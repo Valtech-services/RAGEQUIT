@@ -1,11 +1,67 @@
 /* =====================================================================
    HOME — page d'accueil
-   La navbar est dans BentoGrid. Pas de padding-top à compenser.
+   La navbar est en position FIXED : elle reste visible en haut à gauche
+   pendant tout le scroll de la page (grille + SeoBlock + Footer),
+   exactement comme Poki. La cellule fantôme de la grille réserve sa place.
    ===================================================================== */
 
-   .home {
-    min-height: 100vh;
-    background: var(--color-bg);
-    display: flex;
-    flex-direction: column;
+.home {
+  min-height: 100vh;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* =====================================================================
+   NAVBAR FIXED — alignée sur la 1re cellule de la grille
+   Grille : max-width 1900px centrée, padding 14px top / 8px côtés, gap 14px.
+   ===================================================================== */
+.home__navbar {
+  position: fixed;
+  top: 14px;
+  z-index: 200;
+
+  /* Largeur = 1 cellule sur 8 colonnes */
+  width: calc((min(100vw, var(--max-width)) - 16px - 7 * 14px) / 8);
+  /* Aligné sur le bord gauche de la grille centrée */
+  left: max(8px, calc((100vw - var(--max-width)) / 2 + 8px));
+
+  /* Hauteur = 1 cellule carrée */
+  height: 11.6vw;
+  max-height: 220px;
+}
+.home__navbar > * { height: 100%; }
+
+/* =====================================================================
+   RESPONSIVE
+   ===================================================================== */
+
+/* 6 colonnes */
+@media (max-width: 1200px) {
+  .home__navbar {
+    width: calc((100vw - 16px - 5 * 14px) / 6);
+    left: 8px;
+    height: 15.5vw;
   }
+}
+
+/* 4 colonnes */
+@media (max-width: 900px) {
+  .home__navbar {
+    width: calc((100vw - 12px - 3 * 10px) / 4);
+    left: 6px;
+    top: 6px;
+    height: 22vw;
+  }
+}
+
+/* 2 colonnes (mobile) : navbar pleine largeur, hauteur auto */
+@media (max-width: 600px) {
+  .home__navbar {
+    width: calc(100vw - 10px);
+    left: 5px;
+    top: 5px;
+    height: auto;
+  }
+}
