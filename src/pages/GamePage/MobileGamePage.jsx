@@ -68,8 +68,12 @@ export default function MobileGamePage() {
     return (
       <div className="mgp__rotate-overlay">
         <div className="mgp__rotate-content">
-          <div className="mgp__rotate-icon">
-            <img src="/ragequit-icon-white.png" alt="Ragequit Arcade" className="mgp__rotate-logo" />
+          <div className="mgp__rotate-phone">
+            {/* Icône smartphone qui pivote de portrait à paysage */}
+            <svg className="mgp__rotate-phone-svg" width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="7" y="2" width="10" height="20" rx="2" ry="2" />
+              <line x1="11" y1="18" x2="13" y2="18" />
+            </svg>
             <span className="mgp__rotate-arrow">↻</span>
           </div>
           <h2 className="mgp__rotate-title">Rotate your phone</h2>
