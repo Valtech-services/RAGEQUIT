@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import { games, categories } from '../../data/games'
 import GameCard from '../GameCard/GameCard'
-import Navbar from '../Navbar/Navbar'
 import './BentoGrid.css'
 
 /*
@@ -10,7 +9,7 @@ import './BentoGrid.css'
   Les jeux de tailles variées (small/medium/large) remplissent le reste.
   Sur mobile la navbar prend toute la largeur (span 2).
 */
-export default function BentoGrid() {
+export default function BentoGrid({ reserveNav = false }) {
   const gameCategories = categories.filter(c => c.id !== 'all')
   const catIcons = {
     arcade: '🕹️', puzzle: '🧩', clicker: '👆', runner: '🏃', sports: '⚽',
@@ -26,9 +25,8 @@ export default function BentoGrid() {
       <div className="bento__grid">
 
         {/* Cellule navbar — sticky, 1×1 sur desktop, pleine largeur mobile */}
-        <div className="bento__cell bento__cell--nav">
-          <Navbar inGrid={true} />
-        </div>
+        {/* Cellule fantôme : réserve la place de la navbar sticky (gérée par Home) */}
+        {reserveNav && <div className="bento__cell bento__cell--nav-ghost" aria-hidden="true" />}
 
         {games.map((game, index) => (
           <div
