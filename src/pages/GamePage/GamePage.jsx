@@ -6,10 +6,30 @@ import GameCard from '../../components/GameCard/GameCard'
 import Leaderboard from '../../components/Leaderboard/Leaderboard'
 import SeoBlock from '../../components/SeoBlock/SeoBlock'
 import Footer from '../../components/Footer/Footer'
+import MobileGamePage from './MobileGamePage'
 import { submitScore } from '../../data/leaderboardStore'
 import './GamePage.css'
 
+/* =====================================================================
+   Wrapper — détecte mobile et route vers l'expérience adaptée
+   ===================================================================== */
 export default function GamePage() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)')
+    const h = (e) => setIsMobile(e.matches)
+    mq.addEventListener('change', h)
+    return () => mq.removeEventListener('change', h)
+  }, [])
+
+  if (isMobile) return <MobileGamePage />
+  return <GamePageDesktop />
+}
+
+/* =====================================================================
+   GamePage Desktop — version complète avec sidebar, pubs, leaderboard
+   ===================================================================== */
+function GamePageDesktop() {
   const { id } = useParams()
   const navigate = useNavigate()
   const game = games.find(g => g.id === id)
