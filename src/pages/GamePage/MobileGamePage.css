@@ -1,1 +1,346 @@
+/* =====================================================================
+   MOBILE GAME PAGE — expérience dédiée mobile (< 768px)
+   ===================================================================== */
 
+.mgp {
+  min-height: 100vh;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* =====================================================================
+   MODE PREVIEW — écran d'accueil du jeu
+   ===================================================================== */
+.mgp--preview {
+  overflow-y: auto;
+}
+
+/* Bouton retour en haut */
+.mgp__preview-back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 16px;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--color-on-bg);
+  text-decoration: none;
+  background: rgba(0,0,0,0.15);
+  flex-shrink: 0;
+}
+
+/* Hero : miniature pleine largeur */
+.mgp__hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.mgp__hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.mgp__hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 30%,
+    rgba(0,0,0,0.85) 100%
+  );
+}
+.mgp__hero-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+}
+.mgp__badge-new {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  background: var(--color-magenta);
+  color: #ffffff;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 6px;
+}
+.mgp__hero-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.mgp__hero-by {
+  font-size: var(--text-xs);
+  color: rgba(255,255,255,0.7);
+}
+
+/* Description */
+.mgp__desc-block {
+  background: #ffffff;
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+.mgp__desc {
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+.mgp__landscape-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-xs);
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* Bouton PLAY */
+.mgp__play-wrap {
+  padding: 16px;
+  background: #ffffff;
+}
+.mgp__play-btn {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--gradient-brand);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(255,0,255,0.35), 0 2px 8px rgba(0,217,255,0.3);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.mgp__play-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 12px rgba(255,0,255,0.3);
+}
+
+/* Contrôles */
+.mgp__controls-block {
+  padding: 14px 16px;
+  background: #f4f6fb;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.mgp__controls-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.mgp__controls-text {
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+/* Pub preview */
+.mgp__ad-preview {
+  min-height: 60px;
+  background: rgba(0,0,0,0.08);
+  border-top: 1px dashed rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =====================================================================
+   MODE PLAYING — jeu en plein écran
+   ===================================================================== */
+.mgp--playing {
+  height: 100dvh; /* dynamic viewport height sur mobile */
+  overflow: hidden;
+  background: #0a0e27;
+}
+
+/* Topbar */
+.mgp__topbar {
+  height: 44px;
+  background: #0a0e27;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.mgp__topbar-back {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.mgp__topbar-back:active { background: rgba(255,255,255,0.25); }
+.mgp__topbar-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: #ffffff;
+  letter-spacing: 0.06em;
+  flex: 1;
+  text-align: center;
+}
+.mgp__topbar-spacer { width: 36px; flex-shrink: 0; }
+
+/* Iframe */
+.mgp__iframe-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+.mgp__iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* Bannière pub bas */
+.mgp__ad-bar {
+  height: 50px;
+  background: #0a0e27;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.mgp__ad-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* =====================================================================
+   OVERLAY ROTATION
+   ===================================================================== */
+.mgp__rotate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #0a0e27;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.mgp__rotate-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  max-width: 280px;
+}
+.mgp__rotate-icon {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: rotatePhone 2s ease-in-out infinite;
+}
+@keyframes rotatePhone {
+  0%   { transform: rotate(0deg) scale(1);   }
+  40%  { transform: rotate(90deg) scale(1.1); }
+  60%  { transform: rotate(90deg) scale(1.1); }
+  100% { transform: rotate(0deg) scale(1);   }
+}
+.mgp__rotate-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+.mgp__rotate-arrow {
+  position: absolute;
+  bottom: -8px;
+  right: -8px;
+  font-size: 28px;
+  color: var(--color-accent);
+  animation: arrowPulse 2s ease-in-out infinite;
+}
+@keyframes arrowPulse {
+  0%,100% { opacity: 0.5; }
+  50%     { opacity: 1; }
+}
+.mgp__rotate-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  color: #ffffff;
+  letter-spacing: 0.06em;
+}
+.mgp__rotate-text {
+  font-size: var(--text-sm);
+  color: rgba(255,255,255,0.6);
+  line-height: 1.6;
+}
+.mgp__rotate-skip {
+  padding: 12px 28px;
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.mgp__rotate-skip:active { background: rgba(255,255,255,0.2); }
+.mgp__rotate-home {
+  font-size: var(--text-xs);
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+}
+
+/* =====================================================================
+   NOT FOUND
+   ===================================================================== */
+.mgp--notfound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: var(--color-on-bg);
+  font-family: var(--font-body);
+}
+.mgp__back-link {
+  color: var(--color-accent);
+  font-weight: 700;
+  text-decoration: none;
+}
