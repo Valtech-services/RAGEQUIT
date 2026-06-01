@@ -265,36 +265,34 @@
   gap: 16px;
   max-width: 280px;
 }
-.mgp__rotate-icon {
+.mgp__rotate-phone {
   position: relative;
   width: 100px;
   height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: rotatePhone 2s ease-in-out infinite;
+  margin-bottom: 8px;
+}
+.mgp__rotate-phone-svg {
+  color: #ffffff;
+  animation: rotatePhone 2.4s ease-in-out infinite;
 }
 @keyframes rotatePhone {
-  0%   { transform: rotate(0deg) scale(1);   }
-  40%  { transform: rotate(90deg) scale(1.1); }
-  60%  { transform: rotate(90deg) scale(1.1); }
-  100% { transform: rotate(0deg) scale(1);   }
-}
-.mgp__rotate-logo {
-  width: 80px;
-  height: 80px;
-  object-fit: contain;
+  0%, 15%   { transform: rotate(0deg); }
+  50%, 65%  { transform: rotate(-90deg); }
+  100%      { transform: rotate(0deg); }
 }
 .mgp__rotate-arrow {
   position: absolute;
-  bottom: -8px;
-  right: -8px;
-  font-size: 28px;
+  bottom: 4px;
+  right: 8px;
+  font-size: 26px;
   color: var(--color-accent);
-  animation: arrowPulse 2s ease-in-out infinite;
+  animation: arrowPulse 2.4s ease-in-out infinite;
 }
 @keyframes arrowPulse {
-  0%,100% { opacity: 0.5; }
+  0%,100% { opacity: 0.4; }
   50%     { opacity: 1; }
 }
 .mgp__rotate-title {
