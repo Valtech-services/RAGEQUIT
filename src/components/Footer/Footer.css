@@ -2,152 +2,168 @@
    FOOTER — pleine largeur, fond blanc.
    ===================================================================== */
 
-   .footer {
-    width: 100%;
-    background: #ffffff;
-    margin-top: 0;
-    box-shadow: 0 -2px 16px rgba(0,0,0,0.06);
-  }
-  
+.footer {
+  width: 100%;
+  background: #ffffff;
+  margin-top: 0;
+  box-shadow: 0 -2px 16px rgba(0,0,0,0.06);
+}
+
+.footer__inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--gap-xl) var(--gap-lg);
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: var(--gap-xl);
+}
+
+/* ---- Brand ---- */
+.footer__brand { display: flex; flex-direction: column; }
+
+.footer__logo {
+  display: flex; align-items: baseline; gap: 4px;
+  font-family: var(--font-display); font-size: var(--text-xl);
+  text-decoration: none; margin-bottom: var(--gap-sm);
+}
+.footer__logo-rage  { color: var(--color-accent); }
+.footer__logo-quit  { color: #111111; }
+.footer__logo-arcade { color: #999999; font-size: var(--text-xs); letter-spacing: 0.2em; }
+
+.footer__tagline {
+  font-size: var(--text-sm); color: #555555; margin-bottom: var(--gap-md);
+}
+
+/* =====================================================================
+   WIDGET SOCIAL — cartes arrondies style Uiverse
+   Structure : .social-widget > .social-row(s) > .social-card(s)
+   Extensible : ajoute des rangées ou des cartes librement.
+   Pour 5 réseaux : une rangée de 3 + une rangée de 2 (ou l'inverse).
+   Pour 6 réseaux : deux rangées de 3.
+   ===================================================================== */
+.social-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: fit-content;
+}
+
+.social-row {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+/* Carte de base */
+.social-card {
+  width: 76px;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: rgba(50,50,93,0.22) 0 2px 6px -1px, rgba(0,0,0,0.25) 0 1px 4px -1px;
+  transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+  color: #333333;
+}
+
+/* Coins arrondis asymétriques par position — comme le widget original */
+.social-row:first-child .social-card:first-child { border-radius: 76px 5px 5px 5px; } /* haut-gauche */
+.social-row:first-child .social-card:last-child  { border-radius: 5px 76px 5px 5px; } /* haut-droite */
+.social-row:last-child  .social-card:first-child { border-radius: 5px 5px 5px 76px; } /* bas-gauche */
+.social-row:last-child  .social-card:last-child  { border-radius: 5px 5px 76px 5px; } /* bas-droite */
+/* Cartes du milieu (si 3 rangées) : coins standard */
+.social-row:not(:first-child):not(:last-child) .social-card { border-radius: 8px; }
+
+/* Hover par réseau */
+.social-card--instagram:hover { background-color: #cc39a4; color: #ffffff; transform: scale(1.1); }
+.social-card--instagram:hover svg { fill: #ffffff; }
+
+.social-card--tiktok:hover { background-color: #010101; color: #ffffff; transform: scale(1.1); }
+.social-card--tiktok:hover svg { fill: #ffffff; }
+
+.social-card--x:hover { background-color: #000000; color: #ffffff; transform: scale(1.1); }
+.social-card--x:hover svg { fill: #ffffff; }
+
+.social-card--discord:hover { background-color: #5865F2; color: #ffffff; transform: scale(1.1); }
+.social-card--discord:hover svg { fill: #ffffff; }
+
+/* Couleurs icônes au repos */
+.social-card--instagram svg { fill: #cc39a4; }
+.social-card--tiktok svg    { fill: #010101; }
+.social-card--x svg         { fill: #000000; }
+.social-card--discord svg   { fill: #5865F2; }
+
+/* ---- Colonnes liens ---- */
+.footer__col { display: flex; flex-direction: column; }
+
+.footer__col-title {
+  font-family: var(--font-mono); font-size: var(--text-xs);
+  color: #999999; text-transform: uppercase; letter-spacing: 0.15em;
+  margin-bottom: var(--gap-md);
+}
+
+.footer__link {
+  font-size: var(--text-sm); color: #333333; text-decoration: none;
+  margin-bottom: 10px; transition: color var(--transition-fast);
+}
+.footer__link:hover { color: var(--color-accent); }
+
+/* ---- Bas du footer ---- */
+.footer__bottom { border-top: 1px solid #e8e8ec; }
+.footer__copy {
+  display: block; max-width: var(--max-width); margin: 0 auto;
+  padding: var(--gap-md) var(--gap-lg);
+  font-size: var(--text-xs); color: #999999;
+}
+
+/* =====================================================================
+   RESPONSIVE
+   ===================================================================== */
+@media (max-width: 900px) {
   .footer__inner {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: var(--gap-xl) var(--gap-lg);
-    display: grid;
-    grid-template-columns: 1.6fr 1fr 1fr 1fr;
-    gap: var(--gap-xl);
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gap-lg);
   }
-  
-  /* ---- Brand ---- */
-  .footer__brand { display: flex; flex-direction: column; }
-  
-  .footer__logo {
-    display: flex; align-items: baseline; gap: 4px;
-    font-family: var(--font-display); font-size: var(--text-xl);
-    text-decoration: none; margin-bottom: var(--gap-sm);
+  .footer__brand { grid-column: span 2; }
+
+  /* Sur tablette les cartes passent à 68px */
+  .social-card { width: 68px; height: 68px; }
+}
+
+@media (max-width: 600px) {
+  .footer__inner {
+    grid-template-columns: 1fr;
+    padding: var(--gap-lg) var(--gap-md);
+    text-align: center;
   }
-  .footer__logo-rage  { color: var(--color-accent); }
-  .footer__logo-quit  { color: #111111; }
-  .footer__logo-arcade { color: #999999; font-size: var(--text-xs); letter-spacing: 0.2em; }
-  
-  .footer__tagline {
-    font-size: var(--text-sm); color: #555555; margin-bottom: var(--gap-md);
-  }
-  
-  /* =====================================================================
-     WIDGET SOCIAL — cartes arrondies style Uiverse
-     Structure : .social-widget > .social-row(s) > .social-card(s)
-     Extensible : ajoute des rangées ou des cartes librement.
-     Pour 5 réseaux : une rangée de 3 + une rangée de 2 (ou l'inverse).
-     Pour 6 réseaux : deux rangées de 3.
-     ===================================================================== */
-  .social-widget {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    width: fit-content;
-  }
-  
-  .social-row {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-  }
-  
-  /* Carte de base */
-  .social-card {
-    width: 76px;
-    height: 76px;
-    display: flex;
+  .footer__brand {
+    grid-column: span 1;
     align-items: center;
-    justify-content: center;
-    background: #ffffff;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    text-decoration: none;
-    box-shadow: rgba(50,50,93,0.22) 0 2px 6px -1px, rgba(0,0,0,0.25) 0 1px 4px -1px;
-    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
-    color: #333333;
   }
-  
-  /* Coins arrondis asymétriques par position — comme le widget original */
-  .social-row:first-child .social-card:first-child { border-radius: 76px 5px 5px 5px; } /* haut-gauche */
-  .social-row:first-child .social-card:last-child  { border-radius: 5px 76px 5px 5px; } /* haut-droite */
-  .social-row:last-child  .social-card:first-child { border-radius: 5px 5px 5px 76px; } /* bas-gauche */
-  .social-row:last-child  .social-card:last-child  { border-radius: 5px 5px 76px 5px; } /* bas-droite */
-  /* Cartes du milieu (si 3 rangées) : coins standard */
-  .social-row:not(:first-child):not(:last-child) .social-card { border-radius: 8px; }
-  
-  /* Hover par réseau */
-  .social-card--instagram:hover { background-color: #cc39a4; color: #ffffff; transform: scale(1.1); }
-  .social-card--instagram:hover svg { fill: #ffffff; }
-  
-  .social-card--tiktok:hover { background-color: #010101; color: #ffffff; transform: scale(1.1); }
-  .social-card--tiktok:hover svg { fill: #ffffff; }
-  
-  .social-card--x:hover { background-color: #000000; color: #ffffff; transform: scale(1.1); }
-  .social-card--x:hover svg { fill: #ffffff; }
-  
-  .social-card--discord:hover { background-color: #5865F2; color: #ffffff; transform: scale(1.1); }
-  .social-card--discord:hover svg { fill: #ffffff; }
-  
-  /* Couleurs icônes au repos */
-  .social-card--instagram svg { fill: #cc39a4; }
-  .social-card--tiktok svg    { fill: #010101; }
-  .social-card--x svg         { fill: #000000; }
-  .social-card--discord svg   { fill: #5865F2; }
-  
-  /* ---- Colonnes liens ---- */
-  .footer__col { display: flex; flex-direction: column; }
-  
-  .footer__col-title {
-    font-family: var(--font-mono); font-size: var(--text-xs);
-    color: #999999; text-transform: uppercase; letter-spacing: 0.15em;
-    margin-bottom: var(--gap-md);
-  }
-  
-  .footer__link {
-    font-size: var(--text-sm); color: #333333; text-decoration: none;
-    margin-bottom: 10px; transition: color var(--transition-fast);
-  }
-  .footer__link:hover { color: var(--color-accent); }
-  
-  /* ---- Bas du footer ---- */
-  .footer__bottom { border-top: 1px solid #e8e8ec; }
-  .footer__copy {
-    display: block; max-width: var(--max-width); margin: 0 auto;
-    padding: var(--gap-md) var(--gap-lg);
-    font-size: var(--text-xs); color: #999999;
-  }
-  
-  /* =====================================================================
-     RESPONSIVE
-     ===================================================================== */
-  @media (max-width: 900px) {
-    .footer__inner {
-      grid-template-columns: 1fr 1fr;
-      gap: var(--gap-lg);
-    }
-    .footer__brand { grid-column: span 2; }
-  
-    /* Sur tablette les cartes passent à 68px */
-    .social-card { width: 68px; height: 68px; }
-  }
-  
-  @media (max-width: 600px) {
-    .footer__inner {
-      grid-template-columns: 1fr;
-      padding: var(--gap-lg) var(--gap-md);
-    }
-    .footer__brand { grid-column: span 1; }
-  
-    /* Sur mobile le widget social est centré */
-    .social-widget { margin: 0 auto; }
-  
-    /* Cartes plus petites sur mobile */
-    .social-card { width: 60px; height: 60px; }
-    .social-card svg { width: 22px; height: 22px; }
-  
-    .footer__copy { padding: var(--gap-md); }
-  }
+
+  /* Logo centré */
+  .footer__logo { justify-content: center; }
+
+  /* Tagline centré */
+  .footer__tagline { text-align: center; }
+
+  /* Widget social centré */
+  .social-widget { margin: 0 auto; }
+
+  /* Colonnes de liens centrées */
+  .footer__col { align-items: center; }
+  .footer__col-title { text-align: center; }
+  .footer__link { text-align: center; }
+
+  /* Cartes plus petites sur mobile */
+  .social-card { width: 60px; height: 60px; }
+  .social-card svg { width: 22px; height: 22px; }
+
+  /* Copyright centré */
+  .footer__copy { padding: var(--gap-md); text-align: center; }
+}
