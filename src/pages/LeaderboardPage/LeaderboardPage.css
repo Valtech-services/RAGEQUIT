@@ -1,0 +1,313 @@
+/* =====================================================================
+   LEADERBOARD PAGE — premium, large, podium + profil
+   ===================================================================== */
+   .lbpage {
+    min-height: 100vh;
+    background: var(--color-bg);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .lbpage__content {
+    max-width: var(--max-width);
+    width: 100%;
+    margin: 0 auto;
+    padding: 14px 16px 24px;
+  }
+  
+  /* ---- Intro ---- */
+  .lbpage__intro {
+    padding: var(--gap-lg) 0 var(--gap-lg);
+    text-align: center;
+  }
+  .lbpage__eyebrow {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    margin-bottom: var(--gap-sm);
+  }
+  .lbpage__heading {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    color: var(--color-text);
+    letter-spacing: 0.05em;
+    margin-bottom: var(--gap-sm);
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .lbpage__sub {
+    font-size: var(--text-md);
+    color: var(--color-on-bg-soft);
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  /* ---- Sélecteur de jeu ---- */
+  .lbpage__game-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: var(--gap-lg);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .lbpage__game-tab {
+    flex: 1;
+    padding: 14px;
+    background: var(--color-card);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  .lbpage__game-tab:hover { border-color: var(--color-accent); color: var(--color-text); }
+  .lbpage__game-tab.is-active {
+    border-color: transparent;
+    background: var(--gradient-brand);
+    color: #ffffff;
+    box-shadow: 0 6px 20px rgba(124,58,237,0.3);
+  }
+  
+  /* =====================================================================
+     LAYOUT 2 COLONNES
+     ===================================================================== */
+  .lbpage__grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: var(--gap-lg);
+    align-items: start;
+  }
+  .lbpage__main { min-width: 0; }
+  
+  /* =====================================================================
+     PODIUM TOP 3
+     ===================================================================== */
+  .lbpage__podium {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    align-items: end;
+    margin-bottom: var(--gap-lg);
+  }
+  .lbpage__podium-slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--gap-md) var(--gap-sm) 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .lbpage__podium-slot--empty { background: transparent; border: none; }
+  
+  /* Hauteurs différenciées : 1er plus haut */
+  .lbpage__podium-slot--1 { padding-top: var(--gap-lg); }
+  .lbpage__podium-slot--1 .lbpage__podium-bar { height: 60px; }
+  .lbpage__podium-slot--2 .lbpage__podium-bar { height: 40px; }
+  .lbpage__podium-slot--3 .lbpage__podium-bar { height: 28px; }
+  
+  .lbpage__podium-slot--1 { border-color: #FFD23F; box-shadow: 0 6px 30px rgba(255,210,63,0.25); }
+  .lbpage__podium-slot--2 { border-color: #C8D2E0; }
+  .lbpage__podium-slot--3 { border-color: #E08A4B; }
+  
+  .lbpage__podium-medal {
+    width: 44px; height: 44px;
+    border-radius: var(--radius-full);
+    display: flex; align-items: center; justify-content: center;
+    font-size: var(--text-lg);
+    font-weight: 900;
+    color: #0a0e27;
+  }
+  .lbpage__podium-medal--1 { background: #FFD23F; box-shadow: 0 0 18px rgba(255,210,63,0.5); font-size: 22px; }
+  .lbpage__podium-medal--2 { background: #C8D2E0; }
+  .lbpage__podium-medal--3 { background: #E08A4B; }
+  
+  .lbpage__podium-name {
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    font-weight: 700;
+    color: #111111;
+    letter-spacing: 0.03em;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+  .lbpage__podium-score {
+    font-family: var(--font-mono);
+    font-size: var(--text-lg);
+    font-weight: 800;
+    color: #7C3AED;
+  }
+  .lbpage__podium-bar {
+    width: 100%;
+    margin-top: 6px;
+    background: linear-gradient(180deg, var(--color-accent), var(--color-violet) 50%, var(--color-magenta));
+    opacity: 0.35;
+  }
+  .lbpage__podium-slot--1 .lbpage__podium-bar { opacity: 0.5; }
+  
+  /* ---- Onglets de mode ---- */
+  .lbpage__mode-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: var(--gap-md);
+  }
+  .lbpage__mode-tab {
+    flex: 1;
+    padding: 12px;
+    background: var(--color-card);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-muted);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  .lbpage__mode-tab:hover { border-color: var(--color-accent); color: var(--color-text); }
+  .lbpage__mode-tab.is-active {
+    border-color: var(--color-accent);
+    background: rgba(0,217,255,0.1);
+    color: var(--color-accent);
+  }
+  
+  .lbpage__note {
+    margin-top: var(--gap-md);
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+    text-align: center;
+    font-style: italic;
+  }
+  
+  /* =====================================================================
+     COLONNE PROFIL (sticky)
+     ===================================================================== */
+  .lbpage__aside { position: sticky; top: 80px; }
+  
+  .lbpage__player-card {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--gap-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+  }
+  .lbpage__card-title {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    color: var(--color-text);
+    letter-spacing: 0.05em;
+    padding-bottom: var(--gap-sm);
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  .lbpage__label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  
+  .lbpage__name-row { display: flex; gap: 8px; }
+  .lbpage__input {
+    flex: 1;
+    min-width: 0;
+    padding: 11px 14px;
+    background: var(--color-bg);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: var(--text-md);
+    outline: none;
+    transition: border-color var(--transition-fast);
+  }
+  .lbpage__input:focus { border-color: var(--color-accent); }
+  .lbpage__save {
+    padding: 11px 20px;
+    background: var(--gradient-brand);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  .lbpage__save:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(124,58,237,0.35); }
+  
+  .lbpage__best-block {
+    background: var(--color-bg);
+    border-radius: var(--radius-md);
+    padding: var(--gap-md);
+  }
+  .lbpage__best-value { display: flex; align-items: baseline; gap: var(--gap-md); }
+  .lbpage__best-score {
+    font-family: var(--font-mono);
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    color: var(--color-accent);
+  }
+  .lbpage__best-rank {
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-magenta);
+  }
+  .lbpage__no-score { font-size: var(--text-sm); color: var(--color-muted); }
+  .lbpage__play-link { color: var(--color-accent); font-weight: 700; }
+  
+  .lbpage__cta {
+    display: block;
+    text-align: center;
+    padding: 13px;
+    border-radius: var(--radius-md);
+    background: var(--gradient-brand);
+    color: #ffffff;
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    box-shadow: 0 4px 16px rgba(124,58,237,0.25);
+  }
+  .lbpage__cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,58,237,0.4); }
+  
+  /* =====================================================================
+     RESPONSIVE
+     ===================================================================== */
+  @media (max-width: 1000px) {
+    .lbpage__grid { grid-template-columns: 1fr; }
+    .lbpage__aside { position: static; order: -1; } /* profil au-dessus sur tablette */
+  }
+  
+  @media (max-width: 600px) {
+    .lbpage__content { padding: 10px 10px 20px; }
+    .lbpage__heading { font-size: var(--text-2xl); }
+    .lbpage__mode-tabs { flex-direction: column; }
+    .lbpage__podium-name { font-size: var(--text-sm); }
+    .lbpage__podium-score { font-size: var(--text-md); }
+    .lbpage__podium-medal { width: 36px; height: 36px; }
+  }

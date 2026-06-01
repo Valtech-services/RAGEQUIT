@@ -1,0 +1,113 @@
+/* La card occupe tout l'espace de sa cellule
+   aspect-ratio 1/1 force le carré */
+   .game-card {
+    position: relative;
+    display: block;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-card);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    transition:
+      transform var(--transition-normal),
+      box-shadow var(--transition-normal);
+  }
+  
+  .game-card:hover {
+    transform: scale(1.04) translateY(-3px);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.28);
+    z-index: 10;
+  }
+  
+  .game-card--shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      rgba(255,255,255,0.25) 50%,
+      transparent 60%
+    );
+    animation: shimmer 3s infinite;
+    pointer-events: none;
+  }
+  
+  /* L'image remplit tout le carré sans déformer */
+  .game-card__thumb {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .game-card__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+    display: block;
+  }
+  
+  .game-card:hover .game-card__thumb img {
+    transform: scale(1.06);
+  }
+  
+  /* Fallback lettre si image absente */
+  .game-card__thumb-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-accent-dim), var(--color-accent-2-dim));
+    font-family: var(--font-display);
+    font-size: 3rem;
+    color: var(--color-accent);
+    z-index: -1;
+  }
+  
+  /* Overlay titre : slide-up blanc au hover */
+  .game-card__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--gap-sm);
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transform: translateY(100%);
+    transition: transform var(--transition-normal);
+  }
+  
+  .game-card:hover .game-card__overlay {
+    transform: translateY(0);
+  }
+  
+  .game-card__badge {
+    align-self: flex-start;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    font-family: var(--font-mono);
+    background: var(--color-accent-2);
+    color: #000000;
+  }
+  
+  /* Titre en blanc, slide-up au hover */
+  .game-card__title {
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    color: #ffffff;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }

@@ -1,0 +1,57 @@
+/* Keyframes */
+@keyframes shimmer {
+  0%   { transform: translateX(-150%); }
+  100% { transform: translateX(150%); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(255, 60, 60, 0.2); }
+  50%       { box-shadow: 0 0 32px rgba(255, 60, 60, 0.7); }
+}
+
+@keyframes glow-pulse-purple {
+  0%, 100% { box-shadow: 0 0 10px rgba(124, 58, 237, 0.2); }
+  50%       { box-shadow: 0 0 32px rgba(124, 58, 237, 0.7); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+/* Classes utilitaires */
+.shimmer-effect::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 60%
+  );
+  animation: shimmer 3s infinite;
+  pointer-events: none;
+}
+
+.glow-pulse        { animation: glow-pulse 2.5s ease-in-out infinite; }
+.glow-pulse-purple { animation: glow-pulse-purple 2.5s ease-in-out infinite; }
+.fade-up           { animation: fade-up 0.5s var(--transition-normal) both; }
+.fade-in           { animation: fade-in 0.4s ease both; }
+.scale-in          { animation: scale-in 0.3s ease both; }
+.float             { animation: float 3s ease-in-out infinite; }

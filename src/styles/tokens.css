@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+  /* ===================================================================
+     FONDS
+     Thème Poki : fond turquoise, cartes blanches.
+     =================================================================== */
+  --color-bg:         #00C8C8;   /* fond turquoise du site */
+  --color-surface:    #ffffff;   /* surfaces / barres */
+  --color-card:       #ffffff;   /* cartes */
+  --color-card-hover: #f4f6fb;   /* survol carte (clair, plus blanc cassé) */
+  --color-border:     #e2e6f0;   /* bordures claires sur cartes blanches */
+  --color-border-strong: #cdd4e4;
+
+  /* ===================================================================
+     COULEURS DE MARQUE
+     Magenta + cyan = principales. Violet = transition de dégradé seulement.
+     =================================================================== */
+  --color-accent:        #00d9ff;   /* CYAN — accent principal froid */
+  --color-accent-dark:   #0099cc;
+  --color-accent-dim:    rgba(0, 217, 255, 0.12);
+
+  --color-magenta:       #ff00ff;   /* MAGENTA — accent principal chaud */
+  --color-magenta-dim:   rgba(255, 0, 255, 0.12);
+
+  /* alias rétro-compat : --color-accent-2 = magenta (utilisé un peu partout) */
+  --color-accent-2:      #ff00ff;
+  --color-accent-2-dim:  rgba(255, 0, 255, 0.12);
+
+  /* Violet : UNIQUEMENT pour le point de transition des dégradés cyan→violet→magenta */
+  --color-violet:        #8B5CF6;
+
+  /* Dégradé de marque réutilisable (boutons, titres) */
+  --gradient-brand: linear-gradient(135deg, var(--color-accent) 0%, var(--color-violet) 55%, var(--color-magenta) 100%);
+  --gradient-brand-soft: linear-gradient(135deg, rgba(0,217,255,0.15), rgba(139,92,246,0.15), rgba(255,0,255,0.15));
+
+  /* ===================================================================
+     TEXTES
+     Par défaut SOMBRE (cartes blanches). Variantes claires explicites.
+     =================================================================== */
+  --color-text:        #10162e;   /* texte principal sombre (sur blanc) */
+  --color-text-soft:   #3a425c;   /* texte un peu adouci */
+  --color-text-muted:  #6b7280;   /* texte secondaire gris */
+  --color-muted:       #8a93a8;   /* alias rétro-compat (gris moyen) */
+
+  /* Texte sur fond turquoise (intros, sous-titres pleine largeur) */
+  --color-on-bg:       #06343a;   /* sombre lisible sur turquoise */
+  --color-on-bg-soft:  rgba(6, 52, 58, 0.7);
+
+  /* Texte clair (sur fonds sombres ponctuels : boutons colorés, etc.) */
+  --color-text-light:  #ffffff;
+
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* ===================================================================
+     TYPOGRAPHIE
+     =================================================================== */
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 3rem;
+
+  /* ===================================================================
+     RAYONS
+     =================================================================== */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 999px;
+
+  /* ===================================================================
+     OMBRES — sur fond turquoise/blanc, ombres douces grises
+     =================================================================== */
+  --shadow-card:   0 2px 14px rgba(0, 0, 0, 0.10);
+  --shadow-card-hover: 0 8px 28px rgba(0, 0, 0, 0.16);
+  --shadow-accent:  0 6px 20px rgba(0, 217, 255, 0.35);
+  --shadow-accent2: 0 6px 20px rgba(255, 0, 255, 0.35);
+  --shadow-brand:   0 6px 22px rgba(139, 92, 246, 0.35);
+  --shadow-strong:  0 12px 40px rgba(0, 0, 0, 0.25);
+
+  /* ===================================================================
+     TRANSITIONS / ESPACEMENTS
+     =================================================================== */
+  --transition-fast: 150ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow: 600ms ease;
+
+  --gap-xs: 4px;
+  --gap-sm: 8px;
+  --gap-md: 16px;
+  --gap-lg: 32px;
+  --gap-xl: 64px;
+
+  --max-width: 1900px;
+  --navbar-height: 0px;
+}

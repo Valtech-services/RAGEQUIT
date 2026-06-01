@@ -1,0 +1,11 @@
+/* =====================================================================
+   HOME — page d'accueil
+   La navbar est dans BentoGrid. Pas de padding-top à compenser.
+   ===================================================================== */
+
+   .home {
+    min-height: 100vh;
+    background: var(--color-bg);
+    display: flex;
+    flex-direction: column;
+  }

@@ -1,0 +1,486 @@
+/* =====================================================================
+   GAME PAGE — desktop comme Poki photo 4, mobile comme photo 5
+   ===================================================================== */
+
+   .gamepage {
+    min-height: 100vh;
+    background: var(--color-bg);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* =====================================================================
+     ZONE PRINCIPALE : jeu + colonne laterale
+     ===================================================================== */
+  .gamepage__main {
+    max-width: var(--max-width);
+    width: 100%;
+    margin: 0 auto;
+    padding: 14px 8px 8px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  
+  /* --- Colonne centrale (le jeu) --- */
+  .gamepage__stage-col {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  /* Scene de jeu : ratio 16/10, fond sombre */
+  .gamepage__stage {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: #0a0e27;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    overflow: hidden;
+    position: relative;
+    max-height: 70vh;
+  }
+  
+  /* Bande pub sous la barre du jeu */
+  .gamepage__stage-col .gamepage__ad--banner {
+    margin-top: 14px;
+  }
+  
+  /* Bloc More games sous le jeu */
+  .gamepage__related {
+    margin-top: 18px;
+  }
+  
+  .gamepage__iframe {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border: 0;
+  }
+  
+  /* --- Ecran "Play" (cover avant lancement) --- */
+  .gamepage__cover {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .gamepage__cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10,14,39,0.55), rgba(10,14,39,0.78));
+  }
+  
+  .gamepage__play-btn {
+    position: relative;
+    z-index: 1;
+    width: 88px;
+    height: 88px;
+    border-radius: var(--radius-full);
+    border: none;
+    background: var(--color-accent);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding-left: 6px;
+    box-shadow: 0 8px 30px rgba(0,217,255,0.5);
+    transition: transform var(--transition-fast);
+  }
+  
+  .gamepage__play-btn:hover {
+    transform: scale(1.08);
+  }
+  
+  .gamepage__play-label {
+    position: relative;
+    z-index: 1;
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: #ffffff;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  
+  /* --- Barre sous le jeu --- */
+  .gamepage__bar {
+    background: #ffffff;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+  
+  .gamepage__bar-game {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .gamepage__bar-thumb {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  
+  .gamepage__bar-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .gamepage__bar-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .gamepage__bar-title {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    color: #111111;
+    letter-spacing: 0.04em;
+  }
+  
+  .gamepage__bar-author {
+    font-size: var(--text-xs);
+    color: #999999;
+  }
+  
+  .gamepage__bar-actions {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .gamepage__action {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-full);
+    border: 1.5px solid #e0e0e6;
+    background: transparent;
+    color: #999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  
+  .gamepage__action:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+  
+  /* --- Colonne laterale --- */
+  .gamepage__sidebar {
+    width: 300px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  
+  /* Bloc mini-leaderboard */
+  .gamepage__side-lb {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .gamepage__lb-link {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    text-decoration: none;
+    padding: 8px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .gamepage__lb-link:hover {
+    border-color: var(--color-accent);
+    background: rgba(0, 217, 255, 0.08);
+  }
+  
+  /* Bloc jeux recommandes */
+  .gamepage__side-games {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .gamepage__side-thumb {
+    display: block;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: transform var(--transition-fast);
+  }
+  
+  .gamepage__side-thumb:hover {
+    transform: translateY(-3px);
+  }
+  
+  .gamepage__side-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* =====================================================================
+     RANGEE DU BAS : plus de jeux
+     ===================================================================== */
+  .gamepage__content {
+    max-width: var(--max-width);
+    width: 100%;
+    margin: 0 auto;
+    padding: 8px;
+  }
+  
+  .gamepage__related {
+    margin-top: 6px;
+  }
+  
+  .gamepage__related-title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: var(--color-text);
+    letter-spacing: 0.06em;
+    margin-bottom: 14px;
+  }
+  
+  .gamepage__related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+  }
+  
+  .gamepage__related-cell {
+    aspect-ratio: 1 / 1;
+  }
+  
+  /* =====================================================================
+     NOT FOUND
+     ===================================================================== */
+  .gamepage--notfound {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-md);
+    min-height: 50vh;
+    color: var(--color-muted);
+  }
+  
+  .gamepage__back-link {
+    color: var(--color-accent);
+    font-size: var(--text-sm);
+  }
+  
+  /* =====================================================================
+     RESPONSIVE
+     ===================================================================== */
+  @media (max-width: 1200px) {
+    .gamepage__sidebar {
+      width: 260px;
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .gamepage__related-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+  }
+  
+  /* ---- MOBILE : photo 5 ----
+     Pas de colonne laterale a droite : elle passe sous le jeu.
+     Le mini-leaderboard reste pleine largeur, les jeux en grille 3 colonnes.
+  */
+  @media (max-width: 768px) {
+    .gamepage__main {
+      flex-direction: column;
+      padding: 10px 5px 5px;
+      gap: 10px;
+    }
+  
+    .gamepage__sidebar {
+      width: 100%;
+    }
+  
+    .gamepage__side-games {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+  
+    .gamepage__stage {
+      max-height: none;
+      aspect-ratio: 16 / 11;
+    }
+  
+    .gamepage__related-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+  
+    .gamepage__play-btn {
+      width: 72px;
+      height: 72px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .gamepage__side-games {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .gamepage__related-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  /* =====================================================================
+     ZONES PUBLICITAIRES — bien délimitées, séparées du gameplay
+     À ≥ 150px des zones interactives du jeu (conformité AdSense).
+     ===================================================================== */
+  .gamepage__ad {
+    background: rgba(13,18,38,0.5);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .gamepage__ad-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  
+  /* Rectangle 300x250 en haut de la sidebar */
+  .gamepage__ad--rect {
+    width: 100%;
+    height: 250px;
+    margin-bottom: 14px;
+  }
+  
+  /* Bande horizontale 728x90 sous le jeu */
+  .gamepage__ad-strip {
+    max-width: var(--max-width);
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 8px 14px;
+  }
+  .gamepage__ad--banner {
+    width: 100%;
+    height: 90px;
+  }
+  
+  @media (max-width: 900px) {
+    /* Sur mobile : la pub rect passe en bandeau sous le jeu */
+    .gamepage__ad--rect { height: 100px; }
+    .gamepage__ad--banner { height: 80px; }
+  }
+  
+  /* 2e pub carrée au milieu de la sidebar */
+  .gamepage__ad--square {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-height: 300px;
+  }
+  
+  /* =====================================================================
+     VOTES + REPORT
+     ===================================================================== */
+  .gamepage__action.is-up {
+    color: #ffffff;
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+  .gamepage__action.is-down {
+    color: #ffffff;
+    background: var(--color-magenta);
+    border-color: var(--color-magenta);
+  }
+  
+  /* Modal report */
+  .gamepage__report-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(3px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .gamepage__report {
+    width: 100%;
+    max-width: 380px;
+    background: #ffffff;
+    border-radius: var(--radius-lg);
+    padding: var(--gap-lg);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .gamepage__report-title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    color: #111111;
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+  }
+  .gamepage__report-text { font-size: var(--text-sm); color: #555555; margin-bottom: var(--gap-md); }
+  .gamepage__report-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: var(--gap-md); }
+  .gamepage__report-opt {
+    text-align: left;
+    padding: 12px 14px;
+    border: 1.5px solid #e0e0e6;
+    border-radius: var(--radius-md);
+    background: #fafafc;
+    color: #333333;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  .gamepage__report-opt:hover { border-color: var(--color-accent); color: var(--color-accent); background: #ffffff; }
+  .gamepage__report-cancel {
+    width: 100%;
+    padding: 11px;
+    border: none;
+    background: transparent;
+    color: #999999;
+    font-weight: 700;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    border-radius: var(--radius-md);
+  }
+  .gamepage__report-cancel:hover { color: #555555; }
+  
+  /* Stage en plein écran */
+  .gamepage__stage:fullscreen {
+    max-height: none;
+    aspect-ratio: auto;
+    border-radius: 0;
+  }
+  .gamepage__stage:fullscreen .gamepage__iframe { height: 100%; }
