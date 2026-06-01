@@ -34,10 +34,18 @@ export default function Navbar({ title, inGrid = false }) {
           !inGrid = standalone : barre horizontale sticky sur toutes les autres pages
           ============================================================ */}
       <div className={`navbar__brand-tile ${inGrid ? 'navbar--in-grid' : 'navbar--standalone'}`}>
-        <Link to="/" className="navbar__logo">
-          <span className="navbar__logo-rage">RAGE</span>
-          <span className="navbar__logo-quit">QUIT</span>
-          <span className="navbar__logo-arcade">ARCADE</span>
+        <Link to="/" className="navbar__logo" aria-label="Ragequit Arcade">
+          {/* Wordmark desktop, icône mobile — basculement en CSS */}
+          <img
+            src="/ragequit-logo-white.png"
+            alt="Ragequit Arcade"
+            className="navbar__logo-wordmark"
+          />
+          <img
+            src="/ragequit-icon-white.png"
+            alt="RQ"
+            className="navbar__logo-icon"
+          />
         </Link>
 
         {/* Titre central — pages catégorie/jeu en mode standalone */}
