@@ -1,16 +1,26 @@
 /* =====================================================================
-   BENTO GRID — grille Poki-style
-   Marges latérales (--page-padding) + gap (--grid-gap) pour que les cartes
-   ne touchent jamais les bords. Cellules CARRÉES via aspect-ratio :
-   le carré est garanti quelles que soient les dimensions desktop/mobile,
-   car il ne dépend plus du viewport mais de la largeur réelle de colonne.
+   BENTO GRID — grille Poki-style (nouvelle echelle bento)
+
+   PRINCIPE DE PLACEMENT :
+   La grille a un nombre fixe de colonnes (8 desktop / 6 tablette / 3 mobile).
+   Chaque carte declare sa largeur (span colonnes) et sa hauteur (span rangees).
+   Le navigateur range les cartes automatiquement, de gauche a droite, ligne
+   par ligne, en remplissant les trous : ajouter un jeu dans games.js suffit,
+   il se place tout seul proprement sous les cartes existantes.
+
+   ECHELLE DES TAILLES (modifier ici largeur x hauteur) :
+     very-small = 1 x 1
+     small      = 2 x 2
+     medium     = 3 x 3
+     large      = 4 x 4
+   1 rangee = largeur d'1 colonne (aspect-ratio:1), donc une carte NxN
+   reste un carre parfait, sur desktop comme sur mobile.
    ===================================================================== */
 
 .bento { width: 100%; }
 
 /* =====================================================================
-   GRILLE PRINCIPALE
-   grid-auto-rows: auto + aspect-ratio sur les cellules = carrés parfaits.
+   GRILLE PRINCIPALE — 8 colonnes desktop
    ===================================================================== */
 .bento__grid {
   display: grid;
@@ -22,7 +32,7 @@
   max-width: var(--max-width);
 }
 
-/* ---- Cellule de base : carrée 1x1 ---- */
+/* ---- Cellule de base : carree ---- */
 .bento__cell {
   min-height: 0;
   min-width: 0;
@@ -34,15 +44,19 @@
   height: 100%;
 }
 
-/* ---- Tailles de jeux ---- */
-.bento__cell--small      { grid-column: span 1; grid-row: span 1; aspect-ratio: 1 / 1; }
-.bento__cell--medium     { grid-column: span 2; grid-row: span 2; aspect-ratio: 1 / 1; }
-.bento__cell--large      { grid-column: span 3; grid-row: span 3; aspect-ratio: 1 / 1; }
+/* ---- Tailles de jeux (DESKTOP) ----
+   Premier chiffre = largeur (colonnes), second = hauteur (rangees).
+   ===================================================================== */
+.bento__cell--very-small { grid-column: span 1; grid-row: span 1; aspect-ratio: 1 / 1; }
+.bento__cell--small      { grid-column: span 2; grid-row: span 2; aspect-ratio: 1 / 1; }
+.bento__cell--medium     { grid-column: span 3; grid-row: span 3; aspect-ratio: 1 / 1; }
+.bento__cell--large      { grid-column: span 4; grid-row: span 4; aspect-ratio: 1 / 1; }
+
+/* Formats non carres optionnels (gardes pour compat) */
 .bento__cell--wide       { grid-column: span 2; grid-row: span 1; aspect-ratio: 2 / 1; }
 .bento__cell--tall       { grid-column: span 1; grid-row: span 2; aspect-ratio: 1 / 2; }
-.bento__cell--wide-large { grid-column: span 3; grid-row: span 2; aspect-ratio: 3 / 2; }
 
-/* ---- Cellule NAVBAR : 1re cellule reelle, carree, alignee pile ---- */
+/* ---- Cellule NAVBAR : 1re cellule reelle, format very-small (1x1) ---- */
 .bento__cell--nav {
   grid-column: span 1;
   grid-row: span 1;
@@ -103,52 +117,55 @@
    RESPONSIVE
    ===================================================================== */
 
-/* ---- 6 colonnes ---- */
+/* ---- TABLETTE : 6 colonnes ---- */
 @media (max-width: 1200px) {
   .bento__grid { grid-template-columns: repeat(6, 1fr); }
-  .bento__cell--large      { grid-column: span 3; grid-row: span 3; }
-  .bento__cell--wide-large { grid-column: span 3; grid-row: span 2; }
+  .bento__cell--very-small { grid-column: span 1; grid-row: span 1; }
+  .bento__cell--small      { grid-column: span 2; grid-row: span 2; }
+  .bento__cell--medium     { grid-column: span 3; grid-row: span 3; }
+  .bento__cell--large      { grid-column: span 4; grid-row: span 4; }
   .bento__cats             { grid-template-columns: repeat(3, 1fr); }
 }
 
-/* ---- 4 colonnes ---- */
+/* ---- PETITE TABLETTE : 4 colonnes ---- */
 @media (max-width: 900px) {
   .bento__grid {
     grid-template-columns: repeat(4, 1fr);
     padding: var(--page-padding-mobile) var(--page-padding-mobile) 12px;
   }
-  .bento__cell--large      { grid-column: span 2; grid-row: span 2; aspect-ratio: 1 / 1; }
-  .bento__cell--medium     { grid-column: span 2; grid-row: span 2; aspect-ratio: 1 / 1; }
-  .bento__cell--wide       { grid-column: span 2; grid-row: span 1; aspect-ratio: 2 / 1; }
-  .bento__cell--wide-large { grid-column: span 2; grid-row: span 2; aspect-ratio: 1 / 1; }
+  .bento__cell--very-small { grid-column: span 1; grid-row: span 1; }
+  .bento__cell--small      { grid-column: span 2; grid-row: span 2; }
+  .bento__cell--medium     { grid-column: span 2; grid-row: span 2; }
+  .bento__cell--large      { grid-column: span 4; grid-row: span 4; }
   .bento__cats             { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* ---- 2 colonnes (mobile) ---- */
+/* ---- MOBILE : 3 colonnes, mix de tailles facon Poki ----
+   very-small = 1x1, small/medium = 2x2, large = 3x3 (pleine largeur).
+   Exemple d'agencement : 2 very-small empilees a gauche (1 colonne, 2 lignes)
+   + 1 small 2x2 a droite occupant les 2 colonnes restantes sur 2 lignes.
+   La grille assemble ca automatiquement selon l'ordre des jeux.
+   ===================================================================== */
 @media (max-width: 600px) {
   .bento__grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
     padding: var(--page-padding-mobile) var(--page-padding-mobile) 12px;
   }
 
-  /* Navbar pleine largeur sur mobile (barre horizontale, pas carree) */
+  /* Navbar pleine largeur sur mobile (barre horizontale) */
   .bento__cell--nav {
-    grid-column: span 2;
+    grid-column: span 3;
     grid-row: span 1;
     aspect-ratio: auto;
   }
 
-  .bento__cell--small,
-  .bento__cell--wide,
-  .bento__cell--tall,
-  .bento__cell--wide-large {
-    grid-column: span 1;
-    grid-row: span 1;
-    aspect-ratio: 1 / 1;
-  }
-  .bento__cell--medium { grid-column: span 2; grid-row: span 2; aspect-ratio: 1 / 1; }
-  .bento__cell--large  { grid-column: span 2; grid-row: span 2; aspect-ratio: 1 / 1; }
+  .bento__cell--very-small { grid-column: span 1; grid-row: span 1; aspect-ratio: 1 / 1; }
+  .bento__cell--small      { grid-column: span 2; grid-row: span 2; aspect-ratio: 1 / 1; }
+  .bento__cell--medium     { grid-column: span 2; grid-row: span 2; aspect-ratio: 1 / 1; }
+  .bento__cell--large      { grid-column: span 3; grid-row: span 3; aspect-ratio: 1 / 1; }
+  .bento__cell--wide       { grid-column: span 2; grid-row: span 1; aspect-ratio: 2 / 1; }
+  .bento__cell--tall       { grid-column: span 1; grid-row: span 2; aspect-ratio: 1 / 2; }
 
   .bento__cats     { grid-template-columns: 1fr; gap: 12px; padding: 0 var(--page-padding-mobile); }
   .bento__cat-tile { min-height: 60px; padding: 12px 16px; }
