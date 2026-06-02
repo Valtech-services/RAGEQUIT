@@ -24,7 +24,7 @@ export default function BentoGrid({ showNav = false }) {
           ============================================================ */}
       <div className="bento__grid">
         {showNav && (
-          <div className="bento__cell bento__cell--nav">
+          <div className="bento__cell bento__cell--very-small bento__cell--nav">
             <Navbar inGrid={true} />
           </div>
         )}
