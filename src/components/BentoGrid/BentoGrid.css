@@ -1,8 +1,7 @@
 /* =====================================================================
    BENTO GRID — grille Poki-style
-   La navbar est la 1re cellule (sticky). Les jeux remplissent le reste.
-   grid-auto-rows = hauteur d'une cellule small = carré.
-   Sur 8 colonnes : (100vw - 7*14px - 2*8px padding) / 8 ≈ 11.6vw.
+   Marges latérales généreuses (--page-padding) et gap constant (--grid-gap)
+   pour que les cartes ne touchent jamais les bords, comme Poki.
    ===================================================================== */
 
 .bento { width: 100%; }
@@ -13,20 +12,18 @@
 .bento__grid {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  grid-auto-rows: 11.6vw;
-  gap: 14px;
-  padding: 14px 8px 8px;
-  margin-bottom: 14px;
+  grid-auto-rows: 11.2vw;
+  gap: var(--grid-gap);
+  padding: var(--page-padding) var(--page-padding) 14px;
+  margin: 0 auto 14px;
   max-width: var(--max-width);
-  margin-left: auto;
-  margin-right: auto;
 }
 
 /* ---- Cellule de base ---- */
 .bento__cell {
   min-height: 0;
   min-width: 0;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-card);
   overflow: hidden;
 }
 .bento__cell > * {
@@ -42,17 +39,15 @@
 .bento__cell--tall       { grid-column: span 1; grid-row: span 2; }
 .bento__cell--wide-large { grid-column: span 3; grid-row: span 2; }
 
-/* ---- Cellule NAVBAR ----
-   1×1 comme une petite cellule. Sticky dans le flux de la grille :
-   elle reste visible en haut à gauche pendant le scroll des jeux.
-   align-self: start obligatoire pour que sticky fonctionne dans une grille.
+/* ---- Cellule NAVBAR fantôme ----
+   Réserve l'espace de la navbar (qui est sticky/fixed au niveau page).
    ===================================================================== */
-/* Cellule fantôme : réserve l'espace de la navbar (qui est sticky au niveau page) */
 .bento__cell--nav-ghost {
   grid-column: span 1;
   grid-row: span 1;
   background: transparent;
   pointer-events: none;
+  border-radius: 0;
 }
 
 /* =====================================================================
@@ -61,12 +56,10 @@
 .bento__cats {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 14px;
-  margin: 0 8px 14px;
+  gap: var(--grid-gap);
   max-width: var(--max-width);
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0 8px;
+  margin: 0 auto 14px;
+  padding: 0 var(--page-padding);
 }
 
 .bento__cat-tile {
@@ -109,46 +102,41 @@
 
 /* =====================================================================
    RESPONSIVE
-   Les cellules gardent leurs spans relatifs sauf les grandes qui
-   se réduisent sur petit écran pour ne pas déborder.
-   La navbar prend toute la largeur sur mobile (span = nb colonnes).
    ===================================================================== */
 
 /* ---- 6 colonnes ---- */
 @media (max-width: 1200px) {
   .bento__grid {
     grid-template-columns: repeat(6, 1fr);
-    grid-auto-rows: 15.5vw;
+    grid-auto-rows: 14.8vw;
   }
   .bento__cell--large      { grid-column: span 3; grid-row: span 3; }
   .bento__cell--wide-large { grid-column: span 3; grid-row: span 2; }
   .bento__cats             { grid-template-columns: repeat(3, 1fr); }
-  /* navbar reste 1×1 */
 }
 
 /* ---- 4 colonnes ---- */
 @media (max-width: 900px) {
   .bento__grid {
     grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: 22vw;
-    gap: 10px;
-    padding: 6px;
+    grid-auto-rows: 21vw;
+    gap: var(--grid-gap);
+    padding: var(--page-padding-mobile) var(--page-padding-mobile) 12px;
   }
   .bento__cell--large      { grid-column: span 2; grid-row: span 2; }
   .bento__cell--medium     { grid-column: span 2; grid-row: span 2; }
   .bento__cell--wide       { grid-column: span 2; grid-row: span 1; }
   .bento__cell--wide-large { grid-column: span 2; grid-row: span 2; }
-  .bento__cats             { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  /* navbar reste 1×1 */
+  .bento__cats             { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* ---- 2 colonnes (mobile) ---- */
 @media (max-width: 600px) {
   .bento__grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 45vw;
-    gap: 8px;
-    padding: 5px;
+    grid-auto-rows: 44vw;
+    gap: 12px;
+    padding: var(--page-padding-mobile) var(--page-padding-mobile) 12px;
   }
 
   /* Cellule fantôme pleine largeur sur mobile */
@@ -157,7 +145,7 @@
     grid-row: span 1;
   }
 
-  /* Tout devient carré 1×1 sur mobile sauf medium qui reste 2×2 */
+  /* Tout devient carré 1×1 sur mobile sauf medium/large qui restent 2×2 */
   .bento__cell--small,
   .bento__cell--wide,
   .bento__cell--tall,
@@ -168,7 +156,7 @@
   .bento__cell--medium { grid-column: span 2; grid-row: span 2; }
   .bento__cell--large  { grid-column: span 2; grid-row: span 2; }
 
-  .bento__cats         { grid-template-columns: 1fr; gap: 8px; padding: 0 5px; }
-  .bento__cat-tile     { min-height: 60px; padding: 12px 16px; }
-  .bento__cat-icon     { font-size: 1.6rem; width: 36px; height: 36px; }
+  .bento__cats     { grid-template-columns: 1fr; gap: 12px; padding: 0 var(--page-padding-mobile); }
+  .bento__cat-tile { min-height: 60px; padding: 12px 16px; }
+  .bento__cat-icon { font-size: 1.6rem; width: 36px; height: 36px; }
 }
