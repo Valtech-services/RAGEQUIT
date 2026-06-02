@@ -48,9 +48,18 @@
 }
 .gamecard:hover {
   transform: scale(1.03) translateY(-2px);
-  box-shadow: var(--shadow-thumb-hover), 0 0 0 2px var(--color-magenta);
+  box-shadow: var(--shadow-thumb-hover);
 }
 .gamecard:active { transform: scale(0.99); }
+
+/* Surbrillance néon ACCENTUÉE — uniquement pour les jeux avec badge NEW */
+.gamecard--new:hover {
+  box-shadow:
+    var(--shadow-thumb-hover),
+    0 0 0 3px var(--color-magenta),
+    0 0 22px 2px rgba(255, 0, 255, 0.55),
+    0 0 40px 6px rgba(0, 217, 255, 0.45);
+}
 
 /* ---- Image miniature ---- */
 .gamecard__img {
