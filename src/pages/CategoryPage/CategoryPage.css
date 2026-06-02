@@ -1,134 +1,200 @@
 /* =====================================================================
-   CATEGORY PAGE — presentation style Poki (photo 3)
-   Navbar avec titre, rangee de raccourcis categories, grille de jeux.
+   CATEGORY PAGE — style Poki
+   En-tête : navbar 1x1 | titre catégorie sur le reste de la ligne.
+   Même padding/gap que la BentoGrid pour alignement parfait.
+   ===================================================================== */
+.category {
+  min-height: 100vh;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+/* =====================================================================
+   EN-TETE : ligne navbar 1x1 + titre
+   Même padding et gap que .bento__grid pour alignement pixel-perfect.
+   ===================================================================== */
+.category__header {
+  display: grid;
+  grid-template-columns: 1fr 7fr;   /* 1 col navbar + 7 cols titre sur 8 total */
+  grid-auto-rows: auto;
+  gap: var(--grid-gap);
+  padding: var(--page-padding) var(--page-padding) 0;
+  max-width: var(--max-width);
+  width: 100%;
+  margin: 0 auto;
+  align-items: stretch;
+}
+
+/* Cellule navbar : carree (aspect-ratio 1/1 comme very-small) */
+.category__header-nav {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+.category__header-nav > * {
+  width: 100%;
+  height: 100%;
+}
+
+/* Cellule titre : hauteur = hauteur de la cellule navbar (carree) */
+.category__header-title {
+  background: #ffffff;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-thumb);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  /* Hauteur identique à la cellule navbar (contrainte par le grid) */
+  min-height: 0;
+}
+
+.category__page-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 3rem);
+  color: #111111;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =====================================================================
+   CONTENU — même padding que BentoGrid
+   ===================================================================== */
+.category__content {
+  max-width: var(--max-width);
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--grid-gap) var(--page-padding) var(--page-padding);
+}
+
+/* ---- Raccourcis categories ---- */
+.category__shortcuts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--grid-gap);
+  margin-bottom: var(--grid-gap);
+}
+
+.category__shortcut {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  box-shadow: var(--shadow-thumb);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  min-height: 70px;
+}
+.category__shortcut:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-thumb-hover);
+}
+.category__shortcut-icon  { font-size: 1.8rem; flex-shrink: 0; }
+.category__shortcut-label {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 800;
+  color: #111111;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ---- Grille de jeux ----
+   Même logique que BentoGrid : aspect-ratio pour carrés garantis.
+   Les tailles (very-small/small/medium/large) sont cohérentes.
+   ===================================================================== */
+.category__grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-auto-rows: auto;
+  gap: var(--grid-gap);
+  margin-bottom: var(--grid-gap);
+}
+
+.category__cell {
+  min-height: 0;
+  min-width: 0;
+  border-radius: var(--radius-card);
+  aspect-ratio: 1 / 1;
+}
+.category__cell > * { width: 100%; height: 100%; }
+
+/* Tailles identiques a BentoGrid */
+.category__cell--very-small { grid-column: span 1; grid-row: span 1; aspect-ratio: 1 / 1; }
+.category__cell--small      { grid-column: span 2; grid-row: span 2; aspect-ratio: 1 / 1; }
+.category__cell--medium     { grid-column: span 3; grid-row: span 3; aspect-ratio: 1 / 1; }
+.category__cell--large      { grid-column: span 4; grid-row: span 4; aspect-ratio: 1 / 1; }
+
+/* ---- Empty / Not found ---- */
+.category__empty {
+  color: var(--color-muted);
+  font-size: var(--text-md);
+  padding: var(--gap-xl) 0;
+  text-align: center;
+}
+.category--notfound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-md);
+  min-height: 50vh;
+  color: var(--color-muted);
+}
+.category__back-link { color: var(--color-accent); font-size: var(--text-sm); }
+
+/* =====================================================================
+   RESPONSIVE
    ===================================================================== */
 
-   .category {
-    min-height: 100vh;
-    background: var(--color-bg);
-    display: flex;
-    flex-direction: column;
+/* Tablette 6 colonnes */
+@media (max-width: 1200px) {
+  .category__header {
+    grid-template-columns: 1fr 5fr;
+    padding: var(--page-padding) var(--page-padding) 0;
   }
-  
-  /* Contenu a largeur limitee — IDENTIQUE a .home__content */
-  .category__content {
-    max-width: var(--max-width);
-    width: 100%;
-    margin: 0 auto;
-    padding: 14px 8px 8px;
+  .category__grid { grid-template-columns: repeat(6, 1fr); }
+  .category__shortcuts { grid-template-columns: repeat(4, 1fr); }
+  .category__cell--large { grid-column: span 4; grid-row: span 4; }
+}
+
+/* Petite tablette 4 colonnes */
+@media (max-width: 900px) {
+  .category__header {
+    grid-template-columns: 1fr 3fr;
+    padding: var(--page-padding-mobile) var(--page-padding-mobile) 0;
   }
-  
-  /* ---- Rangee de raccourcis vers les autres categories ---- */
-  .category__shortcuts {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    margin-bottom: 14px;
-  }
-  
-  .category__shortcut {
-    background: #ffffff;
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    text-decoration: none;
-    transition: all var(--transition-fast);
-    min-height: 70px;
-  }
-  
-  .category__shortcut:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 22px rgba(0,0,0,0.16);
-  }
-  
-  .category__shortcut-icon {
-    font-size: 1.8rem;
-    flex-shrink: 0;
-  }
-  
-  .category__shortcut-label {
-    font-family: var(--font-body);
-    font-size: var(--text-sm);
-    font-weight: 800;
-    color: #111111;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  
-  /* ---- Grille de jeux — meme espacement que le BentoGrid ---- */
+  .category__content { padding: var(--grid-gap) var(--page-padding-mobile) var(--page-padding-mobile); }
   .category__grid {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    grid-auto-rows: 11.6vw;
-    gap: 14px;
-    margin-bottom: 14px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
   }
-  
-  .category__cell {
-    min-height: 0;
-    min-width: 0;
+  .category__cell--medium { grid-column: span 2; grid-row: span 2; }
+  .category__cell--large  { grid-column: span 4; grid-row: span 4; }
+  .category__shortcuts { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+}
+
+/* Mobile 3 colonnes */
+@media (max-width: 600px) {
+  .category__header {
+    grid-template-columns: 1fr 2fr;
+    gap: 10px;
+    padding: var(--page-padding-mobile) var(--page-padding-mobile) 0;
   }
-  .category__cell > * {
-    width: 100%;
-    height: 100%;
+  .category__page-title { font-size: 1.4rem; }
+  .category__content { padding: 10px var(--page-padding-mobile) var(--page-padding-mobile); }
+  .category__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
   }
-  
-  /* ---- Empty / Not found ---- */
-  .category__empty {
-    color: var(--color-muted);
-    font-size: var(--text-md);
-    padding: var(--gap-xl) 0;
-    text-align: center;
-  }
-  
-  .category--notfound {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--gap-md);
-    min-height: 50vh;
-    color: var(--color-muted);
-  }
-  
-  .category__back-link {
-    color: var(--color-accent);
-    font-size: var(--text-sm);
-  }
-  
-  /* ---- Responsive ---- */
-  @media (max-width: 1200px) {
-    .category__grid {
-      grid-template-columns: repeat(6, 1fr);
-      grid-auto-rows: 15.5vw;
-    }
-    .category__shortcuts { grid-template-columns: repeat(4, 1fr); }
-  }
-  
-  @media (max-width: 900px) {
-    .category__grid {
-      grid-template-columns: repeat(4, 1fr);
-      grid-auto-rows: 22vw;
-      gap: 10px;
-    }
-    .category__shortcuts {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-  }
-  
-  @media (max-width: 600px) {
-    .category__content { padding: 10px 5px 5px; }
-    .category__grid {
-      grid-template-columns: repeat(2, 1fr);
-      grid-auto-rows: 45vw;
-      gap: 10px;
-    }
-    .category__shortcuts {
-      grid-template-columns: 1fr;
-      gap: 8px;
-    }
-  }
+  .category__cell--very-small { grid-column: span 1; grid-row: span 1; }
+  .category__cell--small      { grid-column: span 2; grid-row: span 2; }
+  .category__cell--medium     { grid-column: span 2; grid-row: span 2; }
+  .category__cell--large      { grid-column: span 3; grid-row: span 3; }
+  .category__shortcuts { grid-template-columns: 1fr; gap: 8px; }
+}
