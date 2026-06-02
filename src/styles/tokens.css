@@ -120,4 +120,10 @@
   --page-padding: 24px;       /* desktop / tablette */
   --page-padding-mobile: 16px; /* mobile : marges nettes sur les bords */
   --navbar-height: 0px;
+
+  /* ---- Cellule de grille (référence pour navbar floating + trou) ----
+     Doit rester synchronisée avec --cell de .bento. Sur mobile, .bento
+     recalcule --cell en fluide ; la navbar lit la même valeur. ---- */
+  --cell: 96px;
+  --grid-pad: 24px;
 }
