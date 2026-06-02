@@ -8,8 +8,8 @@ import './Navbar.css'
   Navbar — deux modes :
   - Par défaut (pages intérieures) : tuile blanche horizontale sticky,
     même format desktop et mobile.
-  - inGrid={true} (Home/BentoGrid) : remplit sa cellule de grille,
-    format colonne sur desktop, barre horizontale sur mobile.
+  - inGrid={true} (Home/BentoGrid) : remplit sa cellule de grille very-small.
+  Le logo affiché est TOUJOURS l'icône RQ (jamais le wordmark).
 */
 export default function Navbar({ title, inGrid = false }) {
   const [searchOpen, setSearchOpen]   = useState(false)
@@ -30,12 +30,12 @@ export default function Navbar({ title, inGrid = false }) {
     <>
       {/* ============================================================
           TUILE BRAND
-          inGrid = dans la cellule de la grille home (colonne desktop, barre mobile)
-          !inGrid = standalone : barre horizontale sticky sur toutes les autres pages
+          inGrid = cellule very-small de la grille home
+          !inGrid = standalone : barre horizontale sticky sur les autres pages
           ============================================================ */}
       <div className={`navbar__brand-tile ${inGrid ? 'navbar--in-grid' : 'navbar--standalone'}`}>
         <Link to="/" className="navbar__logo" aria-label="Ragequit Arcade">
-          {/* Wordmark desktop, icône mobile — basculement en CSS */}
+          {/* Wordmark présent dans le DOM mais masqué en CSS ; icône RQ toujours visible */}
           <img
             src="/ragequit-logo-white.png"
             alt="Ragequit Arcade"
@@ -74,9 +74,7 @@ export default function Navbar({ title, inGrid = false }) {
         </div>
       </div>
 
-      {/* Les drawers sont rendus dans document.body via un portail :
-          ça les sort du contexte sticky de la cellule navbar (home),
-          pour qu'ils s'affichent identiquement sur toutes les pages. */}
+      {/* Drawers rendus dans document.body via un portail */}
       {createPortal(
         <>
       {/* ============================================================
@@ -86,7 +84,6 @@ export default function Navbar({ title, inGrid = false }) {
         <div className="nb-drawer nb-drawer--search">
           <div className="nb-drawer__inner">
 
-            {/* Flèche retour + barre de recherche */}
             <div className="nb-drawer__searchbar">
               <button className="nb-drawer__back" onClick={closeAll} aria-label="Close">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -163,14 +160,12 @@ export default function Navbar({ title, inGrid = false }) {
       )}
 
       {/* ============================================================
-          DRAWER CONNEXION — tiroir latéral identique à la recherche
-          Flèche retour en haut, même position que le drawer recherche.
+          DRAWER CONNEXION
           ============================================================ */}
       {profileOpen && (
         <div className="nb-drawer nb-drawer--auth">
           <div className="nb-drawer__inner">
 
-            {/* En-tête avec flèche retour — même position que recherche */}
             <div className="nb-drawer__head">
               <button className="nb-drawer__back" onClick={() => setProfileOpen(false)} aria-label="Close">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -178,9 +173,7 @@ export default function Navbar({ title, inGrid = false }) {
                 </svg>
               </button>
               <div className="nb-drawer__auth-logo">
-                <span className="nb-drawer__auth-logo-rage">RAGE</span>
-                <span className="nb-drawer__auth-logo-quit">QUIT</span>
-                <span className="nb-drawer__auth-logo-arcade">ARCADE</span>
+                <img src="/ragequit-logo-white.png" alt="Ragequit Arcade" className="nb-drawer__auth-logo-img" />
               </div>
               <span className="nb-drawer__head-spacer" />
             </div>
