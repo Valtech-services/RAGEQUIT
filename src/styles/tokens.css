@@ -1,16 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
 
 :root {
   /* ===================================================================
      FONDS
-     Thème Poki : fond turquoise, cartes blanches.
+     Thème Poki : turquoise clair lumineux + halo radial doux.
      =================================================================== */
-  --color-bg:         #00C8C8;   /* fond turquoise du site */
+  --color-bg:         #19D3C5;   /* turquoise Poki, plus clair et lumineux */
+  --color-bg-deep:    #0FB9AE;   /* turquoise plus saturé (bords du halo) */
   --color-surface:    #ffffff;   /* surfaces / barres */
   --color-card:       #ffffff;   /* cartes */
   --color-card-hover: #f4f6fb;   /* survol carte (clair, plus blanc cassé) */
   --color-border:     #e2e6f0;   /* bordures claires sur cartes blanches */
   --color-border-strong: #cdd4e4;
+
+  /* Halo radial du fond, façon Poki (plus clair au centre/haut) */
+  --bg-gradient: radial-gradient(120% 90% at 50% 0%, #2BE0D2 0%, #19D3C5 45%, #0FB9AE 100%);
 
   /* ===================================================================
      COULEURS DE MARQUE
@@ -70,11 +74,13 @@
 
   /* ===================================================================
      RAYONS
+     Poki utilise des cartes très arrondies (~20px sur mobile).
      =================================================================== */
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 20px;
   --radius-xl: 28px;
+  --radius-card: 22px;       /* rayon dédié aux miniatures de jeux (Poki) */
   --radius-full: 999px;
 
   /* ===================================================================
@@ -100,6 +106,14 @@
   --gap-lg: 32px;
   --gap-xl: 64px;
 
+  /* ===================================================================
+     LAYOUT — calé sur Poki
+     --grid-gap     : espace entre les cartes (Poki ~ 14px)
+     --page-padding : marge latérale du contenu (Poki = marges généreuses)
+     =================================================================== */
   --max-width: 1900px;
+  --grid-gap: 14px;
+  --page-padding: 24px;       /* desktop / tablette */
+  --page-padding-mobile: 16px; /* mobile : marges nettes sur les bords */
   --navbar-height: 0px;
 }
