@@ -13,7 +13,15 @@ export default function CategoryPage() {
   if (!category) {
     return (
       <div className="category">
-        <Navbar />
+        {/* Navbar 1x1 meme en not-found */}
+        <div className="category__header">
+          <div className="category__header-nav">
+            <Navbar inGrid={true} />
+          </div>
+          <div className="category__header-title">
+            <span className="category__page-title">Not found</span>
+          </div>
+        </div>
         <div className="category--notfound">
           <p>Category not found.</p>
           <Link to="/" className="category__back-link">Back to home</Link>
@@ -31,13 +39,25 @@ export default function CategoryPage() {
   return (
     <div className="category">
 
-      {/* Navbar sticky avec le titre de la categorie */}
-      <Navbar title={`${category.label} Games`} />
+      {/* ============================================================
+          EN-TETE : navbar 1x1 | titre categorie 1x2
+          Une ligne, même gap et padding que la BentoGrid.
+          ============================================================ */}
+      <div className="category__header">
+        {/* Cellule navbar very-small (1x1) */}
+        <div className="category__header-nav">
+          <Navbar inGrid={true} />
+        </div>
+        {/* Cellule titre (occupe le reste de la ligne) */}
+        <div className="category__header-title">
+          <span className="category__page-title">{category.label} Games</span>
+        </div>
+      </div>
 
       {/* Contenu a largeur limitee */}
       <div className="category__content">
 
-        {/* Rangee de raccourcis vers les autres categories — comme Poki photo 3 */}
+        {/* Raccourcis vers les autres categories */}
         <div className="category__shortcuts">
           {otherCats.map(cat => (
             <Link
@@ -57,10 +77,10 @@ export default function CategoryPage() {
             {catGames.map((game, index) => (
               <div
                 key={game.id}
-                className="category__cell fade-up"
+                className={`category__cell category__cell--${game.size} fade-up`}
                 style={{ animationDelay: `${index * 35}ms` }}
               >
-                <GameCard game={game} size="small" />
+                <GameCard game={game} size={game.size} shimmer={game.shimmer} />
               </div>
             ))}
           </div>
@@ -70,10 +90,8 @@ export default function CategoryPage() {
 
       </div>
 
-      {/* Blocs pleine largeur, autonomes — identiques a Home */}
       <SeoBlock type="category" data={category} />
       <Footer />
-
     </div>
   )
 }
