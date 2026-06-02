@@ -2,20 +2,31 @@ import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
 import { games, categories } from '../../data/games'
+import { useAuth } from '../../context/AuthContext'
 import './Navbar.css'
 
 /*
   Navbar — deux modes :
-  - Par défaut (pages intérieures) : tuile blanche horizontale sticky,
-    même format desktop et mobile.
-  - inGrid={true} (Home/BentoGrid) : remplit sa cellule de grille very-small.
-  Le logo affiché est TOUJOURS l'icône RQ (jamais le wordmark).
+  - standalone : barre horizontale (pages intérieures)
+  - inGrid : cellule very-small de la grille (logo haut, 3 icônes bas)
+  Le logo affiché est TOUJOURS l'icône RQ.
+  Le drawer profil gère l'authentification Supabase (email + Google).
 */
 export default function Navbar({ title, inGrid = false }) {
   const [searchOpen, setSearchOpen]   = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
   const [query, setQuery]             = useState('')
   const navigate = useNavigate()
+
+  // Auth
+  const { user, profile, signUpEmail, signInEmail, signInGoogle, signOut } = useAuth()
+  const [authTab, setAuthTab]   = useState('signup')   // 'signup' | 'login'
+  const [authEmail, setAuthEmail]       = useState('')
+  const [authPassword, setAuthPassword] = useState('')
+  const [authUsername, setAuthUsername] = useState('')
+  const [authError, setAuthError]   = useState('')
+  const [authBusy, setAuthBusy]     = useState(false)
+  const [authNotice, setAuthNotice] = useState('')
 
   const gameCategories = categories.filter(c => c.id !== 'all')
   const results = query.length > 1
@@ -25,30 +36,60 @@ export default function Navbar({ title, inGrid = false }) {
   const recent  = games.slice(0, 4)
 
   const closeAll = () => { setSearchOpen(false); setProfileOpen(false); setQuery('') }
+  const resetAuthFields = () => {
+    setAuthEmail(''); setAuthPassword(''); setAuthUsername('')
+    setAuthError(''); setAuthNotice('')
+  }
+
+  /* ---- Soumission email (signup ou login selon l'onglet) ---- */
+  async function handleEmailSubmit() {
+    setAuthError(''); setAuthNotice('')
+    if (!authEmail || !authPassword) {
+      setAuthError('Email and password are required.')
+      return
+    }
+    if (authTab === 'signup' && !authUsername.trim()) {
+      setAuthError('Please choose a username.')
+      return
+    }
+    setAuthBusy(true)
+    try {
+      if (authTab === 'signup') {
+        const { error } = await signUpEmail({
+          email: authEmail,
+          password: authPassword,
+          username: authUsername.trim(),
+        })
+        if (error) { setAuthError(error.message); return }
+        setAuthNotice('Account created. You can now play and save your scores.')
+        resetAuthFields()
+        setProfileOpen(false)
+      } else {
+        const { error } = await signInEmail({ email: authEmail, password: authPassword })
+        if (error) { setAuthError(error.message); return }
+        resetAuthFields()
+        setProfileOpen(false)
+      }
+    } finally {
+      setAuthBusy(false)
+    }
+  }
+
+  async function handleGoogle() {
+    setAuthError('')
+    const { error } = await signInGoogle()
+    if (error) setAuthError(error.message)
+    // La redirection OAuth prend le relais ; rien à faire de plus ici.
+  }
 
   return (
     <>
-      {/* ============================================================
-          TUILE BRAND
-          inGrid = cellule very-small de la grille home
-          !inGrid = standalone : barre horizontale sticky sur les autres pages
-          ============================================================ */}
       <div className={`navbar__brand-tile ${inGrid ? 'navbar--in-grid' : 'navbar--standalone'}`}>
         <Link to="/" className="navbar__logo" aria-label="Ragequit Arcade">
-          {/* Wordmark présent dans le DOM mais masqué en CSS ; icône RQ toujours visible */}
-          <img
-            src="/ragequit-logo-white.png"
-            alt="Ragequit Arcade"
-            className="navbar__logo-wordmark"
-          />
-          <img
-            src="/ragequit-icon-white.png"
-            alt="RQ"
-            className="navbar__logo-icon"
-          />
+          <img src="/ragequit-logo-white.png" alt="Ragequit Arcade" className="navbar__logo-wordmark" />
+          <img src="/ragequit-icon-white.png" alt="RQ" className="navbar__logo-icon" />
         </Link>
 
-        {/* Titre central — pages catégorie/jeu en mode standalone */}
         {title && !inGrid && (
           <span className="navbar__title">{title}</span>
         )}
@@ -74,7 +115,6 @@ export default function Navbar({ title, inGrid = false }) {
         </div>
       </div>
 
-      {/* Drawers rendus dans document.body via un portail */}
       {createPortal(
         <>
       {/* ============================================================
@@ -160,7 +200,7 @@ export default function Navbar({ title, inGrid = false }) {
       )}
 
       {/* ============================================================
-          DRAWER CONNEXION
+          DRAWER PROFIL / CONNEXION
           ============================================================ */}
       {profileOpen && (
         <div className="nb-drawer nb-drawer--auth">
@@ -178,26 +218,106 @@ export default function Navbar({ title, inGrid = false }) {
               <span className="nb-drawer__head-spacer" />
             </div>
 
-            <div className="nb-drawer__tabs">
-              <button className="nb-drawer__tab nb-drawer__tab--active">Sign up</button>
-              <button className="nb-drawer__tab">Log in</button>
-            </div>
-            <h2 className="nb-drawer__auth-title">Create your account</h2>
-            <div className="nb-drawer__providers">
-              <button className="nb-drawer__provider">
-                <span className="nb-drawer__provider-icon"></span>With Apple
-              </button>
-              <button className="nb-drawer__provider">
-                <span className="nb-drawer__provider-icon nb-drawer__provider-icon--g">G</span>With Google
-              </button>
-              <button className="nb-drawer__provider">
-                <span className="nb-drawer__provider-icon nb-drawer__provider-icon--ms">⊞</span>With Microsoft
-              </button>
-              <button className="nb-drawer__provider nb-drawer__provider--primary">With email</button>
-            </div>
-            <p className="nb-drawer__auth-legal">
-              By creating an account you agree to our Terms of Use and acknowledge our Privacy Policy.
-            </p>
+            {user ? (
+              /* ---- ÉTAT CONNECTÉ : profil + déconnexion ---- */
+              <div className="nb-drawer__account">
+                <div className="nb-drawer__account-avatar">
+                  {(profile?.username || user.email || '?').charAt(0).toUpperCase()}
+                </div>
+                <h2 className="nb-drawer__auth-title">
+                  {profile?.username || 'Player'}
+                </h2>
+                <p className="nb-drawer__account-email">{user.email}</p>
+                <Link
+                  to="/leaderboard"
+                  className="nb-drawer__provider"
+                  onClick={() => setProfileOpen(false)}
+                >
+                  View leaderboard
+                </Link>
+                <button
+                  className="nb-drawer__provider nb-drawer__provider--primary"
+                  onClick={async () => { await signOut(); setProfileOpen(false) }}
+                >
+                  Log out
+                </button>
+              </div>
+            ) : (
+              /* ---- ÉTAT DÉCONNECTÉ : formulaire signup / login ---- */
+              <>
+                <div className="nb-drawer__tabs">
+                  <button
+                    className={`nb-drawer__tab ${authTab === 'signup' ? 'nb-drawer__tab--active' : ''}`}
+                    onClick={() => { setAuthTab('signup'); setAuthError(''); setAuthNotice('') }}
+                  >Sign up</button>
+                  <button
+                    className={`nb-drawer__tab ${authTab === 'login' ? 'nb-drawer__tab--active' : ''}`}
+                    onClick={() => { setAuthTab('login'); setAuthError(''); setAuthNotice('') }}
+                  >Log in</button>
+                </div>
+
+                <h2 className="nb-drawer__auth-title">
+                  {authTab === 'signup' ? 'Create your account' : 'Welcome back'}
+                </h2>
+
+                {/* Bouton Google */}
+                <div className="nb-drawer__providers">
+                  <button className="nb-drawer__provider" onClick={handleGoogle}>
+                    <span className="nb-drawer__provider-icon nb-drawer__provider-icon--g">G</span>
+                    Continue with Google
+                  </button>
+                </div>
+
+                <div className="nb-drawer__divider"><span>or</span></div>
+
+                {/* Formulaire email */}
+                <div className="nb-drawer__form">
+                  {authTab === 'signup' && (
+                    <input
+                      className="nb-drawer__input"
+                      type="text"
+                      placeholder="Username"
+                      value={authUsername}
+                      onChange={e => setAuthUsername(e.target.value)}
+                      autoComplete="username"
+                    />
+                  )}
+                  <input
+                    className="nb-drawer__input"
+                    type="email"
+                    placeholder="Email"
+                    value={authEmail}
+                    onChange={e => setAuthEmail(e.target.value)}
+                    autoComplete="email"
+                  />
+                  <input
+                    className="nb-drawer__input"
+                    type="password"
+                    placeholder="Password"
+                    value={authPassword}
+                    onChange={e => setAuthPassword(e.target.value)}
+                    autoComplete={authTab === 'signup' ? 'new-password' : 'current-password'}
+                  />
+
+                  {authError && <p className="nb-drawer__auth-error">{authError}</p>}
+                  {authNotice && <p className="nb-drawer__auth-notice">{authNotice}</p>}
+
+                  <button
+                    className="nb-drawer__provider nb-drawer__provider--primary"
+                    onClick={handleEmailSubmit}
+                    disabled={authBusy}
+                  >
+                    {authBusy
+                      ? 'Please wait…'
+                      : (authTab === 'signup' ? 'Create account' : 'Log in')}
+                  </button>
+                </div>
+
+                <p className="nb-drawer__auth-legal">
+                  By continuing you agree to our Terms of Use and acknowledge our Privacy Policy.
+                </p>
+              </>
+            )}
           </div>
         </div>
       )}
