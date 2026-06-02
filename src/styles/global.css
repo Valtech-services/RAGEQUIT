@@ -9,8 +9,10 @@ html {
 }
 
 body {
-  background-color: #00C8C8;
-  background-image: none;
+  /* Halo radial turquoise façon Poki (plus clair au centre/haut) */
+  background-color: var(--color-bg);
+  background-image: var(--bg-gradient);
+  background-attachment: fixed;
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: var(--text-md);
@@ -36,14 +38,14 @@ img {
 }
 
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #0A0E27; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+  background: rgba(6, 52, 58, 0.25);
   border-radius: var(--radius-full);
 }
-::-webkit-scrollbar-thumb:hover { background: var(--color-muted); }
+::-webkit-scrollbar-thumb:hover { background: rgba(6, 52, 58, 0.4); }
 
 ::selection {
   background: var(--color-accent-dim);
-  color: var(--color-accent);
+  color: var(--color-accent-dark);
 }
