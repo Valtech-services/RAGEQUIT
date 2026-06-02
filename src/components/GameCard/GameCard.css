@@ -1,7 +1,35 @@
 /* =====================================================================
    GAME CARD — tuile de jeu dans la BentoGrid (style Poki)
-   Le titre (Inter blanc) monte du bas au hover, centré.
-   Languette "hot" (flamme bleue) en haut à gauche pour les jeux populaires.
+
+   STRUCTURE :
+   .gamecard-wrap  → conteneur fixe (remplit la cellule). Porte les badges
+                     (flamme + NEW) qui restent IMMOBILES au hover.
+   .gamecard       → la carte cliquable qui s'élève / zoome au hover.
+
+   >>> RÉGLAGE DE LA FLAMME BLEUE <<<
+   Modifie les variables ci-dessous pour ajuster la pastille.
+   --hot-size      : taille de la pastille blanche (carrée : largeur = hauteur)
+   --hot-radius    : arrondi des coins de la pastille
+   --hot-offset    : distance depuis le bord haut/gauche de la carte
+   --hot-icon-scale: taille de la flamme à l'intérieur (0 à 1 = % de la pastille)
+   ===================================================================== */
+.gamecard-wrap {
+  --hot-size: 28px;        /* << largeur ET hauteur de la pastille (carrée) */
+  --hot-radius: 9px;       /* << arrondi de la pastille */
+  --hot-offset: 8px;       /* << marge depuis le coin haut-gauche */
+  --hot-icon-scale: 0.62;  /* << proportion de la flamme dans la pastille */
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Tailles de pastille un peu plus grandes sur medium / large */
+.bento__cell--medium .gamecard-wrap { --hot-size: 32px; --hot-radius: 10px; --hot-offset: 10px; }
+.bento__cell--large  .gamecard-wrap { --hot-size: 38px; --hot-radius: 12px; --hot-offset: 12px; }
+
+/* =====================================================================
+   CARTE CLIQUABLE
    ===================================================================== */
 .gamecard {
   display: block;
@@ -13,17 +41,12 @@
   cursor: pointer;
   background: #1a2250;
   text-decoration: none;
-  /* Ombre légère au repos */
-  box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+  box-shadow: var(--shadow-thumb);          /* ombre portee facon Poki */
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
-
-/* Hover global : légère élévation */
 .gamecard:hover {
   transform: scale(1.03) translateY(-2px);
-  box-shadow:
-    0 8px 28px rgba(0,0,0,0.28),
-    0 0 0 2px var(--color-magenta);
+  box-shadow: var(--shadow-thumb-hover), 0 0 0 2px var(--color-magenta);
 }
 .gamecard:active { transform: scale(0.99); }
 
@@ -37,10 +60,9 @@
   display: block;
   transition: opacity 0.2s ease;
 }
-/* Cachée quand la vidéo joue */
 .gamecard__img--hidden { opacity: 0; }
 
-/* ---- Vidéo preview ---- */
+/* ---- Video preview ---- */
 .gamecard__video {
   position: absolute;
   inset: 0;
@@ -54,38 +76,39 @@
 }
 .gamecard__video--visible { opacity: 1; }
 
-/* ---- Languette "hot" (flamme bleue) — jeux populaires façon Poki ---- */
+/* =====================================================================
+   BADGES STATIQUES — sur le wrapper, donc immobiles au hover
+   ===================================================================== */
+
+/* ---- Languette flamme bleue (jeux populaires) ---- */
 .gamecard__hot {
   position: absolute;
-  top: 8px;
-  left: 8px;
-  z-index: 5;
-  width: 26px;
-  height: 26px;
+  top: var(--hot-offset);
+  left: var(--hot-offset);
+  z-index: 6;
+  width: var(--hot-size);
+  height: var(--hot-size);                  /* carree : largeur = hauteur */
   display: flex;
   align-items: center;
   justify-content: center;
   background: #ffffff;
-  border-radius: 9px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  border-radius: var(--hot-radius);
+  box-shadow: 0 2px 7px rgba(0,0,0,0.22);
   pointer-events: none;
 }
 .gamecard__hot-icon {
-  color: var(--color-accent);   /* flamme cyan / bleue */
+  width: calc(var(--hot-size) * var(--hot-icon-scale));
+  height: calc(var(--hot-size) * var(--hot-icon-scale));
   display: block;
+  filter: drop-shadow(0 1px 2px rgba(0, 140, 200, 0.35));
 }
-/* Cartes plus grandes : languette un peu plus grande */
-.gamecard--medium .gamecard__hot { width: 30px; height: 30px; border-radius: 10px; }
-.gamecard--large  .gamecard__hot { width: 34px; height: 34px; border-radius: 11px; }
-.gamecard--medium .gamecard__hot-icon { width: 16px; height: 16px; }
-.gamecard--large  .gamecard__hot-icon { width: 18px; height: 18px; }
 
-/* ---- Badge NEW ---- */
+/* ---- Badge NEW (statique aussi) ---- */
 .gamecard__badge-new {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 3;
+  top: var(--hot-offset);
+  right: var(--hot-offset);
+  z-index: 6;
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 700;
@@ -97,15 +120,16 @@
   pointer-events: none;
 }
 
-/* ---- Overlay titre : voile sombre en bas + titre blanc ---- */
+/* =====================================================================
+   OVERLAY TITRE — voile bas + titre blanc qui monte au hover
+   ===================================================================== */
 .gamecard__overlay {
   position: absolute;
   inset: 0;
   z-index: 4;
   display: flex;
-  align-items: flex-end;       /* titre ancré en bas */
+  align-items: flex-end;
   justify-content: center;
-  /* Voile sombre concentré sur le bas, façon Poki */
   background: linear-gradient(
     to bottom,
     transparent 45%,
@@ -120,7 +144,6 @@
 }
 .gamecard__overlay--visible { opacity: 1; }
 
-/* Titre centré en bas, qui monte au hover (police body / Inter, blanc, gras) */
 .gamecard__title {
   font-family: var(--font-body);
   font-weight: 800;
@@ -136,30 +159,21 @@
   transform: translateY(12px);
   transition: transform 0.22s ease;
 }
-/* Le titre remonte quand l'overlay devient visible */
 .gamecard__overlay--visible .gamecard__title { transform: translateY(0); }
 
-/* ---- Tailles spécifiques : ajuste la taille du titre ---- */
 .gamecard--large  .gamecard__title { font-size: clamp(1.1rem, 2.2vw, 1.5rem); }
 .gamecard--medium .gamecard__title { font-size: clamp(0.95rem, 2vw, 1.2rem); }
 .gamecard--small  .gamecard__title { font-size: clamp(0.8rem, 2vw, 1rem); }
 
-/* ---- Shimmer effect (défini dans animations.css) ---- */
+/* ---- Shimmer ---- */
 .shimmer-effect { position: relative; overflow: hidden; }
 
-/* ---- Touch / mobile : titre toujours visible en bas ---- */
+/* ---- Touch / mobile : titre toujours visible ---- */
 @media (hover: none) {
   .gamecard__overlay {
     opacity: 1;
-    background: linear-gradient(
-      to bottom,
-      transparent 55%,
-      rgba(0,0,0,0.72) 100%
-    );
+    background: linear-gradient(to bottom, transparent 55%, rgba(0,0,0,0.72) 100%);
     padding-bottom: 10px;
   }
-  .gamecard__title {
-    transform: translateY(0);
-    font-size: clamp(0.75rem, 3.5vw, 1rem);
-  }
+  .gamecard__title { transform: translateY(0); font-size: clamp(0.75rem, 3.5vw, 1rem); }
 }
