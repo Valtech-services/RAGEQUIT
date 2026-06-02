@@ -10,9 +10,7 @@ import MobileGamePage from './MobileGamePage'
 import { submitScore } from '../../data/leaderboardStore'
 import './GamePage.css'
 
-/* =====================================================================
-   Wrapper — détecte mobile et route vers l'expérience adaptée
-   ===================================================================== */
+/* Wrapper — détecte mobile et route vers l'expérience adaptée */
 export default function GamePage() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
   useEffect(() => {
@@ -26,37 +24,25 @@ export default function GamePage() {
   return <GamePageDesktop />
 }
 
-/* =====================================================================
-   GamePage Desktop — version complète avec sidebar, pubs, leaderboard
-   ===================================================================== */
+/* GamePage Desktop */
 function GamePageDesktop() {
   const { id } = useParams()
   const navigate = useNavigate()
   const game = games.find(g => g.id === id)
 
-  // L'iframe du jeu n'est montee qu'apres clic sur "Play" (comme Poki).
   const [playing, setPlaying] = useState(false)
-  // Like / dislike (stocké localement par jeu)
-  const [vote, setVote] = useState(null) // 'up' | 'down' | null
+  const [vote, setVote] = useState(null)
   const [reportOpen, setReportOpen] = useState(false)
 
-  // Ecoute les scores envoyes par les jeux via postMessage.
-  // Les jeux (rage-hockey.html, staq.html) postent un message
-  // { type:'..._SCORE', game, mode, score, scoreLabel, diff } a la fin
-  // d'une partie. On l'enregistre dans le store local de leaderboard.
   useEffect(() => {
     function handleMessage(e) {
       const d = e.data
       if (!d || typeof d.type !== 'string') return
       if (!d.type.endsWith('_SCORE')) return
       submitScore({
-        game: d.game,
-        mode: d.mode,
-        score: d.score,
-        scoreLabel: d.scoreLabel,
-        diff: d.diff,
+        game: d.game, mode: d.mode, score: d.score,
+        scoreLabel: d.scoreLabel, diff: d.diff,
       })
-      // Notifie les composants Leaderboard de se rafraichir.
       window.dispatchEvent(new Event('rh-score-saved'))
     }
     window.addEventListener('message', handleMessage)
@@ -66,7 +52,12 @@ function GamePageDesktop() {
   if (!game) {
     return (
       <div className="gamepage">
-        <Navbar />
+        {/* Navbar 1x1 meme en not-found */}
+        <div className="gamepage__header">
+          <div className="gamepage__header-nav">
+            <Navbar inGrid={true} />
+          </div>
+        </div>
         <div className="gamepage--notfound">
           <p>Game not found.</p>
           <Link to="/" className="gamepage__back-link">Back to home</Link>
@@ -76,28 +67,29 @@ function GamePageDesktop() {
   }
 
   const category = categories.find(c => c.id === game.category)
-  // Colonne laterale : jeux recommandes (max 10)
   const sidebar = games.filter(g => g.id !== game.id).slice(0, 10)
-  // Rangee du bas : jeux de la meme categorie
   const related = games.filter(g => g.category === game.category && g.id !== game.id).slice(0, 8)
 
   return (
     <div className="gamepage">
 
-      {/* Navbar sticky — affiche le nom du jeu au centre */}
-      <Navbar title={game.title} />
-
       {/* ============================================================
-          ZONE PRINCIPALE : jeu central + colonne laterale (desktop)
+          EN-TETE : navbar 1x1 seule (même structure que CategoryPage
+          mais sans cellule titre — le titre est dans la barre du jeu)
           ============================================================ */}
+      <div className="gamepage__header">
+        <div className="gamepage__header-nav">
+          <Navbar inGrid={true} />
+        </div>
+      </div>
+
+      {/* Zone principale : jeu + sidebar */}
       <div className="gamepage__main">
 
-        {/* --- Colonne centrale : le jeu --- */}
         <div className="gamepage__stage-col">
 
           <div className="gamepage__stage">
             {playing ? (
-              /* Jeu lance : iframe */
               <iframe
                 src={`/games/${game.id}.html`}
                 title={game.title}
@@ -106,7 +98,6 @@ function GamePageDesktop() {
                 frameBorder="0"
               />
             ) : (
-              /* Ecran "Play" — comme Poki photo 5 */
               <div
                 className="gamepage__cover"
                 style={{ backgroundImage: `url(${game.thumbnail})` }}
@@ -187,12 +178,10 @@ function GamePageDesktop() {
             </div>
           </div>
 
-          {/* Bande pub sous la barre du jeu — remplit la colonne centrale */}
           <div className="gamepage__ad gamepage__ad--banner">
             <span className="gamepage__ad-label">Advertisement</span>
           </div>
 
-          {/* Plus de jeux — directement sous le jeu (comme Poki) */}
           {related.length > 0 && (
             <div className="gamepage__related">
               <h2 className="gamepage__related-title">More games</h2>
@@ -208,15 +197,10 @@ function GamePageDesktop() {
 
         </div>
 
-        {/* --- Colonne laterale --- */}
         <aside className="gamepage__sidebar">
-
-          {/* Zone pub haute (rectangle 300x250 comme Poki) */}
           <div className="gamepage__ad gamepage__ad--rect">
             <span className="gamepage__ad-label">Advertisement</span>
           </div>
-
-          {/* Mini-leaderboard : pour les jeux qui ont un classement */}
           {(game.id === 'rage-hockey' || game.id === 'staq') && (
             <div className="gamepage__side-lb">
               <Leaderboard
@@ -232,8 +216,6 @@ function GamePageDesktop() {
               </Link>
             </div>
           )}
-
-          {/* Jeux recommandes (premiers) */}
           <div className="gamepage__side-games">
             {sidebar.slice(0, 6).map(g => (
               <Link key={g.id} to={`/game/${g.id}`} className="gamepage__side-thumb">
@@ -241,13 +223,9 @@ function GamePageDesktop() {
               </Link>
             ))}
           </div>
-
-          {/* 2e zone pub (carré) au milieu de la sidebar — comme Poki */}
           <div className="gamepage__ad gamepage__ad--square">
             <span className="gamepage__ad-label">Advertisement</span>
           </div>
-
-          {/* Jeux recommandes (suite) */}
           <div className="gamepage__side-games">
             {sidebar.slice(6, 10).map(g => (
               <Link key={g.id} to={`/game/${g.id}`} className="gamepage__side-thumb">
@@ -255,12 +233,10 @@ function GamePageDesktop() {
               </Link>
             ))}
           </div>
-
         </aside>
 
       </div>
 
-      {/* Blocs pleine largeur, autonomes */}
       <SeoBlock
         type="game"
         data={game.seo ? {
@@ -271,32 +247,25 @@ function GamePageDesktop() {
           title: game.title
         } : null}
       />
-      {/* Modal "Signaler un problème" */}
+
       {reportOpen && (
         <div className="gamepage__report-overlay" onClick={() => setReportOpen(false)}>
           <div className="gamepage__report" onClick={e => e.stopPropagation()}>
             <h3 className="gamepage__report-title">Report a problem</h3>
             <p className="gamepage__report-text">What's wrong with {game.title}?</p>
             <div className="gamepage__report-options">
-              {['Game won\u2019t load', 'Game freezes or crashes', 'Controls don\u2019t work', 'Inappropriate content', 'Other'].map(opt => (
-                <button
-                  key={opt}
-                  className="gamepage__report-opt"
-                  onClick={() => setReportOpen(false)}
-                >
+              {['Game won\u2019t load','Game freezes or crashes','Controls don\u2019t work','Inappropriate content','Other'].map(opt => (
+                <button key={opt} className="gamepage__report-opt" onClick={() => setReportOpen(false)}>
                   {opt}
                 </button>
               ))}
             </div>
-            <button className="gamepage__report-cancel" onClick={() => setReportOpen(false)}>
-              Cancel
-            </button>
+            <button className="gamepage__report-cancel" onClick={() => setReportOpen(false)}>Cancel</button>
           </div>
         </div>
       )}
 
       <Footer />
-
     </div>
   )
 }
