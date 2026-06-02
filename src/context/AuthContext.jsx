@@ -1,50 +1,27 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
-/*
-  AuthContext — état d'authentification partagé dans toute l'app.
-
-  Expose :
-    user            : l'objet utilisateur Supabase (ou null)
-    profile         : la ligne profiles correspondante (username, etc.)
-    loading         : true tant que la session initiale n'est pas résolue
-    signUpEmail     : inscription email + mot de passe + username
-    signInEmail     : connexion email + mot de passe
-    signInGoogle    : connexion OAuth Google
-    signOut         : déconnexion
-
-  Usage : envelopper <App/> dans <AuthProvider> (voir main.jsx), puis
-  useAuth() dans n'importe quel composant.
-*/
-
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null)
+  const [user, setUser]       = useState(null)
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  // Récupère la ligne profile liée à l'utilisateur
   async function loadProfile(userId) {
     if (!userId) { setProfile(null); return }
     const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single()
+      .from('profiles').select('*').eq('id', userId).single()
     if (!error) setProfile(data)
   }
 
   useEffect(() => {
-    // Session initiale au chargement
     supabase.auth.getSession().then(({ data: { session } }) => {
       const u = session?.user ?? null
       setUser(u)
       if (u) loadProfile(u.id)
       setLoading(false)
     })
-
-    // Écoute les changements (connexion, déconnexion, refresh token)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         const u = session?.user ?? null
@@ -56,27 +33,19 @@ export function AuthProvider({ children }) {
     return () => subscription.unsubscribe()
   }, [])
 
-  /* ---- Inscription email + mot de passe + username ---- */
   async function signUpEmail({ email, password, username }) {
     const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        // username stocké dans les métadonnées ; un trigger SQL crée
-        // ensuite la ligne dans la table profiles (voir SQL fourni).
-        data: { username },
-      },
+      email, password,
+      options: { data: { username } },
     })
     return { data, error }
   }
 
-  /* ---- Connexion email + mot de passe ---- */
   async function signInEmail({ email, password }) {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     return { data, error }
   }
 
-  /* ---- Connexion Google (OAuth) ---- */
   async function signInGoogle() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -85,16 +54,48 @@ export function AuthProvider({ children }) {
     return { data, error }
   }
 
-  /* ---- Déconnexion ---- */
   async function signOut() {
     await supabase.auth.signOut()
-    setUser(null)
-    setProfile(null)
+    setUser(null); setProfile(null)
+  }
+
+  /* Met à jour le profil (pays, jeu favori, etc.) et recharge le state */
+  async function updateProfile(updates) {
+    if (!user) return { error: 'Not authenticated' }
+    const { data, error } = await supabase
+      .from('profiles')
+      .update(updates)
+      .eq('id', user.id)
+      .select()
+      .single()
+    if (!error && data) setProfile(data)
+    return { data, error }
+  }
+
+  /* Incrémente le compteur de parties + met à jour le streak */
+  async function recordPlay(gameId) {
+    if (!user || !profile) return
+    const now = new Date()
+    const last = profile.last_played_at ? new Date(profile.last_played_at) : null
+    const isNewDay = !last || now.toDateString() !== last.toDateString()
+    const isConsecutive = last &&
+      (now - last) < 1000 * 60 * 60 * 48   // moins de 48h entre les sessions
+
+    const newStreak = isNewDay
+      ? (isConsecutive ? (profile.streak_days || 0) + 1 : 1)
+      : (profile.streak_days || 0)
+
+    await updateProfile({
+      games_played:   (profile.games_played || 0) + 1,
+      streak_days:    newStreak,
+      last_played_at: now.toISOString(),
+    })
   }
 
   const value = {
     user, profile, loading,
     signUpEmail, signInEmail, signInGoogle, signOut,
+    updateProfile, recordPlay,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
