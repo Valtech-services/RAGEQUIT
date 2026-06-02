@@ -1,66 +1,64 @@
 /* =====================================================================
-   NAVBAR — deux modes + drawers
+   NAVBAR — deux modes + drawers (calée sur Poki)
    .navbar--standalone : pages intérieures, barre horizontale sticky
    .navbar--in-grid    : home, remplit sa cellule de grille
    ===================================================================== */
 
 /* =====================================================================
    MODE STANDALONE — pages intérieures (GamePage, CategoryPage, etc.)
-   Barre blanche horizontale sticky. Même format desktop ET mobile.
+   Barre blanche horizontale flottante, compacte façon Poki.
    ===================================================================== */
 .navbar--standalone {
   position: sticky;
-  top: 8px;
+  top: var(--page-padding-mobile);
   z-index: 100;
-  width: calc(100% - 16px);
-  max-width: calc(var(--max-width) - 16px);
-  margin: 8px auto 0;
+  width: calc(100% - 2 * var(--page-padding));
+  max-width: calc(var(--max-width) - 2 * var(--page-padding));
+  margin: var(--page-padding-mobile) auto 0;
   background: #ffffff;
   border-radius: var(--radius-lg);
-  box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+  box-shadow: 0 2px 14px rgba(0,0,0,0.12);
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 10px 18px;
-  height: 64px;
+  padding: 8px 16px;
+  height: 58px;
 }
 
 /* =====================================================================
-   MODE IN-GRID — home, cellule de la BentoGrid
-   Sur desktop : colonne (logo en haut, icônes en bas).
-   Sur mobile : barre horizontale (la cellule fait toute la largeur).
+   MODE IN-GRID — home, PREMIÈRE cellule réelle de la grille (carrée).
+   Remplit toute la cellule : l'alignement vient de la grille elle-même,
+   donc mêmes marges/gap que les vignettes. Pas de position sticky.
    ===================================================================== */
 .navbar--in-grid {
   width: 100%;
   height: 100%;
   background: #ffffff;
-  border-radius: var(--radius-lg);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
-  /* Desktop : colonne centrée */
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-thumb);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 10px;
+  gap: 12px;
+  padding: 12px;
 }
 
-/* Sur mobile la cellule nav est span 2 (pleine largeur) → barre horizontale */
+/* Sur mobile la cellule nav est pleine largeur → barre horizontale compacte */
 @media (max-width: 600px) {
   .navbar--in-grid {
     flex-direction: row;
     justify-content: space-between;
     height: auto;
-    min-height: 56px;
-    padding: 10px 14px;
+    min-height: 52px;
+    padding: 8px 14px;
   }
 }
 
 /* =====================================================================
-   LOGO — commun aux deux modes : images PNG
-   Desktop : wordmark (logo long). Mobile : icône carrée.
+   LOGO — images PNG. Desktop : wordmark. Mobile : icône carrée.
    ===================================================================== */
 .navbar__logo {
   display: flex;
@@ -69,28 +67,26 @@
   flex-shrink: 0;
 }
 
-/* Wordmark : visible sur desktop, caché sur mobile */
 .navbar__logo-wordmark {
-  height: 36px;
+  height: 32px;
   width: auto;
   display: block;
   object-fit: contain;
 }
 
-/* Icône : cachée sur desktop, visible sur mobile */
 .navbar__logo-icon {
-  height: 36px;
-  width: 36px;
+  height: 32px;
+  width: 32px;
   display: none;
   object-fit: contain;
 }
 
-/* En mode grille (home) : un peu plus grand */
-.navbar--in-grid .navbar__logo-wordmark { height: 32px; }
-.navbar--in-grid .navbar__logo-icon     { height: 32px; width: 32px; }
+/* En mode grille (home) */
+.navbar--in-grid .navbar__logo-wordmark { height: 30px; }
+.navbar--in-grid .navbar__logo-icon     { height: 30px; width: 30px; }
 
-/* Standalone un peu plus grand */
-.navbar--standalone .navbar__logo-wordmark { height: 38px; }
+/* Standalone */
+.navbar--standalone .navbar__logo-wordmark { height: 32px; }
 
 /* ---- Mobile : basculement wordmark → icône ---- */
 @media (max-width: 600px) {
@@ -114,34 +110,26 @@
 }
 
 /* =====================================================================
-   ACTIONS (icônes)
+   ACTIONS (icônes) — boutons carrés arrondis façon Poki
    ===================================================================== */
 .navbar__actions {
   display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
+  gap: 8px;
+  flex-wrap: nowrap;
   justify-content: center;
   flex-shrink: 0;
-}
-/* Sur mobile in-grid : pas de wrap */
-@media (max-width: 600px) {
-  .navbar__actions { flex-wrap: nowrap; }
 }
 
 .navbar__btn {
   width: 38px;
   height: 38px;
-  border-radius: var(--radius-full);
+  border-radius: 12px;            /* carré arrondi, pas rond (Poki) */
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--color-accent);
   border: none;
-  background: linear-gradient(145deg, #ffffff, #eef3fb);
-  box-shadow:
-    0 2px 6px rgba(0,0,0,0.10),
-    inset 0 1px 1px rgba(255,255,255,0.9),
-    inset 0 -2px 4px rgba(120,140,200,0.12);
+  background: #eef3fb;            /* gris-bleu très clair façon Poki */
   cursor: pointer;
   transition: all 0.18s ease;
   text-decoration: none;
@@ -149,14 +137,12 @@
 .navbar__btn:hover {
   color: #ffffff;
   background: var(--gradient-brand);
-  box-shadow:
-    0 4px 14px rgba(255,0,255,0.32),
-    0 2px 6px rgba(0,217,255,0.25);
-  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 4px 14px rgba(255,0,255,0.28);
+  transform: translateY(-1px);
 }
-.navbar__btn:active { transform: translateY(0) scale(0.98); }
+.navbar__btn:active { transform: translateY(0) scale(0.97); }
 @media (max-width: 600px) {
-  .navbar__btn { width: 34px; height: 34px; }
+  .navbar__btn { width: 36px; height: 36px; border-radius: 11px; }
 }
 
 /* =====================================================================
@@ -171,7 +157,7 @@
 }
 
 /* =====================================================================
-   DRAWERS — tiroirs latéraux gauche identiques (recherche + connexion)
+   DRAWERS — tiroirs latéraux gauche (recherche + connexion)
    ===================================================================== */
 .nb-drawer--search,
 .nb-drawer--auth {
@@ -192,7 +178,7 @@
 
 .nb-drawer__inner { padding: var(--gap-lg); }
 
-/* En-tête du drawer connexion : flèche + logo centré (même hauteur que recherche) */
+/* En-tête du drawer connexion */
 .nb-drawer__head {
   display: flex;
   align-items: center;
@@ -213,7 +199,6 @@
   padding: 6px;
   margin-bottom: var(--gap-md);
 }
-/* Flèche retour recherche */
 .nb-drawer__back {
   width: 40px; height: 40px; flex-shrink: 0;
   border-radius: var(--radius-full); border: none;
@@ -274,15 +259,14 @@
 .nb-drawer__result-cat { font-size: var(--text-xs); color: #999999; text-transform: uppercase; letter-spacing: 0.08em; }
 
 /* =====================================================================
-   DRAWER CONNEXION — flèche retour ronde comme Poki (en haut à droite)
+   DRAWER CONNEXION
    ===================================================================== */
-
 .nb-drawer__auth-logo {
   display: flex; align-items: baseline; justify-content: center;
   gap: 3px; font-family: var(--font-display);
 }
-.nb-drawer__auth-logo-rage  { color: var(--color-accent); font-size: 28px; }
-.nb-drawer__auth-logo-quit  { color: #111111; font-size: 28px; }
+.nb-drawer__auth-logo-rage   { color: var(--color-accent); font-size: 28px; }
+.nb-drawer__auth-logo-quit   { color: #111111; font-size: 28px; }
 .nb-drawer__auth-logo-arcade { color: #999999; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; }
 
 .nb-drawer__tabs {
@@ -332,7 +316,11 @@
   .nb-drawer__game-grid { grid-template-columns: repeat(3,1fr); }
 
   /* Standalone plus compacte sur mobile */
-  .navbar--standalone { height: 52px; padding: 8px 14px; margin: 5px auto 0; width: calc(100% - 10px); }
-  .navbar--standalone .navbar__logo-rage,
-  .navbar--standalone .navbar__logo-quit { font-size: 18px; }
+  .navbar--standalone {
+    height: 52px;
+    padding: 8px 14px;
+    margin: var(--page-padding-mobile) auto 0;
+    top: var(--page-padding-mobile);
+    width: calc(100% - 2 * var(--page-padding-mobile));
+  }
 }
