@@ -24,9 +24,11 @@
   height: 100%;
 }
 
-/* Tailles de pastille un peu plus grandes sur medium / large */
-.bento__cell--medium .gamecard-wrap { --hot-size: 32px; --hot-radius: 10px; --hot-offset: 10px; }
-.bento__cell--large  .gamecard-wrap { --hot-size: 38px; --hot-radius: 12px; --hot-offset: 12px; }
+/* Tailles de pastille selon la taille de carte (nouvelle échelle) */
+.bento__cell--very-small .gamecard-wrap { --hot-size: 24px; --hot-radius: 8px;  --hot-offset: 6px; }
+.bento__cell--small      .gamecard-wrap { --hot-size: 30px; --hot-radius: 10px; --hot-offset: 9px; }
+.bento__cell--medium     .gamecard-wrap { --hot-size: 34px; --hot-radius: 11px; --hot-offset: 11px; }
+.bento__cell--large      .gamecard-wrap { --hot-size: 40px; --hot-radius: 13px; --hot-offset: 13px; }
 
 /* =====================================================================
    CARTE CLIQUABLE
@@ -161,9 +163,10 @@
 }
 .gamecard__overlay--visible .gamecard__title { transform: translateY(0); }
 
-.gamecard--large  .gamecard__title { font-size: clamp(1.1rem, 2.2vw, 1.5rem); }
-.gamecard--medium .gamecard__title { font-size: clamp(0.95rem, 2vw, 1.2rem); }
-.gamecard--small  .gamecard__title { font-size: clamp(0.8rem, 2vw, 1rem); }
+.gamecard--large      .gamecard__title { font-size: clamp(1.1rem, 2.2vw, 1.5rem); }
+.gamecard--medium     .gamecard__title { font-size: clamp(0.95rem, 2vw, 1.2rem); }
+.gamecard--small      .gamecard__title { font-size: clamp(0.8rem, 2vw, 1rem); }
+.gamecard--very-small .gamecard__title { font-size: clamp(0.7rem, 1.8vw, 0.85rem); }
 
 /* ---- Shimmer ---- */
 .shimmer-effect { position: relative; overflow: hidden; }
