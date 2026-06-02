@@ -2,6 +2,9 @@
    GAMES.JS — Ragequit Arcade
    Catalogue de jeux. Seuls les jeux vraiment en ligne sont listés.
    Ajouter un jeu = ajouter une entrée dans le tableau `games`.
+
+   Champ `hot: true`  → affiche la languette blanche avec la flamme bleue
+                        (façon Poki : marque les jeux les plus joués / tendance).
    ===================================================================== */
 
 /* ---- Catégories ---- */
@@ -67,6 +70,7 @@ export const games = [
     size: 'large',
     shimmer: true,
     isNew: true,
+    hot: true,                 // ← languette flamme bleue (jeu populaire)
     landscape: true,           // ← indique que ce jeu se joue en paysage (rotation mobile)
     plays: 0,
     controls: '1P: mouse or finger on the left side. 2P: right side touch or IJKL keys.',
@@ -98,6 +102,7 @@ export const games = [
     size: 'medium',
     shimmer: true,
     isNew: false,
+    hot: true,                 // ← languette flamme bleue (jeu populaire)
     landscape: false,          // ← portrait ok sur mobile
     plays: 0,
     controls: 'Tap or click to drop the block. Mobile friendly.',
