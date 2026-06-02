@@ -442,6 +442,135 @@
 }
 .nb-drawer__account .nb-drawer__provider { width: 100%; }
 
+/* Username avec drapeau */
+.nb-drawer__account-username {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  color: #111111;
+  letter-spacing: 0.04em;
+  text-align: center;
+  margin: 0;
+}
+
+/* Badge/titre gameur */
+.nb-drawer__badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: var(--badge-color, #aaaaaa);
+  margin-bottom: 4px;
+}
+
+/* Grille de stats */
+.nb-drawer__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
+  margin-bottom: var(--gap-md);
+}
+.nb-drawer__stat {
+  background: #f4f6fb;
+  border-radius: var(--radius-md);
+  padding: 10px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  text-align: center;
+}
+.nb-drawer__stat-value {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: #111111;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.nb-drawer__stat-label {
+  font-size: 10px;
+  color: #999999;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  line-height: 1.2;
+}
+
+/* Jeu favori */
+.nb-drawer__favorite {
+  width: 100%;
+  margin-bottom: var(--gap-md);
+}
+.nb-drawer__favorite-label {
+  display: block;
+  font-size: var(--text-xs);
+  color: #999999;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+.nb-drawer__favorite-game {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #f4f6fb;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: background var(--transition-fast);
+}
+.nb-drawer__favorite-game:hover { background: #e8eef8; }
+.nb-drawer__favorite-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.nb-drawer__favorite-title {
+  font-weight: 700;
+  font-size: var(--text-sm);
+  color: #111111;
+  flex: 1;
+}
+.nb-drawer__favorite-empty {
+  width: 100%;
+  padding: 10px 12px;
+  background: #f4f6fb;
+  border: 1.5px dashed #cccccc;
+  border-radius: var(--radius-md);
+  color: #999999;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: all var(--transition-fast);
+}
+.nb-drawer__favorite-empty:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+/* Bouton danger (logout) */
+.nb-drawer__provider--danger {
+  border-color: #ffcccc;
+  color: #d93636;
+}
+.nb-drawer__provider--danger:hover { background: #fff0f0; border-color: #d93636; }
+
+/* Mode édition */
+.nb-drawer__edit { display: flex; flex-direction: column; gap: 6px; }
+.nb-drawer__field-label {
+  font-size: var(--text-xs);
+  color: #999999;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 8px;
+}
+.nb-drawer__select { cursor: pointer; }
+.nb-drawer__edit-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+
 /* =====================================================================
    RESPONSIVE DRAWERS
    ===================================================================== */
