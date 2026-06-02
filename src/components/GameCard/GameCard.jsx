@@ -54,7 +54,7 @@ export default function GameCard({ game, size = 'small', shimmer = false }) {
       {/* La carte cliquable : c'est ELLE qui scale au hover, pas les badges */}
       <Link
         to={`/game/${game.id}`}
-        className={`gamecard gamecard--${size} ${shimmer ? 'shimmer-effect' : ''}`}
+        className={`gamecard gamecard--${size} ${game.isNew ? 'gamecard--new' : ''} ${shimmer ? 'shimmer-effect' : ''}`}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onFocus={() => setHovered(true)}
