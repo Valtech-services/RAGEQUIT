@@ -41,18 +41,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px;
+  justify-content: space-evenly;   /* logo et icônes bien répartis dans le carré */
+  gap: 6px;
+  padding: 10px 6px;
 }
 
-/* En cellule very-small : on force l'icône RQ (le wordmark ne tient pas) */
+/* En cellule very-small : icône RQ (jamais le wordmark) */
 .navbar--in-grid .navbar__logo-wordmark { display: none; }
-.navbar--in-grid .navbar__logo-icon     { display: block; height: 30px; width: 30px; }
+.navbar--in-grid .navbar__logo-icon     { display: block; height: 28px; width: 28px; }
 
-/* Icônes compactes et alignées sur une rangée dans le petit carré */
-.navbar--in-grid .navbar__actions { gap: 6px; flex-wrap: wrap; }
-.navbar--in-grid .navbar__btn { width: 30px; height: 30px; border-radius: 9px; }
+/* Icônes compactes alignées dans le petit carré */
+.navbar--in-grid .navbar__actions { gap: 6px; flex-wrap: wrap; justify-content: center; }
+.navbar--in-grid .navbar__btn { width: 28px; height: 28px; border-radius: 9px; }
 
 /* Sur mobile la cellule nav est pleine largeur → barre horizontale compacte */
 @media (max-width: 600px) {
@@ -63,14 +63,14 @@
     min-height: 52px;
     padding: 8px 14px;
   }
-  /* Pleine largeur : le wordmark a la place, on le rétablit */
-  .navbar--in-grid .navbar__logo-wordmark { display: block; height: 28px; }
-  .navbar--in-grid .navbar__logo-icon     { display: none; }
+  /* Icône RQ aussi sur mobile (jamais le wordmark) */
+  .navbar--in-grid .navbar__logo-icon { display: block; height: 30px; width: 30px; }
   .navbar--in-grid .navbar__btn { width: 36px; height: 36px; border-radius: 11px; }
 }
 
 /* =====================================================================
-   LOGO — images PNG. Desktop : wordmark. Mobile : icône carrée.
+   LOGO — la navbar utilise TOUJOURS l'icône RQ (jamais le wordmark),
+   quel que soit le mode (in-grid / standalone) et la taille d'écran.
    ===================================================================== */
 .navbar__logo {
   display: flex;
@@ -80,31 +80,18 @@
 }
 
 .navbar__logo-wordmark {
-  height: 32px;
-  width: auto;
-  display: block;
-  object-fit: contain;
+  display: none;            /* jamais affiché dans la navbar */
 }
 
 .navbar__logo-icon {
-  height: 32px;
-  width: 32px;
-  display: none;
+  height: 30px;
+  width: 30px;
+  display: block;           /* toujours visible */
   object-fit: contain;
 }
 
-/* En mode grille (home) */
-.navbar--in-grid .navbar__logo-wordmark { height: 30px; }
-.navbar--in-grid .navbar__logo-icon     { height: 30px; width: 30px; }
-
-/* Standalone */
-.navbar--standalone .navbar__logo-wordmark { height: 32px; }
-
-/* ---- Mobile : basculement wordmark → icône ---- */
-@media (max-width: 600px) {
-  .navbar__logo-wordmark { display: none; }
-  .navbar__logo-icon     { display: block; }
-}
+/* Standalone : icône RQ aussi */
+.navbar--standalone .navbar__logo-icon { height: 32px; width: 32px; }
 
 /* =====================================================================
    TITRE CENTRAL (standalone uniquement — page catégorie)
@@ -274,12 +261,11 @@
    DRAWER CONNEXION
    ===================================================================== */
 .nb-drawer__auth-logo {
-  display: flex; align-items: baseline; justify-content: center;
-  gap: 3px; font-family: var(--font-display);
+  display: flex; align-items: center; justify-content: center; flex: 1;
 }
-.nb-drawer__auth-logo-rage   { color: var(--color-accent); font-size: 28px; }
-.nb-drawer__auth-logo-quit   { color: #111111; font-size: 28px; }
-.nb-drawer__auth-logo-arcade { color: #999999; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; }
+.nb-drawer__auth-logo-img {
+  height: 30px; width: auto; object-fit: contain; display: block;
+}
 
 .nb-drawer__tabs {
   display: flex; background: #f4f4f6; border-radius: var(--radius-full);
