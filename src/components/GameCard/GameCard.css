@@ -1,19 +1,18 @@
 /* =====================================================================
-   GAME CARD — tuile de jeu dans la BentoGrid
-   Le titre apparaît CENTRÉ au hover, avec vidéo preview en boucle.
+   GAME CARD — tuile de jeu dans la BentoGrid (style Poki)
+   Le titre (Inter blanc) monte du bas au hover, centré.
+   Languette "hot" (flamme bleue) en haut à gauche pour les jeux populaires.
    ===================================================================== */
-
 .gamecard {
   display: block;
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-card);
   overflow: hidden;
   cursor: pointer;
   background: #1a2250;
   text-decoration: none;
-
   /* Ombre légère au repos */
   box-shadow: 0 2px 10px rgba(0,0,0,0.18);
   transition: transform 0.18s ease, box-shadow 0.18s ease;
@@ -55,11 +54,37 @@
 }
 .gamecard__video--visible { opacity: 1; }
 
+/* ---- Languette "hot" (flamme bleue) — jeux populaires façon Poki ---- */
+.gamecard__hot {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 5;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border-radius: 9px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  pointer-events: none;
+}
+.gamecard__hot-icon {
+  color: var(--color-accent);   /* flamme cyan / bleue */
+  display: block;
+}
+/* Cartes plus grandes : languette un peu plus grande */
+.gamecard--medium .gamecard__hot { width: 30px; height: 30px; border-radius: 10px; }
+.gamecard--large  .gamecard__hot { width: 34px; height: 34px; border-radius: 11px; }
+.gamecard--medium .gamecard__hot-icon { width: 16px; height: 16px; }
+.gamecard--large  .gamecard__hot-icon { width: 18px; height: 18px; }
+
 /* ---- Badge NEW ---- */
 .gamecard__badge-new {
   position: absolute;
   top: 8px;
-  left: 8px;
+  right: 8px;
   z-index: 3;
   font-family: var(--font-mono);
   font-size: 10px;
@@ -72,83 +97,69 @@
   pointer-events: none;
 }
 
-/* ---- Overlay titre centré ---- */
+/* ---- Overlay titre : voile sombre en bas + titre blanc ---- */
 .gamecard__overlay {
   position: absolute;
   inset: 0;
   z-index: 4;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  align-items: flex-end;       /* titre ancré en bas */
   justify-content: center;
-  gap: 8px;
-  /* Gradient sombre pour lisibilité */
+  /* Voile sombre concentré sur le bas, façon Poki */
   background: linear-gradient(
     to bottom,
-    rgba(0,0,0,0.15) 0%,
-    rgba(0,0,0,0.7) 100%
+    transparent 45%,
+    rgba(0,0,0,0.55) 80%,
+    rgba(0,0,0,0.78) 100%
   );
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.22s ease;
   pointer-events: none;
-  padding: 12px;
+  padding: 14px 12px;
   text-align: center;
 }
 .gamecard__overlay--visible { opacity: 1; }
 
-/* Titre centré au hover */
+/* Titre centré en bas, qui monte au hover (police body / Inter, blanc, gras) */
 .gamecard__title {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
+  font-weight: 800;
   color: #ffffff;
-  letter-spacing: 0.05em;
-  line-height: 1.1;
-  text-shadow:
-    0 2px 8px rgba(0,0,0,0.8),
-    0 0 20px rgba(0,0,0,0.5);
-  /* Taille adaptée à la taille de la cellule */
-  font-size: clamp(0.9rem, 3vw, 1.6rem);
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.7);
+  font-size: clamp(0.85rem, 2vw, 1.05rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  transform: translateY(12px);
+  transition: transform 0.22s ease;
 }
-
-/* Icône play */
-.gamecard__play-icon {
-  font-size: clamp(1rem, 2.5vw, 1.6rem);
-  color: rgba(255,255,255,0.9);
-  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
-  line-height: 1;
-}
+/* Le titre remonte quand l'overlay devient visible */
+.gamecard__overlay--visible .gamecard__title { transform: translateY(0); }
 
 /* ---- Tailles spécifiques : ajuste la taille du titre ---- */
-.gamecard--large .gamecard__title  { font-size: clamp(1.4rem, 3vw, 2.2rem); }
-.gamecard--medium .gamecard__title { font-size: clamp(1.1rem, 2.5vw, 1.7rem); }
-.gamecard--small .gamecard__title  { font-size: clamp(0.8rem, 2vw, 1.1rem); }
-
-.gamecard--large .gamecard__play-icon  { font-size: 1.8rem; }
-.gamecard--medium .gamecard__play-icon { font-size: 1.4rem; }
-.gamecard--small .gamecard__play-icon  { font-size: 1rem; }
+.gamecard--large  .gamecard__title { font-size: clamp(1.1rem, 2.2vw, 1.5rem); }
+.gamecard--medium .gamecard__title { font-size: clamp(0.95rem, 2vw, 1.2rem); }
+.gamecard--small  .gamecard__title { font-size: clamp(0.8rem, 2vw, 1rem); }
 
 /* ---- Shimmer effect (défini dans animations.css) ---- */
 .shimmer-effect { position: relative; overflow: hidden; }
 
-/* ---- Touch / mobile : overlay toujours légèrement visible ---- */
+/* ---- Touch / mobile : titre toujours visible en bas ---- */
 @media (hover: none) {
-  /* Sur tactile, montre en permanence un gradient bas avec le titre */
   .gamecard__overlay {
     opacity: 1;
     background: linear-gradient(
       to bottom,
-      transparent 50%,
-      rgba(0,0,0,0.75) 100%
+      transparent 55%,
+      rgba(0,0,0,0.72) 100%
     );
-    justify-content: flex-end;
     padding-bottom: 10px;
   }
-  .gamecard__play-icon { display: none; }
   .gamecard__title {
+    transform: translateY(0);
     font-size: clamp(0.75rem, 3.5vw, 1rem);
-    text-align: center;
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 }
