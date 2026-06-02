@@ -28,135 +28,87 @@
 }
 
 /* =====================================================================
-   MODE FLOATING — home : navbar posée sur le trou (position absolue
-   calculée en JS), suit le scroll en continu car ancrée dans la page.
-   Mêmes styles internes que in-grid (logo haut, icônes bas).
-   ===================================================================== */
-.navbar--floating {
-  position: absolute;             /* ancrée dans la page → suit le scroll */
-  z-index: 50;
-  overflow: hidden;
-  background: #ffffff;
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-thumb);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  padding: 12% 6%;
-  box-sizing: border-box;
-}
-.navbar--floating .navbar__logo-wordmark { display: none !important; }
-.navbar--floating .navbar__logo-icon {
-  display: block !important;
-  width: clamp(20px, 45%, 40px);
-  height: clamp(20px, 45%, 40px);
-  object-fit: contain;
-}
-.navbar--floating .navbar__actions {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(2px, 4%, 6px);
-  width: 100%;
-}
-.navbar--floating .navbar__btn {
-  width: clamp(18px, 28%, 30px);
-  height: clamp(18px, 28%, 30px);
-  flex-shrink: 0;
-  border-radius: 8px;
-  padding: 0;
-}
-.navbar--floating .navbar__btn svg { width: 55%; height: 55%; }
-
-/* =====================================================================
-   MODE IN-GRID — cellule very-small (1×1), logo en haut, icônes en bas.
-   overflow: hidden garantit qu'aucun enfant ne déborde jamais.
-   Toutes les dimensions sont relatives à la cellule via % et clamp.
+   MODE IN-GRID — cellule 1×1 de la grille, design "split premium"
+   Structure (sans changer le JSX) :
+     .navbar__logo    → zone HAUTE (60%) : le logo, centré
+     [trait fin]      → séparateur via border-top sur .navbar__actions
+     .navbar__actions → zone BASSE (40%) : 3 boutons en colonnes égales
+   La tuile scroll avec la page (aucun position: sticky/fixed).
    ===================================================================== */
 .navbar--in-grid {
   width: 100%;
   height: 100%;
-  overflow: hidden;               /* jamais de débordement */
   background: #ffffff;
   border-radius: var(--radius-card);
-  box-shadow: var(--shadow-thumb);
+  box-shadow: var(--shadow-thumb, 0 6px 16px rgba(0,0,0,0.18));
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;  /* logo haut / icônes bas, bien répartis */
-  padding: 12% 6%;                /* marges internes proportionnelles à la cellule */
+  align-items: stretch;
+  justify-content: stretch;
   gap: 0;
-  box-sizing: border-box;
+  padding: 0;
+  overflow: hidden;
 }
 
-/* Logo : toujours l'icône RQ, jamais le wordmark */
-.navbar--in-grid .navbar__logo-wordmark { display: none !important; }
-.navbar--in-grid .navbar__logo-icon {
-  display: block !important;
-  /* Taille proportionnelle : 45% de la cellule, max 36px */
-  width: clamp(20px, 45%, 36px);
-  height: clamp(20px, 45%, 36px);
-  object-fit: contain;
-}
-
-/* Rangée d'icônes : une seule ligne, 3 boutons serrés */
-.navbar--in-grid .navbar__actions {
+/* Zone HAUTE : logo — occupe 60% */
+.navbar--in-grid .navbar__logo {
+  flex: 0 0 60%;
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;              /* jamais de retour à la ligne */
   align-items: center;
   justify-content: center;
-  gap: clamp(2px, 4%, 6px);      /* gap proportionnel */
-  width: 100%;
-}
-
-/* Boutons : taille proportionnelle à la cellule, jamais trop grands */
-.navbar--in-grid .navbar__btn {
-  width: clamp(18px, 28%, 30px);
-  height: clamp(18px, 28%, 30px);
-  flex-shrink: 0;
-  border-radius: 8px;
   padding: 0;
 }
-.navbar--in-grid .navbar__btn svg {
-  width: 55%;
-  height: 55%;
+
+/* Zone BASSE : 3 boutons — occupe le reste (40%) avec trait séparateur */
+.navbar--in-grid .navbar__actions {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+  padding: 0;
+  border-top: 1px solid rgba(16, 22, 46, 0.08);
 }
 
-/* Mobile : la cellule nav est pleine largeur → barre horizontale */
+/* Boutons : transparents, micro-trait vertical entre eux, hover cyan léger */
+.navbar--in-grid .navbar__btn {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  position: relative;
+  transform: none;
+}
+.navbar--in-grid .navbar__btn + .navbar__btn::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 20%; bottom: 20%;
+  width: 1px;
+  background: rgba(16, 22, 46, 0.08);
+}
+.navbar--in-grid .navbar__btn:hover {
+  background: rgba(0, 217, 255, 0.08);
+  color: var(--color-accent);
+  box-shadow: none;
+  transform: none;
+}
+.navbar--in-grid .navbar__btn:active {
+  background: rgba(0, 217, 255, 0.16);
+  transform: none;
+}
+
+/* Sur mobile la cellule reste un carré 1×1 (même design, pas de bascule) */
 @media (max-width: 600px) {
   .navbar--in-grid {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    height: auto;
-    min-height: 52px;
-    padding: 8px 14px;
-    overflow: visible;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    padding: 0;
   }
-  .navbar--in-grid .navbar__logo-icon {
-    width: 32px;
-    height: 32px;
-  }
-  .navbar--in-grid .navbar__actions {
-    flex-direction: row;
-    width: auto;
-    gap: 8px;
-  }
-  .navbar--in-grid .navbar__btn {
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-  }
-  .navbar--in-grid .navbar__btn svg { width: 16px; height: 16px; }
 }
 
 /* =====================================================================
-   LOGO — la navbar utilise TOUJOURS l'icône RQ (jamais le wordmark),
-   quel que soit le mode (in-grid / standalone) et la taille d'écran.
+   LOGO — images PNG. Desktop : wordmark. Mobile : icône carrée.
    ===================================================================== */
 .navbar__logo {
   display: flex;
@@ -166,18 +118,38 @@
 }
 
 .navbar__logo-wordmark {
-  display: none;            /* jamais affiché dans la navbar */
-}
-
-.navbar__logo-icon {
-  height: 30px;
-  width: 30px;
-  display: block;           /* toujours visible */
+  height: 32px;
+  width: auto;
+  display: block;
   object-fit: contain;
 }
 
-/* Standalone : icône RQ aussi */
-.navbar--standalone .navbar__logo-icon { height: 32px; width: 32px; }
+.navbar__logo-icon {
+  height: 32px;
+  width: 32px;
+  display: none;
+  object-fit: contain;
+}
+
+/* En mode grille (home) : TOUJOURS le wordmark, jamais l'icône, et
+   il s'adapte à la largeur de la cellule (1×1 fixe ou fluide mobile). */
+.navbar--in-grid .navbar__logo-wordmark {
+  display: block;
+  height: auto;
+  width: 72%;
+  max-height: 46%;
+  object-fit: contain;
+}
+.navbar--in-grid .navbar__logo-icon { display: none; }
+
+/* Standalone */
+.navbar--standalone .navbar__logo-wordmark { height: 32px; }
+
+/* ---- Mobile : bascule wordmark → icône UNIQUEMENT en standalone ---- */
+@media (max-width: 600px) {
+  .navbar--standalone .navbar__logo-wordmark { display: none; }
+  .navbar--standalone .navbar__logo-icon     { display: block; }
+}
 
 /* =====================================================================
    TITRE CENTRAL (standalone uniquement — page catégorie)
@@ -347,11 +319,12 @@
    DRAWER CONNEXION
    ===================================================================== */
 .nb-drawer__auth-logo {
-  display: flex; align-items: center; justify-content: center; flex: 1;
+  display: flex; align-items: baseline; justify-content: center;
+  gap: 3px; font-family: var(--font-display);
 }
-.nb-drawer__auth-logo-img {
-  height: 30px; width: auto; object-fit: contain; display: block;
-}
+.nb-drawer__auth-logo-rage   { color: var(--color-accent); font-size: 28px; }
+.nb-drawer__auth-logo-quit   { color: #111111; font-size: 28px; }
+.nb-drawer__auth-logo-arcade { color: #999999; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; }
 
 .nb-drawer__tabs {
   display: flex; background: #f4f4f6; border-radius: var(--radius-full);
@@ -390,230 +363,6 @@
   font-size: var(--text-xs); color: #999999; line-height: 1.6;
   text-align: center; margin-bottom: var(--gap-lg);
 }
-
-/* =====================================================================
-   AUTH — formulaire email, séparateur, messages, compte connecté
-   ===================================================================== */
-.nb-drawer__form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: var(--gap-md);
-}
-.nb-drawer__input {
-  width: 100%;
-  padding: 13px 14px;
-  border: 1.5px solid #e0e0e6;
-  border-radius: var(--radius-md);
-  background: #ffffff;
-  color: #111111;
-  font-family: var(--font-body);
-  font-size: var(--text-md);
-  outline: none;
-  transition: border-color var(--transition-fast);
-}
-.nb-drawer__input::placeholder { color: #aaaaaa; }
-.nb-drawer__input:focus { border-color: var(--color-accent); }
-
-/* Séparateur "or" entre Google et le formulaire email */
-.nb-drawer__divider {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  color: #bbbbbb;
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin: var(--gap-md) 0;
-}
-.nb-drawer__divider::before,
-.nb-drawer__divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: #e8e8ee;
-}
-.nb-drawer__divider span { padding: 0 12px; }
-
-/* Messages */
-.nb-drawer__auth-error {
-  font-size: var(--text-sm);
-  color: #d93636;
-  background: #fdecec;
-  border-radius: var(--radius-sm);
-  padding: 8px 12px;
-  line-height: 1.4;
-}
-.nb-drawer__auth-notice {
-  font-size: var(--text-sm);
-  color: #1f8a4c;
-  background: #e9f8ef;
-  border-radius: var(--radius-sm);
-  padding: 8px 12px;
-  line-height: 1.4;
-}
-.nb-drawer__provider--primary[disabled] {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* État connecté */
-.nb-drawer__account {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-.nb-drawer__account-avatar {
-  width: 72px;
-  height: 72px;
-  border-radius: var(--radius-full);
-  background: var(--gradient-brand);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-size: 2rem;
-  letter-spacing: 0.02em;
-  box-shadow: var(--shadow-brand);
-  margin-bottom: 4px;
-}
-.nb-drawer__account-email {
-  font-size: var(--text-sm);
-  color: #888888;
-  margin-bottom: var(--gap-md);
-}
-.nb-drawer__account .nb-drawer__provider { width: 100%; }
-
-/* Username avec drapeau */
-.nb-drawer__account-username {
-  font-family: var(--font-display);
-  font-size: var(--text-2xl);
-  color: #111111;
-  letter-spacing: 0.04em;
-  text-align: center;
-  margin: 0;
-}
-
-/* Badge/titre gameur */
-.nb-drawer__badge {
-  display: inline-block;
-  padding: 4px 14px;
-  border-radius: var(--radius-full);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #ffffff;
-  background: var(--badge-color, #aaaaaa);
-  margin-bottom: 4px;
-}
-
-/* Grille de stats */
-.nb-drawer__stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  width: 100%;
-  margin-bottom: var(--gap-md);
-}
-.nb-drawer__stat {
-  background: #f4f6fb;
-  border-radius: var(--radius-md);
-  padding: 10px 6px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  text-align: center;
-}
-.nb-drawer__stat-value {
-  font-family: var(--font-display);
-  font-size: var(--text-lg);
-  color: #111111;
-  letter-spacing: 0.02em;
-  line-height: 1;
-}
-.nb-drawer__stat-label {
-  font-size: 10px;
-  color: #999999;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  line-height: 1.2;
-}
-
-/* Jeu favori */
-.nb-drawer__favorite {
-  width: 100%;
-  margin-bottom: var(--gap-md);
-}
-.nb-drawer__favorite-label {
-  display: block;
-  font-size: var(--text-xs);
-  color: #999999;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 6px;
-}
-.nb-drawer__favorite-game {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  background: #f4f6fb;
-  border-radius: var(--radius-md);
-  text-decoration: none;
-  transition: background var(--transition-fast);
-}
-.nb-drawer__favorite-game:hover { background: #e8eef8; }
-.nb-drawer__favorite-thumb {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-.nb-drawer__favorite-title {
-  font-weight: 700;
-  font-size: var(--text-sm);
-  color: #111111;
-  flex: 1;
-}
-.nb-drawer__favorite-empty {
-  width: 100%;
-  padding: 10px 12px;
-  background: #f4f6fb;
-  border: 1.5px dashed #cccccc;
-  border-radius: var(--radius-md);
-  color: #999999;
-  font-size: var(--text-sm);
-  font-weight: 600;
-  cursor: pointer;
-  text-align: center;
-  transition: all var(--transition-fast);
-}
-.nb-drawer__favorite-empty:hover { border-color: var(--color-accent); color: var(--color-accent); }
-
-/* Bouton danger (logout) */
-.nb-drawer__provider--danger {
-  border-color: #ffcccc;
-  color: #d93636;
-}
-.nb-drawer__provider--danger:hover { background: #fff0f0; border-color: #d93636; }
-
-/* Mode édition */
-.nb-drawer__edit { display: flex; flex-direction: column; gap: 6px; }
-.nb-drawer__field-label {
-  font-size: var(--text-xs);
-  color: #999999;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-top: 8px;
-}
-.nb-drawer__select { cursor: pointer; }
-.nb-drawer__edit-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
 
 /* =====================================================================
    RESPONSIVE DRAWERS
