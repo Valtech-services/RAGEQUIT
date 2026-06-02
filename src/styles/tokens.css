@@ -88,6 +88,10 @@
      =================================================================== */
   --shadow-card:   0 2px 14px rgba(0, 0, 0, 0.10);
   --shadow-card-hover: 0 8px 28px rgba(0, 0, 0, 0.16);
+
+  /* Ombre portée sous les miniatures façon Poki (douce, bien visible au repos) */
+  --shadow-thumb:       0 8px 18px rgba(6, 40, 45, 0.28);
+  --shadow-thumb-hover: 0 14px 30px rgba(6, 40, 45, 0.38);
   --shadow-accent:  0 6px 20px rgba(0, 217, 255, 0.35);
   --shadow-accent2: 0 6px 20px rgba(255, 0, 255, 0.35);
   --shadow-brand:   0 6px 22px rgba(139, 92, 246, 0.35);
