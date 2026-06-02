@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
 import { games, categories } from '../../data/games'
@@ -50,39 +50,11 @@ const COUNTRIES = [
 /* =====================================================================
    COMPOSANT NAVBAR
    ===================================================================== */
-export default function Navbar({ title, inGrid = false, floating = false }) {
+export default function Navbar({ title, inGrid = false }) {
   const [searchOpen, setSearchOpen]   = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
   const [query, setQuery]             = useState('')
   const navigate = useNavigate()
-
-  /* ---- Mode floating : positionne la navbar pile sur le trou de la grille,
-     puis la fait suivre le scroll en continu (translateY). ---- */
-  const tileRef = useRef(null)
-  const [floatPos, setFloatPos] = useState({ left: 0, top: 0, size: 96, ready: false })
-
-  useEffect(() => {
-    if (!floating) return
-
-    function place() {
-      const hole = document.querySelector('.bento__hole')
-      if (!hole) return
-      const r = hole.getBoundingClientRect()
-      // Position absolue dans la page (indépendante du scroll vertical) :
-      const left = r.left + window.scrollX
-      const top  = r.top + window.scrollY
-      setFloatPos({ left, top, size: r.width, ready: true })
-    }
-
-    place()
-    window.addEventListener('resize', place)
-    // Recalcule aussi après chargement des polices/images qui décalent le layout
-    const t = setTimeout(place, 300)
-    return () => {
-      window.removeEventListener('resize', place)
-      clearTimeout(t)
-    }
-  }, [floating])
 
   const { user, profile, signUpEmail, signInEmail, signInGoogle, signOut, updateProfile } = useAuth()
 
@@ -159,19 +131,7 @@ export default function Navbar({ title, inGrid = false, floating = false }) {
 
   return (
     <>
-      <div
-        ref={tileRef}
-        className={`navbar__brand-tile ${
-          floating ? 'navbar--floating' : (inGrid ? 'navbar--in-grid' : 'navbar--standalone')
-        }`}
-        style={floating ? {
-          left: `${floatPos.left}px`,
-          top: `${floatPos.top}px`,
-          width: `${floatPos.size}px`,
-          height: `${floatPos.size}px`,
-          visibility: floatPos.ready ? 'visible' : 'hidden',
-        } : undefined}
-      >
+      <div className={`navbar__brand-tile ${inGrid ? 'navbar--in-grid' : 'navbar--standalone'}`}>
         <Link to="/" className="navbar__logo" aria-label="Ragequit Arcade">
           <img src="/ragequit-logo-white.png" alt="Ragequit Arcade" className="navbar__logo-wordmark" />
           <img src="/ragequit-icon-white.png" alt="RQ" className="navbar__logo-icon" />
