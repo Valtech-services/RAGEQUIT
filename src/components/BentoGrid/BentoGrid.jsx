@@ -6,15 +6,21 @@ import Navbar from '../Navbar/Navbar'
 import './BentoGrid.css'
 
 /*
-  BentoGrid — grille Poki-style à cellules de taille FIXE.
+  BentoGrid — grille style Poki à cellules de taille FIXE.
 
-  Logique :
-  - Une cellule 1×1 = --cell pixels (desktop) / largeur/3 (mobile).
-  - La grille remplit autant de colonnes que l'écran le permet (auto-fill).
-  - La 1re cellule est un TROU vide (bento__hole) réservé en dur en haut
-    à gauche : la Navbar (position: fixed) vient se poser dessus visuellement.
-  - L'ordre des jeux est mélangé à chaque chargement (dispo aléatoire),
-    mais le trou reste toujours en première position.
+  - Desktop/tablette : cellules de --cell px, autant de colonnes que
+    l'écran peut en contenir (auto-fill), grille centrée.
+  - Mobile (≤600px) : exactement 3 colonnes fluides, cellules carrées.
+  - La Navbar (mode inGrid) occupe la PREMIÈRE cellule, en haut à gauche,
+    et scrolle avec la page (aucun position fixed/sticky).
+  - L'ordre des jeux est mélangé à chaque chargement (dispo aléatoire) ;
+    la navbar reste toujours en première position car rendue avant la liste.
+
+  Mapping des tailles (game.size → cellules) :
+    large  → 2×2
+    medium → 1×1
+    small  → 1×1
+  Ce mapping est porté par le CSS (.bento__cell--{size}).
 */
 export default function BentoGrid({ showNav = true }) {
   const gameCategories = categories.filter(c => c.id !== 'all')
@@ -22,7 +28,7 @@ export default function BentoGrid({ showNav = true }) {
     arcade: '🕹️', puzzle: '🧩', clicker: '👆', runner: '🏃', sports: '⚽',
   }
 
-  // Mélange l'ordre des jeux une seule fois par chargement de page.
+  // Mélange l'ordre des jeux une seule fois par montage (Fisher-Yates).
   const shuffledGames = useMemo(() => {
     const arr = [...games]
     for (let i = arr.length - 1; i > 0; i--) {
@@ -35,25 +41,29 @@ export default function BentoGrid({ showNav = true }) {
   return (
     <div className="bento">
 
-      {/* Navbar fixe qui suit le scroll, posée sur le trou haut-gauche */}
-      {showNav && <Navbar floating={true} />}
-
       <div className="bento__grid">
-        {/* TROU réservé en dur : toujours en haut à gauche, toujours vide.
-            Même taille qu'une cellule 1×1. La navbar fixe se pose dessus. */}
-        <div className="bento__hole" aria-hidden="true" />
 
-        {shuffledGames.map((game) => (
+        {/* PREMIÈRE CELLULE : Navbar 1×1, scrolle avec la page */}
+        {showNav && (
+          <div className="bento__cell bento__cell--nav">
+            <Navbar inGrid={true} />
+          </div>
+        )}
+
+        {/* JEUX — taille pilotée par game.size via le CSS */}
+        {shuffledGames.map((game, index) => (
           <div
             key={game.id}
             className={`bento__cell bento__cell--${game.size} fade-up`}
+            style={{ animationDelay: `${index * 40}ms` }}
           >
             <GameCard game={game} size={game.size} shimmer={game.shimmer} />
           </div>
         ))}
+
       </div>
 
-      {/* CATEGORIES */}
+      {/* CATÉGORIES */}
       <div className="bento__cats">
         {gameCategories.map((cat, index) => (
           <Link
