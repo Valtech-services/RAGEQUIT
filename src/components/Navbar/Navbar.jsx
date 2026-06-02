@@ -5,28 +5,73 @@ import { games, categories } from '../../data/games'
 import { useAuth } from '../../context/AuthContext'
 import './Navbar.css'
 
-/*
-  Navbar — deux modes :
-  - standalone : barre horizontale (pages intérieures)
-  - inGrid : cellule very-small de la grille (logo haut, 3 icônes bas)
-  Le logo affiché est TOUJOURS l'icône RQ.
-  Le drawer profil gère l'authentification Supabase (email + Google).
-*/
+/* =====================================================================
+   HELPERS
+   ===================================================================== */
+
+/* Badge/titre selon le nombre de parties jouées */
+function getBadge(gamesPlayed = 0) {
+  if (gamesPlayed >= 50) return { label: 'Rage Master', color: '#ff00ff' }
+  if (gamesPlayed >= 20) return { label: 'Veteran',     color: '#8B5CF6' }
+  if (gamesPlayed >= 5)  return { label: 'Gamer',       color: '#00d9ff' }
+  if (gamesPlayed >= 1)  return { label: 'Player',      color: '#4ade80' }
+  return                        { label: 'Newcomer',    color: '#aaaaaa' }
+}
+
+/* Emoji drapeau depuis code ISO (ex: "FR" → 🇫🇷) */
+function flagEmoji(code) {
+  if (!code || code.length !== 2) return ''
+  return code.toUpperCase().replace(/./g, c =>
+    String.fromCodePoint(c.charCodeAt(0) + 127397)
+  )
+}
+
+/* Date lisible */
+function formatDate(iso) {
+  if (!iso) return ''
+  return new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+}
+
+/* Liste des pays pour le select */
+const COUNTRIES = [
+  { code: 'FR', name: 'France' }, { code: 'US', name: 'United States' },
+  { code: 'GB', name: 'United Kingdom' }, { code: 'DE', name: 'Germany' },
+  { code: 'ES', name: 'Spain' }, { code: 'IT', name: 'Italy' },
+  { code: 'CA', name: 'Canada' }, { code: 'AU', name: 'Australia' },
+  { code: 'BR', name: 'Brazil' }, { code: 'JP', name: 'Japan' },
+  { code: 'KR', name: 'South Korea' }, { code: 'MX', name: 'Mexico' },
+  { code: 'NL', name: 'Netherlands' }, { code: 'PL', name: 'Poland' },
+  { code: 'PT', name: 'Portugal' }, { code: 'RU', name: 'Russia' },
+  { code: 'SE', name: 'Sweden' }, { code: 'TR', name: 'Turkey' },
+  { code: 'MA', name: 'Morocco' }, { code: 'DZ', name: 'Algeria' },
+  { code: 'SN', name: 'Senegal' }, { code: 'CI', name: "Côte d'Ivoire" },
+]
+
+/* =====================================================================
+   COMPOSANT NAVBAR
+   ===================================================================== */
 export default function Navbar({ title, inGrid = false }) {
   const [searchOpen, setSearchOpen]   = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
   const [query, setQuery]             = useState('')
   const navigate = useNavigate()
 
-  // Auth
-  const { user, profile, signUpEmail, signInEmail, signInGoogle, signOut } = useAuth()
-  const [authTab, setAuthTab]   = useState('signup')   // 'signup' | 'login'
+  const { user, profile, signUpEmail, signInEmail, signInGoogle, signOut, updateProfile } = useAuth()
+
+  /* Auth form */
+  const [authTab, setAuthTab]           = useState('signup')
   const [authEmail, setAuthEmail]       = useState('')
   const [authPassword, setAuthPassword] = useState('')
   const [authUsername, setAuthUsername] = useState('')
-  const [authError, setAuthError]   = useState('')
-  const [authBusy, setAuthBusy]     = useState(false)
-  const [authNotice, setAuthNotice] = useState('')
+  const [authError, setAuthError]       = useState('')
+  const [authBusy, setAuthBusy]         = useState(false)
+  const [authNotice, setAuthNotice]     = useState('')
+
+  /* Edit profile */
+  const [editMode, setEditMode]           = useState(false)
+  const [editCountry, setEditCountry]     = useState('')
+  const [editFavorite, setEditFavorite]   = useState('')
+  const [editBusy, setEditBusy]           = useState(false)
 
   const gameCategories = categories.filter(c => c.id !== 'all')
   const results = query.length > 1
@@ -36,51 +81,53 @@ export default function Navbar({ title, inGrid = false }) {
   const recent  = games.slice(0, 4)
 
   const closeAll = () => { setSearchOpen(false); setProfileOpen(false); setQuery('') }
-  const resetAuthFields = () => {
+  const resetAuth = () => {
     setAuthEmail(''); setAuthPassword(''); setAuthUsername('')
     setAuthError(''); setAuthNotice('')
   }
 
-  /* ---- Soumission email (signup ou login selon l'onglet) ---- */
+  /* Ouvre le mode édition avec les valeurs actuelles */
+  function openEdit() {
+    setEditCountry(profile?.country || '')
+    setEditFavorite(profile?.favorite_game_id || '')
+    setEditMode(true)
+  }
+
+  async function saveEdit() {
+    setEditBusy(true)
+    await updateProfile({ country: editCountry || null, favorite_game_id: editFavorite || null })
+    setEditBusy(false)
+    setEditMode(false)
+  }
+
   async function handleEmailSubmit() {
     setAuthError(''); setAuthNotice('')
-    if (!authEmail || !authPassword) {
-      setAuthError('Email and password are required.')
-      return
-    }
-    if (authTab === 'signup' && !authUsername.trim()) {
-      setAuthError('Please choose a username.')
-      return
-    }
+    if (!authEmail || !authPassword) { setAuthError('Email and password are required.'); return }
+    if (authTab === 'signup' && !authUsername.trim()) { setAuthError('Please choose a username.'); return }
     setAuthBusy(true)
     try {
       if (authTab === 'signup') {
-        const { error } = await signUpEmail({
-          email: authEmail,
-          password: authPassword,
-          username: authUsername.trim(),
-        })
+        const { error } = await signUpEmail({ email: authEmail, password: authPassword, username: authUsername.trim() })
         if (error) { setAuthError(error.message); return }
-        setAuthNotice('Account created. You can now play and save your scores.')
-        resetAuthFields()
-        setProfileOpen(false)
+        setAuthNotice('Account created! You can now play and save your scores.')
+        resetAuth(); setProfileOpen(false)
       } else {
         const { error } = await signInEmail({ email: authEmail, password: authPassword })
         if (error) { setAuthError(error.message); return }
-        resetAuthFields()
-        setProfileOpen(false)
+        resetAuth(); setProfileOpen(false)
       }
-    } finally {
-      setAuthBusy(false)
-    }
+    } finally { setAuthBusy(false) }
   }
 
   async function handleGoogle() {
     setAuthError('')
     const { error } = await signInGoogle()
     if (error) setAuthError(error.message)
-    // La redirection OAuth prend le relais ; rien à faire de plus ici.
   }
+
+  /* Données profil calculées */
+  const badge       = getBadge(profile?.games_played)
+  const favoriteGame = games.find(g => g.id === profile?.favorite_game_id)
 
   return (
     <>
@@ -89,11 +136,7 @@ export default function Navbar({ title, inGrid = false }) {
           <img src="/ragequit-logo-white.png" alt="Ragequit Arcade" className="navbar__logo-wordmark" />
           <img src="/ragequit-icon-white.png" alt="RQ" className="navbar__logo-icon" />
         </Link>
-
-        {title && !inGrid && (
-          <span className="navbar__title">{title}</span>
-        )}
-
+        {title && !inGrid && <span className="navbar__title">{title}</span>}
         <div className="navbar__actions">
           <Link className="navbar__btn" aria-label="Leaderboard" to="/leaderboard">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -117,214 +160,269 @@ export default function Navbar({ title, inGrid = false }) {
 
       {createPortal(
         <>
-      {/* ============================================================
-          DRAWER RECHERCHE
-          ============================================================ */}
-      {searchOpen && (
-        <div className="nb-drawer nb-drawer--search">
-          <div className="nb-drawer__inner">
-
-            <div className="nb-drawer__searchbar">
-              <button className="nb-drawer__back" onClick={closeAll} aria-label="Close">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-                </svg>
-              </button>
-              <input
-                className="nb-drawer__search-input"
-                placeholder="What are you playing today?"
-                value={query}
-                onChange={e => setQuery(e.target.value)}
-                autoFocus
-              />
-              <span className="nb-drawer__search-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                </svg>
-              </span>
-            </div>
-
-            <div className="nb-drawer__chips">
-              {gameCategories.map(cat => (
-                <button key={cat.id} className="nb-drawer__chip"
-                  onClick={() => { navigate(`/category/${cat.id}`); setSearchOpen(false) }}>
-                  {cat.label} Games
+        {/* ============================================================
+            DRAWER RECHERCHE
+            ============================================================ */}
+        {searchOpen && (
+          <div className="nb-drawer nb-drawer--search">
+            <div className="nb-drawer__inner">
+              <div className="nb-drawer__searchbar">
+                <button className="nb-drawer__back" onClick={closeAll} aria-label="Close">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                  </svg>
                 </button>
-              ))}
+                <input className="nb-drawer__search-input" placeholder="What are you playing today?"
+                  value={query} onChange={e => setQuery(e.target.value)} autoFocus />
+                <span className="nb-drawer__search-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                  </svg>
+                </span>
+              </div>
+              <div className="nb-drawer__chips">
+                {gameCategories.map(cat => (
+                  <button key={cat.id} className="nb-drawer__chip"
+                    onClick={() => { navigate(`/category/${cat.id}`); setSearchOpen(false) }}>
+                    {cat.label} Games
+                  </button>
+                ))}
+              </div>
+              {results.length > 0 ? (
+                <div className="nb-drawer__section">
+                  <h3 className="nb-drawer__section-title">Results</h3>
+                  <div className="nb-drawer__results">
+                    {results.map(game => (
+                      <Link key={game.id} to={`/game/${game.id}`} className="nb-drawer__result"
+                        onClick={() => { setSearchOpen(false); setQuery('') }}>
+                        <div className="nb-drawer__result-thumb">
+                          <img src={game.thumbnail} alt={game.title} />
+                        </div>
+                        <div className="nb-drawer__result-info">
+                          <span className="nb-drawer__result-title">{game.title}</span>
+                          <span className="nb-drawer__result-cat">{game.category}</span>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="nb-drawer__section">
+                    <h3 className="nb-drawer__section-title">Recently played</h3>
+                    <div className="nb-drawer__game-row">
+                      {recent.map(game => (
+                        <Link key={game.id} to={`/game/${game.id}`} className="nb-drawer__game-thumb" onClick={() => setSearchOpen(false)}>
+                          <img src={game.thumbnail} alt={game.title} />
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="nb-drawer__section">
+                    <h3 className="nb-drawer__section-title">Popular this week</h3>
+                    <div className="nb-drawer__game-grid">
+                      {popular.map(game => (
+                        <Link key={game.id} to={`/game/${game.id}`} className="nb-drawer__game-thumb" onClick={() => setSearchOpen(false)}>
+                          <img src={game.thumbnail} alt={game.title} />
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
+          </div>
+        )}
 
-            {results.length > 0 ? (
-              <div className="nb-drawer__section">
-                <h3 className="nb-drawer__section-title">Results</h3>
-                <div className="nb-drawer__results">
-                  {results.map(game => (
-                    <Link key={game.id} to={`/game/${game.id}`} className="nb-drawer__result"
-                      onClick={() => { setSearchOpen(false); setQuery('') }}>
-                      <div className="nb-drawer__result-thumb">
-                        <img src={game.thumbnail} alt={game.title} />
+        {/* ============================================================
+            DRAWER PROFIL / CONNEXION
+            ============================================================ */}
+        {profileOpen && (
+          <div className="nb-drawer nb-drawer--auth">
+            <div className="nb-drawer__inner">
+
+              <div className="nb-drawer__head">
+                <button className="nb-drawer__back" onClick={() => { setProfileOpen(false); setEditMode(false) }} aria-label="Close">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                  </svg>
+                </button>
+                <div className="nb-drawer__auth-logo">
+                  <img src="/ragequit-logo-white.png" alt="Ragequit Arcade" className="nb-drawer__auth-logo-img" />
+                </div>
+                <span className="nb-drawer__head-spacer" />
+              </div>
+
+              {user ? (
+                editMode ? (
+                  /* ---- MODE ÉDITION ---- */
+                  <div className="nb-drawer__edit">
+                    <h2 className="nb-drawer__auth-title">Edit profile</h2>
+
+                    <label className="nb-drawer__field-label">Your country</label>
+                    <select className="nb-drawer__input nb-drawer__select"
+                      value={editCountry} onChange={e => setEditCountry(e.target.value)}>
+                      <option value="">— Select country —</option>
+                      {COUNTRIES.map(c => (
+                        <option key={c.code} value={c.code}>
+                          {flagEmoji(c.code)} {c.name}
+                        </option>
+                      ))}
+                    </select>
+
+                    <label className="nb-drawer__field-label">Favorite game</label>
+                    <select className="nb-drawer__input nb-drawer__select"
+                      value={editFavorite} onChange={e => setEditFavorite(e.target.value)}>
+                      <option value="">— Select a game —</option>
+                      {games.map(g => (
+                        <option key={g.id} value={g.id}>{g.title}</option>
+                      ))}
+                    </select>
+
+                    <div className="nb-drawer__edit-actions">
+                      <button className="nb-drawer__provider nb-drawer__provider--primary"
+                        onClick={saveEdit} disabled={editBusy}>
+                        {editBusy ? 'Saving…' : 'Save changes'}
+                      </button>
+                      <button className="nb-drawer__provider" onClick={() => setEditMode(false)}>
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  /* ---- PROFIL CONNECTÉ ---- */
+                  <div className="nb-drawer__account">
+
+                    {/* Avatar + badge */}
+                    <div className="nb-drawer__account-avatar">
+                      {(profile?.username || user.email || '?').charAt(0).toUpperCase()}
+                    </div>
+                    <h2 className="nb-drawer__account-username">
+                      {flagEmoji(profile?.country)} {profile?.username || 'Player'}
+                    </h2>
+                    <span className="nb-drawer__badge" style={{ '--badge-color': badge.color }}>
+                      {badge.label}
+                    </span>
+                    <p className="nb-drawer__account-email">{user.email}</p>
+
+                    {/* Stats */}
+                    <div className="nb-drawer__stats">
+                      <div className="nb-drawer__stat">
+                        <span className="nb-drawer__stat-value">{profile?.games_played ?? 0}</span>
+                        <span className="nb-drawer__stat-label">Games played</span>
                       </div>
-                      <div className="nb-drawer__result-info">
-                        <span className="nb-drawer__result-title">{game.title}</span>
-                        <span className="nb-drawer__result-cat">{game.category}</span>
+                      <div className="nb-drawer__stat">
+                        <span className="nb-drawer__stat-value">
+                          🔥 {profile?.streak_days ?? 0}
+                        </span>
+                        <span className="nb-drawer__stat-label">Day streak</span>
                       </div>
+                      <div className="nb-drawer__stat">
+                        <span className="nb-drawer__stat-value">
+                          {formatDate(profile?.created_at)}
+                        </span>
+                        <span className="nb-drawer__stat-label">Member since</span>
+                      </div>
+                    </div>
+
+                    {/* Jeu favori */}
+                    {favoriteGame ? (
+                      <div className="nb-drawer__favorite">
+                        <span className="nb-drawer__favorite-label">Favorite game</span>
+                        <Link to={`/game/${favoriteGame.id}`}
+                          className="nb-drawer__favorite-game"
+                          onClick={() => setProfileOpen(false)}>
+                          <img src={favoriteGame.thumbnail} alt={favoriteGame.title} className="nb-drawer__favorite-thumb" />
+                          <span className="nb-drawer__favorite-title">{favoriteGame.title}</span>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{flexShrink:0,opacity:0.5}}>
+                            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
+                          </svg>
+                        </Link>
+                      </div>
+                    ) : (
+                      <div className="nb-drawer__favorite">
+                        <span className="nb-drawer__favorite-label">Favorite game</span>
+                        <button className="nb-drawer__favorite-empty" onClick={openEdit}>
+                          + Set your favorite game
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Actions */}
+                    <button className="nb-drawer__provider" onClick={openEdit}>
+                      Edit profile
+                    </button>
+                    <Link to="/leaderboard" className="nb-drawer__provider"
+                      onClick={() => setProfileOpen(false)}>
+                      View leaderboard
                     </Link>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <>
-                <div className="nb-drawer__section">
-                  <h3 className="nb-drawer__section-title">Recently played</h3>
-                  <div className="nb-drawer__game-row">
-                    {recent.map(game => (
-                      <Link key={game.id} to={`/game/${game.id}`} className="nb-drawer__game-thumb" onClick={() => setSearchOpen(false)}>
-                        <img src={game.thumbnail} alt={game.title} />
-                      </Link>
-                    ))}
+                    <button className="nb-drawer__provider nb-drawer__provider--danger"
+                      onClick={async () => { await signOut(); setProfileOpen(false) }}>
+                      Log out
+                    </button>
                   </div>
-                </div>
-                <div className="nb-drawer__section">
-                  <h3 className="nb-drawer__section-title">Popular this week</h3>
-                  <div className="nb-drawer__game-grid">
-                    {popular.map(game => (
-                      <Link key={game.id} to={`/game/${game.id}`} className="nb-drawer__game-thumb" onClick={() => setSearchOpen(false)}>
-                        <img src={game.thumbnail} alt={game.title} />
-                      </Link>
-                    ))}
+                )
+              ) : (
+                /* ---- DÉCONNECTÉ : formulaire ---- */
+                <>
+                  <div className="nb-drawer__tabs">
+                    <button className={`nb-drawer__tab ${authTab === 'signup' ? 'nb-drawer__tab--active' : ''}`}
+                      onClick={() => { setAuthTab('signup'); setAuthError(''); setAuthNotice('') }}>
+                      Sign up
+                    </button>
+                    <button className={`nb-drawer__tab ${authTab === 'login' ? 'nb-drawer__tab--active' : ''}`}
+                      onClick={() => { setAuthTab('login'); setAuthError(''); setAuthNotice('') }}>
+                      Log in
+                    </button>
                   </div>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
 
-      {/* ============================================================
-          DRAWER PROFIL / CONNEXION
-          ============================================================ */}
-      {profileOpen && (
-        <div className="nb-drawer nb-drawer--auth">
-          <div className="nb-drawer__inner">
+                  <h2 className="nb-drawer__auth-title">
+                    {authTab === 'signup' ? 'Create your account' : 'Welcome back'}
+                  </h2>
 
-            <div className="nb-drawer__head">
-              <button className="nb-drawer__back" onClick={() => setProfileOpen(false)} aria-label="Close">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-                </svg>
-              </button>
-              <div className="nb-drawer__auth-logo">
-                <img src="/ragequit-logo-white.png" alt="Ragequit Arcade" className="nb-drawer__auth-logo-img" />
-              </div>
-              <span className="nb-drawer__head-spacer" />
+                  <div className="nb-drawer__providers">
+                    <button className="nb-drawer__provider" onClick={handleGoogle}>
+                      <span className="nb-drawer__provider-icon nb-drawer__provider-icon--g">G</span>
+                      Continue with Google
+                    </button>
+                  </div>
+
+                  <div className="nb-drawer__divider"><span>or</span></div>
+
+                  <div className="nb-drawer__form">
+                    {authTab === 'signup' && (
+                      <input className="nb-drawer__input" type="text" placeholder="Username"
+                        value={authUsername} onChange={e => setAuthUsername(e.target.value)}
+                        autoComplete="username" />
+                    )}
+                    <input className="nb-drawer__input" type="email" placeholder="Email"
+                      value={authEmail} onChange={e => setAuthEmail(e.target.value)}
+                      autoComplete="email" />
+                    <input className="nb-drawer__input" type="password" placeholder="Password"
+                      value={authPassword} onChange={e => setAuthPassword(e.target.value)}
+                      autoComplete={authTab === 'signup' ? 'new-password' : 'current-password'} />
+
+                    {authError  && <p className="nb-drawer__auth-error">{authError}</p>}
+                    {authNotice && <p className="nb-drawer__auth-notice">{authNotice}</p>}
+
+                    <button className="nb-drawer__provider nb-drawer__provider--primary"
+                      onClick={handleEmailSubmit} disabled={authBusy}>
+                      {authBusy ? 'Please wait…' : (authTab === 'signup' ? 'Create account' : 'Log in')}
+                    </button>
+                  </div>
+
+                  <p className="nb-drawer__auth-legal">
+                    By continuing you agree to our Terms of Use and acknowledge our Privacy Policy.
+                  </p>
+                </>
+              )}
             </div>
-
-            {user ? (
-              /* ---- ÉTAT CONNECTÉ : profil + déconnexion ---- */
-              <div className="nb-drawer__account">
-                <div className="nb-drawer__account-avatar">
-                  {(profile?.username || user.email || '?').charAt(0).toUpperCase()}
-                </div>
-                <h2 className="nb-drawer__auth-title">
-                  {profile?.username || 'Player'}
-                </h2>
-                <p className="nb-drawer__account-email">{user.email}</p>
-                <Link
-                  to="/leaderboard"
-                  className="nb-drawer__provider"
-                  onClick={() => setProfileOpen(false)}
-                >
-                  View leaderboard
-                </Link>
-                <button
-                  className="nb-drawer__provider nb-drawer__provider--primary"
-                  onClick={async () => { await signOut(); setProfileOpen(false) }}
-                >
-                  Log out
-                </button>
-              </div>
-            ) : (
-              /* ---- ÉTAT DÉCONNECTÉ : formulaire signup / login ---- */
-              <>
-                <div className="nb-drawer__tabs">
-                  <button
-                    className={`nb-drawer__tab ${authTab === 'signup' ? 'nb-drawer__tab--active' : ''}`}
-                    onClick={() => { setAuthTab('signup'); setAuthError(''); setAuthNotice('') }}
-                  >Sign up</button>
-                  <button
-                    className={`nb-drawer__tab ${authTab === 'login' ? 'nb-drawer__tab--active' : ''}`}
-                    onClick={() => { setAuthTab('login'); setAuthError(''); setAuthNotice('') }}
-                  >Log in</button>
-                </div>
-
-                <h2 className="nb-drawer__auth-title">
-                  {authTab === 'signup' ? 'Create your account' : 'Welcome back'}
-                </h2>
-
-                {/* Bouton Google */}
-                <div className="nb-drawer__providers">
-                  <button className="nb-drawer__provider" onClick={handleGoogle}>
-                    <span className="nb-drawer__provider-icon nb-drawer__provider-icon--g">G</span>
-                    Continue with Google
-                  </button>
-                </div>
-
-                <div className="nb-drawer__divider"><span>or</span></div>
-
-                {/* Formulaire email */}
-                <div className="nb-drawer__form">
-                  {authTab === 'signup' && (
-                    <input
-                      className="nb-drawer__input"
-                      type="text"
-                      placeholder="Username"
-                      value={authUsername}
-                      onChange={e => setAuthUsername(e.target.value)}
-                      autoComplete="username"
-                    />
-                  )}
-                  <input
-                    className="nb-drawer__input"
-                    type="email"
-                    placeholder="Email"
-                    value={authEmail}
-                    onChange={e => setAuthEmail(e.target.value)}
-                    autoComplete="email"
-                  />
-                  <input
-                    className="nb-drawer__input"
-                    type="password"
-                    placeholder="Password"
-                    value={authPassword}
-                    onChange={e => setAuthPassword(e.target.value)}
-                    autoComplete={authTab === 'signup' ? 'new-password' : 'current-password'}
-                  />
-
-                  {authError && <p className="nb-drawer__auth-error">{authError}</p>}
-                  {authNotice && <p className="nb-drawer__auth-notice">{authNotice}</p>}
-
-                  <button
-                    className="nb-drawer__provider nb-drawer__provider--primary"
-                    onClick={handleEmailSubmit}
-                    disabled={authBusy}
-                  >
-                    {authBusy
-                      ? 'Please wait…'
-                      : (authTab === 'signup' ? 'Create account' : 'Log in')}
-                  </button>
-                </div>
-
-                <p className="nb-drawer__auth-legal">
-                  By continuing you agree to our Terms of Use and acknowledge our Privacy Policy.
-                </p>
-              </>
-            )}
           </div>
-        </div>
-      )}
+        )}
 
-      {(searchOpen || profileOpen) && (
-        <div className="nb-overlay" onClick={closeAll} />
-      )}
+        {(searchOpen || profileOpen) && (
+          <div className="nb-overlay" onClick={closeAll} />
+        )}
         </>,
         document.body
       )}
