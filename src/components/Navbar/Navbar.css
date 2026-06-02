@@ -28,9 +28,9 @@
 }
 
 /* =====================================================================
-   MODE IN-GRID — home, PREMIÈRE cellule réelle de la grille (carrée).
-   Remplit toute la cellule : l'alignement vient de la grille elle-même,
-   donc mêmes marges/gap que les vignettes. Pas de position sticky.
+   MODE IN-GRID — home, PREMIÈRE cellule réelle de la grille.
+   Format very-small (1×1) : compact. Logo en icône RQ, icônes serrées.
+   L'alignement vient de la grille (mêmes marges/gap). Pas de sticky.
    ===================================================================== */
 .navbar--in-grid {
   width: 100%;
@@ -42,9 +42,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 12px;
+  gap: 8px;
+  padding: 8px;
 }
+
+/* En cellule very-small : on force l'icône RQ (le wordmark ne tient pas) */
+.navbar--in-grid .navbar__logo-wordmark { display: none; }
+.navbar--in-grid .navbar__logo-icon     { display: block; height: 30px; width: 30px; }
+
+/* Icônes compactes et alignées sur une rangée dans le petit carré */
+.navbar--in-grid .navbar__actions { gap: 6px; flex-wrap: wrap; }
+.navbar--in-grid .navbar__btn { width: 30px; height: 30px; border-radius: 9px; }
 
 /* Sur mobile la cellule nav est pleine largeur → barre horizontale compacte */
 @media (max-width: 600px) {
@@ -55,6 +63,10 @@
     min-height: 52px;
     padding: 8px 14px;
   }
+  /* Pleine largeur : le wordmark a la place, on le rétablit */
+  .navbar--in-grid .navbar__logo-wordmark { display: block; height: 28px; }
+  .navbar--in-grid .navbar__logo-icon     { display: none; }
+  .navbar--in-grid .navbar__btn { width: 36px; height: 36px; border-radius: 11px; }
 }
 
 /* =====================================================================
