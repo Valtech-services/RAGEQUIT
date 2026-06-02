@@ -1,15 +1,16 @@
 import { Link } from 'react-router-dom'
 import { games, categories } from '../../data/games'
 import GameCard from '../GameCard/GameCard'
+import Navbar from '../Navbar/Navbar'
 import './BentoGrid.css'
 
 /*
   BentoGrid — grille Poki-style.
-  La Navbar est la PREMIERE cellule de la grille (1×1, sticky).
-  Les jeux de tailles variées (small/medium/large) remplissent le reste.
-  Sur mobile la navbar prend toute la largeur (span 2).
+  Quand showNav={true} (Home), la Navbar est la PREMIÈRE cellule réelle de
+  la grille (1×1 carrée sur desktop, pleine largeur sur mobile). Elle est
+  donc alignée pile sur les marges et le gap de la grille, comme Poki.
 */
-export default function BentoGrid({ reserveNav = false }) {
+export default function BentoGrid({ showNav = false }) {
   const gameCategories = categories.filter(c => c.id !== 'all')
   const catIcons = {
     arcade: '🕹️', puzzle: '🧩', clicker: '👆', runner: '🏃', sports: '⚽',
@@ -17,16 +18,16 @@ export default function BentoGrid({ reserveNav = false }) {
 
   return (
     <div className="bento">
-
       {/* ============================================================
           GRILLE DE JEUX
-          La navbar occupe la 1re cellule (sticky dans la grille).
+          La navbar occupe la 1re cellule réelle (carrée) quand showNav.
           ============================================================ */}
       <div className="bento__grid">
-
-        {/* Cellule navbar — sticky, 1×1 sur desktop, pleine largeur mobile */}
-        {/* Cellule fantôme : réserve la place de la navbar sticky (gérée par Home) */}
-        {reserveNav && <div className="bento__cell bento__cell--nav-ghost" aria-hidden="true" />}
+        {showNav && (
+          <div className="bento__cell bento__cell--nav">
+            <Navbar inGrid={true} />
+          </div>
+        )}
 
         {games.map((game, index) => (
           <div
@@ -55,7 +56,6 @@ export default function BentoGrid({ reserveNav = false }) {
           </Link>
         ))}
       </div>
-
     </div>
   )
 }
