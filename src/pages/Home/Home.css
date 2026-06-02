@@ -1,16 +1,11 @@
 /* =====================================================================
-   HOME — page d'accueil
-   La navbar est en position FIXED : elle reste visible en haut à gauche
-   pendant tout le scroll de la page (grille + SeoBlock + Footer),
-   exactement comme Poki. La cellule fantôme de la grille réserve sa place.
+   HOME — page d'accueil.
+   La navbar n'est plus sticky : elle est la 1re cellule de la grille et
+   défile avec la page (comportement Poki). Aucun positionnement fixe ici.
    ===================================================================== */
-
 .home {
+  width: 100%;
   min-height: 100vh;
-  background: var(--color-bg);
-  display: flex;
-  flex-direction: column;
-  position: relative;
 }
 
 /* =====================================================================
