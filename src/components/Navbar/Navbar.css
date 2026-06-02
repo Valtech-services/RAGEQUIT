@@ -28,6 +28,50 @@
 }
 
 /* =====================================================================
+   MODE FLOATING — home : navbar posée sur le trou (position absolue
+   calculée en JS), suit le scroll en continu car ancrée dans la page.
+   Mêmes styles internes que in-grid (logo haut, icônes bas).
+   ===================================================================== */
+.navbar--floating {
+  position: absolute;             /* ancrée dans la page → suit le scroll */
+  z-index: 50;
+  overflow: hidden;
+  background: #ffffff;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-thumb);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 12% 6%;
+  box-sizing: border-box;
+}
+.navbar--floating .navbar__logo-wordmark { display: none !important; }
+.navbar--floating .navbar__logo-icon {
+  display: block !important;
+  width: clamp(20px, 45%, 40px);
+  height: clamp(20px, 45%, 40px);
+  object-fit: contain;
+}
+.navbar--floating .navbar__actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2px, 4%, 6px);
+  width: 100%;
+}
+.navbar--floating .navbar__btn {
+  width: clamp(18px, 28%, 30px);
+  height: clamp(18px, 28%, 30px);
+  flex-shrink: 0;
+  border-radius: 8px;
+  padding: 0;
+}
+.navbar--floating .navbar__btn svg { width: 55%; height: 55%; }
+
+/* =====================================================================
    MODE IN-GRID — cellule very-small (1×1), logo en haut, icônes en bas.
    overflow: hidden garantit qu'aucun enfant ne déborde jamais.
    Toutes les dimensions sont relatives à la cellule via % et clamp.
