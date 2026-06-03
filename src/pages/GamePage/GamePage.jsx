@@ -3,7 +3,6 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { games, categories } from '../../data/games'
 import Navbar from '../../components/Navbar/Navbar'
 import GameCard from '../../components/GameCard/GameCard'
-import Leaderboard from '../../components/Leaderboard/Leaderboard'
 import SeoBlock from '../../components/SeoBlock/SeoBlock'
 import Footer from '../../components/Footer/Footer'
 import MobileGamePage from './MobileGamePage'
@@ -24,7 +23,12 @@ export default function GamePage() {
   return <GamePageDesktop />
 }
 
-/* GamePage Desktop */
+/* =====================================================================
+   GamePage Desktop — layout 3 colonnes (style Poki, preview desktop3)
+     col 1 : navbar 1×1 + pub verticale (alignée sur la hauteur du jeu)
+     col 2 : bloc jeu (16:9) + barre collée + pub sous barre + related 1×1
+     col 3 : une seule pub + jeux similaires (pas de leaderboard)
+   ===================================================================== */
 function GamePageDesktop() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -34,6 +38,7 @@ function GamePageDesktop() {
   const [vote, setVote] = useState(null)
   const [reportOpen, setReportOpen] = useState(false)
 
+  // Réception des scores envoyés par l'iframe du jeu
   useEffect(() => {
     function handleMessage(e) {
       const d = e.data
@@ -52,9 +57,8 @@ function GamePageDesktop() {
   if (!game) {
     return (
       <div className="gamepage">
-        {/* Navbar 1x1 meme en not-found */}
-        <div className="gamepage__header">
-          <div className="gamepage__header-nav">
+        <div className="gamepage__notfound-header">
+          <div className="gamepage__nav">
             <Navbar inGrid={true} />
           </div>
         </div>
@@ -66,125 +70,132 @@ function GamePageDesktop() {
     )
   }
 
-  const category = categories.find(c => c.id === game.category)
-  const sidebar = games.filter(g => g.id !== game.id).slice(0, 10)
-  const related = games.filter(g => g.category === game.category && g.id !== game.id).slice(0, 8)
+  const related = games
+    .filter(g => g.id !== game.id)
+    .slice(0, 12)
+
+  function toggleFullscreen() {
+    const stage = document.querySelector('.gamepage__stage')
+    if (!stage) return
+    if (document.fullscreenElement) {
+      document.exitFullscreen()
+    } else if (stage.requestFullscreen) {
+      stage.requestFullscreen()
+    } else if (stage.webkitRequestFullscreen) {
+      stage.webkitRequestFullscreen()
+    }
+  }
 
   return (
     <div className="gamepage">
 
-      {/* ============================================================
-          EN-TETE : navbar 1x1 seule (même structure que CategoryPage
-          mais sans cellule titre — le titre est dans la barre du jeu)
-          ============================================================ */}
-      <div className="gamepage__header">
-        <div className="gamepage__header-nav">
-          <Navbar inGrid={true} />
+      <div className="gamepage__layout">
+
+        {/* ===================== COLONNE GAUCHE ===================== */}
+        <div className="gamepage__col-nav">
+          <div className="gamepage__nav">
+            <Navbar inGrid={true} />
+          </div>
+          {/* Pub verticale : remplit du bas de la navbar jusqu'au bas du jeu */}
+          <div className="gamepage__ad gamepage__ad--left">
+            <span className="gamepage__ad-label">Advertisement</span>
+          </div>
         </div>
-      </div>
 
-      {/* Zone principale : jeu + sidebar */}
-      <div className="gamepage__main">
+        {/* ===================== COLONNE CENTRE ===================== */}
+        <div className="gamepage__col-main">
 
-        <div className="gamepage__stage-col">
-
-          <div className="gamepage__stage">
-            {playing ? (
-              <iframe
-                src={`/games/${game.id}.html`}
-                title={game.title}
-                className="gamepage__iframe"
-                allowFullScreen
-                frameBorder="0"
-              />
-            ) : (
-              <div
-                className="gamepage__cover"
-                style={{ backgroundImage: `url(${game.thumbnail})` }}
-              >
-                <div className="gamepage__cover-overlay" />
-                <button
-                  className="gamepage__play-btn"
-                  onClick={() => setPlaying(true)}
-                  aria-label="Play"
+          {/* Bloc jeu + barre (collés, même conteneur arrondi) */}
+          <div className="gamepage__block">
+            <div className="gamepage__stage">
+              {playing ? (
+                <iframe
+                  src={`/games/${game.id}.html`}
+                  title={game.title}
+                  className="gamepage__iframe"
+                  allowFullScreen
+                  frameBorder="0"
+                />
+              ) : (
+                <div
+                  className="gamepage__cover"
+                  style={{ backgroundImage: `url(${game.thumbnail})` }}
                 >
-                  <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M8 5v14l11-7z"/>
+                  <div className="gamepage__cover-overlay" />
+                  <button
+                    className="gamepage__play-btn"
+                    onClick={() => setPlaying(true)}
+                    aria-label="Play"
+                  >
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </button>
+                  <span className="gamepage__play-label">Play</span>
+                </div>
+              )}
+            </div>
+
+            {/* Barre collée sous le jeu */}
+            <div className="gamepage__bar">
+              <div className="gamepage__bar-game">
+                <div className="gamepage__bar-thumb">
+                  <img src={game.thumbnail} alt={game.title} />
+                </div>
+                <div className="gamepage__bar-info">
+                  <span className="gamepage__bar-title">{game.title}</span>
+                  <span className="gamepage__bar-author">by {game.author}</span>
+                </div>
+              </div>
+              <div className="gamepage__bar-actions">
+                <button
+                  className={`gamepage__action ${vote === 'up' ? 'is-up' : ''}`}
+                  title="Like"
+                  onClick={() => setVote(vote === 'up' ? null : 'up')}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
                   </svg>
                 </button>
-                <span className="gamepage__play-label">Play</span>
+                <button
+                  className={`gamepage__action ${vote === 'down' ? 'is-down' : ''}`}
+                  title="Dislike"
+                  onClick={() => setVote(vote === 'down' ? null : 'down')}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L10.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                  </svg>
+                </button>
+                <button
+                  className="gamepage__action"
+                  title="Report a problem"
+                  onClick={() => setReportOpen(true)}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/>
+                  </svg>
+                </button>
+                <button
+                  className="gamepage__action gamepage__action--full"
+                  title="Fullscreen"
+                  onClick={toggleFullscreen}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+                  </svg>
+                </button>
               </div>
-            )}
-          </div>
-
-          {/* Barre sous le jeu : titre + auteur + actions */}
-          <div className="gamepage__bar">
-            <div className="gamepage__bar-game">
-              <div className="gamepage__bar-thumb">
-                <img src={game.thumbnail} alt={game.title} />
-              </div>
-              <div className="gamepage__bar-info">
-                <span className="gamepage__bar-title">{game.title}</span>
-                <span className="gamepage__bar-author">by {game.author}</span>
-              </div>
-            </div>
-            <div className="gamepage__bar-actions">
-              <button
-                className={`gamepage__action ${vote === 'up' ? 'is-up' : ''}`}
-                title="Like"
-                onClick={() => setVote(vote === 'up' ? null : 'up')}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
-                </svg>
-              </button>
-              <button
-                className={`gamepage__action ${vote === 'down' ? 'is-down' : ''}`}
-                title="Dislike"
-                onClick={() => setVote(vote === 'down' ? null : 'down')}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L10.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
-                </svg>
-              </button>
-              <button
-                className="gamepage__action"
-                title="Report a problem"
-                onClick={() => setReportOpen(true)}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/>
-                </svg>
-              </button>
-              <button
-                className="gamepage__action gamepage__action--full"
-                title="Fullscreen"
-                onClick={() => {
-                  const stage = document.querySelector('.gamepage__stage')
-                  if (!stage) return
-                  if (document.fullscreenElement) {
-                    document.exitFullscreen()
-                  } else if (stage.requestFullscreen) {
-                    stage.requestFullscreen()
-                  } else if (stage.webkitRequestFullscreen) {
-                    stage.webkitRequestFullscreen()
-                  }
-                }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
-                </svg>
-              </button>
             </div>
           </div>
 
-          <div className="gamepage__ad gamepage__ad--banner">
+          {/* Pub sous la barre blanche */}
+          <div className="gamepage__ad gamepage__ad--below">
             <span className="gamepage__ad-label">Advertisement</span>
           </div>
 
+          {/* Jeux similaires — 1×1 uniquement */}
           {related.length > 0 && (
             <div className="gamepage__related">
-              <h2 className="gamepage__related-title">More games</h2>
               <div className="gamepage__related-grid">
                 {related.map(g => (
                   <div key={g.id} className="gamepage__related-cell">
@@ -197,37 +208,15 @@ function GamePageDesktop() {
 
         </div>
 
-        <aside className="gamepage__sidebar">
-          <div className="gamepage__ad gamepage__ad--rect">
+        {/* ===================== COLONNE DROITE ===================== */}
+        <aside className="gamepage__col-side">
+          {/* Une seule bannière pub */}
+          <div className="gamepage__ad gamepage__ad--right">
             <span className="gamepage__ad-label">Advertisement</span>
           </div>
-          {(game.id === 'rage-hockey' || game.id === 'staq') && (
-            <div className="gamepage__side-lb">
-              <Leaderboard
-                game={game.id}
-                mode={game.id === 'rage-hockey' ? 'survival' : 'classic'}
-                modes={game.id === 'rage-hockey' ? ['survival', 'classic'] : ['classic']}
-                compact
-                limit={5}
-                showModeSwitch={false}
-              />
-              <Link to="/leaderboard" className="gamepage__lb-link">
-                View full leaderboard
-              </Link>
-            </div>
-          )}
+          {/* Jeux similaires en grille 2 colonnes */}
           <div className="gamepage__side-games">
-            {sidebar.slice(0, 6).map(g => (
-              <Link key={g.id} to={`/game/${g.id}`} className="gamepage__side-thumb">
-                <img src={g.thumbnail} alt={g.title} />
-              </Link>
-            ))}
-          </div>
-          <div className="gamepage__ad gamepage__ad--square">
-            <span className="gamepage__ad-label">Advertisement</span>
-          </div>
-          <div className="gamepage__side-games">
-            {sidebar.slice(6, 10).map(g => (
+            {related.slice(0, 8).map(g => (
               <Link key={g.id} to={`/game/${g.id}`} className="gamepage__side-thumb">
                 <img src={g.thumbnail} alt={g.title} />
               </Link>
