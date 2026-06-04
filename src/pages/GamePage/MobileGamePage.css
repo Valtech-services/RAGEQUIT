@@ -126,77 +126,50 @@
 .mgp__related-cell > * { width: 100%; height: 100%; }
 
 /* =====================================================================
-   MODE JEU (playing) — plein ecran
+   MODE JEU (playing) — plein ecran SIMULE
+   position:fixed sur tout le viewport, iframe 100dvh, interface masquee.
    ===================================================================== */
 .mgp--playing {
-  height: 100dvh;
-  display: flex;
-  flex-direction: column;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  width: 100vw;
+  height: 100vh;          /* fallback navigateurs anciens */
+  height: 100dvh;         /* hauteur dynamique : exclut les barres mobiles */
+  background: #0a0e27;
   overflow: hidden;
-  background: #0a0e27;
 }
-.mgp__topbar {
-  height: 44px;
-  background: #0a0e27;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-  gap: 12px;
-  flex-shrink: 0;
-}
-.mgp__topbar-back {
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-full);
-  background: rgba(255,255,255,0.1);
-  border: none;
-  color: #ffffff;
+
+/* Bouton retour discret superpose en haut a gauche */
+.mgp__back-overlay {
+  position: absolute;
+  top: max(10px, env(safe-area-inset-top));
+  left: max(10px, env(safe-area-inset-left));
+  z-index: 10000;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.85);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  flex-shrink: 0;
-  transition: background 0.15s;
+  opacity: 0.65;
+  transition: opacity 0.15s;
 }
-.mgp__topbar-back:active { background: rgba(255,255,255,0.25); }
-.mgp__topbar-title {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  color: #ffffff;
-  letter-spacing: 0.06em;
-  flex: 1;
-  text-align: center;
-}
-.mgp__topbar-spacer { width: 36px; flex-shrink: 0; }
+.mgp__back-overlay:active,
+.mgp__back-overlay:hover { opacity: 1; }
 
-.mgp__iframe-wrap {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-}
+/* Iframe : occupe TOUT le conteneur plein ecran */
 .mgp__iframe {
   width: 100%;
   height: 100%;
   border: none;
   display: block;
-}
-
-.mgp__ad-bar {
-  height: 50px;
-  background: #0a0e27;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.mgp__ad-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: rgba(255,255,255,0.3);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
 }
 
 /* =====================================================================
