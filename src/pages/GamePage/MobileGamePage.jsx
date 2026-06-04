@@ -3,47 +3,28 @@ import { Link, useParams } from 'react-router-dom'
 import { games } from '../../data/games'
 import Navbar from '../../components/Navbar/Navbar'
 import GameCard from '../../components/GameCard/GameCard'
+import SeoBlock from '../../components/SeoBlock/SeoBlock'
+import Footer from '../../components/Footer/Footer'
 import './MobileGamePage.css'
 
-/*
-  MobileGamePage — expérience mobile dédiée (< 768px), façon Poki.
-
-  Deux modes :
-  1. ACCUEIL (preview) — navbar 1×1 + carte titre 2×1, puis grande tuile
-     jeu cliquable (Play centré), puis jeux similaires en 3 colonnes.
-  2. JEU (playing) — l'iframe occupe tout l'écran, barre top avec retour,
-     bannière pub en bas. Aucune gestion d'orientation ici : c'est le HTML
-     du jeu (dans l'iframe) qui affiche son propre overlay "tourne ton
-     téléphone" si besoin.
-*/
 export default function MobileGamePage() {
   const { id } = useParams()
   const game = games.find(g => g.id === id)
-
   const [playing, setPlaying] = useState(false)
 
-  // Au démarrage du jeu : tente le plein écran natif (best effort).
-  // On part toujours en vertical ; le jeu décide ensuite de l'orientation.
   const handlePlay = () => {
     setPlaying(true)
-    try {
-      document.documentElement.requestFullscreen?.()
-    } catch (e) { /* ignoré : certains navigateurs iOS refusent */ }
+    try { document.documentElement.requestFullscreen?.() } catch (e) {}
   }
 
   const handleBack = () => {
     setPlaying(false)
-    try {
-      if (document.fullscreenElement) document.exitFullscreen()
-    } catch (e) { /* ignoré */ }
+    try { if (document.fullscreenElement) document.exitFullscreen() } catch (e) {}
   }
 
-  // Sécurité : si on quitte le composant en plein écran, on en sort.
   useEffect(() => {
     return () => {
-      try {
-        if (document.fullscreenElement) document.exitFullscreen()
-      } catch (e) { /* ignoré */ }
+      try { if (document.fullscreenElement) document.exitFullscreen() } catch (e) {}
     }
   }, [])
 
@@ -71,7 +52,6 @@ export default function MobileGamePage() {
           <span className="mgp__topbar-title">{game.title}</span>
           <div className="mgp__topbar-spacer" />
         </div>
-
         <div className="mgp__iframe-wrap">
           <iframe
             className="mgp__iframe"
@@ -80,7 +60,6 @@ export default function MobileGamePage() {
             allowFullScreen
           />
         </div>
-
         <div className="mgp__ad-bar">
           <span className="mgp__ad-label">Advertisement</span>
         </div>
@@ -92,7 +71,6 @@ export default function MobileGamePage() {
   return (
     <div className="mgp mgp--preview">
 
-      {/* En-tête : navbar 1×1 + carte titre 2×1 */}
       <div className="mgp__header">
         <div className="mgp__header-nav">
           <Navbar inGrid={true} />
@@ -103,7 +81,6 @@ export default function MobileGamePage() {
         </div>
       </div>
 
-      {/* Grande tuile jeu cliquable */}
       <button
         className="mgp__hero"
         onClick={handlePlay}
@@ -119,7 +96,6 @@ export default function MobileGamePage() {
         <span className="mgp__hero-label">Play</span>
       </button>
 
-      {/* Jeux similaires — grille 3 colonnes 1×1 */}
       <div className="mgp__related">
         {related.map(g => (
           <div key={g.id} className="mgp__related-cell">
@@ -127,6 +103,19 @@ export default function MobileGamePage() {
           </div>
         ))}
       </div>
+
+      <SeoBlock
+        type="game"
+        data={game.seo ? {
+          ...game.seo,
+          description: game.description,
+          controls: game.controls,
+          author: game.author,
+          title: game.title,
+        } : null}
+      />
+
+      <Footer />
 
     </div>
   )
