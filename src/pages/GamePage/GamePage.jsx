@@ -9,15 +9,12 @@ import MobileGamePage from './MobileGamePage'
 import { submitScore } from '../../data/leaderboardStore'
 import './GamePage.css'
 
-/* Wrapper — détecte mobile et route vers l'expérience adaptée */
+/* Wrapper — détecte mobile AU MONTAGE UNIQUEMENT et verrouille.
+   On ne réécoute pas les changements de taille : si l'utilisateur tourne
+   son téléphone pendant le jeu, on ne bascule PAS vers la version desktop.
+   La valeur initiale est figée pour toute la durée de la page. */
 export default function GamePage() {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)')
-    const h = (e) => setIsMobile(e.matches)
-    mq.addEventListener('change', h)
-    return () => mq.removeEventListener('change', h)
-  }, [])
+  const [isMobile] = useState(() => window.innerWidth < 768)
 
   if (isMobile) return <MobileGamePage />
   return <GamePageDesktop />
