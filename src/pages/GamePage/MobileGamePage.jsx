@@ -22,9 +22,20 @@ export default function MobileGamePage() {
     try { if (document.fullscreenElement) document.exitFullscreen() } catch (e) {}
   }
 
+  // Pendant le jeu : on bloque le scroll du body pour un vrai effet plein écran
+  useEffect(() => {
+    if (playing) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [playing])
+
   useEffect(() => {
     return () => {
       try { if (document.fullscreenElement) document.exitFullscreen() } catch (e) {}
+      document.body.style.overflow = ''
     }
   }, [])
 
@@ -39,30 +50,27 @@ export default function MobileGamePage() {
 
   const related = games.filter(g => g.id !== game.id).slice(0, 12)
 
-  /* ---- MODE JEU : plein écran ---- */
+  /* ---- MODE JEU : plein écran simulé ----
+     Sur iOS Safari, requestFullscreen sur iframe est peu fiable. On simule
+     donc le plein écran : conteneur position:fixed sur tout le viewport,
+     iframe en 100dvh, notre propre interface (topbar, pub) masquée. Seul
+     reste un bouton retour discret superposé. Les barres du navigateur,
+     elles, ne peuvent pas être masquées par le site (décision du navigateur). */
   if (playing) {
     return (
       <div className="mgp mgp--playing">
-        <div className="mgp__topbar">
-          <button className="mgp__topbar-back" onClick={handleBack} aria-label="Back">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-            </svg>
-          </button>
-          <span className="mgp__topbar-title">{game.title}</span>
-          <div className="mgp__topbar-spacer" />
-        </div>
-        <div className="mgp__iframe-wrap">
-          <iframe
-            className="mgp__iframe"
-            src={`/games/${game.id}.html`}
-            title={game.title}
-            allowFullScreen
-          />
-        </div>
-        <div className="mgp__ad-bar">
-          <span className="mgp__ad-label">Advertisement</span>
-        </div>
+        <button className="mgp__back-overlay" onClick={handleBack} aria-label="Back">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+          </svg>
+        </button>
+        <iframe
+          className="mgp__iframe"
+          src={`/games/${game.id}.html`}
+          title={game.title}
+          allow="fullscreen; autoplay; gamepad"
+          allowFullScreen
+        />
       </div>
     )
   }
