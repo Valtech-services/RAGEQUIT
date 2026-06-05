@@ -41,6 +41,10 @@ export default function CategoryPage() {
       <div className="category__header">
         <div className="category__header-nav"><Navbar inGrid={true} /></div>
         <div className="category__header-title">
+          {category.image && (
+            <img src={category.image} alt={category.label} className="category__header-img"
+              onError={e => { e.currentTarget.style.display='none' }} />
+          )}
           <span className="category__page-title">{category.label} Games</span>
         </div>
       </div>
@@ -48,7 +52,11 @@ export default function CategoryPage() {
         <div className="category__shortcuts">
           {otherCats.map(cat => (
             <Link key={cat.id} to={`/category/${cat.id}`} className="category__shortcut">
-              <span className="category__shortcut-icon">{catIcons[cat.id] || '🎮'}</span>
+              {cat.image ? (
+                <img src={cat.image} alt={cat.label} className="category__shortcut-img"
+                  onError={e => { e.currentTarget.style.display='none'; e.currentTarget.nextElementSibling.style.display='inline' }} />
+              ) : null}
+              <span className="category__shortcut-icon" style={cat.image ? {display:'none'} : {}}>{catIcons[cat.id] || '🎮'}</span>
               <span className="category__shortcut-label">{cat.label}</span>
             </Link>
           ))}
