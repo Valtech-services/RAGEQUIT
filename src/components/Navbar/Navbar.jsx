@@ -243,14 +243,10 @@ export default function Navbar({ title, inGrid = false }) {
                     <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
                   </svg>
                 </button>
-                {/* Logo couleur sur fond blanc — plus de fond noir */}
-                <Link to="/" className="nb-drawer__head-logo" onClick={closeAll}>
-                  <img src="/ragequit-logo-color.png" alt="Ragequit Arcade"
-                    onError={e => { e.target.style.display='none' }} />
-                  <span className="nb-drawer__head-logo-fallback">
-                    <span style={{color:'#00d9ff'}}>RAGE</span><span style={{color:'#ff00ff'}}>QUIT</span>
-                  </span>
-                </Link>
+                {/* Logo blanc sur fond sombre */}
+                <div className="nb-drawer__head-logo">
+                  <img src="/ragequit-logo-white.png" alt="Ragequit Arcade" />
+                </div>
                 <span className="nb-drawer__head-spacer" />
               </div>
 
