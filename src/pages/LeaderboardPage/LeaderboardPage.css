@@ -280,3 +280,8 @@
   }
   .lbpage__cta-btn { width: 100%; justify-content: center; }
 }
+
+/* Cache le panneau nickname sur mobile — le bouton Sign in dans le board suffit */
+@media (max-width: 600px) {
+  .lbpage__nickname--desktop-only { display: none; }
+}
