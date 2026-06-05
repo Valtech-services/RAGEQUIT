@@ -13,6 +13,9 @@ export default function MobileGamePage() {
   const game = games.find(g => g.id === id)
   const [playing, setPlaying] = useState(false)
 
+  // TOUS les hooks doivent être avant tout return conditionnel — règle React
+  usePageTitle(game?.title)
+
   const handlePlay = () => {
     setPlaying(true)
     try { document.documentElement.requestFullscreen?.() } catch (e) {}
@@ -79,8 +82,6 @@ export default function MobileGamePage() {
   }
 
   /* ---- MODE ACCUEIL : façon Poki ---- */
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  usePageTitle(game?.title)
   return (
     <div className="mgp mgp--preview">
 
