@@ -25,7 +25,6 @@
   display: inline-flex;
   align-items: center;
   text-decoration: none;
-  background: #10162e;
   border-radius: var(--radius-md, 12px);
   padding: 8px 18px;
   margin-bottom: var(--gap-md);
