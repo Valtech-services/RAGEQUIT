@@ -462,6 +462,197 @@
 }
 
 /* =====================================================================
+   DRAWER PROFIL CONNECTÉ — vue compte
+   ===================================================================== */
+.nb-drawer__account {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: var(--gap-lg);
+}
+
+/* Avatar initial */
+.nb-drawer__account-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-brand);
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(124,58,237,0.35);
+  margin-bottom: 4px;
+}
+
+.nb-drawer__account-username {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  color: #111111;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.nb-drawer__account-email {
+  font-size: var(--text-xs);
+  color: #999999;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+/* Badge de niveau */
+.nb-drawer__badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--badge-color, #aaaaaa) 15%, transparent);
+  color: var(--badge-color, #aaaaaa);
+  border: 1.5px solid var(--badge-color, #aaaaaa);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 4px;
+}
+
+/* Stats en ligne */
+.nb-drawer__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
+  margin: 8px 0;
+}
+.nb-drawer__stat {
+  background: #f7f8fc;
+  border-radius: var(--radius-md);
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+.nb-drawer__stat-value {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: #111111;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.nb-drawer__stat-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: #999999;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  line-height: 1.2;
+}
+
+/* Jeu favori */
+.nb-drawer__favorite {
+  width: 100%;
+  margin: 4px 0 10px;
+}
+.nb-drawer__favorite-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: #999999;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
+}
+.nb-drawer__favorite-game {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: #f7f8fc;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: background var(--transition-fast);
+}
+.nb-drawer__favorite-game:hover { background: #eef3fb; }
+.nb-drawer__favorite-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.nb-drawer__favorite-title {
+  flex: 1;
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  color: #111111;
+  letter-spacing: 0.03em;
+}
+.nb-drawer__favorite-empty {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  border: 1.5px dashed #d0d0da;
+  border-radius: var(--radius-md);
+  color: #aaaaaa;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: all var(--transition-fast);
+}
+.nb-drawer__favorite-empty:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: rgba(0,217,255,0.04);
+}
+
+/* Actions du profil : boutons pleine largeur */
+.nb-drawer__account .nb-drawer__provider {
+  width: 100%;
+  text-decoration: none;
+  text-align: center;
+}
+
+/* Edit profile */
+.nb-drawer__edit {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.nb-drawer__field-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: #999999;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 6px;
+}
+.nb-drawer__edit-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* Tête du drawer profil (logo centré + bouton retour) */
+.nb-drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--gap-lg);
+}
+.nb-drawer__head-spacer { width: 36px; flex-shrink: 0; }
+
+/* =====================================================================
    RESPONSIVE DRAWERS
    ===================================================================== */
 @media (max-width: 600px) {
