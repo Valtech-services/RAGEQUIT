@@ -5,6 +5,7 @@ import Navbar from '../../components/Navbar/Navbar'
 import GameCard from '../../components/GameCard/GameCard'
 import SeoBlock from '../../components/SeoBlock/SeoBlock'
 import Footer from '../../components/Footer/Footer'
+import usePageTitle from '../../hooks/usePageTitle'
 import './MobileGamePage.css'
 
 export default function MobileGamePage() {
@@ -76,6 +77,8 @@ export default function MobileGamePage() {
   }
 
   /* ---- MODE ACCUEIL : façon Poki ---- */
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  usePageTitle(game?.title)
   return (
     <div className="mgp mgp--preview">
 
