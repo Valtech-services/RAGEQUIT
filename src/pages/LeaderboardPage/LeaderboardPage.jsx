@@ -1,69 +1,91 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { games } from '../../data/games'
+import { supabase } from '../../lib/supabaseClient'
 import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Footer/Footer'
-import {
-  getPlayerBest, getPlayerName, setPlayerName, formatTime, getLeaderboard,
-} from '../../data/leaderboardStore'
+import { getPlayerBest, getPlayerName, setPlayerName, formatTime, getLeaderboard } from '../../data/leaderboardStore'
 import './LeaderboardPage.css'
 
-const GAME_LIST = games.map(g => ({
-  id: g.id,
-  label: g.title,
-  modes: g.id === 'rage-hockey' ? ['survival', 'classic'] : ['classic'],
-  defaultMode: g.id === 'rage-hockey' ? 'survival' : 'classic',
-}))
-
+/*
+  LeaderboardPage — structure :
+  - Header : navbar 1×1 + titre 2×1
+  - Recherche temps réel filtrée sur games.js (tape "rag..." → suggestions)
+  - Onglets mode si le jeu sélectionné en a plusieurs
+  - Rang du joueur (connecté → Supabase, anonyme → localStorage) au-dessus du tableau
+  - Top 20 avec médailles 🥇🥈🥉
+  - Si aucun jeu sélectionné → rien n'est affiché
+  - Si pas de data → message vide
+*/
 export default function LeaderboardPage() {
   const [query, setQuery]       = useState('')
-  const [gameId, setGameId]     = useState(GAME_LIST[0].id)
-  const [mode, setMode]         = useState(GAME_LIST[0].defaultMode)
-  const [name, setName]         = useState(getPlayerName())
+  const [gameId, setGameId]     = useState(null)   // null = aucun jeu sélectionné
+  const [mode, setMode]         = useState('classic')
   const [rows, setRows]         = useState([])
   const [playerRow, setPlayerRow] = useState(null)
+  const [loading, setLoading]   = useState(false)
+  const [user, setUser]         = useState(null)
+  const [name, setName]         = useState(getPlayerName())
 
-  const game = GAME_LIST.find(g => g.id === gameId) || GAME_LIST[0]
+  // Jeu sélectionné
+  const game = gameId ? games.find(g => g.id === gameId) : null
+  const gameModes = game?.modes || ['classic']
+  const defaultMode = game?.defaultMode || 'classic'
 
-  // Suggestions de recherche filtrées en temps réel
-  const suggestions = query.trim().length > 0
-    ? GAME_LIST.filter(g => g.label.toLowerCase().startsWith(query.toLowerCase()))
-    : []
+  // Auth
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => setUser(user))
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+      setUser(session?.user ?? null)
+    })
+    return () => subscription.unsubscribe()
+  }, [])
 
-  // Quand on change de jeu, reset le mode
-  useEffect(() => { setMode(game.defaultMode) }, [gameId])
+  // Reset mode quand on change de jeu
+  useEffect(() => { if (game) setMode(defaultMode) }, [gameId])
 
   // Charger le classement
-  useEffect(() => {
-    const load = () => {
-      const lb = getLeaderboard(gameId, mode, 20)
-      setRows(lb)
-      const best = getPlayerBest(gameId, mode)
-      setPlayerRow(best || null)
-    }
-    load()
-    window.addEventListener('rh-score-saved', load)
-    return () => window.removeEventListener('rh-score-saved', load)
+  const loadData = useCallback(async () => {
+    if (!gameId) { setRows([]); setPlayerRow(null); return }
+    setLoading(true)
+    const [lb, best] = await Promise.all([
+      getLeaderboard(gameId, mode, 20),
+      getPlayerBest(gameId, mode),
+    ])
+    setRows(lb)
+    setPlayerRow(best)
+    setLoading(false)
   }, [gameId, mode])
 
+  useEffect(() => { loadData() }, [loadData])
+  useEffect(() => {
+    window.addEventListener('rh-score-saved', loadData)
+    return () => window.removeEventListener('rh-score-saved', loadData)
+  }, [loadData])
+
+  // Recherche filtrée
+  const suggestions = query.trim().length > 0
+    ? games.filter(g => g.title.toLowerCase().startsWith(query.toLowerCase()))
+    : []
+
+  const selectGame = (id) => { setGameId(id); setQuery('') }
   const handleSaveName = () => setPlayerName(name)
 
   const formatScore = (row) => {
     if (!row) return '—'
-    return mode === 'survival' ? formatTime(row.score) : (row.score + ' pts')
+    if (row.scoreLabel) return row.scoreLabel
+    return mode === 'survival' ? formatTime(row.score) : row.score + ' pts'
   }
 
-  const medalEmoji = (rank) => {
-    if (rank === 1) return '🥇'
-    if (rank === 2) return '🥈'
-    if (rank === 3) return '🥉'
-    return null
+  const openAuthDrawer = () => {
+    // Déclenche l'ouverture du drawer profil de la Navbar
+    window.dispatchEvent(new CustomEvent('rq-open-auth'))
   }
 
   return (
     <div className="lbpage">
 
-      {/* ---- EN-TÊTE : navbar 1×1 + titre 2×1 ---- */}
+      {/* EN-TÊTE : navbar 1×1 + titre 2×1 */}
       <div className="lbpage__header">
         <div className="lbpage__header-nav">
           <Navbar inGrid={true} />
@@ -75,7 +97,7 @@ export default function LeaderboardPage() {
 
       <div className="lbpage__content">
 
-        {/* ---- RECHERCHE DE JEU ---- */}
+        {/* RECHERCHE */}
         <div className="lbpage__search-wrap">
           <div className="lbpage__search-box">
             <svg className="lbpage__search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -87,12 +109,10 @@ export default function LeaderboardPage() {
               placeholder="Search a game…"
               value={query}
               onChange={e => setQuery(e.target.value)}
-              onKeyDown={e => {
-                if (e.key === 'Escape') setQuery('')
-              }}
+              onKeyDown={e => e.key === 'Escape' && setQuery('')}
             />
             {query && (
-              <button className="lbpage__search-clear" onClick={() => setQuery('')} aria-label="Clear">
+              <button className="lbpage__search-clear" onClick={() => setQuery('')}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
                 </svg>
@@ -100,43 +120,35 @@ export default function LeaderboardPage() {
             )}
           </div>
 
-          {/* Suggestions filtrées */}
           {suggestions.length > 0 && (
             <div className="lbpage__suggestions">
               {suggestions.map(g => (
-                <button
-                  key={g.id}
-                  className={`lbpage__suggestion ${g.id === gameId ? 'is-active' : ''}`}
-                  onClick={() => { setGameId(g.id); setQuery('') }}
-                >
-                  {g.label}
+                <button key={g.id} className={`lbpage__suggestion ${g.id === gameId ? 'is-active' : ''}`}
+                  onClick={() => selectGame(g.id)}>
+                  {g.title}
                 </button>
               ))}
             </div>
           )}
 
-          {/* Jeu actuellement sélectionné */}
+          {/* Chips jeux */}
           <div className="lbpage__game-chips">
-            {GAME_LIST.map(g => (
-              <button
-                key={g.id}
+            {games.map(g => (
+              <button key={g.id}
                 className={`lbpage__chip ${g.id === gameId ? 'is-active' : ''}`}
-                onClick={() => setGameId(g.id)}
-              >
-                {g.label}
+                onClick={() => setGameId(gameId === g.id ? null : g.id)}>
+                {g.title}
               </button>
             ))}
           </div>
 
-          {/* Onglets mode si plusieurs */}
-          {game.modes.length > 1 && (
+          {/* Onglets mode — seulement si le jeu a plusieurs modes */}
+          {game && gameModes.length > 1 && (
             <div className="lbpage__mode-tabs">
-              {game.modes.map(m => (
-                <button
-                  key={m}
+              {gameModes.map(m => (
+                <button key={m}
                   className={`lbpage__mode-tab ${mode === m ? 'is-active' : ''}`}
-                  onClick={() => setMode(m)}
-                >
+                  onClick={() => setMode(m)}>
                   {m === 'survival' ? 'Survival' : 'Classic'}
                 </button>
               ))}
@@ -144,83 +156,98 @@ export default function LeaderboardPage() {
           )}
         </div>
 
-        {/* ---- TABLEAU ---- */}
-        <div className="lbpage__board">
-
-          {/* Rang du joueur connecté au-dessus du tableau */}
-          {playerRow && (
-            <div className="lbpage__player-rank">
-              <span className="lbpage__player-rank-label">Your rank</span>
-              <span className="lbpage__player-rank-num">
-                #{playerRow.rank ?? '—'}
-              </span>
-              <span className="lbpage__player-rank-name">{getPlayerName() || 'You'}</span>
-              <span className="lbpage__player-rank-score">{formatScore(playerRow)}</span>
-              <Link to={`/game/${gameId}`} className="lbpage__player-rank-play">Play</Link>
-            </div>
-          )}
-
-          {/* Tableau top 20 */}
-          {rows.length === 0 ? (
-            <div className="lbpage__empty">
-              <p>No scores yet for {game.label}.</p>
-              <Link to={`/game/${gameId}`} className="lbpage__play-link">Be the first to play →</Link>
-            </div>
-          ) : (
-            <table className="lbpage__table">
-              <thead>
-                <tr>
-                  <th className="lbpage__th lbpage__th--rank">#</th>
-                  <th className="lbpage__th lbpage__th--name">Player</th>
-                  <th className="lbpage__th lbpage__th--score">Score</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row, i) => {
-                  const rank = i + 1
-                  const medal = medalEmoji(rank)
-                  const isTop3 = rank <= 3
-                  return (
-                    <tr key={i} className={`lbpage__tr ${isTop3 ? `lbpage__tr--top${rank}` : ''}`}>
-                      <td className="lbpage__td lbpage__td--rank">
-                        {medal ? (
-                          <span className="lbpage__medal">{medal}</span>
-                        ) : (
-                          <span className="lbpage__rank-num">{rank}</span>
-                        )}
-                      </td>
-                      <td className="lbpage__td lbpage__td--name">
-                        {row.name || 'Anonymous'}
-                      </td>
-                      <td className="lbpage__td lbpage__td--score">
-                        {formatScore(row)}
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          )}
-
-          <p className="lbpage__note">
-            Scores stored locally. Global leaderboard coming soon.
-          </p>
-        </div>
-
-        {/* ---- PSEUDO ---- */}
-        <div className="lbpage__nickname">
-          <label className="lbpage__nickname-label">Your nickname</label>
-          <div className="lbpage__nickname-row">
-            <input
-              className="lbpage__nickname-input"
-              value={name}
-              maxLength={16}
-              placeholder="Choose a nickname"
-              onChange={e => setName(e.target.value)}
-            />
-            <button className="lbpage__nickname-save" onClick={handleSaveName}>Save</button>
+        {/* CONTENU : affiché seulement si un jeu est sélectionné */}
+        {!gameId ? (
+          <div className="lbpage__placeholder">
+            <p>Select a game to see its leaderboard.</p>
           </div>
-        </div>
+        ) : (
+          <div className="lbpage__board">
+
+            {/* Rang du joueur — au-dessus du tableau */}
+            {user ? (
+              /* Connecté */
+              playerRow ? (
+                <div className="lbpage__player-rank lbpage__player-rank--connected">
+                  <span className="lbpage__player-rank-badge">You</span>
+                  <span className="lbpage__player-rank-num">#{playerRow.rank}</span>
+                  <span className="lbpage__player-rank-name">{name || 'You'}</span>
+                  <span className="lbpage__player-rank-score">{formatScore(playerRow)}</span>
+                </div>
+              ) : (
+                /* Connecté mais jamais joué */
+                <div className="lbpage__player-rank lbpage__player-rank--no-score">
+                  <span className="lbpage__player-rank-badge">You</span>
+                  <span className="lbpage__player-rank-empty">No score yet —</span>
+                  <Link to={`/game/${gameId}`} className="lbpage__cta-link">
+                    Play {game.title} →
+                  </Link>
+                </div>
+              )
+            ) : (
+              /* Non connecté */
+              <div className="lbpage__player-rank lbpage__player-rank--guest">
+                <span className="lbpage__player-rank-empty">Sign in to track your rank</span>
+                <button className="lbpage__cta-btn" onClick={openAuthDrawer}>
+                  Sign in
+                </button>
+              </div>
+            )}
+
+            {/* Tableau top 20 */}
+            {loading ? (
+              <div className="lbpage__loading">Loading…</div>
+            ) : rows.length === 0 ? (
+              <div className="lbpage__empty">
+                <p>No scores yet for {game.title}.</p>
+                <Link to={`/game/${gameId}`} className="lbpage__play-link">Be the first to play →</Link>
+              </div>
+            ) : (
+              <table className="lbpage__table">
+                <thead>
+                  <tr>
+                    <th className="lbpage__th lbpage__th--rank">#</th>
+                    <th className="lbpage__th lbpage__th--name">Player</th>
+                    <th className="lbpage__th lbpage__th--score">Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((row, i) => {
+                    const rank = i + 1
+                    const medals = { 1: '🥇', 2: '🥈', 3: '🥉' }
+                    return (
+                      <tr key={i} className={`lbpage__tr ${rank <= 3 ? `lbpage__tr--top${rank}` : ''}`}>
+                        <td className="lbpage__td lbpage__td--rank">
+                          {medals[rank]
+                            ? <span className="lbpage__medal">{medals[rank]}</span>
+                            : <span className="lbpage__rank-num">{rank}</span>
+                          }
+                        </td>
+                        <td className="lbpage__td lbpage__td--name">{row.name || 'Anonymous'}</td>
+                        <td className="lbpage__td lbpage__td--score">{formatScore(row)}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            )}
+
+            <p className="lbpage__note">Global leaderboard via Supabase.</p>
+          </div>
+        )}
+
+        {/* PSEUDO (seulement si anonyme) */}
+        {!user && (
+          <div className="lbpage__nickname">
+            <label className="lbpage__nickname-label">Your nickname (anonymous)</label>
+            <div className="lbpage__nickname-row">
+              <input className="lbpage__nickname-input" value={name} maxLength={16}
+                placeholder="Choose a nickname"
+                onChange={e => setName(e.target.value)} />
+              <button className="lbpage__nickname-save" onClick={handleSaveName}>Save</button>
+            </div>
+          </div>
+        )}
 
       </div>
 
