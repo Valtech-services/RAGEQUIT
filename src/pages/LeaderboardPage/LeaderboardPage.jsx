@@ -5,6 +5,7 @@ import { supabase } from '../../lib/supabase'
 import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Footer/Footer'
 import { getPlayerBest, getPlayerName, setPlayerName, formatTime, getLeaderboard } from '../../data/leaderboardStore'
+import usePageTitle from '../../hooks/usePageTitle'
 import './LeaderboardPage.css'
 
 /*
@@ -26,6 +27,8 @@ export default function LeaderboardPage() {
   const [loading, setLoading]   = useState(false)
   const [user, setUser]         = useState(null)
   const [name, setName]         = useState(getPlayerName())
+
+  usePageTitle('Leaderboard')
 
   // Jeu sélectionné
   const game = gameId ? games.find(g => g.id === gameId) : null
