@@ -5,9 +5,6 @@ import { games, categories } from '../../data/games'
 import { useAuth } from '../../context/AuthContext'
 import './Navbar.css'
 
-/* =====================================================================
-   HELPERS
-   ===================================================================== */
 function getBadge(gamesPlayed = 0) {
   if (gamesPlayed >= 50) return { label: 'Rage Master', color: '#ff00ff' }
   if (gamesPlayed >= 20) return { label: 'Veteran',     color: '#8B5CF6' }
@@ -15,19 +12,14 @@ function getBadge(gamesPlayed = 0) {
   if (gamesPlayed >= 1)  return { label: 'Player',      color: '#4ade80' }
   return                        { label: 'Newcomer',    color: '#aaaaaa' }
 }
-
 function flagEmoji(code) {
   if (!code || code.length !== 2) return ''
-  return code.toUpperCase().replace(/./g, c =>
-    String.fromCodePoint(c.charCodeAt(0) + 127397)
-  )
+  return code.toUpperCase().replace(/./g, c => String.fromCodePoint(c.charCodeAt(0) + 127397))
 }
-
 function formatDate(iso) {
   if (!iso) return ''
   return new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
 }
-
 const COUNTRIES = [
   { code: 'FR', name: 'France' }, { code: 'US', name: 'United States' },
   { code: 'GB', name: 'United Kingdom' }, { code: 'DE', name: 'Germany' },
@@ -42,9 +34,6 @@ const COUNTRIES = [
   { code: 'SN', name: 'Senegal' }, { code: 'CI', name: "Côte d'Ivoire" },
 ]
 
-/* =====================================================================
-   COMPOSANT NAVBAR
-   ===================================================================== */
 export default function Navbar({ title, inGrid = false }) {
   const [searchOpen, setSearchOpen]   = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
@@ -53,7 +42,6 @@ export default function Navbar({ title, inGrid = false }) {
 
   const { user, profile, signUpEmail, signInEmail, signInGoogle, signOut, updateProfile } = useAuth()
 
-  /* Auth form */
   const [authTab, setAuthTab]           = useState('signup')
   const [authEmail, setAuthEmail]       = useState('')
   const [authPassword, setAuthPassword] = useState('')
@@ -62,18 +50,16 @@ export default function Navbar({ title, inGrid = false }) {
   const [authBusy, setAuthBusy]         = useState(false)
   const [authNotice, setAuthNotice]     = useState('')
 
-  /* Edit profile */
-  const [editMode, setEditMode]       = useState(false)
-  const [editCountry, setEditCountry] = useState('')
+  const [editMode, setEditMode]         = useState(false)
+  const [editUsername, setEditUsername] = useState('')   // ← NOUVEAU
+  const [editCountry, setEditCountry]   = useState('')
   const [editFavorite, setEditFavorite] = useState('')
-  const [editBusy, setEditBusy]       = useState(false)
+  const [editBusy, setEditBusy]         = useState(false)
+  const [editError, setEditError]       = useState('')   // ← NOUVEAU
 
-  /* ---- Écoute l'event rq-open-auth émis par LeaderboardPage ---- */
+  /* Ouvre le drawer auth depuis LeaderboardPage */
   useEffect(() => {
-    const handler = () => {
-      setProfileOpen(true)
-      setSearchOpen(false)
-    }
+    const handler = () => { setProfileOpen(true); setSearchOpen(false) }
     window.addEventListener('rq-open-auth', handler)
     return () => window.removeEventListener('rq-open-auth', handler)
   }, [])
@@ -92,15 +78,25 @@ export default function Navbar({ title, inGrid = false }) {
   }
 
   function openEdit() {
+    setEditUsername(profile?.username || '')
     setEditCountry(profile?.country || '')
     setEditFavorite(profile?.favorite_game_id || '')
+    setEditError('')
     setEditMode(true)
   }
 
   async function saveEdit() {
+    if (!editUsername.trim()) { setEditError('Username cannot be empty.'); return }
+    if (editUsername.trim().length < 3) { setEditError('Username must be at least 3 characters.'); return }
     setEditBusy(true)
-    await updateProfile({ country: editCountry || null, favorite_game_id: editFavorite || null })
+    setEditError('')
+    const { error } = await updateProfile({
+      username: editUsername.trim(),
+      country: editCountry || null,
+      favorite_game_id: editFavorite || null,
+    })
     setEditBusy(false)
+    if (error) { setEditError(error.message || 'Failed to save.'); return }
     setEditMode(false)
   }
 
@@ -235,28 +231,43 @@ export default function Navbar({ title, inGrid = false }) {
           </div>
         )}
 
-        {/* DRAWER PROFIL / CONNEXION */}
+        {/* DRAWER PROFIL */}
         {profileOpen && (
           <div className="nb-drawer nb-drawer--auth">
             <div className="nb-drawer__inner">
 
               <div className="nb-drawer__head">
-                <button className="nb-drawer__back" onClick={() => { setProfileOpen(false); setEditMode(false) }} aria-label="Close">
+                <button className="nb-drawer__back"
+                  onClick={() => { setProfileOpen(false); setEditMode(false) }} aria-label="Close">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
                   </svg>
                 </button>
-                <div className="nb-drawer__auth-logo">
-                  <img src="/ragequit-logo-white.png" alt="Ragequit Arcade" className="nb-drawer__auth-logo-img" />
-                </div>
+                {/* Logo couleur sur fond blanc — plus de fond noir */}
+                <Link to="/" className="nb-drawer__head-logo" onClick={closeAll}>
+                  <img src="/ragequit-logo-color.png" alt="Ragequit Arcade"
+                    onError={e => { e.target.style.display='none' }} />
+                  <span className="nb-drawer__head-logo-fallback">
+                    <span style={{color:'#00d9ff'}}>RAGE</span><span style={{color:'#ff00ff'}}>QUIT</span>
+                  </span>
+                </Link>
                 <span className="nb-drawer__head-spacer" />
               </div>
 
               {user ? (
                 editMode ? (
+                  /* ---- ÉDITION PROFIL ---- */
                   <div className="nb-drawer__edit">
                     <h2 className="nb-drawer__auth-title">Edit profile</h2>
-                    <label className="nb-drawer__field-label">Your country</label>
+
+                    <label className="nb-drawer__field-label">Username</label>
+                    <input className="nb-drawer__input" type="text"
+                      placeholder="Your username"
+                      value={editUsername}
+                      maxLength={20}
+                      onChange={e => setEditUsername(e.target.value)} />
+
+                    <label className="nb-drawer__field-label">Country</label>
                     <select className="nb-drawer__input nb-drawer__select"
                       value={editCountry} onChange={e => setEditCountry(e.target.value)}>
                       <option value="">— Select country —</option>
@@ -264,6 +275,7 @@ export default function Navbar({ title, inGrid = false }) {
                         <option key={c.code} value={c.code}>{flagEmoji(c.code)} {c.name}</option>
                       ))}
                     </select>
+
                     <label className="nb-drawer__field-label">Favorite game</label>
                     <select className="nb-drawer__input nb-drawer__select"
                       value={editFavorite} onChange={e => setEditFavorite(e.target.value)}>
@@ -272,6 +284,9 @@ export default function Navbar({ title, inGrid = false }) {
                         <option key={g.id} value={g.id}>{g.title}</option>
                       ))}
                     </select>
+
+                    {editError && <p className="nb-drawer__auth-error">{editError}</p>}
+
                     <div className="nb-drawer__edit-actions">
                       <button className="nb-drawer__provider nb-drawer__provider--primary"
                         onClick={saveEdit} disabled={editBusy}>
@@ -283,6 +298,7 @@ export default function Navbar({ title, inGrid = false }) {
                     </div>
                   </div>
                 ) : (
+                  /* ---- VUE PROFIL ---- */
                   <div className="nb-drawer__account">
                     <div className="nb-drawer__account-avatar">
                       {(profile?.username || user.email || '?').charAt(0).toUpperCase()}
@@ -329,9 +345,8 @@ export default function Navbar({ title, inGrid = false }) {
                       </div>
                     )}
                     <button className="nb-drawer__provider" onClick={openEdit}>Edit profile</button>
-                    <Link to="/leaderboard" className="nb-drawer__provider" onClick={() => setProfileOpen(false)}>
-                      View leaderboard
-                    </Link>
+                    <Link to="/leaderboard" className="nb-drawer__provider"
+                      onClick={() => setProfileOpen(false)}>View leaderboard</Link>
                     <button className="nb-drawer__provider nb-drawer__provider--danger"
                       onClick={async () => { await signOut(); setProfileOpen(false) }}>
                       Log out
@@ -388,9 +403,7 @@ export default function Navbar({ title, inGrid = false }) {
           </div>
         )}
 
-        {(searchOpen || profileOpen) && (
-          <div className="nb-overlay" onClick={closeAll} />
-        )}
+        {(searchOpen || profileOpen) && <div className="nb-overlay" onClick={closeAll} />}
         </>,
         document.body
       )}
