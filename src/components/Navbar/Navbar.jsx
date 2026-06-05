@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
 import { games, categories } from '../../data/games'
@@ -8,8 +8,6 @@ import './Navbar.css'
 /* =====================================================================
    HELPERS
    ===================================================================== */
-
-/* Badge/titre selon le nombre de parties jouées */
 function getBadge(gamesPlayed = 0) {
   if (gamesPlayed >= 50) return { label: 'Rage Master', color: '#ff00ff' }
   if (gamesPlayed >= 20) return { label: 'Veteran',     color: '#8B5CF6' }
@@ -18,7 +16,6 @@ function getBadge(gamesPlayed = 0) {
   return                        { label: 'Newcomer',    color: '#aaaaaa' }
 }
 
-/* Emoji drapeau depuis code ISO (ex: "FR" → 🇫🇷) */
 function flagEmoji(code) {
   if (!code || code.length !== 2) return ''
   return code.toUpperCase().replace(/./g, c =>
@@ -26,13 +23,11 @@ function flagEmoji(code) {
   )
 }
 
-/* Date lisible */
 function formatDate(iso) {
   if (!iso) return ''
   return new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
 }
 
-/* Liste des pays pour le select */
 const COUNTRIES = [
   { code: 'FR', name: 'France' }, { code: 'US', name: 'United States' },
   { code: 'GB', name: 'United Kingdom' }, { code: 'DE', name: 'Germany' },
@@ -68,10 +63,20 @@ export default function Navbar({ title, inGrid = false }) {
   const [authNotice, setAuthNotice]     = useState('')
 
   /* Edit profile */
-  const [editMode, setEditMode]           = useState(false)
-  const [editCountry, setEditCountry]     = useState('')
-  const [editFavorite, setEditFavorite]   = useState('')
-  const [editBusy, setEditBusy]           = useState(false)
+  const [editMode, setEditMode]       = useState(false)
+  const [editCountry, setEditCountry] = useState('')
+  const [editFavorite, setEditFavorite] = useState('')
+  const [editBusy, setEditBusy]       = useState(false)
+
+  /* ---- Écoute l'event rq-open-auth émis par LeaderboardPage ---- */
+  useEffect(() => {
+    const handler = () => {
+      setProfileOpen(true)
+      setSearchOpen(false)
+    }
+    window.addEventListener('rq-open-auth', handler)
+    return () => window.removeEventListener('rq-open-auth', handler)
+  }, [])
 
   const gameCategories = categories.filter(c => c.id !== 'all')
   const results = query.length > 1
@@ -86,7 +91,6 @@ export default function Navbar({ title, inGrid = false }) {
     setAuthError(''); setAuthNotice('')
   }
 
-  /* Ouvre le mode édition avec les valeurs actuelles */
   function openEdit() {
     setEditCountry(profile?.country || '')
     setEditFavorite(profile?.favorite_game_id || '')
@@ -125,8 +129,7 @@ export default function Navbar({ title, inGrid = false }) {
     if (error) setAuthError(error.message)
   }
 
-  /* Données profil calculées */
-  const badge       = getBadge(profile?.games_played)
+  const badge        = getBadge(profile?.games_played)
   const favoriteGame = games.find(g => g.id === profile?.favorite_game_id)
 
   return (
@@ -160,9 +163,7 @@ export default function Navbar({ title, inGrid = false }) {
 
       {createPortal(
         <>
-        {/* ============================================================
-            DRAWER RECHERCHE
-            ============================================================ */}
+        {/* DRAWER RECHERCHE */}
         {searchOpen && (
           <div className="nb-drawer nb-drawer--search">
             <div className="nb-drawer__inner">
@@ -234,9 +235,7 @@ export default function Navbar({ title, inGrid = false }) {
           </div>
         )}
 
-        {/* ============================================================
-            DRAWER PROFIL / CONNEXION
-            ============================================================ */}
+        {/* DRAWER PROFIL / CONNEXION */}
         {profileOpen && (
           <div className="nb-drawer nb-drawer--auth">
             <div className="nb-drawer__inner">
@@ -255,21 +254,16 @@ export default function Navbar({ title, inGrid = false }) {
 
               {user ? (
                 editMode ? (
-                  /* ---- MODE ÉDITION ---- */
                   <div className="nb-drawer__edit">
                     <h2 className="nb-drawer__auth-title">Edit profile</h2>
-
                     <label className="nb-drawer__field-label">Your country</label>
                     <select className="nb-drawer__input nb-drawer__select"
                       value={editCountry} onChange={e => setEditCountry(e.target.value)}>
                       <option value="">— Select country —</option>
                       {COUNTRIES.map(c => (
-                        <option key={c.code} value={c.code}>
-                          {flagEmoji(c.code)} {c.name}
-                        </option>
+                        <option key={c.code} value={c.code}>{flagEmoji(c.code)} {c.name}</option>
                       ))}
                     </select>
-
                     <label className="nb-drawer__field-label">Favorite game</label>
                     <select className="nb-drawer__input nb-drawer__select"
                       value={editFavorite} onChange={e => setEditFavorite(e.target.value)}>
@@ -278,7 +272,6 @@ export default function Navbar({ title, inGrid = false }) {
                         <option key={g.id} value={g.id}>{g.title}</option>
                       ))}
                     </select>
-
                     <div className="nb-drawer__edit-actions">
                       <button className="nb-drawer__provider nb-drawer__provider--primary"
                         onClick={saveEdit} disabled={editBusy}>
@@ -290,10 +283,7 @@ export default function Navbar({ title, inGrid = false }) {
                     </div>
                   </div>
                 ) : (
-                  /* ---- PROFIL CONNECTÉ ---- */
                   <div className="nb-drawer__account">
-
-                    {/* Avatar + badge */}
                     <div className="nb-drawer__account-avatar">
                       {(profile?.username || user.email || '?').charAt(0).toUpperCase()}
                     </div>
@@ -304,33 +294,24 @@ export default function Navbar({ title, inGrid = false }) {
                       {badge.label}
                     </span>
                     <p className="nb-drawer__account-email">{user.email}</p>
-
-                    {/* Stats */}
                     <div className="nb-drawer__stats">
                       <div className="nb-drawer__stat">
                         <span className="nb-drawer__stat-value">{profile?.games_played ?? 0}</span>
                         <span className="nb-drawer__stat-label">Games played</span>
                       </div>
                       <div className="nb-drawer__stat">
-                        <span className="nb-drawer__stat-value">
-                          🔥 {profile?.streak_days ?? 0}
-                        </span>
+                        <span className="nb-drawer__stat-value">🔥 {profile?.streak_days ?? 0}</span>
                         <span className="nb-drawer__stat-label">Day streak</span>
                       </div>
                       <div className="nb-drawer__stat">
-                        <span className="nb-drawer__stat-value">
-                          {formatDate(profile?.created_at)}
-                        </span>
+                        <span className="nb-drawer__stat-value">{formatDate(profile?.created_at)}</span>
                         <span className="nb-drawer__stat-label">Member since</span>
                       </div>
                     </div>
-
-                    {/* Jeu favori */}
                     {favoriteGame ? (
                       <div className="nb-drawer__favorite">
                         <span className="nb-drawer__favorite-label">Favorite game</span>
-                        <Link to={`/game/${favoriteGame.id}`}
-                          className="nb-drawer__favorite-game"
+                        <Link to={`/game/${favoriteGame.id}`} className="nb-drawer__favorite-game"
                           onClick={() => setProfileOpen(false)}>
                           <img src={favoriteGame.thumbnail} alt={favoriteGame.title} className="nb-drawer__favorite-thumb" />
                           <span className="nb-drawer__favorite-title">{favoriteGame.title}</span>
@@ -347,13 +328,8 @@ export default function Navbar({ title, inGrid = false }) {
                         </button>
                       </div>
                     )}
-
-                    {/* Actions */}
-                    <button className="nb-drawer__provider" onClick={openEdit}>
-                      Edit profile
-                    </button>
-                    <Link to="/leaderboard" className="nb-drawer__provider"
-                      onClick={() => setProfileOpen(false)}>
+                    <button className="nb-drawer__provider" onClick={openEdit}>Edit profile</button>
+                    <Link to="/leaderboard" className="nb-drawer__provider" onClick={() => setProfileOpen(false)}>
                       View leaderboard
                     </Link>
                     <button className="nb-drawer__provider nb-drawer__provider--danger"
@@ -363,7 +339,6 @@ export default function Navbar({ title, inGrid = false }) {
                   </div>
                 )
               ) : (
-                /* ---- DÉCONNECTÉ : formulaire ---- */
                 <>
                   <div className="nb-drawer__tabs">
                     <button className={`nb-drawer__tab ${authTab === 'signup' ? 'nb-drawer__tab--active' : ''}`}
@@ -375,20 +350,16 @@ export default function Navbar({ title, inGrid = false }) {
                       Log in
                     </button>
                   </div>
-
                   <h2 className="nb-drawer__auth-title">
                     {authTab === 'signup' ? 'Create your account' : 'Welcome back'}
                   </h2>
-
                   <div className="nb-drawer__providers">
                     <button className="nb-drawer__provider" onClick={handleGoogle}>
                       <span className="nb-drawer__provider-icon nb-drawer__provider-icon--g">G</span>
                       Continue with Google
                     </button>
                   </div>
-
                   <div className="nb-drawer__divider"><span>or</span></div>
-
                   <div className="nb-drawer__form">
                     {authTab === 'signup' && (
                       <input className="nb-drawer__input" type="text" placeholder="Username"
@@ -401,16 +372,13 @@ export default function Navbar({ title, inGrid = false }) {
                     <input className="nb-drawer__input" type="password" placeholder="Password"
                       value={authPassword} onChange={e => setAuthPassword(e.target.value)}
                       autoComplete={authTab === 'signup' ? 'new-password' : 'current-password'} />
-
                     {authError  && <p className="nb-drawer__auth-error">{authError}</p>}
                     {authNotice && <p className="nb-drawer__auth-notice">{authNotice}</p>}
-
                     <button className="nb-drawer__provider nb-drawer__provider--primary"
                       onClick={handleEmailSubmit} disabled={authBusy}>
                       {authBusy ? 'Please wait…' : (authTab === 'signup' ? 'Create account' : 'Log in')}
                     </button>
                   </div>
-
                   <p className="nb-drawer__auth-legal">
                     By continuing you agree to our Terms of Use and acknowledge our Privacy Policy.
                   </p>
