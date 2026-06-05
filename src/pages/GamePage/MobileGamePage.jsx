@@ -69,8 +69,10 @@ export default function MobileGamePage() {
           className="mgp__iframe"
           src={`/games/${game.id}.html`}
           title={game.title}
-          allow="fullscreen; autoplay; gamepad"
+          allow="fullscreen; autoplay; gamepad; pointer-lock"
           allowFullScreen
+          scrolling="no"
+          frameBorder="0"
         />
       </div>
     )
