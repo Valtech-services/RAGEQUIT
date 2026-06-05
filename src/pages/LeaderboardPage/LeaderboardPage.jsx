@@ -131,17 +131,6 @@ export default function LeaderboardPage() {
             </div>
           )}
 
-          {/* Chips jeux */}
-          <div className="lbpage__game-chips">
-            {games.map(g => (
-              <button key={g.id}
-                className={`lbpage__chip ${g.id === gameId ? 'is-active' : ''}`}
-                onClick={() => setGameId(gameId === g.id ? null : g.id)}>
-                {g.title}
-              </button>
-            ))}
-          </div>
-
           {/* Onglets mode — seulement si le jeu a plusieurs modes */}
           {game && gameModes.length > 1 && (
             <div className="lbpage__mode-tabs">
