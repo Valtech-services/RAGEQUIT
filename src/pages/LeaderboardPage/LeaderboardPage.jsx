@@ -179,7 +179,7 @@ export default function LeaderboardPage() {
             ) : (
               /* Non connecté */
               <div className="lbpage__player-rank lbpage__player-rank--guest">
-                <span className="lbpage__player-rank-empty">Sign in to track your rank</span>
+                <span className="lbpage__player-rank-empty">Sign in to save your scores &amp; track your rank</span>
                 <button className="lbpage__cta-btn" onClick={openAuthDrawer}>
                   Sign in
                 </button>
