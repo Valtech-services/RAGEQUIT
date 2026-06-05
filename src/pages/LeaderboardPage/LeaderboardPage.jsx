@@ -228,9 +228,9 @@ export default function LeaderboardPage() {
           </div>
         )}
 
-        {/* PSEUDO (seulement si anonyme) */}
+        {/* PSEUDO — seulement si anonyme ET sur desktop (masqué sur mobile via CSS) */}
         {!user && (
-          <div className="lbpage__nickname">
+          <div className="lbpage__nickname lbpage__nickname--desktop-only">
             <label className="lbpage__nickname-label">Your nickname (anonymous)</label>
             <div className="lbpage__nickname-row">
               <input className="lbpage__nickname-input" value={name} maxLength={16}
