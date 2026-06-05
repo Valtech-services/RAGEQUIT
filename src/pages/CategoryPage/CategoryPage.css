@@ -154,3 +154,26 @@
   }
   .category__cell--large { grid-column: span 2; grid-row: span 2; }
 }
+
+/* Image de la catégorie dans le header titre */
+.category__header-img {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm, 8px);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.category__header-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Image dans les shortcuts */
+.category__shortcut-img {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
