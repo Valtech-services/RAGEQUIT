@@ -140,3 +140,12 @@
 @media (max-width: 900px) and (min-width: 601px) {
   .bento__cats { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* Image de catégorie dans la tuile */
+.bento__cat-img {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm, 8px);
+  object-fit: cover;
+  flex-shrink: 0;
+}
