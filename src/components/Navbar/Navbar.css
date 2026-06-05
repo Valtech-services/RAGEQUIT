@@ -364,21 +364,21 @@
   text-align: center; margin-bottom: var(--gap-lg);
 }
 
-/* Logo drawer — brut, pas de fond, tel quel */
+/* Logo drawer — fond sombre pour que le logo blanc soit lisible */
 .nb-drawer__head-logo {
   display: flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  height: 40px;
+  background: #10162e;
+  border-radius: var(--radius-md);
+  padding: 8px 20px;
+  height: 48px;
 }
 .nb-drawer__head-logo img {
-  height: 32px;
+  height: 28px;
   width: auto;
   display: block;
-  /* Si logo blanc sur fond blanc : filtre pour le rendre visible */
-  filter: invert(1) brightness(0) saturate(100%)
-    invert(62%) sepia(97%) saturate(500%) hue-rotate(160deg) brightness(102%) contrast(102%);
 }
 .nb-drawer__head-logo-fallback {
   font-family: var(--font-display);
