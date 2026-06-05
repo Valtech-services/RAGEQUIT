@@ -264,4 +264,19 @@
   .lbpage__td { padding: 11px 14px; }
   .lbpage__th { padding: 10px 14px; }
   .lbpage__player-rank { padding: 10px 14px; gap: 8px; flex-wrap: wrap; }
+  /* Panneau nickname pleine largeur sur mobile */
+  .lbpage__nickname {
+    width: 100%;
+    border-radius: var(--radius-md);
+  }
+  .lbpage__nickname-row { flex-direction: row; }
+  .lbpage__nickname-input { min-width: 0; }
+  /* Guest row : centré colonne sur mobile */
+  .lbpage__player-rank--guest {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+  }
+  .lbpage__cta-btn { width: 100%; justify-content: center; }
 }
