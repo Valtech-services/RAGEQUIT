@@ -14,6 +14,7 @@ export const categories = [
   {
     id: 'sports',
     label: 'Sports',
+    image: '/categories/sports.jpg',
     description: 'Competitive, fast, rage-inducing. Sports games that push your limits.',
     seo: {
       title: 'Free Sports Games | Ragequit Arcade',
@@ -28,6 +29,7 @@ export const categories = [
   {
     id: 'arcade',
     label: 'Arcade',
+    image: '/categories/arcade.jpg',
     description: 'Stack, dodge, survive. Pure arcade reflex games.',
     seo: {
       title: 'Free Arcade Games | Ragequit Arcade',
