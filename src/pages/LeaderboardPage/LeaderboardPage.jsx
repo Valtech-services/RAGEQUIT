@@ -1,257 +1,267 @@
-import { useState, useEffect, useCallback } from 'react'
-import { Link } from 'react-router-dom'
-import { games } from '../../data/games'
-import { supabase } from '../../lib/supabaseClient'
-import Navbar from '../../components/Navbar/Navbar'
-import Footer from '../../components/Footer/Footer'
-import { getPlayerBest, getPlayerName, setPlayerName, formatTime, getLeaderboard } from '../../data/leaderboardStore'
-import './LeaderboardPage.css'
+/* =====================================================================
+   LEADERBOARD PAGE
+   ===================================================================== */
+.lbpage {
+  --cell: 130px;
+  --gap: 14px;
+  --pad: 20px;
+  min-height: 100vh;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+}
 
-/*
-  LeaderboardPage — structure :
-  - Header : navbar 1×1 + titre 2×1
-  - Recherche temps réel filtrée sur games.js (tape "rag..." → suggestions)
-  - Onglets mode si le jeu sélectionné en a plusieurs
-  - Rang du joueur (connecté → Supabase, anonyme → localStorage) au-dessus du tableau
-  - Top 20 avec médailles 🥇🥈🥉
-  - Si aucun jeu sélectionné → rien n'est affiché
-  - Si pas de data → message vide
-*/
-export default function LeaderboardPage() {
-  const [query, setQuery]       = useState('')
-  const [gameId, setGameId]     = useState(null)   // null = aucun jeu sélectionné
-  const [mode, setMode]         = useState('classic')
-  const [rows, setRows]         = useState([])
-  const [playerRow, setPlayerRow] = useState(null)
-  const [loading, setLoading]   = useState(false)
-  const [user, setUser]         = useState(null)
-  const [name, setName]         = useState(getPlayerName())
+/* ---- EN-TÊTE ---- */
+.lbpage__header {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, var(--cell));
+  grid-auto-rows: var(--cell);
+  gap: var(--gap);
+  padding: var(--pad) var(--pad) 0;
+  justify-content: center;
+}
+.lbpage__header-nav { grid-column: span 1; overflow: visible; }
+.lbpage__header-nav > * { width: 100%; height: 100%; }
+.lbpage__header-title {
+  grid-column: span 2;
+  background: #ffffff;
+  border-radius: var(--radius-card);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.14);
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 18px;
+}
+.lbpage__header-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2.8vw, 26px);
+  font-weight: 900; color: #10162e; letter-spacing: 0.05em;
+}
 
-  // Jeu sélectionné
-  const game = gameId ? games.find(g => g.id === gameId) : null
-  const gameModes = game?.modes || ['classic']
-  const defaultMode = game?.defaultMode || 'classic'
+/* ---- CONTENU ---- */
+.lbpage__content {
+  flex: 1;
+  max-width: 680px; width: 100%;
+  margin: 0 auto;
+  padding: var(--pad);
+  display: flex; flex-direction: column; gap: 16px;
+}
 
-  // Auth
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => setUser(user))
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
-      setUser(session?.user ?? null)
-    })
-    return () => subscription.unsubscribe()
-  }, [])
+/* ---- RECHERCHE ---- */
+.lbpage__search-wrap { display: flex; flex-direction: column; gap: 10px; }
+.lbpage__search-box {
+  display: flex; align-items: center; gap: 10px;
+  background: #ffffff; border: 1.5px solid #e0e0e6;
+  border-radius: var(--radius-full); padding: 10px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: border-color var(--transition-fast);
+}
+.lbpage__search-box:focus-within { border-color: var(--color-accent); }
+.lbpage__search-icon { color: #aaaaaa; flex-shrink: 0; }
+.lbpage__search-input {
+  flex: 1; border: none; background: transparent;
+  font-family: var(--font-body); font-size: var(--text-md);
+  color: #111111; outline: none; min-width: 0;
+}
+.lbpage__search-input::placeholder { color: #aaaaaa; }
+.lbpage__search-clear {
+  width: 24px; height: 24px; border-radius: 50%;
+  border: none; background: #f0f0f4;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0; color: #888888;
+}
+.lbpage__search-clear:hover { background: #e0e0e6; }
 
-  // Reset mode quand on change de jeu
-  useEffect(() => { if (game) setMode(defaultMode) }, [gameId])
+.lbpage__suggestions {
+  background: #ffffff; border: 1.5px solid #e0e0e6;
+  border-radius: var(--radius-md); overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+.lbpage__suggestion {
+  display: block; width: 100%; text-align: left;
+  padding: 12px 16px; border: none; background: transparent;
+  font-family: var(--font-body); font-size: var(--text-md);
+  color: #111111; cursor: pointer;
+  transition: background var(--transition-fast);
+}
+.lbpage__suggestion:hover,
+.lbpage__suggestion.is-active { background: rgba(0,217,255,0.08); color: var(--color-accent); }
 
-  // Charger le classement
-  const loadData = useCallback(async () => {
-    if (!gameId) { setRows([]); setPlayerRow(null); return }
-    setLoading(true)
-    const [lb, best] = await Promise.all([
-      getLeaderboard(gameId, mode, 20),
-      getPlayerBest(gameId, mode),
-    ])
-    setRows(lb)
-    setPlayerRow(best)
-    setLoading(false)
-  }, [gameId, mode])
+/* Chips jeux */
+.lbpage__game-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.lbpage__chip {
+  padding: 8px 18px; border-radius: var(--radius-full);
+  border: 1.5px solid rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.15);
+  font-family: var(--font-body); font-size: var(--text-sm); font-weight: 700;
+  color: #ffffff; cursor: pointer;
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(4px);
+}
+.lbpage__chip:hover { background: rgba(255,255,255,0.3); border-color: rgba(255,255,255,0.7); }
+.lbpage__chip.is-active {
+  background: var(--gradient-brand); color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(124,58,237,0.4);
+}
 
-  useEffect(() => { loadData() }, [loadData])
-  useEffect(() => {
-    window.addEventListener('rh-score-saved', loadData)
-    return () => window.removeEventListener('rh-score-saved', loadData)
-  }, [loadData])
+/* Onglets mode — dégradé violet propre */
+.lbpage__mode-tabs { display: flex; gap: 8px; }
+.lbpage__mode-tab {
+  flex: 1; padding: 12px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: rgba(255,255,255,0.2);
+  font-family: var(--font-body); font-size: var(--text-sm); font-weight: 700;
+  color: rgba(255,255,255,0.8); cursor: pointer;
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(4px);
+}
+.lbpage__mode-tab:hover { background: rgba(255,255,255,0.35); color: #ffffff; }
+.lbpage__mode-tab.is-active {
+  background: var(--gradient-brand);
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(124,58,237,0.4);
+}
 
-  // Recherche filtrée
-  const suggestions = query.trim().length > 0
-    ? games.filter(g => g.title.toLowerCase().startsWith(query.toLowerCase()))
-    : []
+/* ---- PLACEHOLDER ---- */
+.lbpage__placeholder {
+  text-align: center; padding: 48px 20px;
+  color: rgba(255,255,255,0.6);
+  font-size: var(--text-md); font-weight: 600;
+}
 
-  const selectGame = (id) => { setGameId(id); setQuery('') }
-  const handleSaveName = () => setPlayerName(name)
+/* ---- BOARD ---- */
+.lbpage__board {
+  background: #ffffff; border-radius: var(--radius-lg);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  overflow: hidden;
+}
 
-  const formatScore = (row) => {
-    if (!row) return '—'
-    if (row.scoreLabel) return row.scoreLabel
-    return mode === 'survival' ? formatTime(row.score) : row.score + ' pts'
+/* Rang joueur */
+.lbpage__player-rank {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 20px;
+  border-bottom: 2px solid var(--color-accent);
+}
+.lbpage__player-rank--connected { background: rgba(0,217,255,0.06); }
+.lbpage__player-rank--no-score  { background: rgba(0,217,255,0.04); }
+.lbpage__player-rank--guest     { background: #fafafa; justify-content: center; gap: 14px; }
+
+.lbpage__player-rank-badge {
+  font-family: var(--font-mono); font-size: 9px;
+  background: var(--color-accent); color: #fff;
+  padding: 2px 7px; border-radius: var(--radius-full);
+  text-transform: uppercase; letter-spacing: 0.1em; flex-shrink: 0;
+}
+.lbpage__player-rank-num {
+  font-family: var(--font-display); font-size: var(--text-lg);
+  color: var(--color-accent); font-weight: 900; flex-shrink: 0;
+}
+.lbpage__player-rank-name {
+  flex: 1; font-size: var(--text-sm); font-weight: 700; color: #111111;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.lbpage__player-rank-score {
+  font-family: var(--font-mono); font-size: var(--text-sm);
+  font-weight: 800; color: #7C3AED; flex-shrink: 0;
+}
+.lbpage__player-rank-empty {
+  font-size: var(--text-sm); color: #888888;
+}
+.lbpage__cta-link {
+  font-size: var(--text-sm); font-weight: 800;
+  color: var(--color-accent); text-decoration: none;
+  white-space: nowrap; flex-shrink: 0;
+}
+.lbpage__cta-btn {
+  padding: 8px 20px; border-radius: var(--radius-full);
+  background: var(--gradient-brand); color: #ffffff;
+  border: none; font-family: var(--font-body);
+  font-size: var(--text-sm); font-weight: 800;
+  cursor: pointer; transition: opacity var(--transition-fast);
+  box-shadow: 0 4px 14px rgba(124,58,237,0.35);
+  flex-shrink: 0;
+}
+.lbpage__cta-btn:hover { opacity: 0.88; }
+
+/* Table */
+.lbpage__table { width: 100%; border-collapse: collapse; }
+.lbpage__th {
+  padding: 11px 20px;
+  font-family: var(--font-mono); font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: #aaaaaa; text-align: left;
+  border-bottom: 1px solid #f0f0f4;
+}
+.lbpage__th--score { text-align: right; }
+.lbpage__th--rank  { width: 52px; }
+.lbpage__tr { transition: background var(--transition-fast); }
+.lbpage__tr:hover { background: #f9f9fc; }
+.lbpage__tr--top1 { background: rgba(255,210,63,0.07); }
+.lbpage__tr--top2 { background: rgba(200,210,224,0.09); }
+.lbpage__tr--top3 { background: rgba(224,138,75,0.07); }
+.lbpage__tr--top1:hover { background: rgba(255,210,63,0.13); }
+.lbpage__tr--top2:hover { background: rgba(200,210,224,0.16); }
+.lbpage__tr--top3:hover { background: rgba(224,138,75,0.11); }
+.lbpage__td {
+  padding: 13px 20px; border-bottom: 1px solid #f0f0f4;
+  font-size: var(--text-sm);
+}
+.lbpage__tr:last-child .lbpage__td { border-bottom: none; }
+.lbpage__td--rank  { width: 52px; }
+.lbpage__td--name  { font-weight: 700; color: #111111; }
+.lbpage__td--score { text-align: right; font-family: var(--font-mono); font-weight: 800; color: #7C3AED; }
+.lbpage__medal     { font-size: 22px; line-height: 1; }
+.lbpage__rank-num  { font-size: var(--text-sm); font-weight: 700; color: #aaaaaa; }
+
+.lbpage__loading { padding: 32px; text-align: center; color: #aaaaaa; font-size: var(--text-sm); }
+.lbpage__empty {
+  padding: 40px 20px; text-align: center;
+  display: flex; flex-direction: column; gap: 12px; align-items: center;
+}
+.lbpage__empty p { font-size: var(--text-md); color: #888888; }
+.lbpage__play-link { color: var(--color-accent); font-weight: 800; text-decoration: none; font-size: var(--text-sm); }
+.lbpage__note {
+  padding: 12px 20px; text-align: center;
+  font-size: var(--text-xs); color: #cccccc; font-style: italic;
+}
+
+/* ---- PSEUDO anonyme ---- */
+.lbpage__nickname {
+  background: #ffffff; border-radius: var(--radius-lg);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+  padding: 20px; display: flex; flex-direction: column; gap: 10px;
+}
+.lbpage__nickname-label {
+  font-family: var(--font-mono); font-size: 10px;
+  color: #aaaaaa; text-transform: uppercase; letter-spacing: 0.12em;
+}
+.lbpage__nickname-row { display: flex; gap: 8px; }
+.lbpage__nickname-input {
+  flex: 1; min-width: 0; padding: 11px 14px;
+  background: #f4f4f6; border: 1.5px solid transparent;
+  border-radius: var(--radius-md); font-family: var(--font-body);
+  font-size: var(--text-md); color: #111111; outline: none;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+.lbpage__nickname-input:focus { background: #ffffff; border-color: var(--color-accent); }
+.lbpage__nickname-input::placeholder { color: #aaaaaa; }
+.lbpage__nickname-save {
+  padding: 11px 22px; background: var(--gradient-brand); color: #ffffff;
+  border: none; border-radius: var(--radius-md);
+  font-family: var(--font-body); font-weight: 700; font-size: var(--text-sm);
+  cursor: pointer; transition: opacity var(--transition-fast); flex-shrink: 0;
+}
+.lbpage__nickname-save:hover { opacity: 0.9; }
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 600px) {
+  .lbpage { --gap: 10px; --pad: 12px; --cell: calc((100vw - 24px - 20px) / 3); }
+  .lbpage__header {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: var(--cell); justify-content: stretch;
   }
-
-  const openAuthDrawer = () => {
-    // Déclenche l'ouverture du drawer profil de la Navbar
-    window.dispatchEvent(new CustomEvent('rq-open-auth'))
-  }
-
-  return (
-    <div className="lbpage">
-
-      {/* EN-TÊTE : navbar 1×1 + titre 2×1 */}
-      <div className="lbpage__header">
-        <div className="lbpage__header-nav">
-          <Navbar inGrid={true} />
-        </div>
-        <div className="lbpage__header-title">
-          <h1 className="lbpage__header-h1">Leaderboard</h1>
-        </div>
-      </div>
-
-      <div className="lbpage__content">
-
-        {/* RECHERCHE */}
-        <div className="lbpage__search-wrap">
-          <div className="lbpage__search-box">
-            <svg className="lbpage__search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
-            </svg>
-            <input
-              className="lbpage__search-input"
-              type="text"
-              placeholder="Search a game…"
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              onKeyDown={e => e.key === 'Escape' && setQuery('')}
-            />
-            {query && (
-              <button className="lbpage__search-clear" onClick={() => setQuery('')}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                </svg>
-              </button>
-            )}
-          </div>
-
-          {suggestions.length > 0 && (
-            <div className="lbpage__suggestions">
-              {suggestions.map(g => (
-                <button key={g.id} className={`lbpage__suggestion ${g.id === gameId ? 'is-active' : ''}`}
-                  onClick={() => selectGame(g.id)}>
-                  {g.title}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Chips jeux */}
-          <div className="lbpage__game-chips">
-            {games.map(g => (
-              <button key={g.id}
-                className={`lbpage__chip ${g.id === gameId ? 'is-active' : ''}`}
-                onClick={() => setGameId(gameId === g.id ? null : g.id)}>
-                {g.title}
-              </button>
-            ))}
-          </div>
-
-          {/* Onglets mode — seulement si le jeu a plusieurs modes */}
-          {game && gameModes.length > 1 && (
-            <div className="lbpage__mode-tabs">
-              {gameModes.map(m => (
-                <button key={m}
-                  className={`lbpage__mode-tab ${mode === m ? 'is-active' : ''}`}
-                  onClick={() => setMode(m)}>
-                  {m === 'survival' ? 'Survival' : 'Classic'}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* CONTENU : affiché seulement si un jeu est sélectionné */}
-        {!gameId ? (
-          <div className="lbpage__placeholder">
-            <p>Select a game to see its leaderboard.</p>
-          </div>
-        ) : (
-          <div className="lbpage__board">
-
-            {/* Rang du joueur — au-dessus du tableau */}
-            {user ? (
-              /* Connecté */
-              playerRow ? (
-                <div className="lbpage__player-rank lbpage__player-rank--connected">
-                  <span className="lbpage__player-rank-badge">You</span>
-                  <span className="lbpage__player-rank-num">#{playerRow.rank}</span>
-                  <span className="lbpage__player-rank-name">{name || 'You'}</span>
-                  <span className="lbpage__player-rank-score">{formatScore(playerRow)}</span>
-                </div>
-              ) : (
-                /* Connecté mais jamais joué */
-                <div className="lbpage__player-rank lbpage__player-rank--no-score">
-                  <span className="lbpage__player-rank-badge">You</span>
-                  <span className="lbpage__player-rank-empty">No score yet —</span>
-                  <Link to={`/game/${gameId}`} className="lbpage__cta-link">
-                    Play {game.title} →
-                  </Link>
-                </div>
-              )
-            ) : (
-              /* Non connecté */
-              <div className="lbpage__player-rank lbpage__player-rank--guest">
-                <span className="lbpage__player-rank-empty">Sign in to track your rank</span>
-                <button className="lbpage__cta-btn" onClick={openAuthDrawer}>
-                  Sign in
-                </button>
-              </div>
-            )}
-
-            {/* Tableau top 20 */}
-            {loading ? (
-              <div className="lbpage__loading">Loading…</div>
-            ) : rows.length === 0 ? (
-              <div className="lbpage__empty">
-                <p>No scores yet for {game.title}.</p>
-                <Link to={`/game/${gameId}`} className="lbpage__play-link">Be the first to play →</Link>
-              </div>
-            ) : (
-              <table className="lbpage__table">
-                <thead>
-                  <tr>
-                    <th className="lbpage__th lbpage__th--rank">#</th>
-                    <th className="lbpage__th lbpage__th--name">Player</th>
-                    <th className="lbpage__th lbpage__th--score">Score</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {rows.map((row, i) => {
-                    const rank = i + 1
-                    const medals = { 1: '🥇', 2: '🥈', 3: '🥉' }
-                    return (
-                      <tr key={i} className={`lbpage__tr ${rank <= 3 ? `lbpage__tr--top${rank}` : ''}`}>
-                        <td className="lbpage__td lbpage__td--rank">
-                          {medals[rank]
-                            ? <span className="lbpage__medal">{medals[rank]}</span>
-                            : <span className="lbpage__rank-num">{rank}</span>
-                          }
-                        </td>
-                        <td className="lbpage__td lbpage__td--name">{row.name || 'Anonymous'}</td>
-                        <td className="lbpage__td lbpage__td--score">{formatScore(row)}</td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            )}
-
-            <p className="lbpage__note">Global leaderboard via Supabase.</p>
-          </div>
-        )}
-
-        {/* PSEUDO (seulement si anonyme) */}
-        {!user && (
-          <div className="lbpage__nickname">
-            <label className="lbpage__nickname-label">Your nickname (anonymous)</label>
-            <div className="lbpage__nickname-row">
-              <input className="lbpage__nickname-input" value={name} maxLength={16}
-                placeholder="Choose a nickname"
-                onChange={e => setName(e.target.value)} />
-              <button className="lbpage__nickname-save" onClick={handleSaveName}>Save</button>
-            </div>
-          </div>
-        )}
-
-      </div>
-
-      <Footer />
-    </div>
-  )
+  .lbpage__mode-tabs { flex-direction: column; }
+  .lbpage__td { padding: 11px 14px; }
+  .lbpage__th { padding: 10px 14px; }
+  .lbpage__player-rank { padding: 10px 14px; gap: 8px; flex-wrap: wrap; }
 }
