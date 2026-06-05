@@ -1,197 +1,154 @@
-/*
-  leaderboardStore — couche d'abstraction du classement.
-
-  POUR L'INSTANT : 100% front-end. Les scores sont stockes en localStorage
-  et melanges a un jeu de faux joueurs pour que le classement soit credible
-  des le depart.
-
-  PLUS TARD : pour brancher Supabase, il suffira de remplacer le corps des
-  fonctions submitScore() et getLeaderboard() par des appels reseau.
-  Le reste de l'application (GamePage, LeaderboardPage) n'aura PAS a changer.
-
-  Le classement est indexe par couple (game, mode). Chaque jeu peut avoir
-  un ou plusieurs modes. Rage Hockey : 'survival' + 'classic'. STAQ : 'classic'.
-*/
-
-const STORAGE_KEY = 'rage_arcade_scores_v2'
-const NAME_KEY = 'rage_arcade_player_name'
-
 /* =====================================================================
-   FAUX JOUEURS — donnent un classement credible avant d'avoir du trafic.
-   Indexes par 'game/mode'. Scores : survival = secondes, sinon = points.
+   leaderboardStore.js — scores hybrides Supabase (connecté) + localStorage (anonyme)
+
+   Utilise la vue Supabase "scores_with_names" pour le leaderboard public.
+   Import supabase depuis '../lib/supabase' (même instance que AuthContext).
    ===================================================================== */
-const SEEDS = {
-  'rage-hockey/survival': [
-    { name: 'NeonReflex', score: 412, diff: 'rage' },
-    { name: 'PuckMaster', score: 388, diff: 'rage' },
-    { name: 'IceQueen',   score: 351, diff: 'normal' },
-    { name: 'xRageQuitx', score: 327, diff: 'rage' },
-    { name: 'SlapShot99', score: 298, diff: 'normal' },
-    { name: 'FrostByte',  score: 274, diff: 'normal' },
-    { name: 'BumperKing', score: 251, diff: 'rage' },
-    { name: 'Vortex',     score: 233, diff: 'normal' },
-    { name: 'CyanStreak', score: 210, diff: 'chill' },
-    { name: 'GhostGoal',  score: 189, diff: 'normal' },
-    { name: 'TurboMitt',  score: 167, diff: 'chill' },
-    { name: 'ZeroChill',  score: 142, diff: 'normal' },
-  ],
-  'rage-hockey/classic': [
-    { name: 'PuckMaster', score: 268, diff: 'rage' },
-    { name: 'NeonReflex', score: 244, diff: 'rage' },
-    { name: 'SlapShot99', score: 221, diff: 'normal' },
-    { name: 'IceQueen',   score: 198, diff: 'rage' },
-    { name: 'xRageQuitx', score: 187, diff: 'normal' },
-    { name: 'BumperKing', score: 165, diff: 'normal' },
-    { name: 'FrostByte',  score: 154, diff: 'normal' },
-    { name: 'Vortex',     score: 138, diff: 'chill' },
-    { name: 'CyanStreak', score: 122, diff: 'normal' },
-    { name: 'GhostGoal',  score: 110, diff: 'chill' },
-    { name: 'TurboMitt',  score: 96,  diff: 'chill' },
-    { name: 'ZeroChill',  score: 84,  diff: 'normal' },
-  ],
-  'staq/classic': [
-    { name: 'SkyBuilder', score: 87, diff: 'normal' },
-    { name: 'BrickGod',   score: 79, diff: 'normal' },
-    { name: 'WobbleKing', score: 72, diff: 'normal' },
-    { name: 'PerfectTap', score: 66, diff: 'normal' },
-    { name: 'TowerRat',   score: 61, diff: 'normal' },
-    { name: 'StackAttak', score: 55, diff: 'normal' },
-    { name: 'NoFalls',    score: 50, diff: 'normal' },
-    { name: 'HighRise',   score: 44, diff: 'normal' },
-    { name: 'ComboChain', score: 39, diff: 'normal' },
-    { name: 'SteadyHand', score: 34, diff: 'normal' },
-    { name: 'JengaJedi',  score: 29, diff: 'normal' },
-    { name: 'BlockHead',  score: 24, diff: 'normal' },
-  ],
+
+import { supabase } from '../lib/supabase'
+
+/* ---- localStorage helpers ---- */
+const LS_KEY      = (game, mode) => `rq_lb_${game}_${mode}`
+const LS_NAME_KEY = 'rq_player_name'
+
+export function getPlayerName()        { return localStorage.getItem(LS_NAME_KEY) || '' }
+export function setPlayerName(name)    { localStorage.setItem(LS_NAME_KEY, name.trim()) }
+
+export function formatTime(ms) {
+  if (!ms && ms !== 0) return '—'
+  const total = Math.floor(ms / 1000)
+  const m = Math.floor(total / 60)
+  const s = total % 60
+  return `${m}:${s.toString().padStart(2, '0')}`
 }
 
 /* =====================================================================
-   STOCKAGE LOCAL
+   submitScore — Supabase si connecté, localStorage sinon.
+   N'insère que si c'est un nouveau meilleur score du joueur.
+   payload : { game, mode, score (number), scoreLabel }
    ===================================================================== */
-function readLocal() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? JSON.parse(raw) : []
-  } catch {
-    return []
-  }
-}
+export async function submitScore({ game, mode, score, scoreLabel }) {
+  const { data: { user } } = await supabase.auth.getUser()
 
-function writeLocal(scores) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(scores))
-  } catch {
-    /* quota plein ou storage indisponible : sans effet */
-  }
-}
+  if (user) {
+    // Cherche le meilleur score existant de ce joueur pour ce jeu/mode
+    const { data: existing } = await supabase
+      .from('scores')
+      .select('id, score')
+      .eq('user_id', user.id)
+      .eq('game_id', game)
+      .eq('mode', mode)
+      .order('score', { ascending: false })
+      .limit(1)
+      .maybeSingle()
 
-/* =====================================================================
-   PSEUDO DU JOUEUR
-   ===================================================================== */
-export function getPlayerName() {
-  try {
-    return localStorage.getItem(NAME_KEY) || ''
-  } catch {
-    return ''
-  }
-}
-
-export function setPlayerName(name) {
-  const clean = String(name || '').trim().slice(0, 16)
-  try {
-    localStorage.setItem(NAME_KEY, clean)
-  } catch {
-    /* sans effet */
-  }
-  return clean
-}
-
-/* =====================================================================
-   API PUBLIQUE
-   ===================================================================== */
-
-/*
-  submitScore — enregistre un score.
-  entry : { game, mode, score, scoreLabel, diff, name }
-*/
-export function submitScore(entry) {
-  const scores = readLocal()
-  const record = {
-    game: entry.game || 'rage-hockey',
-    mode: entry.mode || 'classic',
-    score: Number(entry.score) || 0,
-    scoreLabel: entry.scoreLabel || String(entry.score || 0),
-    diff: entry.diff || 'normal',
-    name: (entry.name || getPlayerName() || 'You').slice(0, 16),
-    date: Date.now(),
-    isLocal: true,
-  }
-  scores.push(record)
-  // On ne garde que les 300 derniers scores locaux pour ne pas saturer.
-  const trimmed = scores
-    .sort((a, b) => b.date - a.date)
-    .slice(0, 300)
-  writeLocal(trimmed)
-  return record
-}
-
-/*
-  getLeaderboard — renvoie le classement trie pour un jeu + mode.
-  game : 'rage-hockey' | 'staq' | ...
-  mode : 'survival' | 'classic'
-  Fusionne faux joueurs + scores locaux, garde le meilleur par pseudo.
-*/
-export function getLeaderboard(game = 'rage-hockey', mode = 'classic', limit = 100) {
-  const key = game + '/' + mode
-  const seed = SEEDS[key] || []
-  const isTime = mode === 'survival'
-
-  const seedRows = seed.map(s => ({
-    ...s,
-    game,
-    mode,
-    isLocal: false,
-    scoreLabel: isTime ? formatTime(s.score) : String(s.score),
-  }))
-
-  const localRows = readLocal()
-    .filter(s => s.game === game && s.mode === mode)
-
-  // Fusion + meilleur score par pseudo
-  const byName = new Map()
-  for (const row of [...seedRows, ...localRows]) {
-    const existing = byName.get(row.name)
-    if (!existing || row.score > existing.score) {
-      byName.set(row.name, row)
+    if (!existing) {
+      // Première partie : insert
+      await supabase.from('scores').insert({
+        user_id: user.id, game_id: game, mode, score, score_label: scoreLabel,
+      })
+    } else if (score > existing.score) {
+      // Nouveau meilleur score : update
+      await supabase.from('scores')
+        .update({ score, score_label: scoreLabel, created_at: new Date().toISOString() })
+        .eq('id', existing.id)
     }
+  } else {
+    // Anonyme : localStorage
+    const key  = LS_KEY(game, mode)
+    const name = getPlayerName() || 'Anonymous'
+    const list = JSON.parse(localStorage.getItem(key) || '[]')
+    const idx  = list.findIndex(e => e.name === name)
+    if (idx >= 0) {
+      if (score > list[idx].score) list[idx] = { name, score, scoreLabel, ts: Date.now() }
+    } else {
+      list.push({ name, score, scoreLabel, ts: Date.now() })
+    }
+    list.sort((a, b) => b.score - a.score)
+    localStorage.setItem(key, JSON.stringify(list.slice(0, 100)))
   }
-
-  return [...byName.values()]
-    .sort((a, b) => b.score - a.score)
-    .slice(0, limit)
-    .map((row, i) => ({ ...row, rank: i + 1 }))
-}
-
-/*
-  getPlayerBest — meilleur score local du joueur pour un jeu + mode.
-  Renvoie null si le joueur n'a pas encore joue.
-*/
-export function getPlayerBest(game = 'rage-hockey', mode = 'classic') {
-  const name = getPlayerName()
-  const rows = readLocal().filter(s => s.game === game && s.mode === mode)
-  if (rows.length === 0) return null
-  const best = rows.reduce((a, b) => (b.score > a.score ? b : a))
-  const board = getLeaderboard(game, mode, 1000)
-  const found = board.find(r => r.name === (name || 'You') && r.score === best.score)
-  return { ...best, rank: found ? found.rank : null }
 }
 
 /* =====================================================================
-   UTILITAIRE
+   getLeaderboard — top N pour un jeu/mode depuis Supabase (ou localStorage)
    ===================================================================== */
-export function formatTime(totalSeconds) {
-  const s = Math.max(0, Math.floor(totalSeconds))
-  const m = Math.floor(s / 60)
-  const ss = s % 60
-  return m + ':' + (ss < 10 ? '0' : '') + ss
+export async function getLeaderboard(game, mode, limit = 20) {
+  try {
+    const { data, error } = await supabase
+      .from('scores_with_names')
+      .select('score, score_label, username')
+      .eq('game_id', game)
+      .eq('mode', mode)
+      .order('score', { ascending: false })
+      .limit(limit)
+
+    if (!error && data && data.length > 0) {
+      return data.map((row, i) => ({
+        rank:       i + 1,
+        name:       row.username || 'Anonymous',
+        score:      row.score,
+        scoreLabel: row.score_label || String(row.score),
+      }))
+    }
+  } catch (e) { /* Supabase indisponible, fallback */ }
+
+  // Fallback localStorage
+  const key  = LS_KEY(game, mode)
+  const list = JSON.parse(localStorage.getItem(key) || '[]')
+  return list.slice(0, limit).map((e, i) => ({
+    rank:       i + 1,
+    name:       e.name || 'Anonymous',
+    score:      e.score,
+    scoreLabel: e.scoreLabel || String(e.score),
+  }))
+}
+
+/* =====================================================================
+   getPlayerBest — meilleur score + rang du joueur courant
+   ===================================================================== */
+export async function getPlayerBest(game, mode) {
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (user) {
+    try {
+      const { data: best } = await supabase
+        .from('scores')
+        .select('score, score_label')
+        .eq('user_id', user.id)
+        .eq('game_id', game)
+        .eq('mode', mode)
+        .order('score', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      if (!best) return null
+
+      // Rang = nombre de joueurs avec un meilleur score + 1
+      const { count } = await supabase
+        .from('scores')
+        .select('id', { count: 'exact', head: true })
+        .eq('game_id', game)
+        .eq('mode', mode)
+        .gt('score', best.score)
+
+      return {
+        score:      best.score,
+        scoreLabel: best.score_label || String(best.score),
+        rank:       (count ?? 0) + 1,
+      }
+    } catch (e) { return null }
+  }
+
+  // Anonyme : localStorage
+  const name = getPlayerName()
+  if (!name) return null
+  const key  = LS_KEY(game, mode)
+  const list = JSON.parse(localStorage.getItem(key) || '[]')
+  const idx  = list.findIndex(e => e.name === name)
+  if (idx < 0) return null
+  return {
+    score:      list[idx].score,
+    scoreLabel: list[idx].scoreLabel,
+    rank:       idx + 1,
+  }
 }
