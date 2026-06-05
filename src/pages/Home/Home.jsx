@@ -9,6 +9,7 @@ import './Home.css'
   La BentoGrid gère elle-même la Navbar en mode floating (posée sur le
   trou réservé en haut à gauche, suit le scroll). Rien d'autre à faire ici.
 */
+usePageTitle()   
 export default function Home() {
   return (
     <div className="home">
