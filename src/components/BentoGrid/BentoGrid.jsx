@@ -24,6 +24,10 @@ import './BentoGrid.css'
 */
 export default function BentoGrid({ showNav = true }) {
   const gameCategories = categories.filter(c => c.id !== 'all')
+  const catImages = {
+    sports: '/categories/sports.jpg',
+    arcade: '/categories/arcade.jpg',
+  }
   const catIcons = {
     arcade: '🕹️', puzzle: '🧩', clicker: '👆', runner: '🏃', sports: '⚽',
   }
@@ -72,7 +76,15 @@ export default function BentoGrid({ showNav = true }) {
             className="bento__cat-tile fade-up"
             style={{ animationDelay: `${index * 50}ms` }}
           >
-            <span className="bento__cat-icon">{catIcons[cat.id] || '🎮'}</span>
+            {catImages[cat.id] ? (
+              <img
+                src={catImages[cat.id]}
+                alt={cat.label}
+                className="bento__cat-img"
+                onError={e => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex' }}
+              />
+            ) : null}
+            <span className="bento__cat-icon" style={catImages[cat.id] ? {display:'none'} : {}}>{catIcons[cat.id] || '🎮'}</span>
             <span className="bento__cat-label">{cat.label} Games</span>
           </Link>
         ))}
