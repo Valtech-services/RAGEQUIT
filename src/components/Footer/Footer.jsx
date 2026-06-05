@@ -1,12 +1,6 @@
 import { Link } from 'react-router-dom'
 import './Footer.css'
 
-/*
-  Footer — pleine largeur, fond blanc.
-  Widget social : 4 réseaux (Instagram, TikTok, X, Discord) en 2x2.
-  Pour passer à 5 : ajoute une .social-row avec 3 cartes et .social-row--triple.
-  Pour passer à 6 : deux .social-row de 3 cartes chacune.
-*/
 export default function Footer() {
   const year = new Date().getFullYear()
   return (
@@ -22,7 +16,6 @@ export default function Footer() {
           </Link>
           <p className="footer__tagline">Free games. Pure rage. Every week.</p>
 
-          {/* Widget social cartes arrondies */}
           <div className="social-widget">
             <div className="social-row">
               <a href="https://instagram.com/ragequitarcade" target="_blank"
@@ -59,17 +52,15 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Colonnes liens */}
+        {/* Jeux — seulement les catégories existantes */}
         <div className="footer__col">
           <span className="footer__col-title">Games</span>
-          <Link to="/category/arcade" className="footer__link">Arcade Games</Link>
-          <Link to="/category/puzzle" className="footer__link">Puzzle Games</Link>
-          <Link to="/category/clicker" className="footer__link">Clicker Games</Link>
-          <Link to="/category/runner" className="footer__link">Runner Games</Link>
           <Link to="/category/sports" className="footer__link">Sports Games</Link>
+          <Link to="/category/arcade" className="footer__link">Arcade Games</Link>
           <Link to="/leaderboard" className="footer__link">Leaderboard</Link>
         </div>
 
+        {/* Liens société */}
         <div className="footer__col">
           <span className="footer__col-title">Company</span>
           <Link to="/legal/about" className="footer__link">About Us</Link>
@@ -78,17 +69,19 @@ export default function Footer() {
           <a href="https://discord.gg/ragequitarcade" target="_blank" rel="noopener noreferrer" className="footer__link">Discord</a>
         </div>
 
+        {/* Légal */}
         <div className="footer__col">
           <span className="footer__col-title">Legal</span>
           <Link to="/legal/privacy" className="footer__link">Privacy Policy</Link>
           <Link to="/legal/terms" className="footer__link">Terms of Use</Link>
           <Link to="/legal/cookies" className="footer__link">Cookie Policy</Link>
-          <Link to="/legal/contact" className="footer__link">Support</Link>
         </div>
 
       </div>
       <div className="footer__bottom">
-        <span className="footer__copy">© {year} Ragequit Arcade. All rights reserved.</span>
+        <span className="footer__copy">
+          © {year} Ragequit Arcade — Valtech Services (SIREN 994 273 118). All rights reserved.
+        </span>
       </div>
     </footer>
   )
