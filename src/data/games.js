@@ -4,7 +4,8 @@
    Ajouter un jeu = ajouter une entrée dans le tableau `games`.
 
    Champ `hot: true`  → affiche la languette blanche avec la flamme bleue
-                        (façon Poki : marque les jeux les plus joués / tendance).
+   Champ `modes`      → liste des modes de jeu (ex: ['survival', 'classic'])
+   Champ `defaultMode`→ mode affiché par défaut dans le leaderboard
    ===================================================================== */
 
 /* ---- Catégories ---- */
@@ -38,7 +39,7 @@ export const categories = [
       ],
     },
   },
-];
+]
 
 /* ---- SEO global du site ---- */
 export const siteSeo = {
@@ -52,7 +53,7 @@ export const siteSeo = {
     { q: 'Do I need an account?', a: 'No account needed to play. Create one to save your scores and appear on the leaderboard.' },
     { q: 'Mobile?', a: 'Yes, all games work on mobile, tablet and desktop.' },
   ],
-};
+}
 
 /* ---- Jeux ---- */
 export const games = [
@@ -70,9 +71,11 @@ export const games = [
     size: 'large',
     shimmer: true,
     isNew: true,
-    hot: true,                 // ← languette flamme bleue (jeu populaire)
-    landscape: true,           // ← indique que ce jeu se joue en paysage (rotation mobile)
+    hot: true,
+    landscape: true,
     plays: 0,
+    modes: ['survival', 'classic'],   // ← modes de jeu pour le leaderboard
+    defaultMode: 'survival',          // ← mode affiché par défaut
     controls: '1P: mouse or finger on the left side. 2P: right side touch or IJKL keys.',
     author: 'Ragequit Arcade',
     seo: {
@@ -102,9 +105,11 @@ export const games = [
     size: 'medium',
     shimmer: true,
     isNew: false,
-    hot: true,                 // ← languette flamme bleue (jeu populaire)
-    landscape: false,          // ← portrait ok sur mobile
+    hot: true,
+    landscape: false,
     plays: 0,
+    modes: ['classic'],               // ← un seul mode : pas d'onglets dans le leaderboard
+    defaultMode: 'classic',
     controls: 'Tap or click to drop the block. Mobile friendly.',
     author: 'Ragequit Arcade',
     seo: {
@@ -119,4 +124,4 @@ export const games = [
     },
   },
 
-];
+]
