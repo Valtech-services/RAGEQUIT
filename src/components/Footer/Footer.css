@@ -20,14 +20,10 @@
 /* ---- Brand ---- */
 .footer__brand { display: flex; flex-direction: column; }
 
-/* Logo image — fond sombre pour lisibilité */
 .footer__logo {
   display: inline-flex;
   align-items: center;
   text-decoration: none;
-  background: #10162e;
-  border-radius: var(--radius-md, 12px);
-  padding: 8px 18px;
   margin-bottom: var(--gap-md);
   width: fit-content;
 }
@@ -60,9 +56,6 @@
   flex-direction: row;
   gap: 8px;
 }
-.social-row--center {
-  padding-left: calc(76px + 8px);  /* indent pour centrer visuellement */
-}
 
 /* Carte de base */
 .social-card {
@@ -81,14 +74,13 @@
   color: #333333;
 }
 
-/* Coins asymétriques — roue 5 branches */
-/* Ligne 1 */
+/* Coins asymétriques — 2 lignes de 3 */
 .social-row:first-child .social-card:first-child  { border-radius: 76px 5px 5px 5px; }
 .social-row:first-child .social-card:nth-child(2) { border-radius: 5px 5px 5px 5px; }
 .social-row:first-child .social-card:last-child   { border-radius: 5px 76px 5px 5px; }
-/* Ligne 2 */
-.social-row:last-child .social-card:first-child   { border-radius: 5px 5px 5px 76px; }
-.social-row:last-child .social-card:last-child    { border-radius: 5px 5px 76px 5px; }
+.social-row:last-child  .social-card:first-child  { border-radius: 5px 5px 5px 76px; }
+.social-row:last-child  .social-card:nth-child(2) { border-radius: 5px 5px 5px 5px; }
+.social-row:last-child  .social-card:last-child   { border-radius: 5px 5px 76px 5px; }
 
 /* Hover */
 .social-card--instagram:hover { background-color: #cc39a4; color: #ffffff; transform: scale(1.1); }
@@ -101,6 +93,8 @@
 .social-card--x:hover svg { fill: #ffffff; }
 .social-card--discord:hover { background-color: #5865F2; color: #ffffff; transform: scale(1.1); }
 .social-card--discord:hover svg { fill: #ffffff; }
+.social-card--reddit:hover  { background-color: #FF4500; color: #ffffff; transform: scale(1.1); }
+.social-card--reddit:hover svg  { fill: #ffffff; }
 
 /* Couleurs au repos */
 .social-card--instagram svg { fill: #cc39a4; }
@@ -108,6 +102,7 @@
 .social-card--facebook svg  { fill: #1877F2; }
 .social-card--x svg         { fill: #000000; }
 .social-card--discord svg   { fill: #5865F2; }
+.social-card--reddit svg    { fill: #FF4500; }
 
 /* ---- Colonnes liens ---- */
 .footer__col { display: flex; flex-direction: column; }
@@ -146,7 +141,6 @@
   .footer__inner { grid-template-columns: 1fr 1fr; gap: var(--gap-lg); }
   .footer__brand { grid-column: span 2; }
   .social-card { width: 68px; height: 68px; }
-  .social-row--center { padding-left: calc(68px + 8px); }
 }
 
 @media (max-width: 600px) {
@@ -159,7 +153,6 @@
   .footer__logo { justify-content: center; }
   .footer__tagline { text-align: center; }
   .social-widget { margin: 0 auto; }
-  .social-row--center { padding-left: 0; justify-content: center; }
   .footer__col { align-items: center; }
   .footer__col-title { text-align: center; }
   .footer__link { text-align: center; }
