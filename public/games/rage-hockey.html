@@ -425,9 +425,9 @@ html,body{
   <div class="screen-actions">
     <button class="btn" id="btnAgain">Play again</button>
 
-    <!-- Sélecteur boost après pub -->
+    <!-- Sélecteur boost : 1) choisir le pouvoir 2) regarder la pub -->
     <div id="boostSection">
-      <div class="boost-header">▶ Watch an ad — Choose your boost (30s)</div>
+      <div class="boost-header">Choose your boost — then watch an ad (30s)</div>
       <div class="boost-choices" id="boostChoices">
         <button class="boost-choice" data-boost="power">
           <span class="boost-choice-icon">⚡</span>
@@ -437,7 +437,7 @@ html,body{
         <button class="boost-choice" data-boost="small_goal">
           <span class="boost-choice-icon">🥅</span>
           <span class="boost-choice-name">Tiny Goal</span>
-          <span class="boost-choice-desc">Enemy goal shrinks 40%</span>
+          <span class="boost-choice-desc">Your goal shrinks 40%</span>
         </button>
         <button class="boost-choice" data-boost="big">
           <span class="boost-choice-icon">◆</span>
@@ -445,6 +445,7 @@ html,body{
           <span class="boost-choice-desc">1.5× paddle size</span>
         </button>
       </div>
+      <button class="boost-watch-btn" id="btnWatchAd">▶ Watch ad &amp; activate</button>
     </div>
 
     <button class="btn btn--ghost" id="btnMenu">Menu</button>
@@ -533,7 +534,7 @@ function calcField(){
 // ---- Tables ----
 const TABLES = {
   normal: { label:"Classic", goalW:180, heightMod:1.0,  bumpers:[] },
-  bumper: { label:"Bumper",  goalW:180, heightMod:1.0,  bumpers:[{x:0,y:0,r:22}] },
+  bumper: { label:"Bumper",  goalW:180, heightMod:1.0,  bumpers:[{x:0,y:0,r:22,vx:1.4,boostTimer:0}] },
   narrow: { label:"Narrow",  goalW:140, heightMod:0.62, bumpers:[] },
 };
 let tableKey = "normal";
@@ -552,14 +553,20 @@ function applyTable(){
     tFX = FX + Math.round((FW - tFW) / 2);
     tFY_active = FY;
     // Buts sur le mur du haut (IA) et bas (joueur) : centrés en X
-    tG1 = CX - tableCfg.goalW / 2;
-    tG2 = CX + tableCfg.goalW / 2;
-    // Cage IA = mur du haut (rétrécie si smallGoalTimer actif)
-    const egw = smallGoalTimer > 0 ? tableCfg.goalW * 0.6 : tableCfg.goalW;
-    eG1 = CX - egw / 2; eG2 = CX + egw / 2;
+    // Cage IA = mur haut (taille normale)
+    eG1 = CX - tableCfg.goalW / 2; eG2 = CX + tableCfg.goalW / 2;
+    // Cage joueur = mur bas (rétrécit si smallGoalTimer — avantage défensif joueur)
+    const pgw = smallGoalTimer > 0 ? tableCfg.goalW * 0.6 : tableCfg.goalW;
+    tG1 = CX - pgw / 2; tG2 = CX + pgw / 2;
     if(tableCfg.bumpers.length > 0){
       tableCfg.bumpers[0].x = CX;
       tableCfg.bumpers[0].y = CY;
+      // Initialiser vx seulement au premier appel (pas réinitialiser pendant la partie)
+      if(!tableCfg.bumpers[0]._initialized){
+        tableCfg.bumpers[0].vx = 1.4;
+        tableCfg.bumpers[0].boostTimer = 180;
+        tableCfg.bumpers[0]._initialized = true;
+      }
     }
   } else {
     // Paysage : narrow réduit la hauteur (axe Y)
@@ -568,13 +575,20 @@ function applyTable(){
     tFX = FX;
     tFY_active = FY + Math.round((FH - tFH) / 2);
     // Buts sur le mur gauche (IA) et droit (joueur) : centrés en Y
-    tG1 = CY - tableCfg.goalW / 2;
-    tG2 = CY + tableCfg.goalW / 2;
-    const egw2 = smallGoalTimer > 0 ? tableCfg.goalW * 0.6 : tableCfg.goalW;
-    eG1 = CY - egw2 / 2; eG2 = CY + egw2 / 2;
+    // Cage IA = mur droit (taille normale)
+    eG1 = CY - tableCfg.goalW / 2; eG2 = CY + tableCfg.goalW / 2;
+    // Cage joueur = mur gauche (rétrécit si smallGoalTimer)
+    const pgw2 = smallGoalTimer > 0 ? tableCfg.goalW * 0.6 : tableCfg.goalW;
+    tG1 = CY - pgw2 / 2; tG2 = CY + pgw2 / 2;
     if(tableCfg.bumpers.length > 0){
       tableCfg.bumpers[0].x = CX;
       tableCfg.bumpers[0].y = CY;
+      // Initialiser vx seulement au premier appel (pas réinitialiser pendant la partie)
+      if(!tableCfg.bumpers[0]._initialized){
+        tableCfg.bumpers[0].vx = 1.4;
+        tableCfg.bumpers[0].boostTimer = 180;
+        tableCfg.bumpers[0]._initialized = true;
+      }
     }
   }
 }
@@ -1205,21 +1219,20 @@ function drawPaddle(p, col, glow, skin){
   ctx.shadowColor=glow; ctx.shadowBlur=12;
 
   if(skin && skin.bicolor){
-    // ---- Skin bicolore : demi-cercle gauche + demi-cercle droit ----
-    // Demi gauche
-    ctx.fillStyle=skin.col;
-    ctx.beginPath(); ctx.arc(0,0,p.r,-Math.PI/2,Math.PI/2,true); ctx.closePath(); ctx.fill();
-    // Demi droit
+    // ---- Skin bicolore : anneau extérieur col2, disque intérieur col1 ----
+    // Disque extérieur plein : couleur 2 (anneau visible entre r et r*0.62)
     ctx.fillStyle=skin.col2;
-    ctx.beginPath(); ctx.arc(0,0,p.r,Math.PI/2,-Math.PI/2,true); ctx.closePath();
-    ctx.shadowBlur=0; ctx.fill();
-    // Séparation centrale
-    ctx.strokeStyle="rgba(0,0,0,.35)"; ctx.lineWidth=1.5;
-    ctx.beginPath(); ctx.moveTo(0,-p.r); ctx.lineTo(0,p.r); ctx.stroke();
-    // Centre sombre
-    ctx.fillStyle="rgba(10,14,39,.9)"; ctx.beginPath(); ctx.arc(0,0,p.r*.55,0,Math.PI*2); ctx.fill();
-    // Point central col1
-    ctx.fillStyle=skin.col; ctx.beginPath(); ctx.arc(0,0,p.r*.22,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(0,0,p.r,0,Math.PI*2); ctx.fill();
+    ctx.shadowBlur=0;
+    // Disque intérieur : couleur 1
+    ctx.fillStyle=skin.col;
+    ctx.beginPath(); ctx.arc(0,0,p.r*0.62,0,Math.PI*2); ctx.fill();
+    // Centre sombre (trou)
+    ctx.fillStyle="rgba(10,14,39,.88)";
+    ctx.beginPath(); ctx.arc(0,0,p.r*0.32,0,Math.PI*2); ctx.fill();
+    // Point central col2 (petite touche de contraste)
+    ctx.fillStyle=skin.col2;
+    ctx.beginPath(); ctx.arc(0,0,p.r*0.14,0,Math.PI*2); ctx.fill();
   } else {
     // ---- Skin uni classique ----
     ctx.fillStyle=col;
@@ -1324,6 +1337,28 @@ function spawnPowerup(){
   const type=Math.floor(Math.random()*3), margin=120;
   powerup={ type, x:CX+(Math.random()-.5)*(tFW*.5), y:tFY_active+margin+Math.random()*(tFH-margin*2), life:POWER_LIFE };
 }
+// Met à jour la position des bumpers mobiles (mode Bumper)
+function updateBumpers(){
+  tableCfg.bumpers.forEach(b=>{
+    if(!('vx' in b)) return;  // bumper sans mouvement (futur usage)
+    // Déplacement horizontal sur la ligne médiane
+    b.x += b.vx;
+    // Rebond sur les bords du terrain (avec marge = rayon du bumper)
+    const minBX = tFX + b.r + 20;
+    const maxBX = tFX + tFW - b.r - 20;
+    if(b.x <= minBX){ b.x = minBX; b.vx = Math.abs(b.vx); }
+    if(b.x >= maxBX){ b.x = maxBX; b.vx = -Math.abs(b.vx); }
+    // Petits boosts aléatoires de vitesse (2-3s)
+    b.boostTimer--;
+    if(b.boostTimer <= 0){
+      const boost = 1.0 + Math.random() * 1.2;  // +0 à +120% de vitesse
+      const dur   = Math.floor(120 + Math.random() * 60); // 2 à 3s à 60fps
+      b.vx = Math.sign(b.vx) * 1.4 * boost;
+      b.boostTimer = dur;
+    }
+  });
+}
+
 function updatePowerups(){
   if(gameMode===MODE.PVP) return;
   if(powerup){ powerup.life--; if(powerup.life<=0){powerup=null;powerupTimer=POWER_INTERVAL;return;} const d=hyp(puck.x-powerup.x,puck.y-powerup.y); if(d<puck.r+18){collectPowerup(powerup.type);powerup=null;powerupTimer=POWER_INTERVAL;} }
@@ -1359,6 +1394,7 @@ function frame(){
     if(ts<1){ puck.vx*=ts; puck.vy*=ts; updatePuck(); if(state===ST.PLAY){puck.vx/=ts;puck.vy/=ts;} } else updatePuck();
     if(boostActive){ boostTimer--; if(boostTimer<=0)boostActive=false; }
     if(gameType===GAMETYPE.SURVIVAL){ survivalTime++; if(survivalTime%480===0)aiLevel++; }
+    updateBumpers();
     updatePowerups();
     if(pBig>0){pBig--;if(pBig===0)player.r=PADR;}
     if(enemyFrozen>0)enemyFrozen--;
@@ -1440,19 +1476,25 @@ document.getElementById("btn1P").addEventListener("click",()=>newGame(MODE.PVE))
 document.getElementById("btn2P").addEventListener("click",()=>newGame(MODE.PVP));
 document.getElementById("btnAgain").addEventListener("click",e=>{ e.stopPropagation(); newGame(gameMode); });
 // Sélecteur boost — sélection d'abord, pub ensuite
+// Sélection du pouvoir — ne lance PAS encore la pub
+let pendingBoost = "power";
 document.querySelectorAll(".boost-choice").forEach(btn=>{
   btn.addEventListener("click",()=>{
-    // Capturer la valeur dans une constante locale immédiate
-    // pour éviter que le callback asynchrone (après 5s de pub) lise
-    // une valeur différente si l'utilisateur a re-cliqué entre-temps.
-    const chosenBoost = btn.dataset.boost;
+    pendingBoost = btn.dataset.boost;
     document.querySelectorAll(".boost-choice").forEach(b=>b.classList.remove("selected"));
     btn.classList.add("selected");
-    AdManager.showRewarded(()=>startBoost(chosenBoost));
+    // Activer le bouton Watch Ad (il était grisé si aucun pouvoir sélectionné)
+    document.getElementById("btnWatchAd").disabled = false;
   });
 });
 // Sélection visuelle par défaut
 document.querySelector('.boost-choice[data-boost="power"]').classList.add("selected");
+// Bouton Watch Ad — lance la pub avec le pouvoir déjà sélectionné
+document.getElementById("btnWatchAd").addEventListener("click", e=>{
+  e.stopPropagation();
+  const boost = pendingBoost;  // capture locale
+  AdManager.showRewarded(()=>startBoost(boost));
+});
 document.getElementById("btnMenu").addEventListener("click",e=>{ e.stopPropagation(); state=ST.TITLE; show("screenStart"); buildSkinUI(); updateXPDisplay(); updateModeHint(); });
 document.getElementById("btnResume").addEventListener("click",e=>{ e.stopPropagation(); if(state===ST.PAUSE){state=ST.PLAY;hideAll();} });
 document.getElementById("btnQuit").addEventListener("click",e=>{ e.stopPropagation(); newGame(gameMode); });
