@@ -434,10 +434,10 @@ html,body{
           <span class="boost-choice-name">Power Hit</span>
           <span class="boost-choice-desc">Hit harder &amp; faster</span>
         </button>
-        <button class="boost-choice" data-boost="freeze">
-          <span class="boost-choice-icon">❄</span>
-          <span class="boost-choice-name">AI Freeze</span>
-          <span class="boost-choice-desc">Enemy half speed</span>
+        <button class="boost-choice" data-boost="small_goal">
+          <span class="boost-choice-icon">🥅</span>
+          <span class="boost-choice-name">Tiny Goal</span>
+          <span class="boost-choice-desc">Enemy goal shrinks 40%</span>
         </button>
         <button class="boost-choice" data-boost="big">
           <span class="boost-choice-icon">◆</span>
@@ -539,7 +539,8 @@ const TABLES = {
 let tableKey = "normal";
 let tableCfg = TABLES.normal;
 let tFW, tFH, tFX, tFY_active;  // dimensions effectives (narrow peut réduire)
-let tG1, tG2;                    // bornes du but (en X pour paysage, en X pour portrait aussi)
+let tG1, tG2;                    // bornes du but joueur
+let eG1, eG2;                    // bornes du but IA (peut être rétréci par boost)
 
 function applyTable(){
   calcField();
@@ -553,6 +554,9 @@ function applyTable(){
     // Buts sur le mur du haut (IA) et bas (joueur) : centrés en X
     tG1 = CX - tableCfg.goalW / 2;
     tG2 = CX + tableCfg.goalW / 2;
+    // Cage IA = mur du haut (rétrécie si smallGoalTimer actif)
+    const egw = smallGoalTimer > 0 ? tableCfg.goalW * 0.6 : tableCfg.goalW;
+    eG1 = CX - egw / 2; eG2 = CX + egw / 2;
     if(tableCfg.bumpers.length > 0){
       tableCfg.bumpers[0].x = CX;
       tableCfg.bumpers[0].y = CY;
@@ -566,6 +570,8 @@ function applyTable(){
     // Buts sur le mur gauche (IA) et droit (joueur) : centrés en Y
     tG1 = CY - tableCfg.goalW / 2;
     tG2 = CY + tableCfg.goalW / 2;
+    const egw2 = smallGoalTimer > 0 ? tableCfg.goalW * 0.6 : tableCfg.goalW;
+    eG1 = CY - egw2 / 2; eG2 = CY + egw2 / 2;
     if(tableCfg.bumpers.length > 0){
       tableCfg.bumpers[0].x = CX;
       tableCfg.bumpers[0].y = CY;
@@ -645,10 +651,16 @@ let aiMistake=0, aiErrorY=0;
 let boostActive=false, boostTimer=0, boostType="power";
 const BOOST_DUR = 60 * 30;  // 30 secondes
 
+// Durée du timer "petite cage" stockée séparément
+let smallGoalTimer = 0;
+let ghostTimer     = 0;   // palet passe à travers les murs latéraux
 const BOOSTS = {
-  power:  { label:"⚡ Power Hit",   desc:"You hit harder & faster",           col:"#FFD23F", apply: ()=>{ /* géré dans collidePaddle */ } },
-  freeze: { label:"❄ AI Freeze",    desc:"Enemy moves at half speed for 30s", col:"#5BE0FF", apply: ()=>{ enemyFrozen=BOOST_DUR; } },
-  big:    { label:"◆ Big Paddle",   desc:"Your paddle is 1.5× bigger for 30s",col:"#A66BFF", apply: ()=>{ pBig=BOOST_DUR; player.r=PADR*1.5; } },
+  power:      { label:"⚡ Power Hit",    desc:"You hit harder & faster",            col:"#FFD23F",
+                apply: ()=>{ /* géré dans collidePaddle */ } },
+  small_goal: { label:"🥅 Tiny Goal",    desc:"Enemy goal is 40% smaller for 30s",  col:"#FF4D6D",
+                apply: ()=>{ smallGoalTimer=BOOST_DUR; } },
+  big:        { label:"◆ Big Paddle",   desc:"Your paddle is 1.5× bigger for 30s", col:"#A66BFF",
+                apply: ()=>{ pBig=BOOST_DUR; player.r=PADR*1.5; } },
 };
 
 // ---- Juice ----
@@ -807,7 +819,7 @@ function newGame(mode){
   gameMode=mode; scoreP=0; scoreE=0; aiLevel=0;
   boostActive=false; boostTimer=0; boostType="power"; goalSlomo=0; parts.length=0;
   survivalTime=0; powerup=null; powerupTimer=POWER_INTERVAL;
-  pBig=0; enemyFrozen=0; player.r=PADR;
+  pBig=0; enemyFrozen=0; smallGoalTimer=0; player.r=PADR;
   puckFlash=0; player.squash=0; enemy.squash=0;
   diffCfg=DIFF[diffKey];
   applyTable(); resetPos(); resetPuck("p");
@@ -935,22 +947,56 @@ function updateEnemyPVE(){
   if(enemyFrozen>0){ enemy.vx=0; enemy.vy=0; return; }
   const spd=aiSpeed()*(boostActive&&boostType==="power"?0.8:1);
   if(PORTRAIT){
-    // IA en haut : elle suit le palet horizontalement dans sa moitié haute
+    // IA en haut — logique complète symétrique au paysage
+    // Axe de jeu : Y (palet monte vers IA, descend vers joueur)
     const minX=tFX+PADR, maxX=tFX+tFW-PADR;
-    const minY=FY+PADR,  maxY=CY-12;
-    const home={ x:CX, y:PAD+160 };
-    if(Math.random()<diffCfg.mistake&&aiMistake===0){ aiMistake=42; aiErrorY=(Math.random()-0.5)*26*2; }
+    const minY=FY+PADR,   maxY=CY-12;
+    const homeY = FY + Math.round((CY-FY)*0.35); // position de repli défensive
+    const CORNER_DEPTH = Math.round(LH * 0.12);   // zone de coin proportionnelle
+
+    if(Math.random()<diffCfg.mistake&&aiMistake===0){ aiMistake=42; aiErrorY=(Math.random()-0.5)*30; }
     if(aiMistake>0) aiMistake--;
-    const err = aiMistake>0 ? aiErrorY : 0;
+    const errX = aiMistake>0 ? aiErrorY : 0;  // erreur sur l'axe X (horizontal)
+
+    // Détection coin : palet proche du mur IA ET d'un bord latéral
+    const puckInCorner =
+      puck.y < FY + CORNER_DEPTH &&
+      (puck.x < tFX + CORNER_DEPTH || puck.x > tFX + tFW - CORNER_DEPTH);
+    const distToPuck = hyp(enemy.x - puck.x, enemy.y - puck.y);
+    const aiCrushingCorner = puckInCorner && distToPuck < PADR + PR + 20;
+
     let tx, ty;
-    if(puck.y < CY && puck.vy < 0){
-      // Palet qui monte vers l'IA : prédiction
-      const frames=clamp((enemy.y-puck.y)/Math.max(0.5,Math.abs(puck.vy)),1,55);
-      tx=clamp(puck.x+puck.vx*frames*aiReact()+err, minX, maxX);
-      ty=clamp(puck.y+puck.vy*frames*aiReact(),      minY, maxY);
+    if(puckInCorner){
+      if(aiCrushingCorner){
+        // Retraite : l'IA recule vers le centre de son terrain
+        const cornerX = puck.x < CX ? tFX + CORNER_DEPTH + 40 : tFX + tFW - CORNER_DEPTH - 40;
+        tx = cornerX; ty = homeY + 30;
+      } else {
+        // Attend à distance du coin pour intercepter le rebond
+        tx = clamp(puck.x, minX, maxX);
+        ty = FY + CORNER_DEPTH + 20;
+      }
+    } else if(puck.y < CY){
+      // Palet dans la moitié IA — elle attaque
+      if(puck.vy < 0){
+        // Palet qui monte vers elle : prédiction avec erreur humaine
+        const frames = clamp((enemy.y - puck.y) / Math.max(0.5, Math.abs(puck.vy)), 1, 55);
+        tx = clamp(puck.x + puck.vx * frames * aiReact() + errX, minX, maxX);
+        ty = clamp(puck.y + puck.vy * frames * aiReact(), minY, maxY);
+      } else {
+        // Palet dans sa moitié mais qui redescend : elle suit latéralement + sort à sa rencontre
+        const chase = aiReact();
+        tx = clamp(puck.x * chase + CX * (1-chase) + errX, minX, maxX);
+        // Elle descend légèrement vers le palet pour aller le chercher
+        ty = clamp(puck.y - 20, minY, maxY);
+      }
     } else {
-      tx=home.x; ty=home.y;
+      // Palet dans la moitié joueur (bas) : retour défensif
+      // Elle se place en X alignée sur le palet, mais reste haute
+      tx = clamp(puck.x * 0.55 + CX * 0.45, minX, maxX);
+      ty = homeY;
     }
+
     const px=enemy.x, py=enemy.y;
     const dx=tx-enemy.x, dy=ty-enemy.y, d=hyp(dx,dy);
     if(d>0.1){ const st=Math.min(d,spd); enemy.x+=dx/d*st; enemy.y+=dy/d*st; }
@@ -1027,7 +1073,7 @@ function updatePuck(){
     }
     // ---- Mur du haut : but joueur (IA) ----
     if(puck.y-puck.r < FY){
-      if(puck.x>tG1 && puck.x<tG2){ goal("p"); return; }   // joueur marque
+      if(puck.x>eG1 && puck.x<eG2){ goal("p"); return; }   // joueur marque
       puck.y=FY+puck.r; puck.vy=Math.abs(puck.vy)*0.86; Sound.wall();
     }
     // ---- Mur du bas : but IA (joueur encaisse) ----
@@ -1046,7 +1092,7 @@ function updatePuck(){
     if(puck.y-puck.r < fy){ puck.y=fy+puck.r; puck.vy=Math.abs(puck.vy)*0.86; Sound.wall(); }
     if(puck.y+puck.r > fy+fh){ puck.y=fy+fh-puck.r; puck.vy=-Math.abs(puck.vy)*0.86; Sound.wall(); }
     if(puck.x-puck.r < FX){ if(puck.y>tG1&&puck.y<tG2){goal("e");return;} puck.x=FX+puck.r; puck.vx=Math.abs(puck.vx)*0.86; Sound.wall(); }
-    if(puck.x+puck.r > FX+FW){ if(puck.y>tG1&&puck.y<tG2){goal("p");return;} puck.x=FX+FW-puck.r; puck.vx=-Math.abs(puck.vx)*0.86; Sound.wall(); }
+    if(puck.x+puck.r > FX+FW){ if(puck.y>eG1&&puck.y<eG2){goal("p");return;} puck.x=FX+FW-puck.r; puck.vx=-Math.abs(puck.vx)*0.86; Sound.wall(); }
     // Bumpers
     tableCfg.bumpers.forEach(b=>{
       const bdx=puck.x-b.x,bdy=puck.y-b.y,bd=hyp(bdx,bdy),minD=puck.r+b.r;
@@ -1122,15 +1168,16 @@ function drawField(){
   // Buts — shadowBlur minimal pour éviter halos hors terrain
   ctx.lineWidth=5;
   if(PORTRAIT){
+    // But IA (haut) : utilise eG1/eG2 qui peut être rétréci
     ctx.strokeStyle="#FF00FF"; ctx.shadowColor="#FF00FF"; ctx.shadowBlur=6;
-    ctx.beginPath(); ctx.moveTo(tG1,FY); ctx.lineTo(tG2,FY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(eG1,FY); ctx.lineTo(eG2,FY); ctx.stroke();
     ctx.strokeStyle="#00D9FF"; ctx.shadowColor="#00D9FF"; ctx.shadowBlur=6;
     ctx.beginPath(); ctx.moveTo(tG1,FY+FH); ctx.lineTo(tG2,FY+FH); ctx.stroke();
   } else {
     ctx.strokeStyle="#00D9FF"; ctx.shadowColor="#00D9FF"; ctx.shadowBlur=6;
     ctx.beginPath(); ctx.moveTo(FX,tG1); ctx.lineTo(FX,tG2); ctx.stroke();
     ctx.strokeStyle="#FF00FF"; ctx.shadowColor="#FF00FF"; ctx.shadowBlur=6;
-    ctx.beginPath(); ctx.moveTo(FX+FW,tG1); ctx.lineTo(FX+FW,tG2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(FX+FW,eG1); ctx.lineTo(FX+FW,eG2); ctx.stroke();
   }
   ctx.shadowBlur=0;
 }
@@ -1312,7 +1359,10 @@ function frame(){
     if(ts<1){ puck.vx*=ts; puck.vy*=ts; updatePuck(); if(state===ST.PLAY){puck.vx/=ts;puck.vy/=ts;} } else updatePuck();
     if(boostActive){ boostTimer--; if(boostTimer<=0)boostActive=false; }
     if(gameType===GAMETYPE.SURVIVAL){ survivalTime++; if(survivalTime%480===0)aiLevel++; }
-    updatePowerups(); if(pBig>0){pBig--;if(pBig===0)player.r=PADR;} if(enemyFrozen>0)enemyFrozen--;
+    updatePowerups();
+    if(pBig>0){pBig--;if(pBig===0)player.r=PADR;}
+    if(enemyFrozen>0)enemyFrozen--;
+    if(smallGoalTimer>0){ smallGoalTimer--; applyTable(); }  // recalcule eG1/eG2 chaque frame
   }
   if(puckFlash>0)  puckFlash=Math.max(0,puckFlash-.06);
   if(player.squash>0) player.squash=Math.max(0,player.squash-.10);
@@ -1390,17 +1440,18 @@ document.getElementById("btn1P").addEventListener("click",()=>newGame(MODE.PVE))
 document.getElementById("btn2P").addEventListener("click",()=>newGame(MODE.PVP));
 document.getElementById("btnAgain").addEventListener("click",e=>{ e.stopPropagation(); newGame(gameMode); });
 // Sélecteur boost — sélection d'abord, pub ensuite
-let selectedBoost = "power";
 document.querySelectorAll(".boost-choice").forEach(btn=>{
   btn.addEventListener("click",()=>{
-    selectedBoost = btn.dataset.boost;
+    // Capturer la valeur dans une constante locale immédiate
+    // pour éviter que le callback asynchrone (après 5s de pub) lise
+    // une valeur différente si l'utilisateur a re-cliqué entre-temps.
+    const chosenBoost = btn.dataset.boost;
     document.querySelectorAll(".boost-choice").forEach(b=>b.classList.remove("selected"));
     btn.classList.add("selected");
-    // Lancer la pub puis démarrer avec le boost choisi
-    AdManager.showRewarded(()=>startBoost(selectedBoost));
+    AdManager.showRewarded(()=>startBoost(chosenBoost));
   });
 });
-// Sélection par défaut visuelle
+// Sélection visuelle par défaut
 document.querySelector('.boost-choice[data-boost="power"]').classList.add("selected");
 document.getElementById("btnMenu").addEventListener("click",e=>{ e.stopPropagation(); state=ST.TITLE; show("screenStart"); buildSkinUI(); updateXPDisplay(); updateModeHint(); });
 document.getElementById("btnResume").addEventListener("click",e=>{ e.stopPropagation(); if(state===ST.PAUSE){state=ST.PLAY;hideAll();} });
