@@ -88,7 +88,7 @@ export default function Footer() {
       </div>
       <div className="footer__bottom">
         <span className="footer__copy">
-          © {year} Ragequit Arcade — Valtech Services (SIREN 994 273 118). All rights reserved.
+          © {year} Ragequit Arcade. All rights reserved.
         </span>
       </div>
     </footer>
