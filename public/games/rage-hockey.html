@@ -133,7 +133,39 @@ html,body{
   transition:all .18s;text-align:center;
 }
 .arena-btn.on,.arena-btn:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,217,255,.09);}
-.arena-icon{display:block;font-size:18px;margin-bottom:3px;}
+.arena-icon{
+  display:block;
+  width:28px;height:20px;
+  margin:0 auto 4px;
+  position:relative;
+}
+/* Classic : rectangle simple avec deux barres verticales (cages) */
+.arena-icon--normal{
+  border:2px solid currentColor;
+  border-radius:3px;
+}
+.arena-icon--normal::before,.arena-icon--normal::after{
+  content:'';position:absolute;top:4px;bottom:4px;width:2px;background:currentColor;opacity:.7;
+}
+.arena-icon--normal::before{left:4px;}
+.arena-icon--normal::after{right:4px;}
+
+/* Bumper : idem + cercle central */
+.arena-icon--bumper{
+  border:2px solid currentColor;border-radius:3px;
+}
+.arena-icon--bumper::before{
+  content:'';position:absolute;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  width:8px;height:8px;border-radius:50%;
+  border:2px solid currentColor;opacity:.9;
+}
+
+/* Narrow : rectangle plus étroit */
+.arena-icon--narrow{
+  width:18px;margin:0 auto 4px;
+  border:2px solid currentColor;border-radius:3px;
+}
 
 /* ================================================================
    BOUTONS
@@ -202,7 +234,50 @@ html,body{
 .face{font-size:52px;line-height:1;margin-bottom:8px;}
 .best-row{margin-top:8px;font-size:11px;letter-spacing:.12em;color:var(--muted);}
 .screen-actions{display:flex;flex-direction:column;gap:10px;width:100%;max-width:260px;margin-top:16px;}
-.ad-explain{font-size:11px;line-height:1.7;color:var(--muted);max-width:290px;}
+/* ================================================================
+   SÉLECTEUR BOOST (après pub)
+   ================================================================ */
+#boostSection{
+  width:100%;
+  background:rgba(15,21,53,.8);
+  border:1.5px solid rgba(255,210,63,.2);
+  border-radius:var(--r-card);
+  padding:12px;
+  display:flex;flex-direction:column;gap:8px;
+}
+.boost-header{
+  font-size:10px;font-weight:800;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--gold);
+  text-align:center;margin-bottom:2px;cursor:default;
+}
+.boost-choices{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.boost-choice{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:10px 6px;border-radius:10px;cursor:pointer;
+  background:rgba(255,255,255,.05);
+  border:1.5px solid rgba(107,125,179,.2);
+  transition:all .18s;
+}
+.boost-choice:hover,.boost-choice.selected{
+  border-color:var(--gold);
+  background:rgba(255,210,63,.1);
+}
+.boost-choice-icon{font-size:20px;line-height:1;}
+.boost-choice-name{
+  font-size:9px;font-weight:800;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--text);
+}
+.boost-choice-desc{font-size:8px;color:var(--muted);text-align:center;line-height:1.3;}
+.boost-watch-btn{
+  width:100%;padding:10px;
+  background:transparent;color:var(--gold);
+  border:2px solid var(--gold);
+  border-radius:var(--r-pill);
+  font-family:inherit;font-size:11px;font-weight:800;
+  letter-spacing:.12em;text-transform:uppercase;cursor:pointer;
+  transition:all .18s;
+}
+.boost-watch-btn:hover{background:rgba(255,210,63,.12);}
 
 /* ================================================================
    HUD
@@ -304,9 +379,9 @@ html,body{
 
       <div class="slabel">Arena</div>
       <div class="arena-grid">
-        <button class="arena-btn on" data-table="normal"><span class="arena-icon">🏒</span>Classic</button>
-        <button class="arena-btn" data-table="bumper"><span class="arena-icon">💠</span>Bumper</button>
-        <button class="arena-btn" data-table="narrow"><span class="arena-icon">⚡</span>Narrow</button>
+        <button class="arena-btn on" data-table="normal"><span class="arena-icon arena-icon--normal"></span>Classic</button>
+        <button class="arena-btn" data-table="bumper"><span class="arena-icon arena-icon--bumper"></span>Bumper</button>
+        <button class="arena-btn" data-table="narrow"><span class="arena-icon arena-icon--narrow"></span>Narrow</button>
       </div>
     </div>
 
@@ -349,8 +424,29 @@ html,body{
   <div class="best-row" id="overBest"></div>
   <div class="screen-actions">
     <button class="btn" id="btnAgain">Play again</button>
-    <button class="btn btn--ad" id="btnAdBonus">▶ Watch ad — Power Boost</button>
-    <div class="ad-explain">For 25s: you hit harder &amp; the enemy is slower.</div>
+
+    <!-- Sélecteur boost après pub -->
+    <div id="boostSection">
+      <div class="boost-header">▶ Watch an ad — Choose your boost (30s)</div>
+      <div class="boost-choices" id="boostChoices">
+        <button class="boost-choice" data-boost="power">
+          <span class="boost-choice-icon">⚡</span>
+          <span class="boost-choice-name">Power Hit</span>
+          <span class="boost-choice-desc">Hit harder &amp; faster</span>
+        </button>
+        <button class="boost-choice" data-boost="freeze">
+          <span class="boost-choice-icon">❄</span>
+          <span class="boost-choice-name">AI Freeze</span>
+          <span class="boost-choice-desc">Enemy half speed</span>
+        </button>
+        <button class="boost-choice" data-boost="big">
+          <span class="boost-choice-icon">◆</span>
+          <span class="boost-choice-name">Big Paddle</span>
+          <span class="boost-choice-desc">1.5× paddle size</span>
+        </button>
+      </div>
+    </div>
+
     <button class="btn btn--ghost" id="btnMenu">Menu</button>
   </div>
 </div>
@@ -406,16 +502,19 @@ function resize(){
 window.addEventListener("resize", resize);
 
 // ---- Terrain (recalculé à chaque resize/orientation) ----
-const PAD = 30;
+const PAD   = 30;   // marge paysage
+const PAD_L = 20;   // marge latérale portrait
+const PAD_V = 12;   // marge verticale portrait — réduite pour voir les cages
 let FX, FY, FW, FH, CX, CY, CORNER;
 const PR = 15, PADR = 27, WIN = 7;
 
 function calcField(){
-  FX = PAD; FY = PAD;
-  FW = LW - PAD * 2;
-  FH = LH - PAD * 2;
+  FX = PORTRAIT ? PAD_L : PAD;
+  FY = PORTRAIT ? PAD_V : PAD;
+  FW = LW - FX * 2;
+  FH = LH - FY * 2;
   CX = LW / 2; CY = LH / 2;
-  CORNER = 60;
+  CORNER = 50;
 }
 
 // ---- Tables ----
@@ -530,8 +629,14 @@ function aiReact(){ return Math.min(diffCfg.react + aiLevel*0.025, 0.95); }
 let aiMistake=0, aiErrorY=0;
 
 // ---- Boost pub ----
-let boostActive=false, boostTimer=0;
-const BOOST_DUR = 60 * 25;
+let boostActive=false, boostTimer=0, boostType="power";
+const BOOST_DUR = 60 * 30;  // 30 secondes
+
+const BOOSTS = {
+  power:  { label:"⚡ Power Hit",   desc:"You hit harder & faster",           col:"#FFD23F", apply: ()=>{ /* géré dans collidePaddle */ } },
+  freeze: { label:"❄ AI Freeze",    desc:"Enemy moves at half speed for 30s", col:"#5BE0FF", apply: ()=>{ enemyFrozen=BOOST_DUR; } },
+  big:    { label:"◆ Big Paddle",   desc:"Your paddle is 1.5× bigger for 30s",col:"#A66BFF", apply: ()=>{ pBig=BOOST_DUR; player.r=PADR*1.5; } },
+};
 
 // ---- Juice ----
 let puckFlash=0, lastHitSpeed=0;
@@ -539,10 +644,11 @@ let puckFlash=0, lastHitSpeed=0;
 // ---- Power-ups ----
 const PWR = { FREEZE:0, BIG:1, FAST:2 };
 let powerup=null, powerupTimer=0, pBig=0, enemyFrozen=0;
-const POWER_INTERVAL=60*12, POWER_LIFE=60*9;
+const POWER_INTERVAL=60*8, POWER_LIFE=60*9;
 
 // ---- Skins ----
 const SKINS = [
+  // Skins unis
   { col:"#00D9FF", glow:"rgba(0,217,255,.6)",   unlockLv:1  },
   { col:"#FF00FF", glow:"rgba(255,0,255,.6)",   unlockLv:1  },
   { col:"#FFD23F", glow:"rgba(255,210,63,.6)",  unlockLv:1  },
@@ -551,6 +657,11 @@ const SKINS = [
   { col:"#A66BFF", glow:"rgba(166,107,255,.6)", unlockLv:7  },
   { col:"#FF8C42", glow:"rgba(255,140,66,.6)",  unlockLv:10 },
   { col:"#F5F5FF", glow:"rgba(245,245,255,.7)", unlockLv:14 },
+  // Skins bicolores (pattern demi-cercle contrasté)
+  { col:"#F5F5FF", col2:"#FF4444", glow:"rgba(245,245,255,.6)", unlockLv:18, bicolor:true }, // blanc / rouge
+  { col:"#00D9FF", col2:"#FF4444", glow:"rgba(0,217,255,.6)",   unlockLv:22, bicolor:true }, // bleu / rouge
+  { col:"#111122", col2:"#F5F5FF", glow:"rgba(100,100,120,.5)", unlockLv:26, bicolor:true }, // noir / blanc
+  { col:"#00D9FF", col2:"#FFD23F", glow:"rgba(0,217,255,.6)",   unlockLv:30, bicolor:true }, // cyan / or
 ];
 function skinUnlocked(i){ return playerLevel() >= SKINS[i].unlockLv; }
 let skinIdx = +(localStorage.getItem("rh_skin") || 0);
@@ -563,9 +674,20 @@ function buildSkinUI(){
     const unlocked = skinUnlocked(i);
     const btn = document.createElement("button");
     btn.className = "skin-btn" + (i===skinIdx?" on":"") + (unlocked?"":" locked");
-    btn.style.background = s.col;
-    if(!unlocked){ const lock=document.createElement("span"); lock.className="skin-lock"; lock.textContent=s.unlockLv; btn.appendChild(lock); }
-    btn.addEventListener("click",()=>{ if(!skinUnlocked(i))return; skinIdx=i; localStorage.setItem("rh_skin",i); buildSkinUI(); });
+    if(s.bicolor){
+      btn.style.background = "linear-gradient(90deg, "+s.col+" 50%, "+s.col2+" 50%)";
+      if(i===skinIdx) btn.style.borderColor = "#fff";
+    } else {
+      btn.style.background = s.col;
+    }
+    if(!unlocked){
+      const lock=document.createElement("span"); lock.className="skin-lock";
+      lock.textContent=s.unlockLv; btn.appendChild(lock);
+    }
+    btn.addEventListener("click",()=>{
+      if(!skinUnlocked(i))return;
+      skinIdx=i; localStorage.setItem("rh_skin",i); buildSkinUI();
+    });
     row.appendChild(btn);
   });
 }
@@ -670,7 +792,7 @@ function resetPos(){
 
 function newGame(mode){
   gameMode=mode; scoreP=0; scoreE=0; aiLevel=0;
-  boostActive=false; boostTimer=0; goalSlomo=0; parts.length=0;
+  boostActive=false; boostTimer=0; boostType="power"; goalSlomo=0; parts.length=0;
   survivalTime=0; powerup=null; powerupTimer=POWER_INTERVAL;
   pBig=0; enemyFrozen=0; player.r=PADR;
   puckFlash=0; player.squash=0; enemy.squash=0;
@@ -678,7 +800,15 @@ function newGame(mode){
   applyTable(); resetPos(); resetPuck("p");
   state=ST.PLAY; hideAll(); Sound.enable();
 }
-function startBoost(){ newGame(gameMode); boostActive=true; boostTimer=BOOST_DUR; burst(player.x,player.y,"#FFD23F",30); }
+function startBoost(type){
+  boostType = type || "power";
+  newGame(gameMode);
+  boostActive = true;
+  boostTimer  = BOOST_DUR;
+  // Appliquer l'effet spécial si besoin
+  if(BOOSTS[boostType].apply) BOOSTS[boostType].apply();
+  burst(player.x, player.y, BOOSTS[boostType].col, 30);
+}
 
 function goal(who){
   if(state!==ST.PLAY) return;
@@ -790,7 +920,7 @@ function updateP2keyboard(){
 
 function updateEnemyPVE(){
   if(enemyFrozen>0){ enemy.vx=0; enemy.vy=0; return; }
-  const spd=aiSpeed()*(boostActive?0.8:1);
+  const spd=aiSpeed()*(boostActive&&boostType==="power"?0.8:1);
   if(PORTRAIT){
     // IA en haut : elle suit le palet horizontalement dans sa moitié haute
     const minX=tFX+PADR, maxX=tFX+tFW-PADR;
@@ -851,14 +981,14 @@ function collidePaddle(pad,isP1){
   if(d>=mn||d<0.01) return;
   const nx=dx/d, ny=dy/d;
   puck.x=pad.x+nx*mn; puck.y=pad.y+ny*mn;
-  const boost=(isP1&&boostActive)?2.5:1.8;
+  const boost=(isP1&&boostActive&&boostType==="power")?2.5:1.8;
   const mvx=pad.vx*boost, mvy=pad.vy*boost;
   const rvx=puck.vx-mvx, rvy=puck.vy-mvy;
   const dot=rvx*nx+rvy*ny; if(dot>=0) return;
   const rest=1.38, impulse=-(1+rest)*dot;
   puck.vx+=impulse*nx; puck.vy+=impulse*ny;
   const sp=hyp(puck.vx,puck.vy);
-  const cap=isP1?(boostActive?26:22):20;
+  const cap=isP1?(boostActive&&boostType==="power"?28:22):20;
   if(sp>cap){ puck.vx=puck.vx/sp*cap; puck.vy=puck.vy/sp*cap; }
   Sound.hit(sp);
   const col=isP1?SKINS[skinIdx].col:"#FF00FF";
@@ -968,7 +1098,7 @@ function drawField(){
 
   // Bumpers
   tableCfg.bumpers.forEach(b=>{
-    ctx.save(); ctx.shadowColor="#FF00FF"; ctx.shadowBlur=20;
+    ctx.save(); ctx.shadowColor="#FF00FF"; ctx.shadowBlur=10;
     const g=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);
     g.addColorStop(0,"rgba(255,0,255,.55)"); g.addColorStop(1,"rgba(255,0,255,.08)");
     ctx.fillStyle=g; ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fill();
@@ -976,21 +1106,17 @@ function drawField(){
     ctx.strokeStyle="rgba(255,0,255,.35)"; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(b.x,b.y,b.r*.55,0,Math.PI*2); ctx.stroke(); ctx.restore();
   });
 
-  // Buts
-  ctx.lineWidth=4;
+  // Buts — shadowBlur minimal pour éviter halos hors terrain
+  ctx.lineWidth=5;
   if(PORTRAIT){
-    // But haut (joueur marque en haut, IA défend) — couleur IA (magenta)
-    ctx.strokeStyle="#FF00FF"; ctx.shadowColor="#FF00FF"; ctx.shadowBlur=16;
+    ctx.strokeStyle="#FF00FF"; ctx.shadowColor="#FF00FF"; ctx.shadowBlur=6;
     ctx.beginPath(); ctx.moveTo(tG1,FY); ctx.lineTo(tG2,FY); ctx.stroke();
-    // But bas (IA marque en bas, joueur défend) — couleur joueur (cyan)
-    ctx.strokeStyle="#00D9FF"; ctx.shadowColor="#00D9FF";
+    ctx.strokeStyle="#00D9FF"; ctx.shadowColor="#00D9FF"; ctx.shadowBlur=6;
     ctx.beginPath(); ctx.moveTo(tG1,FY+FH); ctx.lineTo(tG2,FY+FH); ctx.stroke();
   } else {
-    // But gauche (IA marque ici → joueur perd) — couleur joueur
-    ctx.strokeStyle="#00D9FF"; ctx.shadowColor="#00D9FF"; ctx.shadowBlur=16;
+    ctx.strokeStyle="#00D9FF"; ctx.shadowColor="#00D9FF"; ctx.shadowBlur=6;
     ctx.beginPath(); ctx.moveTo(FX,tG1); ctx.lineTo(FX,tG2); ctx.stroke();
-    // But droit (joueur marque ici → joueur gagne) — couleur IA
-    ctx.strokeStyle="#FF00FF"; ctx.shadowColor="#FF00FF";
+    ctx.strokeStyle="#FF00FF"; ctx.shadowColor="#FF00FF"; ctx.shadowBlur=6;
     ctx.beginPath(); ctx.moveTo(FX+FW,tG1); ctx.lineTo(FX+FW,tG2); ctx.stroke();
   }
   ctx.shadowBlur=0;
@@ -1002,55 +1128,132 @@ function drawPuck(){
   for(let i=0;i<trail.length;i++){ const t=trail[i],p=i/trail.length; ctx.globalAlpha=p*0.42*trailBoost; ctx.fillStyle="#00D9FF"; ctx.beginPath(); ctx.arc(t.x,t.y,puck.r*p*.95,0,Math.PI*2); ctx.fill(); }
   ctx.globalAlpha=1;
   if(puckFlash>0){ const fr=puck.r*(1.6+puckFlash*2.4); const g=ctx.createRadialGradient(puck.x,puck.y,puck.r*.5,puck.x,puck.y,fr); g.addColorStop(0,`rgba(255,255,255,${puckFlash*.9})`); g.addColorStop(.4,`rgba(0,217,255,${puckFlash*.5})`); g.addColorStop(1,"rgba(0,217,255,0)"); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(puck.x,puck.y,fr,0,Math.PI*2); ctx.fill(); }
-  ctx.shadowColor="#00D9FF"; ctx.shadowBlur=24+sp*1.4+puckFlash*30;
+  ctx.shadowColor="#00D9FF"; ctx.shadowBlur=14+sp*0.8+puckFlash*16;
   ctx.fillStyle="#eaf8ff"; ctx.beginPath(); ctx.arc(puck.x,puck.y,puck.r,0,Math.PI*2); ctx.fill();
   ctx.shadowBlur=0; ctx.strokeStyle="#00D9FF"; ctx.lineWidth=2.5; ctx.beginPath(); ctx.arc(puck.x,puck.y,puck.r-1,0,Math.PI*2); ctx.stroke();
   if(puckFlash>0){ ctx.fillStyle=`rgba(255,255,255,${puckFlash})`; ctx.beginPath(); ctx.arc(puck.x,puck.y,puck.r*.5,0,Math.PI*2); ctx.fill(); }
 }
 
-function drawPaddle(p,col,glow){
-  ctx.save(); ctx.translate(p.x,p.y);
-  if(p.squash>0){ const ang=Math.atan2(p.squashNy,p.squashNx); ctx.rotate(ang); ctx.scale(1-p.squash*.32,1+p.squash*.20); ctx.rotate(-ang); }
-  ctx.shadowColor=glow; ctx.shadowBlur=22; ctx.fillStyle=col; ctx.beginPath(); ctx.arc(0,0,p.r,0,Math.PI*2); ctx.fill();
-  ctx.shadowBlur=0; ctx.fillStyle="rgba(10,14,39,.88)"; ctx.beginPath(); ctx.arc(0,0,p.r*.62,0,Math.PI*2); ctx.fill();
-  ctx.fillStyle=col; ctx.beginPath(); ctx.arc(0,0,p.r*.28,0,Math.PI*2); ctx.fill(); ctx.restore();
+function drawPaddle(p, col, glow, skin){
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  if(p.squash>0){
+    const ang=Math.atan2(p.squashNy,p.squashNx);
+    ctx.rotate(ang); ctx.scale(1-p.squash*.32,1+p.squash*.20); ctx.rotate(-ang);
+  }
+  // Glow réduit pour ne pas déborder hors terrain
+  ctx.shadowColor=glow; ctx.shadowBlur=12;
+
+  if(skin && skin.bicolor){
+    // ---- Skin bicolore : demi-cercle gauche + demi-cercle droit ----
+    // Demi gauche
+    ctx.fillStyle=skin.col;
+    ctx.beginPath(); ctx.arc(0,0,p.r,-Math.PI/2,Math.PI/2,true); ctx.closePath(); ctx.fill();
+    // Demi droit
+    ctx.fillStyle=skin.col2;
+    ctx.beginPath(); ctx.arc(0,0,p.r,Math.PI/2,-Math.PI/2,true); ctx.closePath();
+    ctx.shadowBlur=0; ctx.fill();
+    // Séparation centrale
+    ctx.strokeStyle="rgba(0,0,0,.35)"; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(0,-p.r); ctx.lineTo(0,p.r); ctx.stroke();
+    // Centre sombre
+    ctx.fillStyle="rgba(10,14,39,.9)"; ctx.beginPath(); ctx.arc(0,0,p.r*.55,0,Math.PI*2); ctx.fill();
+    // Point central col1
+    ctx.fillStyle=skin.col; ctx.beginPath(); ctx.arc(0,0,p.r*.22,0,Math.PI*2); ctx.fill();
+  } else {
+    // ---- Skin uni classique ----
+    ctx.fillStyle=col;
+    ctx.beginPath(); ctx.arc(0,0,p.r,0,Math.PI*2); ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.fillStyle="rgba(10,14,39,.88)";
+    ctx.beginPath(); ctx.arc(0,0,p.r*.62,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle=col;
+    ctx.beginPath(); ctx.arc(0,0,p.r*.28,0,Math.PI*2); ctx.fill();
+  }
+  ctx.restore();
 }
 
 function drawParts(){ for(const p of parts){ ctx.globalAlpha=Math.max(0,p.life); ctx.fillStyle=p.col; ctx.beginPath(); ctx.arc(p.x,p.y,p.size*p.life,0,Math.PI*2); ctx.fill(); } ctx.globalAlpha=1; }
 
 function drawHUD(){
   ctx.textAlign="center"; const sk=SKINS[skinIdx];
-  if(gameType===GAMETYPE.SURVIVAL){
-    const secs=Math.floor(survivalTime/60);
-    ctx.font="900 44px 'Trebuchet MS',sans-serif"; ctx.fillStyle="#00D9FF";
-    ctx.fillText(fmtTime(secs), CX, PORTRAIT ? FY+60 : FY+52);
-    ctx.font="700 10px 'Trebuchet MS',sans-serif"; ctx.fillStyle="rgba(255,255,255,.4)";
-    ctx.fillText("SURVIVAL", CX, PORTRAIT ? FY+76 : FY+68);
-  } else {
-    ctx.font="900 48px 'Trebuchet MS',sans-serif";
-    if(PORTRAIT){
-      // Scores à gauche et droite de la ligne médiane
-      ctx.fillStyle=sk.col;  ctx.fillText(scoreP, CX-56, CY-10);
-      ctx.fillStyle="#FF00FF"; ctx.fillText(scoreE, CX+56, CY-10);
-      ctx.font="700 10px 'Trebuchet MS',sans-serif";
-      ctx.fillStyle="rgba(0,217,255,.5)";  ctx.fillText("YOU", CX-56, CY+8);
-      ctx.fillStyle="rgba(255,0,255,.5)";  ctx.fillText("AI",  CX+56, CY+8);
+
+  if(PORTRAIT){
+    // ---- PORTRAIT : score joueur en haut, score IA juste en dessous ----
+    const topY = FY + 4;   // tout en haut, dans la zone de la cage IA
+
+    if(gameType===GAMETYPE.SURVIVAL){
+      const secs=Math.floor(survivalTime/60);
+      ctx.font="900 36px 'Trebuchet MS',sans-serif"; ctx.fillStyle="#00D9FF";
+      ctx.fillText(fmtTime(secs), CX, topY+36);
+      ctx.font="700 9px 'Trebuchet MS',sans-serif"; ctx.fillStyle="rgba(255,255,255,.4)";
+      ctx.fillText("SURVIVAL", CX, topY+50);
     } else {
+      // Score YOU (haut gauche) / AI (haut droit), sous la cage IA
+      ctx.font="900 34px 'Trebuchet MS',sans-serif";
+      ctx.fillStyle=sk.col;   ctx.textAlign="right"; ctx.fillText(scoreP, CX-8, topY+36);
+      ctx.fillStyle="#FF00FF"; ctx.textAlign="left";  ctx.fillText(scoreE, CX+8, topY+36);
+      ctx.font="700 8px 'Trebuchet MS',sans-serif";
+      ctx.fillStyle="rgba(0,217,255,.5)";  ctx.textAlign="right"; ctx.fillText("YOU", CX-8, topY+48);
+      ctx.fillStyle="rgba(255,0,255,.5)";  ctx.textAlign="left";  ctx.fillText("AI",  CX+8, topY+48);
+    }
+
+    // ---- Boost intégré : sous le score, en haut ----
+    if(boostActive){
+      const bst=BOOSTS[boostType];
+      const bw=130, bh=5, bx=CX-bw/2, by=FY+60;
+      const ratio=boostTimer/BOOST_DUR;
+      // Fond
+      ctx.fillStyle="rgba(255,255,255,.08)"; rr(bx,by,bw,bh,3); ctx.fill();
+      // Barre
+      ctx.fillStyle=bst.col; rr(bx,by,bw*ratio,bh,3); ctx.fill();
+      // Label + timer
+      ctx.textAlign="center"; ctx.font="700 9px 'Trebuchet MS',sans-serif";
+      ctx.fillStyle=bst.col;
+      ctx.fillText(bst.label + "  " + Math.ceil(boostTimer/60)+"s", CX, by-3);
+    }
+    ctx.textAlign="center";
+
+  } else {
+    // ---- PAYSAGE (inchangé) ----
+    if(gameType===GAMETYPE.SURVIVAL){
+      const secs=Math.floor(survivalTime/60);
+      ctx.font="900 44px 'Trebuchet MS',sans-serif"; ctx.fillStyle="#00D9FF";
+      ctx.fillText(fmtTime(secs), CX, FY+52);
+      ctx.font="700 10px 'Trebuchet MS',sans-serif"; ctx.fillStyle="rgba(255,255,255,.4)";
+      ctx.fillText("SURVIVAL", CX, FY+68);
+    } else {
+      ctx.font="900 48px 'Trebuchet MS',sans-serif";
       ctx.fillStyle=sk.col;  ctx.fillText(scoreP, CX-72, FY+54);
       ctx.fillStyle="#FF00FF"; ctx.fillText(scoreE, CX+72, FY+54);
-      if(gameMode===MODE.PVP){ ctx.font="700 10px 'Trebuchet MS',sans-serif"; ctx.fillStyle="rgba(255,255,255,.28)"; ctx.fillText("P1",CX-72,FY+68); ctx.fillText("P2",CX+72,FY+68); }
+      if(gameMode===MODE.PVP){
+        ctx.font="700 10px 'Trebuchet MS',sans-serif"; ctx.fillStyle="rgba(255,255,255,.28)";
+        ctx.fillText("P1",CX-72,FY+68); ctx.fillText("P2",CX+72,FY+68);
+      }
     }
+    if(boostActive){
+      const bst=BOOSTS[boostType];
+      const bw=150,bh=7,bx=CX-bw/2,by=FY+78;
+      const ratio=boostTimer/BOOST_DUR;
+      ctx.fillStyle="rgba(255,255,255,.08)"; rr(bx,by,bw,bh,3); ctx.fill();
+      ctx.fillStyle=bst.col; rr(bx,by,bw*ratio,bh,3); ctx.fill();
+      ctx.font="700 9px 'Trebuchet MS',sans-serif"; ctx.fillStyle=bst.col;
+      ctx.fillText(bst.label+"  "+Math.ceil(boostTimer/60)+"s", CX, by-4);
+    }
+    if(gameMode===MODE.PVE){
+      ctx.font="700 9px 'Trebuchet MS',sans-serif"; ctx.textAlign="right";
+      const lvTxt=aiLevel>0?(diffCfg.label+" +"+aiLevel):diffCfg.label;
+      ctx.fillStyle="rgba(255,0,255,.5)"; ctx.fillText("AI: "+lvTxt,LW-FX-16,FY+20);
+    }
+    ctx.textAlign="center";
   }
-  if(boostActive){ const bw=150,bh=7,bx=CX-bw/2,by=PORTRAIT?CY-44:FY+78; const ratio=boostTimer/BOOST_DUR; ctx.fillStyle="rgba(255,255,255,.1)"; rr(bx,by,bw,bh,3); ctx.fill(); ctx.fillStyle="#FFD23F"; rr(bx,by,bw*ratio,bh,3); ctx.fill(); ctx.font="700 9px 'Trebuchet MS',sans-serif"; ctx.fillStyle="#FFD23F"; ctx.fillText("⚡ POWER BOOST",CX,by-4); }
-  if(gameMode===MODE.PVE&&!PORTRAIT){ ctx.font="700 9px 'Trebuchet MS',sans-serif"; ctx.textAlign="right"; const lvTxt=aiLevel>0?(diffCfg.label+" +"+aiLevel):diffCfg.label; ctx.fillStyle="rgba(255,0,255,.5)"; ctx.fillText("AI: "+lvTxt,LW-FX-16,FY+20); }
-  ctx.textAlign="center";
 }
 
 function drawGoalFlash(){
   if(state!==ST.GOAL) return;
   ctx.globalAlpha=0.1; ctx.fillStyle="#FFD23F"; ctx.fillRect(0,0,LW,LH); ctx.globalAlpha=1;
   ctx.textAlign="center"; ctx.font="900 62px 'Trebuchet MS',sans-serif";
-  ctx.fillStyle="#FFD23F"; ctx.shadowColor="#FFD23F"; ctx.shadowBlur=32;
+  ctx.fillStyle="#FFD23F"; ctx.shadowColor="#FFD23F"; ctx.shadowBlur=18;
   ctx.fillText("GOAL!",CX,CY+20); ctx.shadowBlur=0;
 }
 
@@ -1104,10 +1307,16 @@ function frame(){
   updateParts();
   let sx=0,sy=0; if(shake>0.3){ sx=(Math.random()-.5)*shake; sy=(Math.random()-.5)*shake; shake*=0.82; }else shake=0;
   ctx.save(); ctx.translate(sx,sy);
+  // Clip sur l'ensemble du terrain pour bloquer tout débordement (halos, shadows)
+  ctx.beginPath();
+  ctx.rect(0, 0, LW, LH);
+  ctx.clip();
   drawField(); drawParts(); drawPowerup(); drawPuck();
   const sk=SKINS[skinIdx];
-  drawPaddle(enemy,"#FF00FF","rgba(255,0,255,.7)");
-  drawPaddle(player,sk.col,sk.glow);
+  if(state !== ST.TITLE){
+    drawPaddle(enemy,"#FF00FF","rgba(255,0,255,.6)", null);
+    drawPaddle(player, sk.col, sk.glow, sk.bicolor ? sk : null);
+  }
   drawHUD(); drawGoalFlash();
   ctx.restore();
   requestAnimationFrame(frame);
@@ -1167,7 +1376,19 @@ document.getElementById("btnChalBack").addEventListener("click",()=>{ show("scre
 document.getElementById("btn1P").addEventListener("click",()=>newGame(MODE.PVE));
 document.getElementById("btn2P").addEventListener("click",()=>newGame(MODE.PVP));
 document.getElementById("btnAgain").addEventListener("click",e=>{ e.stopPropagation(); newGame(gameMode); });
-document.getElementById("btnAdBonus").addEventListener("click",e=>{ e.stopPropagation(); AdManager.showRewarded(()=>startBoost()); });
+// Sélecteur boost — sélection d'abord, pub ensuite
+let selectedBoost = "power";
+document.querySelectorAll(".boost-choice").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    selectedBoost = btn.dataset.boost;
+    document.querySelectorAll(".boost-choice").forEach(b=>b.classList.remove("selected"));
+    btn.classList.add("selected");
+    // Lancer la pub puis démarrer avec le boost choisi
+    AdManager.showRewarded(()=>startBoost(selectedBoost));
+  });
+});
+// Sélection par défaut visuelle
+document.querySelector('.boost-choice[data-boost="power"]').classList.add("selected");
 document.getElementById("btnMenu").addEventListener("click",e=>{ e.stopPropagation(); state=ST.TITLE; show("screenStart"); buildSkinUI(); updateXPDisplay(); updateModeHint(); });
 document.getElementById("btnResume").addEventListener("click",e=>{ e.stopPropagation(); if(state===ST.PAUSE){state=ST.PLAY;hideAll();} });
 document.getElementById("btnQuit").addEventListener("click",e=>{ e.stopPropagation(); newGame(gameMode); });
