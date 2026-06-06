@@ -9,23 +9,20 @@ export default function Footer() {
 
         {/* Brand + widget social */}
         <div className="footer__brand">
-          <Link to="/" className="footer__logo">
-            <span className="footer__logo-rage">RAGE</span>
-            <span className="footer__logo-quit">QUIT</span>
-            <span className="footer__logo-arcade">ARCADE</span>
+          <Link to="/" className="footer__logo" aria-label="Ragequit Arcade">
+            <img src="/ragequit-logo-white.png" alt="Ragequit Arcade" className="footer__logo-img" />
           </Link>
           <p className="footer__tagline">Free games. Pure rage. Every week.</p>
 
+          {/* Widget social — 5 cartes, roue asymétrique */}
           <div className="social-widget">
             <div className="social-row">
               <a href="https://instagram.com/ragequitarcade" target="_blank"
                 rel="noopener noreferrer" className="social-card social-card--instagram" aria-label="Instagram">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,256,256" width="28" height="28" fillRule="nonzero">
-                  <g fillRule="nonzero" stroke="none" strokeWidth="1">
-                    <g transform="scale(8,8)">
-                      <path d="M11.46875,5c-3.55078,0-6.46875,2.91406-6.46875,6.46875v9.0625c0,3.55078 2.91406,6.46875 6.46875,6.46875h9.0625c3.55078,0 6.46875,-2.91406 6.46875,-6.46875v-9.0625c0,-3.55078-2.91406,-6.46875-6.46875,-6.46875zM11.46875,7h9.0625c2.47266,0 4.46875,1.99609 4.46875,4.46875v9.0625c0,2.47266-1.99609,4.46875-4.46875,4.46875h-9.0625c-2.47266,0-4.46875,-1.99609-4.46875,-4.46875v-9.0625c0,-2.47266 1.99609,-4.46875 4.46875,-4.46875zM21.90625,9.1875c-0.50391,0-0.90625,0.40234-0.90625,0.90625c0,0.50391 0.40234,0.90625 0.90625,0.90625c0.50391,0 0.90625,-0.40234 0.90625,-0.90625c0,-0.50391-0.40234,-0.90625-0.90625,-0.90625zM16,10c-3.30078,0-6,2.69922-6,6c0,3.30078 2.69922,6 6,6c3.30078,0 6,-2.69922 6,-6c0,-3.30078-2.69922,-6-6,-6zM16,12c2.22266,0 4,1.77734 4,4c0,2.22266-1.77734,4-4,4c-2.22266,0-4,-1.77734-4,-4c0,-2.22266 1.77734,-4 4,-4z"/>
-                    </g>
-                  </g>
+                  <g fillRule="nonzero" stroke="none" strokeWidth="1"><g transform="scale(8,8)">
+                    <path d="M11.46875,5c-3.55078,0-6.46875,2.91406-6.46875,6.46875v9.0625c0,3.55078 2.91406,6.46875 6.46875,6.46875h9.0625c3.55078,0 6.46875,-2.91406 6.46875,-6.46875v-9.0625c0,-3.55078-2.91406,-6.46875-6.46875,-6.46875zM11.46875,7h9.0625c2.47266,0 4.46875,1.99609 4.46875,4.46875v9.0625c0,2.47266-1.99609,4.46875-4.46875,4.46875h-9.0625c-2.47266,0-4.46875,-1.99609-4.46875,-4.46875v-9.0625c0,-2.47266 1.99609,-4.46875 4.46875,-4.46875zM21.90625,9.1875c-0.50391,0-0.90625,0.40234-0.90625,0.90625c0,0.50391 0.40234,0.90625 0.90625,0.90625c0.50391,0 0.90625,-0.40234 0.90625,-0.90625c0,-0.50391-0.40234,-0.90625-0.90625,-0.90625zM16,10c-3.30078,0-6,2.69922-6,6c0,3.30078 2.69922,6 6,6c3.30078,0 6,-2.69922 6,-6c0,-3.30078-2.69922,-6-6,-6zM16,12c2.22266,0 4,1.77734 4,4c0,2.22266-1.77734,4-4,4c-2.22266,0-4,-1.77734-4,-4c0,-2.22266 1.77734,-4 4,-4z"/>
+                  </g></g>
                 </svg>
               </a>
               <a href="https://tiktok.com/@ragequitarcade" target="_blank"
@@ -34,8 +31,14 @@ export default function Footer() {
                   <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.26 8.26 0 0 0 4.83 1.56V6.79a4.85 4.85 0 0 1-1.06-.1z"/>
                 </svg>
               </a>
+              <a href="https://facebook.com/ragequitarcade" target="_blank"
+                rel="noopener noreferrer" className="social-card social-card--facebook" aria-label="Facebook">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </a>
             </div>
-            <div className="social-row">
+            <div className="social-row social-row--center">
               <a href="https://x.com/ragequitarcade" target="_blank"
                 rel="noopener noreferrer" className="social-card social-card--x" aria-label="X">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
@@ -52,7 +55,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Jeux — seulement les catégories existantes */}
+        {/* Jeux */}
         <div className="footer__col">
           <span className="footer__col-title">Games</span>
           <Link to="/category/sports" className="footer__link">Sports Games</Link>
@@ -60,13 +63,12 @@ export default function Footer() {
           <Link to="/leaderboard" className="footer__link">Leaderboard</Link>
         </div>
 
-        {/* Liens société */}
+        {/* Société — sans TikTok/Discord (déjà dans les icônes sociales) */}
         <div className="footer__col">
           <span className="footer__col-title">Company</span>
           <Link to="/legal/about" className="footer__link">About Us</Link>
           <Link to="/legal/contact" className="footer__link">Contact</Link>
-          <a href="https://tiktok.com/@ragequitarcade" target="_blank" rel="noopener noreferrer" className="footer__link">TikTok</a>
-          <a href="https://discord.gg/ragequitarcade" target="_blank" rel="noopener noreferrer" className="footer__link">Discord</a>
+          <Link to="/legal/mentions" className="footer__link">Legal Notice</Link>
         </div>
 
         {/* Légal */}
