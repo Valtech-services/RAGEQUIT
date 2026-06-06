@@ -467,15 +467,26 @@ html,body{
 // ====================================================================
 
 // ---- Orientation ----
-// Portrait : canvas 600×1080 (9:16), paddles haut/bas.
+// Portrait : dimensions calculées depuis la fenêtre réelle pour que les cages soient visibles.
 // Paysage  : canvas 1080×600 (16:9), paddles gauche/droite.
 let PORTRAIT = false;
 let LW = 1080, LH = 600;
 
+// Marge de sécurité en portrait : laisser ~15% de chaque côté vertical
+// pour que les cages restent visibles dans Safari/Chrome mobile.
+
 function updateOrientation(){
   PORTRAIT = (window.innerWidth < 768 && window.innerHeight > window.innerWidth);
-  LW = PORTRAIT ? 600 : 1080;
-  LH = PORTRAIT ? 1080 : 600;
+  if(PORTRAIT){
+    // Largeur logique = 600 (fixe)
+    // Hauteur logique = calée sur le ratio réel de l'écran, mais plafonnée à 900
+    // pour que les cages restent dans le viewport avec les barres du navigateur
+    const ratio = window.innerHeight / window.innerWidth;
+    LW = 600;
+    LH = Math.min(Math.round(LW * ratio), 900);
+  } else {
+    LW = 1080; LH = 600;
+  }
 }
 
 // ---- Canvas ----
@@ -503,12 +514,14 @@ window.addEventListener("resize", resize);
 
 // ---- Terrain (recalculé à chaque resize/orientation) ----
 const PAD   = 30;   // marge paysage
-const PAD_L = 20;   // marge latérale portrait
-const PAD_V = 12;   // marge verticale portrait — réduite pour voir les cages
+const PAD_L = 16;   // marge latérale portrait (gauche/droite)
+// PAD_V portrait = 2.2% de LH, calculé dynamiquement dans calcField
+// Sur iPhone Safari (LH≈820) → ~18px → cages clairement dans le viewport
 let FX, FY, FW, FH, CX, CY, CORNER;
 const PR = 15, PADR = 27, WIN = 7;
 
 function calcField(){
+  const PAD_V = PORTRAIT ? Math.max(14, Math.round(LH * 0.022)) : PAD;
   FX = PORTRAIT ? PAD_L : PAD;
   FY = PORTRAIT ? PAD_V : PAD;
   FW = LW - FX * 2;
