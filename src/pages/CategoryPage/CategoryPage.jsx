@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { games, categories } from '../../data/games'
 import Navbar from '../../components/Navbar/Navbar'
@@ -5,6 +6,7 @@ import GameCard from '../../components/GameCard/GameCard'
 import SeoBlock from '../../components/SeoBlock/SeoBlock'
 import Footer from '../../components/Footer/Footer'
 import usePageTitle from '../../hooks/usePageTitle'
+import { track } from '../../lib/analytics'
 import './CategoryPage.css'
 
 export default function CategoryPage() {
@@ -13,7 +15,12 @@ export default function CategoryPage() {
 
   usePageTitle(category ? `${category.label} Games` : 'Category')
 
-  if (!category) {
+  // Track page vue catégorie
+  useEffect(() => {
+    if(category) track('category_view', { category: id })
+  }, [id])
+
+  if(!category) {
     return (
       <div className="category">
         <div className="category__header">
@@ -32,8 +39,10 @@ export default function CategoryPage() {
 
   const catGames  = games.filter(g => g.category === id)
   const otherCats = categories.filter(c => c.id !== 'all' && c.id !== id)
-  const catIcons  = {
-    arcade: '🕹️', puzzle: '🧩', clicker: '👆', runner: '🏃', sports: '⚽',
+  const catIcons  = { arcade:'🕹️', puzzle:'🧩', clicker:'👆', runner:'🏃', sports:'⚽' }
+
+  function handleCatClick(catId){
+    track('category_click', { category: catId, source: 'shortcut' })
   }
 
   return (
@@ -51,7 +60,9 @@ export default function CategoryPage() {
       <div className="category__content">
         <div className="category__shortcuts">
           {otherCats.map(cat => (
-            <Link key={cat.id} to={`/category/${cat.id}`} className="category__shortcut">
+            <Link key={cat.id} to={`/category/${cat.id}`}
+              className="category__shortcut"
+              onClick={() => handleCatClick(cat.id)}>
               {cat.image ? (
                 <img src={cat.image} alt={cat.label} className="category__shortcut-img"
                   onError={e => { e.currentTarget.style.display='none'; e.currentTarget.nextElementSibling.style.display='inline' }} />
@@ -67,7 +78,7 @@ export default function CategoryPage() {
               <div key={game.id}
                 className={`category__cell category__cell--${game.size} fade-up`}
                 style={{ animationDelay: `${index * 35}ms` }}>
-                <GameCard game={game} size={game.size} shimmer={game.shimmer} />
+                <GameCard game={game} size={game.size} shimmer={game.shimmer} source="category" />
               </div>
             ))}
           </div>
