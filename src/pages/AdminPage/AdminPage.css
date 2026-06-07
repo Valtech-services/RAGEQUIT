@@ -138,3 +138,86 @@
   .admin-grid{grid-template-columns:1fr;}
   .admin-header{padding:12px 16px;}
 }
+
+/* =====================================================================
+   AJOUTS v2 : graphique, export, scores, messages, PIN
+   ===================================================================== */
+
+/* ---- En-tête de tableau avec bouton export ---- */
+.admin-table-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px;gap:12px;
+}
+.admin-table-head .admin-section-title{margin-bottom:0;}
+.admin-export-btn{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 12px;border-radius:8px;cursor:pointer;
+  background:#1D7A4C;border:none;color:#fff;
+  font-family:inherit;font-size:11px;font-weight:700;
+  letter-spacing:.04em;transition:all .15s;flex-shrink:0;
+}
+.admin-export-btn:hover{background:#16653e;}
+
+/* ---- Graphique ---- */
+.admin-chart-wrap{
+  background:#fff;border-radius:14px;
+  padding:20px 24px;margin:0 24px 20px;
+  box-shadow:0 2px 10px rgba(0,0,0,.07);
+}
+
+/* ---- Bloc pleine largeur (scores, messages) ---- */
+.admin-fullwidth{
+  background:#fff;border-radius:14px;
+  padding:20px 24px;margin:0 24px 20px;
+  box-shadow:0 2px 10px rgba(0,0,0,.07);
+  overflow-x:auto;
+}
+
+/* ---- Bouton suppression score ---- */
+.admin-del-btn{
+  width:28px;height:28px;border-radius:7px;cursor:pointer;
+  background:rgba(255,68,68,.1);border:1px solid rgba(255,68,68,.3);
+  color:#FF4444;display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.admin-del-btn:hover{background:#FF4444;color:#fff;}
+
+/* ---- Messages de contact ---- */
+.admin-messages{display:flex;flex-direction:column;gap:12px;}
+.admin-msg{
+  background:#f9f9fc;border-radius:10px;padding:14px 16px;
+  border-left:3px solid #d0d0da;
+}
+.admin-msg--unread{border-left-color:#FF4444;background:#fff8f8;}
+.admin-msg__head{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin-bottom:6px;gap:12px;
+}
+.admin-msg__subject{font-weight:800;font-size:13px;color:#10162e;}
+.admin-msg__date{font-size:10px;color:#aaa;white-space:nowrap;}
+.admin-msg__body{font-size:13px;color:#444;line-height:1.5;margin-bottom:10px;white-space:pre-wrap;}
+.admin-msg__foot{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+}
+.admin-msg__email{font-size:11px;color:#888;}
+.admin-msg__actions{display:flex;gap:8px;}
+.admin-msg__reply,.admin-msg__mark{
+  padding:5px 12px;border-radius:7px;cursor:pointer;
+  font-family:inherit;font-size:11px;font-weight:700;
+  border:none;transition:all .15s;text-decoration:none;
+}
+.admin-msg__reply{background:#00C8C8;color:#fff;}
+.admin-msg__reply:hover{background:#00a8a8;}
+.admin-msg__mark{background:#e8e8f0;color:#666;}
+.admin-msg__mark:hover{background:#d0d0da;}
+
+/* ---- PIN ---- */
+.admin-pin-input{
+  width:100%;padding:14px;text-align:center;
+  font-size:24px;letter-spacing:.5em;
+  border:1.5px solid #e0e0e8;border-radius:12px;
+  font-family:inherit;color:#10162e;
+}
+.admin-pin-input:focus{outline:none;border-color:#00C8C8;}
+.admin-login__btn--pin{justify-content:center;background:#00C8C8;color:#fff;border:none;}
+.admin-login__btn--pin:hover{background:#00a8a8;box-shadow:0 4px 16px rgba(0,200,200,.3);}
