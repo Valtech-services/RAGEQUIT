@@ -6,6 +6,7 @@ import GamePage from './pages/GamePage/GamePage'
 import LeaderboardPage from './pages/LeaderboardPage/LeaderboardPage'
 import LegalPage from './pages/LegalPage/LegalPage'
 import CookieBanner from './components/CookieBanner/CookieBanner'
+import AdminPage from './pages/AdminPage/AdminPage'
 
 /* Remet le scroll en haut a chaque changement de page. */
 function ScrollToTop() {
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/game/:id" element={<GamePage />} />
         <Route path="/leaderboard" element={<LeaderboardPage />} />
         <Route path="/legal/:page" element={<LegalPage />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
       <CookieBanner />
     </BrowserRouter>
