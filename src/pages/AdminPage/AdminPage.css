@@ -1,0 +1,140 @@
+/* =====================================================================
+   ADMIN PAGE — reprend le fond du site (turquoise bg de Ragequit)
+   ===================================================================== */
+
+/* ---- Login ---- */
+.admin-login{
+  min-height:100vh;
+  background:#00C8C8;
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+}
+.admin-login__card{
+  background:#ffffff;
+  border-radius:20px;
+  padding:40px 36px;
+  max-width:400px;width:100%;
+  text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.25);
+}
+.admin-login__logo img{height:36px;width:auto;}
+.admin-login__title{
+  font-family:'Trebuchet MS',sans-serif;
+  font-size:22px;font-weight:900;color:#10162e;
+  letter-spacing:.02em;text-transform:uppercase;
+}
+.admin-login__sub{font-size:13px;color:#888;margin-bottom:8px;}
+.admin-login__btn{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 24px;width:100%;
+  background:#ffffff;border:1.5px solid #e0e0e8;
+  border-radius:999px;cursor:pointer;
+  font-family:inherit;font-size:13px;font-weight:700;color:#333;
+  transition:all .18s;
+}
+.admin-login__btn:hover{border-color:#4285F4;box-shadow:0 4px 16px rgba(66,133,244,.2);}
+.admin-login__btn:disabled{opacity:.5;cursor:not-allowed;}
+.admin-login__err{font-size:12px;color:#e53e3e;font-weight:600;}
+
+/* ---- Dashboard ---- */
+.admin-dash{
+  min-height:100vh;
+  background:#00C8C8;
+  padding:0 0 60px;
+}
+.admin-header{
+  background:#ffffff;
+  display:flex;align-items:center;gap:16px;
+  padding:16px 28px;
+  box-shadow:0 2px 12px rgba(0,0,0,.1);
+  flex-wrap:wrap;
+}
+.admin-header__logo img{height:28px;width:auto;}
+.admin-header__title{
+  font-family:'Trebuchet MS',sans-serif;
+  font-size:18px;font-weight:900;color:#10162e;
+  letter-spacing:.05em;text-transform:uppercase;
+  flex:1;
+}
+.admin-period-btn{
+  padding:6px 16px;border-radius:999px;cursor:pointer;
+  background:transparent;border:1.5px solid #d0d0da;
+  font-family:inherit;font-size:12px;font-weight:700;color:#888;
+  transition:all .15s;
+}
+.admin-period-btn.is-active,.admin-period-btn:hover{
+  border-color:#00C8C8;color:#00C8C8;background:rgba(0,200,200,.08);
+}
+.admin-header__refresh{
+  width:34px;height:34px;border-radius:50%;
+  background:transparent;border:1.5px solid #d0d0da;
+  font-size:18px;cursor:pointer;color:#888;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.admin-header__refresh:hover{border-color:#00C8C8;color:#00C8C8;}
+
+/* ---- KPIs ---- */
+.admin-kpis{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:12px;padding:20px 24px;
+}
+.admin-stat{
+  background:#ffffff;border-radius:14px;
+  padding:18px 16px;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  text-align:center;
+  box-shadow:0 2px 10px rgba(0,0,0,.07);
+}
+.admin-stat__value{font-size:28px;font-weight:900;font-family:'Trebuchet MS',sans-serif;line-height:1;}
+.admin-stat__label{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.1em;}
+.admin-stat__sub{font-size:10px;color:#aaa;}
+
+/* ---- Grille de tableaux ---- */
+.admin-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+  gap:16px;padding:0 24px;
+}
+.admin-table-wrap{
+  background:#ffffff;border-radius:14px;
+  padding:20px;
+  box-shadow:0 2px 10px rgba(0,0,0,.07);
+}
+.admin-section-title{
+  font-family:'Trebuchet MS',sans-serif;
+  font-size:13px;font-weight:900;color:#10162e;
+  text-transform:uppercase;letter-spacing:.1em;
+  margin-bottom:14px;
+}
+.admin-table{
+  width:100%;border-collapse:collapse;font-size:12px;
+}
+.admin-table th{
+  text-align:left;padding:8px 10px;
+  background:#f5f5f8;color:#666;
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  border-radius:6px;
+}
+.admin-table td{
+  padding:8px 10px;color:#333;
+  border-bottom:1px solid #f0f0f4;
+}
+.admin-table tr:last-child td{border-bottom:none;}
+.admin-table tr:hover td{background:#f9f9fc;}
+.admin-empty{font-size:12px;color:#aaa;text-align:center;padding:20px 0;}
+.admin-loading{
+  min-height:100vh;background:#00C8C8;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Trebuchet MS',sans-serif;
+  font-size:16px;font-weight:700;color:#ffffff;
+  letter-spacing:.1em;text-transform:uppercase;
+}
+
+@media(max-width:600px){
+  .admin-kpis{grid-template-columns:repeat(2,1fr);}
+  .admin-grid{grid-template-columns:1fr;}
+  .admin-header{padding:12px 16px;}
+}
