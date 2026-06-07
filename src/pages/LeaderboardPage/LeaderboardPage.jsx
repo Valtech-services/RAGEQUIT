@@ -7,6 +7,7 @@ import Footer from '../../components/Footer/Footer'
 import { getPlayerBest, getPlayerName, setPlayerName, formatTime, getLeaderboard } from '../../data/leaderboardStore'
 import usePageTitle from '../../hooks/usePageTitle'
 import './LeaderboardPage.css'
+import { track } from '../../lib/analytics'
 
 /*
   LeaderboardPage — structure :
@@ -34,6 +35,9 @@ export default function LeaderboardPage() {
   const game = gameId ? games.find(g => g.id === gameId) : null
   const gameModes = game?.modes || ['classic']
   const defaultMode = game?.defaultMode || 'classic'
+
+  // Track page vue leaderboard
+  useEffect(() => { track('leaderboard_view') }, [])
 
   // Auth
   useEffect(() => {
@@ -71,7 +75,7 @@ export default function LeaderboardPage() {
     ? games.filter(g => g.title.toLowerCase().startsWith(query.toLowerCase()))
     : []
 
-  const selectGame = (id) => { setGameId(id); setQuery('') }
+  const selectGame = (id) => { track('leaderboard_game_select', { game_id: id }); setGameId(id); setQuery('') }
   const handleSaveName = () => setPlayerName(name)
 
   const formatScore = (row) => {
@@ -81,7 +85,7 @@ export default function LeaderboardPage() {
   }
 
   const openAuthDrawer = () => {
-    // Déclenche l'ouverture du drawer profil de la Navbar
+    track('leaderboard_signin_click')
     window.dispatchEvent(new CustomEvent('rq-open-auth'))
   }
 
@@ -140,7 +144,7 @@ export default function LeaderboardPage() {
               {gameModes.map(m => (
                 <button key={m}
                   className={`lbpage__mode-tab ${mode === m ? 'is-active' : ''}`}
-                  onClick={() => setMode(m)}>
+                  onClick={() => { track('leaderboard_mode_change', { game_id: gameId, props: { mode: m } }); setMode(m) }}>
                   {m === 'survival' ? 'Survival' : 'Classic'}
                 </button>
               ))}
@@ -228,9 +232,9 @@ export default function LeaderboardPage() {
           </div>
         )}
 
-        {/* PSEUDO — seulement si anonyme ET sur desktop (masqué sur mobile via CSS) */}
+        {/* PSEUDO (seulement si anonyme) */}
         {!user && (
-          <div className="lbpage__nickname lbpage__nickname--desktop-only">
+          <div className="lbpage__nickname">
             <label className="lbpage__nickname-label">Your nickname (anonymous)</label>
             <div className="lbpage__nickname-row">
               <input className="lbpage__nickname-input" value={name} maxLength={16}
