@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { games, categories } from '../../data/games'
 import { useAuth } from '../../context/AuthContext'
 import './Navbar.css'
+import { track } from '../../lib/analytics'
 
 function getBadge(gamesPlayed = 0) {
   if (gamesPlayed >= 50) return { label: 'Rage Master', color: '#ff00ff' }
@@ -137,19 +138,19 @@ export default function Navbar({ title, inGrid = false }) {
         </Link>
         {title && !inGrid && <span className="navbar__title">{title}</span>}
         <div className="navbar__actions">
-          <Link className="navbar__btn" aria-label="Leaderboard" to="/leaderboard">
+          <Link className="navbar__btn" aria-label="Leaderboard" to="/leaderboard" onClick={() => track('navbar_leaderboard_click')}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 18.9V21H7v2h10v-2h-4v-2.1a5.01 5.01 0 0 0 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/>
             </svg>
           </Link>
           <button className="navbar__btn" aria-label="Profile"
-            onClick={() => { setProfileOpen(true); setSearchOpen(false) }}>
+            onClick={() => { setProfileOpen(true); setSearchOpen(false); track('navbar_profile_open') }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
             </svg>
           </button>
           <button className="navbar__btn" aria-label="Search"
-            onClick={() => { setSearchOpen(true); setProfileOpen(false) }}>
+            onClick={() => { setSearchOpen(true); setProfileOpen(false); track('navbar_search_open') }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
             </svg>
@@ -180,7 +181,7 @@ export default function Navbar({ title, inGrid = false }) {
               <div className="nb-drawer__chips">
                 {gameCategories.map(cat => (
                   <button key={cat.id} className="nb-drawer__chip"
-                    onClick={() => { navigate(`/category/${cat.id}`); setSearchOpen(false) }}>
+                    onClick={() => { track('category_click', { category: cat.id, source: 'navbar_drawer' }); navigate(`/category/${cat.id}`); setSearchOpen(false) }}>
                     {cat.label} Games
                   </button>
                 ))}
@@ -191,7 +192,7 @@ export default function Navbar({ title, inGrid = false }) {
                   <div className="nb-drawer__results">
                     {results.map(game => (
                       <Link key={game.id} to={`/game/${game.id}`} className="nb-drawer__result"
-                        onClick={() => { setSearchOpen(false); setQuery('') }}>
+                        onClick={() => { track('search_result_click', { game_id: game.id, props: { query } }); setSearchOpen(false); setQuery('') }}>
                         <div className="nb-drawer__result-thumb">
                           <img src={game.thumbnail} alt={game.title} />
                         </div>
