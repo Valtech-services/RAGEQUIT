@@ -9,7 +9,7 @@ html {
 }
 
 body {
-  /* Halo radial turquoise façon Poki (plus clair au centre/haut) */
+  /* Fond dégradé cyan → violet (option F), fixe au scroll */
   background-color: var(--color-bg);
   background-image: var(--bg-gradient);
   background-attachment: fixed;
@@ -40,10 +40,10 @@ img {
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: rgba(6, 52, 58, 0.25);
+  background: rgba(255, 255, 255, 0.35);
   border-radius: var(--radius-full);
 }
-::-webkit-scrollbar-thumb:hover { background: rgba(6, 52, 58, 0.4); }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.5); }
 
 ::selection {
   background: var(--color-accent-dim);
