@@ -3,24 +3,33 @@
    Drapeaux réels via flag-icons
    ===================================================================== */
 
-.footer__lang{ margin:14px 0 6px; }
+.footer__lang{
+  margin:0 0 8px;
+  width:fit-content;
+}
+.footer__lang .lang-switch{
+  width:244px;        /* même largeur que la grille 3x76 des réseaux */
+  justify-content:center;
+  border-radius:14px;
+  font-size:14px;
+}
 
 /* Bouton turquoise (couleur de marque du site) */
 .lang-switch{
   display:inline-flex;align-items:center;gap:9px;
   padding:10px 18px;border-radius:14px;cursor:pointer;
-  background:#00C8C8;
+  background:linear-gradient(135deg,#00D9FF,#8B5CF6,#FF2D78);
   border:none;
-  color:#06212b;
+  color:#fff;
   font-family:inherit;font-size:13px;font-weight:800;
   letter-spacing:.02em;
   transition:all .18s;
-  box-shadow:0 4px 14px rgba(0,200,200,.3);
+  box-shadow:0 4px 18px rgba(139,92,246,.35);
 }
 .lang-switch:hover{
-  background:#00b4b4;
-  transform:translateY(-1px);
-  box-shadow:0 6px 18px rgba(0,200,200,.4);
+  opacity:.9;
+  transform:translateY(-2px);
+  box-shadow:0 6px 22px rgba(139,92,246,.5);
 }
 .lang-switch .flag-wrap{display:inline-flex;flex-shrink:0;}
 .lang-switch .flag-svg{
