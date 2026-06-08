@@ -6,14 +6,16 @@ import GameCard from '../../components/GameCard/GameCard'
 import SeoBlock from '../../components/SeoBlock/SeoBlock'
 import Footer from '../../components/Footer/Footer'
 import usePageTitle from '../../hooks/usePageTitle'
+import { useTranslation } from 'react-i18next'
 import { track } from '../../lib/analytics'
 import './CategoryPage.css'
 
 export default function CategoryPage() {
+  const { t } = useTranslation()
   const { id } = useParams()
   const category = categories.find(c => c.id === id)
 
-  usePageTitle(category ? `${category.label} Games` : 'Category')
+  usePageTitle(category ? `${t(`categories.${category.id}`)} ${t('categories.gamesSuffix')}` : t('common.notFound'))
 
   // Track page vue catégorie
   useEffect(() => {
@@ -26,12 +28,12 @@ export default function CategoryPage() {
         <div className="category__header">
           <div className="category__header-nav"><Navbar inGrid={true} /></div>
           <div className="category__header-title">
-            <span className="category__page-title">Not found</span>
+            <span className="category__page-title">{t('common.notFound')}</span>
           </div>
         </div>
         <div className="category--notfound">
-          <p>Category not found.</p>
-          <Link to="/" className="category__back-link">Back to home</Link>
+          <p>{t('common.categoryNotFound')}</p>
+          <Link to="/" className="category__back-link">{t('common.backToHome')}</Link>
         </div>
       </div>
     )
@@ -54,7 +56,7 @@ export default function CategoryPage() {
             <img src={category.image} alt={category.label} className="category__header-img"
               onError={e => { e.currentTarget.style.display='none' }} />
           )}
-          <span className="category__page-title">{category.label} Games</span>
+          <span className="category__page-title">{t(`categories.${category.id}`)} {t('categories.gamesSuffix')}</span>
         </div>
       </div>
       <div className="category__content">
@@ -68,7 +70,7 @@ export default function CategoryPage() {
                   onError={e => { e.currentTarget.style.display='none'; e.currentTarget.nextElementSibling.style.display='inline' }} />
               ) : null}
               <span className="category__shortcut-icon" style={cat.image ? {display:'none'} : {}}>{catIcons[cat.id] || '🎮'}</span>
-              <span className="category__shortcut-label">{cat.label}</span>
+              <span className="category__shortcut-label">{t(`categories.${cat.id}`)}</span>
             </Link>
           ))}
         </div>
@@ -83,7 +85,7 @@ export default function CategoryPage() {
             ))}
           </div>
         ) : (
-          <p className="category__empty">No games in this category yet. Check back soon.</p>
+          <p className="category__empty">{t('common.noGamesYet')}</p>
         )}
       </div>
       <SeoBlock type="category" data={category} />
