@@ -159,5 +159,34 @@
     "messageSentDesc": "En kısa sürede sana döneceğiz.",
     "errorOccurred": "Bir hata oluştu. Bize hello@ragequit-arcade.com adresinden yaz.",
     "from": "Gönderen:"
-  }
+  },
+  "categoryTitles": {
+    "sports": "Spor oyunları",
+    "arcade": "Arcade oyunları",
+    "puzzle": "Bulmaca oyunları",
+    "clicker": "Tıklama oyunları",
+    "runner": "Koşu oyunları"
+  },
+  "siteFaq": [
+    {
+      "q": "Ragequit Arcade nedir?",
+      "a": "Ücretsiz bir online oyun platformu. İndirme yok, kayıt yok."
+    },
+    {
+      "q": "Tüm oyunlar ücretsiz mi?",
+      "a": "Evet, her oyun tamamen ücretsiz."
+    },
+    {
+      "q": "Yeni oyunlar ne sıklıkla ekleniyor?",
+      "a": "Her hafta. Bildirim almak için bizi TikTok'ta takip et."
+    },
+    {
+      "q": "Hesaba ihtiyacım var mı?",
+      "a": "Oynamak için hesap gerekmez. Puanlarını kaydetmek ve sıralamada görünmek için bir tane oluştur."
+    },
+    {
+      "q": "Mobil?",
+      "a": "Evet, tüm oyunlar mobil, tablet ve masaüstünde çalışır."
+    }
+  ]
 }
