@@ -159,5 +159,34 @@
     "messageSentDesc": "We reageren zo snel mogelijk.",
     "errorOccurred": "Er is een fout opgetreden. Mail ons op hello@ragequit-arcade.com.",
     "from": "Van:"
-  }
+  },
+  "categoryTitles": {
+    "sports": "Sportspellen",
+    "arcade": "Arcadespellen",
+    "puzzle": "Puzzelspellen",
+    "clicker": "Clickerspellen",
+    "runner": "Runnerspellen"
+  },
+  "siteFaq": [
+    {
+      "q": "Wat is Ragequit Arcade?",
+      "a": "Een gratis online spelplatform. Geen download, geen registratie nodig."
+    },
+    {
+      "q": "Zijn alle spellen gratis?",
+      "a": "Ja, elk spel is volledig gratis."
+    },
+    {
+      "q": "Hoe vaak komen er nieuwe spellen bij?",
+      "a": "Elke week. Volg ons op TikTok om op de hoogte te blijven."
+    },
+    {
+      "q": "Heb ik een account nodig?",
+      "a": "Geen account nodig om te spelen. Maak er een om je scores op te slaan en in de ranglijst te verschijnen."
+    },
+    {
+      "q": "Mobiel?",
+      "a": "Ja, alle spellen werken op mobiel, tablet en desktop."
+    }
+  ]
 }
