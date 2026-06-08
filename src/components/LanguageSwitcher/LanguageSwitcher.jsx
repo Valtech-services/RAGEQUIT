@@ -5,9 +5,9 @@ import { LANGUAGES } from '../../i18n/i18n'
 import './LanguageSwitcher.css'
 
 /*
-  LanguageSwitcher — bouton + modal façon Poki.
-  À placer dans le Footer. Affiche la langue active, ouvre une grille
-  de langues avec drapeaux. Le changement est instantané (i18next).
+  LanguageSwitcher — bouton compact (format bouton réseau) + modal façon Poki.
+  Le bouton affiche le drapeau + code de la langue active.
+  La modal affiche une grille de langues avec drapeaux.
 */
 export default function LanguageSwitcher() {
   const { i18n } = useTranslation()
@@ -25,7 +25,7 @@ export default function LanguageSwitcher() {
 
   return (
     <>
-      <button className="lang-switch" onClick={() => setOpen(true)}>
+      <button className="lang-switch" onClick={() => setOpen(true)} aria-label="Change language">
         <span className="lang-switch__flag">{current.flag}</span>
         <span className="lang-switch__label">{current.label}</span>
         <svg className="lang-switch__chevron" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
