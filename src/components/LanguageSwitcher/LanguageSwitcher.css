@@ -63,7 +63,7 @@
 .lang-modal__close:hover{background:rgba(255,0,255,.15);color:#fff;}
 .lang-modal__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
 .lang-modal__item{
-  display:flex;align-items:center;gap:10px;
+  display:flex;align-items:center;gap:10px;min-width:0;
   padding:12px 14px;border-radius:10px;cursor:pointer;
   background:rgba(255,255,255,.04);border:1.5px solid transparent;
   color:#f0f4ff;font-family:inherit;font-size:13px;font-weight:600;
@@ -81,6 +81,13 @@
 .lang-modal__item-label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
 @media(max-width:600px){
-  .lang-modal__grid{grid-template-columns:repeat(2,1fr);}
-  .lang-modal{padding:18px;}
+  .lang-modal{padding:16px;max-height:85vh;}
+  .lang-modal__grid{grid-template-columns:repeat(2,1fr);gap:7px;}
+  .lang-modal__item{padding:11px 10px;font-size:12px;gap:8px;min-width:0;}
+  .lang-modal__item-label{font-size:12px;}
+  .lang-modal__item .flag-svg{width:22px;height:16px;}
+  .lang-modal__title{font-size:20px;}
+}
+@media(max-width:380px){
+  .lang-modal__grid{grid-template-columns:1fr;}
 }
