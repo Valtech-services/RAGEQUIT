@@ -3,59 +3,61 @@
 :root {
   /* ===================================================================
      FONDS
-     Option F : dégradé cyan → violet (couleurs du logo Ragequit).
+     Dégradé reprenant EXACTEMENT les couleurs du logo Ragequit :
+     RAGE = #00D9FF (cyan) → QUIT = #FF2D78 (magenta/rose)
+     Violet #8B5CF6 = transition intermédiaire (comme dans le logo dégradé)
      =================================================================== */
-  --color-bg:         #13C4D6;   /* cyan turquoise (point de départ du dégradé) */
-  --color-bg-deep:    #6E5BE2;   /* violet (point d'arrivée du dégradé) */
-  --color-surface:    #ffffff;   /* surfaces / barres */
-  --color-card:       #ffffff;   /* cartes */
-  --color-card-hover: #f4f6fb;   /* survol carte (clair, plus blanc cassé) */
-  --color-border:     #e2e6f0;   /* bordures claires sur cartes blanches */
+  --color-bg:         #00D9FF;
+  --color-bg-deep:    #FF2D78;
+
+  --color-surface:    #ffffff;
+  --color-card:       #ffffff;
+  --color-card-hover: #f4f6fb;
+  --color-border:     #e2e6f0;
   --color-border-strong: #cdd4e4;
 
-  /* Dégradé de fond — option F : cyan → violet en diagonale */
-  --bg-gradient: linear-gradient(135deg, #13C4D6 0%, #6E5BE2 100%);
+  /* Dégradé de fond — couleurs exactes du logo, fixe au scroll */
+  --bg-gradient: linear-gradient(135deg,
+    #00D9FF 0%,
+    #8B5CF6 50%,
+    #FF2D78 100%
+  );
 
   /* ===================================================================
      COULEURS DE MARQUE
-     Magenta + cyan = principales. Violet = transition de dégradé seulement.
      =================================================================== */
-  --color-accent:        #00d9ff;   /* CYAN — accent principal froid */
+  --color-accent:        #00D9FF;
   --color-accent-dark:   #0099cc;
   --color-accent-dim:    rgba(0, 217, 255, 0.12);
 
-  --color-magenta:       #ff00ff;   /* MAGENTA — accent principal chaud */
-  --color-magenta-dim:   rgba(255, 0, 255, 0.12);
+  --color-magenta:       #FF2D78;
+  --color-magenta-dim:   rgba(255, 45, 120, 0.12);
 
-  /* alias rétro-compat : --color-accent-2 = magenta (utilisé un peu partout) */
-  --color-accent-2:      #ff00ff;
-  --color-accent-2-dim:  rgba(255, 0, 255, 0.12);
+  --color-accent-2:      #FF2D78;
+  --color-accent-2-dim:  rgba(255, 45, 120, 0.12);
 
-  /* Violet : transition des dégradés cyan→violet→magenta */
   --color-violet:        #8B5CF6;
 
-  /* Dégradé de marque réutilisable (boutons, titres) */
-  --gradient-brand: linear-gradient(135deg, var(--color-accent) 0%, var(--color-violet) 55%, var(--color-magenta) 100%);
-  --gradient-brand-soft: linear-gradient(135deg, rgba(0,217,255,0.15), rgba(139,92,246,0.15), rgba(255,0,255,0.15));
+  --gradient-brand: linear-gradient(135deg, #00D9FF 0%, #8B5CF6 50%, #FF2D78 100%);
+  --gradient-brand-soft: linear-gradient(135deg,
+    rgba(0,217,255,0.15),
+    rgba(139,92,246,0.15),
+    rgba(255,45,120,0.15)
+  );
 
   /* ===================================================================
      TEXTES
-     Par défaut SOMBRE (cartes blanches). Variantes claires explicites.
+     Blanc sur fond dégradé coloré = lisible partout
      =================================================================== */
-  --color-text:        #10162e;   /* texte principal sombre (sur blanc) */
-  --color-text-soft:   #3a425c;   /* texte un peu adouci */
-  --color-text-muted:  #6b7280;   /* texte secondaire gris */
-  --color-muted:       #8a93a8;   /* alias rétro-compat (gris moyen) */
+  --color-text:        #10162e;
+  --color-text-soft:   #3a425c;
+  --color-text-muted:  #6b7280;
+  --color-muted:       #8a93a8;
 
-  /* Texte sur fond dégradé (intros, sous-titres pleine largeur).
-     Le fond va du cyan au violet : on utilise un texte BLANC pour rester
-     lisible sur toute la longueur du dégradé. */
   --color-on-bg:       #ffffff;
   --color-on-bg-soft:  rgba(255, 255, 255, 0.82);
 
-  /* Texte clair (sur fonds sombres ponctuels : boutons colorés, etc.) */
   --color-text-light:  #ffffff;
-
   --color-white: #ffffff;
   --color-black: #000000;
 
@@ -81,28 +83,27 @@
   --radius-md: 16px;
   --radius-lg: 20px;
   --radius-xl: 28px;
-  --radius-card: 22px;       /* rayon dédié aux miniatures de jeux (Poki) */
+  --radius-card: 22px;
   --radius-full: 999px;
 
   /* ===================================================================
      OMBRES
      =================================================================== */
-  --shadow-card:   0 2px 14px rgba(0, 0, 0, 0.10);
-  --shadow-card-hover: 0 8px 28px rgba(0, 0, 0, 0.16);
-
-  --shadow-thumb:       0 8px 18px rgba(6, 40, 45, 0.28);
-  --shadow-thumb-hover: 0 14px 30px rgba(6, 40, 45, 0.38);
-  --shadow-accent:  0 6px 20px rgba(0, 217, 255, 0.35);
-  --shadow-accent2: 0 6px 20px rgba(255, 0, 255, 0.35);
-  --shadow-brand:   0 6px 22px rgba(139, 92, 246, 0.35);
-  --shadow-strong:  0 12px 40px rgba(0, 0, 0, 0.25);
+  --shadow-card:        0 2px 14px rgba(0, 0, 0, 0.10);
+  --shadow-card-hover:  0 8px 28px rgba(0, 0, 0, 0.16);
+  --shadow-thumb:       0 8px 18px rgba(0, 0, 0, 0.28);
+  --shadow-thumb-hover: 0 14px 30px rgba(0, 0, 0, 0.38);
+  --shadow-accent:      0 6px 20px rgba(0, 217, 255, 0.35);
+  --shadow-accent2:     0 6px 20px rgba(255, 45, 120, 0.35);
+  --shadow-brand:       0 6px 22px rgba(139, 92, 246, 0.35);
+  --shadow-strong:      0 12px 40px rgba(0, 0, 0, 0.25);
 
   /* ===================================================================
      TRANSITIONS / ESPACEMENTS
      =================================================================== */
-  --transition-fast: 150ms ease;
+  --transition-fast:   150ms ease;
   --transition-normal: 300ms ease;
-  --transition-slow: 600ms ease;
+  --transition-slow:   600ms ease;
 
   --gap-xs: 4px;
   --gap-sm: 8px;
@@ -111,14 +112,13 @@
   --gap-xl: 64px;
 
   /* ===================================================================
-     LAYOUT — calé sur Poki
+     LAYOUT
      =================================================================== */
   --max-width: 1900px;
   --grid-gap: 14px;
   --page-padding: 24px;
   --page-padding-mobile: 16px;
   --navbar-height: 0px;
-
   --cell: 96px;
   --grid-pad: 24px;
 }
