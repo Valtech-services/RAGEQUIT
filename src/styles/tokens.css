@@ -3,18 +3,18 @@
 :root {
   /* ===================================================================
      FONDS
-     Thème Poki : turquoise clair lumineux + halo radial doux.
+     Option F : dégradé cyan → violet (couleurs du logo Ragequit).
      =================================================================== */
-  --color-bg:         #19D3C5;   /* turquoise Poki, plus clair et lumineux */
-  --color-bg-deep:    #0FB9AE;   /* turquoise plus saturé (bords du halo) */
+  --color-bg:         #13C4D6;   /* cyan turquoise (point de départ du dégradé) */
+  --color-bg-deep:    #6E5BE2;   /* violet (point d'arrivée du dégradé) */
   --color-surface:    #ffffff;   /* surfaces / barres */
   --color-card:       #ffffff;   /* cartes */
   --color-card-hover: #f4f6fb;   /* survol carte (clair, plus blanc cassé) */
   --color-border:     #e2e6f0;   /* bordures claires sur cartes blanches */
   --color-border-strong: #cdd4e4;
 
-  /* Halo radial du fond, façon Poki (plus clair au centre/haut) */
-  --bg-gradient: radial-gradient(120% 90% at 50% 0%, #2BE0D2 0%, #19D3C5 45%, #0FB9AE 100%);
+  /* Dégradé de fond — option F : cyan → violet en diagonale */
+  --bg-gradient: linear-gradient(135deg, #13C4D6 0%, #6E5BE2 100%);
 
   /* ===================================================================
      COULEURS DE MARQUE
@@ -31,7 +31,7 @@
   --color-accent-2:      #ff00ff;
   --color-accent-2-dim:  rgba(255, 0, 255, 0.12);
 
-  /* Violet : UNIQUEMENT pour le point de transition des dégradés cyan→violet→magenta */
+  /* Violet : transition des dégradés cyan→violet→magenta */
   --color-violet:        #8B5CF6;
 
   /* Dégradé de marque réutilisable (boutons, titres) */
@@ -47,9 +47,11 @@
   --color-text-muted:  #6b7280;   /* texte secondaire gris */
   --color-muted:       #8a93a8;   /* alias rétro-compat (gris moyen) */
 
-  /* Texte sur fond turquoise (intros, sous-titres pleine largeur) */
-  --color-on-bg:       #06343a;   /* sombre lisible sur turquoise */
-  --color-on-bg-soft:  rgba(6, 52, 58, 0.7);
+  /* Texte sur fond dégradé (intros, sous-titres pleine largeur).
+     Le fond va du cyan au violet : on utilise un texte BLANC pour rester
+     lisible sur toute la longueur du dégradé. */
+  --color-on-bg:       #ffffff;
+  --color-on-bg-soft:  rgba(255, 255, 255, 0.82);
 
   /* Texte clair (sur fonds sombres ponctuels : boutons colorés, etc.) */
   --color-text-light:  #ffffff;
@@ -74,7 +76,6 @@
 
   /* ===================================================================
      RAYONS
-     Poki utilise des cartes très arrondies (~20px sur mobile).
      =================================================================== */
   --radius-sm: 8px;
   --radius-md: 16px;
@@ -84,12 +85,11 @@
   --radius-full: 999px;
 
   /* ===================================================================
-     OMBRES — sur fond turquoise/blanc, ombres douces grises
+     OMBRES
      =================================================================== */
   --shadow-card:   0 2px 14px rgba(0, 0, 0, 0.10);
   --shadow-card-hover: 0 8px 28px rgba(0, 0, 0, 0.16);
 
-  /* Ombre portée sous les miniatures façon Poki (douce, bien visible au repos) */
   --shadow-thumb:       0 8px 18px rgba(6, 40, 45, 0.28);
   --shadow-thumb-hover: 0 14px 30px rgba(6, 40, 45, 0.38);
   --shadow-accent:  0 6px 20px rgba(0, 217, 255, 0.35);
@@ -112,18 +112,13 @@
 
   /* ===================================================================
      LAYOUT — calé sur Poki
-     --grid-gap     : espace entre les cartes (Poki ~ 14px)
-     --page-padding : marge latérale du contenu (Poki = marges généreuses)
      =================================================================== */
   --max-width: 1900px;
   --grid-gap: 14px;
-  --page-padding: 24px;       /* desktop / tablette */
-  --page-padding-mobile: 16px; /* mobile : marges nettes sur les bords */
+  --page-padding: 24px;
+  --page-padding-mobile: 16px;
   --navbar-height: 0px;
 
-  /* ---- Cellule de grille (référence pour navbar floating + trou) ----
-     Doit rester synchronisée avec --cell de .bento. Sur mobile, .bento
-     recalcule --cell en fluide ; la navbar lit la même valeur. ---- */
   --cell: 96px;
   --grid-pad: 24px;
 }
