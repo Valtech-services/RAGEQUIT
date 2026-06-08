@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { games, categories } from '../../data/games'
 import { useAuth } from '../../context/AuthContext'
 import { useTranslation } from 'react-i18next'
-import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher'
 import './Navbar.css'
 import { track } from '../../lib/analytics'
 
