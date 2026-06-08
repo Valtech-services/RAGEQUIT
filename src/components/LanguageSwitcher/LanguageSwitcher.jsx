@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createPortal } from 'react-dom'
 import { LANGUAGES } from '../../i18n/i18n'
-import Flag from './flags'
+import Flag from './flags.jsx'
 import './LanguageSwitcher.css'
 
 /*
