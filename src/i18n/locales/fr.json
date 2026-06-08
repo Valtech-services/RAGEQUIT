@@ -109,7 +109,7 @@
     "cookies": "Politique de cookies",
     "language": "Langue",
     "selectLanguage": "Choisis ta langue",
-    "copyright": "© {{year}} Ragequit Arcade — Valtech Services (SIREN 994 273 118). Tous droits réservés."
+    "copyright": "© {{year}} Ragequit Arcade. Tous droits réservés."
   },
   "home": {
     "newGames": "Nouveaux jeux",
@@ -124,5 +124,40 @@
     "gameNotFound": "Jeu introuvable.",
     "categoryNotFound": "Catégorie introuvable.",
     "noGamesYet": "Aucun jeu dans cette catégorie pour l'instant. Reviens bientôt."
+  },
+  "seo": {
+    "aboutLabel": "À propos de Ragequit Arcade",
+    "freeOnlineGames": "Jeux gratuits en ligne",
+    "intro": "Ragequit Arcade te propose les jeux gratuits en ligne les plus addictifs, conçus pour jouer en solo ou pour des parties rapides entre amis. Chaque jeu se lance instantanément dans ton navigateur — aucun téléchargement, aucune inscription, aucune pop-up, aucune complication. Nos jeux fonctionnent sur ordinateur, tablette et mobile, pour jouer à la maison ou en déplacement. Nous construisons un endroit où un bon jeu est toujours à un clic.",
+    "selectionTitle": "Notre sélection de jeux",
+    "selectionText": "Nous ajoutons de nouveaux jeux chaque semaine. Nos titres actuels incluent Rage Hockey et STAQ. Chaque jeu est gratuit, pour toujours.",
+    "startTitle": "Commence à jouer",
+    "startText": "Tu ne sais pas à quoi jouer ? Explore depuis la page d'accueil ou choisis un jeu dans l'une de nos catégories populaires :",
+    "aboutUsTitle": "À propos de nous",
+    "aboutUsText": "Ragequit Arcade est une plateforme de jeux indépendante. Nous concevons et développons chaque jeu nous-mêmes — pas de clones, pas de pay-to-win. Notre objectif est simple : créer l'arcade de navigateur la plus fun et la plus honnête du web. De nouveaux jeux chaque semaine, suis-nous sur TikTok et Instagram.",
+    "aboutCategory": "À propos de cette catégorie",
+    "aboutGame": "À propos de ce jeu",
+    "controls": "Commandes",
+    "developer": "Développeur",
+    "faqTitle": "Questions fréquentes"
+  },
+  "legal": {
+    "lastUpdated": "Dernière mise à jour :",
+    "faqTitle": "Questions fréquentes",
+    "pageNotFound": "Page introuvable",
+    "pageNotExist": "Cette page n'existe pas.",
+    "backToHome": "Retour à l'accueil",
+    "contactSignInRequired": "Tu dois être connecté pour envoyer un message.",
+    "signIn": "Se connecter",
+    "emailDirectly": "Ou écris-nous directement à",
+    "subject": "Sujet",
+    "yourMessage": "Ton message…",
+    "sendMessage": "Envoyer le message",
+    "sending": "Envoi…",
+    "fillAllFields": "Merci de remplir tous les champs.",
+    "messageSent": "Message envoyé !",
+    "messageSentDesc": "Nous te répondrons dès que possible.",
+    "errorOccurred": "Une erreur est survenue. Écris-nous directement à hello@ragequit-arcade.com.",
+    "from": "De :"
   }
 }
