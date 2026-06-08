@@ -3,6 +3,8 @@ import { createPortal } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
 import { games, categories } from '../../data/games'
 import { useAuth } from '../../context/AuthContext'
+import { useTranslation } from 'react-i18next'
+import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher'
 import './Navbar.css'
 import { track } from '../../lib/analytics'
 
@@ -36,6 +38,7 @@ const COUNTRIES = [
 ]
 
 export default function Navbar({ title, inGrid = false }) {
+  const { t } = useTranslation()
   const [searchOpen, setSearchOpen]   = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
   const [query, setQuery]             = useState('')
@@ -170,7 +173,7 @@ export default function Navbar({ title, inGrid = false }) {
                     <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
                   </svg>
                 </button>
-                <input className="nb-drawer__search-input" placeholder="What are you playing today?"
+                <input className="nb-drawer__search-input" placeholder={t('nav.searchPlaceholder')}
                   value={query} onChange={e => setQuery(e.target.value)} autoFocus />
                 <span className="nb-drawer__search-icon">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -182,13 +185,13 @@ export default function Navbar({ title, inGrid = false }) {
                 {gameCategories.map(cat => (
                   <button key={cat.id} className="nb-drawer__chip"
                     onClick={() => { track('category_click', { category: cat.id, source: 'navbar_drawer' }); navigate(`/category/${cat.id}`); setSearchOpen(false) }}>
-                    {cat.label} Games
+                    {t(`categories.${cat.id}`)} {t('categories.gamesSuffix')}
                   </button>
                 ))}
               </div>
               {results.length > 0 ? (
                 <div className="nb-drawer__section">
-                  <h3 className="nb-drawer__section-title">Results</h3>
+                  <h3 className="nb-drawer__section-title">{t('nav.results')}</h3>
                   <div className="nb-drawer__results">
                     {results.map(game => (
                       <Link key={game.id} to={`/game/${game.id}`} className="nb-drawer__result"
@@ -207,7 +210,7 @@ export default function Navbar({ title, inGrid = false }) {
               ) : (
                 <>
                   <div className="nb-drawer__section">
-                    <h3 className="nb-drawer__section-title">Recently played</h3>
+                    <h3 className="nb-drawer__section-title">{t('nav.recentlyPlayed')}</h3>
                     <div className="nb-drawer__game-row">
                       {recent.map(game => (
                         <Link key={game.id} to={`/game/${game.id}`} className="nb-drawer__game-thumb" onClick={() => setSearchOpen(false)}>
@@ -217,7 +220,7 @@ export default function Navbar({ title, inGrid = false }) {
                     </div>
                   </div>
                   <div className="nb-drawer__section">
-                    <h3 className="nb-drawer__section-title">Popular this week</h3>
+                    <h3 className="nb-drawer__section-title">{t('nav.popularThisWeek')}</h3>
                     <div className="nb-drawer__game-grid">
                       {popular.map(game => (
                         <Link key={game.id} to={`/game/${game.id}`} className="nb-drawer__game-thumb" onClick={() => setSearchOpen(false)}>
@@ -255,28 +258,28 @@ export default function Navbar({ title, inGrid = false }) {
                 editMode ? (
                   /* ---- ÉDITION PROFIL ---- */
                   <div className="nb-drawer__edit">
-                    <h2 className="nb-drawer__auth-title">Edit profile</h2>
+                    <h2 className="nb-drawer__auth-title">{t('profile.editProfile')}</h2>
 
-                    <label className="nb-drawer__field-label">Username</label>
+                    <label className="nb-drawer__field-label">{t('profile.username')}</label>
                     <input className="nb-drawer__input" type="text"
                       placeholder="Your username"
                       value={editUsername}
                       maxLength={20}
                       onChange={e => setEditUsername(e.target.value)} />
 
-                    <label className="nb-drawer__field-label">Country</label>
+                    <label className="nb-drawer__field-label">{t('profile.country')}</label>
                     <select className="nb-drawer__input nb-drawer__select"
                       value={editCountry} onChange={e => setEditCountry(e.target.value)}>
-                      <option value="">— Select country —</option>
+                      <option value="">{t('profile.selectCountry')}</option>
                       {COUNTRIES.map(c => (
                         <option key={c.code} value={c.code}>{flagEmoji(c.code)} {c.name}</option>
                       ))}
                     </select>
 
-                    <label className="nb-drawer__field-label">Favorite game</label>
+                    <label className="nb-drawer__field-label">{t('profile.favoriteGame')}</label>
                     <select className="nb-drawer__input nb-drawer__select"
                       value={editFavorite} onChange={e => setEditFavorite(e.target.value)}>
-                      <option value="">— Select a game —</option>
+                      <option value="">{t('profile.selectGame')}</option>
                       {games.map(g => (
                         <option key={g.id} value={g.id}>{g.title}</option>
                       ))}
@@ -287,10 +290,10 @@ export default function Navbar({ title, inGrid = false }) {
                     <div className="nb-drawer__edit-actions">
                       <button className="nb-drawer__provider nb-drawer__provider--primary"
                         onClick={saveEdit} disabled={editBusy}>
-                        {editBusy ? 'Saving…' : 'Save changes'}
+                        {editBusy ? t('profile.saving') : t('profile.saveChanges')}
                       </button>
                       <button className="nb-drawer__provider" onClick={() => setEditMode(false)}>
-                        Cancel
+                        {t('profile.cancel')}
                       </button>
                     </div>
                   </div>
@@ -301,7 +304,7 @@ export default function Navbar({ title, inGrid = false }) {
                       {(profile?.username || user.email || '?').charAt(0).toUpperCase()}
                     </div>
                     <h2 className="nb-drawer__account-username">
-                      {flagEmoji(profile?.country)} {profile?.username || 'Player'}
+                      {flagEmoji(profile?.country)} {profile?.username || t('profile.player')}
                     </h2>
                     <span className="nb-drawer__badge" style={{ '--badge-color': badge.color }}>
                       {badge.label}
@@ -310,20 +313,20 @@ export default function Navbar({ title, inGrid = false }) {
                     <div className="nb-drawer__stats">
                       <div className="nb-drawer__stat">
                         <span className="nb-drawer__stat-value">{profile?.games_played ?? 0}</span>
-                        <span className="nb-drawer__stat-label">Games played</span>
+                        <span className="nb-drawer__stat-label">{t('profile.gamesPlayed')}</span>
                       </div>
                       <div className="nb-drawer__stat">
                         <span className="nb-drawer__stat-value">🔥 {profile?.streak_days ?? 0}</span>
-                        <span className="nb-drawer__stat-label">Day streak</span>
+                        <span className="nb-drawer__stat-label">{t('profile.dayStreak')}</span>
                       </div>
                       <div className="nb-drawer__stat">
                         <span className="nb-drawer__stat-value">{formatDate(profile?.created_at)}</span>
-                        <span className="nb-drawer__stat-label">Member since</span>
+                        <span className="nb-drawer__stat-label">{t('profile.memberSince')}</span>
                       </div>
                     </div>
                     {favoriteGame ? (
                       <div className="nb-drawer__favorite">
-                        <span className="nb-drawer__favorite-label">Favorite game</span>
+                        <span className="nb-drawer__favorite-label">{t('profile.favoriteGame')}</span>
                         <Link to={`/game/${favoriteGame.id}`} className="nb-drawer__favorite-game"
                           onClick={() => setProfileOpen(false)}>
                           <img src={favoriteGame.thumbnail} alt={favoriteGame.title} className="nb-drawer__favorite-thumb" />
@@ -335,18 +338,18 @@ export default function Navbar({ title, inGrid = false }) {
                       </div>
                     ) : (
                       <div className="nb-drawer__favorite">
-                        <span className="nb-drawer__favorite-label">Favorite game</span>
+                        <span className="nb-drawer__favorite-label">{t('profile.favoriteGame')}</span>
                         <button className="nb-drawer__favorite-empty" onClick={openEdit}>
-                          + Set your favorite game
+                          {t('profile.setFavorite')}
                         </button>
                       </div>
                     )}
                     <button className="nb-drawer__provider" onClick={openEdit}>Edit profile</button>
                     <Link to="/leaderboard" className="nb-drawer__provider"
-                      onClick={() => setProfileOpen(false)}>View leaderboard</Link>
+                      onClick={() => setProfileOpen(false)}>{t('profile.viewLeaderboard')}</Link>
                     <button className="nb-drawer__provider nb-drawer__provider--danger"
                       onClick={async () => { await signOut(); setProfileOpen(false) }}>
-                      Log out
+                      {t('profile.logOut')}
                     </button>
                   </div>
                 )
@@ -355,15 +358,15 @@ export default function Navbar({ title, inGrid = false }) {
                   <div className="nb-drawer__tabs">
                     <button className={`nb-drawer__tab ${authTab === 'signup' ? 'nb-drawer__tab--active' : ''}`}
                       onClick={() => { setAuthTab('signup'); setAuthError(''); setAuthNotice('') }}>
-                      Sign up
+                      {t('auth.signup')}
                     </button>
                     <button className={`nb-drawer__tab ${authTab === 'login' ? 'nb-drawer__tab--active' : ''}`}
                       onClick={() => { setAuthTab('login'); setAuthError(''); setAuthNotice('') }}>
-                      Log in
+                      {t('auth.login')}
                     </button>
                   </div>
                   <h2 className="nb-drawer__auth-title">
-                    {authTab === 'signup' ? 'Create your account' : 'Welcome back'}
+                    {authTab === 'signup' ? t('auth.createAccount') : t('auth.welcomeBack')}
                   </h2>
                   <div className="nb-drawer__providers">
                     <button className="nb-drawer__provider" onClick={handleGoogle}>
@@ -374,31 +377,31 @@ export default function Navbar({ title, inGrid = false }) {
                         <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
                         <path fill="none" d="M0 0h48v48H0z"/>
                       </svg>
-                      Continue with Google
+                      {t('auth.continueGoogle')}
                     </button>
                   </div>
-                  <div className="nb-drawer__divider"><span>or</span></div>
+                  <div className="nb-drawer__divider"><span>{t('auth.or')}</span></div>
                   <div className="nb-drawer__form">
                     {authTab === 'signup' && (
-                      <input className="nb-drawer__input" type="text" placeholder="Username"
+                      <input className="nb-drawer__input" type="text" placeholder={t('auth.username')}
                         value={authUsername} onChange={e => setAuthUsername(e.target.value)}
                         autoComplete="username" />
                     )}
-                    <input className="nb-drawer__input" type="email" placeholder="Email"
+                    <input className="nb-drawer__input" type="email" placeholder={t('auth.email')}
                       value={authEmail} onChange={e => setAuthEmail(e.target.value)}
                       autoComplete="email" />
-                    <input className="nb-drawer__input" type="password" placeholder="Password"
+                    <input className="nb-drawer__input" type="password" placeholder={t('auth.password')}
                       value={authPassword} onChange={e => setAuthPassword(e.target.value)}
                       autoComplete={authTab === 'signup' ? 'new-password' : 'current-password'} />
                     {authError  && <p className="nb-drawer__auth-error">{authError}</p>}
                     {authNotice && <p className="nb-drawer__auth-notice">{authNotice}</p>}
                     <button className="nb-drawer__provider nb-drawer__provider--primary"
                       onClick={handleEmailSubmit} disabled={authBusy}>
-                      {authBusy ? 'Please wait…' : (authTab === 'signup' ? 'Create account' : 'Log in')}
+                      {authBusy ? t('auth.pleaseWait') : (authTab === 'signup' ? t('auth.createAccountBtn') : t('auth.loginBtn'))}
                     </button>
                   </div>
                   <p className="nb-drawer__auth-legal">
-                    By continuing you agree to our Terms of Use and acknowledge our Privacy Policy.
+                    {t('auth.legal')}
                   </p>
                 </>
               )}
