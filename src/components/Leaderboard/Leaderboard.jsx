@@ -1,128 +1,255 @@
-import { useState, useEffect } from 'react'
-import { getLeaderboard, getPlayerName } from '../../data/leaderboardStore'
-import './Leaderboard.css'
+import { useState, useEffect, useCallback } from 'react'
+import { Link } from 'react-router-dom'
+import { games } from '../../data/games'
+import { supabase } from '../../lib/supabase'
+import Navbar from '../../components/Navbar/Navbar'
+import Footer from '../../components/Footer/Footer'
+import { getPlayerBest, getPlayerName, setPlayerName, formatTime, getLeaderboard } from '../../data/leaderboardStore'
+import usePageTitle from '../../hooks/usePageTitle'
+import { useTranslation } from 'react-i18next'
+import './LeaderboardPage.css'
+import { track } from '../../lib/analytics'
 
 /*
-  Leaderboard — table de classement reutilisable.
-  Props :
-    - game    : identifiant du jeu ('rage-hockey', 'staq', ...)
-    - mode    : mode initial ('survival' | 'classic')
-    - modes   : liste des modes disponibles pour le selecteur
-    - compact : version reduite (mini-classement sur la page de jeu)
-    - limit   : nombre de lignes
-    - showModeSwitch : affiche le selecteur de mode
+  LeaderboardPage — structure :
+  - Header : navbar 1×1 + titre 2×1
+  - Recherche temps réel filtrée sur games.js (tape "rag..." → suggestions)
+  - Onglets mode si le jeu sélectionné en a plusieurs
+  - Rang du joueur (connecté → Supabase, anonyme → localStorage) au-dessus du tableau
+  - Top 20 avec médailles 🥇🥈🥉
+  - Si aucun jeu sélectionné → rien n'est affiché
+  - Si pas de data → message vide
 */
-export default function Leaderboard({
-  game = 'rage-hockey',
-  mode: initialMode = 'classic',
-  modes = ['classic'],
-  compact = false,
-  limit = 100,
-  showModeSwitch = true,
-  showSearch = false,
-}) {
-  const [mode, setMode] = useState(initialMode)
-  const [rows, setRows] = useState([])
-  const [query, setQuery] = useState('')
-  const playerName = getPlayerName()
+export default function LeaderboardPage() {
+  const { t } = useTranslation()
+  const [query, setQuery]       = useState('')
+  const [gameId, setGameId]     = useState(null)   // null = aucun jeu sélectionné
+  const [mode, setMode]         = useState('classic')
+  const [rows, setRows]         = useState([])
+  const [playerRow, setPlayerRow] = useState(null)
+  const [loading, setLoading]   = useState(false)
+  const [user, setUser]         = useState(null)
+  const [name, setName]         = useState(getPlayerName())
 
+  usePageTitle(t('leaderboard.title'))
+
+  // Jeu sélectionné
+  const game = gameId ? games.find(g => g.id === gameId) : null
+  const gameModes = game?.modes || ['classic']
+  const defaultMode = game?.defaultMode || 'classic'
+
+  // Track page vue leaderboard
+  useEffect(() => { track('leaderboard_view') }, [])
+
+  // Auth
   useEffect(() => {
-    const load = () => setRows(getLeaderboard(game, mode, limit))
-    load()
-    window.addEventListener('rh-score-saved', load)
-    return () => window.removeEventListener('rh-score-saved', load)
-  }, [game, mode, limit])
+    supabase.auth.getUser().then(({ data: { user } }) => setUser(user))
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+      setUser(session?.user ?? null)
+    })
+    return () => subscription.unsubscribe()
+  }, [])
 
-  const modeLabel = m => (m === 'survival' ? 'Survival' : 'Classic')
-  const scoreHeader = mode === 'survival' ? 'Time' : 'Score'
+  // Reset mode quand on change de jeu
+  useEffect(() => { if (game) setMode(defaultMode) }, [gameId])
 
-  const filteredRows = query.trim()
-    ? rows.filter(r => r.name.toLowerCase().includes(query.toLowerCase()))
-    : rows
+  // Charger le classement
+  const loadData = useCallback(async () => {
+    if (!gameId) { setRows([]); setPlayerRow(null); return }
+    setLoading(true)
+    const [lb, best] = await Promise.all([
+      getLeaderboard(gameId, mode, 20),
+      getPlayerBest(gameId, mode),
+    ])
+    setRows(lb)
+    setPlayerRow(best)
+    setLoading(false)
+  }, [gameId, mode])
+
+  useEffect(() => { loadData() }, [loadData])
+  useEffect(() => {
+    window.addEventListener('rh-score-saved', loadData)
+    return () => window.removeEventListener('rh-score-saved', loadData)
+  }, [loadData])
+
+  // Recherche filtrée
+  const suggestions = query.trim().length > 0
+    ? games.filter(g => g.title.toLowerCase().startsWith(query.toLowerCase()))
+    : []
+
+  const selectGame = (id) => { track('leaderboard_game_select', { game_id: id }); setGameId(id); setQuery('') }
+  const handleSaveName = () => setPlayerName(name)
+
+  const formatScore = (row) => {
+    if (!row) return '—'
+    if (row.scoreLabel) return row.scoreLabel
+    return mode === 'survival' ? formatTime(row.score) : row.score + ' pts'
+  }
+
+  const openAuthDrawer = () => {
+    track('leaderboard_signin_click')
+    window.dispatchEvent(new CustomEvent('rq-open-auth'))
+  }
 
   return (
-    <div className={`lb ${compact ? 'lb--compact' : ''}`}>
+    <div className="lbpage">
 
-      <div className="lb__head">
-        <h3 className="lb__title">{compact ? 'Top players' : 'Leaderboard'}</h3>
-        {showModeSwitch && modes.length > 1 && (
-          <div className="lb__switch">
-            {modes.map(m => (
-              <button
-                key={m}
-                className={`lb__switch-btn ${mode === m ? 'is-active' : ''}`}
-                onClick={() => setMode(m)}
-              >
-                {modeLabel(m)}
+      {/* EN-TÊTE : navbar 1×1 + titre 2×1 */}
+      <div className="lbpage__header">
+        <div className="lbpage__header-nav">
+          <Navbar inGrid={true} />
+        </div>
+        <div className="lbpage__header-title">
+          <h1 className="lbpage__header-h1">{t('leaderboard.title')}</h1>
+        </div>
+      </div>
+
+      <div className="lbpage__content">
+
+        {/* RECHERCHE */}
+        <div className="lbpage__search-wrap">
+          <div className="lbpage__search-box">
+            <svg className="lbpage__search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+            </svg>
+            <input
+              className="lbpage__search-input"
+              type="text"
+              placeholder={t('leaderboard.searchGame')}
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              onKeyDown={e => e.key === 'Escape' && setQuery('')}
+            />
+            {query && (
+              <button className="lbpage__search-clear" onClick={() => setQuery('')}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                </svg>
               </button>
-            ))}
+            )}
           </div>
-        )}
-      </div>
 
-      {showSearch && (
-        <div className="lb__search">
-          <svg className="lb__search-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-          </svg>
-          <input
-            className="lb__search-input"
-            placeholder="Search a player..."
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-          />
-        </div>
-      )}
-
-      <div className="lb__table">
-        <div className="lb__row lb__row--header">
-          <span className="lb__cell lb__cell--rank">#</span>
-          <span className="lb__cell lb__cell--name">Player</span>
-          <span className="lb__cell lb__cell--diff">Mode</span>
-          <span className="lb__cell lb__cell--score">{scoreHeader}</span>
-        </div>
-
-        {filteredRows.map(row => {
-          const isYou = row.isLocal && row.name === (playerName || 'You')
-          return (
-            <div
-              key={row.rank + '-' + row.name}
-              className={`lb__row ${isYou ? 'lb__row--you' : ''} ${
-                row.rank <= 3 ? 'lb__row--podium' : ''
-              }`}
-            >
-              <span className="lb__cell lb__cell--rank">
-                {row.rank <= 3 ? (
-                  <span className={`lb__medal lb__medal--${row.rank}`}>
-                    {row.rank}
-                  </span>
-                ) : (
-                  row.rank
-                )}
-              </span>
-              <span className="lb__cell lb__cell--name">
-                {row.name}
-                {isYou && <span className="lb__you-tag">YOU</span>}
-              </span>
-              <span className="lb__cell lb__cell--diff">
-                <span className={`lb__diff lb__diff--${row.diff}`}>
-                  {row.diff}
-                </span>
-              </span>
-              <span className="lb__cell lb__cell--score">
-                {row.scoreLabel}
-              </span>
+          {suggestions.length > 0 && (
+            <div className="lbpage__suggestions">
+              {suggestions.map(g => (
+                <button key={g.id} className={`lbpage__suggestion ${g.id === gameId ? 'is-active' : ''}`}
+                  onClick={() => selectGame(g.id)}>
+                  {g.title}
+                </button>
+              ))}
             </div>
-          )
-        })}
+          )}
 
-        {filteredRows.length === 0 && (
-          <div className="lb__empty">
-            {query.trim() ? 'No player found.' : 'No scores yet. Be the first.'}
+          {/* Onglets mode — seulement si le jeu a plusieurs modes */}
+          {game && gameModes.length > 1 && (
+            <div className="lbpage__mode-tabs">
+              {gameModes.map(m => (
+                <button key={m}
+                  className={`lbpage__mode-tab ${mode === m ? 'is-active' : ''}`}
+                  onClick={() => { track('leaderboard_mode_change', { game_id: gameId, props: { mode: m } }); setMode(m) }}>
+                  {m === 'survival' ? t('leaderboard.survival') : t('leaderboard.classic')}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* CONTENU : affiché seulement si un jeu est sélectionné */}
+        {!gameId ? (
+          <div className="lbpage__placeholder">
+            <p>{t('leaderboard.selectGame')}</p>
+          </div>
+        ) : (
+          <div className="lbpage__board">
+
+            {/* Rang du joueur — au-dessus du tableau */}
+            {user ? (
+              /* Connecté */
+              playerRow ? (
+                <div className="lbpage__player-rank lbpage__player-rank--connected">
+                  <span className="lbpage__player-rank-badge">{t('leaderboard.you')}</span>
+                  <span className="lbpage__player-rank-num">#{playerRow.rank}</span>
+                  <span className="lbpage__player-rank-name">{name || t('leaderboard.you')}</span>
+                  <span className="lbpage__player-rank-score">{formatScore(playerRow)}</span>
+                </div>
+              ) : (
+                /* Connecté mais jamais joué */
+                <div className="lbpage__player-rank lbpage__player-rank--no-score">
+                  <span className="lbpage__player-rank-badge">{t('leaderboard.you')}</span>
+                  <span className="lbpage__player-rank-empty">{t('leaderboard.noScoreYet')}</span>
+                  <Link to={`/game/${gameId}`} className="lbpage__cta-link">
+                    {t('leaderboard.playGame', { game: game.title })}
+                  </Link>
+                </div>
+              )
+            ) : (
+              /* Non connecté */
+              <div className="lbpage__player-rank lbpage__player-rank--guest">
+                <span className="lbpage__player-rank-empty">{t('leaderboard.signInPrompt')}</span>
+                <button className="lbpage__cta-btn" onClick={openAuthDrawer}>
+                  {t('leaderboard.signIn')}
+                </button>
+              </div>
+            )}
+
+            {/* Tableau top 20 */}
+            {loading ? (
+              <div className="lbpage__loading">{t('leaderboard.loading')}</div>
+            ) : rows.length === 0 ? (
+              <div className="lbpage__empty">
+                <p>{t('leaderboard.noScores', { game: game.title })}</p>
+                <Link to={`/game/${gameId}`} className="lbpage__play-link">{t('leaderboard.beFirst')}</Link>
+              </div>
+            ) : (
+              <table className="lbpage__table">
+                <thead>
+                  <tr>
+                    <th className="lbpage__th lbpage__th--rank">#</th>
+                    <th className="lbpage__th lbpage__th--name">{t('leaderboard.player')}</th>
+                    <th className="lbpage__th lbpage__th--score">{t('leaderboard.score')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((row, i) => {
+                    const rank = i + 1
+                    const medals = { 1: '🥇', 2: '🥈', 3: '🥉' }
+                    return (
+                      <tr key={i} className={`lbpage__tr ${rank <= 3 ? `lbpage__tr--top${rank}` : ''}`}>
+                        <td className="lbpage__td lbpage__td--rank">
+                          {medals[rank]
+                            ? <span className="lbpage__medal">{medals[rank]}</span>
+                            : <span className="lbpage__rank-num">{rank}</span>
+                          }
+                        </td>
+                        <td className="lbpage__td lbpage__td--name">{row.name || 'Anonymous'}</td>
+                        <td className="lbpage__td lbpage__td--score">{formatScore(row)}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            )}
+
+            <p className="lbpage__note">{t('leaderboard.globalNote')}</p>
           </div>
         )}
+
+        {/* PSEUDO (seulement si anonyme) */}
+        {!user && (
+          <div className="lbpage__nickname">
+            <label className="lbpage__nickname-label">{t('leaderboard.nicknameLabel')}</label>
+            <div className="lbpage__nickname-row">
+              <input className="lbpage__nickname-input" value={name} maxLength={16}
+                placeholder={t('leaderboard.nicknamePlaceholder')}
+                onChange={e => setName(e.target.value)} />
+              <button className="lbpage__nickname-save" onClick={handleSaveName}>{t('leaderboard.save')}</button>
+            </div>
+          </div>
+        )}
+
       </div>
 
+      <Footer />
     </div>
   )
 }
