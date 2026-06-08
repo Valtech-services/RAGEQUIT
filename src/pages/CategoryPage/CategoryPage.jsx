@@ -14,10 +14,8 @@ export default function CategoryPage() {
   const { t } = useTranslation()
   const { id } = useParams()
   const category = categories.find(c => c.id === id)
+  usePageTitle(category ? t(`categoryTitles.${category.id}`) : t('common.notFound'))
 
-  usePageTitle(category ? `${t(`categories.${category.id}`)} ${t('categories.gamesSuffix')}` : t('common.notFound'))
-
-  // Track page vue catégorie
   useEffect(() => {
     if(category) track('category_view', { category: id })
   }, [id])
@@ -56,7 +54,7 @@ export default function CategoryPage() {
             <img src={category.image} alt={category.label} className="category__header-img"
               onError={e => { e.currentTarget.style.display='none' }} />
           )}
-          <span className="category__page-title">{t(`categories.${category.id}`)} {t('categories.gamesSuffix')}</span>
+          <span className="category__page-title">{t(`categoryTitles.${category.id}`)}</span>
         </div>
       </div>
       <div className="category__content">
@@ -70,7 +68,7 @@ export default function CategoryPage() {
                   onError={e => { e.currentTarget.style.display='none'; e.currentTarget.nextElementSibling.style.display='inline' }} />
               ) : null}
               <span className="category__shortcut-icon" style={cat.image ? {display:'none'} : {}}>{catIcons[cat.id] || '🎮'}</span>
-              <span className="category__shortcut-label">{t(`categories.${cat.id}`)}</span>
+              <span className="category__shortcut-label">{t(`categoryTitles.${cat.id}`)}</span>
             </Link>
           ))}
         </div>
