@@ -109,7 +109,7 @@
     "cookies": "Cookie Policy",
     "language": "Language",
     "selectLanguage": "Select your language",
-    "copyright": "© {{year}} Ragequit Arcade — Valtech Services (SIREN 994 273 118). All rights reserved."
+    "copyright": "© {{year}} Ragequit Arcade. All rights reserved."
   },
   "home": {
     "newGames": "New games",
@@ -124,5 +124,40 @@
     "gameNotFound": "Game not found.",
     "categoryNotFound": "Category not found.",
     "noGamesYet": "No games in this category yet. Check back soon."
+  },
+  "seo": {
+    "aboutLabel": "About Ragequit Arcade",
+    "freeOnlineGames": "Free Online Games",
+    "intro": "Ragequit Arcade brings you the most addictive free online games, built for solo runs or quick matches with friends. Every game runs instantly in your browser — no downloads, no sign-up, no pop-ups, no nonsense. Our games work on desktop, tablet and mobile, so you can play at home or on the move. We are building a place where a great game is always one click away.",
+    "selectionTitle": "Our game selection",
+    "selectionText": "We add new games every single week. Our current titles include Rage Hockey and STAQ. Every game is free to play, forever.",
+    "startTitle": "Start playing",
+    "startText": "Not sure what to play? Start exploring from the homepage or pick a game from one of our popular categories:",
+    "aboutUsTitle": "About us",
+    "aboutUsText": "Ragequit Arcade is an independent gaming platform. We design, build and run every game ourselves — no third-party clones, no pay-to-win. Our goal is simple: create the most fun, most honest browser arcade on the web. New games drop every week, so follow us on TikTok and Instagram to see what is coming next.",
+    "aboutCategory": "About this category",
+    "aboutGame": "About this game",
+    "controls": "Controls",
+    "developer": "Developer",
+    "faqTitle": "Frequently asked questions"
+  },
+  "legal": {
+    "lastUpdated": "Last updated:",
+    "faqTitle": "Frequently asked questions",
+    "pageNotFound": "Page not found",
+    "pageNotExist": "This page does not exist.",
+    "backToHome": "Back to home",
+    "contactSignInRequired": "You need to be signed in to send a message.",
+    "signIn": "Sign in",
+    "emailDirectly": "Or email us directly at",
+    "subject": "Subject",
+    "yourMessage": "Your message…",
+    "sendMessage": "Send message",
+    "sending": "Sending…",
+    "fillAllFields": "Please fill in all fields.",
+    "messageSent": "Message sent!",
+    "messageSentDesc": "We will get back to you as soon as possible.",
+    "errorOccurred": "An error occurred. Please email us directly at hello@ragequit-arcade.com.",
+    "from": "From:"
   }
 }
