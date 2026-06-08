@@ -184,7 +184,7 @@ export default function Navbar({ title, inGrid = false }) {
                 {gameCategories.map(cat => (
                   <button key={cat.id} className="nb-drawer__chip"
                     onClick={() => { track('category_click', { category: cat.id, source: 'navbar_drawer' }); navigate(`/category/${cat.id}`); setSearchOpen(false) }}>
-                    {t(`categories.${cat.id}`)} {t('categories.gamesSuffix')}
+                    {t(`categoryTitles.${cat.id}`)}
                   </button>
                 ))}
               </div>
