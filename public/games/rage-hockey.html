@@ -672,7 +672,7 @@ const BOOSTS = {
   power:      { label:"⚡ Power Hit",    desc:"You hit harder & faster",            col:"#FFD23F",
                 apply: ()=>{ /* géré dans collidePaddle */ } },
   small_goal: { label:"🥅 Tiny Goal",    desc:"Enemy goal is 40% smaller for 30s",  col:"#FF4D6D",
-                apply: ()=>{ smallGoalTimer=BOOST_DUR; } },
+                apply: ()=>{ smallGoalTimer=BOOST_DUR; applyTable(); } },
   big:        { label:"◆ Big Paddle",   desc:"Your paddle is 1.5× bigger for 30s", col:"#A66BFF",
                 apply: ()=>{ pBig=BOOST_DUR; player.r=PADR*1.5; } },
 };
@@ -840,12 +840,15 @@ function newGame(mode){
   state=ST.PLAY; hideAll(); Sound.enable();
 }
 function startBoost(type){
-  boostType = type || "power";
+  // IMPORTANT : newGame() réinitialise boostType="power".
+  // Il faut donc fixer boostType APRÈS l'appel à newGame(), sinon le choix
+  // du joueur est écrasé et c'est toujours Power Hit qui s'active.
   newGame(gameMode);
+  boostType   = type || "power";
   boostActive = true;
   boostTimer  = BOOST_DUR;
-  // Appliquer l'effet spécial si besoin
-  if(BOOSTS[boostType].apply) BOOSTS[boostType].apply();
+  // Appliquer l'effet spécial selon le boost choisi
+  if(BOOSTS[boostType] && BOOSTS[boostType].apply) BOOSTS[boostType].apply();
   burst(player.x, player.y, BOOSTS[boostType].col, 30);
 }
 
