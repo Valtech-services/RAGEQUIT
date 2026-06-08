@@ -18,6 +18,9 @@ export default function Footer() {
             <img src="/ragequit-logo-white.png" alt="Ragequit Arcade" className="footer__logo-img" />
           </Link>
           <p className="footer__tagline">{t('footer.tagline')}</p>
+          <div className="footer__lang">
+            <LanguageSwitcher />
+          </div>
           <div className="social-widget">
             <div className="social-row">
               <a href="https://instagram.com/ragequitarcade" target="_blank" rel="noopener noreferrer"
@@ -67,10 +70,7 @@ export default function Footer() {
           <Link to="/legal/terms" className="footer__link" onClick={() => footerLink('legal','terms')}>{t('footer.terms')}</Link>
           <Link to="/legal/cookies" className="footer__link" onClick={() => footerLink('legal','cookies')}>{t('footer.cookies')}</Link>
         </div>
-        <div className="footer__col">
-          <span className="footer__col-title">{t('footer.language')}</span>
-          <LanguageSwitcher />
-        </div>
+
       </div>
       <div className="footer__bottom">
         <span className="footer__copy">{t('footer.copyright', { year })}</span>
