@@ -9,7 +9,9 @@ html {
 }
 
 body {
-  /* Fond dégradé cyan → violet (option F), fixe au scroll */
+  /* Dégradé logo Ragequit sur TOUTES les pages.
+     background-attachment: fixed = une seule instance du dégradé,
+     stable au scroll, identique sur chaque page. */
   background-color: var(--color-bg);
   background-image: var(--bg-gradient);
   background-attachment: fixed;
@@ -46,6 +48,6 @@ img {
 ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.5); }
 
 ::selection {
-  background: var(--color-accent-dim);
-  color: var(--color-accent-dark);
+  background: rgba(0, 217, 255, 0.25);
+  color: #ffffff;
 }
