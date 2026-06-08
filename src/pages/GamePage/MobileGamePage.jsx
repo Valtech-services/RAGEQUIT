@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { games } from '../../data/games'
 import Navbar from '../../components/Navbar/Navbar'
 import GameCard from '../../components/GameCard/GameCard'
@@ -9,11 +10,11 @@ import usePageTitle from '../../hooks/usePageTitle'
 import './MobileGamePage.css'
 
 export default function MobileGamePage() {
+  const { t } = useTranslation()
   const { id } = useParams()
   const game = games.find(g => g.id === id)
   const [playing, setPlaying] = useState(false)
 
-  // TOUS les hooks doivent être avant tout return conditionnel — règle React
   usePageTitle(game?.title)
 
   const handlePlay = () => {
@@ -26,13 +27,9 @@ export default function MobileGamePage() {
     try { if (document.fullscreenElement) document.exitFullscreen() } catch (e) {}
   }
 
-  // Pendant le jeu : on bloque le scroll du body pour un vrai effet plein écran
   useEffect(() => {
-    if (playing) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
+    if (playing) document.body.style.overflow = 'hidden'
+    else document.body.style.overflow = ''
     return () => { document.body.style.overflow = '' }
   }, [playing])
 
@@ -46,24 +43,19 @@ export default function MobileGamePage() {
   if (!game) {
     return (
       <div className="mgp mgp--notfound">
-        <span>Game not found.</span>
-        <Link to="/" className="mgp__back-link">Back to home</Link>
+        <span>{t('common.gameNotFound')}</span>
+        <Link to="/" className="mgp__back-link">{t('common.backToHome')}</Link>
       </div>
     )
   }
 
   const related = games.filter(g => g.id !== game.id).slice(0, 12)
 
-  /* ---- MODE JEU : plein écran simulé ----
-     Sur iOS Safari, requestFullscreen sur iframe est peu fiable. On simule
-     donc le plein écran : conteneur position:fixed sur tout le viewport,
-     iframe en 100dvh, notre propre interface (topbar, pub) masquée. Seul
-     reste un bouton retour discret superposé. Les barres du navigateur,
-     elles, ne peuvent pas être masquées par le site (décision du navigateur). */
+  /* ---- MODE JEU : plein écran simulé ---- */
   if (playing) {
     return (
       <div className="mgp mgp--playing">
-        <button className="mgp__back-overlay" onClick={handleBack} aria-label="Back">
+        <button className="mgp__back-overlay" onClick={handleBack} aria-label={t('common.back')}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
             <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
           </svg>
@@ -91,7 +83,7 @@ export default function MobileGamePage() {
         </div>
         <div className="mgp__header-title">
           <h1 className="mgp__title">{game.title}</h1>
-          <span className="mgp__by">by {game.author}</span>
+          <span className="mgp__by">{t('game.by')} {game.author}</span>
         </div>
       </div>
 
@@ -99,7 +91,7 @@ export default function MobileGamePage() {
         className="mgp__hero"
         onClick={handlePlay}
         style={{ backgroundImage: `url(${game.thumbnail})` }}
-        aria-label={`Play ${game.title}`}
+        aria-label={`${t('game.play')} ${game.title}`}
       >
         <span className="mgp__hero-overlay" />
         <span className="mgp__hero-play">
@@ -107,8 +99,15 @@ export default function MobileGamePage() {
             <path d="M8 5v14l11-7z"/>
           </svg>
         </span>
-        <span className="mgp__hero-label">Play</span>
+        <span className="mgp__hero-label">{t('game.play')}</span>
       </button>
+
+      {/* Bannière publicitaire mobile — placeholder en attendant AdSense.
+          Le conteneur a des coins arrondis (décoratif), mais la vraie pub
+          AdSense à l'intérieur devra rester rectangulaire (règles AdSense). */}
+      <div className="mgp__ad">
+        <span className="mgp__ad-label">{t('game.advertisement')}</span>
+      </div>
 
       <div className="mgp__related">
         {related.map(g => (
