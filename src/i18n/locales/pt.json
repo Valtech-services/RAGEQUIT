@@ -109,7 +109,7 @@
     "cookies": "Política de cookies",
     "language": "Idioma",
     "selectLanguage": "Escolhe o teu idioma",
-    "copyright": "© {{year}} Ragequit Arcade — Valtech Services (SIREN 994 273 118). Todos os direitos reservados."
+    "copyright": "© {{year}} Ragequit Arcade. Todos os direitos reservados."
   },
   "home": {
     "newGames": "Novos jogos",
@@ -124,5 +124,40 @@
     "gameNotFound": "Jogo não encontrado.",
     "categoryNotFound": "Categoria não encontrada.",
     "noGamesYet": "Ainda não há jogos nesta categoria. Volta em breve."
+  },
+  "seo": {
+    "aboutLabel": "Sobre a Ragequit Arcade",
+    "freeOnlineGames": "Jogos grátis online",
+    "intro": "A Ragequit Arcade traz-te os jogos grátis online mais viciantes, feitos para jogar sozinho ou partidas rápidas com amigos. Cada jogo abre instantaneamente no teu navegador — sem downloads, sem registo, sem pop-ups, sem complicações. Os nossos jogos funcionam em computador, tablet e telemóvel. Estamos a construir um lugar onde um bom jogo está sempre a um clique.",
+    "selectionTitle": "A nossa seleção de jogos",
+    "selectionText": "Adicionamos novos jogos todas as semanas. Os nossos títulos atuais incluem Rage Hockey e STAQ. Cada jogo é grátis, para sempre.",
+    "startTitle": "Começa a jogar",
+    "startText": "Não sabes ao que jogar? Explora a partir da página inicial ou escolhe um jogo de uma das nossas categorias populares:",
+    "aboutUsTitle": "Sobre nós",
+    "aboutUsText": "A Ragequit Arcade é uma plataforma de jogos independente. Criamos cada jogo nós mesmos — sem clones, sem pay-to-win. O nosso objetivo é simples: criar a melhor arcade de navegador da web. Novos jogos toda a semana, segue-nos no TikTok e Instagram.",
+    "aboutCategory": "Sobre esta categoria",
+    "aboutGame": "Sobre este jogo",
+    "controls": "Controlos",
+    "developer": "Programador",
+    "faqTitle": "Perguntas frequentes"
+  },
+  "legal": {
+    "lastUpdated": "Última atualização:",
+    "faqTitle": "Perguntas frequentes",
+    "pageNotFound": "Página não encontrada",
+    "pageNotExist": "Esta página não existe.",
+    "backToHome": "Voltar ao início",
+    "contactSignInRequired": "Precisas de iniciar sessão para enviar uma mensagem.",
+    "signIn": "Iniciar sessão",
+    "emailDirectly": "Ou envia-nos um email para",
+    "subject": "Assunto",
+    "yourMessage": "A tua mensagem…",
+    "sendMessage": "Enviar mensagem",
+    "sending": "A enviar…",
+    "fillAllFields": "Preenche todos os campos.",
+    "messageSent": "Mensagem enviada!",
+    "messageSentDesc": "Responderemos o mais rápido possível.",
+    "errorOccurred": "Ocorreu um erro. Envia-nos um email para hello@ragequit-arcade.com.",
+    "from": "De:"
   }
 }
