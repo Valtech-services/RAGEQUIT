@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { legalContent } from '../../data/legalContent'
+import { getLegalContent } from '../../data/legalContent'
 import { useAuth } from '../../context/AuthContext'
 import { supabase } from '../../lib/supabase'
 import Navbar from '../../components/Navbar/Navbar'
@@ -65,9 +65,9 @@ function ContactForm({ user }) {
 }
 
 export default function LegalPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { page } = useParams()
-  const content  = legalContent[page]
+  const content  = getLegalContent(i18n.language)[page]
   const { user } = useAuth()
 
   usePageTitle(content ? content.title : t('legal.pageNotFound'))
