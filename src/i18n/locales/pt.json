@@ -159,5 +159,34 @@
     "messageSentDesc": "Responderemos o mais rápido possível.",
     "errorOccurred": "Ocorreu um erro. Envia-nos um email para hello@ragequit-arcade.com.",
     "from": "De:"
-  }
+  },
+  "categoryTitles": {
+    "sports": "Jogos de desporto",
+    "arcade": "Jogos de arcade",
+    "puzzle": "Jogos de puzzle",
+    "clicker": "Jogos de clique",
+    "runner": "Jogos de corrida"
+  },
+  "siteFaq": [
+    {
+      "q": "O que é a Ragequit Arcade?",
+      "a": "Uma plataforma de jogos grátis online. Sem downloads nem registo."
+    },
+    {
+      "q": "Todos os jogos são grátis?",
+      "a": "Sim, todos os jogos são totalmente grátis."
+    },
+    {
+      "q": "Com que frequência adicionam novos jogos?",
+      "a": "Todas as semanas. Segue-nos no TikTok para seres notificado."
+    },
+    {
+      "q": "Preciso de uma conta?",
+      "a": "Não precisas de conta para jogar. Cria uma para guardar as pontuações e aparecer na classificação."
+    },
+    {
+      "q": "Telemóvel?",
+      "a": "Sim, todos os jogos funcionam em telemóvel, tablet e computador."
+    }
+  ]
 }
