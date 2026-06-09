@@ -97,36 +97,39 @@ export const games = [
     },
   },
 
-  /* ================================================================
-     STAQ — jeu chill, arcade, portrait ok
-     ================================================================ */
-  {
-    id: 'staq',
-    title: 'STAQ',
-    description: 'Drop blocks and stack them as high as you can. One tap, infinite precision. How high can you go before it all falls apart?',
-    thumbnail: '/thumbnails/staq.jpg',
-    category: 'arcade',
-    tags: ['stacking', 'arcade', 'chill', 'reflex', 'one-tap'],
-    size: 'medium',
-    shimmer: true,
-    isNew: false,
-    hot: true,
-    landscape: false,
-    plays: 0,
-    modes: ['classic'],               // ← un seul mode : pas d'onglets dans le leaderboard
-    defaultMode: 'classic',
-    controls: 'Tap or click to drop the block. Mobile friendly.',
-    author: 'Ragequit Arcade',
-    seo: {
-      title: 'STAQ — Free Block Stacking Game | Ragequit Arcade',
-      metaDescription: 'Play STAQ free online. A satisfying one-tap block stacking game with physics. How high can you go?',
-      faq: [
-        { q: 'How do you play STAQ?', a: 'Tap or click to drop the moving block onto the stack below. Keep them aligned to stack higher.' },
-        { q: 'Does it have a leaderboard?', a: 'Yes! Your best stack height is saved and shown on the global leaderboard.' },
-        { q: 'Is STAQ free?', a: 'Yes, completely free.' },
-        { q: 'Mobile?', a: 'Yes, it works great in portrait mode on mobile.' },
-      ],
-    },
-  },
-
+ /* =====================================================================
+   ENTRÉE games.js POUR STAQ — version mise à jour
+   Remplace l'objet 'staq' existant dans le tableau `games` de games.js.
+   ===================================================================== */
+{
+  id: 'staq',
+  title: 'STAQ',
+  description: 'Stack the blocks as high as you can. One tap, infinite precision — but miss once and it all comes crashing down. Nail a perfect drop to keep your stack full-width, ride your combo, and when you finally fall… watch an ad to revive your tower or double your score. How high can you go before rage quitting?',
+  thumbnail: '/thumbnails/staq.jpg',
+  category: 'arcade',
+  tags: ['stacking', 'arcade', 'reflex', 'one-tap', 'tower', 'casual'],
+  size: 'medium',
+  shimmer: true,
+  isNew: false,
+  hot: true,
+  landscape: false,
+  plays: 0,
+  modes: ['classic'],
+  defaultMode: 'classic',
+  controls: 'Tap or click (or press Space) to drop the moving block. Line it up with the block below. Mobile, tablet and desktop friendly.',
+  author: 'Ragequit Arcade',
+  seo: {
+    title: 'STAQ — Free Block Stacking Game | Ragequit Arcade',
+    metaDescription: 'Play STAQ free online. A satisfying one-tap 3D block-stacking game with perfect-drop combos, revive and double-score rewards. How high can you stack?',
+    faq: [
+      { q: 'How do you play STAQ?', a: 'Tap, click or press the spacebar to drop the moving block onto the stack. Line it up as precisely as possible — the better aligned, the wider your tower stays.' },
+      { q: 'What is a perfect drop?', a: 'If you align a block almost exactly, you get a Perfect: the block keeps its full width instead of being chopped, with a flash and a sound. Chain perfects to build the tallest towers.' },
+      { q: 'What is revive?', a: 'When you miss, you can watch a short ad once per run to revive your tower exactly where you left off, instead of starting over.' },
+      { q: 'What is double score?', a: 'On the game-over screen you can watch an ad to double your final score before it is sent to the leaderboard.' },
+      { q: 'Does it have a leaderboard?', a: 'Yes. Your best stack height is saved and shown on the global leaderboard.' },
+      { q: 'Is STAQ free?', a: 'Yes, completely free to play.' },
+      { q: 'Mobile?', a: 'Yes, STAQ is built for portrait mobile and works great on tablet and desktop too.' }
+    ]
+  }
+}
 ]
