@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>STAQ — Ragequit Arcade</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{
+    height:100%;width:100%;overflow:hidden;position:relative;
+    font-family:'Bebas Neue','Trebuchet MS',sans-serif;
+    background:#0a0e27;
+    touch-action:manipulation;
+    -webkit-user-select:none;user-select:none;
+  }
+  #container{width:100%;height:100%;position:absolute;inset:0;}
+  #game{position:absolute;inset:0;}
+
+  /* SCORE */
+  #score{
+    position:absolute;top:7%;width:100%;text-align:center;
+    font-size:13vh;line-height:1;font-weight:400;
+    color:#fff;letter-spacing:.04em;
+    text-shadow:0 2px 20px rgba(0,0,0,.35);
+    transition:transform .5s ease,opacity .5s ease;
+    transform:translateY(-200px);
+    z-index:5;pointer-events:none;
+  }
+  #container.playing #score,
+  #container.resetting #score,
+  #container.revive #score{transform:translateY(0) scale(1);}
+  #container.ended #score{transform:translateY(4vh) scale(1.6);}
+
+  /* INSTRUCTIONS */
+  #instructions{
+    position:absolute;width:100%;top:20vh;left:0;text-align:center;
+    color:rgba(255,255,255,.85);font-size:3.4vh;letter-spacing:.06em;
+    transition:opacity .5s ease;opacity:0;z-index:5;pointer-events:none;
+    padding:0 8vw;
+  }
+  #container.playing #instructions{opacity:1;}
+  #instructions.hide{opacity:0 !important;}
+
+  /* READY (start) */
+  .game-ready{
+    position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:24px;z-index:6;
+    pointer-events:none;
+  }
+  #start-button{
+    pointer-events:auto;cursor:pointer;
+    padding:18px 56px;border-radius:999px;
+    background:linear-gradient(135deg,#00D9FF,#8B5CF6,#FF2D78);
+    color:#fff;font-size:4.4vh;letter-spacing:.12em;
+    box-shadow:0 10px 34px rgba(139,92,246,.5);
+    opacity:0;transform:translateY(-40px);
+    transition:opacity .5s ease,transform .5s ease;
+    text-transform:uppercase;
+  }
+  #start-button:active{transform:scale(.96);}
+  #container.ready .game-ready #start-button{opacity:1;transform:translateY(0);}
+  .ready-logo{
+    opacity:0;transform:translateY(-40px);
+    transition:opacity .5s ease,transform .5s ease;transition-delay:.1s;
+    font-size:9vh;letter-spacing:.18em;color:#fff;text-transform:uppercase;
+    text-shadow:0 4px 24px rgba(0,0,0,.4);
+  }
+  .ready-logo b{
+    background:linear-gradient(135deg,#00D9FF,#FF2D78);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  #container.ready .game-ready .ready-logo{opacity:1;transform:translateY(0);}
+
+  /* GAME OVER */
+  .game-over{
+    position:absolute;top:0;left:0;width:100%;height:78%;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:8px;z-index:6;pointer-events:none;
+  }
+  .game-over *{
+    opacity:0;transform:translateY(-40px);
+    transition:opacity .5s ease,transform .5s ease;color:#fff;
+  }
+  .game-over h2{font-size:7vh;letter-spacing:.1em;text-transform:uppercase;}
+  .game-over p{font-size:3vh;letter-spacing:.04em;opacity:0;color:rgba(255,255,255,.85);}
+  #container.ended .game-over *{opacity:1;transform:translateY(0);}
+  #container.ended .game-over p{transition-delay:.3s;}
+  .go-best{font-size:2.4vh !important;color:rgba(255,255,255,.6) !important;}
+  .go-new-best{
+    font-size:2.6vh !important;
+    background:linear-gradient(135deg,#00D9FF,#FF2D78);
+    -webkit-background-clip:text;background-clip:text;color:transparent !important;
+    letter-spacing:.1em;text-transform:uppercase;display:none;
+  }
+  #container.ended .go-new-best.show{display:block;}
+
+  /* Bouton double reward (game over) */
+  .go-double{
+    pointer-events:auto;cursor:pointer;border:none;font-family:inherit;
+    margin-top:18px;padding:16px 40px;border-radius:999px;
+    background:linear-gradient(135deg,#00D9FF,#8B5CF6,#FF2D78);
+    color:#fff;font-size:3vh;letter-spacing:.05em;text-transform:uppercase;
+    box-shadow:0 10px 30px rgba(139,92,246,.5);
+    display:flex;align-items:center;gap:10px;
+    opacity:0;transform:translateY(-40px);
+    transition:opacity .5s ease,transform .5s ease;transition-delay:.45s;
+  }
+  .go-double svg{width:24px;height:24px;fill:#fff;}
+  .go-double:active{transform:scale(.96);}
+  #container.ended .go-double{opacity:1;transform:translateY(0);}
+  #container.ended .go-double.hidden{display:none;}
+
+  /* Flash perfect plein écran */
+  .perfect-flash{
+    position:absolute;inset:0;z-index:8;pointer-events:none;
+    background:radial-gradient(circle at 50% 45%, rgba(0,217,255,.35), rgba(255,45,120,.15) 50%, transparent 72%);
+    opacity:0;
+  }
+  .perfect-flash.go{animation:perfectPop .45s ease;}
+  @keyframes perfectPop{0%{opacity:0;transform:scale(.85)}30%{opacity:1}100%{opacity:0;transform:scale(1.1)}}
+  .perfect-word{
+    position:absolute;top:32%;width:100%;text-align:center;z-index:9;pointer-events:none;
+    font-size:5vh;letter-spacing:.14em;text-transform:uppercase;
+    background:linear-gradient(135deg,#00D9FF,#FF2D78);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    opacity:0;
+  }
+  .perfect-word.go{animation:perfectWord .6s ease;}
+  @keyframes perfectWord{0%{opacity:0;transform:translateY(10px) scale(.9)}30%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-16px) scale(1.05)}}
+
+  /* ===== REVIVE OVERLAY ===== */
+  .revive{
+    position:absolute;inset:0;z-index:20;
+    display:none;flex-direction:column;align-items:center;justify-content:center;
+    gap:28px;background:rgba(10,14,39,.82);backdrop-filter:blur(6px);
+    padding:0 10vw;
+  }
+  #container.revive .revive{display:flex;animation:reviveIn .25s ease;}
+  @keyframes reviveIn{from{opacity:0}to{opacity:1}}
+
+  .revive__title{
+    font-size:7vh;color:#fff;letter-spacing:.08em;text-transform:uppercase;
+    text-align:center;
+  }
+  .revive__sub{
+    font-size:2.6vh;color:rgba(255,255,255,.75);letter-spacing:.04em;
+    text-align:center;margin-top:-14px;
+  }
+
+  /* Compte à rebours circulaire */
+  .revive__timer{position:relative;width:128px;height:128px;}
+  .revive__timer svg{transform:rotate(-90deg);}
+  .revive__timer circle{fill:none;stroke-width:9;}
+  .revive__timer .bg{stroke:rgba(255,255,255,.15);}
+  .revive__timer .fg{
+    stroke:url(#reviveGrad);stroke-linecap:round;
+    stroke-dasharray:339;stroke-dashoffset:0;
+    transition:stroke-dashoffset .1s linear;
+  }
+  .revive__count{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-size:6vh;color:#fff;
+  }
+
+  .revive__watch{
+    pointer-events:auto;cursor:pointer;
+    padding:18px 44px;border-radius:999px;
+    background:linear-gradient(135deg,#00D9FF,#8B5CF6,#FF2D78);
+    color:#fff;font-size:3.4vh;letter-spacing:.06em;text-transform:uppercase;
+    box-shadow:0 10px 30px rgba(139,92,246,.55);
+    display:flex;align-items:center;gap:12px;border:none;
+    font-family:inherit;
+  }
+  .revive__watch:active{transform:scale(.96);}
+  .revive__watch svg{width:26px;height:26px;fill:#fff;}
+  .revive__no{
+    pointer-events:auto;cursor:pointer;background:none;border:none;
+    color:rgba(255,255,255,.55);font-size:2.4vh;letter-spacing:.05em;
+    font-family:inherit;text-transform:uppercase;
+  }
+  .revive__no:active{color:#fff;}
+
+  /* Overlay pub simulée */
+  .ad-sim{
+    position:absolute;inset:0;z-index:40;display:none;
+    flex-direction:column;align-items:center;justify-content:center;gap:20px;
+    background:#06070f;color:#fff;
+  }
+  .ad-sim.show{display:flex;}
+  .ad-sim__label{font-size:2.4vh;letter-spacing:.2em;color:rgba(255,255,255,.5);text-transform:uppercase;}
+  .ad-sim__box{
+    width:80%;max-width:340px;aspect-ratio:16/10;border-radius:16px;
+    background:linear-gradient(135deg,#00D9FF,#8B5CF6,#FF2D78);
+    display:flex;align-items:center;justify-content:center;
+    font-size:5vh;letter-spacing:.1em;text-transform:uppercase;
+    box-shadow:0 16px 50px rgba(139,92,246,.5);
+  }
+  .ad-sim__count{font-size:2.2vh;color:rgba(255,255,255,.6);}
+</style>
+</head>
+<body>
+<div id="container">
+  <div id="game"></div>
+  <div id="score">0</div>
+  <div id="instructions">Tap to place the block</div>
+
+  <div class="game-ready">
+    <div class="ready-logo">RAGE<b>STAQ</b></div>
+    <div id="start-button">Start</div>
+  </div>
+
+  <div class="perfect-flash"></div>
+  <div class="perfect-word">Perfect</div>
+
+  <div class="game-over">
+    <h2>Game Over</h2>
+    <p class="go-score">Score: 0</p>
+    <p class="go-best">Best: 0</p>
+    <p class="go-new-best">New best!</p>
+    <button class="go-double">
+      <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      Double score
+    </button>
+    <p>Tap to play again</p>
+  </div>
+
+  <!-- REVIVE -->
+  <div class="revive">
+    <div class="revive__title">Continue?</div>
+    <div class="revive__sub">Keep your stack alive</div>
+    <div class="revive__timer">
+      <svg width="128" height="128">
+        <defs>
+          <linearGradient id="reviveGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#00D9FF"/>
+            <stop offset="50%" stop-color="#8B5CF6"/>
+            <stop offset="100%" stop-color="#FF2D78"/>
+          </linearGradient>
+        </defs>
+        <circle class="bg" cx="64" cy="64" r="54"/>
+        <circle class="fg" cx="64" cy="64" r="54"/>
+      </svg>
+      <div class="revive__count">5</div>
+    </div>
+    <button class="revive__watch">
+      <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      Watch ad
+    </button>
+    <button class="revive__no">No thanks</button>
+  </div>
+
+  <!-- PUB SIMULÉE -->
+  <div class="ad-sim">
+    <div class="ad-sim__label">Advertisement</div>
+    <div class="ad-sim__box">RAGEQUIT</div>
+    <div class="ad-sim__count">Reward in <span class="ad-sim__sec">5</span>s…</div>
+  </div>
+</div>
+
+<!-- Librairies : Three.js r92 (compatible MeshToonMaterial + FlatShading ancienne API) + GSAP TweenLite -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/92/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenLite.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/easing/EasePack.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/plugins/CSSPlugin.min.js"></script>
+
+<script>
+"use strict";
+
+/* =====================================================================
+   STAQ — Ragequit Arcade
+   Jeu de stacking façon Stack (Ketchapp), réécrit en JS pur.
+   Ajouts Ragequit :
+   - REVIVE contre pub (1 par partie) — levier de revenu n°1
+   - Identité visuelle : fond dégradé qui évolue, blocs cyan→violet→magenta
+   - postMessage analytics vers le site parent (score + événements pub)
+   ===================================================================== */
+
+// ---- Communication analytics avec le site parent (iframe) ----
+function track(event, props){
+  try{
+    window.parent.postMessage({ type:'RH_TRACK', event:event, game_id:'staq', props:props||{} }, '*');
+  }catch(e){}
+}
+function sendScore(score){
+  try{
+    window.parent.postMessage({ type:'STAQ_SCORE', game:'staq', mode:'classic', score:score, scoreLabel:score+' blocks' }, '*');
+  }catch(e){}
+}
+
+/* =====================================================================
+   AUDIO — synthétisé via Web Audio API (aucun fichier externe).
+   Sons courts façon mobile arcade : placement, perfect, mort.
+   ===================================================================== */
+var AudioFX = (function(){
+  var ctx = null;
+  function getCtx(){
+    if(!ctx){
+      try{ ctx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ ctx = null; }
+    }
+    return ctx;
+  }
+  function blip(freq, dur, type, gain){
+    var c = getCtx(); if(!c) return;
+    if(c.state === 'suspended') c.resume();
+    var o = c.createOscillator(), g = c.createGain();
+    o.type = type || 'sine';
+    o.frequency.value = freq;
+    g.gain.setValueAtTime(gain || 0.12, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + dur);
+    o.connect(g); g.connect(c.destination);
+    o.start(); o.stop(c.currentTime + dur);
+  }
+  return {
+    // placement normal : note qui monte avec la hauteur de pile
+    place: function(index){
+      var base = 180 + Math.min(index * 14, 520);
+      blip(base, 0.12, 'triangle', 0.10);
+    },
+    // perfect : deux notes claires (accord cyan/magenta)
+    perfect: function(){
+      blip(660, 0.14, 'square', 0.09);
+      setTimeout(function(){ blip(990, 0.18, 'square', 0.08); }, 70);
+    },
+    // mort : note descendante grave
+    die: function(){
+      var c = getCtx(); if(!c) return;
+      if(c.state === 'suspended') c.resume();
+      var o = c.createOscillator(), g = c.createGain();
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(300, c.currentTime);
+      o.frequency.exponentialRampToValueAtTime(70, c.currentTime + 0.4);
+      g.gain.setValueAtTime(0.12, c.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + 0.4);
+      o.connect(g); g.connect(c.destination);
+      o.start(); o.stop(c.currentTime + 0.4);
+    },
+    // reward (revive accepté / double)
+    reward: function(){
+      blip(523, 0.12, 'square', 0.09);
+      setTimeout(function(){ blip(784, 0.12, 'square', 0.09); }, 90);
+      setTimeout(function(){ blip(1046, 0.2, 'square', 0.08); }, 180);
+    }
+  };
+})();
+
+// ---- Palette Ragequit : le bloc prend une couleur qui tourne cyan→violet→magenta ----
+var BRAND_STOPS = [
+  { r:0x00, g:0xD9, b:0xFF },   // cyan
+  { r:0x8B, g:0x5C, b:0xF6 },   // violet
+  { r:0xFF, g:0x2D, b:0x78 },   // magenta
+];
+function brandColor(index){
+  // boucle douce sur la palette selon l'index du bloc
+  var t = (index % 18) / 18;            // cycle tous les 18 blocs
+  var seg = t * 2;                       // 0..2
+  var i = Math.floor(seg);
+  var f = seg - i;
+  var a = BRAND_STOPS[i % 3], b = BRAND_STOPS[(i+1) % 3];
+  var r = (a.r + (b.r - a.r) * f) / 255;
+  var g = (a.g + (b.g - a.g) * f) / 255;
+  var bl = (a.b + (b.b - a.b) * f) / 255;
+  return new THREE.Color(r, g, bl);
+}
+
+var Stage = function(){
+  this.container = document.getElementById('game');
+  this.renderer = new THREE.WebGLRenderer({ antialias:true, alpha:false });
+  this.renderer.setPixelRatio(window.devicePixelRatio || 1);
+  this.renderer.setSize(window.innerWidth, window.innerHeight);
+  this.renderer.setClearColor('#0a0e27', 1);
+  this.container.appendChild(this.renderer.domElement);
+
+  this.scene = new THREE.Scene();
+
+  var aspect = window.innerWidth / window.innerHeight;
+  var d = 20;
+  this.camera = new THREE.OrthographicCamera(-d*aspect, d*aspect, d, -d, -100, 1000);
+  this.camera.position.set(2, 2, 2);
+  this.camera.lookAt(new THREE.Vector3(0,0,0));
+
+  this.light = new THREE.DirectionalLight(0xffffff, 0.5);
+  this.light.position.set(0, 499, 0);
+  this.scene.add(this.light);
+
+  this.softLight = new THREE.AmbientLight(0xffffff, 0.4);
+  this.scene.add(this.softLight);
+
+  var self = this;
+  window.addEventListener('resize', function(){ self.onResize(); });
+  this.onResize();
+};
+Stage.prototype.setCamera = function(y, speed){
+  speed = speed || 0.3;
+  TweenLite.to(this.camera.position, speed, { y: y+4, ease: Power1.easeInOut });
+  TweenLite.to(this.camera.lookAt, speed, { y: y, ease: Power1.easeInOut });
+};
+Stage.prototype.onResize = function(){
+  // viewSize plus petit = jeu plus zoomé (mieux pour le portrait 9:16)
+  var viewSize = window.innerWidth < 768 ? 24 : 30;
+  this.renderer.setSize(window.innerWidth, window.innerHeight);
+  this.camera.left   = window.innerWidth / -viewSize;
+  this.camera.right  = window.innerWidth /  viewSize;
+  this.camera.top    = window.innerHeight /  viewSize;
+  this.camera.bottom = window.innerHeight / -viewSize;
+  this.camera.updateProjectionMatrix();
+};
+Stage.prototype.render = function(){ this.renderer.render(this.scene, this.camera); };
+Stage.prototype.add = function(elem){ this.scene.add(elem); };
+Stage.prototype.remove = function(elem){ this.scene.remove(elem); };
+Stage.prototype.setClear = function(color){
+  // color peut être un hex string ou un THREE.Color
+  TweenLite.to(this.renderer.getClearColor(), 0.5, {
+    r: color.r, g: color.g, b: color.b,
+    onUpdate: (function(self){ return function(){ self.renderer.setClearColor(self.renderer.getClearColor(), 1); }; })(this)
+  });
+};
+
+var BLOCK_STATES = { ACTIVE:'active', STOPPED:'stopped', MISSED:'missed' };
+var MOVE_AMOUNT = 12;
+
+var Block = function(block){
+  this.STATES = BLOCK_STATES;
+  this.MOVE_AMOUNT = MOVE_AMOUNT;
+  this.dimension = { width:0, height:0, depth:0 };
+  this.position = { x:0, y:0, z:0 };
+
+  this.targetBlock = block;
+  this.index = (this.targetBlock ? this.targetBlock.index : 0) + 1;
+  this.workingPlane = this.index % 2 ? 'x' : 'z';
+  this.workingDimension = this.index % 2 ? 'width' : 'depth';
+
+  this.dimension.width  = this.targetBlock ? this.targetBlock.dimension.width  : 10;
+  this.dimension.height = this.targetBlock ? this.targetBlock.dimension.height : 2;
+  this.dimension.depth  = this.targetBlock ? this.targetBlock.dimension.depth  : 10;
+
+  this.position.x = this.targetBlock ? this.targetBlock.position.x : 0;
+  this.position.y = this.dimension.height * this.index;
+  this.position.z = this.targetBlock ? this.targetBlock.position.z : 0;
+
+  this.colorOffset = this.targetBlock ? this.targetBlock.colorOffset : Math.round(Math.random()*100);
+
+  // Couleur : base (1er bloc) sombre, puis palette Ragequit
+  if(!this.targetBlock){
+    this.color = 0x10162e;
+  } else {
+    this.color = brandColor(this.index + this.colorOffset);
+  }
+
+  this.state = this.index > 1 ? this.STATES.ACTIVE : this.STATES.STOPPED;
+
+  // vitesse : progression plus mordante entre blocs 5 et 15, plateau ensuite
+  this.speed = -0.1 - (this.index * 0.0055);
+  if(this.speed < -4) this.speed = -4;
+  this.direction = this.speed;
+
+  var geometry = new THREE.BoxGeometry(this.dimension.width, this.dimension.height, this.dimension.depth);
+  geometry.applyMatrix(new THREE.Matrix4().makeTranslation(this.dimension.width/2, this.dimension.height/2, this.dimension.depth/2));
+  this.material = new THREE.MeshToonMaterial({ color: this.color, flatShading: true });
+  this.mesh = new THREE.Mesh(geometry, this.material);
+  this.mesh.position.set(this.position.x, this.position.y, this.position.z);
+
+  if(this.state == this.STATES.ACTIVE){
+    this.position[this.workingPlane] = Math.random() > 0.5 ? -this.MOVE_AMOUNT : this.MOVE_AMOUNT;
+  }
+};
+Block.prototype.reverseDirection = function(){
+  this.direction = this.direction > 0 ? this.speed : Math.abs(this.speed);
+};
+Block.prototype.place = function(){
+  this.state = this.STATES.STOPPED;
+  var overlap = this.targetBlock.dimension[this.workingDimension] - Math.abs(this.position[this.workingPlane] - this.targetBlock.position[this.workingPlane]);
+  var blocksToReturn = { plane:this.workingPlane, direction:this.direction };
+
+  if(this.dimension[this.workingDimension] - overlap < 0.3){
+    overlap = this.dimension[this.workingDimension];
+    blocksToReturn.bonus = true;
+    this.position.x = this.targetBlock.position.x;
+    this.position.z = this.targetBlock.position.z;
+    this.dimension.width = this.targetBlock.dimension.width;
+    this.dimension.depth = this.targetBlock.dimension.depth;
+  }
+
+  if(overlap > 0){
+    var choppedDimensions = { width:this.dimension.width, height:this.dimension.height, depth:this.dimension.depth };
+    choppedDimensions[this.workingDimension] -= overlap;
+    this.dimension[this.workingDimension] = overlap;
+
+    var placedGeometry = new THREE.BoxGeometry(this.dimension.width, this.dimension.height, this.dimension.depth);
+    placedGeometry.applyMatrix(new THREE.Matrix4().makeTranslation(this.dimension.width/2, this.dimension.height/2, this.dimension.depth/2));
+    var placedMesh = new THREE.Mesh(placedGeometry, this.material);
+
+    var choppedGeometry = new THREE.BoxGeometry(choppedDimensions.width, choppedDimensions.height, choppedDimensions.depth);
+    choppedGeometry.applyMatrix(new THREE.Matrix4().makeTranslation(choppedDimensions.width/2, choppedDimensions.height/2, choppedDimensions.depth/2));
+    var choppedMesh = new THREE.Mesh(choppedGeometry, this.material);
+
+    var choppedPosition = { x:this.position.x, y:this.position.y, z:this.position.z };
+
+    if(this.position[this.workingPlane] < this.targetBlock.position[this.workingPlane]){
+      this.position[this.workingPlane] = this.targetBlock.position[this.workingPlane];
+    } else {
+      choppedPosition[this.workingPlane] += overlap;
+    }
+
+    placedMesh.position.set(this.position.x, this.position.y, this.position.z);
+    choppedMesh.position.set(choppedPosition.x, choppedPosition.y, choppedPosition.z);
+
+    blocksToReturn.placed = placedMesh;
+    if(!blocksToReturn.bonus) blocksToReturn.chopped = choppedMesh;
+  } else {
+    this.state = this.STATES.MISSED;
+  }
+
+  this.dimension[this.workingDimension] = overlap;
+  return blocksToReturn;
+};
+Block.prototype.tick = function(){
+  if(this.state == this.STATES.ACTIVE){
+    var value = this.position[this.workingPlane];
+    if(value > this.MOVE_AMOUNT || value < -this.MOVE_AMOUNT) this.reverseDirection();
+    this.position[this.workingPlane] += this.direction;
+    this.mesh.position[this.workingPlane] = this.position[this.workingPlane];
+  }
+};
+
+var GAME_STATES = {
+  LOADING:'loading', PLAYING:'playing', READY:'ready',
+  ENDED:'ended', RESETTING:'resetting', REVIVE:'revive'
+};
+
+var Game = function(){
+  this.STATES = GAME_STATES;
+  this.blocks = [];
+  this.state = this.STATES.LOADING;
+  this.usedRevive = false;     // une seule revive par partie
+
+  this.stage = new Stage();
+
+  this.mainContainer  = document.getElementById('container');
+  this.scoreContainer = document.getElementById('score');
+  this.startButton    = document.getElementById('start-button');
+  this.instructions   = document.getElementById('instructions');
+  this.scoreContainer.innerHTML = '0';
+
+  this.newBlocks     = new THREE.Group();
+  this.placedBlocks  = new THREE.Group();
+  this.choppedBlocks = new THREE.Group();
+  this.stage.add(this.newBlocks);
+  this.stage.add(this.placedBlocks);
+  this.stage.add(this.choppedBlocks);
+
+  // Revive UI
+  this.reviveEl      = this.mainContainer.querySelector('.revive');
+  this.reviveCountEl = this.mainContainer.querySelector('.revive__count');
+  this.reviveFg      = this.mainContainer.querySelector('.revive__timer .fg');
+  this.adSim         = this.mainContainer.querySelector('.ad-sim');
+  this.adSimSec      = this.mainContainer.querySelector('.ad-sim__sec');
+  this.reviveTimer   = null;
+
+  this.addBlock();
+  this.tick();
+  this.updateState(this.STATES.READY);
+
+  var self = this;
+
+  document.addEventListener('keydown', function(e){ if(e.keyCode == 32) self.onAction(); });
+
+  // Le clic sur les boutons revive ne doit PAS déclencher onAction (placer un bloc)
+  document.addEventListener('click', function(e){
+    if(e.target.closest('.revive') || e.target.closest('.ad-sim') || e.target.closest('.go-double')) return;
+    self.onAction();
+  });
+  document.addEventListener('touchstart', function(e){
+    if(e.target.closest('.revive') || e.target.closest('.ad-sim')) return;
+    // On laisse le click gérer l'action (évite le double-déclenchement Android)
+  }, { passive:true });
+
+  // Boutons revive
+  this.reviveEl.querySelector('.revive__watch').addEventListener('click', function(e){
+    e.stopPropagation(); self.acceptRevive();
+  });
+  this.reviveEl.querySelector('.revive__no').addEventListener('click', function(e){
+    e.stopPropagation(); self.declineRevive();
+  });
+
+  // Bouton double reward (game over)
+  this.mainContainer.querySelector('.go-double').addEventListener('click', function(e){
+    e.stopPropagation(); self.acceptDouble();
+  });
+};
+
+Game.prototype.updateState = function(newState){
+  for(var key in this.STATES) this.mainContainer.classList.remove(this.STATES[key]);
+  this.mainContainer.classList.add(newState);
+  this.state = newState;
+};
+
+Game.prototype.onAction = function(){
+  switch(this.state){
+    case this.STATES.READY:   this.startGame();   break;
+    case this.STATES.PLAYING: this.placeBlock();  break;
+    case this.STATES.ENDED:   this.restartGame(); break;
+  }
+};
+
+Game.prototype.startGame = function(){
+  if(this.state != this.STATES.PLAYING){
+    this.scoreContainer.innerHTML = '0';
+    this.usedRevive = false;
+    this.updateState(this.STATES.PLAYING);
+    track('game_start', {});
+    this.addBlock();
+  }
+};
+
+Game.prototype.restartGame = function(){
+  this.updateState(this.STATES.RESETTING);
+  var self = this;
+  var oldBlocks = this.placedBlocks.children;
+  var removeSpeed = 0.2, delayAmount = 0.02;
+  for(var i=0; i<oldBlocks.length; i++){
+    (function(b, i){
+      TweenLite.to(b.scale, removeSpeed, { x:0, y:0, z:0, delay:(oldBlocks.length-i)*delayAmount, ease:Power1.easeIn, onComplete:function(){ self.placedBlocks.remove(b); }});
+      TweenLite.to(b.rotation, removeSpeed, { y:0.5, delay:(oldBlocks.length-i)*delayAmount, ease:Power1.easeIn });
+    })(oldBlocks[i], i);
+  }
+  var cameraMoveSpeed = removeSpeed*2 + (oldBlocks.length*delayAmount);
+  this.stage.setCamera(2, cameraMoveSpeed);
+
+  var countdown = { value:this.blocks.length-1 };
+  TweenLite.to(countdown, cameraMoveSpeed, { value:0, onUpdate:function(){ self.scoreContainer.innerHTML = String(Math.round(countdown.value)); }});
+
+  this.blocks = this.blocks.slice(0,1);
+  setTimeout(function(){ self.startGame(); }, cameraMoveSpeed*1000);
+};
+
+Game.prototype.placeBlock = function(){
+  var self = this;
+  var currentBlock = this.blocks[this.blocks.length-1];
+  var newBlocks = currentBlock.place();
+  this.newBlocks.remove(currentBlock.mesh);
+  if(newBlocks.placed) this.placedBlocks.add(newBlocks.placed);
+
+  if(newBlocks.bonus){
+    // Perfect placement : flash plein écran + mot "Perfect" + son
+    track('staq_perfect', { index:this.blocks.length-1 });
+    this.flashPerfect();
+    AudioFX.perfect();
+  } else {
+    AudioFX.place(this.blocks.length - 1);
+  }
+
+  if(newBlocks.chopped){
+    this.choppedBlocks.add(newBlocks.chopped);
+    var positionParams = { y:'-=30', ease:Power1.easeIn, onComplete:function(){ self.choppedBlocks.remove(newBlocks.chopped); }};
+    var rotateRandomness = 10;
+    var rotationParams = {
+      delay:0.05,
+      x: newBlocks.plane=='z' ? ((Math.random()*rotateRandomness)-(rotateRandomness/2)) : 0.1,
+      z: newBlocks.plane=='x' ? ((Math.random()*rotateRandomness)-(rotateRandomness/2)) : 0.1,
+      y: Math.random()*0.1
+    };
+    if(newBlocks.chopped.position[newBlocks.plane] > newBlocks.placed.position[newBlocks.plane]){
+      positionParams[newBlocks.plane] = '+=' + (40*Math.abs(newBlocks.direction));
+    } else {
+      positionParams[newBlocks.plane] = '-=' + (40*Math.abs(newBlocks.direction));
+    }
+    TweenLite.to(newBlocks.chopped.position, 1, positionParams);
+    TweenLite.to(newBlocks.chopped.rotation, 1, rotationParams);
+  }
+  this.addBlock();
+};
+
+Game.prototype.flashPerfect = function(){
+  // flash sur le score
+  var el = this.scoreContainer;
+  el.style.textShadow = '0 0 40px #00D9FF, 0 0 60px #FF2D78';
+  setTimeout(function(){ el.style.textShadow = '0 2px 20px rgba(0,0,0,.35)'; }, 220);
+  // flash plein écran + mot "Perfect"
+  var flash = this.mainContainer.querySelector('.perfect-flash');
+  var word  = this.mainContainer.querySelector('.perfect-word');
+  flash.classList.remove('go'); word.classList.remove('go');
+  void flash.offsetWidth; void word.offsetWidth;  // reflow pour rejouer l'anim
+  flash.classList.add('go'); word.classList.add('go');
+};
+
+Game.prototype.addBlock = function(){
+  var lastBlock = this.blocks[this.blocks.length-1];
+  if(lastBlock && lastBlock.state == lastBlock.STATES.MISSED){
+    // ICI : au lieu de game over direct, on tente la revive
+    return this.tryRevive();
+  }
+  this.scoreContainer.innerHTML = String(this.blocks.length-1);
+
+  // Fond qui évolue doucement avec la hauteur (palette Ragequit, version sombre)
+  var depth = this.blocks.length;
+  var bgC = brandColor(depth);
+  var darkBg = new THREE.Color(bgC.r * 0.15, bgC.g * 0.15, bgC.b * 0.15);
+  this.stage.setClear(darkBg);
+
+  var newKidOnTheBlock = new Block(lastBlock);
+  this.newBlocks.add(newKidOnTheBlock.mesh);
+  this.blocks.push(newKidOnTheBlock);
+  this.stage.setCamera(this.blocks.length * 2);
+
+  if(this.blocks.length >= 5) this.instructions.classList.add('hide');
+};
+
+/* =====================================================================
+   SYSTÈME REVIVE — le levier de revenu n°1
+   À la mort : si la revive n'a pas déjà été utilisée ET que le score
+   vaut la peine (>= 3 blocs), on propose un revive contre pub.
+   Compte à rebours 5s. Sinon game over direct.
+   ===================================================================== */
+Game.prototype.tryRevive = function(){
+  var score = this.blocks.length - 1;
+  // Pas de revive si déjà utilisée, ou si score trop bas (pas frustrant)
+  if(this.usedRevive || score < 3){
+    return this.endGame();
+  }
+  this.updateState(this.STATES.REVIVE);
+  track('revive_offered', { score:score });
+
+  var self = this;
+  var total = 5;          // 5 secondes pour décider
+  var remaining = total;
+  var CIRC = 339;         // circonférence (2πr, r=54)
+
+  this.reviveCountEl.innerHTML = total;
+  this.reviveFg.style.strokeDashoffset = '0';
+
+  var start = Date.now();
+  this.reviveTimer = setInterval(function(){
+    var elapsed = (Date.now() - start) / 1000;
+    remaining = Math.max(0, total - elapsed);
+    self.reviveCountEl.innerHTML = Math.ceil(remaining);
+    self.reviveFg.style.strokeDashoffset = String(CIRC * (elapsed/total));
+    if(remaining <= 0){
+      self.declineRevive();   // temps écoulé = refus
+    }
+  }, 80);
+};
+
+Game.prototype.clearReviveTimer = function(){
+  if(this.reviveTimer){ clearInterval(this.reviveTimer); this.reviveTimer = null; }
+};
+
+Game.prototype.acceptRevive = function(){
+  if(this.state !== this.STATES.REVIVE) return;
+  this.clearReviveTimer();
+  track('revive_accepted', { score:this.blocks.length-1 });
+  this.playAd(this.doRevive.bind(this));
+};
+
+Game.prototype.declineRevive = function(){
+  if(this.state !== this.STATES.REVIVE) return;
+  this.clearReviveTimer();
+  track('revive_declined', { score:this.blocks.length-1 });
+  this.endGame();
+};
+
+// Pub simulée 5s (placeholder en attendant AdSense / Gamedistribution)
+Game.prototype.playAd = function(onComplete){
+  var self = this;
+  this.adSim.classList.add('show');
+  var sec = 5;
+  this.adSimSec.innerHTML = sec;
+  var int = setInterval(function(){
+    sec--;
+    self.adSimSec.innerHTML = sec;
+    if(sec <= 0){
+      clearInterval(int);
+      self.adSim.classList.remove('show');
+      track('ad_rewarded_complete', { placement:'revive' });
+      onComplete();
+    }
+  }, 1000);
+};
+
+// Reprise du jeu : on retire le bloc raté, on régénère un bloc actif
+Game.prototype.doRevive = function(){
+  this.usedRevive = true;
+  AudioFX.reward();
+
+  // retirer le dernier bloc (celui qui a raté)
+  this.blocks.pop();
+
+  // revenir en PLAYING et relancer un bloc depuis le dernier placé
+  this.updateState(this.STATES.PLAYING);
+  this.scoreContainer.innerHTML = String(this.blocks.length - 1);
+
+  var lastBlock = this.blocks[this.blocks.length-1];
+  var newKidOnTheBlock = new Block(lastBlock);
+  this.newBlocks.add(newKidOnTheBlock.mesh);
+  this.blocks.push(newKidOnTheBlock);
+  this.stage.setCamera(this.blocks.length * 2);
+};
+
+Game.prototype.endGame = function(){
+  var score = this.blocks.length - 1;
+  this.finalScore = score;
+  this.doubled = false;
+  AudioFX.die();
+
+  // Best score local
+  var best = 0;
+  try{ best = parseInt(localStorage.getItem('staq_best') || '0', 10) || 0; }catch(e){}
+  var isNewBest = score > best;
+  if(isNewBest){ try{ localStorage.setItem('staq_best', String(score)); }catch(e){} best = score; }
+
+  this.mainContainer.querySelector('.go-score').innerHTML = 'Score: ' + score;
+  this.mainContainer.querySelector('.go-best').innerHTML  = 'Best: ' + best;
+  var newBestEl = this.mainContainer.querySelector('.go-new-best');
+  if(isNewBest) newBestEl.classList.add('show'); else newBestEl.classList.remove('show');
+
+  // Bouton double reward : visible seulement si score vaut le coup et pas déjà doublé
+  var dbl = this.mainContainer.querySelector('.go-double');
+  if(score >= 3){ dbl.classList.remove('hidden'); } else { dbl.classList.add('hidden'); }
+
+  sendScore(score);
+  track('game_end', { props:{ score:score, mode:'classic' } });
+  this.updateState(this.STATES.ENDED);
+};
+
+// Double reward : regarder une pub pour doubler le score envoyé au leaderboard
+Game.prototype.acceptDouble = function(){
+  if(this.state !== this.STATES.ENDED || this.doubled) return;
+  this.doubled = true;
+  track('double_accepted', { score:this.finalScore });
+  var self = this;
+  this.playAd(function(){
+    var doubled = self.finalScore * 2;
+    AudioFX.reward();
+    self.mainContainer.querySelector('.go-score').innerHTML = 'Score: ' + doubled;
+    self.mainContainer.querySelector('.go-double').classList.add('hidden');
+    // best score mis à jour si le double dépasse
+    var best = 0;
+    try{ best = parseInt(localStorage.getItem('staq_best')||'0',10)||0; }catch(e){}
+    if(doubled > best){ try{ localStorage.setItem('staq_best', String(doubled)); }catch(e){}
+      self.mainContainer.querySelector('.go-best').innerHTML = 'Best: ' + doubled;
+      self.mainContainer.querySelector('.go-new-best').classList.add('show');
+    }
+    sendScore(doubled);
+    track('double_complete', { score:doubled });
+  });
+};
+
+Game.prototype.tick = function(){
+  var self = this;
+  this.blocks[this.blocks.length-1].tick();
+  this.stage.render();
+  requestAnimationFrame(function(){ self.tick(); });
+};
+
+// GO
+var game = new Game();
+</script>
+</body>
+</html>
