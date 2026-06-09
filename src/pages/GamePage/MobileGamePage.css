@@ -7,6 +7,7 @@
   --pad: 12px;
   --cell: calc((100vw - 2 * var(--pad) - (var(--cols) - 1) * var(--gap)) / var(--cols));
   min-height: 100vh;
+  background: var(--color-bg);
 }
 
 /* =====================================================================
@@ -188,4 +189,31 @@
   color: var(--color-accent);
   font-weight: 700;
   text-decoration: none;
+}
+
+/* =====================================================================
+   BANNIÈRE PUBLICITAIRE MOBILE (page preview, avant de jouer)
+   Conteneur décoratif à coins arrondis. La vraie pub AdSense placée
+   à l'intérieur reste rectangulaire (conformité AdSense).
+   ===================================================================== */
+.mgp__ad {
+  width: 100%;
+  min-height: 90px;
+  margin: 4px 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10,22,40,0.35);
+  border: 1.5px dashed rgba(255,255,255,0.35);
+  border-radius: var(--radius-md, 16px);
+  overflow: hidden;
+  backdrop-filter: blur(2px);
+}
+.mgp__ad-label {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  font-weight: 700;
 }
