@@ -6,7 +6,6 @@
   --gap: 14px;
   --pad: 20px;
   min-height: 100vh;
-  background: var(--color-bg);
   display: flex;
   flex-direction: column;
 }
