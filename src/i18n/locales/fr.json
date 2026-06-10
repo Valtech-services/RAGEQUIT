@@ -109,7 +109,8 @@
     "cookies": "Politique de cookies",
     "language": "Langue",
     "selectLanguage": "Choisis ta langue",
-    "copyright": "© {{year}} Ragequit Arcade. Tous droits réservés."
+    "copyright": "© {{year}} Ragequit Arcade. Tous droits réservés.",
+    "manageCookies": "Gérer les cookies"
   },
   "home": {
     "newGames": "Nouveaux jeux",
@@ -188,5 +189,13 @@
       "q": "Mobile ?",
       "a": "Oui, tous les jeux fonctionnent sur mobile, tablette et ordinateur."
     }
-  ]
+  ],
+  "cookies": {
+    "aria": "Consentement aux cookies",
+    "title": "Nous utilisons des cookies",
+    "body": "Nous utilisons des cookies pour garder nos jeux gratuits, analyser le trafic et afficher des publicités pertinentes. Tu peux accepter tous les cookies ou uniquement les cookies essentiels.",
+    "learnMore": "En savoir plus",
+    "essential": "Essentiels uniquement",
+    "acceptAll": "Tout accepter"
+  }
 }
