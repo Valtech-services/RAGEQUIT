@@ -214,24 +214,50 @@ const legalByLang = {
       "sections": [
         {
           "paragraphs": [
-            "This Cookie Policy explains how Ragequit Arcade uses cookies and your choices."
+            "This Cookie Policy explains how Ragequit Arcade (operated by Valtech Services) uses cookies and similar technologies on ragequit-arcade.com, why we use them, and the choices you have. By using the Site, you agree to the use of cookies as described here, subject to the consent options below."
+          ]
+        },
+        {
+          "heading": "What Are Cookies?",
+          "paragraphs": [
+            "Cookies are small text files placed on your device when you visit a website. They are widely used to make websites work, to remember your preferences, and to provide information to the site owners. Similar technologies such as local storage and pixels may also be used for the same purposes."
           ]
         },
         {
           "heading": "Types of Cookies We Use",
           "paragraphs": [
-            "We use the following categories:"
+            "We use the following categories of cookies:"
           ],
           "list": [
-            "Essential cookies: required for the Site to function.",
-            "Analytics cookies: help us understand how visitors use the Site.",
-            "Advertising cookies: used by Google and its partners to display relevant ads."
+            "Essential cookies: strictly necessary for the Site to function, including remembering your cookie consent choice, your language preference, and keeping you signed in. These cannot be disabled.",
+            "Analytics cookies: help us understand how visitors interact with the Site (for example which games are played most), so we can improve it. These are only set if you accept non-essential cookies.",
+            "Advertising cookies: used by us and our advertising partners (which may include Google and gaming ad networks) to display relevant ads and measure their performance. These are only set if you accept non-essential cookies."
           ]
         },
         {
-          "heading": "Managing Cookies",
+          "heading": "Third-Party Cookies",
           "paragraphs": [
-            "Our cookie banner lets you accept or decline non-essential cookies on your first visit. You can also control cookies through your browser settings."
+            "Some cookies are placed by third parties that provide services to us, such as analytics providers and advertising networks. These third parties may use cookies to collect information about your activity across different websites. We do not control these cookies; please refer to the relevant third party's privacy and cookie policies for more information.",
+            "Where advertising is served by Google, Google's use of advertising cookies enables it and its partners to serve ads based on your visits to this and other sites. You can learn about and control personalized advertising via Google Ads Settings (adssettings.google.com)."
+          ]
+        },
+        {
+          "heading": "Your Consent and How to Manage Cookies",
+          "paragraphs": [
+            "When you first visit the Site, a cookie banner lets you accept all cookies or only the essential ones. No analytics or advertising cookies are set until you give consent. You can change your choice at any time using the \"Manage cookies\" link in the footer, which reopens the banner.",
+            "You can also control or delete cookies through your browser settings. Most browsers let you refuse or remove cookies; however, blocking essential cookies may affect how the Site works."
+          ]
+        },
+        {
+          "heading": "Changes to This Policy",
+          "paragraphs": [
+            "We may update this Cookie Policy from time to time to reflect changes in technology, law, or our practices. The \"Last updated\" date at the top indicates when it was last revised. We encourage you to review this page periodically."
+          ]
+        },
+        {
+          "heading": "Contact",
+          "paragraphs": [
+            "If you have questions about our use of cookies, you can reach us at hello@ragequit-arcade.com."
           ]
         }
       ]
@@ -444,24 +470,50 @@ const legalByLang = {
       "sections": [
         {
           "paragraphs": [
-            "Cette politique de cookies explique comment Ragequit Arcade utilise les cookies et quelles sont tes options."
+            "Cette politique de cookies explique comment Ragequit Arcade (exploité par Valtech Services) utilise les cookies et technologies similaires sur ragequit-arcade.com, pourquoi nous les utilisons et quelles sont tes options. En utilisant le Site, tu acceptes l'utilisation des cookies décrite ici, sous réserve des options de consentement ci-dessous."
+          ]
+        },
+        {
+          "heading": "Qu'est-ce qu'un cookie ?",
+          "paragraphs": [
+            "Les cookies sont de petits fichiers texte déposés sur ton appareil lorsque tu visites un site web. Ils sont largement utilisés pour faire fonctionner les sites, mémoriser tes préférences et fournir des informations aux propriétaires du site. Des technologies similaires comme le stockage local et les pixels peuvent être utilisées aux mêmes fins."
           ]
         },
         {
           "heading": "Types de cookies utilisés",
           "paragraphs": [
-            "Nous utilisons les catégories suivantes :"
+            "Nous utilisons les catégories de cookies suivantes :"
           ],
           "list": [
-            "Cookies essentiels : nécessaires au fonctionnement du Site.",
-            "Cookies analytiques : nous aident à comprendre comment les visiteurs utilisent le Site.",
-            "Cookies publicitaires : utilisés par Google et ses partenaires pour afficher des annonces pertinentes."
+            "Cookies essentiels : strictement nécessaires au fonctionnement du Site, notamment pour mémoriser ton choix de consentement aux cookies, ta langue préférée et te garder connecté. Ils ne peuvent pas être désactivés.",
+            "Cookies analytiques : nous aident à comprendre comment les visiteurs interagissent avec le Site (par exemple quels jeux sont les plus joués), afin de l'améliorer. Ils ne sont déposés que si tu acceptes les cookies non essentiels.",
+            "Cookies publicitaires : utilisés par nous et nos partenaires publicitaires (pouvant inclure Google et des régies publicitaires spécialisées dans le jeu) pour afficher des publicités pertinentes et mesurer leur performance. Ils ne sont déposés que si tu acceptes les cookies non essentiels."
           ]
         },
         {
-          "heading": "Gérer les cookies",
+          "heading": "Cookies tiers",
           "paragraphs": [
-            "Notre bannière de cookies te permet d'accepter ou de refuser les cookies non essentiels lors de ta première visite. Tu peux aussi contrôler les cookies via les paramètres de ton navigateur."
+            "Certains cookies sont déposés par des tiers qui nous fournissent des services, comme des prestataires d'analyse et des régies publicitaires. Ces tiers peuvent utiliser des cookies pour collecter des informations sur ton activité sur différents sites. Nous ne contrôlons pas ces cookies ; consulte les politiques de confidentialité et de cookies du tiers concerné pour plus d'informations.",
+            "Lorsque la publicité est diffusée par Google, l'utilisation de cookies publicitaires par Google permet à Google et à ses partenaires de diffuser des annonces basées sur tes visites sur ce site et d'autres. Tu peux en savoir plus et contrôler la publicité personnalisée via les Paramètres des annonces Google (adssettings.google.com)."
+          ]
+        },
+        {
+          "heading": "Ton consentement et la gestion des cookies",
+          "paragraphs": [
+            "Lors de ta première visite, une bannière de cookies te permet d'accepter tous les cookies ou uniquement les cookies essentiels. Aucun cookie analytique ou publicitaire n'est déposé tant que tu n'as pas donné ton consentement. Tu peux changer ton choix à tout moment via le lien « Gérer les cookies » dans le pied de page, qui rouvre la bannière.",
+            "Tu peux également contrôler ou supprimer les cookies via les paramètres de ton navigateur. La plupart des navigateurs permettent de refuser ou de supprimer les cookies ; toutefois, le blocage des cookies essentiels peut affecter le fonctionnement du Site."
+          ]
+        },
+        {
+          "heading": "Modifications de cette politique",
+          "paragraphs": [
+            "Nous pouvons mettre à jour cette politique de cookies de temps à autre pour refléter des changements technologiques, juridiques ou de nos pratiques. La date de « Dernière mise à jour » en haut indique la dernière révision. Nous t'encourageons à consulter cette page régulièrement."
+          ]
+        },
+        {
+          "heading": "Contact",
+          "paragraphs": [
+            "Pour toute question concernant notre utilisation des cookies, tu peux nous écrire à hello@ragequit-arcade.com."
           ]
         }
       ]
@@ -674,24 +726,50 @@ const legalByLang = {
       "sections": [
         {
           "paragraphs": [
-            "Esta política de cookies explica cómo Ragequit Arcade usa las cookies y cuáles son tus opciones."
+            "Esta Política de cookies explica cómo Ragequit Arcade (operado por Valtech Services) utiliza cookies y tecnologías similares en ragequit-arcade.com, por qué las usamos y qué opciones tienes. Al usar el Sitio, aceptas el uso de cookies descrito aquí, sujeto a las opciones de consentimiento siguientes."
+          ]
+        },
+        {
+          "heading": "¿Qué son las cookies?",
+          "paragraphs": [
+            "Las cookies son pequeños archivos de texto que se colocan en tu dispositivo cuando visitas un sitio web. Se utilizan ampliamente para que los sitios funcionen, recordar tus preferencias y proporcionar información a los propietarios del sitio. También pueden usarse tecnologías similares como el almacenamiento local y los píxeles."
           ]
         },
         {
           "heading": "Tipos de cookies que usamos",
           "paragraphs": [
-            "Usamos las siguientes categorías:"
+            "Utilizamos las siguientes categorías de cookies:"
           ],
           "list": [
-            "Cookies esenciales: necesarias para que el Sitio funcione.",
-            "Cookies analíticas: nos ayudan a entender cómo los visitantes usan el Sitio.",
-            "Cookies publicitarias: usadas por Google y sus socios para mostrar anuncios relevantes."
+            "Cookies esenciales: estrictamente necesarias para que el Sitio funcione, incluido recordar tu elección de consentimiento, tu idioma preferido y mantener tu sesión iniciada. No se pueden desactivar.",
+            "Cookies analíticas: nos ayudan a entender cómo interactúan los visitantes con el Sitio (por ejemplo, qué juegos se juegan más) para mejorarlo. Solo se activan si aceptas las cookies no esenciales.",
+            "Cookies publicitarias: utilizadas por nosotros y nuestros socios publicitarios (que pueden incluir Google y redes publicitarias de juegos) para mostrar anuncios relevantes y medir su rendimiento. Solo se activan si aceptas las cookies no esenciales."
           ]
         },
         {
-          "heading": "Gestionar las cookies",
+          "heading": "Cookies de terceros",
           "paragraphs": [
-            "Nuestro banner de cookies te permite aceptar o rechazar las cookies no esenciales en tu primera visita. También puedes controlar las cookies en la configuración de tu navegador."
+            "Algunas cookies son colocadas por terceros que nos prestan servicios, como proveedores de análisis y redes publicitarias. Estos terceros pueden usar cookies para recopilar información sobre tu actividad en distintos sitios. No controlamos estas cookies; consulta las políticas de privacidad y cookies del tercero correspondiente para más información.",
+            "Cuando la publicidad la sirve Google, el uso de cookies publicitarias por parte de Google permite a Google y a sus socios mostrar anuncios basados en tus visitas a este y otros sitios. Puedes obtener más información y controlar la publicidad personalizada en la Configuración de anuncios de Google (adssettings.google.com)."
+          ]
+        },
+        {
+          "heading": "Tu consentimiento y cómo gestionar las cookies",
+          "paragraphs": [
+            "En tu primera visita, un banner de cookies te permite aceptar todas las cookies o solo las esenciales. No se activa ninguna cookie analítica o publicitaria hasta que des tu consentimiento. Puedes cambiar tu elección en cualquier momento mediante el enlace «Gestionar cookies» en el pie de página, que reabre el banner.",
+            "También puedes controlar o eliminar las cookies a través de la configuración de tu navegador. La mayoría de los navegadores permiten rechazar o eliminar cookies; sin embargo, bloquear las cookies esenciales puede afectar al funcionamiento del Sitio."
+          ]
+        },
+        {
+          "heading": "Cambios en esta política",
+          "paragraphs": [
+            "Podemos actualizar esta Política de cookies de vez en cuando para reflejar cambios tecnológicos, legales o de nuestras prácticas. La fecha de «Última actualización» en la parte superior indica la última revisión. Te animamos a consultar esta página periódicamente."
+          ]
+        },
+        {
+          "heading": "Contacto",
+          "paragraphs": [
+            "Si tienes preguntas sobre nuestro uso de cookies, puedes escribirnos a hello@ragequit-arcade.com."
           ]
         }
       ]
@@ -904,24 +982,50 @@ const legalByLang = {
       "sections": [
         {
           "paragraphs": [
-            "Esta política de cookies explica como a Ragequit Arcade usa cookies e quais são as tuas opções."
+            "Esta Política de cookies explica como a Ragequit Arcade (operada pela Valtech Services) utiliza cookies e tecnologias semelhantes em ragequit-arcade.com, porque as usamos e quais são as tuas opções. Ao utilizar o Site, aceitas a utilização de cookies aqui descrita, sujeita às opções de consentimento abaixo."
           ]
         },
         {
-          "heading": "Tipos de cookies que usamos",
+          "heading": "O que são cookies?",
           "paragraphs": [
-            "Usamos as seguintes categorias:"
+            "Os cookies são pequenos ficheiros de texto colocados no teu dispositivo quando visitas um site. São amplamente utilizados para fazer os sites funcionar, recordar as tuas preferências e fornecer informações aos proprietários do site. Tecnologias semelhantes, como o armazenamento local e os pixels, também podem ser usadas."
+          ]
+        },
+        {
+          "heading": "Tipos de cookies que utilizamos",
+          "paragraphs": [
+            "Utilizamos as seguintes categorias de cookies:"
           ],
           "list": [
-            "Cookies essenciais: necessários para o funcionamento do Site.",
-            "Cookies analíticos: ajudam-nos a perceber como os visitantes usam o Site.",
-            "Cookies publicitários: usados pela Google e parceiros para apresentar anúncios relevantes."
+            "Cookies essenciais: estritamente necessários para o funcionamento do Site, incluindo recordar a tua escolha de consentimento, o teu idioma preferido e manter a tua sessão iniciada. Não podem ser desativados.",
+            "Cookies analíticos: ajudam-nos a compreender como os visitantes interagem com o Site (por exemplo, que jogos são mais jogados) para o melhorar. Só são ativados se aceitares os cookies não essenciais.",
+            "Cookies publicitários: utilizados por nós e pelos nossos parceiros publicitários (que podem incluir a Google e redes publicitárias de jogos) para exibir anúncios relevantes e medir o seu desempenho. Só são ativados se aceitares os cookies não essenciais."
           ]
         },
         {
-          "heading": "Gerir cookies",
+          "heading": "Cookies de terceiros",
           "paragraphs": [
-            "O nosso banner de cookies permite-te aceitar ou recusar cookies não essenciais na primeira visita. Também podes controlar os cookies nas definições do teu navegador."
+            "Alguns cookies são colocados por terceiros que nos prestam serviços, como fornecedores de análise e redes publicitárias. Estes terceiros podem usar cookies para recolher informações sobre a tua atividade em diferentes sites. Não controlamos estes cookies; consulta as políticas de privacidade e de cookies do terceiro em questão para mais informações.",
+            "Quando a publicidade é fornecida pela Google, a utilização de cookies publicitários pela Google permite que a Google e os seus parceiros exibam anúncios com base nas tuas visitas a este e a outros sites. Podes saber mais e controlar a publicidade personalizada nas Definições de anúncios da Google (adssettings.google.com)."
+          ]
+        },
+        {
+          "heading": "O teu consentimento e como gerir os cookies",
+          "paragraphs": [
+            "Na tua primeira visita, um banner de cookies permite-te aceitar todos os cookies ou apenas os essenciais. Nenhum cookie analítico ou publicitário é ativado até dares o teu consentimento. Podes alterar a tua escolha a qualquer momento através do link «Gerir cookies» no rodapé, que reabre o banner.",
+            "Também podes controlar ou eliminar os cookies através das definições do teu navegador. A maioria dos navegadores permite recusar ou remover cookies; no entanto, bloquear os cookies essenciais pode afetar o funcionamento do Site."
+          ]
+        },
+        {
+          "heading": "Alterações a esta política",
+          "paragraphs": [
+            "Podemos atualizar esta Política de cookies periodicamente para refletir alterações tecnológicas, legais ou das nossas práticas. A data de «Última atualização» no topo indica a última revisão. Encorajamos-te a consultar esta página regularmente."
+          ]
+        },
+        {
+          "heading": "Contacto",
+          "paragraphs": [
+            "Se tiveres questões sobre a nossa utilização de cookies, podes contactar-nos em hello@ragequit-arcade.com."
           ]
         }
       ]
@@ -1134,24 +1238,50 @@ const legalByLang = {
       "sections": [
         {
           "paragraphs": [
-            "Diese Cookie-Richtlinie erläutert, wie Ragequit Arcade Cookies verwendet und welche Optionen du hast."
+            "Diese Cookie-Richtlinie erklärt, wie Ragequit Arcade (betrieben von Valtech Services) Cookies und ähnliche Technologien auf ragequit-arcade.com verwendet, warum wir sie einsetzen und welche Optionen du hast. Durch die Nutzung der Website stimmst du der hier beschriebenen Verwendung von Cookies zu, vorbehaltlich der untenstehenden Einwilligungsoptionen."
+          ]
+        },
+        {
+          "heading": "Was sind Cookies?",
+          "paragraphs": [
+            "Cookies sind kleine Textdateien, die beim Besuch einer Website auf deinem Gerät gespeichert werden. Sie werden häufig verwendet, damit Websites funktionieren, um deine Einstellungen zu speichern und um den Websitebetreibern Informationen bereitzustellen. Ähnliche Technologien wie lokaler Speicher und Pixel können zu denselben Zwecken verwendet werden."
           ]
         },
         {
           "heading": "Arten von Cookies, die wir verwenden",
           "paragraphs": [
-            "Wir verwenden die folgenden Kategorien:"
+            "Wir verwenden die folgenden Kategorien von Cookies:"
           ],
           "list": [
-            "Essenzielle Cookies: für die Funktion der Website erforderlich.",
-            "Analyse-Cookies: helfen uns zu verstehen, wie Besucher die Website nutzen.",
-            "Werbe-Cookies: von Google und Partnern verwendet, um relevante Anzeigen zu schalten."
+            "Essenzielle Cookies: unbedingt erforderlich für das Funktionieren der Website, einschließlich der Speicherung deiner Cookie-Einwilligung, deiner bevorzugten Sprache und der Aufrechterhaltung deiner Anmeldung. Sie können nicht deaktiviert werden.",
+            "Analyse-Cookies: helfen uns zu verstehen, wie Besucher mit der Website interagieren (z. B. welche Spiele am häufigsten gespielt werden), um sie zu verbessern. Sie werden nur gesetzt, wenn du nicht essenzielle Cookies akzeptierst.",
+            "Werbe-Cookies: werden von uns und unseren Werbepartnern (zu denen Google und Gaming-Werbenetzwerke gehören können) verwendet, um relevante Anzeigen zu schalten und deren Leistung zu messen. Sie werden nur gesetzt, wenn du nicht essenzielle Cookies akzeptierst."
           ]
         },
         {
-          "heading": "Cookies verwalten",
+          "heading": "Cookies von Drittanbietern",
           "paragraphs": [
-            "Unser Cookie-Banner ermöglicht es dir, nicht essenzielle Cookies bei deinem ersten Besuch zu akzeptieren oder abzulehnen. Du kannst Cookies auch über deine Browsereinstellungen steuern."
+            "Einige Cookies werden von Drittanbietern gesetzt, die Dienste für uns erbringen, etwa Analyseanbieter und Werbenetzwerke. Diese Dritten können Cookies verwenden, um Informationen über deine Aktivität auf verschiedenen Websites zu sammeln. Wir kontrollieren diese Cookies nicht; weitere Informationen findest du in den Datenschutz- und Cookie-Richtlinien des jeweiligen Drittanbieters.",
+            "Wenn Werbung von Google ausgeliefert wird, ermöglicht die Verwendung von Werbe-Cookies durch Google, dass Google und seine Partner Anzeigen basierend auf deinen Besuchen dieser und anderer Websites schalten. Du kannst dich über personalisierte Werbung informieren und sie über die Google-Anzeigeneinstellungen (adssettings.google.com) steuern."
+          ]
+        },
+        {
+          "heading": "Deine Einwilligung und die Verwaltung von Cookies",
+          "paragraphs": [
+            "Bei deinem ersten Besuch ermöglicht dir ein Cookie-Banner, alle Cookies oder nur die essenziellen zu akzeptieren. Es werden keine Analyse- oder Werbe-Cookies gesetzt, bis du deine Einwilligung gibst. Du kannst deine Wahl jederzeit über den Link „Cookies verwalten“ in der Fußzeile ändern, der das Banner erneut öffnet.",
+            "Du kannst Cookies auch über deine Browsereinstellungen steuern oder löschen. Die meisten Browser erlauben das Ablehnen oder Entfernen von Cookies; das Blockieren essenzieller Cookies kann jedoch die Funktion der Website beeinträchtigen."
+          ]
+        },
+        {
+          "heading": "Änderungen dieser Richtlinie",
+          "paragraphs": [
+            "Wir können diese Cookie-Richtlinie von Zeit zu Zeit aktualisieren, um Änderungen der Technologie, der Rechtslage oder unserer Praktiken zu berücksichtigen. Das Datum „Zuletzt aktualisiert“ oben gibt an, wann sie zuletzt überarbeitet wurde. Wir empfehlen dir, diese Seite regelmäßig zu überprüfen."
+          ]
+        },
+        {
+          "heading": "Kontakt",
+          "paragraphs": [
+            "Wenn du Fragen zu unserer Verwendung von Cookies hast, kannst du uns unter hello@ragequit-arcade.com erreichen."
           ]
         }
       ]
