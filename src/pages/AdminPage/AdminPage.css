@@ -1,20 +1,18 @@
 /* =====================================================================
-   ADMIN PAGE — reprend le fond du site (turquoise bg de Ragequit)
+   ADMIN PAGE — dégradé de marque Ragequit (cyan → violet → magenta)
    ===================================================================== */
 
 /* ---- Login ---- */
 .admin-login{
   min-height:100vh;
-  background:#00C8C8;
+  background:linear-gradient(135deg,#00D9FF 0%,#8B5CF6 50%,#FF2D78 100%);
+  background-attachment:fixed;
   display:flex;align-items:center;justify-content:center;
   padding:24px;
 }
 .admin-login__card{
-  background:#ffffff;
-  border-radius:20px;
-  padding:40px 36px;
-  max-width:400px;width:100%;
-  text-align:center;
+  background:#ffffff;border-radius:20px;padding:40px 36px;
+  max-width:400px;width:100%;text-align:center;
   display:flex;flex-direction:column;align-items:center;gap:16px;
   box-shadow:0 20px 60px rgba(0,0,0,0.25);
 }
@@ -40,7 +38,8 @@
 /* ---- Dashboard ---- */
 .admin-dash{
   min-height:100vh;
-  background:#00C8C8;
+  background:linear-gradient(135deg,#00D9FF 0%,#8B5CF6 50%,#FF2D78 100%);
+  background-attachment:fixed;
   padding:0 0 60px;
 }
 .admin-header{
@@ -54,8 +53,7 @@
 .admin-header__title{
   font-family:'Trebuchet MS',sans-serif;
   font-size:18px;font-weight:900;color:#10162e;
-  letter-spacing:.05em;text-transform:uppercase;
-  flex:1;
+  letter-spacing:.05em;text-transform:uppercase;flex:1;
 }
 .admin-period-btn{
   padding:6px 16px;border-radius:999px;cursor:pointer;
@@ -63,92 +61,74 @@
   font-family:inherit;font-size:12px;font-weight:700;color:#888;
   transition:all .15s;
 }
-.admin-period-btn.is-active,.admin-period-btn:hover{
-  border-color:#00C8C8;color:#00C8C8;background:rgba(0,200,200,.08);
+.admin-period-btn.is-active{
+  border-color:transparent;color:#fff;
+  background:linear-gradient(135deg,#00D9FF,#8B5CF6,#FF2D78);
 }
+.admin-period-btn:hover{border-color:#8B5CF6;color:#8B5CF6;}
+.admin-period-btn.is-active:hover{color:#fff;}
 .admin-header__refresh{
   width:34px;height:34px;border-radius:50%;
   background:transparent;border:1.5px solid #d0d0da;
   font-size:18px;cursor:pointer;color:#888;
-  display:flex;align-items:center;justify-content:center;
-  transition:all .15s;
+  display:flex;align-items:center;justify-content:center;transition:all .15s;
 }
-.admin-header__refresh:hover{border-color:#00C8C8;color:#00C8C8;}
+.admin-header__refresh:hover{border-color:#8B5CF6;color:#8B5CF6;}
+
+/* ---- Légende events ---- */
+.admin-legend{
+  margin:18px 24px 0;padding:12px 16px;
+  background:rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.35);
+  border-radius:12px;
+  font-size:12px;line-height:1.55;color:#fff;
+  backdrop-filter:blur(3px);
+}
+.admin-legend strong{font-weight:800;}
 
 /* ---- KPIs ---- */
 .admin-kpis{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-  gap:12px;padding:20px 24px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:12px;padding:18px 24px;
 }
 .admin-stat{
-  background:#ffffff;border-radius:14px;
-  padding:18px 16px;
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  text-align:center;
-  box-shadow:0 2px 10px rgba(0,0,0,.07);
+  background:#ffffff;border-radius:14px;padding:18px 16px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.07);
 }
 .admin-stat__value{font-size:28px;font-weight:900;font-family:'Trebuchet MS',sans-serif;line-height:1;}
 .admin-stat__label{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.1em;}
-.admin-stat__sub{font-size:10px;color:#aaa;}
+.admin-stat__hint{font-size:9px;color:#b4b4c0;font-style:italic;}
 
-/* ---- Grille de tableaux ---- */
+/* ---- Grilles & modules ---- */
 .admin-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
-  gap:16px;padding:0 24px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+  gap:16px;padding:0 24px;margin-bottom:20px;
 }
-.admin-table-wrap{
-  background:#ffffff;border-radius:14px;
-  padding:20px;
+.admin-module{
+  background:#ffffff;border-radius:14px;padding:20px;
   box-shadow:0 2px 10px rgba(0,0,0,.07);
+  display:flex;flex-direction:column;
 }
+.admin-module__head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:12px;gap:12px;
+}
+.admin-module__head .admin-section-title{margin-bottom:0;}
 .admin-section-title{
   font-family:'Trebuchet MS',sans-serif;
   font-size:13px;font-weight:900;color:#10162e;
-  text-transform:uppercase;letter-spacing:.1em;
-  margin-bottom:14px;
+  text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px;
 }
-.admin-table{
-  width:100%;border-collapse:collapse;font-size:12px;
-}
-.admin-table th{
-  text-align:left;padding:8px 10px;
-  background:#f5f5f8;color:#666;
-  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
-  border-radius:6px;
-}
-.admin-table td{
-  padding:8px 10px;color:#333;
-  border-bottom:1px solid #f0f0f4;
-}
-.admin-table tr:last-child td{border-bottom:none;}
-.admin-table tr:hover td{background:#f9f9fc;}
-.admin-empty{font-size:12px;color:#aaa;text-align:center;padding:20px 0;}
-.admin-loading{
-  min-height:100vh;background:#00C8C8;
+
+/* ---- Mini sparkline ---- */
+.admin-spark{width:100%;height:48px;margin-bottom:12px;}
+.admin-spark--empty{
   display:flex;align-items:center;justify-content:center;
-  font-family:'Trebuchet MS',sans-serif;
-  font-size:16px;font-weight:700;color:#ffffff;
-  letter-spacing:.1em;text-transform:uppercase;
+  color:#d0d0da;font-size:18px;
 }
 
-@media(max-width:600px){
-  .admin-kpis{grid-template-columns:repeat(2,1fr);}
-  .admin-grid{grid-template-columns:1fr;}
-  .admin-header{padding:12px 16px;}
-}
-
-/* =====================================================================
-   AJOUTS v2 : graphique, export, scores, messages, PIN
-   ===================================================================== */
-
-/* ---- En-tête de tableau avec bouton export ---- */
-.admin-table-head{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:14px;gap:12px;
-}
-.admin-table-head .admin-section-title{margin-bottom:0;}
+/* ---- Export ---- */
 .admin-export-btn{
   display:flex;align-items:center;gap:5px;
   padding:5px 12px;border-radius:8px;cursor:pointer;
@@ -158,66 +138,81 @@
 }
 .admin-export-btn:hover{background:#16653e;}
 
-/* ---- Graphique ---- */
+/* ---- Tableaux ---- */
+.admin-table{width:100%;border-collapse:collapse;font-size:12px;}
+.admin-table th{
+  text-align:left;padding:8px 10px;background:#f5f5f8;color:#666;
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;border-radius:6px;
+}
+.admin-table td{padding:8px 10px;color:#333;border-bottom:1px solid #f0f0f4;}
+.admin-table tr:last-child td{border-bottom:none;}
+.admin-table tr:hover td{background:#f9f9fc;}
+.admin-empty{font-size:12px;color:#aaa;text-align:center;padding:20px 0;}
+.admin-loading{
+  min-height:100vh;
+  background:linear-gradient(135deg,#00D9FF 0%,#8B5CF6 50%,#FF2D78 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Trebuchet MS',sans-serif;font-size:16px;font-weight:700;color:#fff;
+  letter-spacing:.1em;text-transform:uppercase;
+}
+
+/* ---- Grand graphe ---- */
 .admin-chart-wrap{
-  background:#fff;border-radius:14px;
-  padding:20px 24px;margin:0 24px 20px;
+  background:#fff;border-radius:14px;padding:20px 24px;margin:0 24px 20px;
   box-shadow:0 2px 10px rgba(0,0,0,.07);
 }
 
-/* ---- Bloc pleine largeur (scores, messages) ---- */
+/* ---- Blocs pleine largeur ---- */
 .admin-fullwidth{
-  background:#fff;border-radius:14px;
-  padding:20px 24px;margin:0 24px 20px;
-  box-shadow:0 2px 10px rgba(0,0,0,.07);
-  overflow-x:auto;
+  background:#fff;border-radius:14px;padding:20px 24px;margin:0 24px 20px;
+  box-shadow:0 2px 10px rgba(0,0,0,.07);overflow-x:auto;
+}
+/* Séparation nette du module modération et messages */
+.admin-fullwidth--spaced{margin-top:28px;}
+.admin-fullwidth--spaced:first-of-type{
+  border-top:3px solid rgba(255,255,255,.4);
+  margin-top:36px;
 }
 
-/* ---- Bouton suppression score ---- */
+/* ---- Bouton suppression ---- */
 .admin-del-btn{
   width:28px;height:28px;border-radius:7px;cursor:pointer;
-  background:rgba(255,68,68,.1);border:1px solid rgba(255,68,68,.3);
-  color:#FF4444;display:flex;align-items:center;justify-content:center;
-  transition:all .15s;
+  background:rgba(255,45,120,.1);border:1px solid rgba(255,45,120,.3);
+  color:#FF2D78;display:flex;align-items:center;justify-content:center;transition:all .15s;
 }
-.admin-del-btn:hover{background:#FF4444;color:#fff;}
+.admin-del-btn:hover{background:#FF2D78;color:#fff;}
 
-/* ---- Messages de contact ---- */
+/* ---- Messages ---- */
 .admin-messages{display:flex;flex-direction:column;gap:12px;}
-.admin-msg{
-  background:#f9f9fc;border-radius:10px;padding:14px 16px;
-  border-left:3px solid #d0d0da;
-}
-.admin-msg--unread{border-left-color:#FF4444;background:#fff8f8;}
-.admin-msg__head{
-  display:flex;justify-content:space-between;align-items:baseline;
-  margin-bottom:6px;gap:12px;
-}
+.admin-msg{background:#f9f9fc;border-radius:10px;padding:14px 16px;border-left:3px solid #d0d0da;}
+.admin-msg--unread{border-left-color:#FF2D78;background:#fff8fb;}
+.admin-msg__head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:12px;}
 .admin-msg__subject{font-weight:800;font-size:13px;color:#10162e;}
 .admin-msg__date{font-size:10px;color:#aaa;white-space:nowrap;}
 .admin-msg__body{font-size:13px;color:#444;line-height:1.5;margin-bottom:10px;white-space:pre-wrap;}
-.admin-msg__foot{
-  display:flex;justify-content:space-between;align-items:center;gap:12px;
-}
+.admin-msg__foot{display:flex;justify-content:space-between;align-items:center;gap:12px;}
 .admin-msg__email{font-size:11px;color:#888;}
 .admin-msg__actions{display:flex;gap:8px;}
 .admin-msg__reply,.admin-msg__mark{
   padding:5px 12px;border-radius:7px;cursor:pointer;
-  font-family:inherit;font-size:11px;font-weight:700;
-  border:none;transition:all .15s;text-decoration:none;
+  font-family:inherit;font-size:11px;font-weight:700;border:none;transition:all .15s;text-decoration:none;
 }
-.admin-msg__reply{background:#00C8C8;color:#fff;}
-.admin-msg__reply:hover{background:#00a8a8;}
+.admin-msg__reply{background:linear-gradient(135deg,#00D9FF,#8B5CF6);color:#fff;}
+.admin-msg__reply:hover{opacity:.9;}
 .admin-msg__mark{background:#e8e8f0;color:#666;}
 .admin-msg__mark:hover{background:#d0d0da;}
 
 /* ---- PIN ---- */
 .admin-pin-input{
-  width:100%;padding:14px;text-align:center;
-  font-size:24px;letter-spacing:.5em;
-  border:1.5px solid #e0e0e8;border-radius:12px;
-  font-family:inherit;color:#10162e;
+  width:100%;padding:14px;text-align:center;font-size:24px;letter-spacing:.5em;
+  border:1.5px solid #e0e0e8;border-radius:12px;font-family:inherit;color:#10162e;
 }
-.admin-pin-input:focus{outline:none;border-color:#00C8C8;}
-.admin-login__btn--pin{justify-content:center;background:#00C8C8;color:#fff;border:none;}
-.admin-login__btn--pin:hover{background:#00a8a8;box-shadow:0 4px 16px rgba(0,200,200,.3);}
+.admin-pin-input:focus{outline:none;border-color:#8B5CF6;}
+.admin-login__btn--pin{justify-content:center;background:linear-gradient(135deg,#00D9FF,#8B5CF6,#FF2D78);color:#fff;border:none;}
+.admin-login__btn--pin:hover{opacity:.92;box-shadow:0 4px 16px rgba(139,92,246,.3);}
+
+@media(max-width:600px){
+  .admin-kpis{grid-template-columns:repeat(2,1fr);}
+  .admin-grid{grid-template-columns:1fr;}
+  .admin-header{padding:12px 16px;}
+}
