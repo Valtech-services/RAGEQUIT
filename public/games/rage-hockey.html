@@ -874,7 +874,7 @@ function over(){
     const secs=Math.floor(survivalTime/60); const isRec=survivalTime>survivalBest;
     if(isRec){ survivalBest=survivalTime; localStorage.setItem("rh_survival_best",survivalBest); }
     addXP(Math.floor(secs/2)+5); checkChallenges({survival:true,survivalSecs:secs});
-    reportScore({game:"rage-hockey",mode:"survival",score:secs,scoreLabel:fmtTime(secs),diff:diffKey});
+    reportScore({game:"rage-hockey",mode:"survival",score:secs,scoreLabel:fmtTime(secs),diff:diffKey,arena:tableKey});
     document.getElementById("overFace").innerHTML=isRec?"🔥":"⏱️";
     const t=document.getElementById("overTitle"); t.textContent=isRec?"New record":"Time's up"; t.style.color="var(--cyan)";
     document.getElementById("overScore").textContent=fmtTime(secs);
@@ -884,7 +884,7 @@ function over(){
   const won=scoreP>=WIN;
   if(won){ wins++; localStorage.setItem("rh_wins",wins); Sound.win(); addXP(30+scoreP*4); } else addXP(8+scoreP*3);
   buildSkinUI(); checkChallenges({won,scoreP,scoreE,diff:diffKey,table:tableKey,mode:gameMode});
-  if(gameMode===MODE.PVE) reportScore({game:"rage-hockey",mode:"classic",score:won?(100+scoreP*10-scoreE*5):scoreP*10,scoreLabel:scoreP+" - "+scoreE+(won?" W":" L"),diff:diffKey});
+  if(gameMode===MODE.PVE) reportScore({game:"rage-hockey",mode:"classic",score:won?(100+scoreP*10-scoreE*5):scoreP*10,scoreLabel:scoreP+" - "+scoreE+(won?" W":" L"),diff:diffKey,arena:tableKey});
   document.getElementById("overFace").innerHTML=won?"🏆":"💀";
   const t=document.getElementById("overTitle");
   t.textContent=gameMode===MODE.PVP?(scoreP>=WIN?"P1 wins":"P2 wins"):(won?"You win":"You lose");
