@@ -11,34 +11,45 @@ import './LeaderboardPage.css'
 import { track } from '../../lib/analytics'
 
 /*
-  LeaderboardPage — structure :
-  - Header : navbar 1×1 + titre 2×1
-  - Recherche temps réel filtrée sur games.js (tape "rag..." → suggestions)
-  - Onglets mode si le jeu sélectionné en a plusieurs
-  - Rang du joueur (connecté → Supabase, anonyme → localStorage) au-dessus du tableau
-  - Top 20 avec médailles 🥇🥈🥉
-  - Si aucun jeu sélectionné → rien n'est affiché
-  - Si pas de data → message vide
+  LeaderboardPage
+  - Recherche temps réel filtrée sur games.js
+  - Cas spécial Rage Hockey : SEULEMENT le mode survival, décliné en
+    3 difficultés (chill / normal / rage) × 3 arènes (normal / bumper / narrow)
+  - Autres jeux : modes classiques inchangés
 */
+
+// Déclinaisons Rage Hockey survival
+const RH_DIFFS  = [
+  { key: 'chill',  label: 'Chill'  },
+  { key: 'normal', label: 'Normal' },
+  { key: 'rage',   label: 'Rage'   },
+]
+const RH_ARENAS = [
+  { key: 'normal', label: 'Classic' },  // dans le jeu, l'arène Classic a la clé "normal"
+  { key: 'bumper', label: 'Bumper'  },
+  { key: 'narrow', label: 'Narrow'  },
+]
+
 export default function LeaderboardPage() {
   const { t } = useTranslation()
-  const [query, setQuery]       = useState('')
-  const [gameId, setGameId]     = useState(null)   // null = aucun jeu sélectionné
-  const [mode, setMode]         = useState('classic')
-  const [rows, setRows]         = useState([])
+  const [query, setQuery]         = useState('')
+  const [gameId, setGameId]       = useState(null)
+  const [mode, setMode]           = useState('classic')
+  const [difficulty, setDifficulty] = useState('normal') // Rage Hockey
+  const [arena, setArena]         = useState('normal')    // Rage Hockey
+  const [rows, setRows]           = useState([])
   const [playerRow, setPlayerRow] = useState(null)
-  const [loading, setLoading]   = useState(false)
-  const [user, setUser]         = useState(null)
-  const [name, setName]         = useState(getPlayerName())
+  const [loading, setLoading]     = useState(false)
+  const [user, setUser]           = useState(null)
+  const [name, setName]           = useState(getPlayerName())
 
   usePageTitle(t('leaderboard.title'))
 
-  // Jeu sélectionné
   const game = gameId ? games.find(g => g.id === gameId) : null
+  const isRageHockey = gameId === 'rage-hockey'
   const gameModes = game?.modes || ['classic']
   const defaultMode = game?.defaultMode || 'classic'
 
-  // Track page vue leaderboard
   useEffect(() => { track('leaderboard_view') }, [])
 
   // Auth
@@ -50,21 +61,32 @@ export default function LeaderboardPage() {
     return () => subscription.unsubscribe()
   }, [])
 
-  // Reset mode quand on change de jeu
-  useEffect(() => { if (game) setMode(defaultMode) }, [gameId])
+  // Quand on change de jeu : Rage Hockey force survival, les autres prennent leur défaut
+  useEffect(() => {
+    if (!game) return
+    if (gameId === 'rage-hockey') {
+      setMode('survival')
+      setDifficulty('normal')
+      setArena('normal')
+    } else {
+      setMode(defaultMode)
+    }
+  }, [gameId])
 
-  // Charger le classement
+  // Charger le classement (avec difficulté/arène uniquement pour Rage Hockey)
   const loadData = useCallback(async () => {
     if (!gameId) { setRows([]); setPlayerRow(null); return }
     setLoading(true)
+    const diff  = isRageHockey ? difficulty : null
+    const arn   = isRageHockey ? arena : null
     const [lb, best] = await Promise.all([
-      getLeaderboard(gameId, mode, 20),
-      getPlayerBest(gameId, mode),
+      getLeaderboard(gameId, mode, 20, diff, arn),
+      getPlayerBest(gameId, mode, diff, arn),
     ])
     setRows(lb)
     setPlayerRow(best)
     setLoading(false)
-  }, [gameId, mode])
+  }, [gameId, mode, difficulty, arena, isRageHockey])
 
   useEffect(() => { loadData() }, [loadData])
   useEffect(() => {
@@ -72,7 +94,6 @@ export default function LeaderboardPage() {
     return () => window.removeEventListener('rh-score-saved', loadData)
   }, [loadData])
 
-  // Recherche filtrée
   const suggestions = query.trim().length > 0
     ? games.filter(g => g.title.toLowerCase().startsWith(query.toLowerCase()))
     : []
@@ -94,7 +115,6 @@ export default function LeaderboardPage() {
   return (
     <div className="lbpage">
 
-      {/* EN-TÊTE : navbar 1×1 + titre 2×1 */}
       <div className="lbpage__header">
         <div className="lbpage__header-nav">
           <Navbar inGrid={true} />
@@ -140,21 +160,44 @@ export default function LeaderboardPage() {
             </div>
           )}
 
-          {/* Onglets mode — seulement si le jeu a plusieurs modes */}
-          {game && gameModes.length > 1 && (
-            <div className="lbpage__mode-tabs">
-              {gameModes.map(m => (
-                <button key={m}
-                  className={`lbpage__mode-tab ${mode === m ? 'is-active' : ''}`}
-                  onClick={() => { track('leaderboard_mode_change', { game_id: gameId, props: { mode: m } }); setMode(m) }}>
-                  {m === 'survival' ? t('leaderboard.survival') : t('leaderboard.classic')}
-                </button>
-              ))}
-            </div>
+          {/* Rage Hockey : pas d'onglet mode (survival forcé), mais filtres difficulté + arène */}
+          {game && isRageHockey ? (
+            <>
+              <div className="lbpage__mode-tabs">
+                {RH_DIFFS.map(d => (
+                  <button key={d.key}
+                    className={`lbpage__mode-tab ${difficulty === d.key ? 'is-active' : ''}`}
+                    onClick={() => { track('leaderboard_diff_change', { game_id: gameId, props: { difficulty: d.key } }); setDifficulty(d.key) }}>
+                    {d.label}
+                  </button>
+                ))}
+              </div>
+              <div className="lbpage__mode-tabs lbpage__arena-tabs">
+                {RH_ARENAS.map(a => (
+                  <button key={a.key}
+                    className={`lbpage__mode-tab ${arena === a.key ? 'is-active' : ''}`}
+                    onClick={() => { track('leaderboard_arena_change', { game_id: gameId, props: { arena: a.key } }); setArena(a.key) }}>
+                    {a.label}
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : (
+            /* Autres jeux : onglets mode classiques si plusieurs modes */
+            game && gameModes.length > 1 && (
+              <div className="lbpage__mode-tabs">
+                {gameModes.map(m => (
+                  <button key={m}
+                    className={`lbpage__mode-tab ${mode === m ? 'is-active' : ''}`}
+                    onClick={() => { track('leaderboard_mode_change', { game_id: gameId, props: { mode: m } }); setMode(m) }}>
+                    {m === 'survival' ? t('leaderboard.survival') : t('leaderboard.classic')}
+                  </button>
+                ))}
+              </div>
+            )
           )}
         </div>
 
-        {/* CONTENU : affiché seulement si un jeu est sélectionné */}
         {!gameId ? (
           <div className="lbpage__placeholder">
             <p>{t('leaderboard.selectGame')}</p>
@@ -162,9 +205,8 @@ export default function LeaderboardPage() {
         ) : (
           <div className="lbpage__board">
 
-            {/* Rang du joueur — au-dessus du tableau */}
+            {/* Rang du joueur */}
             {user ? (
-              /* Connecté */
               playerRow ? (
                 <div className="lbpage__player-rank lbpage__player-rank--connected">
                   <span className="lbpage__player-rank-badge">{t('leaderboard.you')}</span>
@@ -173,7 +215,6 @@ export default function LeaderboardPage() {
                   <span className="lbpage__player-rank-score">{formatScore(playerRow)}</span>
                 </div>
               ) : (
-                /* Connecté mais jamais joué */
                 <div className="lbpage__player-rank lbpage__player-rank--no-score">
                   <span className="lbpage__player-rank-badge">{t('leaderboard.you')}</span>
                   <span className="lbpage__player-rank-empty">{t('leaderboard.noScoreYet')}</span>
@@ -183,7 +224,6 @@ export default function LeaderboardPage() {
                 </div>
               )
             ) : (
-              /* Non connecté */
               <div className="lbpage__player-rank lbpage__player-rank--guest">
                 <span className="lbpage__player-rank-empty">{t('leaderboard.signInPrompt')}</span>
                 <button className="lbpage__cta-btn" onClick={openAuthDrawer}>
@@ -192,7 +232,6 @@ export default function LeaderboardPage() {
               </div>
             )}
 
-            {/* Tableau top 20 */}
             {loading ? (
               <div className="lbpage__loading">{t('leaderboard.loading')}</div>
             ) : rows.length === 0 ? (
@@ -234,7 +273,6 @@ export default function LeaderboardPage() {
           </div>
         )}
 
-        {/* PSEUDO (seulement si anonyme) */}
         {!user && (
           <div className="lbpage__nickname">
             <label className="lbpage__nickname-label">{t('leaderboard.nicknameLabel')}</label>
