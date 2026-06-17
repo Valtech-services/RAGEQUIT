@@ -3,16 +3,28 @@
 
    Utilise la vue Supabase "scores_with_names" pour le leaderboard public.
    Import supabase depuis '../lib/supabase' (même instance que AuthContext).
+
+   NOUVEAU : prise en charge de `difficulty` et `arena` (Rage Hockey survival).
+   - Si ces champs sont fournis, la déduplication du meilleur score se fait
+     par combinaison game + mode + difficulty + arena (donc un joueur peut
+     figurer dans plusieurs classements croisés).
+   - Si absents (ex : STAQ), comportement inchangé : 1 meilleur score par
+     game + mode.
    ===================================================================== */
 
 import { supabase } from '../lib/supabase'
 
 /* ---- localStorage helpers ---- */
-const LS_KEY      = (game, mode) => `rq_lb_${game}_${mode}`
+// La clé localStorage inclut difficulty/arena quand ils existent, pour que
+// les classements anonymes soient aussi séparés par combinaison.
+const LS_KEY = (game, mode, difficulty, arena) => {
+  const suffix = (difficulty || arena) ? `_${difficulty || 'x'}_${arena || 'x'}` : ''
+  return `rq_lb_${game}_${mode}${suffix}`
+}
 const LS_NAME_KEY = 'rq_player_name'
 
-export function getPlayerName()        { return localStorage.getItem(LS_NAME_KEY) || '' }
-export function setPlayerName(name)    { localStorage.setItem(LS_NAME_KEY, name.trim()) }
+export function getPlayerName()     { return localStorage.getItem(LS_NAME_KEY) || '' }
+export function setPlayerName(name) { localStorage.setItem(LS_NAME_KEY, name.trim()) }
 
 export function formatTime(ms) {
   if (!ms && ms !== 0) return '—'
@@ -22,30 +34,42 @@ export function formatTime(ms) {
   return `${m}:${s.toString().padStart(2, '0')}`
 }
 
+// Applique les filtres difficulty/arena à une requête Supabase, seulement
+// si les valeurs sont fournies (sinon on n'ajoute pas le filtre).
+function applyVariantFilters(q, difficulty, arena) {
+  if (difficulty) q = q.eq('difficulty', difficulty)
+  if (arena)      q = q.eq('arena', arena)
+  return q
+}
+
 /* =====================================================================
    submitScore — Supabase si connecté, localStorage sinon.
-   N'insère que si c'est un nouveau meilleur score du joueur.
-   payload : { game, mode, score (number), scoreLabel }
+   N'insère/update que si c'est un nouveau meilleur score du joueur POUR
+   cette combinaison (game + mode + difficulty + arena).
+   payload : { game, mode, score (number), scoreLabel, difficulty?, arena? }
    ===================================================================== */
-export async function submitScore({ game, mode, score, scoreLabel }) {
+export async function submitScore({ game, mode, score, scoreLabel, difficulty = null, arena = null }) {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (user) {
-    // Cherche le meilleur score existant de ce joueur pour ce jeu/mode
-    const { data: existing } = await supabase
+    // Cherche le meilleur score existant de ce joueur pour cette combinaison exacte
+    let q = supabase
       .from('scores')
       .select('id, score')
       .eq('user_id', user.id)
       .eq('game_id', game)
       .eq('mode', mode)
+    q = applyVariantFilters(q, difficulty, arena)
+    const { data: existing } = await q
       .order('score', { ascending: false })
       .limit(1)
       .maybeSingle()
 
     if (!existing) {
-      // Première partie : insert
+      // Première partie pour cette combinaison : insert
       await supabase.from('scores').insert({
         user_id: user.id, game_id: game, mode, score, score_label: scoreLabel,
+        difficulty, arena,
       })
     } else if (score > existing.score) {
       // Nouveau meilleur score : update
@@ -54,8 +78,8 @@ export async function submitScore({ game, mode, score, scoreLabel }) {
         .eq('id', existing.id)
     }
   } else {
-    // Anonyme : localStorage
-    const key  = LS_KEY(game, mode)
+    // Anonyme : localStorage (clé séparée par combinaison)
+    const key  = LS_KEY(game, mode, difficulty, arena)
     const name = getPlayerName() || 'Anonymous'
     const list = JSON.parse(localStorage.getItem(key) || '[]')
     const idx  = list.findIndex(e => e.name === name)
@@ -70,15 +94,17 @@ export async function submitScore({ game, mode, score, scoreLabel }) {
 }
 
 /* =====================================================================
-   getLeaderboard — top N pour un jeu/mode depuis Supabase (ou localStorage)
+   getLeaderboard — top N pour une combinaison jeu/mode(/difficulté/arène)
    ===================================================================== */
-export async function getLeaderboard(game, mode, limit = 20) {
+export async function getLeaderboard(game, mode, limit = 20, difficulty = null, arena = null) {
   try {
-    const { data, error } = await supabase
+    let q = supabase
       .from('scores_with_names')
-      .select('score, score_label, username')
+      .select('score, score_label, username, difficulty, arena')
       .eq('game_id', game)
       .eq('mode', mode)
+    q = applyVariantFilters(q, difficulty, arena)
+    const { data, error } = await q
       .order('score', { ascending: false })
       .limit(limit)
 
@@ -93,7 +119,7 @@ export async function getLeaderboard(game, mode, limit = 20) {
   } catch (e) { /* Supabase indisponible, fallback */ }
 
   // Fallback localStorage
-  const key  = LS_KEY(game, mode)
+  const key  = LS_KEY(game, mode, difficulty, arena)
   const list = JSON.parse(localStorage.getItem(key) || '[]')
   return list.slice(0, limit).map((e, i) => ({
     rank:       i + 1,
@@ -104,32 +130,36 @@ export async function getLeaderboard(game, mode, limit = 20) {
 }
 
 /* =====================================================================
-   getPlayerBest — meilleur score + rang du joueur courant
+   getPlayerBest — meilleur score + rang du joueur courant pour la combinaison
    ===================================================================== */
-export async function getPlayerBest(game, mode) {
+export async function getPlayerBest(game, mode, difficulty = null, arena = null) {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (user) {
     try {
-      const { data: best } = await supabase
+      let bq = supabase
         .from('scores')
         .select('score, score_label')
         .eq('user_id', user.id)
         .eq('game_id', game)
         .eq('mode', mode)
+      bq = applyVariantFilters(bq, difficulty, arena)
+      const { data: best } = await bq
         .order('score', { ascending: false })
         .limit(1)
         .maybeSingle()
 
       if (!best) return null
 
-      // Rang = nombre de joueurs avec un meilleur score + 1
-      const { count } = await supabase
+      // Rang = nombre de joueurs avec un meilleur score + 1 (même combinaison)
+      let cq = supabase
         .from('scores')
         .select('id', { count: 'exact', head: true })
         .eq('game_id', game)
         .eq('mode', mode)
         .gt('score', best.score)
+      cq = applyVariantFilters(cq, difficulty, arena)
+      const { count } = await cq
 
       return {
         score:      best.score,
@@ -142,7 +172,7 @@ export async function getPlayerBest(game, mode) {
   // Anonyme : localStorage
   const name = getPlayerName()
   if (!name) return null
-  const key  = LS_KEY(game, mode)
+  const key  = LS_KEY(game, mode, difficulty, arena)
   const list = JSON.parse(localStorage.getItem(key) || '[]')
   const idx  = list.findIndex(e => e.name === name)
   if (idx < 0) return null
