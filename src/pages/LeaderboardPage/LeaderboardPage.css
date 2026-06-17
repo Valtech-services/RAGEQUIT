@@ -252,6 +252,14 @@
 }
 .lbpage__nickname-save:hover { opacity: 0.9; }
 
+/* =====================================================================
+   AJOUT — deuxième rangée de filtres (arènes) pour Rage Hockey
+   À coller à la fin de LeaderboardPage.css
+   ===================================================================== */
+.lbpage__arena-tabs {
+  margin-top: 8px;
+}
+
 /* ---- RESPONSIVE ---- */
 @media (max-width: 600px) {
   .lbpage { --gap: 10px; --pad: 12px; --cell: calc((100vw - 24px - 20px) / 3); }
