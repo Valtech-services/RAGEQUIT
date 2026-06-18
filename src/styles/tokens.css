@@ -122,3 +122,5 @@
   --cell: 96px;
   --grid-pad: 24px;
 }
+
+.gamepage__ad, .mgp__ad { display: none; }
