@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { games } from '../../data/games'
+import { useAuth } from '../../context/AuthContext'
+import { submitScore } from '../../data/leaderboardStore'
+import { track } from '../../lib/analytics'
 import Navbar from '../../components/Navbar/Navbar'
 import GameCard from '../../components/GameCard/GameCard'
 import SeoBlock from '../../components/SeoBlock/SeoBlock'
@@ -13,12 +16,15 @@ export default function MobileGamePage() {
   const { t } = useTranslation()
   const { id } = useParams()
   const game = games.find(g => g.id === id)
+  const { recordPlay } = useAuth()
   const [playing, setPlaying] = useState(false)
+  const [sessionStart] = useState(Date.now())
 
   usePageTitle(game?.title)
 
   const handlePlay = () => {
     setPlaying(true)
+    if (game) track('game_start', { game_id: game.id, category: game.category })
     try { document.documentElement.requestFullscreen?.() } catch (e) {}
   }
 
@@ -39,6 +45,40 @@ export default function MobileGamePage() {
       document.body.style.overflow = ''
     }
   }, [])
+
+  // Track page vue jeu
+  useEffect(() => {
+    if (game) track('game_view', { game_id: game.id, category: game.category })
+  }, [id])
+
+  // Réception des messages postMessage envoyés par le jeu HTML (score + analytics).
+  // Générique : tout type finissant par "_SCORE" est traité comme un score,
+  // donc valable pour STAQ, Rage Hockey et tous les futurs jeux sans modification.
+  useEffect(() => {
+    async function handleMessage(e) {
+      const d = e.data
+      if (!d || typeof d.type !== 'string') return
+
+      // Score depuis le jeu HTML
+      if (d.type.endsWith('_SCORE')) {
+        await submitScore({ game: d.game, mode: d.mode, score: d.score, scoreLabel: d.scoreLabel, difficulty: d.diff, arena: d.arena })
+        if (d.game) recordPlay(d.game)
+        window.dispatchEvent(new Event('rh-score-saved'))
+        const duration = Math.round((Date.now() - sessionStart) / 1000)
+        track('game_end', {
+          game_id: d.game,
+          props: { mode: d.mode, score: d.score, diff: d.diff, duration_secs: duration }
+        })
+      }
+
+      // Analytics depuis le jeu HTML (boost, pub, perfect…)
+      if (d.type === 'RH_TRACK') {
+        track(d.event, { game_id: d.game_id, props: d.props })
+      }
+    }
+    window.addEventListener('message', handleMessage)
+    return () => window.removeEventListener('message', handleMessage)
+  }, [recordPlay])
 
   if (!game) {
     return (
