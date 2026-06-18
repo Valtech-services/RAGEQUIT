@@ -671,7 +671,11 @@ Game.prototype.addBlock = function(){
          prochaine mort, game over sec et score envoyé.
    ===================================================================== */
 Game.prototype.endGame = function(){
-  var score = this.currentScore();
+  // Le dernier bloc du tableau est celui qui a raté (état MISSED) : il ne
+  // doit pas compter. Le score = blocs réellement posés + score conservé.
+  var lastBlock = this.blocks[this.blocks.length-1];
+  var missed = (lastBlock && lastBlock.state == lastBlock.STATES.MISSED) ? 1 : 0;
+  var score = this.currentScore() - missed;
   this.finalScore = score;
 
   // 1) AFFICHAGE IMMÉDIAT — rien ne doit retarder ça.
