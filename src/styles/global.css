@@ -52,4 +52,10 @@ img {
   color: #ffffff;
 }
 
-.gamepage__ad, .mgp__ad { display: none; }
+.gamepage__ad,
+.gamepage__ad--left,
+.gamepage__ad--right,
+.gamepage__ad--below,
+.mgp__ad {
+  display: none !important;
+}
