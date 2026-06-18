@@ -220,11 +220,16 @@ function Dashboard(){
     // Pays (events)
     const byCountry   = groupCount(ev.filter(e => e.country), e => e.country)
 
-    // Taux de complétion (combien de parties finies vs lancées)
-    const completion = gameStarts.length ? Math.round(gameEnds.length / gameStarts.length * 100) : 0
+// Taux de complétion : parties terminées vs lancées, plafonné à 100%.
+    // (une même partie peut émettre plusieurs game_end via le revive STAQ,
+    //  donc on borne pour éviter les valeurs > 100%)
+    const completion = gameStarts.length
+      ? Math.min(100, Math.round(gameEnds.length / gameStarts.length * 100))
+      : 0
     // Taux de pub par partie
     const adsPerPlay = gameStarts.length ? (adsWatched.length / gameStarts.length).toFixed(2) : '0'
-
+    // Taux de visiteurs connectés (part des visiteurs ayant un compte)
+    const loggedRate = allVisitors.size ? Math.round(loggedVisitors.size / allVisitors.size * 100) : 0
     // Séries journalières
     const sVisitors  = dailyUnique(ev, period, vid)
     const sPlays     = dailySeries(gameStarts, period)
@@ -234,7 +239,7 @@ function Dashboard(){
     return {
       visits, homeVisits, gameStarts, gameEnds, adsWatched,
       allVisitors: allVisitors.size, loggedVisitors: loggedVisitors.size, anonVisitors: anonVisitors.size,
-      playsByGame, byCategory, byDevice, byCountry, completion, adsPerPlay,
+      playsByGame, byCategory, byDevice, byCountry, completion, adsPerPlay, loggedRate,
       sVisitors, sPlays, sAds, sHome,
     }
   }, [d, period])
@@ -270,7 +275,7 @@ function Dashboard(){
         {/* KPIs — chiffres concrets */}
         <section className="adm-kpis">
           <Kpi label="Visiteurs uniques" value={m.allVisitors} color={C.cyan} sub={`${period} derniers jours`} />
-          <Kpi label="dont connectés" value={m.loggedVisitors} color={C.violet} sub="avec compte" />
+          <Kpi label="dont connectés" value={m.loggedVisitors} color={C.violet} sub={`${m.loggedRate}% des visiteurs`} />
           <Kpi label="dont anonymes" value={m.anonVisitors} color={C.magenta} sub="sans compte" />
           <Kpi label="Parties lancées" value={m.gameStarts.length} color={C.green} />
           <Kpi label="Parties terminées" value={m.gameEnds.length} color={C.yellow} sub={`${m.completion}% de complétion`} />
