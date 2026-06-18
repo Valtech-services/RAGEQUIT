@@ -55,7 +55,7 @@ function GamePageDesktop() {
 
       // Score postMessage depuis le jeu HTML
       if(d.type.endsWith('_SCORE')) {
-        await submitScore({ game: d.game, mode: d.mode, score: d.score, scoreLabel: d.scoreLabel })
+        await submitScore({ game: d.game, mode: d.mode, score: d.score, scoreLabel: d.scoreLabel, difficulty: d.diff, arena: d.arena })
         if(d.game) recordPlay(d.game)
         window.dispatchEvent(new Event('rh-score-saved'))
         const duration = Math.round((Date.now() - sessionStart) / 1000)
