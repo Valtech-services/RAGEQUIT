@@ -51,3 +51,5 @@ img {
   background: rgba(0, 217, 255, 0.25);
   color: #ffffff;
 }
+
+.gamepage__ad, .mgp__ad { display: none; }
