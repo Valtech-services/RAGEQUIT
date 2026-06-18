@@ -135,22 +135,22 @@
   .perfect-word.go{animation:perfectWord .6s ease;}
   @keyframes perfectWord{0%{opacity:0;transform:translateY(10px) scale(.9)}30%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-16px) scale(1.05)}}
 
-  /* Overlay pub simulée */
+  /* Écran récompense (neutre, en attendant la vraie régie pub) */
   .ad-sim{
     position:absolute;inset:0;z-index:40;display:none;
-    flex-direction:column;align-items:center;justify-content:center;gap:20px;
+    flex-direction:column;align-items:center;justify-content:center;gap:24px;
     background:#06070f;color:#fff;
   }
   .ad-sim.show{display:flex;}
-  .ad-sim__label{font-size:2.4vh;letter-spacing:.2em;color:rgba(255,255,255,.5);text-transform:uppercase;}
   .ad-sim__box{
-    width:80%;max-width:340px;aspect-ratio:16/10;border-radius:16px;
-    background:linear-gradient(135deg,#00D9FF,#8B5CF6,#FF2D78);
-    display:flex;align-items:center;justify-content:center;
-    font-size:5vh;letter-spacing:.1em;text-transform:uppercase;
-    box-shadow:0 16px 50px rgba(139,92,246,.5);
+    font-size:clamp(40px,9vh,72px);letter-spacing:.08em;text-transform:uppercase;
+    color:#fff;font-weight:400;
   }
-  .ad-sim__count{font-size:2.2vh;color:rgba(255,255,255,.6);}
+  .ad-sim__box span{
+    background:linear-gradient(135deg,#00D9FF,#FF2D78);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .ad-sim__count{font-size:2.4vh;letter-spacing:.06em;color:rgba(255,255,255,.6);}
 
   /* LOADER */
   #loader{
@@ -202,10 +202,9 @@
     <p>Tap to play again</p>
   </div>
 
-  <!-- PUB SIMULÉE -->
+  <!-- ÉCRAN RÉCOMPENSE (neutre, en attendant la vraie régie pub) -->
   <div class="ad-sim">
-    <div class="ad-sim__label">Advertisement</div>
-    <div class="ad-sim__box">RAGEQUIT</div>
+    <div class="ad-sim__box">RAGE<span>STAQ</span></div>
     <div class="ad-sim__count">Reward in <span class="ad-sim__sec">5</span>s…</div>
   </div>
 </div>
@@ -703,11 +702,11 @@ Game.prototype.endGame = function(){
   track('game_end', { props:{ score:score, mode:'classic' } });
 };
 
-// Pub simulée 5s (placeholder en attendant AdSense / Gamedistribution)
+// Écran récompense neutre 3s (placeholder ; le SDK pub réel viendra ici plus tard)
 Game.prototype.playAd = function(onComplete){
   var self = this;
   this.adSim.classList.add('show');
-  var sec = 5;
+  var sec = 3;
   this.adSimSec.innerHTML = sec;
   var int = setInterval(function(){
     sec--;
