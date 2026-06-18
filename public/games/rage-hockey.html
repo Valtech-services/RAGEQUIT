@@ -300,14 +300,12 @@ html,body{
   text-align:center;padding:24px;
 }
 #adOverlay.on{display:flex;}
-.ad-tag{font-size:10px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;margin-bottom:18px;}
-.ad-box{
-  width:min(80%,360px);aspect-ratio:16/9;border-radius:12px;
-  background:linear-gradient(135deg,#141a3d,#1a2250);
-  border:1px solid rgba(0,217,255,.2);
-  display:flex;align-items:center;justify-content:center;
-  color:var(--muted);font-size:13px;letter-spacing:.1em;
+.ad-logo{
+  font-size:clamp(28px,6vw,52px);font-weight:900;
+  letter-spacing:.02em;text-transform:uppercase;margin-bottom:20px;
 }
+.ad-logo .c{color:var(--cyan);text-shadow:0 0 28px rgba(0,217,255,.55);}
+.ad-logo .m{color:var(--mag);text-shadow:0 0 28px rgba(255,0,255,.55);}
 .ad-count{margin-top:20px;font-size:13px;font-weight:700;letter-spacing:.16em;color:var(--cyan);text-transform:uppercase;}
 
 /* ================================================================
@@ -452,11 +450,10 @@ html,body{
   </div>
 </div>
 
-<!-- Pub -->
+<!-- Écran récompense (neutre, en attendant la vraie régie pub) -->
 <div id="adOverlay">
-  <div class="ad-tag">Advertisement</div>
-  <div class="ad-box">Your ad here (AdSense)</div>
-  <div class="ad-count" id="adCount">Reward in 5s...</div>
+  <div class="ad-logo"><span class="c">RAGE</span> <span class="m">HOCKEY</span></div>
+  <div class="ad-count" id="adCount">Reward in 3s...</div>
 </div>
 
 </div><!-- #stage -->
@@ -779,7 +776,7 @@ const Sound=(function(){
 // ====================================================================
 const AdManager=(function(){
   const ov=document.getElementById("adOverlay"), ce=document.getElementById("adCount"); let busy=false;
-  function showRewarded(cb){ if(busy)return; busy=true; ov.classList.add("on"); let left=5; ce.textContent="Reward in "+left+"s..."; const iv=setInterval(()=>{ left--; if(left>0){ce.textContent="Reward in "+left+"s...";}else{clearInterval(iv);ov.classList.remove("on");busy=false;if(cb)cb();} },1000); }
+  function showRewarded(cb){ if(busy)return; busy=true; ov.classList.add("on"); let left=3; ce.textContent="Reward in "+left+"s..."; const iv=setInterval(()=>{ left--; if(left>0){ce.textContent="Reward in "+left+"s...";}else{clearInterval(iv);ov.classList.remove("on");busy=false;if(cb)cb();} },1000); }
   return{ showRewarded };
 })();
 
