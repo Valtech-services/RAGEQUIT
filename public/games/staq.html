@@ -27,9 +27,9 @@
     z-index:5;pointer-events:none;
   }
   #container.playing #score,
-  #container.resetting #score,
-  #container.revive #score{transform:translateY(0) scale(1);}
-  #container.ended #score{transform:translateY(4vh) scale(1.6);}
+  #container.resetting #score{transform:translateY(0) scale(1);}
+  /* Game over : le score saute immédiatement à sa position finale (pas de slide lent) */
+  #container.ended #score{transform:translateY(4vh) scale(1.6);transition:transform .12s ease;}
 
   /* INSTRUCTIONS */
   #instructions{
@@ -72,20 +72,20 @@
   }
   #container.ready .game-ready .ready-logo{opacity:1;transform:translateY(0);}
 
-  /* GAME OVER */
+  /* GAME OVER — apparition INSTANTANÉE (le score se fige net) */
   .game-over{
     position:absolute;top:0;left:0;width:100%;height:78%;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     gap:8px;z-index:6;pointer-events:none;
   }
   .game-over *{
-    opacity:0;transform:translateY(-40px);
-    transition:opacity .3s ease,transform .3s ease;color:#fff;
+    opacity:0;transform:translateY(0);
+    transition:opacity .12s ease;color:#fff;
   }
   .game-over h2{font-size:clamp(34px,7vh,56px);letter-spacing:.1em;text-transform:uppercase;}
   .game-over p{font-size:clamp(16px,3vh,24px);letter-spacing:.04em;opacity:0;color:rgba(255,255,255,.85);}
   #container.ended .game-over *{opacity:1;transform:translateY(0);}
-  #container.ended .game-over p{transition-delay:.15s;}
+  #container.ended .game-over p{transition-delay:0s;}
   .go-best{font-size:2.4vh !important;color:rgba(255,255,255,.6) !important;}
   .go-new-best{
     font-size:2.6vh !important;
@@ -96,26 +96,26 @@
   #container.ended .go-new-best.show{display:block;}
 
   /* Bouton double reward (game over) */
-  .go-double{
+  .go-revive{
     pointer-events:auto;cursor:pointer;border:none;font-family:inherit;
     margin-top:18px;padding:16px 40px;border-radius:999px;
     background:linear-gradient(135deg,#00D9FF,#8B5CF6,#FF2D78);
     color:#fff;font-size:3vh;letter-spacing:.05em;text-transform:uppercase;
     box-shadow:0 10px 30px rgba(139,92,246,.5);
     display:flex;align-items:center;gap:10px;
-    opacity:0;transform:translateY(-40px);
-    transition:opacity .35s ease,transform .35s ease;transition-delay:.2s;
+    opacity:0;transform:translateY(0);
+    transition:opacity .12s ease;transition-delay:0s;
   }
-  .go-double svg{width:24px;height:24px;fill:#fff;}
-  .go-double:active{transform:scale(.96);}
+  .go-revive svg{width:24px;height:24px;fill:#fff;}
+  .go-revive:active{transform:scale(.96);}
   .ad-badge{
     background:rgba(255,255,255,.25);color:#fff;
     font-size:.6em;font-weight:700;letter-spacing:.08em;
     padding:3px 7px;border-radius:6px;line-height:1;
     border:1px solid rgba(255,255,255,.45);
   }
-  #container.ended .go-double{opacity:1;transform:translateY(0);}
-  #container.ended .go-double.hidden{display:none;}
+  #container.ended .go-revive{opacity:1;transform:translateY(0);}
+  #container.ended .go-revive.hidden{display:none;}
 
   /* Flash perfect plein écran */
   .perfect-flash{
@@ -134,58 +134,6 @@
   }
   .perfect-word.go{animation:perfectWord .6s ease;}
   @keyframes perfectWord{0%{opacity:0;transform:translateY(10px) scale(.9)}30%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-16px) scale(1.05)}}
-
-  /* ===== REVIVE OVERLAY ===== */
-  .revive{
-    position:absolute;inset:0;z-index:20;
-    display:none;flex-direction:column;align-items:center;justify-content:center;
-    gap:28px;background:rgba(10,14,39,.82);backdrop-filter:blur(6px);
-    padding:0 10vw;
-  }
-  #container.revive .revive{display:flex;animation:reviveIn .25s ease;}
-  @keyframes reviveIn{from{opacity:0}to{opacity:1}}
-
-  .revive__title{
-    font-size:clamp(32px,7vh,52px);color:#fff;letter-spacing:.08em;text-transform:uppercase;
-    text-align:center;
-  }
-  .revive__sub{
-    font-size:2.6vh;color:rgba(255,255,255,.75);letter-spacing:.04em;
-    text-align:center;margin-top:-14px;
-  }
-
-  /* Compte à rebours circulaire */
-  .revive__timer{position:relative;width:128px;height:128px;}
-  .revive__timer svg{transform:rotate(-90deg);}
-  .revive__timer circle{fill:none;stroke-width:9;}
-  .revive__timer .bg{stroke:rgba(255,255,255,.15);}
-  .revive__timer .fg{
-    stroke:url(#reviveGrad);stroke-linecap:round;
-    stroke-dasharray:339;stroke-dashoffset:0;
-    transition:stroke-dashoffset .1s linear;
-  }
-  .revive__count{
-    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    font-size:6vh;color:#fff;
-  }
-
-  .revive__watch{
-    pointer-events:auto;cursor:pointer;
-    padding:18px 44px;border-radius:999px;
-    background:linear-gradient(135deg,#00D9FF,#8B5CF6,#FF2D78);
-    color:#fff;font-size:3.4vh;letter-spacing:.06em;text-transform:uppercase;
-    box-shadow:0 10px 30px rgba(139,92,246,.55);
-    display:flex;align-items:center;gap:12px;border:none;
-    font-family:inherit;
-  }
-  .revive__watch:active{transform:scale(.96);}
-  .revive__watch svg{width:26px;height:26px;fill:#fff;}
-  .revive__no{
-    pointer-events:auto;cursor:pointer;background:none;border:none;
-    color:rgba(255,255,255,.55);font-size:2.4vh;letter-spacing:.05em;
-    font-family:inherit;text-transform:uppercase;
-  }
-  .revive__no:active{color:#fff;}
 
   /* Overlay pub simulée */
   .ad-sim{
@@ -246,38 +194,12 @@
     <p class="go-score">Score: 0</p>
     <p class="go-best">Best: 0</p>
     <p class="go-new-best">New best!</p>
-    <button class="go-double">
-      <span class="ad-badge">AD</span>
-      <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-      Double score
-    </button>
-    <p>Tap to play again</p>
-  </div>
-
-  <!-- REVIVE -->
-  <div class="revive">
-    <div class="revive__title">Continue?</div>
-    <div class="revive__sub">Watch a short ad to keep your stack alive</div>
-    <div class="revive__timer">
-      <svg width="128" height="128">
-        <defs>
-          <linearGradient id="reviveGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#00D9FF"/>
-            <stop offset="50%" stop-color="#8B5CF6"/>
-            <stop offset="100%" stop-color="#FF2D78"/>
-          </linearGradient>
-        </defs>
-        <circle class="bg" cx="64" cy="64" r="54"/>
-        <circle class="fg" cx="64" cy="64" r="54"/>
-      </svg>
-      <div class="revive__count">5</div>
-    </div>
-    <button class="revive__watch">
+    <button class="go-revive hidden">
       <span class="ad-badge">AD</span>
       <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
       Watch ad &amp; continue
     </button>
-    <button class="revive__no">No thanks</button>
+    <p>Tap to play again</p>
   </div>
 
   <!-- PUB SIMULÉE -->
@@ -566,7 +488,7 @@ Block.prototype.tick = function(){
 
 var GAME_STATES = {
   LOADING:'loading', PLAYING:'playing', READY:'ready',
-  ENDED:'ended', RESETTING:'resetting', REVIVE:'revive'
+  ENDED:'ended', RESETTING:'resetting'
 };
 
 var Game = function(){
@@ -574,6 +496,7 @@ var Game = function(){
   this.blocks = [];
   this.state = this.STATES.LOADING;
   this.usedRevive = false;     // une seule revive par partie
+  this.scoreOffset = 0;        // score conservé lors d'un revive (la tour repart de 0, le score continue)
 
   this.stage = new Stage();
 
@@ -590,13 +513,9 @@ var Game = function(){
   this.stage.add(this.placedBlocks);
   this.stage.add(this.choppedBlocks);
 
-  // Revive UI
-  this.reviveEl      = this.mainContainer.querySelector('.revive');
-  this.reviveCountEl = this.mainContainer.querySelector('.revive__count');
-  this.reviveFg      = this.mainContainer.querySelector('.revive__timer .fg');
+  // Revive UI (intégré à l'écran game over)
   this.adSim         = this.mainContainer.querySelector('.ad-sim');
   this.adSimSec      = this.mainContainer.querySelector('.ad-sim__sec');
-  this.reviveTimer   = null;
 
   this.addBlock();
   this.tick();
@@ -606,27 +525,19 @@ var Game = function(){
 
   document.addEventListener('keydown', function(e){ if(e.keyCode == 32) self.onAction(); });
 
-  // Le clic sur les boutons revive ne doit PAS déclencher onAction (placer un bloc)
+  // Le clic sur le bouton revive / la pub ne doit PAS placer un bloc
   document.addEventListener('click', function(e){
-    if(e.target.closest('.revive') || e.target.closest('.ad-sim') || e.target.closest('.go-double')) return;
+    if(e.target.closest('.go-revive') || e.target.closest('.ad-sim')) return;
     self.onAction();
   });
   document.addEventListener('touchstart', function(e){
-    if(e.target.closest('.revive') || e.target.closest('.ad-sim')) return;
+    if(e.target.closest('.go-revive') || e.target.closest('.ad-sim')) return;
     // On laisse le click gérer l'action (évite le double-déclenchement Android)
   }, { passive:true });
 
-  // Boutons revive
-  this.reviveEl.querySelector('.revive__watch').addEventListener('click', function(e){
+  // Bouton revive (sur l'écran game over)
+  this.mainContainer.querySelector('.go-revive').addEventListener('click', function(e){
     e.stopPropagation(); self.acceptRevive();
-  });
-  this.reviveEl.querySelector('.revive__no').addEventListener('click', function(e){
-    e.stopPropagation(); self.declineRevive();
-  });
-
-  // Bouton double reward (game over)
-  this.mainContainer.querySelector('.go-double').addEventListener('click', function(e){
-    e.stopPropagation(); self.acceptDouble();
   });
 };
 
@@ -646,6 +557,7 @@ Game.prototype.onAction = function(){
 
 Game.prototype.startGame = function(){
   if(this.state != this.STATES.PLAYING){
+    this.scoreOffset = 0;
     this.scoreContainer.innerHTML = '0';
     this.usedRevive = false;
     this.updateState(this.STATES.PLAYING);
@@ -668,7 +580,7 @@ Game.prototype.restartGame = function(){
   var cameraMoveSpeed = removeSpeed*2 + (oldBlocks.length*delayAmount);
   this.stage.setCamera(2, cameraMoveSpeed);
 
-  var countdown = { value:this.blocks.length-1 };
+  var countdown = { value:this.currentScore() };
   TweenLite.to(countdown, cameraMoveSpeed, { value:0, onUpdate:function(){ self.scoreContainer.innerHTML = String(Math.round(countdown.value)); }});
 
   this.blocks = this.blocks.slice(0,1);
@@ -725,13 +637,19 @@ Game.prototype.flashPerfect = function(){
   flash.classList.add('go'); word.classList.add('go');
 };
 
+// Score affiché/envoyé = blocs empilés dans la tour courante + score conservé d'avant un revive
+Game.prototype.currentScore = function(){
+  return this.scoreOffset + (this.blocks.length - 1);
+};
+
 Game.prototype.addBlock = function(){
   var lastBlock = this.blocks[this.blocks.length-1];
   if(lastBlock && lastBlock.state == lastBlock.STATES.MISSED){
-    // ICI : au lieu de game over direct, on tente la revive
-    return this.tryRevive();
+    // MORT : on affiche le game over IMMÉDIATEMENT (le bouton revive,
+    // s'il reste disponible, est intégré à l'écran game over).
+    return this.endGame();
   }
-  this.scoreContainer.innerHTML = String(this.blocks.length-1);
+  this.scoreContainer.innerHTML = String(this.currentScore());
 
   var newKidOnTheBlock = new Block(lastBlock);
   this.newBlocks.add(newKidOnTheBlock.mesh);
@@ -742,56 +660,43 @@ Game.prototype.addBlock = function(){
 };
 
 /* =====================================================================
-   SYSTÈME REVIVE — le levier de revenu n°1
-   À la mort : si la revive n'a pas déjà été utilisée ET que le score
-   vaut la peine (>= 3 blocs), on propose un revive contre pub.
-   Compte à rebours 5s. Sinon game over direct.
+   FIN DE PARTIE + REVIVE
+   - À la mort, le game over s'affiche INSTANTANÉMENT (le score est figé,
+     visible ~0,2s après la mort, quoi qu'il se passe derrière).
+   - Si la revive n'a pas encore été utilisée ET score >= 3 : le bouton
+     "Watch ad & continue" est proposé SUR l'écran game over.
+       * Refus / pas de clic  -> le score est DÉJÀ validé et envoyé.
+       * Clic -> pub -> reprise depuis la tour actuelle avec un palier
+         PLEIN, en gardant le score. Plus aucune pub ensuite : à la
+         prochaine mort, game over sec et score envoyé.
    ===================================================================== */
-Game.prototype.tryRevive = function(){
-  var score = this.blocks.length - 1;
-  // Pas de revive si déjà utilisée, ou si score trop bas (pas frustrant)
-  if(this.usedRevive || score < 3){
-    return this.endGame();
-  }
-  this.updateState(this.STATES.REVIVE);
-  track('revive_offered', { score:score });
+Game.prototype.endGame = function(){
+  var score = this.currentScore();
+  this.finalScore = score;
 
-  var self = this;
-  var total = 5;          // 5 secondes pour décider
-  var remaining = total;
-  var CIRC = 339;         // circonférence (2πr, r=54)
+  // 1) AFFICHAGE IMMÉDIAT — rien ne doit retarder ça.
+  var best = 0;
+  try{ best = parseInt(localStorage.getItem('staq_best') || '0', 10) || 0; }catch(e){}
+  var isNewBest = score > best;
+  if(isNewBest){ try{ localStorage.setItem('staq_best', String(score)); }catch(e){} best = score; }
 
-  this.reviveCountEl.innerHTML = total;
-  this.reviveFg.style.strokeDashoffset = '0';
+  this.mainContainer.querySelector('.go-score').innerHTML = 'Score: ' + score;
+  this.mainContainer.querySelector('.go-best').innerHTML  = 'Best: ' + best;
+  var newBestEl = this.mainContainer.querySelector('.go-new-best');
+  if(isNewBest) newBestEl.classList.add('show'); else newBestEl.classList.remove('show');
 
-  var start = Date.now();
-  this.reviveTimer = setInterval(function(){
-    var elapsed = (Date.now() - start) / 1000;
-    remaining = Math.max(0, total - elapsed);
-    self.reviveCountEl.innerHTML = Math.ceil(remaining);
-    self.reviveFg.style.strokeDashoffset = String(CIRC * (elapsed/total));
-    if(remaining <= 0){
-      self.declineRevive();   // temps écoulé = refus
-    }
-  }, 80);
-};
+  // Bouton revive : visible seulement si pas encore utilisé ET score >= 3
+  var rev = this.mainContainer.querySelector('.go-revive');
+  if(!this.usedRevive && score >= 3){ rev.classList.remove('hidden'); }
+  else { rev.classList.add('hidden'); }
 
-Game.prototype.clearReviveTimer = function(){
-  if(this.reviveTimer){ clearInterval(this.reviveTimer); this.reviveTimer = null; }
-};
+  this.updateState(this.STATES.ENDED);
+  AudioFX.die();
 
-Game.prototype.acceptRevive = function(){
-  if(this.state !== this.STATES.REVIVE) return;
-  this.clearReviveTimer();
-  track('revive_accepted', { score:this.blocks.length-1 });
-  this.playAd(this.doRevive.bind(this));
-};
-
-Game.prototype.declineRevive = function(){
-  if(this.state !== this.STATES.REVIVE) return;
-  this.clearReviveTimer();
-  track('revive_declined', { score:this.blocks.length-1 });
-  this.endGame();
+  // 2) Le score est TOUJOURS envoyé dès la mort. Si le joueur revit ensuite,
+  //    un nouveau score (plus élevé) sera renvoyé à la mort suivante.
+  sendScore(score);
+  track('game_end', { props:{ score:score, mode:'classic' } });
 };
 
 // Pub simulée 5s (placeholder en attendant AdSense / Gamedistribution)
@@ -812,72 +717,42 @@ Game.prototype.playAd = function(onComplete){
   }, 1000);
 };
 
-// Reprise du jeu : on retire le bloc raté, on régénère un bloc actif
+// Clic sur "Watch ad & continue" depuis l'écran game over
+Game.prototype.acceptRevive = function(){
+  if(this.state !== this.STATES.ENDED || this.usedRevive) return;
+  track('revive_accepted', { score:this.finalScore });
+  this.mainContainer.querySelector('.go-revive').classList.add('hidden');
+  this.playAd(this.doRevive.bind(this));
+};
+
+// Reprise après pub : la TOUR repart de zéro (un seul bloc en bas),
+// mais le SCORE acquis est conservé et continue à s'incrémenter par-dessus.
 Game.prototype.doRevive = function(){
   this.usedRevive = true;
   AudioFX.reward();
 
-  // retirer le dernier bloc (celui qui a raté)
-  this.blocks.pop();
+  // 1) Figer le score acquis : ce que le joueur avait au moment de la mort.
+  this.scoreOffset = this.finalScore;
 
-  // revenir en PLAYING et relancer un bloc depuis le dernier placé
+  // 2) Vider entièrement la tour (tous les blocs posés + le bloc raté).
+  var i;
+  var posed = this.placedBlocks.children.slice();
+  for(i=0;i<posed.length;i++) this.placedBlocks.remove(posed[i]);
+  var news = this.newBlocks.children.slice();
+  for(i=0;i<news.length;i++) this.newBlocks.remove(news[i]);
+  var chopped = this.choppedBlocks.children.slice();
+  for(i=0;i<chopped.length;i++) this.choppedBlocks.remove(chopped[i]);
+  this.blocks = [];
+
+  // 3) Reconstruire une nouvelle tour de base (bloc socle + 1er bloc actif),
+  //    exactement comme au démarrage d'une partie.
+  this.addBlock();                 // socle (index 0)
   this.updateState(this.STATES.PLAYING);
-  this.scoreContainer.innerHTML = String(this.blocks.length - 1);
+  this.addBlock();                 // 1er bloc actif
 
-  var lastBlock = this.blocks[this.blocks.length-1];
-  var newKidOnTheBlock = new Block(lastBlock);
-  this.newBlocks.add(newKidOnTheBlock.mesh);
-  this.blocks.push(newKidOnTheBlock);
+  // 4) Caméra ramenée en bas et score figé affiché.
   this.stage.setCamera(this.blocks.length * 2);
-};
-
-Game.prototype.endGame = function(){
-  var score = this.blocks.length - 1;
-  this.finalScore = score;
-  this.doubled = false;
-  AudioFX.die();
-
-  // Best score local
-  var best = 0;
-  try{ best = parseInt(localStorage.getItem('staq_best') || '0', 10) || 0; }catch(e){}
-  var isNewBest = score > best;
-  if(isNewBest){ try{ localStorage.setItem('staq_best', String(score)); }catch(e){} best = score; }
-
-  this.mainContainer.querySelector('.go-score').innerHTML = 'Score: ' + score;
-  this.mainContainer.querySelector('.go-best').innerHTML  = 'Best: ' + best;
-  var newBestEl = this.mainContainer.querySelector('.go-new-best');
-  if(isNewBest) newBestEl.classList.add('show'); else newBestEl.classList.remove('show');
-
-  // Bouton double reward : visible seulement si score vaut le coup et pas déjà doublé
-  var dbl = this.mainContainer.querySelector('.go-double');
-  if(score >= 3){ dbl.classList.remove('hidden'); } else { dbl.classList.add('hidden'); }
-
-  sendScore(score);
-  track('game_end', { props:{ score:score, mode:'classic' } });
-  this.updateState(this.STATES.ENDED);
-};
-
-// Double reward : regarder une pub pour doubler le score envoyé au leaderboard
-Game.prototype.acceptDouble = function(){
-  if(this.state !== this.STATES.ENDED || this.doubled) return;
-  this.doubled = true;
-  track('double_accepted', { score:this.finalScore });
-  var self = this;
-  this.playAd(function(){
-    var doubled = self.finalScore * 2;
-    AudioFX.reward();
-    self.mainContainer.querySelector('.go-score').innerHTML = 'Score: ' + doubled;
-    self.mainContainer.querySelector('.go-double').classList.add('hidden');
-    // best score mis à jour si le double dépasse
-    var best = 0;
-    try{ best = parseInt(localStorage.getItem('staq_best')||'0',10)||0; }catch(e){}
-    if(doubled > best){ try{ localStorage.setItem('staq_best', String(doubled)); }catch(e){}
-      self.mainContainer.querySelector('.go-best').innerHTML = 'Best: ' + doubled;
-      self.mainContainer.querySelector('.go-new-best').classList.add('show');
-    }
-    sendScore(doubled);
-    track('double_complete', { score:doubled });
-  });
+  this.scoreContainer.innerHTML = String(this.currentScore());
 };
 
 Game.prototype.tick = function(){
