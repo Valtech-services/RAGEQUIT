@@ -7,6 +7,7 @@ import * as XLSX from 'xlsx'
 import { useAuth } from '../../context/AuthContext'
 import { supabase } from '../../lib/supabase'
 import usePageTitle from '../../hooks/usePageTitle'
+import { testGames } from '../../data/testGames'
 import './AdminPage.css'
 
 const ADMIN_ID = '4340752c-bfae-492c-a61b-a9552ac8c908'
@@ -25,7 +26,6 @@ function groupCount(arr, keyFn){
 const sortDesc = obj => Object.entries(obj).sort((a,b) => b[1]-a[1])
 const pct = (n, total) => total ? Math.round(n/total*100) + '%' : '0%'
 
-// Série journalière : compte d'events par jour sur la période
 function dailySeries(events, period){
   const byDay = {}
   for(let i = period - 1; i >= 0; i--){
@@ -38,7 +38,6 @@ function dailySeries(events, period){
   })
   return Object.entries(byDay).map(([date, value]) => ({ date: date.slice(5), value }))
 }
-// Série journalière de visiteurs UNIQUES (cardinalité d'un identifiant par jour)
 function dailyUnique(events, period, idFn){
   const byDay = {}
   for(let i = period - 1; i >= 0; i--){
@@ -71,7 +70,6 @@ function Kpi({ label, value, color, sub }){
   )
 }
 
-// Module = un titre + un graphe ET un tableau qui parlent de LA MÊME chose
 function Panel({ title, subtitle, children, onExport }){
   return (
     <div className="adm-panel">
@@ -168,6 +166,72 @@ function AdminPinGate({ onUnlock }){
   )
 }
 
+// ── TEST DES JEUX (staging, admin only) ────────────────────────────────────
+function GameTester(){
+  const [active, setActive] = useState(null)  // jeu en cours de test
+
+  // verrouille le scroll de la page quand un jeu est lancé
+  useEffect(() => {
+    document.body.style.overflow = active ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [active])
+
+  if(active){
+    const landscape = active.orientation === 'landscape'
+    return (
+      <div className="gt-player">
+        <div className="gt-player__bar">
+          <button className="gt-player__back" onClick={() => setActive(null)}>‹ Retour aux jeux</button>
+          <span className="gt-player__name">{active.title}</span>
+          <span className="gt-player__badge">{landscape ? 'Paysage' : 'Portrait'}</span>
+        </div>
+        <div className="gt-player__stage">
+          <div className={`gt-frame ${landscape ? 'gt-frame--land' : 'gt-frame--port'}`}>
+            <iframe
+              title={active.title}
+              src={active.file}
+              className="gt-iframe"
+              allow="autoplay; fullscreen; gamepad"
+            />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="gt">
+      <p className="gt-intro">
+        Ces jeux sont en test et ne sont <strong>pas visibles sur le site public</strong>.
+        Lance-les ici pour les essayer avant de les publier. Pour ajouter un jeu, édite
+        <code> src/data/testGames.js</code>.
+      </p>
+      {testGames.length === 0 ? (
+        <p className="adm-empty">Aucun jeu en test pour le moment.</p>
+      ) : (
+        <div className="gt-grid">
+          {testGames.map(g => (
+            <div key={g.id} className="gt-card">
+              <div className="gt-card__thumb">
+                {g.thumbnail
+                  ? <img src={g.thumbnail} alt={g.title} onError={e => { e.currentTarget.style.display='none' }} />
+                  : <span className="gt-card__ph">🎮</span>}
+                <span className="gt-card__cat">{g.category}</span>
+              </div>
+              <div className="gt-card__body">
+                <h4 className="gt-card__title">{g.title}</h4>
+                <p className="gt-card__desc">{g.description}</p>
+                {g.notes && <p className="gt-card__notes">{g.notes}</p>}
+                <button className="gt-card__play" onClick={() => setActive(g)}>▶ Lancer le test</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ── DASHBOARD ────────────────────────────────────────────────────────────
 function Dashboard(){
   const [period, setPeriod] = useState(7)
@@ -194,48 +258,29 @@ function Dashboard(){
   const m = useMemo(() => {
     if(!d) return null
     const { ev, scores, users } = d
-
-    // identifiant visiteur : session_id si présent, sinon user_id
     const vid = e => e.session_id || e.user_id || null
     const isLogged = e => !!e.user_id
-
-    // Sous-ensembles d'events par TYPE (clair, plus de "event" fourre-tout)
     const visits      = ev.filter(e => e.event === 'page_view')
     const homeVisits  = visits.filter(e => e.url === '/')
     const gameStarts  = ev.filter(e => e.event === 'game_start')
     const gameEnds    = ev.filter(e => e.event === 'game_end')
     const adsWatched  = ev.filter(e => e.event === 'ad_rewarded_complete')
-
-    // Visiteurs uniques
     const allVisitors    = new Set(ev.map(vid).filter(Boolean))
     const loggedVisitors = new Set(ev.filter(isLogged).map(vid).filter(Boolean))
     const anonVisitors   = new Set(ev.filter(e => !isLogged(e)).map(vid).filter(Boolean))
-
-    // Parties par jeu (game_start)
     const playsByGame = groupCount(gameStarts, e => e.game_id)
-    // Catégories (sur tous les events qui en ont une)
     const byCategory  = groupCount(ev.filter(e => e.category), e => e.category)
-    // Appareils
     const byDevice    = groupCount(ev, e => e.device)
-    // Pays (events)
     const byCountry   = groupCount(ev.filter(e => e.country), e => e.country)
-
-// Taux de complétion : parties terminées vs lancées, plafonné à 100%.
-    // (une même partie peut émettre plusieurs game_end via le revive STAQ,
-    //  donc on borne pour éviter les valeurs > 100%)
     const completion = gameStarts.length
       ? Math.min(100, Math.round(gameEnds.length / gameStarts.length * 100))
       : 0
-    // Taux de pub par partie
     const adsPerPlay = gameStarts.length ? (adsWatched.length / gameStarts.length).toFixed(2) : '0'
-    // Taux de visiteurs connectés (part des visiteurs ayant un compte)
     const loggedRate = allVisitors.size ? Math.round(loggedVisitors.size / allVisitors.size * 100) : 0
-    // Séries journalières
     const sVisitors  = dailyUnique(ev, period, vid)
     const sPlays     = dailySeries(gameStarts, period)
     const sAds       = dailySeries(adsWatched, period)
     const sHome      = dailySeries(homeVisits, period)
-
     return {
       visits, homeVisits, gameStarts, gameEnds, adsWatched,
       allVisitors: allVisitors.size, loggedVisitors: loggedVisitors.size, anonVisitors: anonVisitors.size,
@@ -249,177 +294,179 @@ function Dashboard(){
 
   const { ev, scores, users, messages } = d
   const unread = messages.filter(x => !x.read).length
-
-  // Lignes tableaux
   const gameRows = sortDesc(m.playsByGame).map(([g,n]) => [g, fmt(n)])
   const catRows  = sortDesc(m.byCategory).map(([c,n]) => [c, fmt(n)])
   const devRows  = sortDesc(m.byDevice).map(([dv,n]) => [dv || '—', fmt(n), pct(n, ev.length)])
   const ctyRows  = sortDesc(m.byCountry).slice(0,8).map(([c,n]) => [c, fmt(n)])
 
   return (
-    <div className="adm">
-      {/* Header */}
-      <header className="adm-header">
-        <img src="/ragequit-logo-white.png" alt="Ragequit" className="adm-header__logo" />
-        <h1 className="adm-header__title">Dashboard</h1>
-        <div className="adm-period">
-          {[7,14,30].map(p => (
-            <button key={p} className={`adm-period__btn ${period===p?'is-active':''}`} onClick={() => setPeriod(p)}>{p}j</button>
-          ))}
-        </div>
+    <div className="adm-body">
+      <div className="adm-period adm-period--inline">
+        {[7,14,30].map(p => (
+          <button key={p} className={`adm-period__btn ${period===p?'is-active':''}`} onClick={() => setPeriod(p)}>{p}j</button>
+        ))}
         <button className="adm-refresh" onClick={load} title="Rafraîchir">↺</button>
-      </header>
+      </div>
 
-      <div className="adm-body">
+      <section className="adm-kpis">
+        <Kpi label="Visiteurs uniques" value={m.allVisitors} color={C.cyan} sub={`${period} derniers jours`} />
+        <Kpi label="dont connectés" value={m.loggedVisitors} color={C.violet} sub={`${m.loggedRate}% des visiteurs`} />
+        <Kpi label="dont anonymes" value={m.anonVisitors} color={C.magenta} sub="sans compte" />
+        <Kpi label="Parties lancées" value={m.gameStarts.length} color={C.green} />
+        <Kpi label="Parties terminées" value={m.gameEnds.length} color={C.yellow} sub={`${m.completion}% de complétion`} />
+        <Kpi label="Pubs récompensées vues" value={m.adsWatched.length} color="#FF8C42" sub={`${m.adsPerPlay} / partie`} />
+        <Kpi label="Joueurs inscrits" value={users.length} color={C.violet} sub="total" />
+        <Kpi label="Messages non lus" value={unread} color={C.red} />
+      </section>
 
-        {/* KPIs — chiffres concrets */}
-        <section className="adm-kpis">
-          <Kpi label="Visiteurs uniques" value={m.allVisitors} color={C.cyan} sub={`${period} derniers jours`} />
-          <Kpi label="dont connectés" value={m.loggedVisitors} color={C.violet} sub={`${m.loggedRate}% des visiteurs`} />
-          <Kpi label="dont anonymes" value={m.anonVisitors} color={C.magenta} sub="sans compte" />
-          <Kpi label="Parties lancées" value={m.gameStarts.length} color={C.green} />
-          <Kpi label="Parties terminées" value={m.gameEnds.length} color={C.yellow} sub={`${m.completion}% de complétion`} />
-          <Kpi label="Pubs récompensées vues" value={m.adsWatched.length} color="#FF8C42" sub={`${m.adsPerPlay} / partie`} />
-          <Kpi label="Joueurs inscrits" value={users.length} color={C.violet} sub="total" />
-          <Kpi label="Messages non lus" value={unread} color={C.red} />
-        </section>
-
-        {/* Grand graphe : visiteurs uniques / jour */}
-        <section className="adm-hero-chart">
-          <div className="adm-panel__head">
-            <div>
-              <h3 className="adm-panel__title">Visiteurs uniques par jour</h3>
-              <p className="adm-panel__sub">Une personne = un visiteur, qu'elle soit connectée ou non. Sans adresse IP (RGPD).</p>
-            </div>
+      <section className="adm-hero-chart">
+        <div className="adm-panel__head">
+          <div>
+            <h3 className="adm-panel__title">Visiteurs uniques par jour</h3>
+            <p className="adm-panel__sub">Une personne = un visiteur, qu'elle soit connectée ou non. Sans adresse IP (RGPD).</p>
           </div>
-          <ResponsiveContainer width="100%" height={240}>
-            <AreaChart data={m.sVisitors} margin={{ top: 10, right: 16, left: -8, bottom: 0 }}>
-              <defs>
-                <linearGradient id="heroFill" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor={C.cyan} stopOpacity={0.5}/>
-                  <stop offset="50%" stopColor={C.violet} stopOpacity={0.3}/>
-                  <stop offset="100%" stopColor={C.magenta} stopOpacity={0.05}/>
-                </linearGradient>
-                <linearGradient id="heroLine" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor={C.cyan}/><stop offset="50%" stopColor={C.violet}/><stop offset="100%" stopColor={C.magenta}/>
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#eef" />
-              <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#999' }} />
-              <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#999' }} />
-              <Tooltip contentStyle={{ borderRadius: 10, border: '1px solid #eee' }} />
-              <Area type="monotone" dataKey="value" stroke="url(#heroLine)" strokeWidth={3} fill="url(#heroFill)" />
-            </AreaChart>
-          </ResponsiveContainer>
-        </section>
+        </div>
+        <ResponsiveContainer width="100%" height={240}>
+          <AreaChart data={m.sVisitors} margin={{ top: 10, right: 16, left: -8, bottom: 0 }}>
+            <defs>
+              <linearGradient id="heroFill" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor={C.cyan} stopOpacity={0.5}/>
+                <stop offset="50%" stopColor={C.violet} stopOpacity={0.3}/>
+                <stop offset="100%" stopColor={C.magenta} stopOpacity={0.05}/>
+              </linearGradient>
+              <linearGradient id="heroLine" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor={C.cyan}/><stop offset="50%" stopColor={C.violet}/><stop offset="100%" stopColor={C.magenta}/>
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="#eef" />
+            <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#999' }} />
+            <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#999' }} />
+            <Tooltip contentStyle={{ borderRadius: 10, border: '1px solid #eee' }} />
+            <Area type="monotone" dataKey="value" stroke="url(#heroLine)" strokeWidth={3} fill="url(#heroFill)" />
+          </AreaChart>
+        </ResponsiveContainer>
+      </section>
 
-        {/* Modules cohérents : chaque graphe correspond à son tableau */}
-        <section className="adm-grid">
-          <Panel title="Parties par jeu" subtitle="Nombre de parties lancées"
-            onExport={() => exportXlsx('parties_par_jeu', ['Jeu','Parties'], gameRows)}>
-            <MiniChart data={m.sPlays} color={C.green} type="bar" />
-            <Table cols={['Jeu','Parties']} rows={gameRows} empty="Aucune partie sur la période" />
-          </Panel>
+      <section className="adm-grid">
+        <Panel title="Parties par jeu" subtitle="Nombre de parties lancées"
+          onExport={() => exportXlsx('parties_par_jeu', ['Jeu','Parties'], gameRows)}>
+          <MiniChart data={m.sPlays} color={C.green} type="bar" />
+          <Table cols={['Jeu','Parties']} rows={gameRows} empty="Aucune partie sur la période" />
+        </Panel>
 
-          <Panel title="Pubs récompensées" subtitle="Vidéos vues en entier (revive / double)"
-            onExport={() => exportXlsx('pubs', ['Jour','Pubs'], m.sAds.map(x => [x.date, x.value]))}>
-            <MiniChart data={m.sAds} color="#FF8C42" />
-            <Table cols={['Indicateur','Valeur']} rows={[
-              ['Total pubs vues', fmt(m.adsWatched.length)],
-              ['Pubs par partie', m.adsPerPlay],
-              ['Parties terminées', `${m.completion}%`],
-            ]} />
-          </Panel>
+        <Panel title="Pubs récompensées" subtitle="Vidéos vues en entier (revive / double)"
+          onExport={() => exportXlsx('pubs', ['Jour','Pubs'], m.sAds.map(x => [x.date, x.value]))}>
+          <MiniChart data={m.sAds} color="#FF8C42" />
+          <Table cols={['Indicateur','Valeur']} rows={[
+            ['Total pubs vues', fmt(m.adsWatched.length)],
+            ['Pubs par partie', m.adsPerPlay],
+            ['Parties terminées', `${m.completion}%`],
+          ]} />
+        </Panel>
 
-          <Panel title="Pages d'accueil vues" subtitle="Visites de la page d'accueil"
-            onExport={() => exportXlsx('home', ['Jour','Vues'], m.sHome.map(x => [x.date, x.value]))}>
-            <MiniChart data={m.sHome} color={C.violet} />
-            <Table cols={['Indicateur','Valeur']} rows={[
-              ['Vues accueil', fmt(m.homeVisits.length)],
-              ['Vues toutes pages', fmt(m.visits.length)],
-            ]} empty="Active le tracking page_view" />
-          </Panel>
+        <Panel title="Pages d'accueil vues" subtitle="Visites de la page d'accueil"
+          onExport={() => exportXlsx('home', ['Jour','Vues'], m.sHome.map(x => [x.date, x.value]))}>
+          <MiniChart data={m.sHome} color={C.violet} />
+          <Table cols={['Indicateur','Valeur']} rows={[
+            ['Vues accueil', fmt(m.homeVisits.length)],
+            ['Vues toutes pages', fmt(m.visits.length)],
+          ]} empty="Active le tracking page_view" />
+        </Panel>
 
-          <Panel title="Catégories jouées" subtitle="Répartition par catégorie"
-            onExport={() => exportXlsx('categories', ['Catégorie','Events'], catRows)}>
-            <Table cols={['Catégorie','Events']} rows={catRows} />
-          </Panel>
+        <Panel title="Catégories jouées" subtitle="Répartition par catégorie"
+          onExport={() => exportXlsx('categories', ['Catégorie','Events'], catRows)}>
+          <Table cols={['Catégorie','Events']} rows={catRows} />
+        </Panel>
 
-          <Panel title="Appareils" subtitle="D'où viennent les visites"
-            onExport={() => exportXlsx('appareils', ['Appareil','Events','%'], devRows)}>
-            <Table cols={['Appareil','Events','%']} rows={devRows} />
-          </Panel>
+        <Panel title="Appareils" subtitle="D'où viennent les visites"
+          onExport={() => exportXlsx('appareils', ['Appareil','Events','%'], devRows)}>
+          <Table cols={['Appareil','Events','%']} rows={devRows} />
+        </Panel>
 
-          <Panel title="Pays" subtitle="Provenance géographique (sans IP)"
-            onExport={() => exportXlsx('pays', ['Pays','Events'], ctyRows)}>
-            <Table cols={['Pays','Events']} rows={ctyRows} empty="Aucune donnée pays" />
-          </Panel>
-        </section>
+        <Panel title="Pays" subtitle="Provenance géographique (sans IP)"
+          onExport={() => exportXlsx('pays', ['Pays','Events'], ctyRows)}>
+          <Table cols={['Pays','Events']} rows={ctyRows} empty="Aucune donnée pays" />
+        </Panel>
+      </section>
 
-        {/* Scores — modération (bien séparé) */}
-        <section className="adm-wide">
-          <div className="adm-panel__head">
-            <div><h3 className="adm-panel__title">Scores récents — modération</h3>
-              <p className="adm-panel__sub">Supprime un score suspect ou triché</p></div>
-            {scores.length > 0 && (
-              <button className="adm-xls" onClick={() => exportXlsx('scores',
-                ['Date','Jeu','Mode','Score','Joueur'],
-                scores.slice(0,50).map(s => {
-                  const u = users.find(u => u.id === s.user_id)
-                  return [new Date(s.created_at).toLocaleDateString('fr-FR'), s.game_id, s.mode, s.score_label || s.score, u?.username || (s.user_id?'Joueur':'Anon')]
-                }))}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Excel
-              </button>
-            )}
-          </div>
-          {scores.length === 0 ? <p className="adm-empty">Aucun score</p> : (
-            <table className="adm-table">
-              <thead><tr><th>Date</th><th>Jeu</th><th>Mode</th><th>Score</th><th>Joueur</th><th></th></tr></thead>
-              <tbody>
-                {scores.slice(0,30).map(s => {
-                  const u = users.find(u => u.id === s.user_id)
-                  return (
-                    <tr key={s.id}>
-                      <td>{new Date(s.created_at).toLocaleDateString('fr-FR')}</td>
-                      <td>{s.game_id}</td><td>{s.mode}</td><td>{s.score_label || s.score}</td>
-                      <td>{u?.username || (s.user_id ? 'Joueur' : 'Anon')}</td>
-                      <td><button className="adm-del" onClick={() => deleteScore(s.id)} title="Supprimer">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-                      </button></td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
+      <section className="adm-wide">
+        <div className="adm-panel__head">
+          <div><h3 className="adm-panel__title">Scores récents — modération</h3>
+            <p className="adm-panel__sub">Supprime un score suspect ou triché</p></div>
+          {scores.length > 0 && (
+            <button className="adm-xls" onClick={() => exportXlsx('scores',
+              ['Date','Jeu','Mode','Score','Joueur'],
+              scores.slice(0,50).map(s => {
+                const u = users.find(u => u.id === s.user_id)
+                return [new Date(s.created_at).toLocaleDateString('fr-FR'), s.game_id, s.mode, s.score_label || s.score, u?.username || (s.user_id?'Joueur':'Anon')]
+              }))}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Excel
+            </button>
           )}
-        </section>
+        </div>
+        {scores.length === 0 ? <p className="adm-empty">Aucun score</p> : (
+          <table className="adm-table">
+            <thead><tr><th>Date</th><th>Jeu</th><th>Mode</th><th>Score</th><th>Joueur</th><th></th></tr></thead>
+            <tbody>
+              {scores.slice(0,30).map(s => {
+                const u = users.find(u => u.id === s.user_id)
+                return (
+                  <tr key={s.id}>
+                    <td>{new Date(s.created_at).toLocaleDateString('fr-FR')}</td>
+                    <td>{s.game_id}</td><td>{s.mode}</td><td>{s.score_label || s.score}</td>
+                    <td>{u?.username || (s.user_id ? 'Joueur' : 'Anon')}</td>
+                    <td><button className="adm-del" onClick={() => deleteScore(s.id)} title="Supprimer">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                    </button></td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        )}
+      </section>
 
-        {/* Messages */}
-        <section className="adm-wide">
-          <div className="adm-panel__head"><div><h3 className="adm-panel__title">Messages de contact</h3></div></div>
-          {messages.length === 0 ? <p className="adm-empty">Aucun message</p> : (
-            <div className="adm-msgs">
-              {messages.map(msg => (
-                <div key={msg.id} className={`adm-msg ${msg.read ? '' : 'adm-msg--unread'}`}>
-                  <div className="adm-msg__top">
-                    <span className="adm-msg__subj">{msg.subject}</span>
-                    <span className="adm-msg__date">{new Date(msg.created_at).toLocaleString('fr-FR')}</span>
-                  </div>
-                  <p className="adm-msg__body">{msg.message}</p>
-                  <div className="adm-msg__foot">
-                    <span className="adm-msg__mail">{msg.email || 'sans email'}</span>
-                    <div className="adm-msg__act">
-                      {msg.email && <a className="adm-msg__reply" href={`mailto:${msg.email}?subject=Re: ${encodeURIComponent(msg.subject)}`}>Répondre</a>}
-                      {!msg.read && <button className="adm-msg__mark" onClick={() => markRead(msg.id)}>Marquer lu</button>}
-                    </div>
+      <section className="adm-wide">
+        <div className="adm-panel__head"><div><h3 className="adm-panel__title">Messages de contact</h3></div></div>
+        {messages.length === 0 ? <p className="adm-empty">Aucun message</p> : (
+          <div className="adm-msgs">
+            {messages.map(msg => (
+              <div key={msg.id} className={`adm-msg ${msg.read ? '' : 'adm-msg--unread'}`}>
+                <div className="adm-msg__top">
+                  <span className="adm-msg__subj">{msg.subject}</span>
+                  <span className="adm-msg__date">{new Date(msg.created_at).toLocaleString('fr-FR')}</span>
+                </div>
+                <p className="adm-msg__body">{msg.message}</p>
+                <div className="adm-msg__foot">
+                  <span className="adm-msg__mail">{msg.email || 'sans email'}</span>
+                  <div className="adm-msg__act">
+                    {msg.email && <a className="adm-msg__reply" href={`mailto:${msg.email}?subject=Re: ${encodeURIComponent(msg.subject)}`}>Répondre</a>}
+                    {!msg.read && <button className="adm-msg__mark" onClick={() => markRead(msg.id)}>Marquer lu</button>}
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
-        </section>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+    </div>
+  )
+}
 
-      </div>
+// ── PAGE (onglets Dashboard / Test des jeux) ───────────────────────────────
+function AdminShell(){
+  const [tab, setTab] = useState('dashboard')
+  return (
+    <div className="adm">
+      <header className="adm-header">
+        <img src="/ragequit-logo-white.png" alt="Ragequit" className="adm-header__logo" />
+        <h1 className="adm-header__title">{tab === 'dashboard' ? 'Dashboard' : 'Test des jeux'}</h1>
+        <nav className="adm-tabs">
+          <button className={`adm-tab ${tab==='dashboard'?'is-active':''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
+          <button className={`adm-tab ${tab==='games'?'is-active':''}`} onClick={() => setTab('games')}>Test des jeux</button>
+        </nav>
+      </header>
+      {tab === 'dashboard' ? <Dashboard /> : <div className="adm-body"><GameTester /></div>}
     </div>
   )
 }
@@ -437,5 +484,5 @@ export default function AdminPage(){
     </div></div>
   )
   if(ADMIN_PIN && !pinOk) return <AdminPinGate onUnlock={() => setPinOk(true)} />
-  return <Dashboard />
+  return <AdminShell />
 }
