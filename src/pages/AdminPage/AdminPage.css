@@ -1,5 +1,6 @@
 /* =====================================================================
-   ADMIN — clair, lisible, tient à l'écran. Dégradé de marque.
+   ADMIN — clair, lisible, responsive. Dégradé de marque.
+   + onglets (Dashboard / Test des jeux) + lecteur de test de jeux.
    ===================================================================== */
 
 /* Login / PIN */
@@ -39,28 +40,37 @@
 }
 .adm-header{
   background:#fff;display:flex;align-items:center;gap:16px;padding:14px 24px;
-  box-shadow:0 2px 12px rgba(0,0,0,.1);position:sticky;top:0;z-index:10;
+  box-shadow:0 2px 12px rgba(0,0,0,.1);position:sticky;top:0;z-index:10;flex-wrap:wrap;
 }
 .adm-header__logo{height:26px;width:auto;}
 .adm-header__title{font-size:17px;font-weight:900;color:#10162e;text-transform:uppercase;letter-spacing:.05em;flex:1;}
-.adm-period{display:flex;gap:6px;}
+
+/* Onglets */
+.adm-tabs{display:flex;gap:8px;}
+.adm-tab{
+  padding:8px 18px;border-radius:999px;border:1.5px solid #d4d4dd;background:transparent;
+  font-family:inherit;font-size:13px;font-weight:800;color:#888;cursor:pointer;transition:all .15s;
+}
+.adm-tab.is-active{border-color:transparent;color:#fff;background:linear-gradient(135deg,#00D9FF,#8B5CF6,#FF2D78);}
+
+/* Sélecteur de période (déplacé dans le corps) */
+.adm-period{display:flex;gap:6px;align-items:center;}
+.adm-period--inline{margin-bottom:16px;}
 .adm-period__btn{
-  padding:6px 15px;border-radius:999px;border:1.5px solid #d4d4dd;background:transparent;
+  padding:6px 15px;border-radius:999px;border:1.5px solid #d4d4dd;background:#fff;
   font-family:inherit;font-size:12px;font-weight:700;color:#999;cursor:pointer;transition:all .15s;
 }
 .adm-period__btn.is-active{border-color:transparent;color:#fff;background:linear-gradient(135deg,#00D9FF,#8B5CF6,#FF2D78);}
 .adm-refresh{
-  width:34px;height:34px;border-radius:50%;border:1.5px solid #d4d4dd;background:transparent;
+  width:34px;height:34px;border-radius:50%;border:1.5px solid #d4d4dd;background:#fff;
   font-size:18px;color:#999;cursor:pointer;display:flex;align-items:center;justify-content:center;
 }
 .adm-refresh:hover{border-color:#8B5CF6;color:#8B5CF6;}
 
 .adm-body{max-width:1280px;margin:0 auto;padding:20px;}
 
-/* KPIs : grille auto qui tient à l'écran */
-.adm-kpis{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;
-}
+/* KPIs */
+.adm-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;}
 .adm-kpi{
   background:#fff;border-radius:14px;padding:16px;text-align:center;
   display:flex;flex-direction:column;gap:2px;box-shadow:0 2px 10px rgba(0,0,0,.08);
@@ -69,33 +79,23 @@
 .adm-kpi__label{font-size:11px;color:#555;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:4px;}
 .adm-kpi__sub{font-size:10px;color:#aaa;font-style:italic;}
 
-/* Grand graphe */
 .adm-hero-chart{background:#fff;border-radius:16px;padding:20px 22px;margin-bottom:18px;box-shadow:0 2px 10px rgba(0,0,0,.08);}
 
-/* Grille de panneaux : 3 colonnes desktop, descend proprement */
-.adm-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px;
-}
+.adm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px;}
 .adm-panel{background:#fff;border-radius:14px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.08);display:flex;flex-direction:column;}
 .adm-panel__head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px;}
 .adm-panel__title{font-size:13px;font-weight:900;color:#10162e;text-transform:uppercase;letter-spacing:.06em;}
 .adm-panel__sub{font-size:11px;color:#999;margin-top:2px;line-height:1.4;}
 
-/* Charts */
 .adm-chart{width:100%;margin-bottom:12px;}
-.adm-chart--empty{
-  height:90px;display:flex;align-items:center;justify-content:center;
-  color:#c4c4cc;font-size:11px;font-style:italic;
-}
+.adm-chart--empty{height:90px;display:flex;align-items:center;justify-content:center;color:#c4c4cc;font-size:11px;font-style:italic;}
 
-/* Export */
 .adm-xls{
   display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:8px;cursor:pointer;
   background:#1D7A4C;border:none;color:#fff;font-family:inherit;font-size:11px;font-weight:700;flex-shrink:0;transition:all .15s;
 }
 .adm-xls:hover{background:#16653e;}
 
-/* Tableaux */
 .adm-table{width:100%;border-collapse:collapse;font-size:12px;}
 .adm-table th{text-align:left;padding:7px 9px;background:#f5f5f8;color:#666;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;}
 .adm-table td{padding:7px 9px;color:#333;border-bottom:1px solid #f0f0f4;}
@@ -103,14 +103,11 @@
 .adm-table tr:hover td{background:#fafafc;}
 .adm-empty{font-size:12px;color:#aaa;text-align:center;padding:18px 0;font-style:italic;}
 
-/* Blocs larges */
 .adm-wide{background:#fff;border-radius:16px;padding:20px 22px;margin-bottom:18px;box-shadow:0 2px 10px rgba(0,0,0,.08);overflow-x:auto;}
 
-/* Suppression */
 .adm-del{width:26px;height:26px;border-radius:7px;cursor:pointer;background:rgba(255,68,102,.1);border:1px solid rgba(255,68,102,.3);color:#FF4466;display:flex;align-items:center;justify-content:center;transition:all .15s;}
 .adm-del:hover{background:#FF4466;color:#fff;}
 
-/* Messages */
 .adm-msgs{display:flex;flex-direction:column;gap:10px;}
 .adm-msg{background:#f9f9fc;border-radius:10px;padding:13px 15px;border-left:3px solid #d4d4dd;}
 .adm-msg--unread{border-left-color:#FF2D78;background:#fff8fb;}
@@ -127,13 +124,69 @@
 .adm-msg__mark{background:#e8e8f0;color:#666;}
 .adm-msg__mark:hover{background:#d4d4dd;}
 
-/* Responsive : la grille se réduit proprement, plus besoin de dézoomer */
+/* =====================================================================
+   TEST DES JEUX
+   ===================================================================== */
+.gt-intro{
+  background:#fff;border-radius:12px;padding:14px 16px;font-size:13px;color:#555;line-height:1.5;
+  margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+.gt-intro code{background:#f0f0f4;padding:1px 6px;border-radius:5px;font-size:12px;color:#8B5CF6;}
+.gt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
+.gt-card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08);display:flex;flex-direction:column;}
+.gt-card__thumb{position:relative;aspect-ratio:16/10;background:#1a1226;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.gt-card__thumb img{width:100%;height:100%;object-fit:cover;}
+.gt-card__ph{font-size:42px;}
+.gt-card__cat{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.55);color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 9px;border-radius:7px;}
+.gt-card__body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1;}
+.gt-card__title{font-size:15px;font-weight:900;color:#10162e;}
+.gt-card__desc{font-size:12px;color:#777;line-height:1.4;flex:1;}
+.gt-card__notes{font-size:11px;color:#aaa;font-style:italic;}
+.gt-card__play{
+  margin-top:6px;padding:10px;border-radius:10px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#00D9FF,#8B5CF6,#FF2D78);color:#fff;font-family:inherit;font-weight:800;font-size:13px;transition:opacity .15s;
+}
+.gt-card__play:hover{opacity:.9;}
+
+/* Lecteur de test plein écran */
+.gt-player{position:fixed;inset:0;z-index:50;background:#0d0a16;display:flex;flex-direction:column;}
+.gt-player__bar{
+  display:flex;align-items:center;gap:12px;padding:10px 14px;background:#15101f;
+  box-shadow:0 2px 12px rgba(0,0,0,.4);flex-shrink:0;
+}
+.gt-player__back{
+  background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);
+  border-radius:10px;padding:8px 14px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;
+}
+.gt-player__back:hover{background:rgba(255,255,255,.18);}
+.gt-player__name{color:#fff;font-weight:800;font-size:15px;flex:1;}
+.gt-player__badge{color:#0d0a16;background:#FFB02E;font-size:11px;font-weight:800;padding:3px 10px;border-radius:8px;text-transform:uppercase;}
+.gt-player__stage{flex:1;display:flex;align-items:center;justify-content:center;padding:14px;overflow:hidden;}
+/* cadre portrait 9:16 : hauteur pleine, largeur déduite */
+.gt-frame{background:#000;border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.5);}
+.gt-frame--port{height:100%;aspect-ratio:9/16;max-width:100%;}
+.gt-frame--land{width:100%;aspect-ratio:16/9;max-height:100%;}
+.gt-iframe{width:100%;height:100%;border:0;display:block;background:#000;}
+
+/* =====================================================================
+   RESPONSIVE — tout reste lisible sur mobile (format de tes jeux)
+   ===================================================================== */
 @media(max-width:1100px){
-  .adm-kpis{grid-template-columns:repeat(4,1fr);}
   .adm-grid{grid-template-columns:repeat(2,1fr);}
 }
-@media(max-width:680px){
+@media(max-width:760px){
+  .adm-header{padding:12px 14px;gap:10px;}
+  .adm-header__title{font-size:15px;width:100%;flex:none;order:-1;}
+  .adm-tabs{flex:1;}
+  .adm-tab{flex:1;text-align:center;padding:8px 10px;font-size:12px;}
   .adm-kpis{grid-template-columns:repeat(2,1fr);}
   .adm-grid{grid-template-columns:1fr;}
   .adm-body{padding:14px;}
+  .adm-kpi__val{font-size:24px;}
+  .gt-grid{grid-template-columns:1fr 1fr;gap:12px;}
+}
+@media(max-width:430px){
+  .adm-kpis{grid-template-columns:1fr 1fr;}
+  .gt-grid{grid-template-columns:1fr;}
+  .gt-player__stage{padding:6px;}
 }
