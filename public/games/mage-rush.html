@@ -508,7 +508,7 @@ const HOUSES={
     splash:true,splashR:70,splashDmg:0.5,splashSlow:0.5,strongVs:['fire','dark'],weakVs:['ice']},
   storm:{name:'Stormcaller',desc:'Bolts strike several foes at once, but for less damage each.',color:'#e8c14a',base:'bolt',zoneSpell:'bolt',multi:3,multiDmg:0.55,
     strongVs:['nature'],weakVs:['bolt']},
-  necro:{name:'Necromancer',desc:'Dark bolts; slain foes have a chance to rise and fight for you. Plus a summon spell.',color:'#9a6bff',base:'dark',zoneSpell:'fireZone',summon:true,
+  necro:{name:'Necromancer',desc:'Dark bolts; slain foes have a chance to rise and fight for you. Plus a summon spell.',color:'#9a6bff',base:'dark',zoneSpell:'summon',summon:true,
     raise:0.2,raiseTime:8,strongVs:['dark','fire'],weakVs:['nature']}
 };
 // débloque le sort de zone propre à la maison (gratuit, conservé même si on change de maison)
@@ -1452,7 +1452,7 @@ function drawPlayer(){
   const s=W2S(Player.x,Player.y);const bob=Math.sin(Player.anim*5)*2;const x=s.x,y=s.y+bob;
   cx.fillStyle='rgba(0,0,0,0.2)';cx.beginPath();cx.ellipse(x,y+Player.r*0.85,Player.r*0.7,Player.r*0.25,0,0,6.28);cx.fill();
   const img=ASSETS[skinSprite()]||ASSETS.mage;
-  if(img){const flip=Math.cos(Player.facing)<0;const sz=Player.r*2.6;cx.save();cx.translate(x,y);if(flip)cx.scale(-1,1);cx.drawImage(img,-sz/2,-sz*0.64,sz,sz);cx.restore();}
+  if(img){const flip=Math.cos(Player.facing)<0;const sz=Player.r*3.1;cx.save();cx.translate(x,y);if(flip)cx.scale(-1,1);cx.drawImage(img,-sz/2,-sz*0.64,sz,sz);cx.restore();}
   else{
     cx.save();cx.translate(x,y);
     const rg=cx.createLinearGradient(-14,-22,14,12);rg.addColorStop(0,'#4a8fd6');rg.addColorStop(1,'#2a5a9a');cx.fillStyle=rg;cx.beginPath();cx.moveTo(-15,12);cx.lineTo(-11,-16);cx.quadraticCurveTo(0,-26,11,-16);cx.lineTo(15,12);cx.closePath();cx.fill();
@@ -1475,7 +1475,7 @@ function drawEnemy(e){
   cx.fillStyle='rgba(0,0,0,0.18)';cx.beginPath();cx.ellipse(x,y+r*0.7,r*0.7,r*0.22,0,0,6.28);cx.fill();
   if(e.slowT>0){cx.strokeStyle='#7afcff';cx.lineWidth=2;cx.beginPath();cx.arc(x,y-r*0.2,r*0.95,0,6.28);cx.stroke();}
   const img=ASSETS[e.sprite];
-  if(img){const flip=Player.x<e.x;const sz=r*2.5;cx.save();cx.translate(x,y);if(flip)cx.scale(-1,1);cx.drawImage(img,-sz/2,-sz*0.6,sz,sz);if(e.flash>0){cx.globalCompositeOperation='source-atop';cx.fillStyle='rgba(255,255,255,'+(e.flash/0.15*0.7)+')';cx.fillRect(-sz/2,-sz*0.6,sz,sz);cx.globalCompositeOperation='source-over';}cx.restore();}
+  if(img){const flip=Player.x>e.x;const sz=r*3;cx.save();cx.translate(x,y);if(flip)cx.scale(-1,1);cx.drawImage(img,-sz/2,-sz*0.6,sz,sz);if(e.flash>0){cx.globalCompositeOperation='source-atop';cx.fillStyle='rgba(255,255,255,'+(e.flash/0.15*0.7)+')';cx.fillRect(-sz/2,-sz*0.6,sz,sz);cx.globalCompositeOperation='source-over';}cx.restore();}
   else{
     cx.save();cx.translate(x,y);
     cx.fillStyle=e.flash>0?'#fff':e.color;cx.beginPath();cx.arc(0,-r*0.25,r*0.72,0,6.28);cx.fill();
@@ -1558,7 +1558,7 @@ function updateSpellButtons(){
   if(fire){fire.classList.toggle('locked',!(D.powers.fireZone>0));fire.classList.toggle('aiming',aimSpell==='fire');}
   if(shield)shield.classList.toggle('locked',!D.unlocks.shield);
   // bouton invocation : visible uniquement pour le Necromancer
-  if(summon){const isNecro=currentHouse().summon;summon.style.display=isNecro?'':'none';}
+  if(summon){const isNecro=currentHouse().summon;summon.style.display=isNecro?'':'none';summon.classList.remove('locked');}
   const blood=document.getElementById('spellBlood');if(blood)blood.classList.toggle('locked',!(D.powers.bloodpact>0));
 }
 function syncHUD(){
