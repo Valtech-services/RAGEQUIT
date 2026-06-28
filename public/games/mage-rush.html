@@ -325,13 +325,19 @@ const ASSET_LIST={
   'Dark Mage':'Dark Mage.png',
   // projectiles ennemis
   arrow:'arrow.png', efire:'efire.png', erock:'erock.png', eice:'eice.png', ebolt:'ebolt.png', edark:'edark.png',
-  // décor bloquant
-  tree:'tree.png', tree2:'tree2.png', rock:'rock.png', rock2:'rock2.png', pond:'pond.png',
-  deadtree:'deadtree.png', lavarock:'lavarock.png', icerock:'icerock.png', crystal:'crystal.png',
-  // décor non bloquant
-  bush:'bush.png', flowers:'flowers.png',
-  // sol & titre
-  groundGrass:'ground-grass.png', titleBg:'title-bg.png', master:'master.png',
+  // décor par monde — Verdant (par défaut)
+  tree:'tree.png', tree2:'tree2.png', rock:'rock.png', rock2:'rock2.png', bush:'bush.png', flowers:'flowers.png', pond:'pond.png', lake:'lake.png',
+  // décor Ashen Volcano
+  tree_volcano:'tree_volcano.png', rock_volcano:'rock_volcano.png', rock2_volcano:'rock2_volcano.png', bush_volcano:'bush_volcano.png', flowers_volcano:'flowers_volcano.png', pond_volcano:'pond_volcano.png', lake_volcano:'lake_volcano.png',
+  // décor Frostpeak
+  tree_frost:'tree_frost.png', rock_frost:'rock_frost.png', rock2_frost:'rock2_frost.png', bush_frost:'bush_frost.png', flowers_frost:'flowers_frost.png', pond_frost:'pond_frost.png', lake_frost:'lake_frost.png',
+  // décor Stormwild
+  tree_storm:'tree_storm.png', rock_storm:'rock_storm.png', rock2_storm:'rock2_storm.png', bush_storm:'bush_storm.png', flowers_storm:'flowers_storm.png', pond_storm:'pond_storm.png', lake_storm:'lake_storm.png',
+  // décor Thornjungle
+  tree_jungle:'tree_jungle.png', rock_jungle:'rock_jungle.png', rock2_jungle:'rock2_jungle.png', bush_jungle:'bush_jungle.png', flowers_jungle:'flowers_jungle.png', pond_jungle:'pond_jungle.png', lake_jungle:'lake_jungle.png',
+  // sols par monde
+  groundGrass:'ground-grass.png', ground_volcano:'ground-volcano.png', ground_frost:'ground-frost.png', ground_storm:'ground-storm.png', ground_jungle:'ground-jungle.png',
+  titleBg:'title-bg.png', master:'master.png',
   // portraits des maisons
   house_pyro:'house_pyro.png', house_cryo:'house_cryo.png', house_storm:'house_storm.png', house_necro:'house_necro.png',
   // icônes de pouvoirs (academy)
@@ -490,11 +496,11 @@ function getWeekendMult(){return 1;}
 // ============================================================
 const WORLDS=[
   {id:0,name:'Verdant Meadow',desc:'Rolling green fields dotted with wildflowers',color:'#6db84a',ground:'groundGrass',affinity:'nature'},
-  {id:1,name:'Ashen Volcano',desc:'Scorched rock and rivers of molten lava',color:'#e8632f',ground:'groundGrass',affinity:'fire'},
-  {id:2,name:'Frostpeak',desc:'Frozen wastes under an endless blizzard',color:'#5aaee8',ground:'groundGrass',affinity:'ice'},
-  {id:3,name:'Stormwild',desc:'Storm-battered highlands crackling with thunder',color:'#e8c14a',ground:'groundGrass',affinity:'bolt'},
-  {id:4,name:'Thornjungle',desc:'Overgrown ruins choked with cursed vines',color:'#3a9a5a',ground:'groundGrass',affinity:'nature'},
-  {id:5,name:"Hell's Gate",desc:'The dark domain where the Dark Mage awaits',color:'#c4304a',ground:'groundGrass',affinity:'dark'}
+  {id:1,name:'Ashen Volcano',desc:'Scorched rock and rivers of molten lava',color:'#e8632f',ground:'ground_volcano',affinity:'fire'},
+  {id:2,name:'Frostpeak',desc:'Frozen wastes under an endless blizzard',color:'#5aaee8',ground:'ground_frost',affinity:'ice'},
+  {id:3,name:'Stormwild',desc:'Storm-battered highlands crackling with thunder',color:'#e8c14a',ground:'ground_storm',affinity:'bolt'},
+  {id:4,name:'Thornjungle',desc:'Overgrown ruins choked with cursed vines',color:'#3a9a5a',ground:'ground_jungle',affinity:'nature'},
+  {id:5,name:"Hell's Gate",desc:'The dark domain where the Dark Mage awaits',color:'#c4304a',ground:'ground_volcano',affinity:'dark'}
 ];
 // rotation survival : on change de monde tous les 10 niveaux (les 5 premiers, en boucle)
 const SURVIVAL_ROTATION=[0,1,2,3,4];
@@ -579,15 +585,45 @@ const ALL_ENEMIES=E_TYPES.concat([MINI_BOSS,BIG_BOSS]);
 
 // === DÉCOR À HITBOX ===
 // types de décor : bloquant (hitbox) ou non. r = rayon de collision.
-const DECOR_TYPES=[
-  {sprite:'tree',r:26,block:true,w:'nature'},{sprite:'tree2',r:28,block:true,w:'nature'},
-  {sprite:'rock',r:24,block:true,w:'any'},{sprite:'rock2',r:30,block:true,w:'any'},
-  {sprite:'bush',r:18,block:false,w:'nature'},{sprite:'flowers',r:14,block:false,w:'nature'},
-  {sprite:'pond',r:34,block:true,w:'nature'},
-  {sprite:'deadtree',r:24,block:true,w:'dark'},{sprite:'lavarock',r:28,block:true,w:'fire'},
-  {sprite:'icerock',r:28,block:true,w:'ice'},{sprite:'crystal',r:22,block:true,w:'bolt'}
-];
-function decorForWorld(w){const aff=(w&&w.affinity)||'nature';return DECOR_TYPES.filter(d=>d.w==='any'||d.w===aff);}
+// décor par monde : chaque biome a ses arbres/rochers/buissons/fleurs/flaques/lac
+// suffixe vide = Verdant (par défaut), sinon _volcano / _frost / _storm / _jungle
+const DECOR_BY_WORLD={
+  0:[ // Verdant Meadow
+    {sprite:'tree',r:26,block:true},{sprite:'tree2',r:28,block:true},
+    {sprite:'rock',r:22,block:true},{sprite:'rock2',r:32,block:true},
+    {sprite:'bush',r:18,block:false},{sprite:'flowers',r:14,block:false},
+    {sprite:'pond',r:34,block:true},{sprite:'lake',r:70,block:true,rare:true}
+  ],
+  1:[ // Ashen Volcano
+    {sprite:'tree_volcano',r:26,block:true},
+    {sprite:'rock_volcano',r:22,block:true},{sprite:'rock2_volcano',r:32,block:true},
+    {sprite:'bush_volcano',r:18,block:false},{sprite:'flowers_volcano',r:14,block:false},
+    {sprite:'pond_volcano',r:34,block:true},{sprite:'lake_volcano',r:70,block:true,rare:true}
+  ],
+  2:[ // Frostpeak
+    {sprite:'tree_frost',r:26,block:true},
+    {sprite:'rock_frost',r:22,block:true},{sprite:'rock2_frost',r:32,block:true},
+    {sprite:'bush_frost',r:18,block:false},{sprite:'flowers_frost',r:14,block:false},
+    {sprite:'pond_frost',r:34,block:true},{sprite:'lake_frost',r:70,block:true,rare:true}
+  ],
+  3:[ // Stormwild
+    {sprite:'tree_storm',r:26,block:true},
+    {sprite:'rock_storm',r:22,block:true},{sprite:'rock2_storm',r:32,block:true},
+    {sprite:'bush_storm',r:18,block:false},{sprite:'flowers_storm',r:14,block:false},
+    {sprite:'pond_storm',r:34,block:true},{sprite:'lake_storm',r:70,block:true,rare:true}
+  ],
+  4:[ // Thornjungle
+    {sprite:'tree_jungle',r:28,block:true},
+    {sprite:'rock_jungle',r:22,block:true},{sprite:'rock2_jungle',r:32,block:true},
+    {sprite:'bush_jungle',r:18,block:false},{sprite:'flowers_jungle',r:14,block:false},
+    {sprite:'pond_jungle',r:34,block:true},{sprite:'lake_jungle',r:70,block:true,rare:true}
+  ],
+  5:[ // Hell's Gate (réutilise le volcan)
+    {sprite:'rock_volcano',r:22,block:true},{sprite:'rock2_volcano',r:32,block:true},
+    {sprite:'lake_volcano',r:70,block:true,rare:true}
+  ]
+};
+function decorForWorld(w){return DECOR_BY_WORLD[(w&&w.id)||0]||DECOR_BY_WORLD[0];}
 
 // génération de décor par "chunks" autour du joueur (monde infini)
 const CHUNK=400;const decorChunks={};
@@ -606,6 +642,7 @@ function ensureDecorAround(){
       const ry=cy*CHUNK+seedRand(base+i*13.7)*CHUNK;
       if(Math.hypot(rx-Player.x,ry-Player.y)<140)continue; // pas trop près du joueur
       const t=pool[Math.floor(seedRand(base+i*3.3)*pool.length)];
+      if(t.rare&&seedRand(base+i*5.9)>0.18)continue; // les lacs sont rares
       const d={x:rx,y:ry,r:t.r,sprite:t.sprite,block:t.block,chunk:key};
       Decor.push(d);if(t.block)Obstacles.push(d);
     }
@@ -1431,21 +1468,19 @@ const GROUND_TINT={
   4:['#5a9a55','#3c6e3a'], // jungle
   5:['#5a2030','#2a0e16']  // enfers
 };
+// couleur de sol pleine par monde (HTML5, aucune image, aucune tuile, aucun quadrillage)
+const GROUND_SOLID={
+  0:'#5fa84e', // Verdant Meadow
+  1:'#7a3526', // Ashen Volcano
+  2:'#9fcadf', // Frostpeak
+  3:'#6f6790', // Stormwild
+  4:'#3c6e3a', // Thornjungle
+  5:'#3a1420'  // Hell's Gate
+};
 function drawGround(){
   const wid=(curWorld&&curWorld.id!=null)?curWorld.id:0;
-  const img=ASSETS[(curWorld&&curWorld.ground)||'groundGrass'];
-  const ts=128;const ox=-(((cam.x%ts)+ts)%ts),oy=-(((cam.y%ts)+ts)%ts);
-  if(img){
-    for(let y=oy-ts;y<VH+ts;y+=ts)for(let x=ox-ts;x<VW+ts;x+=ts)cx.drawImage(img,x,y,ts,ts);
-    // légère teinte du monde par-dessus la tuile d'herbe
-    if(wid!==0){cx.globalAlpha=0.35;cx.fillStyle=GROUND_TINT[wid][1];cx.fillRect(0,0,VW,VH);cx.globalAlpha=1;}
-  }else{
-    const tint=GROUND_TINT[wid]||GROUND_TINT[0];
-    const g=cx.createLinearGradient(0,0,0,VH);g.addColorStop(0,tint[0]);g.addColorStop(1,tint[1]);cx.fillStyle=g;cx.fillRect(0,0,VW,VH);
-    // damier doux qui défile pour donner la sensation de déplacement (infini)
-    const t2=96;const o2x=-(((cam.x%t2)+t2)%t2),o2y=-(((cam.y%t2)+t2)%t2);cx.fillStyle='rgba(255,255,255,0.05)';
-    for(let yy=-1;yy*t2+o2y<VH+t2;yy++)for(let xx=-1;xx*t2+o2x<VW+t2;xx++){const gx=Math.round((xx*t2+o2x+cam.x)/t2),gy=Math.round((yy*t2+o2y+cam.y)/t2);if((gx+gy)&1)cx.fillRect(xx*t2+o2x,yy*t2+o2y,t2,t2);}
-  }
+  cx.fillStyle=GROUND_SOLID[wid]||GROUND_SOLID[0];
+  cx.fillRect(0,0,VW,VH);
 }
 
 function drawPlayer(){
@@ -1491,6 +1526,20 @@ function drawEnemy(e){
   if(e.chargeState==='dash'){cx.strokeStyle='#ff6a6a';cx.lineWidth=3;cx.beginPath();cx.arc(x,y-r*0.2,r*1.1,0,6.28);cx.stroke();}
 }
 function drawDecor(o){
+  const s=W2S(o.x,o.y);if(s.x<-80||s.x>VW+80||s.y<-80||s.y>VH+80)return;
+  const img=ASSETS[o.sprite];
+  if(img){const sz=o.r*2.6;cx.drawImage(img,s.x-sz/2,s.y-sz*0.78,sz,sz);return;}
+  // fallback canvas selon la FAMILLE (préfixe), pour gérer les suffixes de monde
+  const k=o.sprite;
+  cx.fillStyle='rgba(0,0,0,0.15)';cx.beginPath();cx.ellipse(s.x,s.y+o.r*0.5,o.r*0.8,o.r*0.25,0,0,6.28);cx.fill();
+  if(k.indexOf('tree')===0){cx.fillStyle='#6b4a2a';cx.fillRect(s.x-4,s.y-4,8,o.r*0.6);cx.fillStyle='#3e8e41';cx.beginPath();cx.arc(s.x,s.y-o.r*0.5,o.r,0,6.28);cx.fill();cx.fillStyle='#4caf50';cx.beginPath();cx.arc(s.x-o.r*0.4,s.y-o.r*0.3,o.r*0.6,0,6.28);cx.fill();}
+  else if(k.indexOf('lake')===0){cx.fillStyle='#4a90d9';cx.beginPath();cx.ellipse(s.x,s.y,o.r,o.r*0.62,0,0,6.28);cx.fill();cx.fillStyle='rgba(255,255,255,0.25)';cx.beginPath();cx.ellipse(s.x-o.r*0.3,s.y-o.r*0.18,o.r*0.3,o.r*0.14,0,0,6.28);cx.fill();}
+  else if(k.indexOf('pond')===0){cx.fillStyle='#4a90d9';cx.beginPath();cx.ellipse(s.x,s.y,o.r,o.r*0.6,0,0,6.28);cx.fill();cx.fillStyle='rgba(255,255,255,0.3)';cx.beginPath();cx.ellipse(s.x-o.r*0.3,s.y-o.r*0.15,o.r*0.25,o.r*0.12,0,0,6.28);cx.fill();}
+  else if(k.indexOf('bush')===0){cx.fillStyle='#3e8e41';cx.beginPath();cx.arc(s.x-o.r*0.4,s.y,o.r*0.6,0,6.28);cx.arc(s.x+o.r*0.4,s.y,o.r*0.6,0,6.28);cx.arc(s.x,s.y-o.r*0.3,o.r*0.7,0,6.28);cx.fill();}
+  else if(k.indexOf('flowers')===0){['#e85a8a','#e8c14a','#9a6bff'].forEach((c,i)=>{cx.fillStyle=c;cx.beginPath();cx.arc(s.x+(i-1)*o.r*0.6,s.y-(i%2)*o.r*0.3,o.r*0.3,0,6.28);cx.fill();});}
+  else {cx.fillStyle='#9a8a7a';cx.beginPath();cx.arc(s.x,s.y,o.r*0.85,0,6.28);cx.fill();cx.fillStyle='#b5a690';cx.beginPath();cx.arc(s.x-o.r*0.2,s.y-o.r*0.2,o.r*0.4,0,6.28);cx.fill();}
+}
+function drawDecor_OLD(o){
   const s=W2S(o.x,o.y);if(s.x<-60||s.x>VW+60||s.y<-60||s.y>VH+60)return;
   const img=ASSETS[o.sprite];
   if(img){const sz=o.r*2.6;cx.drawImage(img,s.x-sz/2,s.y-sz*0.78,sz,sz);return;}
