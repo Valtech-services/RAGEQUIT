@@ -41,6 +41,21 @@ export const categories = [
       ],
     },
   },
+   {
+    id: 'idle',
+    label: 'Idle / Clicker',
+    image: '/categories/idle.jpg',
+    description: 'Tap, collect, upgrade, repeat. Watch your numbers grow — even while you are away.',
+    seo: {
+      title: 'Free Idle & Clicker Games | Ragequit Arcade',
+      metaDescription: 'Play the best free idle and clicker games online. Tap to collect, upgrade and grow. No download required.',
+      faq: [
+        { q: 'What are idle / clicker games?', a: 'Games where you tap to earn resources, then unlock upgrades that keep producing even when you are idle. Simple to start, deeply addictive.' },
+        { q: 'Are they free?', a: 'Yes, 100% free, no account required.' },
+        { q: 'Mobile?', a: 'Yes, idle and clicker games are perfect on mobile — one thumb is all you need.' },
+      ],
+    },
+  },
 ]
 
 /* ---- SEO global du site ---- */
