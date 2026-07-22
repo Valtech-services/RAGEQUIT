@@ -1676,7 +1676,7 @@
   <div id="topbar">
     <div id="brandBlock">
       <div id="brandFrame">
-        <img id="brandLogo" src="logo.png" alt="Stellar Forge" onerror="this.style.visibility='hidden';">
+        <img id="brandLogo" src="stellar-forge/logo.png" alt="Stellar Forge" onerror="this.style.visibility='hidden';">
       </div>
     </div>
     <div id="statPanel">
@@ -1836,7 +1836,7 @@
   <div id="adBox">
     <div id="adLabel">ADVERTISEMENT</div>
     <div id="adContent">
-      <div id="adSimVisual"><img id="adLogo" src="logo.png" alt="Stellar Forge" onerror="this.style.display='none'; document.getElementById('adLogoFallback').style.display='inline';"><span id="adLogoFallback" style="display:none;">STELLAR FORGE</span></div>
+      <div id="adSimVisual"><img id="adLogo" src="stellar-forge/logo.png" alt="Stellar Forge" onerror="this.style.display='none'; document.getElementById('adLogoFallback').style.display='inline';"><span id="adLogoFallback" style="display:none;">STELLAR FORGE</span></div>
       <div id="adSimText">Thanks for supporting the game</div>
     </div>
     <div id="adCountdown">5</div>
@@ -2044,6 +2044,7 @@ const MANAGER_UPGRADE_GROWTH = 1.75; // mineral cost multiplier per manager leve
 // ones provided by the project owner. NOTE: plant_11/plant_12 keep the filenames
 // dyson_swarm / dyson_sphere even though the in-game plant #11 is now "Stellar
 // Collector" — the files are named this way on purpose.
+const IMG_BASE = "stellar-forge/";
 const BUILDING_IMAGES = [
   "building_00_hand_pick.png",
   "building_01_robotic_drill.png",
@@ -3429,7 +3430,7 @@ function renderStatic(){
     div.id = "building-" + i;
     div.innerHTML = `
       <span class="techTag tier${b.techTier}">Type ${b.techTier}</span>
-      <div class="cardThumb" id="bThumb-${i}" style="background-image:url('${BUILDING_IMAGES[i]}');">
+      <div class="cardThumb" id="bThumb-${i}" style="background-image:url('${IMG_BASE}${BUILDING_IMAGES[i]}');">
         <span class="cardLvl" id="bOwned-${i}">0</span>
       </div>
       <div class="cardBody">
@@ -3472,7 +3473,7 @@ function renderStatic(){
     div.id = "plant-" + i;
     div.innerHTML = `
       <span class="techTag tier${plantTier(i)}">Type ${plantTier(i)}</span>
-      <div class="cardThumb" id="plantThumb-${i}" style="background-image:url('${PLANT_IMAGES[i]}');">
+      <div class="cardThumb" id="plantThumb-${i}" style="background-image:url('${IMG_BASE}${PLANT_IMAGES[i]}');">
         <span class="cardLvl" id="plantOwned-${i}">0</span>
       </div>
       <div class="cardBody">
@@ -3509,7 +3510,7 @@ function renderStatic(){
     div.id = "upgrade-" + i;
     div.innerHTML = `
       <span class="techTag tier${upgradeTier(i)}">Type ${upgradeTier(i)}</span>
-      <div class="cardThumb" id="upgThumb-${i}" style="background-image:url('${UPGRADE_IMAGES[i]}');">
+      <div class="cardThumb" id="upgThumb-${i}" style="background-image:url('${IMG_BASE}${UPGRADE_IMAGES[i]}');">
         <span class="cardLvl" id="upgQty-${i}"></span>
       </div>
       <div class="cardBody">
@@ -3540,7 +3541,7 @@ function renderStatic(){
     div.id = "manager-" + i;
     div.innerHTML = `
       <span class="techTag tier${managerTier(i)}">Type ${managerTier(i)}</span>
-      <div class="cardThumb" id="managerThumb-${i}" style="background-image:url('${MANAGER_IMAGES[i]}');">
+      <div class="cardThumb" id="managerThumb-${i}" style="background-image:url('${IMG_BASE}${MANAGER_IMAGES[i]}');">
         <span class="cardLvl" id="mgrLevel-${i}"></span>
       </div>
       <div class="cardBody">
