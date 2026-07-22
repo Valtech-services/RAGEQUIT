@@ -143,8 +143,42 @@ export const games = [
       { q: 'What is double score?', a: 'On the game-over screen you can watch an ad to double your final score before it is sent to the leaderboard.' },
       { q: 'Does it have a leaderboard?', a: 'Yes. Your best stack height is saved and shown on the global leaderboard.' },
       { q: 'Is STAQ free?', a: 'Yes, completely free to play.' },
-      { q: 'Mobile?', a: 'Yes, STAQ is built for portrait mobile and works great on tablet and desktop too.' }
+{ q: 'Mobile?', a: 'Yes, STAQ is built for portrait mobile and works great on tablet and desktop too.' }
     ]
   }
-}
+},
+
+  /* ================================================================
+     STELLAR FORGE — idle clicker spatial, catégorie idle
+     ================================================================ */
+  {
+    id: 'stellar-forge',
+    title: 'Stellar Forge',
+    description: 'Start with a single hand pick and forge your way to a galactic civilization. Mine ore, automate with drills and mining empires, build a real energy grid from solar panels to Dyson spheres, and climb the actual Kardashev scale from Type I to Type III. Colonize planets, expand across the stars, and watch your civilization grow — even while you are away. A deep, science-based idle clicker for players who love numbers going up.',
+    thumbnail: '/thumbnails/stellar-forge.jpg',
+    category: 'idle',
+    tags: ['idle', 'clicker', 'space', 'incremental', 'mining', 'sci-fi', 'kardashev', 'automation'],
+    size: 'medium',
+    shimmer: true,
+    isNew: true,
+    hot: true,
+    landscape: false,
+    plays: 0,
+    modes: ['classic'],
+    defaultMode: 'classic',
+    controls: 'Tap or click to mine ore. Buy buildings to automate production, build energy plants to power everything, and colonize planets to unlock bigger upgrades. Works on mobile, tablet and desktop.',
+    author: 'Ragequit Arcade',
+    seo: {
+      title: 'Stellar Forge — Free Space Idle Clicker Game | Ragequit Arcade',
+      metaDescription: 'Play Stellar Forge free online. A space idle clicker where you mine ore, build an energy empire and climb the real Kardashev scale from planet to galaxy. No download.',
+      faq: [
+        { q: 'How do you play Stellar Forge?', a: 'Tap to mine your first ore, then buy drills, platforms and mining empires to automate production. Build energy plants to power everything and colonize planets to unlock bigger upgrades.' },
+        { q: 'What is the Kardashev scale in the game?', a: 'It is a real scientific scale of civilization energy use. You progress from Type I (planetary) to Type II (stellar, like a Dyson sphere) to Type III (galactic), based on the actual power your civilization produces.' },
+        { q: 'Does it produce while I am away?', a: 'Yes. Once you automate with buildings, your civilization keeps producing resources even when the game is closed. Come back to collect your progress.' },
+        { q: 'What is the goal?', a: 'Grow from a single hand pick to a galaxy-spanning civilization. Expand across planets, scale your energy grid, and push as far up the Kardashev scale as you can.' },
+        { q: 'Is Stellar Forge free?', a: 'Yes, completely free to play, no download and no signup required.' },
+        { q: 'Mobile?', a: 'Yes, Stellar Forge is built for portrait mobile and works great on tablet and desktop too.' }
+      ]
+    }
+  }
 ]
