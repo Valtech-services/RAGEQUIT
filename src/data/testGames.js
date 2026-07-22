@@ -17,23 +17,21 @@ export const testGames = [
   {
     id: 'mage-rush',
     title: 'Mage Rush',
-    description: 'Survis aux vagues, choisis ta maison de mage et maîtrise tes sorts.',
+    description: 'Survis aux vagues, choisis ta maison de mage et maitrise tes sorts.',
     thumbnail: '/thumbnails/mage-rush.jpg',
     category: 'adventure',
-    orientation: 'portrait',        // 'portrait' (9:16) ou 'landscape'
-    file: '/games/mage-rush.html',  // chemin du HTML dans public/
+    orientation: 'portrait',
+    file: '/games/mage-rush.html',
     notes: 'Roguelite mage. Mobile-first 9:16.'
   },
   {
     id: 'stellar-forge',
     title: 'Stellar Forge',
-    description: 'Idle clicker spatial : extrais du minerai, automatise, construis ton énergie et grimpe l\'échelle de Kardashev de la planète à la galaxie.',
+    description: 'Idle clicker spatial : extrais du minerai, automatise, construis ton energie et grimpe l echelle de Kardashev de la planete a la galaxie.',
     thumbnail: '/thumbnails/stellar-forge.jpg',
     category: 'idle',
     orientation: 'portrait',
     file: '/games/stellar-forge.html',
-    notes: 'Idle clicker spatial. Mobile-first portrait. Progression Kardashev + colonisation planètes.'
+    notes: 'Idle clicker spatial. Mobile-first portrait. Progression Kardashev + colonisation planetes.'
   }
-  // Ajoute ici tes prochains jeux en test…
-]
 ]
