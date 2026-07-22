@@ -23,6 +23,17 @@ export const testGames = [
     orientation: 'portrait',        // 'portrait' (9:16) ou 'landscape'
     file: '/games/mage-rush.html',  // chemin du HTML dans public/
     notes: 'Roguelite mage. Mobile-first 9:16.'
+  },
+  {
+    id: 'stellar-forge',
+    title: 'Stellar Forge',
+    description: 'Idle clicker spatial : extrais du minerai, automatise, construis ton énergie et grimpe l\'échelle de Kardashev de la planète à la galaxie.',
+    thumbnail: '/thumbnails/stellar-forge.jpg',
+    category: 'idle',
+    orientation: 'portrait',
+    file: '/games/stellar-forge.html',
+    notes: 'Idle clicker spatial. Mobile-first portrait. Progression Kardashev + colonisation planètes.'
   }
   // Ajoute ici tes prochains jeux en test…
+]
 ]
