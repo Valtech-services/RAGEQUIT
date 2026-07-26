@@ -3695,7 +3695,7 @@ function renderStatic(){
     div.id = "manager-" + i;
     div.innerHTML = `
       <span class="techTag tier${managerTier(i)}">Type ${managerTier(i)}</span>
-      <div class="cardThumb" id="managerThumb-${i}" style="background-image:url('${IMG_BASE}${MANAGER_IMAGES[i]}');">
+      <div class="cardThumb" id="managerThumb-${i}" style="background-image:url('${IMG_BASE}${MANAGER_IMAGES[i-1]}');">
         <span class="cardLvl" id="mgrLevel-${i}"></span>
       </div>
       <div class="cardBody">
