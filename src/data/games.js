@@ -2,7 +2,6 @@
    GAMES.JS — Ragequit Arcade
    Catalogue de jeux. Seuls les jeux vraiment en ligne sont listés.
    Ajouter un jeu = ajouter une entrée dans le tableau `games`.
-
    Champ `hot: true`  → affiche la languette blanche avec la flamme bleue
    Champ `modes`      → liste des modes de jeu (ex: ['survival', 'classic'])
    Champ `defaultMode`→ mode affiché par défaut dans le leaderboard
@@ -41,7 +40,7 @@ export const categories = [
       ],
     },
   },
-   {
+  {
     id: 'idle',
     label: 'Idle / Clicker',
     image: '/categories/idle.jpg',
@@ -63,8 +62,8 @@ export const siteSeo = {
   title: 'Ragequit Arcade — Free Online Games',
   description: 'The most addictive free online games. Simple to learn, impossible to master. A new game every week.',
   about: 'Ragequit Arcade brings you the most addictive free online games, built for solo runs or quick matches with friends. Every game runs instantly in your browser — no downloads, no sign-up, no pop-ups, no nonsense. Our games work on desktop, tablet and mobile, so you can play at home or on the move. We are building a place where a great game is always one click away.',
-  gameSelection: 'We add new games every single week. Our current titles include Rage Hockey and STAQ. Every game is free to play, forever.',
-  startPlaying: 'Not sure what to play? Start exploring from the homepage or pick a game from Sports Games or Arcade Games.',
+  gameSelection: 'We add new games every single week. Our current titles include Rage Hockey, STAQ and Stellar Forge. Every game is free to play, forever.',
+  startPlaying: 'Not sure what to play? Start exploring from the homepage or pick a game from Sports Games, Arcade Games or Idle / Clicker Games.',
   aboutUs: 'Ragequit Arcade is an independent gaming platform. Our goal is simple: create the most fun, most honest browser arcade on the web. New games drop every week — follow us on TikTok and Instagram to see what is coming next.',
   faq: [
     { q: 'What is Ragequit Arcade?', a: 'A free online gaming platform. No download, no registration required.' },
@@ -77,7 +76,6 @@ export const siteSeo = {
 
 /* ---- Jeux ---- */
 export const games = [
-
   /* ================================================================
      RAGE HOCKEY — jeu phare, sports, paysage obligatoire sur mobile
      ================================================================ */
@@ -94,8 +92,8 @@ export const games = [
     hot: true,
     landscape: true,
     plays: 0,
-    modes: ['survival', 'classic'],   // ← modes de jeu pour le leaderboard
-    defaultMode: 'survival',          // ← mode affiché par défaut
+    modes: ['survival', 'classic'],
+    defaultMode: 'survival',
     controls: '1P: mouse or finger on the left side. 2P: right side touch or IJKL keys.',
     author: 'Ragequit Arcade',
     seo: {
@@ -112,49 +110,47 @@ export const games = [
     },
   },
 
- /* =====================================================================
-   ENTRÉE games.js POUR STAQ — version mise à jour
-   Remplace l'objet 'staq' existant dans le tableau `games` de games.js.
-   ===================================================================== */
-{
-  id: 'staq',
-  title: 'STAQ',
-  description: 'Stack the blocks as high as you can. One tap, infinite precision — but miss once and it all comes crashing down. Nail a perfect drop to keep your stack full-width, ride your combo, and when you finally fall… watch an ad to revive your tower or double your score. How high can you go before rage quitting?',
-  thumbnail: '/thumbnails/staq.jpg',
-  category: 'arcade',
-  tags: ['stacking', 'arcade', 'reflex', 'one-tap', 'tower', 'casual'],
-  size: 'medium',
-  shimmer: true,
-  isNew: false,
-  hot: true,
-  landscape: false,
-  plays: 0,
-  modes: ['classic'],
-  defaultMode: 'classic',
-  controls: 'Tap or click (or press Space) to drop the moving block. Line it up with the block below. Mobile, tablet and desktop friendly.',
-  author: 'Ragequit Arcade',
-  seo: {
-    title: 'STAQ — Free Block Stacking Game | Ragequit Arcade',
-    metaDescription: 'Play STAQ free online. A satisfying one-tap 3D block-stacking game with perfect-drop combos, revive and double-score rewards. How high can you stack?',
-    faq: [
-      { q: 'How do you play STAQ?', a: 'Tap, click or press the spacebar to drop the moving block onto the stack. Line it up as precisely as possible — the better aligned, the wider your tower stays.' },
-      { q: 'What is a perfect drop?', a: 'If you align a block almost exactly, you get a Perfect: the block keeps its full width instead of being chopped, with a flash and a sound. Chain perfects to build the tallest towers.' },
-      { q: 'What is revive?', a: 'When you miss, you can watch a short ad once per run to revive your tower exactly where you left off, instead of starting over.' },
-      { q: 'What is double score?', a: 'On the game-over screen you can watch an ad to double your final score before it is sent to the leaderboard.' },
-      { q: 'Does it have a leaderboard?', a: 'Yes. Your best stack height is saved and shown on the global leaderboard.' },
-      { q: 'Is STAQ free?', a: 'Yes, completely free to play.' },
-{ q: 'Mobile?', a: 'Yes, STAQ is built for portrait mobile and works great on tablet and desktop too.' }
-    ]
-  }
-}
+  /* ================================================================
+     STAQ — arcade, one-tap block stacking
+     ================================================================ */
+  {
+    id: 'staq',
+    title: 'STAQ',
+    description: 'Stack the blocks as high as you can. One tap, infinite precision — but miss once and it all comes crashing down. Nail a perfect drop to keep your stack full-width, ride your combo, and when you finally fall… watch an ad to revive your tower. How high can you go before rage quitting?',
+    thumbnail: '/thumbnails/staq.jpg',
+    category: 'arcade',
+    tags: ['stacking', 'arcade', 'reflex', 'one-tap', 'tower', 'casual'],
+    size: 'medium',
+    shimmer: true,
+    isNew: false,
+    hot: true,
+    landscape: false,
+    plays: 0,
+    modes: ['classic'],
+    defaultMode: 'classic',
+    controls: 'Tap or click (or press Space) to drop the moving block. Line it up with the block below. Mobile, tablet and desktop friendly.',
+    author: 'Ragequit Arcade',
+    seo: {
+      title: 'STAQ — Free Block Stacking Game | Ragequit Arcade',
+      metaDescription: 'Play STAQ free online. A satisfying one-tap 3D block-stacking game with perfect-drop combos and a revive reward. How high can you stack?',
+      faq: [
+        { q: 'How do you play STAQ?', a: 'Tap, click or press the spacebar to drop the moving block onto the stack. Line it up as precisely as possible — the better aligned, the wider your tower stays.' },
+        { q: 'What is a perfect drop?', a: 'If you align a block almost exactly, you get a Perfect: the block keeps its full width instead of being chopped, with a flash and a sound. Chain perfects to build the tallest towers.' },
+        { q: 'What is revive?', a: 'When you miss, you can watch a short ad once per run to keep your score and start a fresh tower, instead of ending the game.' },
+        { q: 'Does it have a leaderboard?', a: 'Yes. Your best stack height is saved and shown on the global leaderboard.' },
+        { q: 'Is STAQ free?', a: 'Yes, completely free to play.' },
+        { q: 'Mobile?', a: 'Yes, STAQ is built for portrait mobile and works great on tablet and desktop too.' },
+      ],
+    },
+  },
 
   /* ================================================================
      STELLAR FORGE — idle clicker spatial, catégorie idle
      ================================================================ */
- {
+  {
     id: 'stellar-forge',
     title: 'Stellar Forge',
-    description: 'Start with a single hand pick and forge your way to a galactic civilization. Mine ore, automate with drills and mining empires, build a real energy grid from solar panels to Dyson spheres, and climb the actual Kardashev scale from Type I to Type III. Colonize planets, expand across the stars, and watch your civilization grow — even while you are away. A deep, science-based idle clicker for players who love numbers going up.',
+    description: 'Start with a single hand pick and forge your way to a galactic civilization. Mine ore, automate with drills and mining empires, build a real energy grid from solar panels to Dyson spheres, and climb the actual Kardashev scale from Type I to Type III. Watch your civilization grow — even while you are away. A deep, science-based idle clicker for players who love numbers going up.',
     thumbnail: '/thumbnails/stellar-forge.jpg',
     category: 'idle',
     tags: ['idle', 'clicker', 'space', 'incremental', 'mining', 'sci-fi', 'kardashev', 'automation'],
@@ -166,19 +162,19 @@ export const games = [
     plays: 0,
     modes: ['classic'],
     defaultMode: 'classic',
-    controls: 'Tap or click to mine ore. Buy buildings to automate production, build energy plants to power everything, and colonize planets to unlock bigger upgrades. Works on mobile, tablet and desktop.',
+    controls: 'Tap or click to mine ore. Buy buildings to automate production and build energy plants to power everything and climb the Kardashev scale. Works on mobile, tablet and desktop.',
     author: 'Ragequit Arcade',
     seo: {
       title: 'Stellar Forge — Free Space Idle Clicker Game | Ragequit Arcade',
       metaDescription: 'Play Stellar Forge free online. A space idle clicker where you mine ore, build an energy empire and climb the real Kardashev scale from planet to galaxy. No download.',
       faq: [
-        { q: 'How do you play Stellar Forge?', a: 'Tap to mine your first ore, then buy drills, platforms and mining empires to automate production. Build energy plants to power everything and colonize planets to unlock bigger upgrades.' },
+        { q: 'How do you play Stellar Forge?', a: 'Tap to mine your first ore, then buy drills, rigs and mining empires to automate production. Build energy plants to power everything and climb the civilization scale.' },
         { q: 'What is the Kardashev scale in the game?', a: 'It is a real scientific scale of civilization energy use. You progress from Type I (planetary) to Type II (stellar, like a Dyson sphere) to Type III (galactic), based on the actual power your civilization produces.' },
         { q: 'Does it produce while I am away?', a: 'Yes. Once you automate with buildings, your civilization keeps producing resources even when the game is closed. Come back to collect your progress.' },
-        { q: 'What is the goal?', a: 'Grow from a single hand pick to a galaxy-spanning civilization. Expand across planets, scale your energy grid, and push as far up the Kardashev scale as you can.' },
+        { q: 'What is the goal?', a: 'Grow from a single hand pick to a galaxy-spanning civilization. Scale your energy grid and push as far up the Kardashev scale as you can.' },
         { q: 'Is Stellar Forge free?', a: 'Yes, completely free to play, no download and no signup required.' },
-        { q: 'Mobile?', a: 'Yes, Stellar Forge is built for portrait mobile and works great on tablet and desktop too.' }
-      ]
-    }
-  }
+        { q: 'Mobile?', a: 'Yes, Stellar Forge is built for portrait mobile and works great on tablet and desktop too.' },
+      ],
+    },
+  },
 ]
