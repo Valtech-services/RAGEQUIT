@@ -15,6 +15,7 @@
     "puzzle": "Puzzle",
     "clicker": "Clicker",
     "runner": "Runner",
+    "idle": "Idle / Clicker",
     "gamesSuffix": "Games"
   },
   "game": {
@@ -165,7 +166,7 @@
     "sports": "Sports Games",
     "arcade": "Arcade Games",
     "puzzle": "Puzzle Games",
-    "clicker": "Clicker Games",
+    "idle": "Idle / Clicker Games",
     "runner": "Runner Games"
   },
   "siteFaq": [
