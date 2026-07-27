@@ -151,7 +151,7 @@ export const games = [
   /* ================================================================
      STELLAR FORGE — idle clicker spatial, catégorie idle
      ================================================================ */
- /* {
+ {
     id: 'stellar-forge',
     title: 'Stellar Forge',
     description: 'Start with a single hand pick and forge your way to a galactic civilization. Mine ore, automate with drills and mining empires, build a real energy grid from solar panels to Dyson spheres, and climb the actual Kardashev scale from Type I to Type III. Colonize planets, expand across the stars, and watch your civilization grow — even while you are away. A deep, science-based idle clicker for players who love numbers going up.',
@@ -180,5 +180,5 @@ export const games = [
         { q: 'Mobile?', a: 'Yes, Stellar Forge is built for portrait mobile and works great on tablet and desktop too.' }
       ]
     }
-  }*/
+  }
 ]
