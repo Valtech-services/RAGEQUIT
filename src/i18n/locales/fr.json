@@ -13,7 +13,7 @@
     "arcade": "Arcade",
     "sports": "Sport",
     "puzzle": "Puzzle",
-    "clicker": "Clicker",
+    "idle": "Idle / Clicker",
     "runner": "Runner",
     "gamesSuffix": "Jeux"
   },
@@ -165,7 +165,7 @@
     "sports": "Jeux de sport",
     "arcade": "Jeux d'arcade",
     "puzzle": "Jeux de réflexion",
-    "clicker": "Jeux de clic",
+    "idle": "Jeux Idle / Clicker",
     "runner": "Jeux de course"
   },
   "siteFaq": [
