@@ -4308,13 +4308,20 @@ function showRewardedAd(onReward){
   const overlay = document.getElementById("adOverlay");
   const countdownEl = document.getElementById("adCountdown");
   const closeBtn = document.getElementById("adCloseBtn");
-  // Compte à rebours basé sur le TEMPS RÉEL (pas un compteur qui gèle si l'onglet
-  // passe en arrière-plan). C'est ce gel qui laissait le voile bloqué.
+  const skipBtn = document.getElementById("adSkipBtn");
   const endAt = Date.now() + AD_DURATION_SEC * 1000;
-  let rewarded = false;
+  let done = false;      // le compte à rebours est terminé
+  let claimed = false;   // la récompense a été donnée (une seule fois)
 
   overlay.classList.remove("hidden");
   closeBtn.disabled = true;
+
+  function grant(){
+    if (claimed) return;
+    claimed = true;
+    closeAdOverlay();
+    if (typeof onReward === "function") onReward();
+  }
 
   if (adTimer) clearInterval(adTimer);
   const refresh = () => {
@@ -4326,6 +4333,7 @@ function showRewardedAd(onReward){
     } else {
       clearInterval(adTimer);
       adTimer = null;
+      done = true;
       countdownEl.textContent = "✓";
       closeBtn.disabled = false;
       closeBtn.textContent = "Claim reward";
@@ -4334,18 +4342,16 @@ function showRewardedAd(onReward){
   refresh();
   adTimer = setInterval(refresh, 250);
 
-  // Bouton "Claim" : donne la récompense puis ferme.
-  closeBtn.onclick = () => {
-    if (closeBtn.disabled) return;
-    rewarded = true;
-    closeAdOverlay();
-    if (typeof onReward === "function") onReward();
+  // Bouton "Claim reward" : donne le bonus (seulement une fois le délai écoulé).
+  closeBtn.onclick = () => { if (done) grant(); };
+  // Croix : ferme. Si le délai est déjà écoulé, on récompense quand même
+  // (le joueur a "regardé la pub"), sinon on ferme sans bonus.
+  if (skipBtn) skipBtn.onclick = () => { if (done) grant(); else closeAdOverlay(); };
+  // Clic sur le fond : idem que la croix.
+  overlay.onclick = (e) => {
+    if (e.target !== overlay) return;
+    if (done) grant(); else closeAdOverlay();
   };
-  // Croix / clic sur le fond : ferme SANS récompense, à tout moment. Filet de
-  // sécurité pour ne jamais rester bloqué derrière le voile.
-  const skipBtn = document.getElementById("adSkipBtn");
-  if (skipBtn) skipBtn.onclick = () => { closeAdOverlay(); };
-  overlay.onclick = (e) => { if (e.target === overlay) closeAdOverlay(); };
 }
 
 // ---------------------------------------------------------------------
