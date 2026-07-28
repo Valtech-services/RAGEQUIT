@@ -1808,7 +1808,7 @@
   <div id="topbar">
     <div id="brandBlock">
       <div id="brandFrame">
-        <img id="brandLogo" src="stellar-forge/logo.png"" alt="Stellar Forge" onerror="this.style.visibility='hidden';">
+        <img id="brandLogo" src="stellar-forge/logo.png" alt="Stellar Forge" onerror="this.style.visibility='hidden';">
       </div>
     </div>
     <div id="statPanel">
@@ -1973,7 +1973,7 @@
   <div id="adBox">
     <div id="adLabel">ADVERTISEMENT</div>
     <div id="adContent">
-      <div id="adSimVisual"><img id="adLogo" src="stellar-forge/logo.png"" alt="Stellar Forge" onerror="this.style.display='none'; document.getElementById('adLogoFallback').style.display='inline';"><span id="adLogoFallback" style="display:none;">STELLAR FORGE</span></div>
+      <div id="adSimVisual"><img id="adLogo" src="stellar-forge/logo.png" alt="Stellar Forge" onerror="this.style.display='none'; document.getElementById('adLogoFallback').style.display='inline';"><span id="adLogoFallback" style="display:none;">STELLAR FORGE</span></div>
       <div id="adSimText">Thanks for supporting the game</div>
     </div>
     <div id="adCountdown">5</div>
@@ -2592,6 +2592,57 @@ function freshState(){
 
 state = freshState();
 
+// ---------------------------------------------------------------------
+// SAUVEGARDE LOCALE (localStorage)
+// ---------------------------------------------------------------------
+const SAVE_KEY = "stellar_forge_save_v1";
+const SAVE_TS_KEY = "stellar_forge_last_seen_v1";
+function saveGame(){
+  try{
+    localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+    localStorage.setItem(SAVE_TS_KEY, String(Date.now()));
+  }catch(e){}
+}
+function loadGame(){
+  let raw = null;
+  try{ raw = localStorage.getItem(SAVE_KEY); }catch(e){ return false; }
+  if(!raw) return false;
+  let saved;
+  try{ saved = JSON.parse(raw); }catch(e){ return false; }
+  if(!saved || typeof saved !== "object") return false;
+  const base = freshState();
+  for(const k in base){
+    if(Object.prototype.hasOwnProperty.call(saved, k) && saved[k] !== undefined && saved[k] !== null){
+      base[k] = saved[k];
+    }
+  }
+  function fixLen(arr, len, fill){
+    if(!Array.isArray(arr)) return new Array(len).fill(fill);
+    if(arr.length < len) return arr.concat(new Array(len - arr.length).fill(fill));
+    if(arr.length > len) return arr.slice(0, len);
+    return arr;
+  }
+  base.owned         = fixLen(base.owned, BUILDINGS.length, 0);
+  base.incMult       = fixLen(base.incMult, BUILDINGS.length, 1);
+  base.progress      = fixLen(base.progress, BUILDINGS.length, 0);
+  base.running       = fixLen(base.running, BUILDINGS.length, false);
+  base.managersOwned = fixLen(base.managersOwned, MANAGERS.length, false);
+  base.managerLevels = fixLen(base.managerLevels, MANAGERS.length, 0);
+  base.plantsOwned   = fixLen(base.plantsOwned, POWER_PLANTS.length, 0);
+  base.plantProgress = fixLen(base.plantProgress, POWER_PLANTS.length, 0);
+  base.plantRunning  = fixLen(base.plantRunning, POWER_PLANTS.length, false);
+  base.upgradesOwned = fixLen(base.upgradesOwned, UPGRADES.length, 0);
+  if(base.tutorialStep < 99) base.tutorialStep = 99;
+  state = base;
+  return true;
+}
+function clearSave(){
+  try{
+    localStorage.removeItem(SAVE_KEY);
+    localStorage.removeItem(SAVE_TS_KEY);
+  }catch(e){}
+}
+  
 // ---------------------------------------------------------------------
 // UTILITAIRES NUMÉRIQUES
 // ---------------------------------------------------------------------
@@ -3504,6 +3555,8 @@ function doSoftReset(){
   renderStatic();
   render();
   // a departure is a key milestone: push the updated score right away
+  state.tutorialStep = 99;
+  saveGame();
   if (typeof reportScore === "function") reportScore();
 }
 
@@ -3512,6 +3565,7 @@ function doHardReset(){
   recomputeGalaxyBonuses();
   renderStatic();
   render();
+  clearSave(); saveGame();
 }
 
 // ---------------------------------------------------------------------
@@ -4758,9 +4812,12 @@ const OFFLINE_CAP_MS = 24 * 60 * 60 * 1000; // max 24h of accrual
 window.stellarForgeGetLastSeen = function(){ return Date.now(); };
 
 function applyOfflineProduction(){
-  const lastSeen = (typeof window.STELLAR_FORGE_LAST_SEEN === "number")
+  let lastSeen = (typeof window.STELLAR_FORGE_LAST_SEEN === "number")
     ? window.STELLAR_FORGE_LAST_SEEN
     : null;
+  if (lastSeen === null){
+    try{ const ts = parseInt(localStorage.getItem(SAVE_TS_KEY) || "", 10); if(!isNaN(ts)) lastSeen = ts; }catch(e){}
+  }
   if (!lastSeen) return; // no persisted timestamp yet → no offline gain
 
   const elapsedMs = Math.min(Date.now() - lastSeen, OFFLINE_CAP_MS);
@@ -5168,13 +5225,20 @@ const galaxyBg = (function(){
 // DÉMARRAGE
 // ---------------------------------------------------------------------
 
+loadGame();
 renderStatic();
 render();
 applyOfflineProduction();
 requestAnimationFrame(tick);
 updateTutorial();
-
+setInterval(saveGame, 10000);
+document.addEventListener("visibilitychange", () => {
+  if(document.visibilityState === "hidden") saveGame();
+});
+window.addEventListener("pagehide", saveGame);
+window.addEventListener("beforeunload", saveGame);
 })();
+
 </script>
 </body>
 </html>
