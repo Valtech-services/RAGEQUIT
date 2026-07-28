@@ -1392,7 +1392,8 @@
     padding:20px;
   }
   #adOverlay.hidden{ display:none; }
-  #adBox{
+#adBox{
+    position:relative;
     width:100%;
     max-width:340px;
     background:var(--hull);
@@ -1971,6 +1972,7 @@
 
 <div id="adOverlay" class="hidden">
   <div id="adBox">
+    <button id="adSkipBtn" aria-label="Close" style="position:absolute;top:8px;right:10px;z-index:5;background:rgba(5,6,15,0.7);border:1px solid var(--line);color:var(--text);font-size:20px;line-height:1;width:30px;height:30px;border-radius:6px;cursor:pointer;">&times;</button>
     <div id="adLabel">ADVERTISEMENT</div>
     <div id="adContent">
       <div id="adSimVisual"><img id="adLogo" src="stellar-forge/logo.png" alt="Stellar Forge" onerror="this.style.display='none'; document.getElementById('adLogoFallback').style.display='inline';"><span id="adLogoFallback" style="display:none;">STELLAR FORGE</span></div>
@@ -4298,24 +4300,29 @@ document.getElementById("boostBtn").addEventListener("click", () => {
 
 const AD_DURATION_SEC = 5;
 let adTimer = null;
-
+function closeAdOverlay(){
+  if (adTimer){ clearInterval(adTimer); adTimer = null; }
+  document.getElementById("adOverlay").classList.add("hidden");
+}
 function showRewardedAd(onReward){
   const overlay = document.getElementById("adOverlay");
   const countdownEl = document.getElementById("adCountdown");
   const closeBtn = document.getElementById("adCloseBtn");
-  let remaining = AD_DURATION_SEC;
+  // Compte à rebours basé sur le TEMPS RÉEL (pas un compteur qui gèle si l'onglet
+  // passe en arrière-plan). C'est ce gel qui laissait le voile bloqué.
+  const endAt = Date.now() + AD_DURATION_SEC * 1000;
+  let rewarded = false;
 
   overlay.classList.remove("hidden");
-  countdownEl.textContent = remaining;
   closeBtn.disabled = true;
-  closeBtn.textContent = `Please wait ${remaining} s…`;
 
   if (adTimer) clearInterval(adTimer);
-  adTimer = setInterval(() => {
-    remaining -= 1;
+  const refresh = () => {
+    const remaining = Math.ceil((endAt - Date.now()) / 1000);
     if (remaining > 0){
       countdownEl.textContent = remaining;
       closeBtn.textContent = `Please wait ${remaining} s…`;
+      closeBtn.disabled = true;
     } else {
       clearInterval(adTimer);
       adTimer = null;
@@ -4323,13 +4330,22 @@ function showRewardedAd(onReward){
       closeBtn.disabled = false;
       closeBtn.textContent = "Claim reward";
     }
-  }, 1000);
+  };
+  refresh();
+  adTimer = setInterval(refresh, 250);
 
+  // Bouton "Claim" : donne la récompense puis ferme.
   closeBtn.onclick = () => {
     if (closeBtn.disabled) return;
-    overlay.classList.add("hidden");
+    rewarded = true;
+    closeAdOverlay();
     if (typeof onReward === "function") onReward();
   };
+  // Croix / clic sur le fond : ferme SANS récompense, à tout moment. Filet de
+  // sécurité pour ne jamais rester bloqué derrière le voile.
+  const skipBtn = document.getElementById("adSkipBtn");
+  if (skipBtn) skipBtn.onclick = () => { closeAdOverlay(); };
+  overlay.onclick = (e) => { if (e.target === overlay) closeAdOverlay(); };
 }
 
 // ---------------------------------------------------------------------
@@ -4806,7 +4822,7 @@ function startIntro(){
 //   platform supplies a real timestamp.
 
 const OFFLINE_RATE = 0.05;                  // 1/20 of live production
-const OFFLINE_CAP_MS = 24 * 60 * 60 * 1000; // max 24h of accrual
+const OFFLINE_CAP_MS = 10 * 60 * 1000; // max 10 min of accrual
 
 // Exposed so the platform can persist the timestamp on exit.
 window.stellarForgeGetLastSeen = function(){ return Date.now(); };
@@ -4833,7 +4849,7 @@ function applyOfflineProduction(){
 
   const hrs = Math.floor(elapsedMs / 3600000);
   const mins = Math.floor((elapsedMs % 3600000) / 60000);
-  const cappedNote = (Date.now() - lastSeen > OFFLINE_CAP_MS) ? " (capped at 24h)" : "";
+  const cappedNote = (Date.now() - lastSeen > OFFLINE_CAP_MS) ? " (capped at 10min)" : "";
   document.getElementById("offlineAmount").textContent = "+" + fmt(gained);
   document.getElementById("offlineNote").textContent =
     "Away for " + (hrs > 0 ? hrs + "h " : "") + mins + "min" + cappedNote +
