@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, useId } from 'react'
 import {
   ResponsiveContainer, AreaChart, Area, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip, Cell,
@@ -18,6 +18,25 @@ const C = { cyan: '#00D9FF', violet: '#8B5CF6', magenta: '#FF2D78',
 
 // ── Helpers ────────────────────────────────────────────────────────────
 const fmt = n => (n ?? 0).toLocaleString('fr-FR')
+
+// Clé de jour en heure LOCALE (pas UTC), pour éviter le décalage de fuseau
+// qui faisait tomber les visites du soir sur le mauvais jour.
+function localDayKey(dateLike){
+  const d = new Date(dateLike)
+  if(isNaN(d)) return ''
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}
+// Début de journée locale il y a `daysAgo` jours (minuit local).
+function localDayStart(daysAgo){
+  const d = new Date()
+  d.setHours(0, 0, 0, 0)
+  d.setDate(d.getDate() - daysAgo)
+  return d
+}
+
 function groupCount(arr, keyFn){
   const m = {}
   arr.forEach(item => { const k = keyFn(item) ?? '—'; m[k] = (m[k] || 0) + 1 })
@@ -26,26 +45,26 @@ function groupCount(arr, keyFn){
 const sortDesc = obj => Object.entries(obj).sort((a,b) => b[1]-a[1])
 const pct = (n, total) => total ? Math.round(n/total*100) + '%' : '0%'
 
+// Série quotidienne (nombre d'événements par jour), en heure locale.
 function dailySeries(events, period){
   const byDay = {}
   for(let i = period - 1; i >= 0; i--){
-    const d = new Date(Date.now() - i * 86400000)
-    byDay[d.toISOString().slice(0,10)] = 0
+    byDay[localDayKey(localDayStart(i))] = 0
   }
   events.forEach(e => {
-    const k = (e.created_at || '').slice(0,10)
+    const k = localDayKey(e.created_at)
     if(k in byDay) byDay[k] += 1
   })
   return Object.entries(byDay).map(([date, value]) => ({ date: date.slice(5), value }))
 }
+// Série quotidienne de visiteurs UNIQUES par jour, en heure locale.
 function dailyUnique(events, period, idFn){
   const byDay = {}
   for(let i = period - 1; i >= 0; i--){
-    const d = new Date(Date.now() - i * 86400000)
-    byDay[d.toISOString().slice(0,10)] = new Set()
+    byDay[localDayKey(localDayStart(i))] = new Set()
   }
   events.forEach(e => {
-    const k = (e.created_at || '').slice(0,10)
+    const k = localDayKey(e.created_at)
     const id = idFn(e)
     if(k in byDay && id) byDay[k].add(id)
   })
@@ -91,9 +110,11 @@ function Panel({ title, subtitle, children, onExport }){
 }
 
 function MiniChart({ data, color, type = 'area' }){
+  // id de gradient STABLE (useId) au lieu de Math.random() : plus de clignotement
+  // ni de gradient cassé au changement de période.
+  const gid = 'grad' + useId().replace(/[:]/g, '')
   if(!data || data.every(d => d.value === 0))
     return <div className="adm-chart adm-chart--empty">Aucune donnée sur la période</div>
-  const gid = 'g' + Math.random().toString(36).slice(2, 8)
   return (
     <div className="adm-chart">
       <ResponsiveContainer width="100%" height={90}>
@@ -150,6 +171,7 @@ function AdminLogin(){
     </div></div>
   )
 }
+
 function AdminPinGate({ onUnlock }){
   const [pin, setPin] = useState(''); const [err, setErr] = useState('')
   function submit(){ if(pin === ADMIN_PIN){ sessionStorage.setItem('rq_admin_pin_ok','1'); onUnlock() } else { setErr('PIN incorrect'); setPin('') } }
@@ -168,14 +190,11 @@ function AdminPinGate({ onUnlock }){
 
 // ── TEST DES JEUX (staging, admin only) ────────────────────────────────────
 function GameTester(){
-  const [active, setActive] = useState(null)  // jeu en cours de test
-
-  // verrouille le scroll de la page quand un jeu est lancé
+  const [active, setActive] = useState(null)
   useEffect(() => {
     document.body.style.overflow = active ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [active])
-
   if(active){
     const landscape = active.orientation === 'landscape'
     return (
@@ -198,7 +217,6 @@ function GameTester(){
       </div>
     )
   }
-
   return (
     <div className="gt">
       <p className="gt-intro">
@@ -240,16 +258,19 @@ function Dashboard(){
 
   const load = useCallback(async () => {
     setLoading(true)
-    const since = new Date(Date.now() - period * 86400000).toISOString()
+    // Fenêtre = début de journée locale il y a (period-1) jours → maintenant.
+    // On envoie l'ISO (UTC) correspondant à ce minuit local, pour filtrer côté DB.
+    const since = localDayStart(period - 1).toISOString()
     const [ev, sc, us, ms] = await Promise.all([
       supabase.from('analytics_events').select('*').gte('created_at', since).order('created_at', { ascending: true }),
-      supabase.from('scores').select('*').order('created_at', { ascending: false }),
+      supabase.from('scores').select('*').gte('created_at', since).order('created_at', { ascending: false }),
       supabase.from('profiles').select('id, username, country, created_at'),
       supabase.from('contact_messages').select('*').order('created_at', { ascending: false }),
     ])
     setD({ ev: ev.data || [], scores: sc.data || [], users: us.data || [], messages: ms.data || [] })
     setLoading(false)
   }, [period])
+
   useEffect(() => { load() }, [load])
 
   async function markRead(id){ await supabase.from('contact_messages').update({ read: true }).eq('id', id); load() }
@@ -257,9 +278,11 @@ function Dashboard(){
 
   const m = useMemo(() => {
     if(!d) return null
-    const { ev, scores, users } = d
+    const { ev, users } = d
     const vid = e => e.session_id || e.user_id || null
     const isLogged = e => !!e.user_id
+    const sinceDate = localDayStart(period - 1)
+
     const visits      = ev.filter(e => e.event === 'page_view')
     const homeVisits  = visits.filter(e => e.url === '/')
     const gameStarts  = ev.filter(e => e.event === 'game_start')
@@ -277,6 +300,11 @@ function Dashboard(){
       : 0
     const adsPerPlay = gameStarts.length ? (adsWatched.length / gameStarts.length).toFixed(2) : '0'
     const loggedRate = allVisitors.size ? Math.round(loggedVisitors.size / allVisitors.size * 100) : 0
+
+    // Inscrits SUR LA PÉRIODE (nouveaux comptes créés dans la fenêtre), en plus
+    // du total, pour rester cohérent avec les autres KPIs filtrés.
+    const newUsers = users.filter(u => u.created_at && new Date(u.created_at) >= sinceDate).length
+
     const sVisitors  = dailyUnique(ev, period, vid)
     const sPlays     = dailySeries(gameStarts, period)
     const sAds       = dailySeries(adsWatched, period)
@@ -285,13 +313,12 @@ function Dashboard(){
       visits, homeVisits, gameStarts, gameEnds, adsWatched,
       allVisitors: allVisitors.size, loggedVisitors: loggedVisitors.size, anonVisitors: anonVisitors.size,
       playsByGame, byCategory, byDevice, byCountry, completion, adsPerPlay, loggedRate,
-      sVisitors, sPlays, sAds, sHome,
+      newUsers, sVisitors, sPlays, sAds, sHome,
     }
   }, [d, period])
 
   if(loading) return <div className="adm-loading">Chargement…</div>
   if(!d || !m) return <div className="adm-loading">Aucune donnée.</div>
-
   const { ev, scores, users, messages } = d
   const unread = messages.filter(x => !x.read).length
   const gameRows = sortDesc(m.playsByGame).map(([g,n]) => [g, fmt(n)])
@@ -307,7 +334,6 @@ function Dashboard(){
         ))}
         <button className="adm-refresh" onClick={load} title="Rafraîchir">↺</button>
       </div>
-
       <section className="adm-kpis">
         <Kpi label="Visiteurs uniques" value={m.allVisitors} color={C.cyan} sub={`${period} derniers jours`} />
         <Kpi label="dont connectés" value={m.loggedVisitors} color={C.violet} sub={`${m.loggedRate}% des visiteurs`} />
@@ -315,15 +341,14 @@ function Dashboard(){
         <Kpi label="Parties lancées" value={m.gameStarts.length} color={C.green} />
         <Kpi label="Parties terminées" value={m.gameEnds.length} color={C.yellow} sub={`${m.completion}% de complétion`} />
         <Kpi label="Pubs récompensées vues" value={m.adsWatched.length} color="#FF8C42" sub={`${m.adsPerPlay} / partie`} />
-        <Kpi label="Joueurs inscrits" value={users.length} color={C.violet} sub="total" />
+        <Kpi label="Nouveaux inscrits" value={m.newUsers} color={C.violet} sub={`${fmt(users.length)} au total`} />
         <Kpi label="Messages non lus" value={unread} color={C.red} />
       </section>
-
       <section className="adm-hero-chart">
         <div className="adm-panel__head">
           <div>
             <h3 className="adm-panel__title">Visiteurs uniques par jour</h3>
-            <p className="adm-panel__sub">Une personne = un visiteur, qu'elle soit connectée ou non. Sans adresse IP (RGPD).</p>
+            <p className="adm-panel__sub">Une personne = un visiteur, qu'elle soit connectée ou non. Un même visiteur peut apparaître sur plusieurs jours, donc la somme des barres dépasse le total unique de la période (c'est normal). Sans adresse IP (RGPD).</p>
           </div>
         </div>
         <ResponsiveContainer width="100%" height={240}>
@@ -346,14 +371,12 @@ function Dashboard(){
           </AreaChart>
         </ResponsiveContainer>
       </section>
-
       <section className="adm-grid">
         <Panel title="Parties par jeu" subtitle="Nombre de parties lancées"
           onExport={() => exportXlsx('parties_par_jeu', ['Jeu','Parties'], gameRows)}>
           <MiniChart data={m.sPlays} color={C.green} type="bar" />
           <Table cols={['Jeu','Parties']} rows={gameRows} empty="Aucune partie sur la période" />
         </Panel>
-
         <Panel title="Pubs récompensées" subtitle="Vidéos vues en entier (revive / double)"
           onExport={() => exportXlsx('pubs', ['Jour','Pubs'], m.sAds.map(x => [x.date, x.value]))}>
           <MiniChart data={m.sAds} color="#FF8C42" />
@@ -363,7 +386,6 @@ function Dashboard(){
             ['Parties terminées', `${m.completion}%`],
           ]} />
         </Panel>
-
         <Panel title="Pages d'accueil vues" subtitle="Visites de la page d'accueil"
           onExport={() => exportXlsx('home', ['Jour','Vues'], m.sHome.map(x => [x.date, x.value]))}>
           <MiniChart data={m.sHome} color={C.violet} />
@@ -372,23 +394,19 @@ function Dashboard(){
             ['Vues toutes pages', fmt(m.visits.length)],
           ]} empty="Active le tracking page_view" />
         </Panel>
-
         <Panel title="Catégories jouées" subtitle="Répartition par catégorie"
           onExport={() => exportXlsx('categories', ['Catégorie','Events'], catRows)}>
           <Table cols={['Catégorie','Events']} rows={catRows} />
         </Panel>
-
         <Panel title="Appareils" subtitle="D'où viennent les visites"
           onExport={() => exportXlsx('appareils', ['Appareil','Events','%'], devRows)}>
           <Table cols={['Appareil','Events','%']} rows={devRows} />
         </Panel>
-
         <Panel title="Pays" subtitle="Provenance géographique (sans IP)"
           onExport={() => exportXlsx('pays', ['Pays','Events'], ctyRows)}>
           <Table cols={['Pays','Events']} rows={ctyRows} empty="Aucune donnée pays" />
         </Panel>
       </section>
-
       <section className="adm-wide">
         <div className="adm-panel__head">
           <div><h3 className="adm-panel__title">Scores récents — modération</h3>
@@ -404,7 +422,7 @@ function Dashboard(){
             </button>
           )}
         </div>
-        {scores.length === 0 ? <p className="adm-empty">Aucun score</p> : (
+        {scores.length === 0 ? <p className="adm-empty">Aucun score sur la période</p> : (
           <table className="adm-table">
             <thead><tr><th>Date</th><th>Jeu</th><th>Mode</th><th>Score</th><th>Joueur</th><th></th></tr></thead>
             <tbody>
@@ -425,7 +443,6 @@ function Dashboard(){
           </table>
         )}
       </section>
-
       <section className="adm-wide">
         <div className="adm-panel__head"><div><h3 className="adm-panel__title">Messages de contact</h3></div></div>
         {messages.length === 0 ? <p className="adm-empty">Aucun message</p> : (
