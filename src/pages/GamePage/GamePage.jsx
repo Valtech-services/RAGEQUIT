@@ -8,6 +8,8 @@ import SeoBlock from '../../components/SeoBlock/SeoBlock'
 import Footer from '../../components/Footer/Footer'
 import MobileGamePage from './MobileGamePage'
 import { submitScore } from '../../data/leaderboardStore'
+import { supabase } from '../../lib/supabase'
+import { useRef } from 'react'
 import usePageTitle from '../../hooks/usePageTitle'
 import { track } from '../../lib/analytics'
 import './GamePage.css'
@@ -21,7 +23,8 @@ export default function GamePage() {
 function GamePageDesktop() {
   const { id } = useParams()
   const game = games.find(g => g.id === id)
-  const { recordPlay } = useAuth()
+  const { recordPlay, user } = useAuth()
+  const iframeRef = useRef(null)
   const [playing, setPlaying]       = useState(false)
   const [vote, setVote]             = useState(null)
   const [reportOpen, setReportOpen] = useState(false)
@@ -69,10 +72,60 @@ function GamePageDesktop() {
       if(d.type === 'RH_TRACK') {
         track(d.event, { game_id: d.game_id, props: d.props })
       }
+      // --- Sauvegarde cloud Stellar Forge (joueurs connectés) ---
+      // Le jeu signale qu'il est prêt → on lui renvoie la sauvegarde cloud.
+      if(d.type === 'STELLAR_FORGE_READY' && user){
+        const { data } = await supabase
+          .from('game_saves')
+          .select('state')
+          .eq('user_id', user.id)
+          .eq('game_id', 'stellar-forge')
+          .maybeSingle()
+        if(data && data.state && iframeRef.current){
+          iframeRef.current.contentWindow.postMessage(
+            { type: 'STELLAR_FORGE_LOAD', state: data.state }, '*'
+          )
+        }
+      }
+      // Le jeu envoie son état (via _SCORE toutes les 60s) → on écrit dans Supabase.
+      if(d.type === 'STELLAR_FORGE_SCORE' && user && iframeRef.current){
+        try {
+          const snap = iframeRef.current.contentWindow.stellarForgeGetState?.()
+          if(snap && snap.state){
+            await supabase.from('game_saves').upsert({
+              user_id: user.id,
+              game_id: 'stellar-forge',
+              state: snap.state,
+              total_ore: snap.total_ore || 0,
+              updated_at: new Date().toISOString(),
+            }, { onConflict: 'user_id,game_id' })
+          }
+        } catch(err) { /* silencieux */ }
+      }
     }
-    window.addEventListener('message', handleMessage)
-    return () => window.removeEventListener('message', handleMessage)
-  }, [recordPlay])
+window.addEventListener('message', handleMessage)
+    // Sauvegarde cloud de sécurité quand le joueur quitte la page.
+    async function saveOnLeave(){
+      if(!user || !iframeRef.current) return
+      try {
+        const snap = iframeRef.current.contentWindow.stellarForgeGetState?.()
+        if(snap && snap.state){
+          await supabase.from('game_saves').upsert({
+            user_id: user.id,
+            game_id: 'stellar-forge',
+            state: snap.state,
+            total_ore: snap.total_ore || 0,
+            updated_at: new Date().toISOString(),
+          }, { onConflict: 'user_id,game_id' })
+        }
+      } catch(err) {}
+    }
+    window.addEventListener('pagehide', saveOnLeave)
+    return () => {
+      window.removeEventListener('message', handleMessage)
+      window.removeEventListener('pagehide', saveOnLeave)
+    }
+  }, [recordPlay, user])
 
   if(!game) {
     return (
@@ -103,7 +156,7 @@ function GamePageDesktop() {
           <div className="gamepage__block">
             <div className="gamepage__stage">
               {playing ? (
-                <iframe src={`/games/${game.id}.html`} title={game.title}
+<iframe ref={iframeRef} src={`/games/${game.id}.html`} title={game.title}
                   className="gamepage__iframe" allowFullScreen frameBorder="0" />
               ) : (
                 <div className="gamepage__cover" style={{ backgroundImage: `url(${game.thumbnail})` }}>
