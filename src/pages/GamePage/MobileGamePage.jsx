@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { games } from '../../data/games'
 import { useAuth } from '../../context/AuthContext'
-import { submitScore } from '../../data/leaderboardStore'
 import { supabase } from '../../lib/supabase'
-import { useRef } from 'react'
+import { submitScore } from '../../data/leaderboardStore'
 import { track } from '../../lib/analytics'
 import Navbar from '../../components/Navbar/Navbar'
 import GameCard from '../../components/GameCard/GameCard'
@@ -22,7 +21,6 @@ export default function MobileGamePage() {
   const iframeRef = useRef(null)
   const [playing, setPlaying] = useState(false)
   const [sessionStart] = useState(Date.now())
-
   usePageTitle(game?.title)
 
   const handlePlay = () => {
@@ -54,15 +52,64 @@ export default function MobileGamePage() {
     if (game) track('game_view', { game_id: game.id, category: game.category })
   }, [id])
 
+  // Écrit l'état complet de Stellar Forge dans Supabase (joueurs connectés).
+  async function saveStellarForgeCloud(){
+    if (!user || !iframeRef.current) return
+    try {
+      const snap = iframeRef.current.contentWindow.stellarForgeGetState?.()
+      if (snap && snap.state) {
+        await supabase.from('game_saves').upsert({
+          user_id: user.id,
+          game_id: 'stellar-forge',
+          state: snap.state,
+          total_ore: snap.total_ore || 0,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'user_id,game_id' })
+      }
+    } catch (err) { /* silencieux */ }
+  }
+
   // Réception des messages postMessage envoyés par le jeu HTML (score + analytics).
-  // Générique : tout type finissant par "_SCORE" est traité comme un score,
-  // donc valable pour STAQ, Rage Hockey et tous les futurs jeux sans modification.
   useEffect(() => {
     async function handleMessage(e) {
       const d = e.data
       if (!d || typeof d.type !== 'string') return
 
-      // Score depuis le jeu HTML
+      // --- Stellar Forge : le jeu est prêt → on lui renvoie sa sauvegarde cloud ---
+      if (d.type === 'STELLAR_FORGE_READY' && user) {
+        const { data } = await supabase
+          .from('game_saves')
+          .select('state')
+          .eq('user_id', user.id)
+          .eq('game_id', 'stellar-forge')
+          .maybeSingle()
+        if (data && data.state && iframeRef.current) {
+          iframeRef.current.contentWindow.postMessage(
+            { type: 'STELLAR_FORGE_LOAD', state: data.state }, '*'
+          )
+        }
+        return
+      }
+
+      // --- Stellar Forge : envoi périodique (toutes les 60s) ---
+      // 1) sauvegarde cloud de l'état complet, 2) score Kardashev au leaderboard.
+      if (d.type === 'STELLAR_FORGE_SCORE') {
+        await saveStellarForgeCloud()
+        const kValue = typeof d.kardashev === 'number' ? d.kardashev : 0
+        const tier = d.kardashev_tier || '0'
+        const pct = Math.round(d.kardashev_pct || 0)
+        await submitScore({
+          game: 'stellar-forge',
+          mode: 'classic',
+          score: Math.round(kValue * 1000),
+          scoreLabel: `Type ${tier} · ${pct}%`,
+        })
+        if (recordPlay) recordPlay('stellar-forge')
+        window.dispatchEvent(new Event('rh-score-saved'))
+        return
+      }
+
+      // --- Autres jeux (STAQ, Rage Hockey…) : score classique ---
       if (d.type.endsWith('_SCORE')) {
         await submitScore({ game: d.game, mode: d.mode, score: d.score, scoreLabel: d.scoreLabel, difficulty: d.diff, arena: d.arena })
         if (d.game) recordPlay(d.game)
@@ -78,51 +125,10 @@ export default function MobileGamePage() {
       if (d.type === 'RH_TRACK') {
         track(d.event, { game_id: d.game_id, props: d.props })
       }
-      // --- Sauvegarde cloud Stellar Forge (joueurs connectés) ---
-      if (d.type === 'STELLAR_FORGE_READY' && user) {
-        const { data } = await supabase
-          .from('game_saves')
-          .select('state')
-          .eq('user_id', user.id)
-          .eq('game_id', 'stellar-forge')
-          .maybeSingle()
-        if (data && data.state && iframeRef.current) {
-          iframeRef.current.contentWindow.postMessage(
-            { type: 'STELLAR_FORGE_LOAD', state: data.state }, '*'
-          )
-        }
-      }
-      if (d.type === 'STELLAR_FORGE_SCORE' && user && iframeRef.current) {
-        try {
-          const snap = iframeRef.current.contentWindow.stellarForgeGetState?.()
-          if (snap && snap.state) {
-            await supabase.from('game_saves').upsert({
-              user_id: user.id,
-              game_id: 'stellar-forge',
-              state: snap.state,
-              total_ore: snap.total_ore || 0,
-              updated_at: new Date().toISOString(),
-            }, { onConflict: 'user_id,game_id' })
-          }
-        } catch (err) {}
-      }
     }
-window.addEventListener('message', handleMessage)
-    async function saveOnLeave() {
-      if (!user || !iframeRef.current) return
-      try {
-        const snap = iframeRef.current.contentWindow.stellarForgeGetState?.()
-        if (snap && snap.state) {
-          await supabase.from('game_saves').upsert({
-            user_id: user.id,
-            game_id: 'stellar-forge',
-            state: snap.state,
-            total_ore: snap.total_ore || 0,
-            updated_at: new Date().toISOString(),
-          }, { onConflict: 'user_id,game_id' })
-        }
-      } catch (err) {}
-    }
+
+    window.addEventListener('message', handleMessage)
+    const saveOnLeave = () => { saveStellarForgeCloud() }
     window.addEventListener('pagehide', saveOnLeave)
     return () => {
       window.removeEventListener('message', handleMessage)
@@ -150,7 +156,7 @@ window.addEventListener('message', handleMessage)
             <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
           </svg>
         </button>
-<iframe
+        <iframe
           ref={iframeRef}
           className="mgp__iframe"
           src={`/games/${game.id}.html`}
@@ -167,7 +173,6 @@ window.addEventListener('message', handleMessage)
   /* ---- MODE ACCUEIL : façon Poki ---- */
   return (
     <div className="mgp mgp--preview">
-
       <div className="mgp__header">
         <div className="mgp__header-nav">
           <Navbar inGrid={true} />
@@ -177,7 +182,6 @@ window.addEventListener('message', handleMessage)
           <span className="mgp__by">{t('game.by')} {game.author}</span>
         </div>
       </div>
-
       <button
         className="mgp__hero"
         onClick={handlePlay}
@@ -192,14 +196,10 @@ window.addEventListener('message', handleMessage)
         </span>
         <span className="mgp__hero-label">{t('game.play')}</span>
       </button>
-
-      {/* Bannière publicitaire mobile — placeholder en attendant AdSense.
-          Le conteneur a des coins arrondis (décoratif), mais la vraie pub
-          AdSense à l'intérieur devra rester rectangulaire (règles AdSense). */}
+      {/* Bannière publicitaire mobile — placeholder en attendant AdSense. */}
       <div className="mgp__ad">
         <span className="mgp__ad-label">{t('game.advertisement')}</span>
       </div>
-
       <div className="mgp__related">
         {related.map(g => (
           <div key={g.id} className="mgp__related-cell">
@@ -207,7 +207,6 @@ window.addEventListener('message', handleMessage)
           </div>
         ))}
       </div>
-
       <SeoBlock
         type="game"
         data={game.seo ? {
@@ -218,9 +217,7 @@ window.addEventListener('message', handleMessage)
           title: game.title,
         } : null}
       />
-
       <Footer />
-
     </div>
   )
 }
