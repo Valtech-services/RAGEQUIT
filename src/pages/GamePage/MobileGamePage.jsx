@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { games } from '../../data/games'
 import { useAuth } from '../../context/AuthContext'
 import { submitScore } from '../../data/leaderboardStore'
+import { supabase } from '../../lib/supabase'
+import { useRef } from 'react'
 import { track } from '../../lib/analytics'
 import Navbar from '../../components/Navbar/Navbar'
 import GameCard from '../../components/GameCard/GameCard'
@@ -16,7 +18,8 @@ export default function MobileGamePage() {
   const { t } = useTranslation()
   const { id } = useParams()
   const game = games.find(g => g.id === id)
-  const { recordPlay } = useAuth()
+  const { recordPlay, user } = useAuth()
+  const iframeRef = useRef(null)
   const [playing, setPlaying] = useState(false)
   const [sessionStart] = useState(Date.now())
 
@@ -75,10 +78,57 @@ export default function MobileGamePage() {
       if (d.type === 'RH_TRACK') {
         track(d.event, { game_id: d.game_id, props: d.props })
       }
+      // --- Sauvegarde cloud Stellar Forge (joueurs connectés) ---
+      if (d.type === 'STELLAR_FORGE_READY' && user) {
+        const { data } = await supabase
+          .from('game_saves')
+          .select('state')
+          .eq('user_id', user.id)
+          .eq('game_id', 'stellar-forge')
+          .maybeSingle()
+        if (data && data.state && iframeRef.current) {
+          iframeRef.current.contentWindow.postMessage(
+            { type: 'STELLAR_FORGE_LOAD', state: data.state }, '*'
+          )
+        }
+      }
+      if (d.type === 'STELLAR_FORGE_SCORE' && user && iframeRef.current) {
+        try {
+          const snap = iframeRef.current.contentWindow.stellarForgeGetState?.()
+          if (snap && snap.state) {
+            await supabase.from('game_saves').upsert({
+              user_id: user.id,
+              game_id: 'stellar-forge',
+              state: snap.state,
+              total_ore: snap.total_ore || 0,
+              updated_at: new Date().toISOString(),
+            }, { onConflict: 'user_id,game_id' })
+          }
+        } catch (err) {}
+      }
     }
-    window.addEventListener('message', handleMessage)
-    return () => window.removeEventListener('message', handleMessage)
-  }, [recordPlay])
+window.addEventListener('message', handleMessage)
+    async function saveOnLeave() {
+      if (!user || !iframeRef.current) return
+      try {
+        const snap = iframeRef.current.contentWindow.stellarForgeGetState?.()
+        if (snap && snap.state) {
+          await supabase.from('game_saves').upsert({
+            user_id: user.id,
+            game_id: 'stellar-forge',
+            state: snap.state,
+            total_ore: snap.total_ore || 0,
+            updated_at: new Date().toISOString(),
+          }, { onConflict: 'user_id,game_id' })
+        }
+      } catch (err) {}
+    }
+    window.addEventListener('pagehide', saveOnLeave)
+    return () => {
+      window.removeEventListener('message', handleMessage)
+      window.removeEventListener('pagehide', saveOnLeave)
+    }
+  }, [recordPlay, user])
 
   if (!game) {
     return (
@@ -100,7 +150,8 @@ export default function MobileGamePage() {
             <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
           </svg>
         </button>
-        <iframe
+<iframe
+          ref={iframeRef}
           className="mgp__iframe"
           src={`/games/${game.id}.html`}
           title={game.title}
