@@ -1,15 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { games } from '../../data/games'
 import { useAuth } from '../../context/AuthContext'
+import { supabase } from '../../lib/supabase'
 import Navbar from '../../components/Navbar/Navbar'
 import GameCard from '../../components/GameCard/GameCard'
 import SeoBlock from '../../components/SeoBlock/SeoBlock'
 import Footer from '../../components/Footer/Footer'
 import MobileGamePage from './MobileGamePage'
 import { submitScore } from '../../data/leaderboardStore'
-import { supabase } from '../../lib/supabase'
-import { useRef } from 'react'
 import usePageTitle from '../../hooks/usePageTitle'
 import { track } from '../../lib/analytics'
 import './GamePage.css'
@@ -29,7 +28,6 @@ function GamePageDesktop() {
   const [vote, setVote]             = useState(null)
   const [reportOpen, setReportOpen] = useState(false)
   const [sessionStart]              = useState(Date.now())
-
   usePageTitle(game?.title)
 
   // Track page vue jeu
@@ -51,12 +49,66 @@ function GamePageDesktop() {
     track('game_fullscreen', { game_id: game.id })
   }
 
+  // Écrit l'état complet de Stellar Forge dans Supabase (joueurs connectés).
+  async function saveStellarForgeCloud(){
+    if(!user || !iframeRef.current) return
+    try {
+      const snap = iframeRef.current.contentWindow.stellarForgeGetState?.()
+      if(snap && snap.state){
+        await supabase.from('game_saves').upsert({
+          user_id: user.id,
+          game_id: 'stellar-forge',
+          state: snap.state,
+          total_ore: snap.total_ore || 0,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'user_id,game_id' })
+      }
+    } catch(err) { /* silencieux */ }
+  }
+
   useEffect(() => {
     async function handleMessage(e) {
       const d = e.data
       if(!d || typeof d.type !== 'string') return
 
-      // Score postMessage depuis le jeu HTML
+      // --- Stellar Forge : le jeu est prêt → on lui renvoie sa sauvegarde cloud ---
+      if(d.type === 'STELLAR_FORGE_READY' && user){
+        const { data } = await supabase
+          .from('game_saves')
+          .select('state')
+          .eq('user_id', user.id)
+          .eq('game_id', 'stellar-forge')
+          .maybeSingle()
+        if(data && data.state && iframeRef.current){
+          iframeRef.current.contentWindow.postMessage(
+            { type: 'STELLAR_FORGE_LOAD', state: data.state }, '*'
+          )
+        }
+        return
+      }
+
+      // --- Stellar Forge : envoi périodique (toutes les 60s) ---
+      // 1) sauvegarde cloud de l'état complet, 2) score Kardashev au leaderboard.
+      if(d.type === 'STELLAR_FORGE_SCORE'){
+        // 1) sauvegarde cloud
+        await saveStellarForgeCloud()
+        // 2) leaderboard : score = niveau de Kardashev décimal → entier ×1000,
+        //    label affiché "Type II · 37%".
+        const kValue = typeof d.kardashev === 'number' ? d.kardashev : 0
+        const tier = d.kardashev_tier || '0'
+        const pct = Math.round(d.kardashev_pct || 0)
+        await submitScore({
+          game: 'stellar-forge',
+          mode: 'classic',
+          score: Math.round(kValue * 1000),
+          scoreLabel: `Type ${tier} · ${pct}%`,
+        })
+        if(recordPlay) recordPlay('stellar-forge')
+        window.dispatchEvent(new Event('rh-score-saved'))
+        return
+      }
+
+      // --- Autres jeux (STAQ, Rage Hockey…) : score classique ---
       if(d.type.endsWith('_SCORE')) {
         await submitScore({ game: d.game, mode: d.mode, score: d.score, scoreLabel: d.scoreLabel, difficulty: d.diff, arena: d.arena })
         if(d.game) recordPlay(d.game)
@@ -72,54 +124,11 @@ function GamePageDesktop() {
       if(d.type === 'RH_TRACK') {
         track(d.event, { game_id: d.game_id, props: d.props })
       }
-      // --- Sauvegarde cloud Stellar Forge (joueurs connectés) ---
-      // Le jeu signale qu'il est prêt → on lui renvoie la sauvegarde cloud.
-      if(d.type === 'STELLAR_FORGE_READY' && user){
-        const { data } = await supabase
-          .from('game_saves')
-          .select('state')
-          .eq('user_id', user.id)
-          .eq('game_id', 'stellar-forge')
-          .maybeSingle()
-        if(data && data.state && iframeRef.current){
-          iframeRef.current.contentWindow.postMessage(
-            { type: 'STELLAR_FORGE_LOAD', state: data.state }, '*'
-          )
-        }
-      }
-      // Le jeu envoie son état (via _SCORE toutes les 60s) → on écrit dans Supabase.
-      if(d.type === 'STELLAR_FORGE_SCORE' && user && iframeRef.current){
-        try {
-          const snap = iframeRef.current.contentWindow.stellarForgeGetState?.()
-          if(snap && snap.state){
-            await supabase.from('game_saves').upsert({
-              user_id: user.id,
-              game_id: 'stellar-forge',
-              state: snap.state,
-              total_ore: snap.total_ore || 0,
-              updated_at: new Date().toISOString(),
-            }, { onConflict: 'user_id,game_id' })
-          }
-        } catch(err) { /* silencieux */ }
-      }
     }
-window.addEventListener('message', handleMessage)
+
+    window.addEventListener('message', handleMessage)
     // Sauvegarde cloud de sécurité quand le joueur quitte la page.
-    async function saveOnLeave(){
-      if(!user || !iframeRef.current) return
-      try {
-        const snap = iframeRef.current.contentWindow.stellarForgeGetState?.()
-        if(snap && snap.state){
-          await supabase.from('game_saves').upsert({
-            user_id: user.id,
-            game_id: 'stellar-forge',
-            state: snap.state,
-            total_ore: snap.total_ore || 0,
-            updated_at: new Date().toISOString(),
-          }, { onConflict: 'user_id,game_id' })
-        }
-      } catch(err) {}
-    }
+    const saveOnLeave = () => { saveStellarForgeCloud() }
     window.addEventListener('pagehide', saveOnLeave)
     return () => {
       window.removeEventListener('message', handleMessage)
@@ -156,7 +165,7 @@ window.addEventListener('message', handleMessage)
           <div className="gamepage__block">
             <div className="gamepage__stage">
               {playing ? (
-<iframe ref={iframeRef} src={`/games/${game.id}.html`} title={game.title}
+                <iframe ref={iframeRef} src={`/games/${game.id}.html`} title={game.title}
                   className="gamepage__iframe" allowFullScreen frameBorder="0" />
               ) : (
                 <div className="gamepage__cover" style={{ backgroundImage: `url(${game.thumbnail})` }}>
