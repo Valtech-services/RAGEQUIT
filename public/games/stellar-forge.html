@@ -4775,6 +4775,78 @@ window.reportScore = reportScore;
 // Exposé pour que la page parente puisse lire les métriques à la demande
 window.stellarForgeGetScore = buildScorePayload;
 
+// ---------------------------------------------------------------------
+// SAUVEGARDE CLOUD (via le site parent → Supabase)
+// ---------------------------------------------------------------------
+// Le jeu ne connaît pas Supabase : il expose son état complet au parent, qui
+// l'écrit dans Supabase, et accepte un état renvoyé par le parent au chargement.
+// total_ore sert de juge d'ancienneté (la sauvegarde la plus avancée gagne).
+
+// Le parent lit l'état courant à la demande (pour l'écrire dans Supabase).
+window.stellarForgeGetState = function(){
+  return { state: state, total_ore: state.totalOreEarned || 0 };
+};
+
+// Le parent injecte un état (sauvegarde cloud) dans le jeu. On ne l'applique que
+// s'il est plus avancé que l'état courant (comparaison sur le minerai total),
+// pour ne jamais faire régresser la progression du joueur.
+window.stellarForgeLoadState = function(cloud){
+  try{
+    if(!cloud || typeof cloud !== "object") return false;
+    const incoming = cloud.state || cloud;
+    if(!incoming || typeof incoming !== "object") return false;
+    const incomingOre = incoming.totalOreEarned || 0;
+    const currentOre = state.totalOreEarned || 0;
+    if(incomingOre <= currentOre) return false; // le local est déjà aussi/plus avancé
+    // Fusion prudente : on part d'un état neuf, on écrase avec le cloud, on
+    // sécurise les longueurs de tableaux (comme loadGame).
+    const base = freshState();
+    for(const k in base){
+      if(Object.prototype.hasOwnProperty.call(incoming, k) && incoming[k] !== undefined && incoming[k] !== null){
+        base[k] = incoming[k];
+      }
+    }
+    function fixLen(arr, len, fill){
+      if(!Array.isArray(arr)) return new Array(len).fill(fill);
+      if(arr.length < len) return arr.concat(new Array(len - arr.length).fill(fill));
+      if(arr.length > len) return arr.slice(0, len);
+      return arr;
+    }
+    base.owned         = fixLen(base.owned, BUILDINGS.length, 0);
+    base.incMult       = fixLen(base.incMult, BUILDINGS.length, 1);
+    base.progress      = fixLen(base.progress, BUILDINGS.length, 0);
+    base.running       = fixLen(base.running, BUILDINGS.length, false);
+    base.managersOwned = fixLen(base.managersOwned, MANAGERS.length, false);
+    base.managerLevels = fixLen(base.managerLevels, MANAGERS.length, 0);
+    base.plantsOwned   = fixLen(base.plantsOwned, POWER_PLANTS.length, 0);
+    base.plantProgress = fixLen(base.plantProgress, POWER_PLANTS.length, 0);
+    base.plantRunning  = fixLen(base.plantRunning, POWER_PLANTS.length, false);
+    base.upgradesOwned = fixLen(base.upgradesOwned, UPGRADES.length, 0);
+    if(base.tutorialStep < 99) base.tutorialStep = 99;
+    state = base;
+    recomputeGalaxyBonuses();
+    renderStatic();
+    render();
+    if(typeof saveGame === "function") saveGame(); // fige aussi en local
+    return true;
+  }catch(e){ return false; }
+};
+
+// Signale au parent que le jeu est prêt à recevoir une sauvegarde cloud.
+// Le parent, en réponse, enverra { type:'STELLAR_FORGE_LOAD', state:... }.
+try{
+  window.parent.postMessage({ type: "STELLAR_FORGE_READY", game: "stellar-forge" }, "*");
+}catch(e){}
+
+// Écoute l'état cloud envoyé par le parent.
+window.addEventListener("message", function(ev){
+  const d = ev.data;
+  if(!d || typeof d !== "object") return;
+  if(d.type === "STELLAR_FORGE_LOAD"){
+    window.stellarForgeLoadState(d);
+  }
+});
+
 // Envoi automatique régulier (toutes les 60 s) + à chaque Départ stellaire,
 // pour que le classement reste à jour sans action du joueur.
 setInterval(() => reportScore(), 60000);
