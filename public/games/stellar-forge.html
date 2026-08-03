@@ -3478,12 +3478,26 @@ function milestoneEnergyBonus(){ return 1; }
 
 // Checks every milestone; auto-claims newly completed ones and celebrates.
 function checkMilestones(){
+  // Collect everything newly unlocked THIS pass first, so if many milestones fall
+  // at once (e.g. a big offline jump or an advanced player) we don't flood the
+  // player with dozens of pop-ups they must close one by one — which looked like
+  // a freeze. One or two → show normally; a burst → a single grouped card.
+  const justUnlocked = [];
   for (const m of MILESTONES){
     if (!state.milestonesClaimed[m.id] && milestoneProgress(m) >= m.goal){
       state.milestonesClaimed[m.id] = true;
+      justUnlocked.push(m);
+    }
+  }
+  if (justUnlocked.length === 0) return;
+  if (justUnlocked.length <= 2){
+    for (const m of justUnlocked){
       const kind = m.tier === "legendary" ? "LEGENDARY ACHIEVEMENT" : "ACHIEVEMENT";
       celebrate(kind, m.text, "Unlocked");
     }
+  } else {
+    // burst: one grouped celebration instead of a blocking stack
+    celebrate("ACHIEVEMENTS UNLOCKED", justUnlocked.length + " milestones reached", "Unlocked");
   }
 }
 
@@ -3553,20 +3567,25 @@ function doSoftReset(){
   state.totalEnergyEarned = keepTotalEnergy;
   state.milestonesClaimed = keepMilestones;
   state.kardashevReached = keepKardashev;
+  clearCelebrations();   // never leave a celebration overlay stuck after a reset
   recomputeGalaxyBonuses();
   renderStatic();
   render();
   // a departure is a key milestone: push the updated score right away
   state.tutorialStep = 99;
+  if (typeof updateTutorial === "function") updateTutorial();  // hide the tutorial bubble
   saveGame();
   if (typeof reportScore === "function") reportScore();
 }
 
 function doHardReset(){
   state = freshState();
+  state.tutorialStep = 99;   // don't replay the tutorial after a full reset
+  clearCelebrations();       // never leave a celebration overlay stuck after a reset
   recomputeGalaxyBonuses();
   renderStatic();
   render();
+  if (typeof updateTutorial === "function") updateTutorial();  // hide the tutorial bubble
   clearSave(); saveGame();
 }
 
@@ -4212,6 +4231,15 @@ let rewardQuoteIndex = 0;
 function celebrate(kind, title, reward){
   celebrateQueue.push({ kind, title, reward });
   if (!celebrateActive) showNextCelebration();
+}
+// Clears any pending celebrations and hides the overlay. Called on every reset so
+// a reset can NEVER leave a celebration overlay stuck on screen blocking clicks
+// (that stuck overlay is what felt like a "freeze").
+function clearCelebrations(){
+  celebrateQueue = [];
+  celebrateActive = false;
+  const ov = document.getElementById("celebrateOverlay");
+  if (ov) ov.classList.add("hidden");
 }
 function showNextCelebration(){
   if (celebrateQueue.length === 0){ celebrateActive = false; return; }
