@@ -34,7 +34,7 @@ export const categories = [
       title: 'Free Arcade Games | Ragequit Arcade',
       metaDescription: 'Play the best free arcade games online. No download required.',
       faq: [
-        { q: 'What arcade games are available?', a: 'STAQ — a satisfying block-stacking physics game. New games added regularly.' },
+        { q: 'What arcade games are available?', a: 'STAQ — a satisfying block-stacking physics game — and Neon Rush, a fast 3D neon tunnel runner. New games added regularly.' },
         { q: 'Mobile?', a: 'Yes, all games are optimized for mobile and desktop.' },
         { q: 'New games?', a: 'Every week. Follow us on TikTok and Instagram.' },
       ],
@@ -62,7 +62,7 @@ export const siteSeo = {
   title: 'Ragequit Arcade — Free Online Games',
   description: 'The most addictive free online games. Simple to learn, impossible to master. A new game every week.',
   about: 'Ragequit Arcade brings you the most addictive free online games, built for solo runs or quick matches with friends. Every game runs instantly in your browser — no downloads, no sign-up, no pop-ups, no nonsense. Our games work on desktop, tablet and mobile, so you can play at home or on the move. We are building a place where a great game is always one click away.',
-  gameSelection: 'We add new games every single week. Our current titles include Rage Hockey, STAQ and Stellar Forge. Every game is free to play, forever.',
+  gameSelection: 'We add new games every single week. Our current titles include Rage Hockey, STAQ, Stellar Forge and Neon Rush. Every game is free to play, forever.',
   startPlaying: 'Not sure what to play? Start exploring from the homepage or pick a game from Sports Games, Arcade Games or Idle / Clicker Games.',
   aboutUs: 'Ragequit Arcade is an independent gaming platform. Our goal is simple: create the most fun, most honest browser arcade on the web. New games drop every week — follow us on TikTok and Instagram to see what is coming next.',
   faq: [
@@ -140,6 +140,41 @@ export const games = [
         { q: 'Does it have a leaderboard?', a: 'Yes. Your best stack height is saved and shown on the global leaderboard.' },
         { q: 'Is STAQ free?', a: 'Yes, completely free to play.' },
         { q: 'Mobile?', a: 'Yes, STAQ is built for portrait mobile and works great on tablet and desktop too.' },
+      ],
+    },
+  },
+
+  /* ================================================================
+     NEON RUSH — runner 3D tunnel néon, catégorie arcade
+     ================================================================ */
+  {
+    id: 'neon-rush',
+    title: 'Neon Rush',
+    description: 'Race through an endless neon tunnel at breakneck speed. Dodge between three lanes, weave past glowing walls, and grab energy orbs to build a score multiplier. Chain near-misses for huge combos, survive the intense obstacle waves, and use your one revive to push even further. A fast, hypnotic 3D runner in pure retro-futuristic neon — how far can you go before you crash?',
+    thumbnail: '/thumbnails/neon-rush.jpg',
+    category: 'arcade',
+    tags: ['runner', 'arcade', '3d', 'neon', 'reflex', 'endless', 'dodge', 'synthwave'],
+    size: 'medium',
+    shimmer: true,
+    isNew: true,
+    hot: true,
+    landscape: false,
+    plays: 0,
+    modes: ['classic'],
+    defaultMode: 'classic',
+    controls: 'Left / right arrows or A / D to switch lanes. On mobile, tap the left or right side of the screen. Dodge obstacles, collect orbs, survive. Works on mobile, tablet and desktop.',
+    author: 'Ragequit Arcade',
+    seo: {
+      title: 'Neon Rush — Free 3D Neon Tunnel Runner Game | Ragequit Arcade',
+      metaDescription: 'Play Neon Rush free online. A fast 3D endless runner through a retro-futuristic neon tunnel: dodge across three lanes, chain combos and survive the waves. No download.',
+      faq: [
+        { q: 'How do you play Neon Rush?', a: 'Use the left and right arrows or A and D to move between the three lanes. On mobile, tap the left or right half of the screen. Dodge the neon obstacles, collect orbs and survive as long as you can.' },
+        { q: 'How does the score work?', a: 'You earn points for the distance you travel, plus bonuses for collecting orbs and for near-misses. Chaining pickups and close calls builds a combo multiplier that boosts every point you score.' },
+        { q: 'What are the waves?', a: 'The tunnel alternates calm stretches with intense obstacle waves that speed you up and pack the track with walls. A safe path always exists, but it gets harder to read at high speed.' },
+        { q: 'What is revive?', a: 'When you crash you can revive once per run to keep your score and keep going, with a few seconds of invincibility to get back into the flow.' },
+        { q: 'Does it have a leaderboard?', a: 'Yes. Your best run is saved and shown on the global leaderboard.' },
+        { q: 'Is Neon Rush free?', a: 'Yes, completely free to play, no download and no signup required.' },
+        { q: 'Mobile?', a: 'Yes, Neon Rush works on mobile, tablet and desktop, in both portrait and landscape.' },
       ],
     },
   },
