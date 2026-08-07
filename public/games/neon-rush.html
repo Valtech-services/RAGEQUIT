@@ -1400,6 +1400,21 @@
     hud.classList.remove('hidden');
     startDrone();
   }
+ // ============ Leaderboard : envoi du score au site parent ============
+  // Le jeu tourne en iframe sur Ragequit Arcade. On envoie le score par
+  // postMessage ; le parent (GamePage.jsx) l'écrit dans Supabase. Type finissant
+  // par "_SCORE" pour être pris en charge par le handler générique du site.
+  function reportScore() {
+    try {
+      window.parent.postMessage({
+        type: 'NEON_RUSH_SCORE',
+        game: 'neon-rush',
+        mode: 'classic',
+        score: score,
+        scoreLabel: score.toLocaleString('en-US'),
+      }, '*');
+    } catch (e) { /* hors iframe : sans effet */ }
+  }
   function endGame() {
     if (state === 'dead') return;
     state = 'dead';
@@ -1431,9 +1446,11 @@
     comboWrap.classList.remove('show');
     waveBanner.classList.remove('show');
     waveTimerEl.classList.add('hidden');
-    pauseScreen.classList.add('hidden');
+pauseScreen.classList.add('hidden');
     reviveScreen.classList.add('hidden');
     endScreen.classList.remove('hidden');
+    // Envoi du score au site parent (Ragequit Arcade) pour le leaderboard.
+    reportScore();
   }
   document.getElementById('startBtn').addEventListener('click', startGame);
   document.getElementById('restartBtn').addEventListener('click', startGame);
