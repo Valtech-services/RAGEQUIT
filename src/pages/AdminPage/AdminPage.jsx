@@ -256,20 +256,41 @@ function Dashboard(){
   const [d, setD] = useState(null)
   const [loading, setLoading] = useState(true)
 
+// Récupère TOUTES les lignes d'une requête, en paginant par blocs de 1000
+  // (Supabase plafonne chaque requête à 1000 lignes). Sans ça, sur 30 jours on
+  // perdait les événements récents une fois les 1000 premiers atteints.
+  const fetchAll = useCallback(async (build) => {
+    const PAGE = 1000
+    let from = 0
+    let all = []
+    while(true){
+      const { data, error } = await build().range(from, from + PAGE - 1)
+      if(error || !data || data.length === 0) break
+      all = all.concat(data)
+      if(data.length < PAGE) break
+      from += PAGE
+    }
+    return all
+  }, [])
+
   const load = useCallback(async () => {
     setLoading(true)
-    // Fenêtre = début de journée locale il y a (period-1) jours → maintenant.
-    // On envoie l'ISO (UTC) correspondant à ce minuit local, pour filtrer côté DB.
     const since = localDayStart(period - 1).toISOString()
     const [ev, sc, us, ms] = await Promise.all([
-      supabase.from('analytics_events').select('*').gte('created_at', since).order('created_at', { ascending: true }),
-      supabase.from('scores').select('*').gte('created_at', since).order('created_at', { ascending: false }),
+      // Événements : on pagine pour tout récupérer (peut dépasser 1000 lignes).
+      fetchAll(() => supabase.from('analytics_events').select('*').gte('created_at', since).order('created_at', { ascending: true })),
+      fetchAll(() => supabase.from('scores').select('*').gte('created_at', since).order('created_at', { ascending: false })),
       supabase.from('profiles').select('id, username, country, created_at'),
       supabase.from('contact_messages').select('*').order('created_at', { ascending: false }),
     ])
-    setD({ ev: ev.data || [], scores: sc.data || [], users: us.data || [], messages: ms.data || [] })
+    setD({
+      ev: ev || [],
+      scores: sc || [],
+      users: us.data || [],
+      messages: ms.data || [],
+    })
     setLoading(false)
-  }, [period])
+  }, [period, fetchAll])
 
   useEffect(() => { load() }, [load])
 
