@@ -7,7 +7,7 @@
 <title>NEON RUSH — Infinite Tunnel</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body {
+  html, body {llll;                                                                                                                                                                
     width: 100%; height: 100%; overflow: hidden;
     background: #0A1628; color: #ffffff;
     font-family: 'Orbitron', ui-monospace, 'Courier New', monospace;
@@ -405,9 +405,15 @@
   <div class="end-label">Score</div>
   <div class="final-score" id="reviveScore">0</div>
   <button class="btn" id="reviveBtn" data-testid="revive-btn">
-    Revive <span class="revive-count" id="reviveCount">(3)</span>
+    &#9654; Watch ad &amp; revive <span class="revive-count" id="reviveCount">(5)</span>
   </button>
   <button class="btn magenta btn-small" id="reviveGiveUp" data-testid="giveup-btn">No thanks</button>
+</div>
+<div class="overlay hidden" id="adScreen" data-testid="ad-screen">
+  <div class="subtitle" style="margin-bottom:1.4rem;">Advertisement</div>
+  <div class="title" style="font-size:clamp(1.6rem,7vw,2.6rem);" id="adCountdown">5</div>
+  <div class="end-label" style="margin-top:1.4rem;" id="adWaitLabel">Please wait 5 s…</div>
+  <button class="btn magenta btn-small" id="adSkip" style="margin-top:2rem;">Skip</button>
 </div>
 <div class="overlay hidden" id="endScreen" data-testid="end-screen">
   <div class="end-title">Game Over</div>
@@ -480,6 +486,10 @@
   const reviveBtn   = document.getElementById('reviveBtn');
   const reviveCountEl= document.getElementById('reviveCount');
   const reviveGiveUp= document.getElementById('reviveGiveUp');
+  const adScreen    = document.getElementById('adScreen');
+  const adCountdownEl= document.getElementById('adCountdown');
+  const adWaitLabel = document.getElementById('adWaitLabel');
+  const adSkipBtn   = document.getElementById('adSkip');
   const nearRecordEl= document.getElementById('nearRecord');
   const nearNumEl   = document.getElementById('nearNum');
   const endWaveNumEl= document.getElementById('endWaveNum');
@@ -1382,6 +1392,47 @@
       endGame();
     }
   }
+ // ============ Pub récompensée (revive) ============
+  // Affiche un overlay de pub avec compte à rebours réel de 5 s, puis accorde le
+  // revive. Compte à rebours basé sur le TEMPS RÉEL pour ne jamais rester bloqué
+  // si l'onglet passe en arrière-plan. Structuré pour brancher un vrai SDK.
+  const AD_DURATION_SEC = 5;
+  let adTimer = null;
+  function showRewardedAd(onReward) {
+    const endAt = Date.now() + AD_DURATION_SEC * 1000;
+    let done = false, claimed = false;
+    reviveScreen.classList.add('hidden');
+    adScreen.classList.remove('hidden');
+    adSkipBtn.textContent = 'Skip';
+    function grant() {
+      if (claimed) return;
+      claimed = true;
+      if (adTimer) { clearInterval(adTimer); adTimer = null; }
+      adScreen.classList.add('hidden');
+      if (typeof onReward === 'function') onReward();
+    }
+    function closeNoReward() {
+      if (adTimer) { clearInterval(adTimer); adTimer = null; }
+      adScreen.classList.add('hidden');
+      endGame(); // pas de pub regardée en entier → fin de partie
+    }
+    function refresh() {
+      const remaining = Math.ceil((endAt - Date.now()) / 1000);
+      if (remaining > 0) {
+        adCountdownEl.textContent = remaining;
+        adWaitLabel.textContent = 'Please wait ' + remaining + ' s…';
+      } else {
+        if (adTimer) { clearInterval(adTimer); adTimer = null; }
+        done = true;
+        adCountdownEl.textContent = '✓';
+        adWaitLabel.textContent = 'Reward ready';
+        adSkipBtn.textContent = 'Claim revive';
+      }
+    }
+    refresh();
+    adTimer = setInterval(refresh, 250);
+    adSkipBtn.onclick = () => { if (done) grant(); else closeNoReward(); };
+  }
   function doRevive() {
     if (state !== 'revive') return;
     revivesUsed++;
@@ -1454,7 +1505,22 @@ pauseScreen.classList.add('hidden');
   }
   document.getElementById('startBtn').addEventListener('click', startGame);
   document.getElementById('restartBtn').addEventListener('click', startGame);
-  reviveBtn.addEventListener('click', doRevive);
+reviveBtn.addEventListener('click', () => {
+    if (state !== 'revive') return;
+    state = 'ad'; // fige l'état pour stopper le compte à rebours de décision
+    showRewardedAd(() => {
+      state = 'revive'; // doRevive attend l'état 'revive'
+      doRevive();
+      try {
+        window.parent.postMessage({
+          type: 'RH_TRACK',
+          event: 'ad_rewarded_complete',
+          game_id: 'neon-rush',
+          props: { reward: 'revive' }
+        }, '*');
+      } catch (e) {}
+    });
+  });
   reviveGiveUp.addEventListener('click', endGame);
   // ============ Pause ============
   function pauseGame() {
