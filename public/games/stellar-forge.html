@@ -4314,6 +4314,15 @@ document.getElementById("boostBtn").addEventListener("click", () => {
   showRewardedAd(() => {
     state.adBoostEndsAt = Date.now() + AD_BOOST_DURATION_MS;
     render();
+    // Signale au site parent qu'une pub récompensée a été vue en entier.
+    try {
+      window.parent.postMessage({
+        type: 'RH_TRACK',
+        event: 'ad_rewarded_complete',
+        game_id: 'stellar-forge',
+        props: { reward: 'boost_x2' }
+      }, '*');
+    } catch (e) {}
   });
 });
 
