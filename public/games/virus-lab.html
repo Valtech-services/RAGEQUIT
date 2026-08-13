@@ -1,0 +1,3714 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Virus Lab — Ragequit Arcade</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#04060f;display:flex;justify-content:center;align-items:center;height:100vh;width:100vw;overflow:hidden;
+       font-family:'Segoe UI',system-ui,sans-serif;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none}
+  #game-container{position:relative;width:min(100vw,56.25vh);height:min(177.78vw,100vh);aspect-ratio:9/16;
+       max-width:460px;max-height:820px;box-shadow:0 0 90px rgba(40,140,255,.28),0 0 40px rgba(0,0,0,.9);border-radius:22px;overflow:hidden}
+  canvas{display:block;width:100%;height:100%;border-radius:22px}
+</style>
+</head>
+<body>
+<div id="game-container"><canvas id="c"></canvas></div>
+<script>
+(function(){
+'use strict';
+
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d',{alpha:false});
+const W=450,H=800;
+function resize(){
+  const el=document.getElementById('game-container');
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  canvas.style.width=el.clientWidth+'px';canvas.style.height=el.clientHeight+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.imageSmoothingEnabled=false;
+}
+window.addEventListener('resize',resize);
+window.addEventListener('orientationchange',()=>setTimeout(resize,120));
+resize();
+
+/* ---------------- AUDIO ---------------- */
+let actx=null;
+function initAudio(){
+  if(!actx){try{actx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}
+  if(actx&&actx.state==='suspended')actx.resume();
+}
+function beep(f,d,type='square',v=.05,slide=0){
+  if(!actx)return;
+  try{
+    const o=actx.createOscillator(),g=actx.createGain();
+    o.type=type;o.frequency.setValueAtTime(f,actx.currentTime);
+    if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(40,f+slide),actx.currentTime+d);
+    g.gain.setValueAtTime(v,actx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.0001,actx.currentTime+d);
+    o.connect(g);g.connect(actx.destination);o.start();o.stop(actx.currentTime+d);
+  }catch(e){}
+}
+const sfx={
+  click:()=>{beep(760,.05,'square',.045);beep(1120,.035,'sine',.03);},
+  place:()=>{beep(520,.05,'square',.04);},
+  del:()=>{beep(220,.07,'sawtooth',.04);},
+  win:()=>{[[523,0],[659,90],[784,180],[1046,280]].forEach(([f,t])=>setTimeout(()=>beep(f,.16,'square',.06),t));},
+  lose:()=>{beep(200,.28,'sawtooth',.06,-140);setTimeout(()=>beep(120,.35,'triangle',.05),160);},
+  unlock:()=>{[[440,0],[660,80],[880,160]].forEach(([f,t])=>setTimeout(()=>beep(f,.12,'sine',.05),t));},
+  err:()=>{beep(160,.14,'square',.05);}
+};
+
+/* ---------------- PALETTE ---------------- */
+const C={
+  bg0:'#04060f',bg1:'#081226',bg2:'#0b1c3a',
+  cyan:'#3fd0ff',cyanDim:'#1a6c94',
+  red:'#ff4d4d',redDim:'#8f2626',
+  gold:'#f5c542',
+  dna:'#c48bff',dnaDeep:'#7a3fd0',
+  enemyBlue:'#3fa0ff',   // couleur ennemi de repli quand le joueur joue en rouge
+  panel:'rgba(10,26,52,.82)',
+  panelBorder:'rgba(63,208,255,.35)',
+  text:'#dceaff',textDim:'#7c96bd',
+  lock:'#2a3a55'
+};
+
+/* ---------------- DONNÉES ---------------- */
+const ACTIONS={
+  avancer :{name:'Advance',   icon:'▲', cost:0,   time:0,    slot:1, desc:'Move one cell forward and claim it.'},
+  tournerG:{name:'Turn Left', icon:'◄', cost:0,   time:0,    slot:1, desc:'Rotate 90 degrees to the left.'},
+  tournerD:{name:'Turn Right',icon:'►', cost:0,   time:0,    slot:1, desc:'Rotate 90 degrees to the right.'},
+  reculer :{name:'Back',      icon:'▼', cost:0,   time:0,    slot:1, desc:'Move one cell backward, claiming it.'},
+  sauter  :{name:'Leap',      icon:'⇈', cost:120, time:90,   slot:2, desc:'Jump 2 cells. Only claims the landing cell, so it leaves gaps behind.'},
+  boost   :{name:'Surge',     icon:'⚡', cost:220, time:180,  slot:2, desc:'Advance 3 cells, claiming every cell along the way.'},
+  acide   :{name:'Acid',      icon:'☣', cost:320, time:420,  slot:2, desc:'Claims the 4 adjacent enemy cells. No effect on empty ground.'},
+  diviser :{name:'Split',     icon:'⧉', cost:520, time:900,  slot:3, desc:'Spawns a second head to the side while you keep moving.'},
+  muter   :{name:'Mutate',    icon:'◎', cost:700, time:1200, slot:2, desc:'Turns the head toward the nearest enemy territory.'},
+  dash    :{name:'Dash',      icon:'⇉', cost:260, time:150,  slot:2, desc:'Charges up to 6 cells forward, stopping at the first enemy cell it claims.'},
+  sprint  :{name:'Sprint',    icon:'⏩', cost:340, time:240,  slot:2, desc:'Executes the next action twice this turn. Doubles a key move.'},
+  sense   :{name:'Sense',     icon:'❖', cost:300, time:180,  slot:1, desc:'Turns toward the largest open space. Great for fast expansion.'},
+  corrode :{name:'Corrode',   icon:'⊗', cost:480, time:600,  slot:3, desc:'Acid at range: eats enemy cells 2 ahead plus the sides.'},
+  shield  :{name:'Shield',    icon:'⛨', cost:560, time:720,  slot:2, desc:'Protects nearby cells from enemy infection for a short time.'},
+  twin    :{name:'Twin',      icon:'⁂', cost:820, time:1080, slot:3, desc:'Splits into two new heads at once. Explosive but slot-heavy.'},
+  retreat :{name:'Retreat',   icon:'⟲', cost:240, time:120,  slot:1, desc:'Turns back toward your own territory. Defensive repositioning.'},
+  burst   :{name:'Burst',     icon:'✺', cost:900, time:1320, slot:4, desc:'Converts every enemy cell within 2 tiles at once. Devastating, costly.'}
+};
+const BASE_ACTIONS=['avancer','reculer','tournerG','tournerD'];
+const LAB_TIERS=[
+  {name:'MOBILITY',    keys:['sauter','sense','retreat']},
+  {name:'ASSAULT',     keys:['boost','dash','sprint']},
+  {name:'CORROSION',   keys:['acide','corrode']},
+  {name:'REPLICATION', keys:['diviser','twin']},
+  {name:'APEX',        keys:['muter','shield','burst']}
+];
+const SLOT_BUDGET_BASE=0;
+// Budget de génome : commence à 0. Le palier initial 'cap0' débloque les 4
+// premiers slots pour 150 (via l'onboarding). Ensuite +4 par palier jusqu'à 24.
+const CAPACITY_UPGRADES=[
+  {id:'cap0',bonus:4, cost:150, time:0},    // premier achat (0->4), instantané
+  {id:'cap1',bonus:4, cost:300, time:180},
+  {id:'cap2',bonus:4, cost:400, time:300},
+  {id:'cap3',bonus:4, cost:500, time:480},
+  {id:'cap4',bonus:4, cost:600, time:720},
+  {id:'cap5',bonus:4, cost:700, time:1080}
+];
+function slotBudget(){
+  let b=SLOT_BUDGET_BASE;
+  for(const u of CAPACITY_UPGRADES)if(D.unlocked.includes(u.id))b+=u.bonus;
+  return b;
+}
+const MAX_SEQ=20;
+
+const ACT_COLOR={
+  avancer:'#7fe3ff',reculer:'#7fa8d8',tournerG:'#9db4d8',tournerD:'#9db4d8',
+  dash:'#7fffd0',sprint:'#7fffd0',sense:'#a8e0ff',
+  corrode:'#c77cff',shield:'#5b9dff',twin:'#ff8fb0',
+  retreat:'#9db4d8',burst:'#ff6b6b',
+  sauter:'#7fffd0',boost:'#ffd45e',acide:'#b07cff',
+  diviser:'#ff8fb0',muter:'#ffa04d'
+};
+// Détecte si une couleur (hex) est de la famille rouge (pour contraste ennemi).
+function isReddish(hex){
+  if(typeof hex!=='string'||hex[0]!=='#'||hex.length<7)return false;
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return r>150 && r>g+50 && r>b+50; // dominante rouge marquée
+}
+// Couleur de l'ennemi selon la couleur du joueur : rouge par défaut,
+// bleu si le joueur est déjà rouge (garantit deux camps distincts).
+function enemyColorFor(playerColor){
+  return isReddish(playerColor)?C.enemyBlue:C.red;
+}
+const VIRUS_COLORS=['#3fd0ff','#5b8cff','#4dffa6','#f5c542','#c46bff','#ff6b9d','#ff8f4d'];
+
+const DEFAULT={
+  virusList:[],unlocked:BASE_ACTIONS.slice(),research:{},
+  progress:1,dna:150,
+  scores:{wins:0,best:0,streak:0,bestStreak:0},
+  selected:0,lastDefeat:null,tutorial:99,onb:0
+};
+
+/* ===== ONBOARDING GUIDÉ =====
+   Séquence de surbrillances à travers les vraies pages. Chaque étape a un
+   identifiant de cible (id de l'élément à surligner) et un court texte.
+   onbTarget(id) dit si un élément est la cible courante (surbrillance + clic
+   autorisé). Le reste de l'écran est cliquable-bloqué pendant l'onboarding. */
+const ONB=[
+  {id:'menu_lab',    tip:'Welcome! First, open the LAB to expand your genome.'}, //0
+  {id:'lab_cap',     tip:'Unlock your first +4 genome slots (150 DNA).'},         //1
+  {id:'back_menu',   tip:'Great! Now head back to the menu.'},                    //2
+  {id:'menu_viruses',tip:'Go to MY VIRUSES to build your strain.'},              //3
+  {id:'viruses_new', tip:'Create your first virus.'},                            //4
+  {id:'edit_deploy', tip:'Name it, pick a look and actions, then DEPLOY.'},      //5
+  {id:'camp_lvl1',   tip:'Select level 1 — Bactoculus.'},                        //6
+  {id:'info_deploy', tip:'Deploy your virus to start the battle!'}               //7
+];
+// Un élément est-il la cible courante de l'onboarding ?
+function onbTarget(id){
+  return D.onb<ONB.length && ONB[D.onb] && ONB[D.onb].id===id;
+}
+// Onboarding actif ?
+function onbActive(){return D.onb<ONB.length;}
+// Avancer l'onboarding si l'action correspond à l'étape courante
+function onbAdvance(id){
+  if(onbTarget(id)){D.onb++;save();}
+}
+// Surbrillance pulsée : toutes les ~2s elle grossit de 5% puis revient.
+// Renvoie true si l'élément est la cible courante.
+function onbHighlight(id,x,y,w,h,rad){
+  if(!onbTarget(id))return false;
+  // cycle de 2s : 0->1 (grossit) puis retour ; échelle max +5%
+  const cycle=(T%2)/2;                  // 0..1 sur 2 secondes
+  const grow=Math.sin(cycle*Math.PI);   // 0->1->0 en douceur
+  const scale=1+0.05*grow;              // jusqu'à +5%
+  const cx=x+w/2, cy=y+h/2;
+  const nw=w*scale, nh=h*scale;
+  const nx=cx-nw/2, ny=cy-nh/2;
+  const glow=0.5+0.5*Math.sin(T*3);
+  rr(nx-3,ny-3,nw+6,nh+6,(rad||10)+2);
+  ctx.strokeStyle=C.dna;ctx.lineWidth=2.6;
+  ctx.shadowColor=C.dna;ctx.shadowBlur=12+glow*16;ctx.stroke();ctx.shadowBlur=0;
+  return true;
+}
+let D;
+function load(){
+  try{
+    D=Object.assign({},DEFAULT,JSON.parse(localStorage.getItem('virusLabV3')||'{}'));
+    D.scores=Object.assign({},DEFAULT.scores,D.scores||{});
+    if(!Array.isArray(D.unlocked)||!D.unlocked.length)D.unlocked=BASE_ACTIONS.slice();
+    if(!Array.isArray(D.virusList))D.virusList=[];
+    if(typeof D.dna!=='number')D.dna=150;
+    if(typeof D.tutorial!=='number')D.tutorial=D.virusList.length?99:0;
+    D.virusList.forEach((v,i)=>{v.look=normaliseLook(v.look,i);
+      if(!v.color)v.color=paletteById(v.look.palette).main;});
+  }catch(e){D=JSON.parse(JSON.stringify(DEFAULT));}
+}
+function save(){try{localStorage.setItem('virusLabV3',JSON.stringify(D));}catch(e){}}
+load();
+
+function slotCost(actions){return actions.reduce((s,a)=>s+(ACTIONS[a]?ACTIONS[a].slot:1),0);}
+
+/* ---------------- CAMPAGNE ---------------- */
+const ENEMY_NAMES=['Bactoculus','Phage-X','Lentivorus','Rotovirax','Spikine','Morbax','Cytomeg','Herpex','Poxine','Necrovore',
+'Neurophage','Ebolaï','Mycotox','Rhabdon','Flavivar','Coronax','Togavir','Retrovix','Papillon','Adenox',
+'Parvox','Hepevir','Astrovix','Calicis','Picorna','Reovirax','Birnavir','Totivore','Partitix','Hypervor'];
+
+const ENEMY_PATTERNS=[
+  // 1-3 : ennemis faibles (tournent souvent) - battables avec Strain Alpha (4 slots)
+  // Niveau 1 : très faible (petit carré) pour que l'onboarding se solde toujours par une victoire.
+  ['avancer','tournerD','tournerD','tournerG'],
+  ['avancer','tournerD','avancer','tournerD','avancer','tournerD','avancer','tournerD'],
+  ['avancer','avancer','tournerD','avancer','tournerG','tournerD'],
+  // 4-6 : Leap
+  ['avancer','sauter','avancer','tournerD'],
+  ['sauter','avancer','avancer','tournerD','avancer'],
+  ['avancer','sauter','avancer','tournerD','sauter','tournerG'],
+  // 7-9 : Surge
+  ['boost','avancer','tournerD','avancer'],
+  ['boost','avancer','avancer','tournerD'],
+  ['boost','avancer','tournerD','boost','tournerG'],
+  // 10-12 : Dash
+  ['dash','avancer','tournerD','avancer'],
+  ['dash','boost','tournerD','avancer'],
+  ['boost','dash','tournerD','avancer','boost'],
+  // 13-15 : Dash + Surge combinés
+  ['dash','boost','avancer','tournerD','boost'],
+  ['dash','dash','boost','tournerD','avancer'],
+  ['boost','dash','boost','tournerD','avancer'],
+  // 16-18 : boucles d'expansion denses
+  ['dash','boost','boost','dash','tournerD'],
+  ['boost','dash','boost','dash','tournerD'],
+  ['dash','boost','dash','boost','tournerD','avancer'],
+  // 19-21 : pression forte (proche des builds joueurs)
+  ['boost','boost','sauter','boost','tournerD'],
+  ['dash','boost','boost','dash','tournerD','boost'],
+  ['boost','dash','boost','dash','boost','tournerD'],
+  // 22-24 : expansion optimale, dont un miroir
+  ['dash','boost','sauter','boost','dash','tournerD'],
+  ['boost','boost','sauter','boost','dash'],
+  ['dash','boost','boost','dash','boost','tournerD'],
+  // 25-27 : très haute densité d'expansion
+  ['boost','dash','boost','boost','dash','tournerD'],
+  ['dash','boost','dash','boost','boost','tournerD'],
+  ['boost','dash','boost','dash','boost','dash','tournerD'],
+  // 28-30 : final, expansion maximale
+  ['dash','boost','boost','dash','boost','boost','tournerD'],
+  ['boost','dash','boost','dash','boost','boost','tournerD'],
+  ['dash','boost','boost','dash','boost','dash','boost','tournerD']
+];
+
+const ENEMY_DESC=[
+  'Primitive strain. Circles endlessly without thinking.',
+  'Wide, predictable path. Look for the gaps it leaves.',
+  'Slow zigzag. Covers the centre poorly.',
+  'Square loop. Takes ground methodically.',
+  'Open spiral. Gains territory along the edges.',
+  'First use of Leap. Leaves exploitable holes.',
+  'Charges with Surge. Colonises fast in straight lines.',
+  'Mixes Leap and turns. Uneven coverage.',
+  'Double Surge in a corner pattern. Very fast.',
+  'Uses Acid. Takes your cells back on contact.',
+  'First splitter. Growth turns exponential.',
+  'Splits then surges. Aggressive expansion.',
+  'Acidic surge. Advances while eating through you.',
+  'Leaping splitter. Spreads in scattered islands.',
+  'Split and acid combined. Hard to dislodge.',
+  'Surging splitter. Saturates the centre quickly.',
+  'First mutant. It actively hunts you.',
+  'Explosive splitter with acid cover.',
+  'Directed mutation. Targets your weak zones.',
+  'Full combination: surge, split and acid.',
+  'Splitting tracker. Never loses your trail.',
+  'Eats and multiplies without pause.',
+  'Boosted mutant. Maximum conquest speed.',
+  'Complete cocktail. Every cycle is a threat.',
+  'Built for contact. Avoid fighting it head on.',
+  'Double split. Saturates the dish in seconds.',
+  'Mutating eater. Claims and hunts at once.',
+  'Triple threat: split, surge, mutation.',
+  'Splitting acid mutant. Nearly flawless.',
+  'Final strain. Every action, no weakness.'
+];
+
+function enemyAt(i){
+  return{
+    name:ENEMY_NAMES[i]||('Strain-'+(i+1)),
+    desc:ENEMY_DESC[i]||'Unknown strain.',
+    pattern:ENEMY_PATTERNS[i]||ENEMY_PATTERNS[ENEMY_PATTERNS.length-1],
+    reward:40+i*12
+  };
+}
+
+/* ---------------- ARÈNE ---------------- */
+const COLS=76,ROWS=76;
+const arenaR=Math.min(W,H)*0.40;
+const arenaCX=W/2,arenaCY=H/2;
+const cell=(arenaR*2)/COLS;
+const originX=arenaCX-arenaR,originY=arenaCY-arenaR;
+
+const valid=[];let validTotal=0;
+(function(){
+  for(let y=0;y<ROWS;y++){
+    valid[y]=[];
+    for(let x=0;x<COLS;x++){
+      const px=originX+x*cell+cell/2,py=originY+y*cell+cell/2;
+      const ok=Math.hypot(px-arenaCX,py-arenaCY)<=arenaR-cell*0.9;
+      valid[y][x]=ok;if(ok)validTotal++;
+    }
+  }
+})();
+
+const DIRS=[[0,-1],[1,0],[0,1],[-1,0]];
+const rot=(d,t)=>(d+t+4)%4;
+
+const BATTLE_TIME=45;
+const TICK=90;
+const MAX_HEADS=90;
+const HEAD_BUD=0.5;
+const INFECT_RATE=0.10, INFECT_STEAL=0.038;
+// Anti-boule-de-neige : le territoire fraîchement colonisé est fragile pendant
+// FRESH_TIME ticks (l'adversaire le reprend bien plus facilement). Étaler trop
+// vite crée un grand front vulnérable qui se fait grignoter.
+const FRESH_TIME=13;
+const INFECT_STEAL_FRESH=0.19;   // vol d'une case fraîche adverse (élevé)
+
+let grid=null,shieldGrid=null,freshGrid=null,headsP=[],headsE=[];
+let battle={
+  running:false,ended:false,timer:BATTLE_TIME,winner:null,
+  pPattern:null,ePattern:null,level:0,acc:0,
+  flashes:[],history:[],peakEnemy:0,peakPlayer:0,firstLeadLost:null,
+  rewardGiven:0
+};
+
+function initGrid(){
+  grid=new Uint8Array(COLS*ROWS);
+  shieldGrid=new Uint8Array(COLS*ROWS);
+  freshGrid=new Uint8Array(COLS*ROWS);
+}
+const gi=(x,y)=>y*COLS+x;
+const inB=(x,y)=>x>=0&&x<COLS&&y>=0&&y<ROWS&&valid[y][x];
+
+function census(){
+  let p=0,e=0;
+  for(let i=0;i<grid.length;i++){const v=grid[i];if(v===1)p++;else if(v===2)e++;}
+  return{p,e,total:validTotal};
+}
+
+function seed(owner,cx,cy,dir){
+  const heads=owner===1?headsP:headsE;
+  heads.push({x:cx,y:cy,dir:dir,idx:0});
+  if(inB(cx,cy))grid[gi(cx,cy)]=owner;
+}
+
+function startBattle(playerPattern,enemyPattern,level){
+  initGrid();headsP=[];headsE=[];
+  battle.running=true;battle.ended=false;battle.timer=BATTLE_TIME;
+  battle.winner=null;battle.pPattern=playerPattern;battle.ePattern=enemyPattern;
+  battle.level=level;battle.acc=0;battle.flashes=[];battle.history=[];
+  battle.peakEnemy=0;battle.peakPlayer=0;battle.firstLeadLost=null;battle.rewardGiven=0;battle.annihilation=false;
+  battle.arena=false;battle.arenaOpponent=null;
+  budAccum[1]=0;budAccum[2]=0;
+  const mid=Math.floor(COLS/2);
+  // Noyau de départ : 5 têtes orientées en éventail, croissance immédiate.
+  const nucleus=[[0,0],[-2,0],[2,0],[0,-2],[0,2]];
+  nucleus.forEach(([ox,oy],i)=>{
+    seed(1,mid+ox,ROWS-13+oy,i===0?0:[0,3,1,0,2][i]);
+    seed(2,mid+ox,12+oy,i===0?2:[2,1,3,2,0][i]);
+  });
+}
+
+const budAccum={1:0,2:0};
+function convert(owner,x,y,heads,pending,dir){
+  if(!inB(x,y))return false;
+  const k=gi(x,y);
+  if(grid[k]===owner)return false;
+  if(shieldGrid[k]>0&&grid[k]!==0&&grid[k]!==owner)return false;
+  grid[k]=owner;
+  freshGrid[k]=FRESH_TIME; // territoire fraîchement pris = fragile un instant
+  battle.flashes.push({x,y,t:1,owner});
+  budAccum[owner]+=HEAD_BUD;
+  if(budAccum[owner]>=1&&heads.length+pending.length<MAX_HEADS){
+    budAccum[owner]-=1;
+    pending.push({x,y,dir:rot(dir,Math.random()<0.5?1:-1),idx:0});
+  }
+  return true;
+}
+
+function largestEmptyDir(h){
+  let best=h.dir,bestC=-1;
+  for(let d=0;d<4;d++){const[dx,dy]=DIRS[d];let c=0;
+    for(let s=1;s<=12;s++){const nx=h.x+dx*s,ny=h.y+dy*s;
+      if(!inB(nx,ny))break;if(grid[gi(nx,ny)]===0)c++;}
+    if(c>bestC){bestC=c;best=d;}}
+  return best;
+}
+function ownTerritoryDir(h,owner){
+  let best=h.dir,bestC=-1;
+  for(let d=0;d<4;d++){const[dx,dy]=DIRS[d];let c=0;
+    for(let s=1;s<=8;s++){const nx=h.x+dx*s,ny=h.y+dy*s;
+      if(!inB(nx,ny))break;if(grid[gi(nx,ny)]===owner)c++;}
+    if(c>bestC){bestC=c;best=d;}}
+  return best;
+}
+function nearestEnemyDir(h,owner){
+  const foe=owner===1?2:1;
+  let best=-1,bestD=1e9;
+  for(let d=0;d<4;d++){
+    const[dx,dy]=DIRS[d];
+    for(let s=1;s<=14;s++){
+      const nx=h.x+dx*s,ny=h.y+dy*s;
+      if(!inB(nx,ny))break;
+      if(grid[gi(nx,ny)]===foe){if(s<bestD){bestD=s;best=d;}break;}
+    }
+  }
+  return best;
+}
+
+function doAction(owner,h,act,heads,pending){
+  switch(act){
+    case 'avancer':{
+      const[dx,dy]=DIRS[h.dir];const nx=h.x+dx,ny=h.y+dy;
+      if(inB(nx,ny)){convert(owner,nx,ny,heads,pending,h.dir);h.x=nx;h.y=ny;}
+      else h.dir=rot(h.dir,2);
+      break;
+    }
+    case 'tournerG':h.dir=rot(h.dir,-1);break;
+    case 'tournerD':h.dir=rot(h.dir,1);break;
+    case 'reculer':{
+      // recule d'une case selon l'orientation, sans pivoter, en colonisant la case
+      const[dx,dy]=DIRS[h.dir];const nx=h.x-dx,ny=h.y-dy;
+      if(inB(nx,ny)){convert(owner,nx,ny,heads,pending,h.dir);h.x=nx;h.y=ny;}
+      break;
+    }
+    case 'sauter':{
+      const[dx,dy]=DIRS[h.dir];const nx=h.x+dx*2,ny=h.y+dy*2;
+      if(inB(nx,ny)){convert(owner,nx,ny,heads,pending,h.dir);h.x=nx;h.y=ny;}
+      else h.dir=rot(h.dir,2);
+      break;
+    }
+    case 'boost':{
+      const[dx,dy]=DIRS[h.dir];
+      for(let s=0;s<3;s++){
+        const nx=h.x+dx,ny=h.y+dy;
+        if(!inB(nx,ny)){h.dir=rot(h.dir,2);break;}
+        convert(owner,nx,ny,heads,pending,h.dir);h.x=nx;h.y=ny;
+      }
+      break;
+    }
+    case 'acide':{
+      const foe=owner===1?2:1;
+      for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){
+        const ax=h.x+dx,ay=h.y+dy;
+        if(inB(ax,ay)&&grid[gi(ax,ay)]===foe)convert(owner,ax,ay,heads,pending,h.dir);
+      }
+      break;
+    }
+    case 'diviser':{
+      const side=rot(h.dir,Math.random()<0.5?1:-1);
+      const[sdx,sdy]=DIRS[side];const sx=h.x+sdx,sy=h.y+sdy;
+      if(inB(sx,sy)&&heads.length+pending.length<MAX_HEADS){
+        if(grid[gi(sx,sy)]!==owner){grid[gi(sx,sy)]=owner;battle.flashes.push({x:sx,y:sy,t:1,owner});}
+        pending.push({x:sx,y:sy,dir:side,idx:0});
+      }
+      const[dx,dy]=DIRS[h.dir];const nx=h.x+dx,ny=h.y+dy;
+      if(inB(nx,ny)){convert(owner,nx,ny,heads,pending,h.dir);h.x=nx;h.y=ny;}
+      else h.dir=rot(h.dir,2);
+      break;
+    }
+    case 'muter':{
+      const d=nearestEnemyDir(h,owner);
+      if(d>=0)h.dir=d;else h.dir=rot(h.dir,1);
+      // avance dans la foulée : la traque ne coûte plus un tour mort
+      {const[dx,dy]=DIRS[h.dir];const nx=h.x+dx,ny=h.y+dy;
+       if(inB(nx,ny)){convert(owner,nx,ny,heads,pending,h.dir);h.x=nx;h.y=ny;}}
+      break;
+    }
+    case 'dash':{
+      const[dx,dy]=DIRS[h.dir];const foe=owner===1?2:1;
+      for(let s=0;s<6;s++){
+        const nx=h.x+dx,ny=h.y+dy;
+        if(!inB(nx,ny)){h.dir=rot(h.dir,2);break;}
+        const wasFoe=grid[gi(nx,ny)]===foe;
+        convert(owner,nx,ny,heads,pending,h.dir);h.x=nx;h.y=ny;
+        if(wasFoe)break;
+      }
+      break;
+    }
+    case 'sprint':{h.sprint=(h.sprint||0)+1;break;}
+    case 'sense':{
+      h.dir=largestEmptyDir(h);
+      // avance de 2 cases vers l'espace ouvert : expansion optimisée, pas de tour mort
+      {const[dx,dy]=DIRS[h.dir];
+       for(let st=0;st<2;st++){const nx=h.x+dx,ny=h.y+dy;
+         if(!inB(nx,ny)){h.dir=rot(h.dir,2);break;}
+         convert(owner,nx,ny,heads,pending,h.dir);h.x=nx;h.y=ny;}}
+      break;
+    }
+    case 'retreat':{
+      h.dir=ownTerritoryDir(h,owner);
+      // avance vers son territoire ET pose un bouclier léger : repli défensif utile
+      {const[dx,dy]=DIRS[h.dir];const nx=h.x+dx,ny=h.y+dy;
+       if(inB(nx,ny)){convert(owner,nx,ny,heads,pending,h.dir);h.x=nx;h.y=ny;}}
+      // renforce les cases autour (mini-bouclier) pour tenir une position
+      for(let ox=-1;ox<=1;ox++)for(let oy=-1;oy<=1;oy++){
+        const ax=h.x+ox,ay=h.y+oy;
+        if(inB(ax,ay)&&grid[gi(ax,ay)]===owner)shieldGrid[gi(ax,ay)]=Math.max(shieldGrid[gi(ax,ay)],4);
+      }
+      break;
+    }
+    case 'corrode':{
+      const foe=owner===1?2:1;const[dx,dy]=DIRS[h.dir];
+      for(let s=1;s<=2;s++){const ax=h.x+dx*s,ay=h.y+dy*s;
+        if(inB(ax,ay)&&grid[gi(ax,ay)]===foe)convert(owner,ax,ay,heads,pending,h.dir);}
+      for(const pd of[rot(h.dir,1),rot(h.dir,-1)]){const[px,py]=DIRS[pd];
+        const ax=h.x+px,ay=h.y+py;
+        if(inB(ax,ay)&&grid[gi(ax,ay)]===foe)convert(owner,ax,ay,heads,pending,h.dir);}
+      break;
+    }
+    case 'shield':{
+      for(let ox=-1;ox<=1;ox++)for(let oy=-1;oy<=1;oy++){
+        const ax=h.x+ox,ay=h.y+oy;
+        if(inB(ax,ay)&&grid[gi(ax,ay)]===owner)shieldGrid[gi(ax,ay)]=8;
+      }
+      break;
+    }
+    case 'twin':{
+      for(const side of[rot(h.dir,1),rot(h.dir,-1)]){
+        const[sx,sy]=DIRS[side];const px=h.x+sx,py=h.y+sy;
+        if(inB(px,py)&&heads.length+pending.length<MAX_HEADS){
+          if(grid[gi(px,py)]!==owner){grid[gi(px,py)]=owner;battle.flashes.push({x:px,y:py,t:1,owner});}
+          pending.push({x:px,y:py,dir:side,idx:0});
+        }
+      }
+      break;
+    }
+    case 'burst':{
+      const foe=owner===1?2:1;
+      for(let ox=-2;ox<=2;ox++)for(let oy=-2;oy<=2;oy++){
+        if(Math.abs(ox)+Math.abs(oy)>2)continue;
+        const ax=h.x+ox,ay=h.y+oy;
+        if(inB(ax,ay)&&grid[gi(ax,ay)]===foe)convert(owner,ax,ay,heads,pending,h.dir);
+      }
+      break;
+    }
+  }
+}
+
+function stepSide(owner,heads,pattern){
+  if(!pattern||!pattern.length)return;
+  const pending=[];
+  for(let i=0;i<heads.length;i++){
+    const h=heads[i];
+    doAction(owner,h,pattern[h.idx%pattern.length],heads,pending);
+    if(h.sprint>0){
+      h.sprint--;
+      h.idx=(h.idx+1)%pattern.length;
+      doAction(owner,h,pattern[h.idx%pattern.length],heads,pending);
+    }
+    h.idx=(h.idx+1)%pattern.length;
+  }
+  for(const p of pending)heads.push(p);
+  if(heads.length>MAX_HEADS)heads.length=MAX_HEADS;
+  // Têtes bloquées (entourées de leur propre couleur) : réorientées, jamais tuées.
+  for(let i=0;i<heads.length;i++){
+    const h=heads[i];let stuck=true;
+    for(const[dx,dy]of DIRS){
+      const nx=h.x+dx,ny=h.y+dy;
+      if(inB(nx,ny)&&grid[gi(nx,ny)]!==owner){stuck=false;break;}
+    }
+    if(stuck)h.dir=(Math.random()*4)|0;
+  }
+}
+
+// Infection passive : chaque case possédée peut convertir un voisin.
+// C'est ce qui garantit qu'une case colorée propage toujours le virus,
+// même sans tête à proximité. Application simultanée pour éviter les cascades.
+const infectBorn=[];
+function infectStep(){
+  infectBorn.length=0;
+  for(let y=0;y<ROWS;y++){
+    const row=y*COLS;
+    for(let x=0;x<COLS;x++){
+      const owner=grid[row+x];
+      if(!owner||!valid[y][x])continue;
+      for(let d=0;d<4;d++){
+        const nx=x+DIRS[d][0],ny=y+DIRS[d][1];
+        if(!inB(nx,ny))continue;
+        const nk=ny*COLS+nx;
+        const t=grid[nk];
+        if(t===owner)continue;
+        if(t!==0&&shieldGrid[nk]>0)continue;
+        let rate;
+        if(t===0){rate=INFECT_RATE;}
+        else{
+          // voler une case adverse : bien plus facile si elle est FRAÎCHE (fragile)
+          rate=freshGrid[nk]>0?INFECT_STEAL_FRESH:INFECT_STEAL;
+        }
+        if(Math.random()<rate)infectBorn.push(nk,owner);
+      }
+    }
+  }
+  for(let i=0;i<infectBorn.length;i+=2){
+    const k=infectBorn[i],o=infectBorn[i+1];
+    if(grid[k]!==o){
+      grid[k]=o;
+      freshGrid[k]=FRESH_TIME; // une case volée est elle aussi fraîche/fragile
+      const bx=k%COLS,by=(k/COLS)|0;
+      if(battle.flashes.length<600)battle.flashes.push({x:bx,y:by,t:.7,owner:o});
+    }
+  }
+  for(let i=0;i<shieldGrid.length;i++)if(shieldGrid[i]>0)shieldGrid[i]--;
+  for(let i=0;i<freshGrid.length;i++)if(freshGrid[i]>0)freshGrid[i]--;
+}
+
+function tickBattle(){
+  if(!battle.running||battle.ended)return;
+  battle.timer-=TICK/1000;
+  stepSide(1,headsP,battle.pPattern);
+  stepSide(2,headsE,battle.ePattern);
+  infectStep();
+  const c=census();
+  battle.peakPlayer=Math.max(battle.peakPlayer,c.p);
+  battle.peakEnemy=Math.max(battle.peakEnemy,c.e);
+  const t=BATTLE_TIME-battle.timer;
+  battle.history.push({t:t,p:c.p,e:c.e});
+  if(battle.firstLeadLost===null&&c.e>c.p&&t>3)battle.firstLeadLost=t;
+  if(battle.timer<=0){battle.timer=0;endBattle();return;}
+  if(t>3&&(c.p===0||c.e===0)){battle.annihilation=true;endBattle();return;}
+  if(c.p+c.e>=c.total&&(c.p===0||c.e===0)){battle.annihilation=true;endBattle();return;}
+}
+
+function endBattle(){
+  if(battle.ended)return;
+  battle.ended=true;battle.running=false;
+  const c=census();
+  const pct=Math.round(c.p/c.total*100);
+  const av=D.virusList[D.selected]; // virus actif, pour créditer ses stats
+  // Arena battles don't touch campaign progression; they record W/L instead.
+  if(battle.arena){
+    if(c.p>c.e){
+      battle.winner='player';sfx.win();
+      D.arenaWins=(D.arenaWins|0)+1;
+      if(av)av.wins=(av.wins|0)+1;
+      D.dna+=30;battle.rewardGiven=30;
+      if(battle.arenaOpponent)arenaRecordWin(battle.arenaOpponent.id);
+    }else if(c.e>c.p){
+      battle.winner='enemy';sfx.lose();
+      D.arenaLosses=(D.arenaLosses|0)+1;
+      if(av)av.losses=(av.losses|0)+1;
+      D.dna+=10;battle.rewardGiven=10;
+    }else{battle.winner='draw';D.dna+=15;battle.rewardGiven=15;}
+    scroll.y=0;scroll.max=0;scroll.vel=0;
+    D.lastReport=buildBattleReport(c,battle.winner);
+    save();return;
+  }
+  if(c.p>c.e){
+    battle.winner='player';sfx.win();
+    D.scores.wins++;D.scores.streak++;
+    // victoire créditée au virus actif (+ meilleur niveau atteint)
+    if(av){av.wins=(av.wins|0)+1;av.bestLevel=Math.max(av.bestLevel|0,battle.level);}
+    D.scores.bestStreak=Math.max(D.scores.bestStreak,D.scores.streak);
+    D.scores.best=Math.max(D.scores.best,pct);
+    const en=enemyAt(battle.level-1);
+    let reward;
+    if(battle.level===D.progress){
+      // premier passage : récompense complète (×1.5) et progression
+      D.progress=Math.min(30,D.progress+1);
+      reward=Math.round(en.reward*1.5);
+    }else{
+      // niveau déjà battu : gain symbolique pour éviter le farm de virus faibles
+      reward=5;
+    }
+    D.dna+=reward;battle.rewardGiven=reward;
+  }else if(c.e>c.p){
+    battle.winner='enemy';sfx.lose();
+    D.scores.streak=0;
+    if(av)av.losses=(av.losses|0)+1;
+    D.dna+=22;battle.rewardGiven=22;
+  }else{
+    battle.winner='draw';
+    D.dna+=25;battle.rewardGiven=25;
+  }
+  scroll.y=0;scroll.max=0;scroll.vel=0;
+  // Rapport généré à CHAQUE combat de campagne (victoire, défaite ou égalité).
+  D.lastReport=buildBattleReport(c,battle.winner);
+  D.lastDefeat=(battle.winner==='enemy')?D.lastReport:D.lastDefeat; // compat
+  save();
+}
+
+/* Rapport de combat : la boucle d'apprentissage, victoire comme défaite. */
+function buildBattleReport(c,winner){
+  const hist=battle.history;
+  const en=battle.arena?{name:(battle.arenaOpponent&&battle.arenaOpponent.name)||'Opponent',pattern:battle.ePattern||[]}:enemyAt(battle.level-1);
+  const lines=[];
+  const pct=Math.round(c.p/c.total*100),epct=Math.round(c.e/c.total*100);
+  const won=winner==='player';
+
+  lines.push(`Final territory: ${pct}% against ${epct}%.`);
+
+  if(won){
+    if(battle.firstLeadLost!==null)lines.push(`You were behind at ${battle.firstLeadLost.toFixed(0)}s, then turned it around.`);
+    else lines.push('You led from start to finish.');
+  }else{
+    if(battle.firstLeadLost!==null)lines.push(`The enemy took the lead at ${battle.firstLeadLost.toFixed(0)}s.`);
+    else lines.push('You never held the lead at any point.');
+  }
+
+  const mid=hist[Math.floor(hist.length/2)];
+  if(mid){
+    const rp=mid.p,re=mid.e;
+    if(won){
+      if(rp>re*1.35)lines.push('You expanded much faster \u2014 a strong, aggressive loop.');
+      else lines.push('A close race won on the details of your loop.');
+    }else{
+      if(re>rp*1.35)lines.push('It grows much faster than you. You need more claims per loop.');
+      else if(rp>re*1.1)lines.push('You grew faster but stalled. Your loop closes in on itself.');
+      else lines.push('Growth rates were close. The detail of the loop decided it.');
+    }
+  }
+
+  const ep=en.pattern||[];
+  if(!won){
+    if(ep.includes('dash'))lines.push('It uses Dash to charge across the dish. Match its speed with Dash or Surge.');
+    else if(ep.includes('sprint'))lines.push('It Sprints to double its moves. You need more expansion per loop.');
+    else if(ep.includes('boost'))lines.push('It uses Surge, colonising in straight lines. Cut across its path.');
+    else if(ep.includes('diviser'))lines.push('It uses Split. Without your own head source you will be swarmed.');
+    else lines.push('A dense expansion loop. Pack more Advance/Surge into yours.');
+  }
+
+  const pp=battle.pPattern||[];
+  const turns=pp.filter(a=>a==='tournerG'||a==='tournerD').length;
+  const moves=pp.filter(a=>['avancer','sauter','boost','dash'].includes(a)).length;
+  if(!won&&pp.length&&turns>moves)lines.push('Your loop has more turns than moves, so you spin in place.');
+  else if(!won&&moves&&turns===0)lines.push('Your loop never turns, so you run straight into the wall.');
+  else if(won&&moves>=turns*2)lines.push('Good move-to-turn ratio keeps you expanding.');
+
+  // Pic de territoire : as-tu mené puis tout perdu ? (mécanique territoire frais)
+  const peakP=battle.peakPlayer||0;
+  const peakPct=Math.round(peakP/c.total*100);
+  if(!won&&peakPct>=55){
+    lines.push('You peaked at '+peakPct+'% then lost ground \u2014 you spread too fast and your fresh territory got eaten back. Consolidate more.');
+  }else if(won&&pct>=peakPct-3&&pct>60){
+    lines.push('You held your gains steadily \u2014 solid, consolidated expansion.');
+  }
+  // Conseil consolidation si le joueur ne fait QUE de la vitesse pure
+  const fastActions=pp.filter(a=>['dash','sauter','boost','sprint'].includes(a)).length;
+  if(!won&&fastActions>=pp.length*0.7&&pp.length>=3){
+    lines.push('Pure speed spreads thin. Mix in Advance to lock down what you take before the enemy grinds it back.');
+  }
+  // Combativité de la fin
+  const late=hist[hist.length-1],early=hist[Math.floor(hist.length*0.25)];
+  if(won&&early&&late&&early.e>early.p&&late.p>late.e){
+    lines.push('A real comeback \u2014 you were losing early and clawed it back.');
+  }
+
+  return{level:battle.level,arena:!!battle.arena,winner:winner,won:won,
+         enemy:en.name,enemyPattern:(en.pattern||[]).slice(),
+         playerPattern:pp.slice(),lines:lines,hist:hist.slice(),pct:pct,epct:epct,
+         peakPct:peakPct};
+}
+
+/* ---------------- RENDU : PRIMITIVES ---------------- */
+let T=0;
+function rr(x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+function text(s,x,y,size,color,align='left',weight='600',glow=0){
+  ctx.font=`${weight} ${size}px 'Segoe UI',system-ui,sans-serif`;
+  ctx.textAlign=align;ctx.textBaseline='middle';
+  if(glow){ctx.shadowColor=color;ctx.shadowBlur=glow;}
+  ctx.fillStyle=color;ctx.fillText(s,x,y);
+  ctx.shadowBlur=0;
+}
+function panel(x,y,w,h,accent=C.panelBorder,fill=C.panel,r=12){
+  rr(x,y,w,h,r);ctx.fillStyle=fill;ctx.fill();
+  ctx.strokeStyle=accent;ctx.lineWidth=1.5;ctx.stroke();
+}
+
+/* Boutons : registre reconstruit chaque frame */
+let hitzones=[];
+function button(x,y,w,h,label,cb,opt={}){
+  const accent=opt.accent||C.cyan;
+  const disabled=!!opt.disabled;
+  const g=ctx.createLinearGradient(x,y,x,y+h);
+  if(disabled){g.addColorStop(0,'rgba(30,42,64,.7)');g.addColorStop(1,'rgba(18,26,42,.7)');}
+  else{g.addColorStop(0,'rgba(20,52,96,.95)');g.addColorStop(1,'rgba(10,28,58,.95)');}
+  rr(x,y,w,h,10);ctx.fillStyle=g;ctx.fill();
+  ctx.strokeStyle=disabled?C.lock:accent;ctx.lineWidth=1.6;
+  if(!disabled){ctx.shadowColor=accent;ctx.shadowBlur=10;}
+  ctx.stroke();ctx.shadowBlur=0;
+  // liseré coin
+  if(!disabled){
+    ctx.strokeStyle=accent;ctx.lineWidth=2.4;ctx.beginPath();
+    ctx.moveTo(x+4,y+h-3);ctx.lineTo(x+16,y+h-3);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x+w-16,y+3);ctx.lineTo(x+w-4,y+3);ctx.stroke();
+  }
+  text(label,x+w/2,y+h/2+1,opt.size||16,disabled?C.textDim:C.text,'center','700',disabled?0:6);
+  if(!disabled)hitzones.push({x,y,w,h,cb});
+}
+function iconButton(x,y,w,h,icon,label,cb,opt={}){
+  const accent=opt.accent||C.cyan;
+  const sel=opt.selected;
+  rr(x,y,w,h,10);
+  ctx.fillStyle=sel?'rgba(63,208,255,.18)':'rgba(12,28,54,.9)';ctx.fill();
+  ctx.strokeStyle=opt.disabled?C.lock:accent;ctx.lineWidth=sel?2.2:1.4;ctx.stroke();
+  text(icon,x+w/2,y+h*0.38,opt.iconSize||22,opt.disabled?C.textDim:(opt.iconColor||accent),'center','700',sel?8:0);
+  if(label)text(label,x+w/2,y+h*0.76,9.5,C.textDim,'center','600');
+  if(!opt.disabled)hitzones.push({x,y,w,h,cb});
+}
+
+/* Fond animé : circuit + particules */
+const parts=[];
+for(let i=0;i<46;i++)parts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.13,vy:(Math.random()-.5)*.13,s:.5+Math.random()*2,a:.08+Math.random()*.22});
+
+function drawBackground(){
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#061024');g.addColorStop(.45,'#08182f');g.addColorStop(1,'#04060f');
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  // grille circuit
+  ctx.strokeStyle='rgba(63,208,255,.05)';ctx.lineWidth=1;
+  for(let x=0;x<W;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  drawCircuit();
+  for(const p of parts){
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+    ctx.fillStyle=`rgba(120,200,255,${p.a})`;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,7);ctx.fill();
+  }
+}
+
+
+/* ---------------- CIRCUIT IMPRIMÉ (fond dense) ---------------- */
+// Généré une fois, puis rejoué à l'identique : traces orthogonales avec
+// coins à 45°, pastilles de connexion et pavés de "puce".
+let circuitPaths=null,circuitPads=null,circuitChips=null;
+function buildCircuit(){
+  const rnd=(()=>{let s=1337;return()=>(s=(s*1664525+1013904223)>>>0)/4294967296;})();
+  circuitPaths=[];circuitPads=[];circuitChips=[];
+  const edges=[
+    {x:0,y:0,dx:1,dy:0},{x:W,y:0,dx:-1,dy:0},
+    {x:0,y:H,dx:1,dy:0},{x:W,y:H,dx:-1,dy:0}
+  ];
+  for(let i=0;i<40;i++){
+    const fromLeft=rnd()<.5;
+    let x=fromLeft?0:W;
+    let y=20+rnd()*(H-40);
+    const dir=fromLeft?1:-1;
+    const pts=[[x,y]];
+    let len=0;
+    const segs=3+((rnd()*4)|0);
+    for(let sgi=0;sgi<segs;sgi++){
+      const run=40+rnd()*130;
+      x+=dir*run;len+=run;
+      pts.push([x,y]);
+      if(sgi<segs-1){
+        const drop=(rnd()<.5?-1:1)*(30+rnd()*90);
+        // coin à 45° caractéristique des circuits imprimés
+        const d=Math.min(12,Math.abs(drop)/2);
+        pts.push([x+dir*d,y+Math.sign(drop)*d]);
+        y+=drop;
+        pts.push([x+dir*d,y]);
+        x+=dir*d;
+      }
+      if(x<-20||x>W+20||y<0||y>H)break;
+    }
+    circuitPaths.push(pts);
+    const last=pts[pts.length-1];
+    circuitPads.push([last[0],last[1],2+rnd()*2]);
+  }
+  // pavés de puce (rectangles pointillés en damier)
+  for(let i=0;i<8;i++){
+    circuitChips.push({
+      x:rnd()<.5?8+rnd()*40:W-70-rnd()*40,
+      y:60+rnd()*(H-160),
+      w:40+rnd()*34,h:34+rnd()*40
+    });
+  }
+}
+function drawCircuit(){
+  if(!circuitPaths)buildCircuit();
+  ctx.save();
+  // pavés de puce
+  for(const c of circuitChips){
+    ctx.fillStyle='rgba(63,208,255,.06)';
+    for(let gx=0;gx<c.w;gx+=6)for(let gy=0;gy<c.h;gy+=6){
+      if(((gx+gy)/6)%2===0)ctx.fillRect(c.x+gx,c.y+gy,3,3);
+    }
+  }
+  // traces
+  ctx.lineWidth=1.4;ctx.lineJoin='round';ctx.lineCap='round';
+  ctx.strokeStyle='rgba(63,208,255,.17)';
+  for(const pts of circuitPaths){
+    ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);
+    for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);
+    ctx.stroke();
+  }
+  // pastilles de connexion
+  for(const[px,py,pr]of circuitPads){
+    ctx.beginPath();ctx.arc(px,py,pr,0,7);
+    ctx.fillStyle='rgba(63,208,255,.30)';ctx.fill();
+    ctx.beginPath();ctx.arc(px,py,pr+2.2,0,7);
+    ctx.strokeStyle='rgba(63,208,255,.16)';ctx.lineWidth=1;ctx.stroke();
+  }
+  ctx.restore();
+}
+
+/* ---------------- VIRUS LOGO (noyau à anneaux) ---------------- */
+function drawLogoVirus(cx,cy,r,phase){
+  ctx.save();ctx.translate(cx,cy);
+  // halo
+  const halo=ctx.createRadialGradient(0,0,r*.5,0,0,r*2.1);
+  halo.addColorStop(0,'rgba(63,208,255,.30)');
+  halo.addColorStop(.5,'rgba(63,208,255,.10)');
+  halo.addColorStop(1,'rgba(63,208,255,0)');
+  ctx.fillStyle=halo;ctx.beginPath();ctx.arc(0,0,r*2.1,0,7);ctx.fill();
+
+  // pointes à bout arrondi (glycoprotéines)
+  const spikes=20;
+  ctx.save();ctx.rotate(phase*.16);
+  for(let i=0;i<spikes;i++){
+    const a=(i/spikes)*Math.PI*2;
+    const x1=Math.cos(a)*r*.94,y1=Math.sin(a)*r*.94;
+    const x2=Math.cos(a)*r*1.34,y2=Math.sin(a)*r*1.34;
+    ctx.strokeStyle='rgba(150,225,255,.9)';
+    ctx.lineWidth=r*.075;ctx.lineCap='round';
+    ctx.shadowColor='#3fd0ff';ctx.shadowBlur=8;
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    const bulb=ctx.createRadialGradient(x2-r*.03,y2-r*.03,r*.01,x2,y2,r*.115);
+    bulb.addColorStop(0,'#eafaff');bulb.addColorStop(1,'#4fb8e8');
+    ctx.beginPath();ctx.arc(x2,y2,r*.115,0,7);ctx.fillStyle=bulb;ctx.fill();
+  }
+  ctx.restore();ctx.shadowBlur=0;
+
+  // capside
+  const shell=ctx.createRadialGradient(-r*.34,-r*.38,r*.06,0,0,r);
+  shell.addColorStop(0,'#7fe6ff');shell.addColorStop(.42,'#1f9fd4');
+  shell.addColorStop(.78,'#0d5f8f');shell.addColorStop(1,'#062f4d');
+  ctx.beginPath();ctx.arc(0,0,r,0,7);ctx.fillStyle=shell;ctx.fill();
+
+  // anneaux concentriques internes (arcs partiels, façon HUD)
+  ctx.save();
+  ctx.beginPath();ctx.arc(0,0,r*.97,0,7);ctx.clip();
+  ctx.rotate(-phase*.5);
+  const rings=[[.72,.9,2.4],[.54,1.7,1.9],[.36,1.2,1.6],[.20,2.4,1.3]];
+  rings.forEach(([rad,arc,lw],i)=>{
+    ctx.beginPath();
+    ctx.arc(0,0,r*rad,i*1.3,i*1.3+arc);
+    ctx.strokeStyle=`rgba(190,245,255,${.75-i*.1})`;
+    ctx.lineWidth=lw;ctx.lineCap='round';
+    ctx.shadowColor='#8fe8ff';ctx.shadowBlur=6;ctx.stroke();
+  });
+  ctx.shadowBlur=0;
+  // segments de données
+  ctx.rotate(phase*.9);
+  for(let i=0;i<7;i++){
+    const a=(i/7)*Math.PI*2;
+    const rr0=r*(.42+((i*37)%23)/60);
+    ctx.beginPath();
+    ctx.arc(0,0,rr0,a,a+.30);
+    ctx.strokeStyle='rgba(120,255,235,.55)';ctx.lineWidth=2.4;ctx.stroke();
+  }
+  ctx.restore();
+
+  // reflet + liseré
+  const gloss=ctx.createLinearGradient(-r,-r,r*.3,r*.3);
+  gloss.addColorStop(0,'rgba(255,255,255,.34)');
+  gloss.addColorStop(.55,'rgba(255,255,255,0)');
+  ctx.beginPath();ctx.arc(0,0,r,0,7);ctx.fillStyle=gloss;ctx.fill();
+  ctx.beginPath();ctx.arc(0,0,r,0,7);
+  ctx.strokeStyle='rgba(180,240,255,.75)';ctx.lineWidth=r*.045;
+  ctx.shadowColor='#3fd0ff';ctx.shadowBlur=14;ctx.stroke();ctx.shadowBlur=0;
+  ctx.restore();
+}
+
+/* ---------------- ICÔNES VECTORIELLES ---------------- */
+// Tracées à la main, taille normalisée autour de (cx,cy) sur ~s pixels.
+function icoMap(cx,cy,s,col){
+  ctx.save();ctx.translate(cx,cy);ctx.scale(s/24,s/24);
+  ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=1.7;ctx.lineJoin='round';
+  ctx.beginPath();
+  ctx.moveTo(-10,-7);ctx.lineTo(-3,-10);ctx.lineTo(4,-6);ctx.lineTo(11,-9);
+  ctx.lineTo(11,7);ctx.lineTo(4,10);ctx.lineTo(-3,6);ctx.lineTo(-10,9);
+  ctx.closePath();ctx.stroke();
+  ctx.globalAlpha=.22;ctx.fill();ctx.globalAlpha=1;
+  ctx.beginPath();ctx.moveTo(-3,-10);ctx.lineTo(-3,6);ctx.moveTo(4,-6);ctx.lineTo(4,10);
+  ctx.lineWidth=1.2;ctx.stroke();
+  // marqueur
+  ctx.beginPath();ctx.arc(0.5,-2,2.6,0,7);ctx.fill();
+  ctx.restore();
+}
+function icoTube(cx,cy,s,col){
+  ctx.save();ctx.translate(cx,cy);ctx.rotate(-.42);ctx.scale(s/24,s/24);
+  ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=1.7;ctx.lineJoin='round';
+  ctx.beginPath();
+  ctx.moveTo(-4.5,-11);ctx.lineTo(-4.5,7);
+  ctx.quadraticCurveTo(-4.5,11.5,0,11.5);
+  ctx.quadraticCurveTo(4.5,11.5,4.5,7);
+  ctx.lineTo(4.5,-11);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(-7,-11);ctx.lineTo(7,-11);ctx.lineWidth=2.1;ctx.stroke();
+  // liquide
+  ctx.globalAlpha=.34;
+  ctx.beginPath();
+  ctx.moveTo(-4.5,1);ctx.lineTo(4.5,1);ctx.lineTo(4.5,7);
+  ctx.quadraticCurveTo(4.5,10.4,0,10.4);
+  ctx.quadraticCurveTo(-4.5,10.4,-4.5,7);
+  ctx.closePath();ctx.fill();ctx.globalAlpha=1;
+  // bulles
+  ctx.beginPath();ctx.arc(-1.4,4,1.25,0,7);ctx.fill();
+  ctx.beginPath();ctx.arc(2,6.6,.95,0,7);ctx.fill();
+  ctx.restore();
+}
+function icoScope(cx,cy,s,col){
+  ctx.save();ctx.translate(cx,cy);ctx.scale(s/24,s/24);
+  ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=1.7;
+  ctx.lineJoin='round';ctx.lineCap='round';
+  // socle
+  ctx.beginPath();ctx.moveTo(-10,11);ctx.lineTo(10,11);ctx.lineWidth=2.2;ctx.stroke();
+  ctx.beginPath();ctx.moveTo(-6.5,11);ctx.lineTo(-2,4);ctx.lineWidth=1.7;ctx.stroke();
+  // platine
+  ctx.beginPath();ctx.moveTo(-7,4);ctx.lineTo(3,4);ctx.stroke();
+  // bras + tube
+  ctx.beginPath();ctx.moveTo(1,4);
+  ctx.quadraticCurveTo(9,1,6.5,-6);ctx.stroke();
+  ctx.save();ctx.translate(3.6,-8.6);ctx.rotate(.42);
+  ctx.beginPath();ctx.rect(-2.6,-4.4,5.2,9);ctx.stroke();
+  ctx.globalAlpha=.25;ctx.fill();ctx.globalAlpha=1;
+  ctx.restore();
+  // oculaire
+  ctx.beginPath();ctx.arc(-0.2,-11.4,1.9,0,7);ctx.fill();
+  ctx.restore();
+}
+function icoTrophy(cx,cy,s,col){
+  ctx.save();ctx.translate(cx,cy);ctx.scale(s/24,s/24);
+  ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=1.7;ctx.lineJoin='round';
+  ctx.beginPath();
+  ctx.moveTo(-6.5,-9);ctx.lineTo(6.5,-9);ctx.lineTo(6.5,-3);
+  ctx.quadraticCurveTo(6.5,4,0,4.6);
+  ctx.quadraticCurveTo(-6.5,4,-6.5,-3);
+  ctx.closePath();ctx.stroke();
+  ctx.globalAlpha=.22;ctx.fill();ctx.globalAlpha=1;
+  // anses
+  ctx.beginPath();ctx.moveTo(-6.5,-7.5);ctx.quadraticCurveTo(-11,-6.5,-8,-1.5);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(6.5,-7.5);ctx.quadraticCurveTo(11,-6.5,8,-1.5);ctx.stroke();
+  // pied
+  ctx.beginPath();ctx.moveTo(0,4.6);ctx.lineTo(0,8);ctx.lineWidth=2;ctx.stroke();
+  ctx.beginPath();ctx.moveTo(-5,10.5);ctx.lineTo(5,10.5);ctx.lineWidth=2.3;ctx.stroke();
+  ctx.beginPath();ctx.moveTo(-3,8);ctx.lineTo(3,8);ctx.lineWidth=1.8;ctx.stroke();
+  ctx.restore();
+}
+function icoDna(cx,cy,s,col){
+  ctx.save();ctx.translate(cx,cy);ctx.scale(s/24,s/24);
+  ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=1.7;ctx.lineCap='round';
+  for(const dir of[1,-1]){
+    ctx.beginPath();
+    for(let i=0;i<=22;i++){
+      const t=i/22,yy=-10+t*20;
+      const xx=Math.sin(t*Math.PI*2)*5.4*dir;
+      i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy);
+    }
+    ctx.stroke();
+  }
+  ctx.lineWidth=1.25;
+  for(let i=1;i<=4;i++){
+    const t=i/5,yy=-10+t*20;
+    const xx=Math.sin(t*Math.PI*2)*5.4;
+    ctx.beginPath();ctx.moveTo(-xx,yy);ctx.lineTo(xx,yy);ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// Petit compteur ADN réutilisable : hélice violette + nombre.
+function dnaLabel(x,y,amount,size,align){
+  size=size||13;align=align||'left';
+  const iconS=size*1.2;
+  ctx.font=(size)+"px 'Segoe UI',system-ui,sans-serif";
+  const numStr=''+(amount==null||(typeof amount==='number'&&isNaN(amount))?0:amount);
+  const numW=ctx.measureText(numStr).width;
+  let ix;
+  if(align==='left'){ix=x+iconS*0.4;}
+  else if(align==='right'){ix=x-numW-iconS*0.55;}
+  else{ix=x-(numW+iconS*0.9)/2+iconS*0.4;}
+  icoDna(ix,y,iconS,C.dna);
+  text(numStr,ix+iconS*0.55,y,size,C.dna,'left','800',5);
+}
+
+function icoChevron(cx,cy,s,col){
+  ctx.save();ctx.translate(cx,cy);ctx.scale(s/24,s/24);
+  ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineJoin='round';
+  ctx.beginPath();
+  ctx.moveTo(0,-10.5);ctx.lineTo(8,-2);ctx.lineTo(3.4,-2);ctx.lineTo(3.4,4);
+  ctx.lineTo(-3.4,4);ctx.lineTo(-3.4,-2);ctx.lineTo(-8,-2);ctx.closePath();
+  ctx.globalAlpha=.30;ctx.fill();ctx.globalAlpha=1;
+  ctx.lineWidth=1.7;ctx.stroke();
+  ctx.beginPath();ctx.moveTo(-6,8);ctx.lineTo(6,8);ctx.lineWidth=2.1;ctx.stroke();
+  ctx.restore();
+}
+function icoCrown(cx,cy,s,col){
+  ctx.save();ctx.translate(cx,cy);ctx.scale(s/24,s/24);
+  ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineJoin='round';ctx.lineWidth=1.7;
+  ctx.beginPath();
+  ctx.moveTo(-9.5,6);ctx.lineTo(-8,-7);ctx.lineTo(-3.4,-1.4);ctx.lineTo(0,-8.6);
+  ctx.lineTo(3.4,-1.4);ctx.lineTo(8,-7);ctx.lineTo(9.5,6);ctx.closePath();
+  ctx.globalAlpha=.24;ctx.fill();ctx.globalAlpha=1;ctx.stroke();
+  ctx.beginPath();ctx.moveTo(-9.5,9);ctx.lineTo(9.5,9);ctx.lineWidth=2.1;ctx.stroke();
+  ctx.restore();
+}
+function icoFolder(cx,cy,s,col){
+  ctx.save();ctx.translate(cx,cy);ctx.scale(s/24,s/24);
+  ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=1.7;ctx.lineJoin='round';
+  // chemise
+  ctx.beginPath();
+  ctx.moveTo(-10,-7.5);ctx.lineTo(-2.5,-7.5);ctx.lineTo(-0.4,-4.6);
+  ctx.lineTo(10,-4.6);ctx.lineTo(10,9);ctx.lineTo(-10,9);
+  ctx.closePath();ctx.stroke();
+  ctx.globalAlpha=.20;ctx.fill();ctx.globalAlpha=1;
+  // feuille dépassant
+  ctx.beginPath();
+  ctx.moveTo(-6,-4.6);ctx.lineTo(-6,-9.6);ctx.lineTo(6,-9.6);ctx.lineTo(6,-4.6);
+  ctx.lineWidth=1.4;ctx.stroke();
+  // lignes d'étiquette
+  ctx.lineWidth=1.25;
+  ctx.beginPath();ctx.moveTo(-5.6,1.2);ctx.lineTo(2.2,1.2);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(-5.6,4.4);ctx.lineTo(5.4,4.4);ctx.stroke();
+  ctx.restore();
+}
+function icoArena(cx,cy,s,col){
+  ctx.save();ctx.translate(cx,cy);ctx.scale(s/24,s/24);
+  ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=1.7;
+  ctx.beginPath();ctx.arc(0,0,9,0,7);ctx.stroke();
+  ctx.beginPath();ctx.arc(0,0,4,0,7);ctx.stroke();
+  ctx.lineWidth=1.4;
+  for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){
+    ctx.beginPath();ctx.moveTo(dx*9,dy*9);ctx.lineTo(dx*13,dy*13);ctx.stroke();
+  }
+  ctx.beginPath();ctx.arc(0,0,1.6,0,7);ctx.fill();
+  ctx.restore();
+}
+const MENU_ICONS={map:icoMap,folder:icoFolder,arena:icoArena,tube:icoTube,scope:icoScope,trophy:icoTrophy,
+                  dna:icoDna,chevron:icoChevron,crown:icoCrown};
+
+/* ---------------- BOUTON À ICÔNE (icône | libellé) ---------------- */
+function menuButton(x,y,w,h,iconKey,label,cb,opt={}){
+  const accent=opt.dim?C.lock:(opt.accent||C.cyan);
+  if(opt.dim)ctx.globalAlpha=0.4;
+  // corps
+  const g=ctx.createLinearGradient(x,y,x,y+h);
+  g.addColorStop(0,'rgba(18,52,96,.92)');
+  g.addColorStop(.5,'rgba(11,34,66,.92)');
+  g.addColorStop(1,'rgba(8,24,50,.92)');
+  rr(x,y,w,h,9);ctx.fillStyle=g;ctx.fill();
+  // double liseré
+  ctx.strokeStyle=accent;ctx.lineWidth=1.8;
+  ctx.shadowColor=accent;ctx.shadowBlur=13;ctx.stroke();ctx.shadowBlur=0;
+  rr(x+3.5,y+3.5,w-7,h-7,6.5);
+  ctx.strokeStyle='rgba(63,208,255,.28)';ctx.lineWidth=1;ctx.stroke();
+  // icône
+  const fn=MENU_ICONS[iconKey];
+  const iconS=opt.iconSize||(h>52?30:26);
+  if(fn){
+    ctx.shadowColor=accent;ctx.shadowBlur=8;
+    fn(x+38,y+h/2,iconS,'#dff4ff');
+    ctx.shadowBlur=0;
+  }
+  // séparateur vertical
+  ctx.beginPath();
+  ctx.moveTo(x+62,y+12);ctx.lineTo(x+62,y+h-12);
+  ctx.strokeStyle='rgba(63,208,255,.45)';ctx.lineWidth=1.3;ctx.stroke();
+  // libellé
+  text(label,x+62+(w-62)/2,y+h/2+1,opt.size||17,'#eaf6ff','center','800',9);
+  hitzones.push({x,y,w,h,cb});
+  ctx.globalAlpha=1;
+}
+
+
+/* ================= VIRUS APPEARANCE ================= */
+// A strain's look is data, so it can be saved, randomised and drawn anywhere.
+const SPIKE_SHAPES=['round','triangle','tentacle','club','crystal','hook','none'];
+const CORE_STYLES=['rings','nucleus','spiral','hex','cells','void'];
+const BODY_STYLES=['smooth','ridged','segmented','crystalline','porous'];
+
+const PALETTE=[
+  {id:'cyan',   name:'Cyan',    main:'#3fd0ff',glow:'#8fe8ff',deep:'#062f4d'},
+  {id:'azure',  name:'Azure',   main:'#5b8cff',glow:'#a8c4ff',deep:'#0b1f52'},
+  {id:'mint',   name:'Mint',    main:'#4dffa6',glow:'#a8ffd4',deep:'#053d29'},
+  {id:'gold',   name:'Gold',    main:'#f5c542',glow:'#ffe9a3',deep:'#4a3407'},
+  {id:'violet', name:'Violet',  main:'#c46bff',glow:'#e2b6ff',deep:'#33094d'},
+  {id:'rose',   name:'Rose',    main:'#ff6b9d',glow:'#ffb8d0',deep:'#4d0a26'},
+  {id:'amber',  name:'Amber',   main:'#ff8f4d',glow:'#ffc9a3',deep:'#4d2205'},
+  {id:'crimson',name:'Crimson', main:'#ff4d4d',glow:'#ffa8a8',deep:'#4d0808'},
+  {id:'lime',   name:'Lime',    main:'#b6ff4d',glow:'#dcffa8',deep:'#2c4d05'},
+  {id:'ice',    name:'Ice',     main:'#c8f0ff',glow:'#ffffff',deep:'#1c4457'},
+  {id:'teal',   name:'Teal',    main:'#2fd6c4',glow:'#9bf2e8',deep:'#04413b'},
+  {id:'magenta',name:'Magenta', main:'#ff4dd6',glow:'#ffa8ee',deep:'#4d0840'}
+];
+function paletteById(id){return PALETTE.find(p=>p.id===id)||PALETTE[0];}
+
+function defaultLook(i){
+  return{
+    palette:PALETTE[i%PALETTE.length].id,
+    accent:PALETTE[(i+4)%PALETTE.length].id,
+    spike:'round',spikeCount:14,
+    core:'rings',body:'smooth'
+  };
+}
+function randomLook(){
+  const R=a=>a[(Math.random()*a.length)|0];
+  return{
+    palette:R(PALETTE).id,accent:R(PALETTE).id,
+    spike:R(SPIKE_SHAPES),spikeCount:8+((Math.random()*14)|0),
+    core:R(CORE_STYLES),body:R(BODY_STYLES)
+  };
+}
+function normaliseLook(l,i){
+  const d=defaultLook(i||0);
+  if(!l||typeof l!=='object')return d;
+  return{
+    palette:PALETTE.some(p=>p.id===l.palette)?l.palette:d.palette,
+    accent:PALETTE.some(p=>p.id===l.accent)?l.accent:d.accent,
+    spike:SPIKE_SHAPES.includes(l.spike)?l.spike:d.spike,
+    spikeCount:Math.max(6,Math.min(22,l.spikeCount|0||d.spikeCount)),
+    core:CORE_STYLES.includes(l.core)?l.core:d.core,
+    body:BODY_STYLES.includes(l.body)?l.body:d.body
+  };
+}
+
+// Draws a strain from its look data. Used for the logo, lists, editor and battles.
+function drawStrain(cx,cy,r,look,phase,opt={}){
+  look=normaliseLook(look,0);
+  const P=paletteById(look.palette),A=paletteById(look.accent);
+  const detail=opt.detail!==false;
+  // Le r demandé est le rayon TOTAL, pointes comprises. Les pointes atteignent
+  // jusqu'à ~1.5x le rayon du corps ; on réduit donc le corps pour que
+  // l'ensemble tienne dans r et ne déborde jamais des cadres.
+  const SPIKE_REACH=1.55;
+  const rOuter=r;
+  if(look.spike!=='none')r=r/SPIKE_REACH;
+  ctx.save();ctx.translate(cx,cy);
+
+  if(opt.halo!==false){
+    const halo=ctx.createRadialGradient(0,0,r*.5,0,0,r*2.05);
+    halo.addColorStop(0,P.main+'4d');halo.addColorStop(.5,P.main+'1a');
+    halo.addColorStop(1,P.main+'00');
+    ctx.fillStyle=halo;ctx.beginPath();ctx.arc(0,0,r*2.05,0,7);ctx.fill();
+  }
+
+  // --- spikes ---
+  if(look.spike!=='none'){
+    ctx.save();ctx.rotate(phase*.16);
+    const n=look.spikeCount;
+    for(let i=0;i<n;i++){
+      const a=(i/n)*Math.PI*2;
+      const ca=Math.cos(a),sa=Math.sin(a);
+      const x1=ca*r*.94,y1=sa*r*.94;
+      const len=r*(look.spike==='tentacle'?1.46:1.32);
+      const x2=ca*len,y2=sa*len;
+      ctx.strokeStyle=P.glow;ctx.fillStyle=P.glow;
+      ctx.lineWidth=r*.075;ctx.lineCap='round';
+      if(detail){ctx.shadowColor=P.main;ctx.shadowBlur=7;}
+      switch(look.spike){
+        case 'round':
+          ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+          ctx.beginPath();ctx.arc(x2,y2,r*.115,0,7);ctx.fill();
+          break;
+        case 'triangle':{
+          ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+          const pa=a+Math.PI/2,px=Math.cos(pa)*r*.10,py=Math.sin(pa)*r*.10;
+          ctx.beginPath();
+          ctx.moveTo(ca*len*1.16,sa*len*1.16);
+          ctx.lineTo(x2+px,y2+py);ctx.lineTo(x2-px,y2-py);
+          ctx.closePath();ctx.fill();
+          break;}
+        case 'tentacle':{
+          ctx.beginPath();ctx.moveTo(x1,y1);
+          const wob=Math.sin(phase*2+i)*r*.16;
+          const pa=a+Math.PI/2;
+          ctx.quadraticCurveTo(
+            ca*len*.62+Math.cos(pa)*wob, sa*len*.62+Math.sin(pa)*wob, x2,y2);
+          ctx.lineWidth=r*.055;ctx.stroke();
+          ctx.beginPath();ctx.arc(x2,y2,r*.07,0,7);ctx.fill();
+          break;}
+        case 'club':
+          ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);
+          ctx.lineWidth=r*.05;ctx.stroke();
+          ctx.save();ctx.translate(x2,y2);ctx.rotate(a);
+          ctx.beginPath();ctx.ellipse(0,0,r*.15,r*.09,0,0,7);ctx.fill();
+          ctx.restore();
+          break;
+        case 'crystal':{
+          const pa=a+Math.PI/2,px=Math.cos(pa)*r*.075,py=Math.sin(pa)*r*.075;
+          ctx.beginPath();
+          ctx.moveTo(x1+px,y1+py);ctx.lineTo(ca*len*1.1,sa*len*1.1);
+          ctx.lineTo(x1-px,y1-py);ctx.closePath();
+          ctx.fill();
+          break;}
+        case 'hook':{
+          ctx.beginPath();ctx.moveTo(x1,y1);
+          const pa=a+Math.PI/2;
+          ctx.quadraticCurveTo(x2,y2,x2+Math.cos(pa)*r*.20,y2+Math.sin(pa)*r*.20);
+          ctx.lineWidth=r*.06;ctx.stroke();
+          break;}
+      }
+      ctx.shadowBlur=0;
+    }
+    ctx.restore();
+  }
+  ctx.shadowBlur=0;
+
+  // --- body ---
+  const shell=ctx.createRadialGradient(-r*.34,-r*.38,r*.06,0,0,r);
+  shell.addColorStop(0,P.glow);shell.addColorStop(.42,P.main);
+  shell.addColorStop(.80,P.deep);shell.addColorStop(1,'#03121f');
+  ctx.beginPath();ctx.arc(0,0,r,0,7);ctx.fillStyle=shell;ctx.fill();
+
+  if(detail){
+    ctx.save();ctx.beginPath();ctx.arc(0,0,r*.99,0,7);ctx.clip();
+    switch(look.body){
+      case 'ridged':
+        ctx.strokeStyle='rgba(255,255,255,.13)';ctx.lineWidth=r*.05;
+        for(let i=-4;i<=4;i++){
+          ctx.beginPath();ctx.arc(0,r*i*.30,r*.95,0,Math.PI);ctx.stroke();
+        }
+        break;
+      case 'segmented':
+        ctx.strokeStyle='rgba(0,0,0,.30)';ctx.lineWidth=r*.045;
+        for(let i=0;i<6;i++){
+          const a=(i/6)*Math.PI;
+          ctx.beginPath();
+          ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r);
+          ctx.lineTo(-Math.cos(a)*r,-Math.sin(a)*r);ctx.stroke();
+        }
+        break;
+      case 'crystalline':
+        ctx.strokeStyle='rgba(255,255,255,.16)';ctx.lineWidth=r*.035;
+        for(let i=0;i<7;i++){
+          const a=(i/7)*Math.PI*2+phase*.1;
+          ctx.beginPath();ctx.moveTo(0,0);
+          ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r);ctx.stroke();
+        }
+        break;
+      case 'porous':
+        ctx.fillStyle='rgba(0,0,0,.24)';
+        for(let i=0;i<11;i++){
+          const a=(i*2.399),rr0=r*.30+((i*29)%50)/100*r*.6;
+          ctx.beginPath();
+          ctx.arc(Math.cos(a)*rr0,Math.sin(a)*rr0,r*(.05+((i*17)%9)/100),0,7);
+          ctx.fill();
+        }
+        break;
+    }
+    ctx.restore();
+  }
+
+  // --- core ---
+  if(detail&&look.core!=='void'){
+    ctx.save();ctx.beginPath();ctx.arc(0,0,r*.97,0,7);ctx.clip();
+    ctx.rotate(-phase*.5);
+    switch(look.core){
+      case 'rings':{
+        const rings=[[.72,.9,2.4],[.54,1.7,1.9],[.36,1.2,1.6],[.20,2.4,1.3]];
+        rings.forEach(([rad,arc,lw],i)=>{
+          ctx.beginPath();ctx.arc(0,0,r*rad,i*1.3,i*1.3+arc);
+          ctx.strokeStyle=A.glow+'c0';ctx.lineWidth=lw*(r/54);
+          ctx.lineCap='round';ctx.shadowColor=A.main;ctx.shadowBlur=6;ctx.stroke();
+        });
+        ctx.shadowBlur=0;ctx.rotate(phase*.9);
+        for(let i=0;i<7;i++){
+          const a=(i/7)*Math.PI*2,rr0=r*(.42+((i*37)%23)/60);
+          ctx.beginPath();ctx.arc(0,0,rr0,a,a+.30);
+          ctx.strokeStyle=A.main+'8c';ctx.lineWidth=2.4*(r/54);ctx.stroke();
+        }
+        break;}
+      case 'nucleus':{
+        const ng=ctx.createRadialGradient(0,0,r*.05,0,0,r*.5);
+        ng.addColorStop(0,A.glow);ng.addColorStop(1,A.main+'00');
+        ctx.beginPath();ctx.arc(0,0,r*.5,0,7);ctx.fillStyle=ng;ctx.fill();
+        ctx.fillStyle=A.glow+'99';
+        for(let i=0;i<5;i++){
+          const a=(i/5)*Math.PI*2+phase*.6;
+          ctx.beginPath();ctx.arc(Math.cos(a)*r*.30,Math.sin(a)*r*.30,r*.075,0,7);ctx.fill();
+        }
+        break;}
+      case 'spiral':{
+        ctx.strokeStyle=A.glow+'cc';ctx.lineWidth=2.2*(r/54);ctx.lineCap='round';
+        ctx.shadowColor=A.main;ctx.shadowBlur=6;
+        for(const dir of[1,-1]){
+          ctx.beginPath();
+          for(let i=0;i<=44;i++){
+            const t=i/44,ang=t*Math.PI*3*dir+phase*.5,rad=r*.10+t*r*.66;
+            const xx=Math.cos(ang)*rad,yy=Math.sin(ang)*rad;
+            i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy);
+          }
+          ctx.stroke();
+        }
+        ctx.shadowBlur=0;break;}
+      case 'hex':{
+        ctx.strokeStyle=A.glow+'aa';ctx.lineWidth=1.8*(r/54);
+        for(const rad of[r*.28,r*.50,r*.72]){
+          ctx.beginPath();
+          for(let i=0;i<=6;i++){
+            const a=(i/6)*Math.PI*2+phase*.3;
+            const xx=Math.cos(a)*rad,yy=Math.sin(a)*rad;
+            i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy);
+          }
+          ctx.stroke();
+        }
+        break;}
+      case 'cells':{
+        ctx.fillStyle=A.main+'70';ctx.strokeStyle=A.glow+'99';ctx.lineWidth=1.2*(r/54);
+        for(let i=0;i<8;i++){
+          const a=(i*2.399)+phase*.25,rad=r*.18+((i*31)%40)/100*r*.5;
+          const xx=Math.cos(a)*rad,yy=Math.sin(a)*rad;
+          ctx.beginPath();ctx.arc(xx,yy,r*(.09+((i*13)%7)/100),0,7);
+          ctx.fill();ctx.stroke();
+        }
+        break;}
+    }
+    ctx.restore();
+  }
+
+  // gloss + rim
+  const gloss=ctx.createLinearGradient(-r,-r,r*.3,r*.3);
+  gloss.addColorStop(0,'rgba(255,255,255,.32)');
+  gloss.addColorStop(.55,'rgba(255,255,255,0)');
+  ctx.beginPath();ctx.arc(0,0,r,0,7);ctx.fillStyle=gloss;ctx.fill();
+  ctx.beginPath();ctx.arc(0,0,r,0,7);
+  ctx.strokeStyle=P.glow+'bf';ctx.lineWidth=Math.max(1,r*.045);
+  if(detail){ctx.shadowColor=P.main;ctx.shadowBlur=12;}
+  ctx.stroke();ctx.shadowBlur=0;
+  ctx.restore();
+}
+
+/* ================= ON-CANVAS KEYBOARD ================= */
+// Browsers block prompt() on mobile and in sandboxed frames, so text entry
+// is handled in-canvas and always works.
+let keyboard=null;
+const KB_ROWS=['QWERTYUIOP','ASDFGHJKL','ZXCVBNM'];
+const KB_NUMS='1234567890';
+const KB_SYM_ROWS=['@#&_-+()','/*"\':;!?',',.=%$'];
+function openKeyboard(title,initial,maxLen,onConfirm){
+  keyboard={title,value:(initial||'').slice(0,maxLen),max:maxLen,onConfirm,symbols:false,lower:false,blink:0};
+}
+function drawKeyboard(dt){
+  if(!keyboard)return;
+  keyboard.blink+=dt;
+  ctx.fillStyle='rgba(2,6,14,.94)';ctx.fillRect(0,0,W,H);
+  const kx=10,kw=W-20;
+  const panelY=150;
+  panel(kx,panelY,kw,92,C.cyan,'rgba(6,18,38,.98)',12);
+  text(keyboard.title,W/2,panelY+22,13,C.textDim,'center','700');
+  rr(kx+14,panelY+38,kw-28,40,8);
+  ctx.fillStyle='rgba(4,12,26,.95)';ctx.fill();
+  ctx.strokeStyle=C.cyan;ctx.lineWidth=1.4;ctx.stroke();
+  const shown=keyboard.value||'';
+  text(shown,kx+26,panelY+59,17,'#eaf6ff','left','700');
+  if((keyboard.blink%1)<0.55){
+    ctx.font="700 17px 'Segoe UI',system-ui,sans-serif";
+    const wdt=ctx.measureText(shown).width;
+    ctx.fillStyle=C.cyan;ctx.fillRect(kx+27+wdt,panelY+48,2,22);
+  }
+  text(shown.length+'/'+keyboard.max,kx+kw-26,panelY+59,10,C.textDim,'right','600');
+  const gap=4,kh=40;
+  let ky=panelY+104;
+  const drawKeyRow=(chars)=>{
+    const n=chars.length;
+    const kwid=(kw-(n-1)*gap)/n;
+    for(let i=0;i<n;i++){
+      const ch=chars[i];
+      const bx=kx+i*(kwid+gap);
+      rr(bx,ky,kwid,kh,6);
+      ctx.fillStyle='rgba(16,42,78,.95)';ctx.fill();
+      ctx.strokeStyle='rgba(63,208,255,.4)';ctx.lineWidth=1.1;ctx.stroke();
+      const label=(/[A-Z]/.test(ch)&&keyboard.lower)?ch.toLowerCase():ch;
+      text(label,bx+kwid/2,ky+kh/2,15,'#dff4ff','center','700');
+      hitzones.push({x:bx,y:ky,w:kwid,h:kh,cb:()=>{
+        if(keyboard.value.length<keyboard.max){keyboard.value+=label;sfx.place();}else sfx.err();
+      }});
+    }
+    ky+=kh+gap;
+  };
+  drawKeyRow(KB_NUMS.split(''));
+  if(keyboard.symbols){
+    KB_SYM_ROWS.forEach(row=>drawKeyRow(row.split('')));
+    // rangée vide pour aligner la hauteur avec le mode lettres (3 rangées)
+  }else{
+    KB_ROWS.forEach(row=>drawKeyRow(row.split('')));
+  }
+  const cw=(kw-3*gap);
+  const caseW=cw*0.19,symW=cw*0.19,spaceW=cw*0.40,delW=cw*0.22;
+  let cxp=kx;
+  // Bascule Maj/min (uniquement en mode lettres)
+  rr(cxp,ky,caseW,kh,6);
+  ctx.fillStyle=keyboard.lower?'rgba(16,42,78,.95)':'rgba(63,208,255,.30)';ctx.fill();
+  ctx.strokeStyle='rgba(63,208,255,.4)';ctx.lineWidth=1.1;ctx.stroke();
+  text(keyboard.lower?'abc':'ABC',cxp+caseW/2,ky+kh/2,11,keyboard.lower?'#dff4ff':C.cyan,'center','800');
+  hitzones.push({x:cxp,y:ky,w:caseW,h:kh,cb:()=>{keyboard.lower=!keyboard.lower;sfx.click();}});
+  cxp+=caseW+gap;
+  // Bascule lettres <-> symboles
+  rr(cxp,ky,symW,kh,6);
+  ctx.fillStyle=keyboard.symbols?'rgba(63,208,255,.30)':'rgba(16,42,78,.95)';ctx.fill();
+  ctx.strokeStyle='rgba(63,208,255,.4)';ctx.lineWidth=1.1;ctx.stroke();
+  text(keyboard.symbols?'ABC':'#+=',cxp+symW/2,ky+kh/2,12,keyboard.symbols?C.cyan:'#dff4ff','center','800');
+  hitzones.push({x:cxp,y:ky,w:symW,h:kh,cb:()=>{keyboard.symbols=!keyboard.symbols;sfx.click();}});
+  cxp+=symW+gap;
+  rr(cxp,ky,spaceW,kh,6);ctx.fillStyle='rgba(16,42,78,.95)';ctx.fill();
+  ctx.strokeStyle='rgba(63,208,255,.4)';ctx.lineWidth=1.1;ctx.stroke();
+  text('SPACE',cxp+spaceW/2,ky+kh/2,11,'#dff4ff','center','700');
+  hitzones.push({x:cxp,y:ky,w:spaceW,h:kh,cb:()=>{
+    if(keyboard.value.length<keyboard.max&&keyboard.value.length>0&&keyboard.value.slice(-1)!==' '){keyboard.value+=' ';sfx.place();}
+  }});
+  cxp+=spaceW+gap;
+  rr(cxp,ky,delW,kh,6);ctx.fillStyle='rgba(78,26,36,.95)';ctx.fill();
+  ctx.strokeStyle='rgba(255,120,120,.5)';ctx.lineWidth=1.1;ctx.stroke();
+  text('DEL',cxp+delW/2,ky+kh/2,12,'#ffd4d4','center','700');
+  hitzones.push({x:cxp,y:ky,w:delW,h:kh,cb:()=>{keyboard.value=keyboard.value.slice(0,-1);sfx.del();}});
+  ky+=kh+12;
+  const half=(kw-gap)/2;
+  button(kx,ky,half,46,'CANCEL',()=>{keyboard=null;},{accent:C.lock,size:14});
+  const ok=keyboard.value.trim().length>0;
+  button(kx+half+gap,ky,half,46,'CONFIRM',()=>{
+    const v=keyboard.value.trim();
+    if(!v){sfx.err();return;}
+    const cb=keyboard.onConfirm;keyboard=null;cb(v);
+  },{accent:ok?'#4dffa6':C.lock,disabled:!ok,size:14});
+}
+/* ================= CONFIRM DIALOG ================= */
+let dialog=null;
+function openDialog(title,body,confirmLabel,onConfirm){
+  dialog={title,body,confirmLabel,onConfirm};
+}
+function drawDialog(){
+  if(!dialog)return;
+  ctx.fillStyle='rgba(2,6,14,.88)';ctx.fillRect(0,0,W,H);
+  const dw=W-64,dh=200,dx=32,dy=H/2-dh/2;
+  panel(dx,dy,dw,dh,C.gold,'rgba(6,18,38,.98)',14);
+  text(dialog.title,W/2,dy+34,17,C.gold,'center','800',8);
+  ctx.font="500 12px 'Segoe UI',system-ui,sans-serif";
+  const words=dialog.body.split(' ');let line='',ly=dy+70;
+  for(const wd of words){
+    if(ctx.measureText(line+wd).width>dw-48){
+      text(line,W/2,ly,12,C.text,'center','500');line=wd+' ';ly+=18;
+    }else line+=wd+' ';
+  }
+  if(line)text(line,W/2,ly,12,C.text,'center','500');
+  const bw2=(dw-48)/2;
+  button(dx+16,dy+dh-58,bw2,42,'CANCEL',()=>{dialog=null;},{accent:C.lock,size:13});
+  button(dx+24+bw2,dy+dh-58,bw2,42,dialog.confirmLabel,()=>{
+    const cb=dialog.onConfirm;dialog=null;cb();
+  },{accent:C.gold,size:13});
+}
+
+/* Virus décoratif */
+function drawVirus(cx,cy,r,color,spikes=12,phase=0){
+  ctx.save();ctx.translate(cx,cy);ctx.rotate(phase*.25);
+  ctx.strokeStyle=color;ctx.lineWidth=Math.max(1.5,r*.09);
+  ctx.shadowColor=color;ctx.shadowBlur=12;
+  for(let i=0;i<spikes;i++){
+    const a=(i/spikes)*Math.PI*2;
+    const x1=Math.cos(a)*r,y1=Math.sin(a)*r;
+    const x2=Math.cos(a)*r*1.42,y2=Math.sin(a)*r*1.42;
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    ctx.beginPath();ctx.arc(x2,y2,r*.13,0,7);ctx.fillStyle=color;ctx.fill();
+  }
+  const g=ctx.createRadialGradient(-r*.3,-r*.3,r*.1,0,0,r);
+  g.addColorStop(0,color);g.addColorStop(1,'rgba(0,0,0,.55)');
+  ctx.beginPath();ctx.arc(0,0,r,0,7);ctx.fillStyle=g;ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=r*.07;
+  ctx.beginPath();ctx.arc(0,0,r,0,7);ctx.stroke();
+  // capsomères
+  ctx.fillStyle='rgba(255,255,255,.18)';
+  for(let i=0;i<6;i++){
+    const a=(i/6)*Math.PI*2+phase*.4;
+    ctx.beginPath();ctx.arc(Math.cos(a)*r*.5,Math.sin(a)*r*.5,r*.14,0,7);ctx.fill();
+  }
+  ctx.restore();
+}
+
+/* Châssis métallique autour de la boîte de Petri */
+function drawChassis(){
+  const R=arenaR;
+  // anneau externe
+  ctx.save();
+  const g=ctx.createLinearGradient(arenaCX-R,arenaCY-R,arenaCX+R,arenaCY+R);
+  g.addColorStop(0,'#1c3550');g.addColorStop(.5,'#0d1e34');g.addColorStop(1,'#16283f');
+  ctx.beginPath();ctx.arc(arenaCX,arenaCY,R+22,0,7);ctx.fillStyle=g;ctx.fill();
+  ctx.strokeStyle='rgba(63,208,255,.5)';ctx.lineWidth=2;ctx.stroke();
+  // segments techniques
+  ctx.strokeStyle='rgba(63,208,255,.35)';ctx.lineWidth=3;
+  for(let i=0;i<8;i++){
+    const a0=(i/8)*Math.PI*2+.12,a1=a0+.55;
+    ctx.beginPath();ctx.arc(arenaCX,arenaCY,R+15,a0,a1);ctx.stroke();
+  }
+  // vis
+  for(let i=0;i<4;i++){
+    const a=(i/4)*Math.PI*2+Math.PI/4;
+    const vx=arenaCX+Math.cos(a)*(R+16),vy=arenaCY+Math.sin(a)*(R+16);
+    ctx.beginPath();ctx.arc(vx,vy,4.5,0,7);ctx.fillStyle='#294863';ctx.fill();
+    ctx.strokeStyle='rgba(150,200,240,.5)';ctx.lineWidth=1;ctx.stroke();
+  }
+  // anneau interne lumineux
+  ctx.beginPath();ctx.arc(arenaCX,arenaCY,R+6,0,7);
+  ctx.strokeStyle=C.cyan;ctx.lineWidth=2.5;ctx.shadowColor=C.cyan;ctx.shadowBlur=18;ctx.stroke();
+  ctx.shadowBlur=0;
+  ctx.restore();
+}
+
+/* Barre de territoire */
+function territoryBar(x,y,w,h,pRatio,eRatio,pColor){
+  rr(x,y,w,h,h/2);ctx.fillStyle='rgba(6,14,28,.9)';ctx.fill();
+  ctx.save();rr(x,y,w,h,h/2);ctx.clip();
+  const pw=w*pRatio;
+  const gp=ctx.createLinearGradient(x,y,x+pw,y);
+  gp.addColorStop(0,pColor);gp.addColorStop(1,'rgba(255,255,255,.85)');
+  ctx.fillStyle=gp;ctx.fillRect(x,y,pw,h);
+  const ew=w*eRatio;
+  const ge=ctx.createLinearGradient(x+w-ew,y,x+w,y);
+  ge.addColorStop(0,'rgba(255,255,255,.7)');ge.addColorStop(1,C.red);
+  ctx.fillStyle=ge;ctx.fillRect(x+w-ew,y,ew,h);
+  ctx.restore();
+  rr(x,y,w,h,h/2);ctx.strokeStyle='rgba(63,208,255,.4)';ctx.lineWidth=1.2;ctx.stroke();
+}
+
+// Barre de territoire VERTICALE, couleurs pleines (ennemi en haut, joueur en bas).
+// Anneau de territoire autour de la boîte : se remplit du BAS (joueur) et du
+// HAUT (ennemi), les deux arcs se rejoignant selon le % de colonisation.
+// Un léger gap sépare l'anneau du bord de la boîte.
+function drawTerritoryRing(cx,cy,radius,pRatio,eRatio,pColor,eColor){
+  eColor=eColor||C.red;
+  const lw=9;
+  const rr2=radius+14; // rayon de l'anneau (léger gap avec la boîte)
+  // fond de l'anneau
+  ctx.beginPath();ctx.arc(cx,cy,rr2,0,Math.PI*2);
+  ctx.strokeStyle='rgba(10,20,40,.9)';ctx.lineWidth=lw+4;ctx.stroke();
+  // Le joueur remplit depuis le bas (angle PI/2) vers le haut des deux côtés.
+  // L'ennemi remplit depuis le haut (angle -PI/2) vers le bas des deux côtés.
+  // Chaque camp occupe une fraction de la circonférence = son ratio.
+  const bottom=Math.PI/2, top=-Math.PI/2;
+  const pHalf=pRatio*Math.PI;   // demi-arc joueur de chaque côté
+  const eHalf=eRatio*Math.PI;
+  // joueur : deux arcs partant du bas
+  ctx.lineCap='round';
+  ctx.strokeStyle=pColor;ctx.lineWidth=lw;ctx.shadowColor=pColor;ctx.shadowBlur=8;
+  ctx.beginPath();ctx.arc(cx,cy,rr2,bottom,bottom+pHalf);ctx.stroke();          // bas -> droite
+  ctx.beginPath();ctx.arc(cx,cy,rr2,bottom-pHalf,bottom,false);ctx.stroke();     // gauche -> bas
+  // ennemi : deux arcs partant du haut
+  ctx.strokeStyle=eColor;ctx.shadowColor=eColor;
+  ctx.beginPath();ctx.arc(cx,cy,rr2,top,top+eHalf);ctx.stroke();                 // haut -> droite
+  ctx.beginPath();ctx.arc(cx,cy,rr2,top-eHalf,top,false);ctx.stroke();           // gauche -> haut
+  ctx.shadowBlur=0;ctx.lineCap='butt';
+}
+
+function vTerritoryBar(x,y,w,h,pRatio,eRatio,pColor){
+  rr(x,y,w,h,w/2);ctx.fillStyle='rgba(6,14,28,.9)';ctx.fill();
+  ctx.save();rr(x,y,w,h,w/2);ctx.clip();
+  // ennemi en haut (rouge plein)
+  const eh=h*eRatio;
+  ctx.fillStyle=C.red;ctx.fillRect(x,y,w,eh);
+  // joueur en bas (couleur pleine)
+  const ph=h*pRatio;
+  ctx.fillStyle=pColor;ctx.fillRect(x,y+h-ph,w,ph);
+  // ligne de front nette
+  ctx.fillStyle='rgba(255,255,255,.85)';ctx.fillRect(x,y+eh-1,w,2);
+  ctx.restore();
+  rr(x,y,w,h,w/2);ctx.strokeStyle='rgba(63,208,255,.4)';ctx.lineWidth=1.2;ctx.stroke();
+}
+
+/* Notification */
+let notif='',notifT=0;
+function notify(msg){notif=msg;notifT=2.2;}
+function drawNotif(dt){
+  if(notifT<=0)return;
+  notifT-=dt;
+  const a=Math.min(1,notifT*1.6);
+  ctx.globalAlpha=a;
+  const w=Math.min(360,ctx.measureText(notif).width+90);
+  panel(W/2-w/2,H-96,w,42,C.gold,'rgba(8,20,40,.95)',10);
+  text(notif,W/2,H-75,14,C.gold,'center','700',8);
+  ctx.globalAlpha=1;
+}
+
+/* Scroll générique */
+let scroll={y:0,max:0,dragging:false,lastY:0,vel:0,moved:0};
+function resetScroll(){scroll.y=0;scroll.max=0;scroll.vel=0;scroll.moved=0;}
+function applyScrollPhysics(){
+  if(!scroll.dragging){
+    scroll.y+=scroll.vel;scroll.vel*=.9;
+    if(Math.abs(scroll.vel)<.1)scroll.vel=0;
+  }
+  scroll.y=Math.max(0,Math.min(scroll.max,scroll.y));
+}
+
+/* ---------------- NAVIGATION ---------------- */
+const P={MAIN:'main',VIRUSES:'viruses',EDITOR:'editor',LAB:'lab',CAMPAIGN:'campaign',INFO:'info',BATTLE:'battle',SCORES:'scores',DEBRIEF:'debrief',APPEARANCE:'appearance',TUTORIAL:'tutorial',ARENA:'arena',ARENA_PREVIEW:'arena_preview',ARENA_BOARD:'arena_board'};
+let page=P.MAIN,prevPage=P.MAIN;
+let editIndex=0,levelSel=1,modal=null,campaignNeedsCenter=true;
+
+function go(p){
+  prevPage=page;page=p;resetScroll();modal=null;sfx.click();
+  if(p===P.CAMPAIGN)campaignNeedsCenter=true;
+  // Onboarding : franchir l'étape quand on atteint la page attendue
+  if(onbActive()){
+    if(p===P.MAIN)onbAdvance('back_menu');
+    else if(p===P.LAB)onbAdvance('menu_lab');
+    else if(p===P.VIRUSES)onbAdvance('menu_viruses');
+  }
+}
+
+/* Header commun */
+function header(title,backTo){
+  panel(0,0,W,64,'rgba(63,208,255,.25)','rgba(6,16,34,.95)',0);
+  text(title,W/2,32,21,C.text,'center','800',10);
+  if(backTo!==null){
+    // Pendant l'onboarding, Back n'est cliquable que si c'est l'étape 'back_menu'.
+    const onbBack=onbActive();
+    const backIsTarget=onbTarget('back_menu');
+    const backLocked=onbBack&&!backIsTarget;
+    const bkW=68,bkX=12,bkY=15,bkH=34;
+    if(backIsTarget)onbHighlight('back_menu',bkX,bkY,bkW,bkH,10);
+    if(backLocked)ctx.globalAlpha=0.4;
+    const g=ctx.createLinearGradient(bkX,bkY,bkX,bkY+bkH);
+    g.addColorStop(0,'rgba(20,52,96,.95)');g.addColorStop(1,'rgba(10,28,58,.95)');
+    rr(bkX,bkY,bkW,bkH,10);ctx.fillStyle=g;ctx.fill();
+    ctx.strokeStyle=backLocked?C.lock:C.cyan;ctx.lineWidth=1.6;ctx.shadowColor=backLocked?'transparent':C.cyan;ctx.shadowBlur=backLocked?0:10;ctx.stroke();ctx.shadowBlur=0;
+    ctx.strokeStyle=backLocked?C.lock:C.cyan;ctx.lineWidth=2.4;
+    ctx.beginPath();ctx.moveTo(bkX+4,bkY+bkH-3);ctx.lineTo(bkX+16,bkY+bkH-3);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(bkX+bkW-16,bkY+3);ctx.lineTo(bkX+bkW-4,bkY+3);ctx.stroke();
+    text('\u2039 Back',bkX+bkW/2,bkY+bkH/2+1,12,C.text,'center','700',5);
+    ctx.globalAlpha=1;
+    hitzones.push({x:bkX,y:bkY,w:bkW,h:bkH,cb:()=>{
+      if(backLocked){sfx.err();return;}
+      go(backTo);
+    }});
+  }
+  // ADN — même design de bouton, accent violet, épouse la bande du haut
+  const adnW=96,adnX=W-adnW-12,adnY=15,adnH=34;
+  const ag=ctx.createLinearGradient(adnX,adnY,adnX,adnY+adnH);
+  ag.addColorStop(0,'rgba(48,24,72,.95)');ag.addColorStop(1,'rgba(26,14,44,.95)');
+  rr(adnX,adnY,adnW,adnH,10);ctx.fillStyle=ag;ctx.fill();
+  ctx.strokeStyle=C.dna;ctx.lineWidth=1.6;ctx.shadowColor=C.dna;ctx.shadowBlur=10;ctx.stroke();ctx.shadowBlur=0;
+  ctx.strokeStyle=C.dna;ctx.lineWidth=2.4;
+  ctx.beginPath();ctx.moveTo(adnX+4,adnY+adnH-3);ctx.lineTo(adnX+16,adnY+adnH-3);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(adnX+adnW-16,adnY+3);ctx.lineTo(adnX+adnW-4,adnY+3);ctx.stroke();
+  dnaLabel(adnX+adnW/2,adnY+adnH/2+2,D.dna,13,'center');
+}
+
+/* ---------------- MENU PRINCIPAL ---------------- */
+function drawMain(dt){
+  drawBackground();
+
+  // Logo
+  drawLogoVirus(W/2,146,52,T);
+
+  // Titre
+  text('VIRUS LAB',W/2,266,44,'#ffffff','center','800',22);
+  text('PROGRAMMED CELLULAR STRATEGY',W/2,295,11.5,'#6fa8d8','center','600',0);
+
+  // Menu principal — boutons plus grands, davantage de présence.
+  const bw=320,bx=W/2-bw/2,bh=60,gap=12;
+  let by=330;
+  const entries=[
+    ['map','CAMPAIGN',P.CAMPAIGN,null],
+    ['arena','ARENA',P.ARENA,null],
+    ['tube','MY VIRUSES',P.VIRUSES,'menu_viruses'],
+    ['scope','LAB',P.LAB,'menu_lab'],
+    ['folder','RECORDS',P.SCORES,null]
+  ];
+  for(const[ic,lb,dest,onbId]of entries){
+    // pendant l'onboarding, seul le bouton cible est actif
+    const gated=onbActive()&&onbId!==null&&!onbTarget(onbId);
+    const gatedAll=onbActive()&&onbId===null; // boutons non concernés = bloqués
+    const locked=gated||gatedAll;
+    menuButton(bx,by,bw,bh,ic,lb,()=>{
+      if(locked){sfx.err();return;}
+      go(dest);
+    },{size:19,dim:locked});
+    // surbrillance de la cible courante
+    if(onbId)onbHighlight(onbId,bx,by,bw,bh,12);
+    by+=bh+gap;
+  }
+
+  // Bandeau d'aide onboarding (sous le menu)
+  if(onbActive()){
+    const tipY=by+8;
+    rr(bx,tipY,bw,52,10);ctx.fillStyle='rgba(40,24,60,.96)';ctx.fill();
+    ctx.strokeStyle=C.dna;ctx.lineWidth=1.4;ctx.shadowColor=C.dna;ctx.shadowBlur=8;ctx.stroke();ctx.shadowBlur=0;
+    icoDna(bx+26,tipY+26,16,C.dna);
+    text('STEP '+(D.onb+1)+'/'+ONB.length,bx+46,tipY+20,10,C.dna,'left','800');
+    text(ONB[D.onb].tip,bx+46,tipY+38,10.5,C.text,'left','600');
+  }
+
+  if(D.lastReport){
+    by+=6;
+    const r=D.lastReport;
+    const won=r.won;
+    const col=won?'#4dffa6':C.red;
+    panel(bx,by,bw,58,col,'rgba(8,20,42,.92)',10);
+    text('LAST BATTLE',bx+16,by+20,10,C.textDim,'left','700');
+    const label=r.arena?('vs '+r.enemy):('Level '+r.level);
+    text((won?'WON ':'LOST ')+label,bx+16,by+40,15,col,'left','800');
+    text(r.pct+'% \u2013 '+r.epct+'%',bx+bw-16,by+30,13,C.text,'right','700');
+    text('view report \u203a',bx+bw-16,by+46,9,C.textDim,'right','600');
+    hitzones.push({x:bx,y:by,w:bw,h:58,cb:()=>{go(P.DEBRIEF);}});
+  }
+}
+
+/* ---------------- MES VIRUS ---------------- */
+function drawViruses(dt){
+  drawBackground();header('MY VIRUSES',P.MAIN);
+  const list=D.virusList;
+  const cardH=220,top=80;
+  const visH=H-top-84;
+  scroll.max=Math.max(0,list.length*cardH-visH+16);
+  applyScrollPhysics();
+
+  ctx.save();ctx.beginPath();ctx.rect(0,top,W,visH);ctx.clip();
+  if(!list.length){
+    text('No viruses yet.',W/2,top+70,15,C.textDim,'center','600');
+    text('Create your first virus to begin.',W/2,top+96,12,C.textDim,'center','500');
+  }
+  for(let i=0;i<list.length;i++){
+    const v=list[i];
+    v.look=normaliseLook(v.look,i);
+    const y=top+i*cardH-scroll.y;
+    if(y>H||y+cardH<top)continue;
+    const sel=(i===D.selected);
+    const pal=paletteById(v.look.palette);
+    // carte
+    panel(14,y+6,W-28,cardH-14,sel?pal.main:'rgba(63,208,255,.28)','rgba(8,20,42,.92)',12);
+    if(sel){
+      // liseré lumineux quand actif
+      rr(14,y+6,W-28,cardH-14,12);
+      ctx.strokeStyle=pal.main;ctx.lineWidth=2.2;ctx.shadowColor=pal.main;ctx.shadowBlur=12;ctx.stroke();ctx.shadowBlur=0;
+    }
+    // virus en grand
+    drawStrain(84,y+cardH/2,72,v.look,T+i,{halo:false});
+    // nom + statut
+    text(v.name,164,y+48,21,C.text,'left','800');
+    if(sel)text('ACTIVE',W-40,y+48,10,pal.main,'center','800',6);
+    const sc=slotCost(v.actions);
+    // ligne de stats : victoires + taux de victoire + meilleur niveau
+    const w=v.wins|0, l=v.losses|0, tot=w+l;
+    const wr=tot>0?Math.round(w/tot*100):0;
+    text('\u265b '+w+' wins',164,y+74,12,C.gold,'left','700');
+    if(tot>0)text(wr+'% WR',272,y+74,11,wr>=50?'#4dffa6':C.textDim,'left','700');
+    if(v.bestLevel)text('Best Lv '+v.bestLevel,W-40,y+74,11,C.cyan,'right','700');
+    text(v.actions.length+' actions',164,y+98,11,C.textDim,'left','600');
+    text(sc+'/'+slotBudget()+' slots',248,y+98,11,sc>slotBudget()?C.red:C.gold,'left','700');
+    // génome visible (icônes)
+    const gs=30,gg=6;
+    const maxIcons=Math.floor((W-184)/(gs+gg));
+    v.actions.slice(0,maxIcons).forEach((k,j)=>{
+      const bx=164+j*(gs+gg),by=y+118;
+      rr(bx,by,gs,gs,5);ctx.fillStyle='rgba(16,40,74,.9)';ctx.fill();
+      ctx.strokeStyle=ACT_COLOR[k]||C.cyan;ctx.lineWidth=1.1;ctx.stroke();
+      text(ACTIONS[k].icon,bx+gs/2,by+gs/2,16,ACT_COLOR[k]||C.cyan,'center','700');
+    });
+    if(v.actions.length>maxIcons)text('+'+(v.actions.length-maxIcons),164+maxIcons*(gs+gg)+4,y+118+gs/2,11,C.textDim,'left','700');
+    // bouton EDIT
+    rr(W-84,y+cardH-40,64,26,7);ctx.fillStyle='rgba(20,52,96,.9)';ctx.fill();
+    ctx.strokeStyle=C.cyan;ctx.lineWidth=1.2;ctx.stroke();
+    text('EDIT',W-52,y+cardH-27,11,C.cyan,'center','800');
+    // toute la carte sélectionne, le coin EDIT ouvre l'éditeur (même action)
+    hitzones.push({x:14,y:y+6,w:W-28,h:cardH-14,cb:()=>{
+      D.selected=i;editIndex=i;save();go(P.EDITOR);
+    }});
+  }
+  ctx.restore();
+
+  if(onbTarget('viruses_new'))onbHighlight('viruses_new',W/2-130,H-72,260,48,10);
+  button(W/2-130,H-72,260,48,'+ NEW VIRUS',()=>{
+    if(onbActive()&&!onbTarget('viruses_new')){sfx.err();return;}
+    openKeyboard('Name your virus','',16,val=>{
+      const i=D.virusList.length;
+      const look=randomLook();
+      D.virusList.push({name:val||'Strain Alpha',actions:['avancer','avancer','tournerD'],
+                        look:look,color:paletteById(look.palette).main});
+      D.selected=i;editIndex=i;save();
+      onbAdvance('viruses_new');
+      notify('Virus created');go(P.APPEARANCE);
+    });
+  });
+}
+
+/* ---------------- ÉDITEUR ---------------- */
+function drawEditor(dt){
+  drawBackground();
+  const v=D.virusList[editIndex];
+  if(!v){go(P.VIRUSES);return;}
+  header(v.name.toUpperCase(),P.VIRUSES);
+
+  const used=slotCost(v.actions);
+  const over=used>slotBudget();
+
+  // Zone scrollable (au-dessus des boutons fixes du bas)
+  const top=70, btnZone=64, visH=H-top-btnZone;
+  applyScrollPhysics();
+  ctx.save();ctx.beginPath();ctx.rect(0,top,W,visH);ctx.clip();
+  let y=top+4-scroll.y;
+
+  // Jauge de slots
+  panel(16,y,W-32,44,over?C.red:'rgba(63,208,255,.25)');
+  text('GENOME BUDGET',26,y+14,10,C.textDim,'left','700');
+  text(`${used} / ${slotBudget()}`,W-26,y+14,13,over?C.red:C.gold,'right','800',6);
+  const bwid=W-52;
+  rr(26,y+26,bwid,8,4);ctx.fillStyle='rgba(6,14,28,.9)';ctx.fill();
+  ctx.save();rr(26,y+26,bwid,8,4);ctx.clip();
+  const gg=ctx.createLinearGradient(26,0,26+bwid,0);
+  gg.addColorStop(0,over?C.red:v.color);gg.addColorStop(1,over?'#ff9090':'#ffffff');
+  ctx.fillStyle=gg;ctx.fillRect(26,y+26,bwid*Math.min(1,used/slotBudget()),8);
+  ctx.restore();
+  y+=58;
+
+  // Séquence
+  text('SEQUENCE',20,y,11,C.textDim,'left','700');
+  text('tap a slot to remove',W-20,y,10,C.textDim,'right','500');
+  const cols=5,cs=54,gap=6;
+  const gx=W/2-(cols*cs+(cols-1)*gap)/2;
+  const gy=y+14;
+  for(let i=0;i<MAX_SEQ;i++){
+    const cx=gx+(i%cols)*(cs+gap),cy=gy+Math.floor(i/cols)*(cs+gap);
+    const a=v.actions[i];
+    rr(cx,cy,cs,cs,8);
+    ctx.fillStyle=a?'rgba(20,50,92,.92)':'rgba(10,20,38,.55)';ctx.fill();
+    ctx.strokeStyle=a?v.color:'rgba(63,208,255,.15)';ctx.lineWidth=a?1.6:1;
+    ctx.setLineDash(a?[]:[3,3]);ctx.stroke();ctx.setLineDash([]);
+    if(a){
+      text(ACTIONS[a].icon,cx+cs/2,cy+cs/2-4,22,ACT_COLOR[a]||v.color,'center','700',6);
+      text(String(ACTIONS[a].slot),cx+cs-9,cy+10,9,C.gold,'center','800');
+      const ii=i;
+      hitzones.push({x:cx,y:cy,w:cs,h:cs,cb:()=>{v.actions.splice(ii,1);save();sfx.del();}});
+    }else{
+      // numéro du slot vide, plus visible
+      text(String(i+1),cx+cs/2,cy+cs/2,15,'rgba(120,160,210,.6)','center','800');
+    }
+  }
+  y=gy+4*(cs+gap)+14;
+
+  // Palette — cases carrées façon séquence, uniquement les actions débloquées
+  text('AVAILABLE ACTIONS',20,y,11,C.textDim,'left','700');
+  const unlockedActs=D.unlocked.filter(k=>ACTIONS[k]);
+  const pcols=5,pw=54;
+  const px0=W/2-(pcols*pw+(pcols-1)*gap)/2;
+  const palTop=y+16;
+  unlockedActs.forEach((key,i)=>{
+    const a=ACTIONS[key];
+    const cx=px0+(i%pcols)*(pw+gap),cy=palTop+Math.floor(i/pcols)*(pw+gap);
+    const wouldOver=used+a.slot>slotBudget();
+    const full=v.actions.length>=MAX_SEQ;
+    const blocked=wouldOver||full;
+    const ac=ACT_COLOR[key]||C.cyan;
+    // case (même look que la séquence)
+    rr(cx,cy,pw,pw,8);
+    ctx.fillStyle=blocked?'rgba(10,20,38,.6)':'rgba(20,50,92,.92)';ctx.fill();
+    ctx.strokeStyle=blocked?C.lock:ac;ctx.lineWidth=1.6;ctx.stroke();
+    text(a.icon,cx+pw/2,cy+pw*0.40,22,blocked?C.textDim:ac,'center','700',6);
+    text(a.name.slice(0,7),cx+pw/2,cy+pw-9,7.5,C.textDim,'center','600');
+    // badge coût en slot
+    text(String(a.slot),cx+pw-9,cy+10,9,C.gold,'center','800');
+    hitzones.push({x:cx,y:cy,w:pw,h:pw,cb:()=>{
+      if(full){notify('Sequence full (20)');sfx.err();return;}
+      if(used+a.slot>slotBudget()){notify('Genome budget exceeded');sfx.err();return;}
+      v.actions.push(key);save();sfx.place();
+    }});
+  });
+  const palRows=Math.max(1,Math.ceil(unlockedActs.length/pcols));
+  y=palTop+palRows*(pw+gap)+20;  // marge nette avant le guide
+
+  // === GUIDE DES ACTIONS (rappel de ce que fait chaque génome, style Labo) ===
+  text('WHAT EACH ACTION DOES',20,y,11,C.dna,'left','700',3);
+  y+=18;
+  D.unlocked.forEach((key)=>{
+    const a=ACTIONS[key];if(!a)return;
+    const ac=ACT_COLOR[key]||C.cyan;
+    // hauteur adaptée à la description
+    ctx.font="500 11px 'Segoe UI',system-ui,sans-serif";
+    const words=a.desc.split(' ');const rows=[];let ln='';
+    for(const wd of words){if(ctx.measureText(ln+wd).width>W-108){rows.push(ln);ln=wd+' ';}else ln+=wd+' ';}
+    if(ln)rows.push(ln);
+    const rh=Math.max(46,18+rows.length*14);
+    panel(16,y,W-32,rh,'rgba(63,208,255,.18)','rgba(8,20,42,.85)',10);
+    // pastille icône
+    rr(26,y+9,34,34,8);ctx.fillStyle='rgba(16,40,74,.9)';ctx.fill();
+    ctx.strokeStyle=ac;ctx.lineWidth=1.2;ctx.stroke();
+    text(a.icon,43,y+26,17,ac,'center','700',4);
+    // nom + coût
+    text(a.name,72,y+18,13,C.text,'left','800');
+    text(a.slot+' slot'+(a.slot>1?'s':''),W-24,y+18,10,C.gold,'right','700');
+    // description
+    rows.forEach((rw,i)=>text(rw,72,y+34+i*14,11,C.textDim,'left','500'));
+    y+=rh+7;
+  });
+  y+=6;
+
+  ctx.restore();
+  scroll.max=Math.max(0,(y+scroll.y)-(H-btnZone)+10);
+
+  // === Boutons fixes en bas ===
+  const by=H-56;
+  button(16,by,120,44,'APPEARANCE',()=>{go(P.APPEARANCE);});
+  button(146,by,140,44,'CLEAR',()=>{v.actions=[];save();sfx.del();notify('Sequence cleared');},{accent:C.red});
+  if(onbTarget('edit_deploy'))onbHighlight('edit_deploy',296,by,138,44,10);
+  button(296,by,138,44,'DEPLOY',()=>{
+    if(!v.actions.length){notify('Sequence is empty');sfx.err();return;}
+    D.selected=editIndex;save();
+    onbAdvance('edit_deploy');
+    go(P.CAMPAIGN);
+  },{accent:C.gold});
+}
+
+
+
+/* ---------------- TUTORIAL ---------------- */
+// Runs once on a fresh save. Walks the player through creating Strain Alpha
+// and explains the core loop before handing over control.
+const TUT_STEPS=[
+  {title:'WELCOME TO VIRUS LAB',
+   body:'You do not control your virus during a fight. You program its behaviour beforehand, then watch it run.',
+   art:'logo',action:'NEXT'},
+  {title:'THE PETRI DISH',
+   body:'Two strains grow inside a sealed dish. Whoever holds the most territory when the timer ends wins the round.',
+   art:'dish',action:'NEXT'},
+  {title:'GENOME = A LOOP',
+   body:'A genome is a short list of actions. Your virus repeats that list forever. A better loop beats a longer one.',
+   art:'genome',action:'NEXT'},
+  {title:'EVERY ACTION HAS A COST',
+   body:'You have 24 genome slots. Advance costs 1, Surge costs 2, Split costs 3. Spend them where they matter.',
+   art:'slots',action:'NEXT'},
+  {title:'NAME YOUR FIRST STRAIN',
+   body:'Every lab starts with a reference sample. This one is already logged as Strain Alpha.',
+   art:'strain',action:'CREATE STRAIN ALPHA'},
+  {title:'STRAIN ALPHA IS READY',
+   body:'Alpha carries a basic loop: advance, advance, turn right, advance. Enough to win the first levels.',
+   art:'alpha',action:'NEXT'},
+  {title:'WHEN YOU LOSE, READ THE REPORT',
+   body:'Defeat opens a debrief showing the enemy genome and where the fight turned. That is how you improve.',
+   art:'report',action:'START PLAYING'}
+];
+
+
+
+/* ================= ONLINE ARENA (async PvP) =================
+   Players publish their best strain (genome + look + name) to Supabase.
+   Other players load those real strains and battle them; wins are recorded.
+   Everything is asynchronous: you fight the genome, replayed by your engine,
+   so no two players need to be online at once.
+
+   To go live, set ARENA_CONFIG.url and ARENA_CONFIG.key to your Supabase
+   project. Until then, the Arena runs on a built-in roster so it is fully
+   playable offline and in development. */
+const ARENA_CONFIG={
+  url:'',   // e.g. 'https://xxxx.supabase.co'
+  key:'',   // anon public key
+  table:'published_strains'
+};
+
+// Local identity: a stable random id so a player's own uploads are recognised.
+function arenaPlayerId(){
+  if(!D.arenaId){
+    D.arenaId='p_'+Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);
+    save();
+  }
+  return D.arenaId;
+}
+
+// Built-in opponents used when offline or before Supabase is configured.
+const ARENA_FALLBACK=[
+  {id:'seed1',name:'Nyx',author:'Lab',wins:41,genome:['boost','tournerD','avancer','avancer','tournerG'],
+   look:{palette:'violet',accent:'magenta',spike:'triangle',spikeCount:14,core:'hex',body:'crystalline'}},
+  {id:'seed2',name:'Emberling',author:'Lab',wins:33,genome:['dash','tournerD','dash','tournerG','avancer'],
+   look:{palette:'crimson',accent:'amber',spike:'club',spikeCount:12,core:'nucleus',body:'ridged'}},
+  {id:'seed3',name:'Verdant',author:'Lab',wins:28,genome:['sense','avancer','avancer','diviser','avancer'],
+   look:{palette:'mint',accent:'lime',spike:'tentacle',spikeCount:11,core:'spiral',body:'porous'}},
+  {id:'seed4',name:'Halcyon',author:'Lab',wins:22,genome:['muter','boost','avancer','diviser','boost'],
+   look:{palette:'azure',accent:'cyan',spike:'round',spikeCount:16,core:'rings',body:'smooth'}},
+  {id:'seed5',name:'Cinder',author:'Lab',wins:17,genome:['sprint','avancer','boost','tournerD','avancer'],
+   look:{palette:'amber',accent:'crimson',spike:'crystal',spikeCount:15,core:'cells',body:'segmented'}},
+  {id:'seed6',name:'Frostbite',author:'Lab',wins:12,genome:['avancer','shield','boost','tournerD','avancer'],
+   look:{palette:'ice',accent:'azure',spike:'hook',spikeCount:13,core:'hex',body:'ridged'}},
+  {id:'seed7',name:'Wraith',author:'Lab',wins:36,genome:['muter','dash','sprint','avancer','twin'],
+   look:{palette:'teal',accent:'ice',spike:'tentacle',spikeCount:12,core:'spiral',body:'smooth'}},
+  {id:'seed8',name:'Sable',author:'Lab',wins:19,genome:['dash','corrode','tournerD','avancer','boost'],
+   look:{palette:'magenta',accent:'violet',spike:'crystal',spikeCount:14,core:'nucleus',body:'crystalline'}},
+  {id:'seed9',name:'Bloomrot',author:'Lab',wins:24,genome:['twin','avancer','sense','diviser','avancer'],
+   look:{palette:'lime',accent:'mint',spike:'round',spikeCount:17,core:'cells',body:'porous'}},
+  {id:'seed10',name:'Quasar',author:'Lab',wins:45,genome:['muter','burst','sprint','dash','avancer','twin'],
+   look:{palette:'gold',accent:'amber',spike:'triangle',spikeCount:18,core:'rings',body:'segmented'}},
+  {id:'seed11',name:'Kelpling',author:'Lab',wins:9,genome:['sense','avancer','avancer','tournerD','boost'],
+   look:{palette:'teal',accent:'lime',spike:'hook',spikeCount:10,core:'hex',body:'ridged'}},
+  {id:'seed12',name:'Obsidian',author:'Lab',wins:31,genome:['dash','sprint','corrode','avancer','muter'],
+   look:{palette:'azure',accent:'violet',spike:'club',spikeCount:13,core:'spiral',body:'crystalline'}}
+];
+// Élo simplifié : score dérivé des victoires/défaites d'arène.
+function arenaScore(){
+  return Math.max(0,1000+(D.arenaWins|0)*25-(D.arenaLosses|0)*10);
+}
+
+let arenaState={loading:false,error:null,roster:null,fetchedAt:0,mode:'ranked'};
+
+function arenaHeaders(){
+  return{'Content-Type':'application/json','apikey':ARENA_CONFIG.key,'Authorization':'Bearer '+ARENA_CONFIG.key};
+}
+function arenaConfigured(){return !!(ARENA_CONFIG.url&&ARENA_CONFIG.key);}
+
+async function arenaFetchRoster(){
+  if(!arenaConfigured()){arenaState.roster=ARENA_FALLBACK.slice();return;}
+  arenaState.loading=true;arenaState.error=null;
+  try{
+    const u=ARENA_CONFIG.url+'/rest/v1/'+ARENA_CONFIG.table+'?select=*&order=wins.desc&limit=25';
+    const r=await fetch(u,{headers:arenaHeaders()});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const rows=await r.json();
+    arenaState.roster=(rows&&rows.length?rows:ARENA_FALLBACK).map(normaliseArenaRow);
+  }catch(e){
+    arenaState.error='Offline \u2014 showing local roster';
+    arenaState.roster=ARENA_FALLBACK.slice();
+  }finally{
+    arenaState.loading=false;arenaState.fetchedAt=Date.now();
+  }
+}
+function normaliseArenaRow(r){
+  return{
+    id:r.id||('row_'+Math.random().toString(36).slice(2)),
+    name:(r.name||'Unknown').slice(0,16),
+    author:r.author||'anon',
+    wins:r.wins|0,
+    genome:Array.isArray(r.genome)?r.genome:(typeof r.genome==='string'?JSON.parse(r.genome):['avancer','avancer','tournerD','avancer']),
+    look:normaliseLook(typeof r.look==='string'?JSON.parse(r.look):r.look,0)
+  };
+}
+
+async function arenaPublish(strain){
+  const payload={
+    author_id:arenaPlayerId(),
+    name:strain.name,
+    author:strain.name,
+    genome:JSON.stringify(strain.actions),
+    look:JSON.stringify(strain.look),
+    wins:0
+  };
+  if(!arenaConfigured()){notify('Arena not configured yet');return false;}
+  try{
+    const u=ARENA_CONFIG.url+'/rest/v1/'+ARENA_CONFIG.table;
+    const r=await fetch(u,{method:'POST',headers:Object.assign(arenaHeaders(),{'Prefer':'return=minimal'}),body:JSON.stringify(payload)});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    notify('Strain published to Arena');return true;
+  }catch(e){notify('Publish failed \u2014 try later');return false;}
+}
+
+async function arenaRecordWin(rowId){
+  if(!arenaConfigured())return;
+  try{
+    // increment wins via RPC-less patch: read then write (best-effort)
+    const u=ARENA_CONFIG.url+'/rest/v1/'+ARENA_CONFIG.table+'?id=eq.'+encodeURIComponent(rowId);
+    const cur=await (await fetch(u+'&select=wins',{headers:arenaHeaders()})).json();
+    const w=(cur&&cur[0]?cur[0].wins|0:0)+1;
+    await fetch(u,{method:'PATCH',headers:arenaHeaders(),body:JSON.stringify({wins:w})});
+  }catch(e){/* silent */}
+}
+
+/* ---- Arena screen ---- */
+function drawArena(dt){
+  drawBackground();header('ARENA',P.MAIN);
+
+  if(!arenaState.roster&&!arenaState.loading){arenaFetchRoster();}
+  const roster=arenaState.roster||[];
+  const circulating=roster.length;
+  const v=D.virusList[D.selected];
+
+  // === Bandeau score ===
+  panel(16,74,W-32,80,C.dna,'rgba(24,14,44,.94)',14);
+  text('YOUR ARENA SCORE',W/2,96,10,C.textDim,'center','700');
+  text(String(arenaScore()),W/2,128,28,C.dna,'center','800',10);
+  text((D.arenaWins|0)+'W',40,122,15,'#4dffa6','left','800');
+  text((D.arenaLosses|0)+'L',W-40,122,15,C.red,'right','800');
+
+  // === Souches en circulation ===
+  panel(16,164,W-32,38,'rgba(63,208,255,.28)');
+  icoDna(40,183,18,C.dna);
+  text(circulating+' viruses circulating',W/2+14,183,12.5,C.text,'center','700');
+
+  // constantes des boutons du bas (nécessaires pour centrer le showcase)
+  const bw=W-40,bx=20;
+  const fbh=76, fby=H-fbh-96;
+
+  // === Showcase : le plus GROS bloc propre, centré dans l'espace disponible ===
+  const spinIdx=Math.floor(T*0.22)%Math.max(1,roster.length);
+  const showcase=roster[spinIdx];
+  if(showcase){
+    const bandTop=214, bandBot=fby-14;
+    const bandMid=(bandTop+bandBot)/2;
+    const R=130;
+    const nameGap=R+40;
+    const infoGap=nameGap+22;
+    const gs=38,gg=8;
+    const gp=showcase.genome||[];
+    const gn=Math.min(gp.length,Math.floor((W-40)/(gs+gg)));
+    const genGap=infoGap+28;
+    const blockCenterOffset=((-R)+(genGap+gs))/2;
+    let scCY=bandMid-blockCenterOffset;
+    if(scCY-R<bandTop)scCY=bandTop+R;
+    drawStrain(W/2,scCY,R,showcase.look,T,{halo:true});
+    text('\u201C'+showcase.name+'\u201D',W/2,scCY+nameGap,24,C.text,'center','800',8);
+    text(showcase.wins+' wins \u2022 by '+(showcase.author||'a player'),W/2,scCY+infoGap,12,C.textDim,'center','600');
+    const gx0=W/2-(gn*(gs+gg)-gg)/2;
+    gp.slice(0,gn).forEach((k,i)=>{
+      const bxx=gx0+i*(gs+gg),byy=scCY+genGap;
+      const ac=ACT_COLOR[k]||C.cyan;
+      rr(bxx,byy,gs,gs,6);ctx.fillStyle='rgba(16,40,74,.9)';ctx.fill();
+      ctx.strokeStyle=ac;ctx.lineWidth=1.3;ctx.stroke();
+      text(ACTIONS[k].icon,bxx+gs/2,byy+gs/2,19,ac,'center','700');
+    });
+    if(gp.length>gn)text('+'+(gp.length-gn),gx0+gn*(gs+gg)+2,scCY+genGap+gs/2,12,C.textDim,'left','700');
+  }
+
+  // === Boutons TOUT EN BAS ===
+  // Fight (GROS, agressif)
+  rr(bx,fby,bw,fbh,16);
+  const gg2=ctx.createLinearGradient(bx,fby,bx,fby+fbh);
+  gg2.addColorStop(0,'rgba(150,40,60,.98)');gg2.addColorStop(1,'rgba(90,18,38,.98)');
+  ctx.fillStyle=gg2;ctx.fill();
+  ctx.strokeStyle=C.red;ctx.lineWidth=2.6;
+  ctx.shadowColor=C.red;ctx.shadowBlur=20+Math.sin(T*3)*6;ctx.stroke();ctx.shadowBlur=0;
+  text('FIGHT A RANDOM VIRUS',W/2,fby+34,21,'#ffe8e8','center','800',10);
+  text(v?('with \u201C'+v.name+'\u201D'):'create a virus first',W/2,fby+57,12,'rgba(255,220,220,.85)','center','600');
+  hitzones.push({x:bx,y:fby,w:bw,h:fbh,cb:()=>{
+    if(!v||!v.actions.length){notify('Select a valid virus first');sfx.err();return;}
+    if(!roster.length){notify('Loading opponents\u2026');return;}
+    const op=roster[(Math.random()*roster.length)|0];
+    arenaState.pendingOpponent=op;
+    go(P.ARENA_PREVIEW);
+  }});
+  // Publish : pleine largeur, grisé « bientôt » (Supabase branché à la fin du dev)
+  const sby=fby+fbh+12;
+  rr(bx,sby,bw,48,10);ctx.fillStyle='rgba(20,28,44,.75)';ctx.fill();
+  ctx.strokeStyle='rgba(90,110,140,.4)';ctx.lineWidth=1.2;ctx.stroke();
+  text('PUBLISH TO ARENA',W/2-30,sby+28,14,C.textDim,'center','700');
+  rr(W/2+66,sby+13,58,22,11);ctx.fillStyle='rgba(63,208,255,.15)';ctx.fill();
+  ctx.strokeStyle='rgba(63,208,255,.4)';ctx.lineWidth=1;ctx.stroke();
+  text('SOON',W/2+95,sby+24,9,C.cyan,'center','800');
+  hitzones.push({x:bx,y:sby,w:bw,h:48,cb:()=>{notify('Online arena coming soon');sfx.click();}});
+
+  if(arenaState.error){
+    text(arenaState.error,W/2,H-14,10,C.gold,'center','600');
+  }
+}
+
+// Écran d'aperçu avant combat : qui tu affrontes
+function drawArenaPreview(dt){
+  drawBackground();header('CHALLENGER',P.ARENA);
+  const op=arenaState.pendingOpponent;
+  if(!op){go(P.ARENA);return;}
+
+  // Taille de case COMMUNE aux deux cartes de génome (ennemi et joueur)
+  const GES=40, GEG=6;                     // taille et écart des cases
+  const gperRow=Math.floor((W-52)/(GES+GEG));
+  // rend une grille de génome dans une carte, avec retour à la ligne
+  function genomeGrid(actions,gx,gy){
+    actions.forEach((k,i)=>{
+      const col=i%gperRow,row=(i/gperRow)|0;
+      const bx=gx+col*(GES+GEG),by=gy+row*(GES+16);
+      const ac=ACT_COLOR[k]||C.cyan;
+      rr(bx,by,GES,GES,7);ctx.fillStyle='rgba(16,40,74,.9)';ctx.fill();
+      ctx.strokeStyle=ac;ctx.lineWidth=1.3;ctx.stroke();
+      text(ACTIONS[k].icon,bx+GES/2,by+GES/2-3,17,ac,'center','700',4);
+      text(ACTIONS[k].name.slice(0,7),bx+GES/2,by+GES-7,6.5,C.textDim,'center','600');
+    });
+  }
+  const eRows=Math.max(1,Math.ceil(op.genome.length/gperRow));
+
+  // === Carte ennemi : virus à GAUCHE, génome DANS la carte (plus haute) ===
+  const ecH=132+eRows*(GES+16);
+  panel(16,80,W-32,ecH,C.red,'rgba(30,10,16,.94)',14);
+  drawStrain(78,142,44,op.look,T,{halo:false});
+  text(op.name.toUpperCase(),138,120,22,C.red,'left','800',6);
+  text(op.wins+' arena wins',138,144,12,C.gold,'left','700');
+  text('by '+(op.author||'a player'),138,162,10,C.textDim,'left','600');
+  text('\u21ba GENOME',30,196,9,C.textDim,'left','700');
+  genomeGrid(op.genome,30,206);
+  let yy=80+ecH+24;
+
+  // === Ta souche : MÊME taille de cases de génome, carte plus haute, wrap ===
+  const v=D.virusList[D.selected];
+  if(v){
+    text('YOU FIGHT WITH',24,yy,11,C.textDim,'left','700');yy+=16;
+    const pRows=Math.max(1,Math.ceil(v.actions.length/gperRow));
+    const pcH=132+pRows*(GES+16);
+    panel(16,yy,W-32,pcH,paletteById(v.look.palette).main,'rgba(8,20,42,.92)',12);
+    drawStrain(78,yy+62,44,v.look,T,{halo:false});
+    text(v.name,138,yy+40,20,C.text,'left','800');
+    const sc=slotCost(v.actions);
+    text(sc+'/'+slotBudget()+' slots',138,yy+62,12,sc>slotBudget()?C.red:C.gold,'left','700');
+    text('\u21ba GENOME',30,yy+116,9,C.textDim,'left','700');
+    genomeGrid(v.actions,30,yy+126);
+  }
+
+  // === Bouton BATTLE : même style que "Fight a random virus", plus haut ===
+  const bw=W-40,bx=20,fbh=72,fby=H-fbh-28;
+  rr(bx,fby,bw,fbh,16);
+  const gg2=ctx.createLinearGradient(bx,fby,bx,fby+fbh);
+  gg2.addColorStop(0,'rgba(150,40,60,.98)');gg2.addColorStop(1,'rgba(90,18,38,.98)');
+  ctx.fillStyle=gg2;ctx.fill();
+  ctx.strokeStyle=C.red;ctx.lineWidth=2.6;
+  ctx.shadowColor=C.red;ctx.shadowBlur=18+Math.sin(T*3)*5;ctx.stroke();ctx.shadowBlur=0;
+  text('BATTLE',W/2,fby+fbh/2+2,22,'#ffe8e8','center','800',10);
+  hitzones.push({x:bx,y:fby,w:bw,h:fbh,cb:()=>{startArenaBattle(op);}});
+}
+
+// Leaderboard consultable (lecture seule)
+function drawArenaBoard(dt){
+  drawBackground();header('LEADERBOARD',P.ARENA);
+  const roster=(arenaState.roster||[]).slice().sort((a,b)=>b.wins-a.wins);
+  const top=76,visH=H-top-8;
+  applyScrollPhysics();
+  ctx.save();ctx.beginPath();ctx.rect(0,top,W,visH);ctx.clip();
+  let y=top+6-scroll.y;
+  const rowH=62;
+  roster.forEach((op,i)=>{
+    if(y+rowH>top-4&&y<H+4){
+      panel(16,y,W-32,rowH-8,i<3?C.gold:'rgba(63,208,255,.22)','rgba(8,20,42,.92)',10);
+      text('#'+(i+1),40,y+28,14,i<3?C.gold:C.textDim,'center','800',i<3?4:0);
+      drawStrain(80,y+27,18,op.look,T+i,{halo:false,detail:false});
+      text(op.name,110,y+22,15,C.text,'left','800');
+      text(op.wins+' wins',110,y+40,10,C.gold,'left','700');
+      const gs=13,gg=3;
+      op.genome.slice(0,10).forEach((k,j)=>{
+        const bx=200+j*(gs+gg),by=y+20;
+        rr(bx,by,gs,gs,3);ctx.fillStyle='rgba(16,40,74,.9)';ctx.fill();
+        ctx.strokeStyle=ACT_COLOR[k]||C.cyan;ctx.lineWidth=.9;ctx.stroke();
+      });
+    }
+    y+=rowH;
+  });
+  ctx.restore();
+  scroll.max=Math.max(0,(y+scroll.y)-H+20);
+}
+
+function startArenaBattle(op){
+  const v=D.virusList[D.selected];
+  if(!v||!v.actions.length){notify('Select a valid virus');sfx.err();return;}
+  arenaState.currentOpponent=op;
+  startBattle(v.actions.slice(),op.genome.slice(),0);
+  battle.arena=true;battle.arenaOpponent=op;
+  go(P.BATTLE);
+}
+
+/* ================= INTERACTIVE TUTORIAL =================
+   The player is locked into a guided flow: only the highlighted control
+   responds to taps. They physically build Strain Alpha before playing.
+   The old slideshow tutorial is kept below (drawTutorialSlides) but disabled;
+   flip USE_INTERACTIVE_TUTORIAL to switch back if needed. */
+const USE_INTERACTIVE_TUTORIAL=true;
+
+// Each stage: what to show, which control is live, and when it completes.
+// gate(): returns true once the required action has been done.
+const ITUT=[
+  {id:'intro',
+   text:'Welcome. In Virus Lab you do not steer your virus. You write its behaviour, then watch it spread. Let\u2019s build your first strain.',
+   cta:'BEGIN'},
+  {id:'explain-loop',
+   text:'A genome is a short list of actions your virus repeats forever. We\u2019ll add four actions to make it advance and turn. Tap ADVANCE below.',
+   focus:'palette-avancer'},
+  {id:'add-second',
+   text:'Good. Add one more ADVANCE so it moves two cells before turning.',
+   focus:'palette-avancer'},
+  {id:'add-turn',
+   text:'Now a turn, so it doesn\u2019t just run into the wall. Tap TURN RIGHT.',
+   focus:'palette-tournerD'},
+  {id:'add-fourth',
+   text:'One last ADVANCE to close the loop. Tap ADVANCE.',
+   focus:'palette-avancer'},
+  {id:'name',
+   text:'Your first genome is ready: advance, advance, turn, advance. Name your strain.',
+   focus:'name'},
+  {id:'done',
+   text:'Strain Alpha is logged. When you lose a match, a report shows the enemy genome and how to beat it. That\u2019s how you improve. Time to play.',
+   cta:'ENTER THE LAB'}
+];
+
+let itutStage=0;
+let itutStrain=null; // built in-place before being committed to D.virusList
+
+function itutTarget(){return ITUT[Math.min(itutStage,ITUT.length-1)];}
+
+function ensureItutStrain(){
+  if(!itutStrain){
+    const look=defaultLook(0);
+    itutStrain={name:'Strain Alpha',actions:[],look:look,color:paletteById(look.palette).main};
+  }
+}
+
+function drawTutorial(dt){
+  if(!USE_INTERACTIVE_TUTORIAL){drawTutorialSlides(dt);return;}
+  ensureItutStrain();
+  drawBackground();
+  const st=itutTarget();
+
+  // progress pips
+  const pw=10,pgap=7;
+  const totalW=ITUT.length*pw+(ITUT.length-1)*pgap;
+  ITUT.forEach((_,k)=>{
+    const px=W/2-totalW/2+k*(pw+pgap);
+    rr(px,28,pw,6,3);
+    ctx.fillStyle=k<=itutStage?C.cyan:'rgba(63,208,255,.22)';ctx.fill();
+  });
+
+  // --- Virus preview (bigger, more room) ---
+  panel(16,52,W-32,150,paletteById(itutStrain.look.palette).main,'rgba(6,18,38,.92)',14);
+  drawStrain(84,127,48,itutStrain.look,T,{halo:false});
+  text(itutStrain.name,158,96,20,C.text,'left','800');
+  text(itutStrain.actions.length+'/4 actions',158,122,13,C.gold,'left','700');
+  const cs=32,cg=7;
+  for(let i=0;i<4;i++){
+    const bx=158+i*(cs+cg),by=140;
+    const k=itutStrain.actions[i];
+    rr(bx,by,cs,cs,6);
+    if(k){
+      ctx.fillStyle='rgba(16,44,80,.9)';ctx.fill();
+      ctx.strokeStyle=ACT_COLOR[k]||C.cyan;ctx.lineWidth=1.4;ctx.stroke();
+      text(ACTIONS[k].icon,bx+cs/2,by+cs/2,17,ACT_COLOR[k]||C.cyan,'center','700');
+    }else{
+      ctx.setLineDash([2,2]);ctx.strokeStyle='rgba(63,208,255,.25)';ctx.lineWidth=1;ctx.stroke();ctx.setLineDash([]);
+    }
+  }
+
+  // --- Instruction card (bigger text, taller) ---
+  panel(16,216,W-32,150,C.cyan,'rgba(6,18,38,.96)',14);
+  text('STEP '+(itutStage+1)+' / '+ITUT.length,36,242,11,C.gold,'left','800');
+  ctx.font="500 15px 'Segoe UI',system-ui,sans-serif";
+  const words=st.text.split(' ');let line='',ly=272;
+  for(const wd of words){
+    if(ctx.measureText(line+wd).width>W-76){text(line,36,ly,15,C.text,'left','500');line=wd+' ';ly+=23;}
+    else line+=wd+' ';
+  }
+  if(line)text(line,36,ly,15,C.text,'left','500');
+
+  // --- Genome palette, moved up to fill the gap ---
+  const paletteY=414;
+  text('GENOME ACTIONS',W/2,paletteY-18,12,C.textDim,'center','700');
+  const keys=['avancer','tournerG','tournerD'];
+  const pw2=92,ph2=82,pg2=14;
+  const totalPW=keys.length*pw2+(keys.length-1)*pg2;
+  keys.forEach((key,i)=>{
+    const bx=W/2-totalPW/2+i*(pw2+pg2),by=paletteY;
+    const a=ACTIONS[key];
+    const focused=st.focus==='palette-'+key;
+    const dim=st.focus&&st.focus.startsWith('palette-')&&!focused;
+    rr(bx,by,pw2,ph2,10);
+    ctx.fillStyle=focused?'rgba(63,208,255,.20)':'rgba(12,28,54,.9)';ctx.fill();
+    ctx.strokeStyle=focused?C.cyan:(dim?'rgba(63,208,255,.15)':'rgba(63,208,255,.4)');
+    ctx.lineWidth=focused?2.4:1.2;
+    if(focused){ctx.shadowColor=C.cyan;ctx.shadowBlur=16+Math.sin(T*4)*6;}
+    ctx.stroke();ctx.shadowBlur=0;
+    ctx.globalAlpha=dim?0.4:1;
+    text(a.icon,bx+pw2/2,by+32,28,ACT_COLOR[key],'center','700',focused?6:0);
+    text(a.name,bx+pw2/2,by+62,12,focused?C.text:C.textDim,'center','700');
+    ctx.globalAlpha=1;
+    if(focused){
+      const ax=bx+pw2/2,ay2=by-8+Math.sin(T*4)*4;
+      ctx.fillStyle=C.cyan;
+      ctx.beginPath();ctx.moveTo(ax,ay2+6);ctx.lineTo(ax-7,ay2-4);ctx.lineTo(ax+7,ay2-4);ctx.closePath();ctx.fill();
+    }
+    if(focused){
+      hitzones.push({x:bx,y:by,w:pw2,h:ph2,cb:()=>{
+        itutStrain.actions.push(key);save();sfx.place();advanceItut();
+      }});
+    }
+  });
+
+  // --- Bottom row : Back arrow + CTA/name, closer to the actions ---
+  const btnY=H-96;
+  // Back arrow (disabled on first step)
+  const canBack=itutStage>0&&!(st.id==='done');
+  rr(24,btnY+4,52,46,10);
+  ctx.fillStyle=canBack?'rgba(20,44,80,.9)':'rgba(20,28,44,.6)';ctx.fill();
+  ctx.strokeStyle=canBack?C.cyan:C.lock;ctx.lineWidth=1.4;ctx.stroke();
+  text('\u2039',49,btnY+26,26,canBack?C.cyan:C.textDim,'center','700');
+  if(canBack)hitzones.push({x:24,y:btnY+4,w:52,h:46,cb:()=>{backItut();}});
+
+  const mainX=88,mainW=W-88-24;
+  if(st.cta){
+    const ctaAccent=st.id==='done'?'#4dffa6':(st.id==='intro'?C.gold:C.cyan);
+    button(mainX,btnY,mainW,54,st.cta,()=>{
+      if(st.id==='done')commitItut();else advanceItut();
+    },{accent:ctaAccent,size:18});
+  }else if(st.focus==='name'){
+    rr(mainX,btnY,mainW,54,10);
+    ctx.fillStyle='rgba(63,208,255,.18)';ctx.fill();
+    ctx.strokeStyle=C.cyan;ctx.lineWidth=2.2;
+    ctx.shadowColor=C.cyan;ctx.shadowBlur=14+Math.sin(T*4)*5;ctx.stroke();ctx.shadowBlur=0;
+    text('NAME YOUR VIRUS',mainX+mainW/2,btnY+28,16,C.text,'center','800',6);
+    hitzones.push({x:mainX,y:btnY,w:mainW,h:54,cb:()=>{
+      openKeyboard('Name your virus','Strain Alpha',16,val=>{
+        itutStrain.name=val;save();advanceItut();
+      });
+    }});
+  }
+}
+
+function backItut(){
+  if(itutStage<=0)return;
+  // if the previous step added an action, remove it so the sequence stays in sync
+  const prev=ITUT[itutStage-1];
+  if(prev&&prev.focus&&prev.focus.indexOf('palette-')===0&&itutStrain.actions.length>0){
+    itutStrain.actions.pop();
+  }
+  itutStage--;save();sfx.click();
+}
+
+function advanceItut(){
+  itutStage++;
+  if(itutStage>=ITUT.length)itutStage=ITUT.length-1;
+  save();sfx.click();
+}
+function commitItut(){
+  // finalise the built strain
+  if(itutStrain.actions.length<4){
+    itutStrain.actions=['avancer','avancer','tournerD','avancer'];
+  }
+  D.virusList=[itutStrain];D.selected=0;editIndex=0;
+  D.tutorial=99;itutStrain=null;itutStage=0;
+  D.onboardLab=true; // afficher l'indice "va au Labo" une fois, au menu
+  save();sfx.unlock();notify('Strain Alpha created');
+  go(P.MAIN);
+}
+
+function drawTutorialSlides(dt){
+  drawBackground();
+  const i=Math.min(D.tutorial,TUT_STEPS.length-1);
+  const st=TUT_STEPS[i];
+
+  // progress pips
+  const pw=10,pgap=7;
+  const totalW=TUT_STEPS.length*pw+(TUT_STEPS.length-1)*pgap;
+  TUT_STEPS.forEach((_,k)=>{
+    const px=W/2-totalW/2+k*(pw+pgap);
+    rr(px,44,pw,5,2.5);
+    ctx.fillStyle=k<=i?C.cyan:'rgba(63,208,255,.22)';ctx.fill();
+  });
+
+  // artwork
+  const ay=190;
+  switch(st.art){
+    case 'logo':drawLogoVirus(W/2,ay,58,T);break;
+    case 'dish':drawTutorialDish(W/2,ay,T);break;
+    case 'genome':drawTutorialGenome(W/2,ay);break;
+    case 'slots':drawTutorialSlots(W/2,ay);break;
+    case 'strain':case 'alpha':{
+      const look=D.virusList[0]?D.virusList[0].look:defaultLook(0);
+      drawStrain(W/2,ay,54,look,T);
+      break;}
+    case 'report':drawTutorialReport(W/2,ay);break;
+  }
+
+  // text
+  panel(24,300,W-48,190,C.cyan,'rgba(6,18,38,.94)',14);
+  text(st.title,W/2,336,19,C.text,'center','800',10);
+  ctx.font="500 13px 'Segoe UI',system-ui,sans-serif";
+  const words=st.body.split(' ');let line='',ly=378;
+  for(const wd of words){
+    if(ctx.measureText(line+wd).width>W-100){
+      text(line,W/2,ly,13,C.textDim,'center','500');line=wd+' ';ly+=21;
+    }else line+=wd+' ';
+  }
+  if(line)text(line,W/2,ly,13,C.textDim,'center','500');
+
+  // action
+  button(W/2-130,H-150,260,52,st.action,()=>{
+    if(st.art==='strain'){
+      // The tutorial always creates Strain Alpha, no other option.
+      if(!D.virusList.length){
+        const look=defaultLook(0);
+        D.virusList.push({name:'Strain Alpha',
+          actions:['avancer','avancer','tournerD','avancer'],
+          look:look,color:paletteById(look.palette).main});
+        D.selected=0;editIndex=0;
+      }
+      sfx.unlock();notify('Strain Alpha created');
+    }
+    D.tutorial++;
+    if(D.tutorial>=TUT_STEPS.length){D.tutorial=99;save();go(P.MAIN);}
+    else{save();sfx.click();}
+  },{accent:st.art==='strain'?'#4dffa6':C.cyan,size:16});
+
+  if(D.tutorial<TUT_STEPS.length-1){
+    rr(W/2-60,H-86,120,28,7);
+    ctx.fillStyle='rgba(12,28,54,.8)';ctx.fill();
+    ctx.strokeStyle='rgba(63,208,255,.3)';ctx.lineWidth=1;ctx.stroke();
+    text('SKIP TUTORIAL',W/2,H-72,10,C.textDim,'center','700');
+    hitzones.push({x:W/2-60,y:H-86,w:120,h:28,cb:()=>{
+      if(!D.virusList.length){
+        const look=defaultLook(0);
+        D.virusList.push({name:'Strain Alpha',
+          actions:['avancer','avancer','tournerD','avancer'],
+          look:look,color:paletteById(look.palette).main});
+        D.selected=0;editIndex=0;
+      }
+      D.tutorial=99;save();go(P.MAIN);
+    }});
+  }
+}
+
+function drawTutorialDish(cx,cy,phase){
+  const r=64;
+  ctx.save();
+  ctx.beginPath();ctx.arc(cx,cy,r+10,0,7);
+  ctx.fillStyle='rgba(14,34,60,.9)';ctx.fill();
+  ctx.strokeStyle=C.cyan;ctx.lineWidth=2.4;
+  ctx.shadowColor=C.cyan;ctx.shadowBlur=14;ctx.stroke();ctx.shadowBlur=0;
+  ctx.beginPath();ctx.arc(cx,cy,r,0,7);ctx.clip();
+  ctx.fillStyle='#071626';ctx.fillRect(cx-r,cy-r,r*2,r*2);
+  // animated fill from both sides
+  const t=(Math.sin(phase*.8)*.5+.5)*.35+.30;
+  ctx.fillStyle=C.cyan+'cc';
+  ctx.fillRect(cx-r,cy+r-(r*2*t),r*2,r*2*t);
+  ctx.fillStyle=C.red+'cc';
+  ctx.fillRect(cx-r,cy-r,r*2,r*2*(1-t)*0.72);
+  // grid texture
+  ctx.strokeStyle='rgba(0,0,0,.20)';ctx.lineWidth=1;
+  for(let g=-r;g<r;g+=5){
+    ctx.beginPath();ctx.moveTo(cx-r,cy+g);ctx.lineTo(cx+r,cy+g);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx+g,cy-r);ctx.lineTo(cx+g,cy+r);ctx.stroke();
+  }
+  ctx.restore();
+  text(Math.round(t*100)+'%',cx-r-6,cy+r+22,12,C.cyan,'right','800');
+  text(Math.round((1-t)*72)+'%',cx+r+6,cy+r+22,12,C.red,'left','800');
+}
+
+function drawTutorialGenome(cx,cy){
+  const seq=['avancer','avancer','tournerD','avancer'];
+  const cs=48,gap=8;
+  const total=seq.length*cs+(seq.length-1)*gap;
+  const sx=cx-total/2;
+  seq.forEach((k,i)=>{
+    const bx=sx+i*(cs+gap);
+    rr(bx,cy-cs/2,cs,cs,8);
+    ctx.fillStyle='rgba(16,44,80,.95)';ctx.fill();
+    ctx.strokeStyle=ACT_COLOR[k];ctx.lineWidth=1.7;
+    ctx.shadowColor=ACT_COLOR[k];ctx.shadowBlur=8;ctx.stroke();ctx.shadowBlur=0;
+    text(ACTIONS[k].icon,bx+cs/2,cy-4,22,ACT_COLOR[k],'center','700',5);
+    text(ACTIONS[k].name.slice(0,7),bx+cs/2,cy+cs/2-9,6.5,C.textDim,'center','600');
+  });
+  // loop arrow
+  ctx.strokeStyle='rgba(124,150,189,.55)';ctx.lineWidth=1.6;ctx.setLineDash([4,4]);
+  ctx.beginPath();
+  ctx.moveTo(sx+total,cy+cs/2+6);ctx.lineTo(sx+total+16,cy+cs/2+6);
+  ctx.lineTo(sx+total+16,cy-cs/2-14);ctx.lineTo(sx-16,cy-cs/2-14);
+  ctx.lineTo(sx-16,cy-cs/2+8);
+  ctx.stroke();ctx.setLineDash([]);
+  text('repeats forever',cx,cy-cs/2-24,10,C.textDim,'center','600');
+}
+
+function drawTutorialSlots(cx,cy){
+  const rows=[['avancer',1],['boost',2],['diviser',3]];
+  rows.forEach(([k,cost],i)=>{
+    const ry=cy-46+i*44;
+    rr(cx-120,ry,240,36,8);
+    ctx.fillStyle='rgba(12,30,58,.9)';ctx.fill();
+    ctx.strokeStyle=ACT_COLOR[k];ctx.lineWidth=1.3;ctx.stroke();
+    text(ACTIONS[k].icon,cx-100,ry+18,18,ACT_COLOR[k],'center','700',4);
+    text(ACTIONS[k].name,cx-78,ry+18,13,C.text,'left','700');
+    for(let sIdx=0;sIdx<3;sIdx++){
+      const bx=cx+56+sIdx*17;
+      rr(bx,ry+12,13,13,3);
+      ctx.fillStyle=sIdx<cost?C.gold:'rgba(90,110,140,.25)';ctx.fill();
+    }
+  });
+}
+
+function drawTutorialReport(cx,cy){
+  panel(cx-110,cy-58,220,116,C.gold,'rgba(30,20,8,.92)',10);
+  text('DEBRIEF',cx,cy-38,12,C.gold,'center','800',6);
+  // mini curve
+  const gx=cx-88,gy=cy-24,gw=176,gh=54;
+  ctx.strokeStyle='rgba(63,208,255,.12)';ctx.lineWidth=1;
+  for(let i=1;i<3;i++){
+    ctx.beginPath();ctx.moveTo(gx,gy+gh*i/3);ctx.lineTo(gx+gw,gy+gh*i/3);ctx.stroke();
+  }
+  const plot=(fn,col)=>{
+    ctx.beginPath();
+    for(let i=0;i<=30;i++){
+      const t=i/30,x=gx+t*gw,y=gy+gh-fn(t)*gh;
+      i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+    }
+    ctx.strokeStyle=col;ctx.lineWidth=2;
+    ctx.shadowColor=col;ctx.shadowBlur=6;ctx.stroke();ctx.shadowBlur=0;
+  };
+  plot(t=>0.15+t*0.30,C.cyan);
+  plot(t=>0.12+t*t*0.80,C.red);
+  text('you',gx+4,gy+10,8,C.cyan,'left','700');
+  text('enemy',gx+30,gy+10,8,C.red,'left','700');
+}
+
+/* ---------------- APPEARANCE EDITOR ---------------- */
+const SPIKE_LABELS={round:'Round',triangle:'Spiked',tentacle:'Tendril',
+                    club:'Club',crystal:'Blade',hook:'Hook',none:'Bare'};
+const CORE_LABELS={rings:'Rings',nucleus:'Nucleus',spiral:'Helix',
+                   hex:'Lattice',cells:'Vesicles',void:'Hollow'};
+const BODY_LABELS={smooth:'Smooth',ridged:'Ridged',segmented:'Segmented',
+                   crystalline:'Faceted',porous:'Porous'};
+
+function drawAppearance(dt){
+  drawBackground();
+  const v=D.virusList[editIndex];
+  if(!v){go(P.VIRUSES);return;}
+  v.look=normaliseLook(v.look,editIndex);
+  header('APPEARANCE',P.EDITOR);
+  applyScrollPhysics();
+  ctx.save();ctx.beginPath();ctx.rect(0,68,W,H-68);ctx.clip();
+  const scrollY=scroll.y;
+
+  // Live preview
+  panel(16,74-scrollY,W-32,132,paletteById(v.look.palette).main,'rgba(6,18,38,.92)',12);
+  drawStrain(88,140-scrollY,44,v.look,T);
+  text(v.name,152,120-scrollY,19,C.text,'left','800');
+  text(`${SPIKE_LABELS[v.look.spike]} \u2022 ${BODY_LABELS[v.look.body]} \u2022 ${CORE_LABELS[v.look.core]}`,
+       152,144-scrollY,10.5,C.textDim,'left','600');
+  // rename
+  rr(152,158-scrollY,96,30,7);ctx.fillStyle='rgba(16,42,78,.9)';ctx.fill();
+  ctx.strokeStyle=C.cyan;ctx.lineWidth=1.2;ctx.stroke();
+  text('RENAME',200,173-scrollY,10,C.text,'center','700');
+  hitzones.push({x:152,y:158-scrollY,w:96,h:30,cb:()=>{
+    openKeyboard('Strain name',v.name,16,val=>{v.name=val;save();notify('Renamed');});
+  }});
+  // randomise
+  rr(256,158-scrollY,96,30,7);ctx.fillStyle='rgba(60,44,10,.9)';ctx.fill();
+  ctx.strokeStyle=C.gold;ctx.lineWidth=1.2;ctx.stroke();
+  text('RANDOM',304,173-scrollY,10,C.gold,'center','700');
+  hitzones.push({x:256,y:158-scrollY,w:96,h:30,cb:()=>{
+    v.look=randomLook();v.color=paletteById(v.look.palette).main;save();sfx.click();
+  }});
+
+  let y=218-scrollY;
+  const swatch=(label,key)=>{
+    text(label,20,y,10,C.textDim,'left','700');
+    y+=14;
+    const per=6,sw=(W-40-(per-1)*6)/per;
+    PALETTE.forEach((pal,i)=>{
+      const col=i%per,row=(i/per)|0;
+      const bx=20+col*(sw+6),by=y+row*(sw+6);
+      rr(bx,by,sw,sw,7);
+      const g=ctx.createLinearGradient(bx,by,bx+sw,by+sw);
+      g.addColorStop(0,pal.glow);g.addColorStop(.5,pal.main);g.addColorStop(1,pal.deep);
+      ctx.fillStyle=g;ctx.fill();
+      const sel=v.look[key]===pal.id;
+      ctx.strokeStyle=sel?'#ffffff':'rgba(0,0,0,.45)';ctx.lineWidth=sel?2.6:1;
+      if(sel){ctx.shadowColor=pal.main;ctx.shadowBlur=10;}
+      ctx.stroke();ctx.shadowBlur=0;
+      hitzones.push({x:bx,y:by,w:sw,h:sw,cb:()=>{
+        v.look[key]=pal.id;
+        if(key==='palette')v.color=pal.main;
+        save();sfx.place();
+      }});
+    });
+    y+=Math.ceil(PALETTE.length/per)*(sw+6)+10;
+  };
+  swatch('SHELL COLOUR','palette');
+  swatch('CORE COLOUR','accent');
+
+  // Option rows
+  const optRow=(label,key,values,labels)=>{
+    text(label,20,y,10,C.textDim,'left','700');
+    y+=14;
+    const per=Math.min(4,values.length);
+    const bw2=(W-40-(per-1)*5)/per;
+    values.forEach((val,i)=>{
+      const col=i%per,row=(i/per)|0;
+      const bx=20+col*(bw2+5),by=y+row*39;
+      const sel=v.look[key]===val;
+      rr(bx,by,bw2,34,6);
+      ctx.fillStyle=sel?'rgba(63,208,255,.22)':'rgba(12,30,58,.9)';ctx.fill();
+      ctx.strokeStyle=sel?C.cyan:'rgba(63,208,255,.25)';ctx.lineWidth=sel?1.9:1;ctx.stroke();
+      text(labels[val],bx+bw2/2,by+17,9.5,sel?C.text:C.textDim,'center','700');
+      hitzones.push({x:bx,y:by,w:bw2,h:34,cb:()=>{v.look[key]=val;save();sfx.place();}});
+    });
+    y+=Math.ceil(values.length/per)*39+8;
+  };
+  optRow('SPIKE SHAPE','spike',SPIKE_SHAPES,SPIKE_LABELS);
+  optRow('SHELL TEXTURE','body',BODY_STYLES,BODY_LABELS);
+  optRow('CORE PATTERN','core',CORE_STYLES,CORE_LABELS);
+
+  // Spike count slider
+  text('SPIKE COUNT',20,y,10,C.textDim,'left','700');
+  text(String(v.look.spikeCount),W-20,y,11,C.gold,'right','800');
+  y+=14;
+  const tw=W-40;
+  rr(20,y+9,tw,7,4);ctx.fillStyle='rgba(6,14,28,.9)';ctx.fill();
+  const frac=(v.look.spikeCount-6)/16;
+  rr(20,y+9,tw*frac,7,4);ctx.fillStyle=paletteById(v.look.palette).main;ctx.fill();
+  const kx=20+tw*frac;
+  ctx.beginPath();ctx.arc(kx,y+12.5,10,0,7);
+  ctx.fillStyle='#eaf6ff';ctx.fill();
+  ctx.strokeStyle=paletteById(v.look.palette).main;ctx.lineWidth=2;ctx.stroke();
+  hitzones.push({x:16,y:y-4,w:W-32,h:34,slider:true,cb:(px)=>{
+    const f=Math.max(0,Math.min(1,(px-20)/tw));
+    v.look.spikeCount=Math.round(6+f*16);save();
+  }});
+  y+=46;
+  ctx.restore();
+  scroll.max=Math.max(0,(y+scrollY)-H+96);
+
+  // barre d'action fixe
+  panel(0,H-74,W,74,'rgba(63,208,255,.2)','rgba(4,10,22,.96)',0);
+  button(W/2-110,H-60,220,46,'DONE',()=>{save();go(P.EDITOR);},{accent:'#4dffa6'});
+}
+
+/* ---------------- LABORATOIRE ---------------- */
+function drawLab(dt){
+  drawBackground();header('LAB',P.MAIN);
+  const top=72,visH=H-top-8;
+  applyScrollPhysics();
+  const now=Date.now();
+
+  ctx.save();ctx.beginPath();ctx.rect(0,top,W,visH);ctx.clip();
+  let y=top+8-scroll.y;
+  const rowH=88;
+
+  // === SECTION CAPACITÉ DE GÉNOME ===
+  if(y+24>top-4&&y<H+4){
+    text('GENOME CAPACITY',24,y+8,12,C.dna,'left','800',4);
+    text(slotBudget()+' slots',W-24,y+8,11,C.textDim,'right','700');
+    ctx.strokeStyle='rgba(196,139,255,.3)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(24,y+18);ctx.lineTo(W-24,y+18);ctx.stroke();
+  }
+  y+=30;
+  // ne montrer que le PROCHAIN palier non débloqué (progression séquentielle)
+  let nextCap=null;
+  for(const u of CAPACITY_UPGRADES){if(!D.unlocked.includes(u.id)){nextCap=u;break;}}
+  CAPACITY_UPGRADES.forEach((u,ui)=>{
+    const owned=D.unlocked.includes(u.id);
+    const end=D.research[u.id];
+    const researching=!!end&&end>now;
+    const done=!!end&&end<=now;
+    if(done&&!owned){D.unlocked.push(u.id);delete D.research[u.id];save();sfx.unlock();notify('Genome capacity +'+u.bonus);}
+    // afficher : les paliers possédés + uniquement le prochain disponible
+    const isNext=(nextCap&&nextCap.id===u.id);
+    if(!owned&&!isNext&&!researching){return;}
+    if(y+rowH>top-4&&y<H+4){
+      const accent=owned?'#4dffa6':(researching?C.gold:C.dna);
+      panel(16,y,W-32,rowH-8,owned?'rgba(77,255,166,.4)':'rgba(196,139,255,.3)','rgba(14,8,30,.92)',10);
+      rr(28,y+12,50,50,10);ctx.fillStyle='rgba(30,16,54,.9)';ctx.fill();
+      ctx.strokeStyle=accent;ctx.lineWidth=1.4;ctx.stroke();
+      icoDna(53,y+37,26,accent);
+      text('+'+u.bonus+' SLOTS',90,y+24,15,C.text,'left','800');
+      text('Expand your genome budget to '+(SLOT_BUDGET_BASE+CAPACITY_UPGRADES.slice(0,ui+1).reduce((a,x)=>a+x.bonus,0))+' slots.',90,y+46,10,C.textDim,'left','500');
+      if(owned){
+        text('OWNED',W-56,y+40,11,'#4dffa6','center','800',6);
+      }else if(researching){
+        const left=Math.ceil((end-now)/1000);const m=Math.floor(left/60),ss=left%60;
+        text(m+':'+String(ss).padStart(2,'0'),W-56,y+30,14,C.gold,'center','800',6);
+        rr(W-90,y+44,68,22,6);ctx.fillStyle='rgba(60,50,10,.9)';ctx.fill();
+        ctx.strokeStyle=C.gold;ctx.lineWidth=1;ctx.stroke();
+        text('SKIP',W-56,y+55,8.5,C.gold,'center','800');
+        hitzones.push({x:W-90,y:y+44,w:68,h:22,cb:()=>{
+          openDialog('Skip research','Watch a short ad to finish this instantly?','WATCH AD',()=>{D.research[u.id]=Date.now()-1;save();sfx.unlock();});
+        }});
+      }else{
+        const afford=D.dna>=u.cost;
+        // pendant l'onboarding, seul le tout premier palier (cap0) est achetable
+        const onbBlocked=onbActive()&&u.id!=='cap0';
+        const isOnbTarget=onbTarget('lab_cap')&&u.id==='cap0';
+        if(isOnbTarget)onbHighlight('lab_cap',W-96,y+24,78,38,8);
+        if(onbBlocked)ctx.globalAlpha=0.4;
+        rr(W-94,y+26,74,34,8);
+        ctx.fillStyle=afford&&!onbBlocked?'rgba(40,20,72,.95)':'rgba(30,36,50,.8)';ctx.fill();
+        ctx.strokeStyle=(afford&&!onbBlocked)?C.dna:C.lock;ctx.lineWidth=1.3;ctx.stroke();
+        if(afford)dnaLabel(W-56,y+37,u.cost,12,'center');else text('\u2b22 '+u.cost,W-56,y+37,12,C.textDim,'center','800');
+        text('RESEARCH',W-56,y+51,8,(afford&&!onbBlocked)?C.text:C.textDim,'center','700');
+        ctx.globalAlpha=1;
+        if(afford&&!onbBlocked)hitzones.push({x:W-94,y:y+26,w:74,h:34,cb:()=>{
+          if(D.dna<u.cost){sfx.err();return;}
+          D.dna-=u.cost;
+          // pendant l'onboarding (ou time 0), débloquage instantané
+          if(u.time<=0||onbActive()){
+            D.unlocked.push(u.id);save();sfx.unlock();notify('Genome capacity +'+u.bonus);
+            onbAdvance('lab_cap');
+          }else{
+            D.research[u.id]=Date.now()+u.time*1000;save();sfx.click();notify('Research started');
+          }
+        }});
+      }
+      y+=rowH;
+    }else{y+=rowH;}
+  });
+  y+=8;
+
+  LAB_TIERS.forEach((tier)=>{
+    const unlockedInTier=tier.keys.filter(k=>D.unlocked.includes(k)).length;
+    if(y+24>top-4&&y<H+4){
+      text(tier.name,24,y+8,12,C.gold,'left','800',4);
+      text(unlockedInTier+'/'+tier.keys.length,W-24,y+8,11,C.textDim,'right','700');
+      ctx.strokeStyle='rgba(245,197,66,.25)';ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(24,y+18);ctx.lineTo(W-24,y+18);ctx.stroke();
+    }
+    y+=30;
+
+    tier.keys.forEach(key=>{
+      const a=ACTIONS[key];if(!a){return;}
+      const owned=D.unlocked.includes(key);
+      const end=D.research[key];
+      const researching=!!end&&end>now;
+      const done=!!end&&end<=now;
+      if(done&&!owned){
+        D.unlocked.push(key);delete D.research[key];save();sfx.unlock();notify(a.name+' unlocked');
+      }
+      if(y+rowH>top-4&&y<H+4){
+        const accent=owned?'#4dffa6':(researching?C.gold:C.cyan);
+        panel(16,y,W-32,rowH-8,owned?'rgba(77,255,166,.4)':'rgba(63,208,255,.22)','rgba(8,20,42,.92)',10);
+        rr(28,y+12,50,50,10);ctx.fillStyle='rgba(16,38,70,.9)';ctx.fill();
+        ctx.strokeStyle=accent;ctx.lineWidth=1.4;ctx.stroke();
+        text(a.icon,53,y+37,24,ACT_COLOR[key]||accent,'center','700',8);
+        text(a.name,90,y+22,15,C.text,'left','800');
+        text(a.slot+' slot'+(a.slot>1?'s':''),90,y+40,10,C.gold,'left','700');
+        ctx.font="500 10px 'Segoe UI',system-ui,sans-serif";
+        const words=a.desc.split(' ');let line='',ly=y+56;
+        for(const wd of words){
+          if(ctx.measureText(line+wd).width>205){text(line,90,ly,10,C.textDim,'left','500');line=wd+' ';ly+=12;}
+          else line+=wd+' ';
+        }
+        if(line)text(line,90,ly,10,C.textDim,'left','500');
+
+        if(owned){
+          text('UNLOCKED',W-56,y+40,11,'#4dffa6','center','800',6);
+        }else if(researching){
+          const left=Math.ceil((end-now)/1000);
+          const m=Math.floor(left/60),ss=left%60;
+          text(m+':'+String(ss).padStart(2,'0'),W-56,y+30,14,C.gold,'center','800',6);
+          rr(W-90,y+44,68,22,6);ctx.fillStyle='rgba(60,50,10,.9)';ctx.fill();
+          ctx.strokeStyle=C.gold;ctx.lineWidth=1;ctx.stroke();
+          text('SKIP',W-56,y+55,8.5,C.gold,'center','800');
+          hitzones.push({x:W-90,y:y+44,w:68,h:22,cb:()=>{
+            openDialog('Skip research','Watch a short ad to finish this research instantly?','WATCH AD',()=>{
+              D.research[key]=Date.now()-1;save();sfx.unlock();
+            });
+          }});
+        }else{
+          const afford=D.dna>=a.cost;
+          // pendant l'onboarding, aucun achat d'action n'est autorisé
+          const onbBlk=onbActive();
+          const canBuy=afford&&!onbBlk;
+          if(onbBlk)ctx.globalAlpha=0.4;
+          rr(W-94,y+26,74,34,8);
+          ctx.fillStyle=canBuy?'rgba(20,52,96,.95)':'rgba(30,36,50,.8)';ctx.fill();
+          ctx.strokeStyle=canBuy?C.cyan:C.lock;ctx.lineWidth=1.3;ctx.stroke();
+          if(afford)dnaLabel(W-56,y+37,a.cost,12,'center');else text('\u2b22 '+a.cost,W-56,y+37,12,C.textDim,'center','800');
+          text('RESEARCH',W-56,y+51,8,canBuy?C.text:C.textDim,'center','700');
+          ctx.globalAlpha=1;
+          if(canBuy)hitzones.push({x:W-94,y:y+26,w:74,h:34,cb:()=>{
+            if(D.dna<a.cost){sfx.err();return;}
+            D.dna-=a.cost;D.research[key]=Date.now()+a.time*1000;save();sfx.click();
+            notify('Research started');
+          }});
+        }
+      }
+      y+=rowH;
+    });
+    y+=8;
+  });
+
+  ctx.restore();
+  scroll.max=Math.max(0,(y+scroll.y)-H+20);
+}
+
+/* ---------------- CAMPAGNE ---------------- */
+function drawCampaign(dt){
+  drawBackground();header('CAMPAIGN',P.MAIN);
+  const top=70,visH=H-top-8;
+  const nodeGap=88,pad=40;
+  scroll.max=Math.max(0,30*nodeGap+pad*2-visH);
+  if(campaignNeedsCenter){
+    const targetY=pad+(29-(D.progress-1))*nodeGap;
+    scroll.y=Math.max(0,Math.min(scroll.max,targetY-visH/2));
+    campaignNeedsCenter=false;
+  }
+  applyScrollPhysics();
+
+  ctx.save();ctx.beginPath();ctx.rect(0,top,W,visH);ctx.clip();
+
+  // tracé serpentin
+  ctx.strokeStyle='rgba(63,208,255,.18)';ctx.lineWidth=4;
+  ctx.beginPath();
+  for(let i=0;i<30;i++){
+    const y=top+pad+(29-i)*nodeGap-scroll.y;
+    const x=W/2+Math.sin(i*0.9)*76;
+    if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+
+  for(let i=29;i>=0;i--){
+    const lv=i+1;
+    const y=top+pad+(29-i)*nodeGap-scroll.y;
+    if(y<top-60||y>H+60)continue;
+    const x=W/2+Math.sin(i*0.9)*76;
+    const unlocked=lv<=D.progress;
+    const isCurrent=lv===D.progress;
+    const en=enemyAt(i);
+
+    if(isCurrent){
+      const pulse=1+Math.sin(T*3)*0.08;
+      ctx.beginPath();ctx.arc(x,y,32*pulse,0,7);
+      ctx.strokeStyle='rgba(245,197,66,.5)';ctx.lineWidth=2;ctx.stroke();
+    }
+    ctx.beginPath();ctx.arc(x,y,26,0,7);
+    const g=ctx.createRadialGradient(x-8,y-8,4,x,y,26);
+    if(unlocked){g.addColorStop(0,'#2a6ea8');g.addColorStop(1,'#0d2748');}
+    else{g.addColorStop(0,'#1a2436');g.addColorStop(1,'#0b1220');}
+    ctx.fillStyle=g;ctx.fill();
+    ctx.strokeStyle=unlocked?(isCurrent?C.gold:C.cyan):C.lock;
+    ctx.lineWidth=isCurrent?2.6:1.8;
+    if(unlocked){ctx.shadowColor=isCurrent?C.gold:C.cyan;ctx.shadowBlur=12;}
+    ctx.stroke();ctx.shadowBlur=0;
+
+    if(unlocked){
+      text(String(lv),x,y,17,C.text,'center','800',4);
+      text(en.name,x+(x<W/2?40:-40),y,12,C.textDim,x<W/2?'left':'right','700');
+      // surbrillance onboarding sur le niveau 1
+      if(lv===1&&onbTarget('camp_lvl1'))onbHighlight('camp_lvl1',x-32,y-32,64,64,32);
+      hitzones.push({x:x-30,y:y-30,w:60,h:60,cb:()=>{
+        if(onbActive()&&!(lv===1&&onbTarget('camp_lvl1'))){sfx.err();return;}
+        levelSel=lv;onbAdvance('camp_lvl1');go(P.INFO);
+      }});
+    }else{
+      text('🔒',x,y,15,C.lock,'center','700');
+    }
+  }
+  ctx.restore();
+
+  // gradient de bord
+  const gt=ctx.createLinearGradient(0,top,0,top+40);
+  gt.addColorStop(0,'rgba(6,16,34,.95)');gt.addColorStop(1,'rgba(6,16,34,0)');
+  ctx.fillStyle=gt;ctx.fillRect(0,top,W,40);
+}
+
+/* ---------------- INFO NIVEAU ---------------- */
+function drawInfo(dt){
+  drawBackground();header('LEVEL '+levelSel,P.CAMPAIGN);
+  const en=enemyAt(levelSel-1);
+
+  // === CARTE ENNEMI (avec son génome À L'INTÉRIEUR) ===
+  const ecH=214;
+  panel(16,76,W-32,ecH,'rgba(255,77,77,.4)','rgba(30,10,16,.9)',12);
+  drawStrain(80,150,44,{palette:'crimson',accent:'amber',spike:'triangle',spikeCount:12,core:'nucleus',body:'ridged'},T,{halo:false});
+  text(en.name.toUpperCase(),140,110,19,C.red,'left','800',6);
+  const threat=Math.min(5,1+Math.floor((levelSel-1)/6));
+  text('THREAT',140,130,8.5,C.textDim,'left','700');
+  for(let i=0;i<5;i++){const bx=186+i*13;rr(bx,124,9,9,2);ctx.fillStyle=i<threat?C.red:'rgba(90,110,140,.25)';ctx.fill();}
+  ctx.font="500 11px 'Segoe UI',system-ui,sans-serif";
+  const words=en.desc.split(' ');let line='',ly=154;
+  for(const wd of words){
+    if(ctx.measureText(line+wd).width>W-180){text(line,140,ly,11,C.textDim,'left','500');line=wd+' ';ly+=14;}
+    else line+=wd+' ';
+  }
+  if(line)text(line,140,ly,11,C.textDim,'left','500');
+  text('Reward:',140,190,11,C.textDim,'left','700');dnaLabel(140+48,190,en.reward,11,'left');
+  // génome ennemi DANS la carte (bas de la carte)
+  text('\u21ba GENOME',30,206,9,C.textDim,'left','700');
+  const es=30,eg=5;
+  const gy=214;
+  const gn=Math.min(en.pattern.length,Math.floor((W-56)/(es+eg)));
+  en.pattern.slice(0,gn).forEach((k,i)=>{
+    const cx=30+i*(es+eg);
+    const ac=ACT_COLOR[k]||C.red;
+    rr(cx,gy,es,es,6);ctx.fillStyle='rgba(52,14,20,.92)';ctx.fill();
+    ctx.strokeStyle=ac;ctx.lineWidth=1.2;ctx.stroke();
+    text(ACTIONS[k].icon,cx+es/2,gy+es/2,15,ac,'center','700');
+  });
+  if(en.pattern.length>gn)text('+'+(en.pattern.length-gn),30+gn*(es+eg)+2,gy+es/2,10,C.textDim,'left','700');
+
+  // === VIRUS JOUEUR (plus gros, descendu pour combler le vide) ===
+  const v=D.virusList[D.selected];
+  const yvY=354;
+  text('YOUR VIRUS',24,yvY,11,C.textDim,'left','700');
+  if(!v){
+    panel(16,yvY+12,W-32,110,C.gold,'rgba(40,32,8,.9)',12);
+    text('No virus selected.',W/2,yvY+58,14,C.gold,'center','700');
+    text('Create one from MY VIRUSES.',W/2,yvY+84,11,C.textDim,'center','500');
+  }else{
+    const pcY=yvY+12, pcH=182;
+    panel(16,pcY,W-32,pcH,paletteById(v.look.palette).main,'rgba(8,20,42,.92)',12);
+    drawStrain(76,pcY+pcH/2,50,v.look,T,{halo:false});
+    text(v.name,142,pcY+46,19,C.text,'left','800');
+    const sc=slotCost(v.actions);
+    text(sc+'/'+slotBudget()+' slots',142,pcY+68,12,sc>slotBudget()?C.red:C.gold,'left','700');
+    // label GENOME au-dessus des actions (comme la carte ennemi)
+    text('\u21ba GENOME',142,pcY+92,9,C.textDim,'left','700');
+    const ps=30,pg=6;
+    const pn=Math.min(v.actions.length,Math.floor((W-158)/(ps+pg)));
+    v.actions.slice(0,pn).forEach((k,i)=>{
+      const cx=142+i*(ps+pg),cy=pcY+102;
+      const ac=ACT_COLOR[k]||paletteById(v.look.palette).main;
+      rr(cx,cy,ps,ps,6);ctx.fillStyle='rgba(16,40,74,.9)';ctx.fill();
+      ctx.strokeStyle=ac;ctx.lineWidth=1.1;ctx.stroke();
+      text(ACTIONS[k].icon,cx+ps/2,cy+ps/2,15,ac,'center','700');
+    });
+    if(v.actions.length>pn)text('+'+(v.actions.length-pn),142+pn*(ps+pg)+2,pcY+102+ps/2,10,C.textDim,'left','700');
+  }
+
+  // === BOUTONS EN BAS (remontés) ===
+  // Switch / Edit côte à côte, en bleu
+  const bw=W-40,bx=20;
+  const half=(bw-12)/2, sby=H-156;
+  const onbInfo=onbActive();
+  button(bx,sby,half,52,'SWITCH',()=>{if(onbInfo){sfx.err();return;}modal='pick';},{accent:C.cyan,size:16,dim:onbInfo});
+  button(bx+half+12,sby,half,52,'EDIT GENOME',()=>{
+    if(onbInfo){sfx.err();return;}
+    if(!D.virusList.length){notify('Create a virus first');sfx.err();return;}
+    editIndex=D.selected;go(P.EDITOR);
+  },{accent:C.cyan,size:16,dim:onbInfo});
+  // Deploy pleine largeur, remonté
+  if(onbTarget('info_deploy'))onbHighlight('info_deploy',bx,H-94,bw,60,10);
+  button(bx,H-94,bw,60,'DEPLOY VIRUS',()=>{
+    const vv=D.virusList[D.selected];
+    if(!vv||!vv.actions.length){notify('Invalid virus');sfx.err();return;}
+    onbAdvance('info_deploy'); // dernière étape : lancer le combat termine l'onboarding
+    startBattle(vv.actions.slice(),en.pattern.slice(),levelSel);
+    go(P.BATTLE);
+  },{accent:C.red,size:21});
+
+  if(modal==='pick')drawPickModal();
+}
+
+function drawPickModal(){
+  ctx.fillStyle='rgba(2,6,14,.85)';ctx.fillRect(0,0,W,H);
+  const rowH=90;
+  const mh=Math.min(H-60,100+D.virusList.length*rowH);
+  const mTop=H/2-mh/2;
+  panel(24,mTop,W-48,mh,C.cyan,'rgba(6,18,38,.98)',14);
+  text('SELECT A VIRUS',W/2,mTop+30,16,C.text,'center','800',8);
+  const listTop=mTop+50, listBot=mTop+mh-52;
+  D.virusList.forEach((v,i)=>{
+    const y=listTop+i*rowH;
+    if(y+rowH-8>listBot)return;
+    const pal=paletteById(normaliseLook(v.look,i).palette);
+    panel(38,y,W-76,rowH-8,i===D.selected?pal.main:'rgba(63,208,255,.22)','rgba(10,26,50,.92)',10);
+    drawStrain(74,y+(rowH-8)/2,26,v.look,T+i,{halo:false});
+    text(v.name,116,y+22,15,C.text,'left','800');
+    if(i===D.selected)text('ACTIVE',W-66,y+22,9,pal.main,'center','800',5);
+    const sc=slotCost(v.actions);
+    text(v.actions.length+' actions \u2022 '+sc+'/'+slotBudget()+' slots',116,y+40,10,C.textDim,'left','600');
+    // rappel du génome (icônes)
+    const gs=20,gg=4;
+    const maxI=Math.floor((W-140)/(gs+gg));
+    v.actions.slice(0,maxI).forEach((k,j)=>{
+      const bx=116+j*(gs+gg),by=y+50;
+      const ac=ACT_COLOR[k]||pal.main;
+      rr(bx,by,gs,gs,4);ctx.fillStyle='rgba(16,40,74,.9)';ctx.fill();
+      ctx.strokeStyle=ac;ctx.lineWidth=1;ctx.stroke();
+      text(ACTIONS[k].icon,bx+gs/2,by+gs/2,12,ac,'center','700');
+    });
+    if(v.actions.length>maxI)text('+'+(v.actions.length-maxI),116+maxI*(gs+gg)+2,y+50+gs/2,10,C.textDim,'left','700');
+    hitzones.push({x:38,y:y,w:W-76,h:rowH-8,cb:()=>{D.selected=i;save();modal=null;sfx.click();}});
+  });
+  button(W/2-70,mTop+mh-40,140,32,'CLOSE',()=>{modal=null;},{size:13});
+}
+
+/* ---------------- COMBAT ---------------- */
+function drawBattle(dt){
+  drawBackground();
+
+  if(battle.running){
+    battle.acc+=dt*1000;
+    while(battle.acc>=TICK){battle.acc-=TICK;tickBattle();}
+  }
+
+  const c=census();
+  const pRatio=c.p/c.total,eRatio=c.e/c.total;
+  const v=D.virusList[D.selected];
+  const pColor=v?v.color:C.cyan;
+  const enemyColor=enemyColorFor(pColor);
+  const enemyName=battle.arena?((battle.arenaOpponent&&battle.arenaOpponent.name)||'Opponent'):enemyAt(battle.level-1).name;
+  const enemyLook=battle.arena?(battle.arenaOpponent&&battle.arenaOpponent.look):null;
+
+  // === FICHE ENNEMI (carte 20% moins haute, virus 50% plus gros) ===
+  const boxTop=arenaCY-arenaR;
+  const ecTop=16;
+  const ecHfull=(boxTop-38)-ecTop;      // hauteur précédente
+  const ecH=Math.max(78,ecHfull*0.8);    // 20% moins haute
+  const ecMidY=ecTop+ecH*0.42;
+  panel(14,ecTop,W-28,ecH,C.red,'rgba(34,10,16,.95)',14);
+  const eLook=enemyLook||{palette:'crimson',accent:'amber',spike:'triangle',spikeCount:12,core:'nucleus',body:'ridged'};
+  drawStrain(66,ecMidY,45,eLook,T,{halo:false,detail:false});
+  text(enemyName.toUpperCase(),120,ecMidY-16,19,enemyColor,'left','800',6);
+  text(battle.arena?'ARENA CHALLENGER':'ENEMY',120,ecMidY+4,9.5,C.textDim,'left','700');
+  // barre de % ennemi dans la carte
+  const epw=110;
+  rr(120,ecMidY+14,epw,7,3);ctx.fillStyle='rgba(80,20,26,.8)';ctx.fill();
+  rr(120,ecMidY+14,epw*eRatio,7,3);ctx.fillStyle=enemyColor;ctx.fill();
+  // gros % à droite
+  text(Math.round(eRatio*100)+'%',W-38,ecMidY-4,32,enemyColor,'right','800',12);
+  // rappel du génome ennemi (icônes) en bas de la carte
+  {
+    const ePat=battle.arena?((battle.arenaOpponent&&battle.arenaOpponent.genome)||[]):enemyAt(battle.level-1).pattern;
+    const gs=16,gg=4;
+    const gy=ecTop+ecH-gs-9;
+    const gn=Math.min(ePat.length,Math.floor((W-52)/(gs+gg)));
+    ePat.slice(0,gn).forEach((k,i)=>{
+      const bx=28+i*(gs+gg);
+      const ac=ACT_COLOR[k]||C.red;
+      rr(bx,gy,gs,gs,4);ctx.fillStyle='rgba(52,14,20,.9)';ctx.fill();
+      ctx.strokeStyle=ac;ctx.lineWidth=1;ctx.stroke();
+      text(ACTIONS[k].icon,bx+gs/2,gy+gs/2,10,ac,'center','700');
+    });
+    if(ePat.length>gn)text('+'+(ePat.length-gn),28+gn*(gs+gg)+2,gy+gs/2,9,C.textDim,'left','700');
+  }
+
+  // Timer : bien AU-DESSUS de la boîte, dans l'espace dégagé (hors du cadre)
+  const tt=Math.max(0,battle.timer);
+  const urgent=tt<10;
+  text(tt.toFixed(1)+'s',W/2,ecTop+ecH+22,22,urgent?C.red:C.gold,'center','800',urgent?12:6);
+
+  // Arène
+  drawChassis();
+  ctx.save();
+  ctx.beginPath();ctx.arc(arenaCX,arenaCY,arenaR,0,7);ctx.clip();
+  const bg=ctx.createRadialGradient(arenaCX,arenaCY-arenaR*.3,arenaR*.1,arenaCX,arenaCY,arenaR);
+  bg.addColorStop(0,'#0d2038');bg.addColorStop(1,'#050c18');
+  ctx.fillStyle=bg;ctx.fillRect(arenaCX-arenaR,arenaCY-arenaR,arenaR*2,arenaR*2);
+
+  // cellules — dessinées opaques et légèrement débordantes (ceil) pour ne
+  // laisser AUCUNE couture sombre entre les carrés (bug des traits noirs).
+  const cw=Math.ceil(cell)+1;
+  for(let y=0;y<ROWS;y++){
+    for(let x=0;x<COLS;x++){
+      if(!valid[y][x])continue;
+      const val=grid[gi(x,y)];
+      if(!val)continue;
+      const px=Math.floor(originX+x*cell),py=Math.floor(originY+y*cell);
+      ctx.fillStyle=val===1?pColor:enemyColor;
+      ctx.fillRect(px,py,cw,cw);
+    }
+  }
+
+  // flashs de conversion (glow néon)
+  for(let i=battle.flashes.length-1;i>=0;i--){
+    const f=battle.flashes[i];
+    f.t-=dt*3.2;
+    if(f.t<=0){battle.flashes.splice(i,1);continue;}
+    const px=Math.floor(originX+f.x*cell),py=Math.floor(originY+f.y*cell);
+    ctx.globalAlpha=f.t*.5;
+    ctx.fillStyle=f.owner===1?pColor:enemyColor;
+    ctx.fillRect(px-1,py-1,cw+2,cw+2);
+  }
+  ctx.globalAlpha=1;
+  if(battle.flashes.length>500)battle.flashes.splice(0,battle.flashes.length-500);
+
+  // têtes — discrètes : petit point centré, semi-transparent, sans glow lourd.
+  // Elles suggèrent l'activité sans parasiter la lecture du territoire.
+  const hs=Math.max(1.5,cell*0.55);
+  const hoff=(cell-hs)/2;
+  ctx.globalAlpha=0.5;
+  ctx.fillStyle='#eaf7ff';
+  for(const h of headsP){
+    if(!inB(h.x,h.y))continue;
+    ctx.fillRect(originX+h.x*cell+hoff,originY+h.y*cell+hoff,hs,hs);
+  }
+  ctx.fillStyle='#ffe4e4';
+  for(const h of headsE){
+    if(!inB(h.x,h.y))continue;
+    ctx.fillRect(originX+h.x*cell+hoff,originY+h.y*cell+hoff,hs,hs);
+  }
+  ctx.globalAlpha=1;
+
+  // scanlines
+  ctx.fillStyle='rgba(0,0,0,.14)';
+  for(let y=arenaCY-arenaR;y<arenaCY+arenaR;y+=3)ctx.fillRect(arenaCX-arenaR,y,arenaR*2,1);
+  // reflet verre
+  const gl=ctx.createLinearGradient(arenaCX-arenaR,arenaCY-arenaR,arenaCX,arenaCY);
+  gl.addColorStop(0,'rgba(255,255,255,.10)');gl.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=gl;ctx.fillRect(arenaCX-arenaR,arenaCY-arenaR,arenaR*2,arenaR*2);
+  ctx.restore();
+
+  // === ANNEAU DE TERRITOIRE autour de la boîte (bas=joueur, haut=ennemi) ===
+  drawTerritoryRing(arenaCX,arenaCY,arenaR,pRatio,eRatio,pColor,enemyColor);
+
+  // === FICHE VIRUS JOUEUR (carte 20% moins haute, virus 50% plus gros) ===
+  const boxBot=arenaCY+arenaR;
+  const pcBot=H-16;
+  const pcHfull=pcBot-(boxBot+22);        // hauteur précédente
+  const pcH=Math.max(78,pcHfull*0.8);      // 20% moins haute
+  const pcTop=pcBot-pcH;                    // ancrée en bas
+  const pcMidY=pcTop+pcH*0.42;
+  panel(14,pcTop,W-28,pcH,pColor,'rgba(8,22,44,.95)',14);
+  if(v)drawStrain(66,pcMidY,45,v.look,T,{halo:false,detail:false});
+  text(v?v.name.toUpperCase():'YOUR VIRUS',120,pcMidY-16,19,pColor,'left','800',5);
+  text('YOUR VIRUS',120,pcMidY+4,9.5,C.textDim,'left','700');
+  // barre de % joueur + gros %
+  const ppw=110;
+  rr(120,pcMidY+14,ppw,7,3);ctx.fillStyle='rgba(20,52,96,.8)';ctx.fill();
+  rr(120,pcMidY+14,ppw*pRatio,7,3);ctx.fillStyle=pColor;ctx.fill();
+  text(Math.round(pRatio*100)+'%',W-38,pcMidY-4,32,pColor,'right','800',10);
+  // rappel du génome (icônes) en bas de la carte
+  if(v){
+    const gs=16,gg=4;
+    const gy=pcTop+pcH-gs-9;
+    const gn=Math.min(v.actions.length,Math.floor((W-52)/(gs+gg)));
+    v.actions.slice(0,gn).forEach((k,i)=>{
+      const bx=28+i*(gs+gg);
+      const ac=ACT_COLOR[k]||pColor;
+      rr(bx,gy,gs,gs,4);ctx.fillStyle='rgba(16,40,74,.9)';ctx.fill();
+      ctx.strokeStyle=ac;ctx.lineWidth=1;ctx.stroke();
+      text(ACTIONS[k].icon,bx+gs/2,gy+gs/2,10,ac,'center','700');
+    });
+    if(v.actions.length>gn)text('+'+(v.actions.length-gn),28+gn*(gs+gg)+2,gy+gs/2,9,C.textDim,'left','700');
+  }
+
+  if(battle.ended){
+    drawBattleResult(c);
+  }
+}
+
+function drawBattleResult(c){
+  drawBackground();
+  const win=battle.winner==='player';
+  const draw=battle.winner==='draw';
+  const loss=!win&&!draw;
+  const col=win?'#4dffa6':(draw?C.gold:C.red);
+  const r=D.lastReport;
+
+  const top=8,visH=H-top;
+  applyScrollPhysics();
+  ctx.save();ctx.beginPath();ctx.rect(0,top,W,visH);ctx.clip();
+  let y=top+8-scroll.y;
+
+  // --- Bandeau résultat : TON virus à gauche, résultat au centre, ENNEMI à droite ---
+  const pv=D.virusList[D.selected];
+  const eColorR=enemyColorFor(pv?pv.color:C.cyan);
+  const eName=battle.arena?((battle.arenaOpponent&&battle.arenaOpponent.name)||'Opponent'):enemyAt(battle.level-1).name;
+  const eLookR=battle.arena?(battle.arenaOpponent&&battle.arenaOpponent.look):{palette:'crimson',accent:'amber',spike:'triangle',spikeCount:12,core:'nucleus',body:'ridged'};
+  const bh=210;
+  panel(16,y,W-32,bh,col,'rgba(6,16,34,.98)',16);
+  if(win){
+    rr(16,y,W-32,bh,16);ctx.strokeStyle=col;ctx.lineWidth=2.4;ctx.shadowColor=col;ctx.shadowBlur=16;ctx.stroke();ctx.shadowBlur=0;
+  }
+  // virus joueur (gauche) et ennemi (droite)
+  const sideY=y+62, lx=W*0.20, rx=W*0.80;
+  if(pv)drawStrain(lx,sideY,40,pv.look,T,{halo:win}); else drawVirus(lx,sideY,36,col,13,T);
+  drawStrain(rx,sideY,40,eLookR,T,{halo:false});
+  // titre au centre
+  text(win?'VICTORY':(draw?'DRAW':'DEFEAT'),W/2,y+56,30,col,'center','800',16);
+  // % + nom sous chaque virus
+  const pColBanner=pv?pv.color:col;
+  text(Math.round(c.p/c.total*100)+'%',lx,y+116,24,pColBanner,'center','800',8);
+  text((pv?pv.name:'you').slice(0,10),lx,y+138,10,C.textDim,'center','600');
+  text(Math.round(c.e/c.total*100)+'%',rx,y+116,24,eColorR,'center','800',8);
+  text(eName.slice(0,10),rx,y+138,10,C.textDim,'center','600');
+  // ligne +DNA ... Level X unlocked (même carte, même ligne ; rien pour le niveau si défaite)
+  const lineY=y+bh-30;
+  const levelTxt=(win&&!battle.arena&&battle.level===D.progress-1)?('Level '+D.progress+' unlocked'):
+                 (battle.arena?((win?'Beat ':(draw?'Tied ':'Lost to '))+eName):'');
+  if(levelTxt){
+    dnaLabel(W/2-70,lineY,'+'+battle.rewardGiven+' DNA',15,'center');
+    text(levelTxt,W/2+64,lineY,12,win?'#4dffa6':C.textDim,'center','700',4);
+  }else{
+    dnaLabel(W/2,lineY,'+'+battle.rewardGiven+' DNA',15,'center');
+  }
+  y+=bh+22;
+
+  if(r){
+    // --- Courbe de territoire ---
+    text('TERRITORY OVER TIME',24,y,11,C.textDim,'left','700');y+=18;
+    const gx=24,gw=W-48,gh=130;
+    panel(gx,y,gw,gh,'rgba(63,208,255,.2)','rgba(4,12,26,.9)',8);
+    const hist=r.hist||[];
+    if(hist.length>1){
+      const maxV=Math.max(1,...hist.map(h=>Math.max(h.p,h.e)));
+      const v=D.virusList[D.selected];
+      const pc=v?paletteById(normaliseLook(v.look,0).palette).main:C.cyan;
+      ctx.strokeStyle='rgba(63,208,255,.08)';ctx.lineWidth=1;
+      for(let i=1;i<4;i++){ctx.beginPath();ctx.moveTo(gx,y+gh*i/4);ctx.lineTo(gx+gw,y+gh*i/4);ctx.stroke();}
+      const plot=(key,color)=>{
+        ctx.beginPath();
+        hist.forEach((h,i)=>{const px=gx+(i/(hist.length-1))*gw;const py=y+gh-(h[key]/maxV)*(gh-12)-6;
+          i?ctx.lineTo(px,py):ctx.moveTo(px,py);});
+        ctx.strokeStyle=color;ctx.lineWidth=2.2;ctx.shadowColor=color;ctx.shadowBlur=8;ctx.stroke();ctx.shadowBlur=0;
+      };
+      plot('p',pc);plot('e',eColorR);
+      text('you',gx+8,y+14,10,pc,'left','700');
+      text('enemy',gx+40,y+14,10,eColorR,'left','700');
+    }
+    y+=gh+22;
+
+    // --- Diagnostic ---
+    text('DIAGNOSIS',24,y,11,C.textDim,'left','700');y+=18;
+    r.lines.forEach(l=>{
+      ctx.font="500 12px 'Segoe UI',system-ui,sans-serif";
+      const words=l.split(' ');const rows=[];let ln='';
+      for(const wd of words){if(ctx.measureText(ln+wd).width>W-76){rows.push(ln);ln=wd+' ';}else ln+=wd+' ';}
+      if(ln)rows.push(ln);
+      const bhh=Math.max(42,14+rows.length*15);
+      panel(20,y,W-40,bhh,'rgba(245,197,66,.22)','rgba(10,22,44,.9)',8);
+      rows.forEach((rw,i)=>text(rw,32,y+19+i*15,12,C.text,'left','500'));
+      y+=bhh+9;
+    });
+  }
+  y+=12;
+
+  // --- Boutons ---
+  const wasArena=battle.arena;const arenaOpp=battle.arenaOpponent;
+  button(24,y,(W-56)/2,50,'RETRY',()=>{
+    const vv=D.virusList[D.selected];
+    if(!vv||!vv.actions.length){notify('Invalid virus');sfx.err();return;}
+    if(wasArena&&arenaOpp){startBattle(vv.actions.slice(),arenaOpp.genome.slice(),0);battle.arena=true;battle.arenaOpponent=arenaOpp;}
+    else{startBattle(vv.actions.slice(),enemyAt(battle.level-1).pattern.slice(),battle.level);}
+    page=P.BATTLE;sfx.click();
+  },{size:15});
+  button(24+(W-56)/2+8,y,(W-56)/2,50,win?'CONTINUE':'EDIT VIRUS',()=>{
+    if(win)go(wasArena?P.ARENA:P.CAMPAIGN);
+    else{editIndex=D.selected;go(P.EDITOR);}
+  },{accent:win?'#4dffa6':C.cyan,size:15});
+  y+=60;
+  if(!win){
+    button(24,y,W-48,42,wasArena?'BACK TO ARENA':'BACK TO CAMPAIGN',()=>{go(wasArena?P.ARENA:P.CAMPAIGN);},{accent:C.gold,size:13});
+    y+=50;
+  }
+
+  ctx.restore();
+  scroll.max=Math.max(0,(y+scroll.y)-H+40);
+}
+
+/* ---------------- DEBRIEF ---------------- */
+function drawDebrief(dt){
+  drawBackground();header('BATTLE REPORT',P.MAIN);
+  const r=D.lastReport||D.lastDefeat;
+  if(!r){
+    text('No report available.',W/2,300,15,C.textDim,'center','600');
+    return;
+  }
+  const won=r.won;
+  const accent=won?'#4dffa6':C.red;
+  const top=72,visH=H-top-8;
+  applyScrollPhysics();
+  ctx.save();ctx.beginPath();ctx.rect(0,top,W,visH);ctx.clip();
+  let y=top+6-scroll.y;
+
+  // --- Résultat / adversaire ---
+  panel(16,y,W-32,84,accent,won?'rgba(10,34,22,.94)':'rgba(34,10,16,.94)',11);
+  drawStrain(56,y+42,26,{palette:won?'mint':'crimson',accent:'amber',spike:'triangle',
+                         spikeCount:12,core:'nucleus',body:'ridged'},T,{halo:false});
+  text(won?'YOU DEFEATED':'DEFEATED BY',96,y+24,9.5,C.textDim,'left','700');
+  text((r.enemy||'Enemy').toUpperCase(),96,y+45,20,accent,'left','800',8);
+  const ctx2=(r.arena?'Arena':'Level '+r.level);
+  text(ctx2+'  \u2022  '+r.pct+'% vs '+r.epct+'%',96,y+66,11,C.textDim,'left','600');
+  y+=94;
+
+  // --- Génome ennemi DANS sa propre carte (intégré, sans débordement) ---
+  const ep=r.enemyPattern||[];
+  const es=40,eg=6;
+  const perRow=Math.floor((W-52)/(es+eg));
+  const rows=Math.max(1,Math.ceil(ep.length/perRow));
+  const gcH=28+rows*(es+16);
+  panel(16,y,W-32,gcH,C.red,'rgba(30,10,16,.9)',12);
+  text('ENEMY GENOME',30,y+18,10.5,C.textDim,'left','700');
+  ep.forEach((k,i)=>{
+    const col=i%perRow,row=(i/perRow)|0;
+    const bx=30+col*(es+eg),by=y+28+row*(es+16);
+    const ac=ACT_COLOR[k]||C.red;
+    rr(bx,by,es,es,7);ctx.fillStyle='rgba(52,14,20,.92)';ctx.fill();
+    ctx.strokeStyle=ac;ctx.lineWidth=1.4;ctx.stroke();
+    text(ACTIONS[k].icon,bx+es/2,by+es/2-4,18,ac,'center','700',5);
+    text(ACTIONS[k].name.slice(0,7),bx+es/2,by+es-8,6.5,C.textDim,'center','600');
+  });
+  y+=gcH+12;
+
+  // --- Your genome ---
+  const pp=r.playerPattern||[];
+  if(pp.length){
+    const ps=34,pg=5;
+    const perRowP=Math.floor((W-52)/(ps+pg));
+    const rowsP=Math.max(1,Math.ceil(pp.length/perRowP));
+    const pcH=28+rowsP*(ps+8);
+    const pcol=(D.virusList[D.selected]&&D.virusList[D.selected].color)||C.cyan;
+    panel(16,y,W-32,pcH,pcol,'rgba(8,20,42,.9)',12);
+    text('YOUR GENOME',30,y+18,10.5,C.textDim,'left','700');
+    pp.forEach((k,i)=>{
+      const col=i%perRowP,row=(i/perRowP)|0;
+      const bx=30+col*(ps+pg),by=y+28+row*(ps+8);
+      const ac=ACT_COLOR[k]||C.cyan;
+      rr(bx,by,ps,ps,6);ctx.fillStyle='rgba(16,40,74,.9)';ctx.fill();
+      ctx.strokeStyle=ac;ctx.lineWidth=1.1;ctx.stroke();
+      text(ACTIONS[k].icon,bx+ps/2,by+ps/2,15,ac,'center','700');
+    });
+    y+=pcH+12;
+  }
+
+  // --- Territory curve ---
+  text('TERRITORY OVER TIME',20,y,10.5,C.textDim,'left','700');
+  y+=14;
+  const gx=20,gw=W-40,gh=126;
+  panel(gx,y,gw,gh,'rgba(63,208,255,.2)','rgba(4,12,26,.9)',8);
+  const hist=r.hist||[];
+  if(hist.length>1){
+    const maxV=Math.max(1,...hist.map(h=>Math.max(h.p,h.e)));
+    const v=D.virusList[D.selected];
+    const pc=v?paletteById(normaliseLook(v.look,0).palette).main:C.cyan;
+    ctx.strokeStyle='rgba(63,208,255,.08)';ctx.lineWidth=1;
+    for(let i=1;i<4;i++){
+      ctx.beginPath();ctx.moveTo(gx,y+gh*i/4);ctx.lineTo(gx+gw,y+gh*i/4);ctx.stroke();
+    }
+    const plot=(key,color)=>{
+      ctx.beginPath();
+      hist.forEach((h,i)=>{
+        const px=gx+(i/(hist.length-1))*gw;
+        const py=y+gh-(h[key]/maxV)*(gh-12)-6;
+        i?ctx.lineTo(px,py):ctx.moveTo(px,py);
+      });
+      ctx.strokeStyle=color;ctx.lineWidth=2.2;
+      ctx.shadowColor=color;ctx.shadowBlur=8;ctx.stroke();ctx.shadowBlur=0;
+    };
+    plot('p',pc);plot('e',C.red);
+    text('you',gx+8,y+14,10,pc,'left','700');
+    text('enemy',gx+40,y+14,10,C.red,'left','700');
+  }
+  y+=gh+16;
+
+  // --- Diagnosis ---
+  text('DIAGNOSIS',20,y,10.5,C.textDim,'left','700');
+  y+=16;
+  r.lines.forEach(l=>{
+    ctx.font="500 11.5px 'Segoe UI',system-ui,sans-serif";
+    const words=l.split(' ');const rows=[];let line='';
+    for(const wd of words){
+      if(ctx.measureText(line+wd).width>W-76){rows.push(line);line=wd+' ';}
+      else line+=wd+' ';
+    }
+    if(line)rows.push(line);
+    const bh=Math.max(40,14+rows.length*15);
+    panel(16,y,W-32,bh,'rgba(245,197,66,.25)','rgba(10,22,44,.9)',8);
+    rows.forEach((rw,i)=>text(rw,28,y+18+i*15,11.5,C.text,'left','500'));
+    y+=bh+8;
+  });
+
+  y+=4;
+  button(20,y,W-40,46,'EDIT MY GENOME',()=>{
+    editIndex=D.selected;go(P.EDITOR);
+  },{accent:'#4dffa6'});
+  y+=58;
+
+  ctx.restore();
+  scroll.max=Math.max(0,(y+scroll.y)-H+20);
+}
+
+/* ---------------- SCORES ---------------- */
+function drawScores(dt){
+  drawBackground();header('RECORDS',P.MAIN);
+  const s=D.scores;
+  const rows=[
+    ['CAMPAIGN',null,null],
+    ['Level reached',D.progress+'/30',C.cyan],
+    ['Total wins',String(s.wins),C.cyan],
+    ['Current streak',String(s.streak),C.gold],
+    ['Best streak',String(s.bestStreak),C.gold],
+    ['Best territory',s.best+'%','#4dffa6'],
+    ['ARENA',null,null],
+    ['Arena wins',String(D.arenaWins|0),'#4dffa6'],
+    ['Arena losses',String(D.arenaLosses|0),C.red],
+    ['Arena score',String(arenaScore()),C.dna],
+    ['COLLECTION',null,null],
+    ['Viruses created',String(D.virusList.length),C.cyan],
+    ['Actions unlocked',D.unlocked.filter(k=>ACTIONS[k]).length+'/'+Object.keys(ACTIONS).length,'#c48bff'],
+    ['Genome budget',slotBudget()+' slots',C.dna],
+    ['DNA banked',String(D.dna),C.dna]
+  ];
+  const top=76,visH=H-top-8;
+  applyScrollPhysics();
+  ctx.save();ctx.beginPath();ctx.rect(0,top,W,visH);ctx.clip();
+  let y=top+6-scroll.y;
+  rows.forEach((r)=>{
+    if(r[1]===null){
+      // section header
+      text(r[0],28,y+18,12,C.gold,'left','800',4);
+      ctx.strokeStyle='rgba(245,197,66,.25)';ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(28,y+28);ctx.lineTo(W-28,y+28);ctx.stroke();
+      y+=40;
+    }else{
+      panel(24,y,W-48,50,'rgba(63,208,255,.2)');
+      text(r[0],44,y+27,14,C.textDim,'left','600');
+      if(r[2]===C.dna){dnaLabel(W-44,y+27,r[1],20,'right');}
+      else text(r[1],W-44,y+27,20,r[2],'right','800',8);
+      y+=58;
+    }
+  });
+  ctx.restore();
+  scroll.max=Math.max(0,(y+scroll.y)-H+20);
+}
+
+/* ---------------- ENTRÉES ---------------- */
+function toLocal(clientX,clientY){
+  const r=canvas.getBoundingClientRect();
+  return{x:(clientX-r.left)/r.width*W,y:(clientY-r.top)/r.height*H};
+}
+const SCROLLABLE=[P.VIRUSES,P.LAB,P.CAMPAIGN,P.DEBRIEF,P.APPEARANCE,P.ARENA,P.SCORES,P.ARENA_BOARD,P.EDITOR];
+
+let pointerDown=false,downPos={x:0,y:0},downTime=0;
+
+let activeSlider=null;
+function onDown(x,y){
+  initAudio();
+  pointerDown=true;downPos={x,y};downTime=performance.now();
+  activeSlider=null;
+  for(let i=hitzones.length-1;i>=0;i--){
+    const h=hitzones[i];
+    if(h.slider&&x>=h.x&&x<=h.x+h.w&&y>=h.y&&y<=h.y+h.h){activeSlider=h;h.cb(x,y);break;}
+  }
+  scroll.dragging=(SCROLLABLE.includes(page)||(page===P.BATTLE&&battle.ended))&&!modal&&!keyboard&&!dialog;
+  scroll.lastY=y;scroll.vel=0;scroll.moved=0;
+}
+function onMove(x,y){
+  if(!pointerDown)return;
+  if(activeSlider){activeSlider.cb(x,y);return;}
+  const dy=y-scroll.lastY;
+  scroll.moved+=Math.abs(dy);
+  if(scroll.dragging){
+    scroll.y-=dy;
+    scroll.vel=-dy*0.85;
+    scroll.y=Math.max(0,Math.min(scroll.max,scroll.y));
+  }
+  scroll.lastY=y;
+}
+function onUp(x,y){
+  if(!pointerDown)return;
+  pointerDown=false;scroll.dragging=false;
+  if(activeSlider){activeSlider=null;return;}
+  if(scroll.moved>12)return; // c'était un scroll, pas un tap
+  // hit test en ordre inverse (dernier dessiné = au-dessus)
+  for(let i=hitzones.length-1;i>=0;i--){
+    const h=hitzones[i];
+    if(x>=h.x&&x<=h.x+h.w&&y>=h.y&&y<=h.y+h.h){h.cb(x,y);return;}
+  }
+}
+
+canvas.addEventListener('mousedown',e=>{const p=toLocal(e.clientX,e.clientY);onDown(p.x,p.y);});
+canvas.addEventListener('mousemove',e=>{const p=toLocal(e.clientX,e.clientY);onMove(p.x,p.y);});
+canvas.addEventListener('mouseup',e=>{const p=toLocal(e.clientX,e.clientY);onUp(p.x,p.y);});
+canvas.addEventListener('mouseleave',()=>{pointerDown=false;scroll.dragging=false;});
+
+canvas.addEventListener('touchstart',e=>{
+  e.preventDefault();const t=e.changedTouches[0];const p=toLocal(t.clientX,t.clientY);onDown(p.x,p.y);
+},{passive:false});
+canvas.addEventListener('touchmove',e=>{
+  e.preventDefault();const t=e.changedTouches[0];const p=toLocal(t.clientX,t.clientY);onMove(p.x,p.y);
+},{passive:false});
+canvas.addEventListener('touchend',e=>{
+  e.preventDefault();const t=e.changedTouches[0];const p=toLocal(t.clientX,t.clientY);onUp(p.x,p.y);
+},{passive:false});
+
+canvas.addEventListener('wheel',e=>{
+  if(!SCROLLABLE.includes(page))return;
+  e.preventDefault();
+  scroll.y=Math.max(0,Math.min(scroll.max,scroll.y+e.deltaY*0.6));
+},{passive:false});
+
+/* ---------------- BOUCLE ---------------- */
+let last=performance.now();
+function frame(now){
+  const dt=Math.min(.05,(now-last)/1000);
+  last=now;T+=dt;
+  hitzones=[];
+
+  switch(page){
+    case P.MAIN:drawMain(dt);break;
+    case P.VIRUSES:drawViruses(dt);break;
+    case P.EDITOR:drawEditor(dt);break;
+    case P.LAB:drawLab(dt);break;
+    case P.APPEARANCE:drawAppearance(dt);break;
+    case P.TUTORIAL:drawTutorial(dt);break;
+    case P.CAMPAIGN:drawCampaign(dt);break;
+    case P.INFO:drawInfo(dt);break;
+    case P.BATTLE:drawBattle(dt);break;
+    case P.DEBRIEF:drawDebrief(dt);break;
+    case P.SCORES:drawScores(dt);break;
+    case P.ARENA:drawArena(dt);break;
+    case P.ARENA_PREVIEW:drawArenaPreview(dt);break;
+    case P.ARENA_BOARD:drawArenaBoard(dt);break;
+    default:drawMain(dt);
+  }
+  drawDialog();
+  drawKeyboard(dt);
+  drawNotif(dt);
+  // vignette
+  const vg=ctx.createRadialGradient(W/2,H/2,H*.35,W/2,H/2,H*.72);
+  vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.5)');
+  ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+
+  requestAnimationFrame(frame);
+}
+
+// Nouvel onboarding guidé (surbrillances). Le jeu démarre sur le MENU.
+// Un joueur qui n'a jamais joué (pas de virus) commence l'onboarding à l'étape 0.
+if(typeof D.onb!=='number'){
+  D.onb=(D.virusList&&D.virusList.length)?99:0; // 99 = terminé
+}
+D.tutorial=99; // ancien tutoriel désactivé
+page=P.MAIN;
+
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
