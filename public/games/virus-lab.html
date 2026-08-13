@@ -200,6 +200,10 @@ function load(){
     if(!Array.isArray(D.virusList))D.virusList=[];
     if(typeof D.dna!=='number')D.dna=150;
     if(typeof D.tutorial!=='number')D.tutorial=D.virusList.length?99:0;
+    // Onboarding terminé dès qu'un virus existe : empêche le tuto de revenir.
+    if(typeof D.onb!=='number')D.onb=D.virusList.length?99:0;
+    if(D.virusList.length && D.onb<8)D.onb=99;
+    D.tutorial=99;
     D.virusList.forEach((v,i)=>{v.look=normaliseLook(v.look,i);
       if(!v.color)v.color=paletteById(v.look.palette).main;});
   }catch(e){D=JSON.parse(JSON.stringify(DEFAULT));}
