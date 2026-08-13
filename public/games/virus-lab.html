@@ -2265,10 +2265,15 @@ function drawArena(dt){
     ctx.strokeStyle='rgba(196,139,255,.5)';ctx.lineWidth=1;ctx.stroke();
     text('LOGIN',W/2+105,sby+24,9,C.dna,'center','800');
   }
-  hitzones.push({x:bx,y:sby,w:bw,h:48,cb:()=>{
+hitzones.push({x:bx,y:sby,w:bw,h:48,cb:()=>{
     if(signedIn){
-      // Étape 5 : la vraie publication Supabase. Pour l'instant, placeholder.
-      notify('Publishing coming next update');sfx.click();
+      const v=D.virusList[D.selected];
+      if(!v||!v.actions.length){notify('Select a valid virus first');sfx.err();return;}
+      // Envoie le virus actif au site, qui l'écrit dans Supabase (virus_lab_arena).
+      try{
+        window.parent.postMessage({type:'VIRUS_LAB_PUBLISH',payload:window.virusLabGetPublishData()},'*');
+        notify('Publishing your virus\u2026');sfx.click();
+      }catch(e){notify('Publish failed');sfx.err();}
     }else{
       notify('Opening sign in\u2026');sfx.click();
       requestLogin();
@@ -3740,6 +3745,14 @@ window.addEventListener('message',function(e){
     AUTH.userId=d.userId||null;
     AUTH.username=d.username||null;
   }
+ if(d.type==='VIRUS_LAB_PUBLISHED'){
+    if(d.ok){notify('Virus published to Arena!');sfx.unlock();}
+    else notify('Publish failed \u2014 try again');
+  }
+  if(d.type==='VIRUS_LAB_CLOUD_STATE'){
+    // Le site nous renvoie la sauvegarde cloud → on l'applique si plus avancée.
+    window.virusLabLoadState&&window.virusLabLoadState(d.state);
+  }
 });
 // Signale au site que le jeu est prêt : il répondra par VIRUS_LAB_AUTH.
 function requestAuthState(){
@@ -3749,7 +3762,58 @@ function requestAuthState(){
 function requestLogin(){
   try{ window.parent.postMessage({type:'VIRUS_LAB_REQUEST_LOGIN'},'*'); }catch(e){}
 }
+
+/* ===== Sauvegarde cloud de la progression complète (joueurs connectés) =====
+   Toute la progression est dans l'objet D (virus, campagne, Lab, records, arène).
+   On l'expose au site qui l'écrit dans game_saves (game_id 'virus-lab'), comme
+   Stellar Forge. Indicateur d'avancement pour la fusion : progress (niveau
+   campagne) puis dna. Le plus avancé gagne, on n'écrase jamais une meilleure
+   progression par une plus faible. */
+function vlAdvancement(data){
+  if(!data)return -1;
+  // progress domine, dna départage
+  return (data.progress|0)*1000000 + (data.dna|0);
+}
+window.virusLabGetState=function(){
+  return { state:D, progress:D.progress|0, dna:D.dna|0 };
+};
+window.virusLabLoadState=function(cloud){
+  try{
+    if(!cloud||typeof cloud!=='object')return;
+    // Ne remplace la progression locale que si le cloud est PLUS avancé.
+    if(vlAdvancement(cloud)>vlAdvancement(D)){
+      D=Object.assign({},DEFAULT,cloud);
+      D.scores=Object.assign({},DEFAULT.scores,D.scores||{});
+      if(!Array.isArray(D.unlocked)||!D.unlocked.length)D.unlocked=BASE_ACTIONS.slice();
+      if(!Array.isArray(D.virusList))D.virusList=[];
+      if(typeof D.dna!=='number')D.dna=150;
+      D.tutorial=99;D.onb=99; // un joueur avec sauvegarde cloud a déjà tout vu
+      D.virusList.forEach((v,i)=>{v.look=normaliseLook(v.look,i);
+        if(!v.color)v.color=paletteById(v.look.palette).main;});
+      save();
+    }
+  }catch(e){}
+};
+// Données du virus actif à publier dans l'arène (Supabase virus_lab_arena).
+window.virusLabGetPublishData=function(){
+  const v=D.virusList[D.selected];
+  if(!v||!v.actions||!v.actions.length)return null;
+  return {
+    virus_name:v.name||'Strain',
+    genome:v.actions.slice(),
+    look:v.look,
+    arena_score:arenaScore(),
+    wins:D.arenaWins|0,
+    losses:D.arenaLosses|0
+  };
+};
+// Signale au site un état prêt pour la sauvegarde cloud.
+function requestCloudLoad(){
+  try{ window.parent.postMessage({type:'VIRUS_LAB_CLOUD_READY'},'*'); }catch(e){}
+}
+
 requestAuthState();
+requestCloudLoad();
 
 page=P.MAIN;
 requestAnimationFrame(frame);
