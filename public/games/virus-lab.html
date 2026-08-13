@@ -3724,11 +3724,6 @@ function frame(now){
   requestAnimationFrame(frame);
 }
 
-// Nouvel onboarding guidé (surbrillances). Le jeu démarre sur le MENU.
-// Un joueur qui n'a jamais joué (pas de virus) commence l'onboarding à l'étape 0.
-if(typeof D.onb!=='number'){
-// Onboarding : terminé si le joueur a déjà des virus OU une progression.
-// Empêche le tuto de revenir après un rechargement / une sauvegarde cloud.
 // Onboarding : ne se joue qu'une seule fois, pour un joueur vraiment neuf.
 // Dès qu'il y a un virus ou une progression, l'onboarding est marqué terminé.
 if(typeof D.onb!=='number') D.onb = 99;
