@@ -22,7 +22,7 @@ export default function GamePage() {
 function GamePageDesktop() {
   const { id } = useParams()
   const game = games.find(g => g.id === id)
-  const { recordPlay, user } = useAuth()
+  const { recordPlay, user, profile, signInGoogle } = useAuth()
   const iframeRef = useRef(null)
   const [playing, setPlaying]       = useState(false)
   const [vote, setVote]             = useState(null)
@@ -70,6 +70,21 @@ function GamePageDesktop() {
     async function handleMessage(e) {
       const d = e.data
       if(!d || typeof d.type !== 'string') return
+      // --- Virus Lab : le jeu demande l'état de connexion ---
+      if(d.type === 'VIRUS_LAB_READY'){
+        iframeRef.current?.contentWindow?.postMessage({
+          type: 'VIRUS_LAB_AUTH',
+          signedIn: !!user,
+          userId: user?.id || null,
+          username: profile?.username || null,
+        }, '*')
+        return
+      }
+      // --- Virus Lab : le jeu demande d'ouvrir la connexion Google ---
+      if(d.type === 'VIRUS_LAB_REQUEST_LOGIN'){
+        signInGoogle()
+        return
+      }
 
       // --- Stellar Forge : le jeu est prêt → on lui renvoie sa sauvegarde cloud ---
       if(d.type === 'STELLAR_FORGE_READY' && user){
@@ -135,6 +150,16 @@ function GamePageDesktop() {
       window.removeEventListener('pagehide', saveOnLeave)
     }
   }, [recordPlay, user])
+  // Informe Virus Lab (iframe) de tout changement d'état de connexion.
+  useEffect(() => {
+    if(game?.id !== 'virus-lab') return
+    iframeRef.current?.contentWindow?.postMessage({
+      type: 'VIRUS_LAB_AUTH',
+      signedIn: !!user,
+      userId: user?.id || null,
+      username: profile?.username || null,
+    }, '*')
+  }, [user, profile, playing])
 
   if(!game) {
     return (
