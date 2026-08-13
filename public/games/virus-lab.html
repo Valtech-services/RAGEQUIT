@@ -3773,7 +3773,9 @@ function vlAdvancement(data){
   return (data.progress|0)*1000000 + (data.dna|0);
 }
 window.virusLabGetState=function(){
-  return { state:D, progress:D.progress|0, dna:D.dna|0 };
+  // Indique si l'état vaut la peine d'être sauvegardé (pas un démarrage vierge).
+  const hasContent=(Array.isArray(D.virusList)&&D.virusList.length>0)||(D.progress|0)>1;
+  return { state:D, progress:D.progress|0, dna:D.dna|0, hasContent:hasContent };
 };
 window.virusLabLoadState=function(cloud){
   try{
