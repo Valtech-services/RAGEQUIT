@@ -3729,11 +3729,11 @@ function frame(now){
 if(typeof D.onb!=='number'){
 // Onboarding : terminé si le joueur a déjà des virus OU une progression.
 // Empêche le tuto de revenir après un rechargement / une sauvegarde cloud.
-if(typeof D.onb!=='number' || (D.virusList&&D.virusList.length) || (D.progress|0)>1 || (D.dna|0)!==150){
-  if((D.virusList&&D.virusList.length) || (D.progress|0)>1){ D.onb=99; }
-  else if(typeof D.onb!=='number'){ D.onb=0; }
-}
-D.tutorial=99; // ancien tutoriel désactivé
+// Onboarding : ne se joue qu'une seule fois, pour un joueur vraiment neuf.
+// Dès qu'il y a un virus ou une progression, l'onboarding est marqué terminé.
+if(typeof D.onb!=='number') D.onb = 99;
+if((D.virusList && D.virusList.length) || (D.progress|0) > 1) D.onb = 99;
+D.tutorial = 99; // ancien tutoriel désactivé
 
 /* ===== Communication avec le site parent (Ragequit Arcade) =====
    Le jeu tourne en iframe. Le site nous informe de l'état de connexion via
