@@ -2247,15 +2247,33 @@ function drawArena(dt){
     arenaState.pendingOpponent=op;
     go(P.ARENA_PREVIEW);
   }});
-  // Publish : pleine largeur, grisé « bientôt » (Supabase branché à la fin du dev)
+// Publish : réservé aux joueurs connectés (stratégie d'inscription).
+  // Non connecté → invite à se connecter. Connecté → publication (étape 5).
   const sby=fby+fbh+12;
-  rr(bx,sby,bw,48,10);ctx.fillStyle='rgba(20,28,44,.75)';ctx.fill();
-  ctx.strokeStyle='rgba(90,110,140,.4)';ctx.lineWidth=1.2;ctx.stroke();
-  text('PUBLISH TO ARENA',W/2-30,sby+28,14,C.textDim,'center','700');
-  rr(W/2+66,sby+13,58,22,11);ctx.fillStyle='rgba(63,208,255,.15)';ctx.fill();
-  ctx.strokeStyle='rgba(63,208,255,.4)';ctx.lineWidth=1;ctx.stroke();
-  text('SOON',W/2+95,sby+24,9,C.cyan,'center','800');
-  hitzones.push({x:bx,y:sby,w:bw,h:48,cb:()=>{notify('Online arena coming soon');sfx.click();}});
+  const signedIn=AUTH.signedIn;
+  rr(bx,sby,bw,48,10);
+  ctx.fillStyle=signedIn?'rgba(20,52,96,.92)':'rgba(20,28,44,.85)';ctx.fill();
+  ctx.strokeStyle=signedIn?C.cyan:'rgba(196,139,255,.55)';ctx.lineWidth=1.3;
+  if(signedIn){ctx.shadowColor=C.cyan;ctx.shadowBlur=8;ctx.stroke();ctx.shadowBlur=0;}else ctx.stroke();
+  if(signedIn){
+    text('PUBLISH TO ARENA',W/2,sby+28,14,C.text,'center','800',6);
+  }else{
+    text('SIGN IN TO PUBLISH',W/2-24,sby+22,13,C.dna,'center','800',4);
+    text('save your progress on all your devices',W/2-24,sby+37,8.5,C.textDim,'center','600');
+    // petite pastille "account"
+    rr(W/2+78,sby+13,54,22,11);ctx.fillStyle='rgba(196,139,255,.18)';ctx.fill();
+    ctx.strokeStyle='rgba(196,139,255,.5)';ctx.lineWidth=1;ctx.stroke();
+    text('LOGIN',W/2+105,sby+24,9,C.dna,'center','800');
+  }
+  hitzones.push({x:bx,y:sby,w:bw,h:48,cb:()=>{
+    if(signedIn){
+      // Étape 5 : la vraie publication Supabase. Pour l'instant, placeholder.
+      notify('Publishing coming next update');sfx.click();
+    }else{
+      notify('Opening sign in\u2026');sfx.click();
+      requestLogin();
+    }
+  }});
 
   if(arenaState.error){
     text(arenaState.error,W/2,H-14,10,C.gold,'center','600');
@@ -3707,8 +3725,33 @@ if(typeof D.onb!=='number'){
   D.onb=(D.virusList&&D.virusList.length)?99:0; // 99 = terminé
 }
 D.tutorial=99; // ancien tutoriel désactivé
-page=P.MAIN;
 
+/* ===== Communication avec le site parent (Ragequit Arcade) =====
+   Le jeu tourne en iframe. Le site nous informe de l'état de connexion via
+   VIRUS_LAB_AUTH. On stocke ça hors de D (pas de persistance : l'auth vient
+   toujours du site, jamais du localStorage). Le bouton PUBLISH de l'arène et
+   le classement seront réservés aux joueurs connectés. */
+let AUTH={ signedIn:false, userId:null, username:null };
+window.addEventListener('message',function(e){
+  const d=e.data;
+  if(!d||typeof d.type!=='string')return;
+  if(d.type==='VIRUS_LAB_AUTH'){
+    AUTH.signedIn=!!d.signedIn;
+    AUTH.userId=d.userId||null;
+    AUTH.username=d.username||null;
+  }
+});
+// Signale au site que le jeu est prêt : il répondra par VIRUS_LAB_AUTH.
+function requestAuthState(){
+  try{ window.parent.postMessage({type:'VIRUS_LAB_READY'},'*'); }catch(e){}
+}
+// Demande au site d'ouvrir la connexion Google.
+function requestLogin(){
+  try{ window.parent.postMessage({type:'VIRUS_LAB_REQUEST_LOGIN'},'*'); }catch(e){}
+}
+requestAuthState();
+
+page=P.MAIN;
 requestAnimationFrame(frame);
 })();
 </script>
