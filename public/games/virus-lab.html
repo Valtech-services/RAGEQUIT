@@ -168,8 +168,8 @@ const ONB=[
 function onbTarget(id){
   return D.onb<ONB.length && ONB[D.onb] && ONB[D.onb].id===id;
 }
-// Onboarding actif ?
-function onbActive(){return D.onb<ONB.length;}
+// Onboarding désactivé : les joueurs découvrent le jeu librement.
+function onbActive(){return false;}
 // Avancer l'onboarding si l'action correspond à l'étape courante
 function onbAdvance(id){
   if(onbTarget(id)){D.onb++;save();}
@@ -200,9 +200,8 @@ function load(){
     if(!Array.isArray(D.virusList))D.virusList=[];
     if(typeof D.dna!=='number')D.dna=150;
     if(typeof D.tutorial!=='number')D.tutorial=D.virusList.length?99:0;
-    // Onboarding terminé dès qu'un virus existe : empêche le tuto de revenir.
-    if(typeof D.onb!=='number')D.onb=D.virusList.length?99:0;
-    if(D.virusList.length && D.onb<8)D.onb=99;
+// Onboarding et tutoriel désactivés.
+    D.onb=99;
     D.tutorial=99;
     D.virusList.forEach((v,i)=>{v.look=normaliseLook(v.look,i);
       if(!v.color)v.color=paletteById(v.look.palette).main;});
@@ -3728,14 +3727,7 @@ function frame(now){
   requestAnimationFrame(frame);
 }
 
-// Onboarding : ne se joue qu'une seule fois, pour un joueur vraiment neuf.
-// Dès qu'il y a un virus, l'onboarding est marqué terminé DÉFINITIVEMENT
-// (écrit dans le localStorage), pour qu'il ne revienne jamais au rechargement.
-if(typeof D.onb!=='number') D.onb = 99;
-if(D.virusList && D.virusList.length){
-  if(D.onb !== 99){ D.onb = 99; save(); }
-}
-D.tutorial = 99; // ancien tutoriel désactivé
+D.onb=99;D.tutorial=99;
 
 /* ===== Communication avec le site parent (Ragequit Arcade) =====
    Le jeu tourne en iframe. Le site nous informe de l'état de connexion via
@@ -3819,7 +3811,7 @@ function requestCloudLoad(){
 }
 
 requestAuthState();
-//requestCloudLoad();
+requestCloudLoad();
 
 page=P.MAIN;
 requestAnimationFrame(frame);
