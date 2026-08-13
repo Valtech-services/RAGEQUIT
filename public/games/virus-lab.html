@@ -646,7 +646,7 @@ function endBattle(){
   const pct=Math.round(c.p/c.total*100);
   const av=D.virusList[D.selected]; // virus actif, pour créditer ses stats
   // Arena battles don't touch campaign progression; they record W/L instead.
-  if(battle.arena){
+if(battle.arena){
     if(c.p>c.e){
       battle.winner='player';sfx.win();
       D.arenaWins=(D.arenaWins|0)+1;
@@ -661,7 +661,9 @@ function endBattle(){
     }else{battle.winner='draw';D.dna+=15;battle.rewardGiven=15;}
     scroll.y=0;scroll.max=0;scroll.vel=0;
     D.lastReport=buildBattleReport(c,battle.winner);
-    save();return;
+    save();
+    reportArenaScore();
+    return;
   }
   if(c.p>c.e){
     battle.winner='player';sfx.win();
