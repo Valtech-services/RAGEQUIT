@@ -8,7 +8,7 @@
   *{margin:0;padding:0;box-sizing:border-box}
 body{background:#04060f;display:flex;justify-content:center;align-items:center;height:100dvh;width:100vw;overflow:hidden;
        font-family:'Segoe UI',system-ui,sans-serif;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none}
-  #game-container{position:relative;width:min(100vw,56.25dvh);height:min(177.78vw,100dvh);aspect-ratio:9/16;
+  #game-container{position:relative;aspect-ratio:9/16;
        max-width:460px;max-height:820px;box-shadow:0 0 90px rgba(40,140,255,.28),0 0 40px rgba(0,0,0,.9);border-radius:22px;overflow:hidden}
   canvas{display:block;width:100%;height:100%;border-radius:22px}
 </style>
@@ -24,10 +24,8 @@ const ctx=canvas.getContext('2d',{alpha:false});
 const W=450,H=800;
 function resize(){
   const el=document.getElementById('game-container');
-  // Mesure la hauteur RÉELLEMENT visible (contourne les barres du navigateur mobile).
   const vh=window.innerHeight;
   const vw=window.innerWidth;
-  // Le jeu est en ratio 9/16. On calcule la plus grande taille qui tient dans l'écran.
   let cw=vw, ch=cw*16/9;
   if(ch>vh){ ch=vh; cw=ch*9/16; }
   cw=Math.min(cw,460); ch=Math.min(ch,820);
@@ -39,6 +37,11 @@ function resize(){
   ctx.setTransform(dpr,0,0,dpr,0,0);
   ctx.imageSmoothingEnabled=false;
 }
+window.addEventListener('resize',resize);
+window.addEventListener('orientationchange',()=>setTimeout(resize,120));
+window.addEventListener('load',()=>setTimeout(resize,100));
+resize();
+setTimeout(resize,300);
 window.addEventListener('resize',resize);
 window.addEventListener('orientationchange',()=>setTimeout(resize,120));
 window.addEventListener('load',()=>setTimeout(resize,100));
