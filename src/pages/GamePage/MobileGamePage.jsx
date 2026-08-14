@@ -53,7 +53,7 @@ export default function MobileGamePage() {
   }, [id])
 
   // Écrit l'état complet de Stellar Forge dans Supabase (joueurs connectés).
-  async function saveStellarForgeCloud(){
+  async  saveStellarForgeCloud(){
     if (!user || !iframeRef.current) return
     try {
       const snap = iframeRef.current.contentWindow.stellarForgeGetState?.()
@@ -68,10 +68,41 @@ export default function MobileGamePage() {
       }
     } catch (err) { /* silencieux */ }
   }
-
+async function saveVirusLabCloud(){
+    if(!user || !iframeRef.current) return
+    try {
+      const snap = iframeRef.current.contentWindow.virusLabGetState?.()
+      if(!snap || !snap.state) return
+      // Garde 1 : ne jamais sauvegarder un état vierge (aucun virus, campagne au début).
+      // Empêche un démarrage à vide d'écraser une vraie sauvegarde cloud.
+      if(!snap.hasContent) return
+      // Garde 2 : lire l'avancement déjà stocké dans le cloud, et ne remplacer
+      // que si l'état local est au moins aussi avancé. On compare progress puis dna.
+      const localAdv = (snap.progress || 0) * 1000000 + (snap.dna || 0)
+      const { data: existing } = await supabase
+        .from('game_saves')
+        .select('state, total_ore')
+        .eq('user_id', user.id)
+        .eq('game_id', 'virus-lab')
+        .maybeSingle()
+      if(existing && existing.state){
+        const cs = existing.state
+        const cloudAdv = ((cs.progress|0)) * 1000000 + ((cs.dna|0))
+        // Si le cloud est STRICTEMENT plus avancé, on ne l'écrase pas.
+        if(cloudAdv > localAdv) return
+      }
+      await supabase.from('game_saves').upsert({
+        user_id: user.id,
+        game_id: 'virus-lab',
+        state: snap.state,
+        total_ore: snap.progress || 0,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'user_id,game_id' })
+    } catch(err) { /* silencieux */ }
+  }
   // Réception des messages postMessage envoyés par le jeu HTML (score + analytics).
   useEffect(() => {
-    async function handleMessage(e) {
+    async  handleMessage(e) {
       const d = e.data
       if (!d || typeof d.type !== 'string') return
       // --- Virus Lab : le jeu demande l'état de connexion ---
