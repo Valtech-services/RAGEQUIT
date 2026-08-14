@@ -3780,6 +3780,11 @@ window.virusLabGetState=function(){
 window.virusLabLoadState=function(cloud){
   try{
     if(!cloud||typeof cloud!=='object')return;
+    // Ne jamais écraser un état local qui a déjà du contenu (virus ou progression)
+    // par un cloud vide ou moins avancé. Protection absolue contre la perte de données.
+    const localHasContent=(Array.isArray(D.virusList)&&D.virusList.length>0)||(D.progress|0)>1;
+    const cloudHasContent=(Array.isArray(cloud.virusList)&&cloud.virusList.length>0)||(cloud.progress|0)>1;
+    if(localHasContent&&!cloudHasContent)return; // local plein, cloud vide → on garde le local
     // Ne remplace la progression locale que si le cloud est PLUS avancé.
     if(vlAdvancement(cloud)>vlAdvancement(D)){
       D=Object.assign({},DEFAULT,cloud);
