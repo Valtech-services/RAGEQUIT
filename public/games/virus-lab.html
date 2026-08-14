@@ -2179,30 +2179,24 @@ function arenaHeaders(){
 }
 function arenaConfigured(){return !!(ARENA_CONFIG.url&&ARENA_CONFIG.key);}
 
-async function arenaFetchRoster(){
-  if(!arenaConfigured()){arenaState.roster=ARENA_FALLBACK.slice();return;}
-  arenaState.loading=true;arenaState.error=null;
-  try{
-    const u=ARENA_CONFIG.url+'/rest/v1/'+ARENA_CONFIG.table+'?select=*&order=wins.desc&limit=25';
-    const r=await fetch(u,{headers:arenaHeaders()});
-    if(!r.ok)throw new Error('HTTP '+r.status);
-    const rows=await r.json();
-    arenaState.roster=(rows&&rows.length?rows:ARENA_FALLBACK).map(normaliseArenaRow);
-  }catch(e){
-    arenaState.error='Offline \u2014 showing local roster';
-    arenaState.roster=ARENA_FALLBACK.slice();
-  }finally{
-    arenaState.loading=false;arenaState.fetchedAt=Date.now();
-  }
+// Charge le roster : démos (ARENA_FALLBACK) + vrais virus publiés (via le site).
+function arenaFetchRoster(){
+  // On part des 12 démos, puis on demande au site les vrais virus publiés.
+  arenaState.roster=ARENA_FALLBACK.slice();
+  arenaState.loading=true;
+  try{ window.parent.postMessage({type:'VIRUS_LAB_ARENA_REQUEST'},'*'); }catch(e){}
+  arenaState.fetchedAt=Date.now();
 }
 function normaliseArenaRow(r){
+  const genome=Array.isArray(r.genome)?r.genome:(typeof r.genome==='string'?JSON.parse(r.genome):['avancer','avancer','tournerD','avancer']);
+  const look=typeof r.look==='string'?JSON.parse(r.look):r.look;
   return{
-    id:r.id||('row_'+Math.random().toString(36).slice(2)),
-    name:(r.name||'Unknown').slice(0,16),
-    author:r.author||'anon',
-    wins:r.wins|0,
-    genome:Array.isArray(r.genome)?r.genome:(typeof r.genome==='string'?JSON.parse(r.genome):['avancer','avancer','tournerD','avancer']),
-    look:normaliseLook(typeof r.look==='string'?JSON.parse(r.look):r.look,0)
+    id:r.id||r.user_id||('row_'+Math.random().toString(36).slice(2)),
+    name:(r.name||r.virus_name||'Unknown').slice(0,16),
+    author:r.author||r.username||'a player',
+    wins:(r.wins!=null?r.wins:0)|0,
+    genome:genome,
+    look:normaliseLook(look,0)
   };
 }
 
@@ -3810,6 +3804,14 @@ window.addEventListener('message',function(e){
   if(d.type==='VIRUS_LAB_CLOUD_STATE'){
     // Le site nous renvoie la sauvegarde cloud → on l'applique si plus avancée.
     window.virusLabLoadState&&window.virusLabLoadState(d.state);
+  }
+ if(d.type==='VIRUS_LAB_ARENA_LIST'){
+    // Le site nous envoie les vrais virus publiés. On les fusionne avec les démos.
+    const real=Array.isArray(d.viruses)?d.viruses.map(normaliseArenaRow):[];
+    // Les vrais virus d'abord, puis les démos pour compléter.
+    const combined=real.concat(ARENA_FALLBACK.slice());
+    arenaState.roster=combined;
+    arenaState.loading=false;
   }
 });
 // Signale au site que le jeu est prêt : il répondra par VIRUS_LAB_AUTH.
