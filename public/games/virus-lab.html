@@ -3779,14 +3779,12 @@ window.virusLabGetState=function(){
   return { state:D, progress:D.progress|0, dna:D.dna|0, hasContent:hasContent };
 };
 window.virusLabLoadState=function(cloud){
-  return; // CLOUD COUPÉ : le jeu n'utilise QUE le localStorage. Ne rien charger du cloud.
   try{
     if(!cloud||typeof cloud!=='object')return;
-    // Ne jamais écraser un état local qui a déjà du contenu (virus ou progression)
-    // par un cloud vide ou moins avancé. Protection absolue contre la perte de données.
+    // Garde : si le local a déjà du contenu et que le cloud est vide, on garde le local.
     const localHasContent=(Array.isArray(D.virusList)&&D.virusList.length>0)||(D.progress|0)>1;
     const cloudHasContent=(Array.isArray(cloud.virusList)&&cloud.virusList.length>0)||(cloud.progress|0)>1;
-    if(localHasContent&&!cloudHasContent)return; // local plein, cloud vide → on garde le local
+    if(localHasContent&&!cloudHasContent)return;
     // Ne remplace la progression locale que si le cloud est PLUS avancé.
     if(vlAdvancement(cloud)>vlAdvancement(D)){
       D=Object.assign({},DEFAULT,cloud);
@@ -3820,7 +3818,7 @@ function requestCloudLoad(){
 }
 
 requestAuthState();
-// requestCloudLoad();
+requestCloudLoad();
 
 page=P.MAIN;
 requestAnimationFrame(frame);
