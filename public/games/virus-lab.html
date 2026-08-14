@@ -3778,6 +3778,7 @@ window.virusLabGetState=function(){
   return { state:D, progress:D.progress|0, dna:D.dna|0, hasContent:hasContent };
 };
 window.virusLabLoadState=function(cloud){
+  return; // CLOUD COUPÉ : le jeu n'utilise QUE le localStorage. Ne rien charger du cloud.
   try{
     if(!cloud||typeof cloud!=='object')return;
     // Ne jamais écraser un état local qui a déjà du contenu (virus ou progression)
@@ -3818,7 +3819,7 @@ function requestCloudLoad(){
 }
 
 requestAuthState();
-requestCloudLoad();
+// requestCloudLoad();
 
 page=P.MAIN;
 requestAnimationFrame(frame);
