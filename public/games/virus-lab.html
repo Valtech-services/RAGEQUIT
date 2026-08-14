@@ -24,15 +24,26 @@ const ctx=canvas.getContext('2d',{alpha:false});
 const W=450,H=800;
 function resize(){
   const el=document.getElementById('game-container');
+  // Mesure la hauteur RÉELLEMENT visible (contourne les barres du navigateur mobile).
+  const vh=window.innerHeight;
+  const vw=window.innerWidth;
+  // Le jeu est en ratio 9/16. On calcule la plus grande taille qui tient dans l'écran.
+  let cw=vw, ch=cw*16/9;
+  if(ch>vh){ ch=vh; cw=ch*9/16; }
+  cw=Math.min(cw,460); ch=Math.min(ch,820);
+  el.style.width=cw+'px';
+  el.style.height=ch+'px';
   const dpr=Math.min(window.devicePixelRatio||1,2);
   canvas.width=W*dpr;canvas.height=H*dpr;
-  canvas.style.width=el.clientWidth+'px';canvas.style.height=el.clientHeight+'px';
+  canvas.style.width=cw+'px';canvas.style.height=ch+'px';
   ctx.setTransform(dpr,0,0,dpr,0,0);
   ctx.imageSmoothingEnabled=false;
 }
 window.addEventListener('resize',resize);
 window.addEventListener('orientationchange',()=>setTimeout(resize,120));
+window.addEventListener('load',()=>setTimeout(resize,100));
 resize();
+setTimeout(resize,300); // re-mesure après stabilisation des barres du navigateur
 
 /* ---------------- AUDIO ---------------- */
 let actx=null;
