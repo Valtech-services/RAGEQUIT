@@ -208,7 +208,18 @@ function load(){
     // réinitialisait toute la progression.
   }catch(e){D=JSON.parse(JSON.stringify(DEFAULT));}
 }
-function save(){try{localStorage.setItem('virusLabV3',JSON.stringify(D));}catch(e){}}
+function save(){
+  try{localStorage.setItem('virusLabV3',JSON.stringify(D));}catch(e){}
+  // Prévient le site (parent) qu'il faut aussi sauvegarder dans le cloud.
+  // Throttle : au maximum une fois toutes les 8 secondes pour ne pas spammer.
+  try{
+    const now=Date.now();
+    if(!save._lastCloud||now-save._lastCloud>8000){
+      save._lastCloud=now;
+      window.parent.postMessage({type:'VIRUS_LAB_SAVE_CLOUD'},'*');
+    }
+  }catch(e){}
+}
 load();
 
 function slotCost(actions){return actions.reduce((s,a)=>s+(ACTIONS[a]?ACTIONS[a].slot:1),0);}
