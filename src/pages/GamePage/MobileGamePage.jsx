@@ -53,7 +53,7 @@ export default function MobileGamePage() {
   }, [id])
 
   // Écrit l'état complet de Stellar Forge dans Supabase (joueurs connectés).
-  async  saveStellarForgeCloud(){
+  async function saveStellarForgeCloud(){
     if (!user || !iframeRef.current) return
     try {
       const snap = iframeRef.current.contentWindow.stellarForgeGetState?.()
@@ -100,9 +100,29 @@ async function saveVirusLabCloud(){
       }, { onConflict: 'user_id,game_id' })
     } catch(err) { /* silencieux */ }
   }
+  // Publie le virus actif du joueur dans l'arène (table virus_lab_arena).
+  async function publishVirusLab(payload){
+    if(!user || !iframeRef.current) return
+    let ok = false
+    try {
+      const { error } = await supabase.from('virus_lab_arena').upsert({
+        user_id: user.id,
+        username: profile?.username || null,
+        virus_name: payload.virus_name,
+        genome: payload.genome,
+        look: payload.look,
+        arena_score: payload.arena_score || 1000,
+        wins: payload.wins || 0,
+        losses: payload.losses || 0,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'user_id' })
+      ok = !error
+    } catch(err) { ok = false }
+    iframeRef.current?.contentWindow?.postMessage({ type: 'VIRUS_LAB_PUBLISHED', ok }, '*')
+  }
   // Réception des messages postMessage envoyés par le jeu HTML (score + analytics).
   useEffect(() => {
-    async  handleMessage(e) {
+    async function handleMessage(e) {
       const d = e.data
       if (!d || typeof d.type !== 'string') return
       // --- Virus Lab : le jeu demande l'état de connexion ---
@@ -118,6 +138,27 @@ async function saveVirusLabCloud(){
       // --- Virus Lab : le jeu demande d'ouvrir la connexion Google ---
       if(d.type === 'VIRUS_LAB_REQUEST_LOGIN'){
         signInGoogle()
+        return
+      }
+      // --- Virus Lab : le jeu est prêt pour sa sauvegarde cloud ---
+      if(d.type === 'VIRUS_LAB_CLOUD_READY' && user){
+        const { data } = await supabase
+          .from('game_saves')
+          .select('state')
+          .eq('user_id', user.id)
+          .eq('game_id', 'virus-lab')
+          .maybeSingle()
+        if(data && data.state && iframeRef.current){
+          iframeRef.current.contentWindow.postMessage(
+            { type: 'VIRUS_LAB_CLOUD_STATE', state: data.state }, '*'
+          )
+        }
+        return
+      }
+      // --- Virus Lab : publier le virus dans l'arène ---
+      if(d.type === 'VIRUS_LAB_PUBLISH'){
+        if(user && d.payload) await publishVirusLab(d.payload)
+        else iframeRef.current?.contentWindow?.postMessage({ type: 'VIRUS_LAB_PUBLISHED', ok: false }, '*')
         return
       }
 
@@ -156,10 +197,11 @@ async function saveVirusLabCloud(){
       }
 
       // --- Autres jeux (STAQ, Rage Hockey…) : score classique ---
-      if (d.type.endsWith('_SCORE')) {
+if (d.type.endsWith('_SCORE')) {
         await submitScore({ game: d.game, mode: d.mode, score: d.score, scoreLabel: d.scoreLabel, difficulty: d.diff, arena: d.arena })
         if (d.game) recordPlay(d.game)
         window.dispatchEvent(new Event('rh-score-saved'))
+        if (d.game === 'virus-lab') await saveVirusLabCloud()
         const duration = Math.round((Date.now() - sessionStart) / 1000)
         track('game_end', {
           game_id: d.game,
@@ -174,7 +216,7 @@ async function saveVirusLabCloud(){
     }
 
     window.addEventListener('message', handleMessage)
-    const saveOnLeave = () => { saveStellarForgeCloud() }
+    const saveOnLeave = () => { saveStellarForgeCloud(); saveVirusLabCloud() }
     window.addEventListener('pagehide', saveOnLeave)
     return () => {
       window.removeEventListener('message', handleMessage)
