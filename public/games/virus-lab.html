@@ -1555,6 +1555,38 @@ function drawKeyboard(dt){
     const cb=keyboard.onConfirm;keyboard=null;cb(v);
   },{accent:ok?'#4dffa6':C.lock,disabled:!ok,size:14});
 }
+ /* ================= PUB RÉCOMPENSÉE (simulée) ================= */
+// Overlay plein écran avec compte à rebours de 5s, puis récompense.
+// À la fin, on notifie le site (RH_TRACK ad_rewarded_complete) pour le suivi.
+let adState=null; // {endAt, onReward, context}
+function showRewardedAd(context,onReward){
+  adState={endAt:Date.now()+5000,onReward:onReward,context:context||'generic'};
+}
+function drawRewardedAd(dt){
+  if(!adState)return;
+  const remain=Math.max(0,adState.endAt-Date.now());
+  const secs=Math.ceil(remain/1000);
+  // fond opaque
+  ctx.fillStyle='rgba(2,6,14,.96)';ctx.fillRect(0,0,W,H);
+  // cadre "annonce"
+  const bw=W-56,bx=28,bh=180,by=H/2-bh/2;
+  panel(bx,by,bw,bh,C.cyan,'rgba(6,18,38,.98)',14);
+  text('ADVERTISEMENT',W/2,by+30,11,C.textDim,'center','700',4);
+  // faux visuel de pub (logo virus animé)
+  drawLogoVirus(W/2,by+92,34,T);
+  if(secs>0){
+    text('Reward in '+secs+'s\u2026',W/2,by+bh-30,15,C.gold,'center','800',6);
+  }else{
+    text('Tap to collect your reward',W/2,by+bh-30,14,'#4dffa6','center','800',6);
+    hitzones.push({x:bx,y:by,w:bw,h:bh,cb:()=>{
+      const cb=adState.onReward, ctxName=adState.context;
+      adState=null;
+      // suivi : une pub récompensée a été regardée jusqu'au bout
+      try{window.parent.postMessage({type:'RH_TRACK',event:'ad_rewarded_complete',game_id:'virus-lab',props:{context:ctxName}},'*');}catch(e){}
+      if(cb)cb();
+    }});
+  }
+}
 /* ================= CONFIRM DIALOG ================= */
 let dialog=null;
 function openDialog(title,body,confirmLabel,onConfirm){
@@ -2906,8 +2938,8 @@ function drawLab(dt){
         rr(W-90,y+44,68,22,6);ctx.fillStyle='rgba(60,50,10,.9)';ctx.fill();
         ctx.strokeStyle=C.gold;ctx.lineWidth=1;ctx.stroke();
         text('SKIP',W-56,y+55,8.5,C.gold,'center','800');
-        hitzones.push({x:W-90,y:y+44,w:68,h:22,cb:()=>{
-          openDialog('Skip research','Watch a short ad to finish this instantly?','WATCH AD',()=>{D.research[u.id]=Date.now()-1;save();sfx.unlock();});
+hitzones.push({x:W-90,y:y+44,w:68,h:22,cb:()=>{
+          showRewardedAd('skip_slots',()=>{D.research[u.id]=Date.now()-1;save();sfx.unlock();notify('Research completed!');});
         }});
       }else{
         const afford=D.dna>=u.cost;
@@ -2983,9 +3015,9 @@ function drawLab(dt){
           rr(W-90,y+44,68,22,6);ctx.fillStyle='rgba(60,50,10,.9)';ctx.fill();
           ctx.strokeStyle=C.gold;ctx.lineWidth=1;ctx.stroke();
           text('SKIP',W-56,y+55,8.5,C.gold,'center','800');
-          hitzones.push({x:W-90,y:y+44,w:68,h:22,cb:()=>{
-            openDialog('Skip research','Watch a short ad to finish this research instantly?','WATCH AD',()=>{
-              D.research[key]=Date.now()-1;save();sfx.unlock();
+hitzones.push({x:W-90,y:y+44,w:68,h:22,cb:()=>{
+            showRewardedAd('skip_research',()=>{
+              D.research[key]=Date.now()-1;save();sfx.unlock();notify('Research completed!');
             });
           }});
         }else{
@@ -3676,6 +3708,8 @@ function onUp(x,y){
   pointerDown=false;scroll.dragging=false;
   if(activeSlider){activeSlider=null;return;}
   if(scroll.moved>12)return; // c'était un scroll, pas un tap
+  // Pendant la pub (compte à rebours), bloquer tous les clics sauf la collecte.
+  if(adState && Date.now()<adState.endAt)return;
   // hit test en ordre inverse (dernier dessiné = au-dessus)
   for(let i=hitzones.length-1;i>=0;i--){
     const h=hitzones[i];
@@ -3728,7 +3762,8 @@ function frame(now){
     case P.ARENA_BOARD:drawArenaBoard(dt);break;
     default:drawMain(dt);
   }
-  drawDialog();
+drawDialog();
+  drawRewardedAd(dt);
   drawKeyboard(dt);
   drawNotif(dt);
   // vignette
