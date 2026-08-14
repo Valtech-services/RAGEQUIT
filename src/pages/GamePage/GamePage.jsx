@@ -138,6 +138,11 @@ async function saveVirusLabCloud(){
       if(d.type === 'VIRUS_LAB_REQUEST_LOGIN'){
         signInGoogle()
         return
+        // --- Virus Lab : le jeu demande une sauvegarde cloud ---
+      if(d.type === 'VIRUS_LAB_SAVE_CLOUD'){
+        await saveVirusLabCloud()
+        return
+      }
         // --- Virus Lab : le jeu est prêt pour sa sauvegarde cloud ---
       if(d.type === 'VIRUS_LAB_CLOUD_READY' && user){
         const { data } = await supabase
