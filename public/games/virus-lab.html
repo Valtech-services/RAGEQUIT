@@ -203,9 +203,10 @@ function load(){
 // Onboarding et tutoriel désactivés.
     D.onb=99;
     D.tutorial=99;
-    D.virusList.forEach((v,i)=>{v.look=normaliseLook(v.look,i);
+D.virusList.forEach((v,i)=>{v.look=normaliseLook(v.look,i);
       if(!v.color)v.color=paletteById(v.look.palette).main;});
-  }catch(e){D=JSON.parse(JSON.stringify(DEFAULT));}
+    console.log('LOAD OK: progress=', D.progress, 'virus=', D.virusList.length, 'onb=', D.onb);
+  }catch(e){D=JSON.parse(JSON.stringify(DEFAULT));console.log('LOAD CATCH (erreur, reset DEFAULT):', e);}
 }
 function save(){try{localStorage.setItem('virusLabV3',JSON.stringify(D));}catch(e){}}
 load();
