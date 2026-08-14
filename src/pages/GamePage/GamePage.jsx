@@ -143,6 +143,19 @@ async function saveVirusLabCloud(){
         await saveVirusLabCloud()
         return
       }
+        // --- Virus Lab : le jeu demande la liste des virus publiés (arène) ---
+      if(d.type === 'VIRUS_LAB_ARENA_REQUEST'){
+        const { data } = await supabase
+          .from('virus_lab_arena')
+          .select('user_id, username, virus_name, genome, look, arena_score, wins, losses')
+          .order('arena_score', { ascending: false })
+          .limit(50)
+        iframeRef.current?.contentWindow?.postMessage({
+          type: 'VIRUS_LAB_ARENA_LIST',
+          viruses: data || [],
+        }, '*')
+        return
+      }
         // --- Virus Lab : le jeu est prêt pour sa sauvegarde cloud ---
       if(d.type === 'VIRUS_LAB_CLOUD_READY' && user){
         const { data } = await supabase
