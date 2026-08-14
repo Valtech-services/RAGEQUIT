@@ -2158,6 +2158,19 @@ const ARENA_FALLBACK=[
 function arenaScore(){
   return Math.max(0,1000+(D.arenaWins|0)*25-(D.arenaLosses|0)*10);
 }
+ // Envoie le score d'arène (Elo) au leaderboard du site.
+function reportArenaScore(){
+  try{
+    const w=D.arenaWins|0, l=D.arenaLosses|0;
+    window.parent.postMessage({
+      type:'VIRUS_LAB_SCORE',
+      game:'virus-lab',
+      mode:'arena',
+      score:arenaScore(),
+      scoreLabel:arenaScore()+' pts \u00b7 '+w+'W-'+l+'L'
+    },'*');
+  }catch(e){}
+}
 
 let arenaState={loading:false,error:null,roster:null,fetchedAt:0,mode:'ranked'};
 
