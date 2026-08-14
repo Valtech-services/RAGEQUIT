@@ -199,14 +199,14 @@ function load(){
     if(!Array.isArray(D.unlocked)||!D.unlocked.length)D.unlocked=BASE_ACTIONS.slice();
     if(!Array.isArray(D.virusList))D.virusList=[];
     if(typeof D.dna!=='number')D.dna=150;
-    if(typeof D.tutorial!=='number')D.tutorial=D.virusList.length?99:0;
-// Onboarding et tutoriel désactivés.
+    // Onboarding et tutoriel désactivés.
     D.onb=99;
     D.tutorial=99;
-D.virusList.forEach((v,i)=>{v.look=normaliseLook(v.look,i);
-      if(!v.color)v.color=paletteById(v.look.palette).main;});
-    console.log('LOAD OK: progress=', D.progress, 'virus=', D.virusList.length, 'onb=', D.onb);
-  }catch(e){D=JSON.parse(JSON.stringify(DEFAULT));console.log('LOAD CATCH (erreur, reset DEFAULT):', e);}
+    // NB : on ne normalise PAS les looks ici (PALETTE n'est pas encore défini
+    // à ce stade du fichier). Les looks sont normalisés à l'affichage de chaque
+    // virus, ce qui suffit. Toucher aux looks ici faisait planter load() et
+    // réinitialisait toute la progression.
+  }catch(e){D=JSON.parse(JSON.stringify(DEFAULT));}
 }
 function save(){try{localStorage.setItem('virusLabV3',JSON.stringify(D));}catch(e){}}
 load();
