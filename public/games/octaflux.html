@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Octaflux</title>
+<style>
+  :root{
+    --bg0:#0a0612; --bg1:#150a24; --ink:#f7ecff; --dim:#9a7fb8;
+    --mag:#ff2fb0; --mag-soft:#ff8fd4; --edge:#3a1f52; --warn:#ff5f6d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100dvh;overflow:hidden;background:var(--bg0);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    color:var(--ink);user-select:none;-webkit-user-select:none;touch-action:none;}
+  /* stage : 9:16 borné sur mobile/portrait, plein écran 16:9 sur desktop */
+  #stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(120% 120% at 50% 22%,var(--bg1),var(--bg0) 70%);}
+  #frame{position:relative;width:100%;height:100%;overflow:hidden;}
+  canvas{display:block;position:absolute;inset:0;width:100%;height:100%;touch-action:none;}
+
+  /* zone de sécurité basse (barre de recherche mobile) gérée en JS via --safe */
+  .hud{position:absolute;top:0;left:0;right:0;
+    padding:calc(14px + env(safe-area-inset-top)) 20px 0;
+    display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;z-index:5;}
+  .stat{display:flex;flex-direction:column;line-height:1;}
+  .stat .lab{font-size:10px;letter-spacing:.22em;color:var(--dim);text-transform:uppercase;margin-bottom:5px;}
+  .stat .val{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;
+    text-shadow:0 0 18px rgba(255,47,176,.55);}
+  .stat.right{align-items:flex-end;}
+  #combo{position:absolute;left:50%;transform:translateX(-50%);z-index:5;
+    font-size:16px;font-weight:800;letter-spacing:.05em;color:var(--mag-soft);
+    opacity:0;transition:opacity .12s;pointer-events:none;text-shadow:0 0 20px rgba(255,47,176,.7);}
+
+  .screen{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;padding:30px;
+    background:radial-gradient(120% 120% at 50% 30%,#150a24,#0a0612 72%);}
+  .screen.hidden{display:none;}
+  .logo{font-size:clamp(46px,14vw,88px);font-weight:900;letter-spacing:-.03em;line-height:.9;
+    background:linear-gradient(180deg,#fff,var(--mag) 60%,#b0187f);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 4px 30px rgba(255,47,176,.5));}
+  .tag{margin-top:14px;color:var(--dim);font-size:13px;letter-spacing:.32em;text-transform:uppercase;}
+  .btn{margin-top:32px;pointer-events:auto;cursor:pointer;border:none;
+    padding:17px 46px;border-radius:100px;font-size:17px;font-weight:800;letter-spacing:.04em;
+    color:#1a0512;background:linear-gradient(180deg,var(--mag-soft),var(--mag));
+    box-shadow:0 10px 34px rgba(255,47,176,.5),inset 0 1px 0 rgba(255,255,255,.6);
+    transition:transform .12s;}
+  .btn:active{transform:scale(.95);}
+  .btn.ghost{background:transparent;color:var(--mag-soft);border:1.5px solid var(--edge);
+    box-shadow:none;padding:13px 30px;font-size:14px;margin-top:14px;}
+  .how{margin-top:24px;color:var(--dim);font-size:13px;max-width:300px;line-height:1.7;}
+  .how b{color:var(--mag-soft);font-weight:700;}
+  .go-title{font-size:13px;letter-spacing:.34em;text-transform:uppercase;color:var(--warn);margin-bottom:10px;}
+  .go-score{font-size:clamp(56px,18vw,104px);font-weight:900;line-height:.9;
+    text-shadow:0 0 40px rgba(255,47,176,.55);}
+  .go-best{margin-top:12px;color:var(--dim);font-size:15px;}
+  .go-best.newrec{color:#ffd23f;font-weight:800;}
+  .goal{margin-top:18px;color:var(--mag-soft);font-size:14px;font-weight:600;max-width:280px;line-height:1.5;}
+  .pill{position:absolute;left:50%;transform:translateX(-50%);z-index:5;
+    color:var(--dim);font-size:11px;letter-spacing:.18em;text-transform:uppercase;pointer-events:none;
+    opacity:.65;text-align:center;width:90%;}
+  #adOverlay{z-index:40;background:#05030a;}
+  .ad-label{position:absolute;top:calc(16px + env(safe-area-inset-top));left:0;right:0;
+    text-align:center;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:#6b5a80;}
+  .ad-box{width:min(88%,520px);aspect-ratio:16/10;border-radius:16px;
+    background:linear-gradient(135deg,#1a1030,#2a1140);border:1px solid var(--edge);
+    display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
+  .ad-box::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(115deg,transparent 30%,rgba(255,143,212,.14) 50%,transparent 70%);
+    background-size:220% 100%;animation:adshine 2.4s linear infinite;}
+  @keyframes adshine{0%{background-position:120% 0}100%{background-position:-120% 0}}
+  .ad-fake{font-size:20px;font-weight:800;color:var(--mag-soft);letter-spacing:.02em;opacity:.85;}
+  .ad-count{margin-top:26px;font-size:15px;font-weight:700;color:var(--dim);letter-spacing:.05em;
+    font-variant-numeric:tabular-nums;}
+</style>
+</head>
+<body>
+<div id="stage"><div id="frame">
+  <canvas id="cv"></canvas>
+
+  <div class="hud">
+    <span id="score" style="display:none">0</span>
+    <div class="stat"><span class="lab">Speed</span><span class="val" id="speedVal">0.0<small style="font-size:12px;opacity:.6;letter-spacing:0"> m/s</small></span></div>
+    <div class="stat right" style="margin-left:auto"><span class="lab">Best</span><span class="val" id="best">0</span></div>
+  </div>
+  <div id="combo"></div>
+  <div class="pill" id="pill">Drag or tap to spin the octagon</div>
+
+  <div class="screen" id="start">
+    <div class="logo">OCTAFLUX</div>
+    <div class="tag">Eight faces, one color</div>
+    <div class="how">
+      Cells fall toward the core.<br>
+      <b>Drag your thumb</b> to spin, or tap left / right.<br>
+      Match <b>3 or more same colors</b> to clear them.<br>
+      Chain clears before the <b>timer</b> runs out for combos.
+    </div>
+    <button class="btn" id="playBtn">Play</button>
+  </div>
+
+  <div class="screen hidden" id="over">
+    <div class="go-title">Game Over</div>
+    <div class="go-score" id="finalScore">0</div>
+    <div class="go-best" id="finalBest">Best 0</div>
+    <div class="goal" id="goalMsg"></div>
+    <button class="btn" id="continueBtn">Continue (watch ad)</button>
+    <button class="btn" id="againBtn">Play again</button>
+  </div>
+
+  <div class="screen hidden" id="adOverlay">
+    <div class="ad-label">Advertisement</div>
+    <div class="ad-box">
+      <div class="ad-fake">Your ad here</div>
+    </div>
+    <div class="ad-count" id="adCount">Reward in 5s</div>
+  </div>
+</div></div>
+
+<script>
+(()=>{
+"use strict";
+
+// Communication avec le site parent (Ragequit Arcade).
+function rqPost(msg){ try{ window.parent.postMessage(msg,'*'); }catch(e){} }
+
+const SIDES=8;
+const COLORS=['#ff2fb0','#00e6c3','#ffd23f','#7a5cff'];
+const GLOW  =['#ff8fd4','#5ff5e0','#ffe488','#a98cff'];
+const cv=document.getElementById('cv');
+const ctx=cv.getContext('2d');
+
+let W=0,H=0,CX=0,CY=0,DPR=1,coreR=0,laneStep=0,safeBottom=0;
+
+function resize(){
+  DPR=Math.min(window.devicePixelRatio||1,2);
+  const r=cv.getBoundingClientRect();
+  W=Math.max(1,r.width); H=Math.max(1,r.height);
+  cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+
+  // marge basse de sécurité : sur mobile la barre d'URL peut manger ~90px.
+  // on décale le centre vers le haut en portrait pour que rien d'important
+  // ne tombe sous la barre.
+  const portrait = H>=W;
+  safeBottom = portrait ? Math.max(70, H*0.09) : 0;
+  CX=W/2; CY=(H-safeBottom)/2 + (portrait?6:0);
+
+  const playable=Math.min(W, H-safeBottom);
+  coreR=playable*0.10;
+  laneStep=playable*0.016;   // blocs plus petits : on peut en empiler beaucoup plus
+
+  // place les éléments d'UI dépendant du centre
+  const combo=document.getElementById('combo');
+  combo.style.top=(CY-coreR-52)+'px';
+  const pill=document.getElementById('pill');
+  pill.style.bottom=(safeBottom+14)+'px';
+}
+window.addEventListener('resize',resize);
+window.addEventListener('orientationchange',()=>setTimeout(resize,120));
+
+const S={running:false,over:false,angle:0,targetAngle:0,
+  score:0,best:+localStorage.getItem('octaflux_best')||0,
+  cells:[],stacks:[],spawnT:0,spawnGap:1200,minGap:900,
+  speed:0.021,elapsed:0,combo:0,comboRing:0,comboMax:1.5,
+  shake:0,flash:0,particles:[],floaters:[],games:+localStorage.getItem('octaflux_games')||0,
+  audio:null,noteBase:0,usedContinue:false};
+
+function resetStacks(){S.stacks=[];for(let i=0;i<SIDES;i++)S.stacks.push([]);}
+resetStacks(); // init immédiate : draw() peut tourner avant la 1re partie
+
+function reset(){
+  S.running=true;S.over=false;S.angle=0;S.targetAngle=0;
+  S.score=0;S.cells=[];resetStacks();S.spawnT=0;S.spawnGap=1200;
+  S.speed=0.021;S.elapsed=0;S.combo=0;S.comboRing=0;
+  S.shake=0;S.flash=0;S.particles=[];S.floaters=[];S.noteBase=0;S.usedContinue=false;
+  document.getElementById('score').textContent='0';
+  document.getElementById('best').textContent=S.best;
+  document.getElementById('combo').style.opacity='0';
+  resize();
+}
+
+// ---- audio (montée de pitch au combo) ----
+function initAudio(){
+  if(S.audio) return;
+  try{ const AC=window.AudioContext||window.webkitAudioContext; S.audio=new AC(); }catch(e){ S.audio=null; }
+}
+function beep(freq,dur=0.09,type='triangle',vol=0.18){
+  if(!S.audio) return;
+  const t=S.audio.currentTime;
+  const o=S.audio.createOscillator(), g=S.audio.createGain();
+  o.type=type; o.frequency.value=freq;
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g); g.connect(S.audio.destination); o.start(t); o.stop(t+dur+0.02);
+}
+
+function spawn(){
+  const slot=(Math.random()*SIDES)|0;   // direction FIXE à l'écran (ne tourne pas)
+  const ci=(Math.random()*COLORS.length)|0;
+  // départ juste au-dessus de la ligne limite : trajet court et lisible,
+  // temps de chute raisonnable même avec des blocs petits et nombreux.
+  const start=coreR + STACK_LIMIT*laneStep + laneStep*6;
+  S.cells.push({slot,ci,r:start});
+}
+
+function rotate(dir){ if(!S.running) return; S.targetAngle+=dir*(Math.PI*2/SIDES); beep(320,0.05,'sine',0.08); }
+
+// position à l'écran d'un SLOT SPATIAL FIXE (n'inclut PAS S.angle : ne tourne pas)
+function slotPoint(slot,radius){
+  const a=(slot/SIDES)*Math.PI*2-Math.PI/2;
+  return [CX+Math.cos(a)*radius,CY+Math.sin(a)*radius];
+}
+
+// quelle FACE de l'octogone se trouve actuellement sous un slot spatial donné,
+// compte tenu de la rotation courante. L'octogone tourne, les slots non.
+function slotToFace(slot){
+  const per=Math.PI*2/SIDES;
+  let k=Math.round((slot*per - S.angle)/per)%SIDES;
+  if(k<0)k+=SIDES;
+  return k;
+}
+
+// position à l'écran d'une FACE de l'octogone (tourne avec S.angle)
+function facePoint(side,radius){
+  const a=S.angle+(side/SIDES)*Math.PI*2-Math.PI/2;
+  return [CX+Math.cos(a)*radius,CY+Math.sin(a)*radius];
+}
+
+function addParticles(x,y,color,n){
+  for(let i=0;i<n;i++){
+    const a=Math.random()*Math.PI*2,sp=1+Math.random()*3.5;
+    S.particles.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1,color,size:2+Math.random()*3});
+  }
+}
+
+// score selon le nombre total de blocs détruits dans un groupe.
+function groupScore(n){
+  const table={3:30,4:80,5:150,6:250,7:400,8:600};
+  return table[n] || (600 + (n-8)*250);
+}
+
+// textes de score qui montent et s'estompent
+function floatScore(x,y,val,big){
+  S.floaters.push({x,y,val:'+'+val,life:1,big});
+}
+
+// voisin horizontal : faces adjacentes sur l'octogone (cyclique)
+function neighborSides(s){ return [(s+1)%SIDES,(s+SIDES-1)%SIDES]; }
+
+// trouve tous les groupes connectés de >=3 blocs de même couleur.
+// adjacence : vertical (même face, niveaux consécutifs) + horizontal (faces
+// voisines, même niveau). Retourne une liste de groupes, chaque groupe = liste
+// de {side, lvl}.
+function findGroups(){
+  const seen=new Set();
+  const key=(s,l)=>s+':'+l;
+  const groups=[];
+  for(let s=0;s<SIDES;s++){
+    const st=S.stacks[s]; if(!st) continue;
+    for(let l=0;l<st.length;l++){
+      if(seen.has(key(s,l))) continue;
+      const color=st[l];
+      // flood-fill
+      const stack=[[s,l]]; const group=[];
+      seen.add(key(s,l));
+      while(stack.length){
+        const [cs,cl]=stack.pop();
+        group.push({side:cs,lvl:cl});
+        // vertical
+        const vst=S.stacks[cs];
+        [[cs,cl+1],[cs,cl-1]].forEach(([ns,nl])=>{
+          if(nl<0||nl>=vst.length) return;
+          if(seen.has(key(ns,nl))) return;
+          if(vst[nl]===color){ seen.add(key(ns,nl)); stack.push([ns,nl]); }
+        });
+        // horizontal : même niveau sur faces voisines
+        neighborSides(cs).forEach(ns=>{
+          const nst=S.stacks[ns];
+          if(cl>=nst.length) return;
+          if(seen.has(key(ns,cl))) return;
+          if(nst[cl]===color){ seen.add(key(ns,cl)); stack.push([ns,cl]); }
+        });
+      }
+      if(group.length>=3) groups.push({color,cells:group});
+    }
+  }
+  return groups;
+}
+
+// applique la gravité : sur chaque face, les blocs retombent vers le noyau
+// pour combler les trous laissés par une destruction.
+function applyGravity(){
+  for(let s=0;s<SIDES;s++){
+    S.stacks[s]=S.stacks[s].filter(v=>v!==null&&v!==undefined);
+  }
+}
+
+// résout toutes les fusions en vagues successives (groupes connectés + gravité).
+function resolveCascades(){
+  let anyEver=false, wave=0;
+  while(true){
+    const groups=findGroups();
+    if(groups.length===0) break;
+    anyEver=true; wave++;
+    S.combo++; S.comboRing=S.comboMax;
+    const mult=Math.max(1,S.combo);
+
+    let totalCells=0;
+    for(const g of groups){
+      const n=g.cells.length; totalCells+=n;
+      // multiplicateur de taille : 3->x1, 4->x1.5, 5->x2, 6->x3, 7->x4, 8+->x5
+      const sizeMult = n>=8?5 : n>=7?4 : n>=6?3 : n>=5?2 : n>=4?1.5 : 1;
+      const gained=Math.round(groupScore(n)*mult*sizeMult);
+      S.score+=gained;
+      let ax=0,ay=0;
+      for(const c of g.cells){
+        const r=coreR+(c.lvl+0.5)*laneStep;
+        const [px,py]=facePoint(c.side,r);
+        ax+=px; ay+=py;
+        addParticles(px,py,COLORS[g.color],8);
+        S.stacks[c.side][c.lvl]=null;
+      }
+      ax/=n; ay/=n;
+      // affiche le coefficient de taille sur le floater quand il y a bonus
+      const label = sizeMult>1 ? '+'+gained+'  x'+sizeMult : '+'+gained;
+      S.floaters.push({x:ax,y:ay,val:label,life:1,big:(mult>=2||sizeMult>=2)});
+    }
+    applyGravity();
+
+    S.flash=0.5; S.shake=Math.min(22,6+totalCells*1.5);
+    S.noteBase=Math.min(12,S.noteBase+1);
+    beep(300*Math.pow(1.0595,S.noteBase*2+totalCells),0.14,'triangle',0.22);
+
+    // bonus multi-groupe (plusieurs groupes détruits dans la même vague)
+    if(groups.length>=2){
+      const bonus=200*groups.length*mult;
+      S.score+=bonus;
+      floatScore(CX,CY-coreR*0.15,bonus,true);
+      showMulti(groups.length);
+      S.shake=Math.min(24,S.shake+groups.length*3);
+      beep(520+groups.length*60,0.22,'square',0.20);
+    } else {
+      showCombo();
+    }
+    document.getElementById('score').textContent=S.score;
+    if(wave>16) break;
+  }
+  return anyEver;
+}
+
+function showMulti(n){
+  const el=document.getElementById('combo');
+  el.textContent=n+' GROUPS ×'+Math.max(1,S.combo);
+  el.style.opacity='1';
+}
+
+function showCombo(){
+  const el=document.getElementById('combo');
+  if(S.combo>=2){ el.textContent='COMBO ×'+S.combo; el.style.opacity='1'; }
+}
+
+const STACK_LIMIT=15;   // hauteur d'empilement réduite : moins tolérant, plus dur
+
+function update(dt){
+  S.elapsed+=dt;
+  // difficulté progressive : la vitesse et la cadence montent doucement.
+  // vitesse de base 0.021, +50% environ après ~2 min de jeu.
+  S.speed=0.021+S.elapsed*0.00000009;
+  // apparition : de 1200ms vers 900ms (plancher) au fil du temps
+  S.spawnGap=Math.max(S.minGap,1200-S.elapsed*0.0016);
+  S.angle+=(S.targetAngle-S.angle)*Math.min(1,dt*0.014);
+  // indicateur de vitesse lisible (échelle "m/s" décorative qui monte avec la difficulté)
+  const sv=document.getElementById('speedVal');
+  if(sv){ const mps=(S.speed*100).toFixed(1);
+    sv.firstChild.textContent=mps; }
+
+  S.spawnT+=dt;
+  if(S.spawnT>=S.spawnGap){ S.spawnT=0; spawn(); }
+
+  // compte à rebours du combo (anneau)
+  if(S.comboRing>0){
+    S.comboRing-=dt/1000;
+    if(S.comboRing<=0){ S.combo=0; S.noteBase=0;
+      document.getElementById('combo').style.opacity='0'; }
+  }
+
+  for(let i=S.cells.length-1;i>=0;i--){
+    const c=S.cells[i];
+    c.r-=laneStep*S.speed*dt*0.5;
+    // la face visée dépend de la rotation courante de l'octogone
+    const face=slotToFace(c.slot);
+    const st=S.stacks[face];
+    const landR=coreR+st.length*laneStep+laneStep*0.5;
+    if(c.r<=landR){
+      st.push(c.ci);
+      beep(180,0.05,'sine',0.10);
+      S.cells.splice(i,1);
+      resolveCascades();
+      for(let s=0;s<SIDES;s++){
+        if(S.stacks[s] && S.stacks[s].length>STACK_LIMIT) return gameOver();
+      }
+    }
+  }
+
+  for(let i=S.particles.length-1;i>=0;i--){
+    const p=S.particles[i];
+    p.x+=p.vx;p.y+=p.vy;p.vx*=0.94;p.vy*=0.94;p.life-=dt/650;
+    if(p.life<=0) S.particles.splice(i,1);
+  }
+  for(let i=S.floaters.length-1;i>=0;i--){
+    const f=S.floaters[i];
+    f.y-=dt*0.03; f.life-=dt/900;
+    if(f.life<=0) S.floaters.splice(i,1);
+  }
+  if(S.shake>0) S.shake*=0.86;
+  if(S.flash>0) S.flash-=dt/400;
+}
+
+function gameOver(){
+  S.running=false;S.over=true;
+  S.games++; localStorage.setItem('octaflux_games',S.games);
+const rec=S.score>S.best;
+  if(rec){ S.best=S.score; localStorage.setItem('octaflux_best',S.best); }
+  // envoi du score au leaderboard du site
+  rqPost({type:'OCTAFLUX_SCORE',game:'octaflux',mode:'classic',score:S.score,scoreLabel:S.score+' pts'});
+  beep(160,0.5,'sawtooth',0.15);
+  document.getElementById('finalScore').textContent=S.score;
+  const fb=document.getElementById('finalBest');
+  if(rec && S.score>0){ fb.textContent='New best'; fb.classList.add('newrec'); }
+  else { fb.textContent='Best '+S.best; fb.classList.remove('newrec'); }
+  const goals=[
+    {t:500,m:'Next goal: reach 500 points'},
+    {t:1000,m:'Next goal: break 1000'},
+    {t:2500,m:'Next goal: aim for 2500'},
+    {t:5000,m:'Next goal: the 5000 mark'}
+  ];
+  const g=goals.find(g=>S.score<g.t)||{m:'Land a x6 combo to blow up your score'};
+  document.getElementById('goalMsg').textContent=g.m;
+
+  // bouton Continuer : proposé une seule fois par partie, et seulement
+  // si le joueur a un score qui vaut la peine d'être sauvé.
+  const cbtn=document.getElementById('continueBtn');
+  cbtn.style.display = (!S.usedContinue && S.score>0) ? 'block' : 'none';
+
+  document.getElementById('over').classList.remove('hidden');
+
+  // interstitiel plein écran : 1 partie sur 3, au game over uniquement.
+  if(S.games % 3 === 0){ Ads.showInterstitial(); }
+}
+
+// reprend la partie après une pub récompensée : on vide les piles les plus
+// hautes pour redonner de l'air, puis on relance la boucle.
+function continueRun(){
+  S.usedContinue=true;
+  // ramène chaque pile à la moitié de la limite pour redonner de l'air
+  const keep=Math.floor(STACK_LIMIT/2);
+  for(let s=0;s<SIDES;s++){
+    const st=S.stacks[s]; if(!st) continue;
+    while(st.length>keep) st.pop();
+  }
+  S.cells=[];               // on efface les composants en vol
+  S.combo=0; S.comboRing=0; S.noteBase=0;
+  S.over=false; S.running=true;
+  document.getElementById('over').classList.add('hidden');
+  document.getElementById('combo').style.opacity='0';
+  beep(660,0.2,'triangle',0.2);
+}
+
+function polyPath(radius){
+  ctx.beginPath();
+  for(let s=0;s<SIDES;s++){
+    const a=S.angle+(s/SIDES)*Math.PI*2-Math.PI/2-(Math.PI/SIDES);
+    const x=CX+Math.cos(a)*radius,y=CY+Math.sin(a)*radius;
+    s===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+}
+
+function drawSeg(side,rIn,rOut,ci,danger){
+  const a0=S.angle+(side/SIDES)*Math.PI*2-Math.PI/2-(Math.PI/SIDES);
+  const a1=a0+(Math.PI*2/SIDES);
+  const p=(a,r)=>[CX+Math.cos(a)*r,CY+Math.sin(a)*r];
+  const [x0,y0]=p(a0,rIn),[x1,y1]=p(a1,rIn),[x2,y2]=p(a1,rOut),[x3,y3]=p(a0,rOut);
+  ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.lineTo(x2,y2);ctx.lineTo(x3,y3);ctx.closePath();
+  ctx.fillStyle=COLORS[ci];ctx.fill();
+  ctx.lineWidth=danger?2.5:1.5;
+  ctx.strokeStyle=danger?'#ff5f6d':GLOW[ci];ctx.stroke();
+}
+
+// dessine un segment sur un SLOT SPATIAL FIXE (ne tourne pas avec l'octogone)
+function drawSlotSeg(slot,rIn,rOut,ci){
+  const a0=(slot/SIDES)*Math.PI*2-Math.PI/2-(Math.PI/SIDES);
+  const a1=a0+(Math.PI*2/SIDES);
+  const p=(a,r)=>[CX+Math.cos(a)*r,CY+Math.sin(a)*r];
+  const [x0,y0]=p(a0,rIn),[x1,y1]=p(a1,rIn),[x2,y2]=p(a1,rOut),[x3,y3]=p(a0,rOut);
+  ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.lineTo(x2,y2);ctx.lineTo(x3,y3);ctx.closePath();
+  ctx.fillStyle=COLORS[ci];ctx.fill();
+  ctx.lineWidth=1.5;ctx.strokeStyle=GLOW[ci];ctx.stroke();
+}
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  let ox=0,oy=0;
+  if(S.shake>0.3){ ox=(Math.random()-.5)*S.shake; oy=(Math.random()-.5)*S.shake; }
+  ctx.save();ctx.translate(ox,oy);
+
+  const g=ctx.createRadialGradient(CX,CY,coreR*0.4,CX,CY,coreR*6);
+  g.addColorStop(0,'rgba(255,47,176,0.10)');g.addColorStop(1,'rgba(255,47,176,0)');
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+
+  // octogone-limite : contour de la ligne à ne pas dépasser.
+  const limitR=coreR+STACK_LIMIT*laneStep;
+  let maxStack=0;
+  for(let s=0;s<SIDES;s++){ if(S.stacks[s]&&S.stacks[s].length>maxStack) maxStack=S.stacks[s].length; }
+  const near=maxStack>=STACK_LIMIT-3;
+  const pulse=near?(0.55+0.45*Math.abs(Math.sin(S.elapsed*0.012))):0.32;
+  polyPath(limitR);
+  ctx.setLineDash([6,7]);
+  ctx.lineWidth=near?3:2;
+  ctx.strokeStyle=near?'rgba(255,95,109,'+pulse+')':'rgba(255,143,212,'+pulse+')';
+  ctx.shadowColor=near?'#ff5f6d':'#ff8fd4';ctx.shadowBlur=near?16:6;
+  ctx.stroke();
+  ctx.setLineDash([]);ctx.shadowBlur=0;
+
+  // near-miss : face proche de la limite clignote rouge
+  const blink=(Math.sin(S.elapsed*0.02)>0);
+  for(let side=0;side<SIDES;side++){
+    const st=S.stacks[side]; if(!st) continue;
+    const danger=(st.length>=STACK_LIMIT-3)&&blink;
+    for(let k=0;k<st.length;k++){
+      const rIn=coreR+k*laneStep,rOut=rIn+laneStep*0.86;
+      drawSeg(side,rIn,rOut,st[k],danger);
+    }
+  }
+
+  for(const c of S.cells){
+    const rIn=c.r,rOut=c.r+laneStep*0.86;
+    drawSlotSeg(c.slot,rIn,rOut,c.ci);
+  }
+
+  // noyau
+  polyPath(coreR);
+  const cg=ctx.createRadialGradient(CX,CY,0,CX,CY,coreR);
+  cg.addColorStop(0,'#2a1140');cg.addColorStop(1,'#12071f');
+  ctx.fillStyle=cg;ctx.fill();
+  ctx.lineWidth=2;ctx.strokeStyle='rgba(255,47,176,'+(0.5+Math.max(0,S.flash))+')';
+  ctx.shadowColor='#ff2fb0';ctx.shadowBlur=18+Math.max(0,S.flash)*40;ctx.stroke();
+  ctx.shadowBlur=0;
+
+  // score au centre du noyau
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  const sTxt=String(S.score);
+  const fs=Math.max(18,coreR*0.62 - sTxt.length*coreR*0.05);
+  ctx.font='900 '+fs+'px -apple-system,Segoe UI,Roboto,sans-serif';
+  ctx.fillStyle='#ffffff';
+  ctx.shadowColor='#ff2fb0';ctx.shadowBlur=16+Math.max(0,S.flash)*30;
+  ctx.fillText(sTxt,CX,CY);
+  ctx.shadowBlur=0;
+
+  // anneau de combo (compte à rebours) autour du noyau
+  if(S.comboRing>0 && S.combo>=2){
+    const frac=S.comboRing/S.comboMax;
+    ctx.beginPath();
+    ctx.arc(CX,CY,coreR+laneStep*0.35,-Math.PI/2,-Math.PI/2+frac*Math.PI*2);
+    ctx.lineWidth=4;ctx.strokeStyle='#ffd23f';
+    ctx.shadowColor='#ffd23f';ctx.shadowBlur=14;ctx.stroke();ctx.shadowBlur=0;
+  }
+
+  // repères des 8 slots d'entrée (positions FIXES, ne tournent pas).
+  // marque discrètement d'où les composants peuvent arriver.
+  for(let slot=0;slot<SIDES;slot++){
+    const [mx,my]=slotPoint(slot,limitR+laneStep*0.5);
+    ctx.fillStyle='rgba(255,143,212,.25)';
+    ctx.beginPath();ctx.arc(mx,my,3,0,Math.PI*2);ctx.fill();
+  }
+
+  for(const p of S.particles){
+    ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.color;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();
+  }
+  ctx.globalAlpha=1;
+
+  // scores flottants
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  for(const f of S.floaters){
+    ctx.globalAlpha=Math.max(0,f.life);
+    const size=f.big?30:20;
+    ctx.font='800 '+size+'px -apple-system,Segoe UI,Roboto,sans-serif';
+    ctx.fillStyle=f.big?'#ffd23f':'#ffffff';
+    ctx.shadowColor=f.big?'#ffd23f':'#ff2fb0';ctx.shadowBlur=14;
+    ctx.fillText(f.val,f.x,f.y);
+    ctx.shadowBlur=0;
+  }
+  ctx.globalAlpha=1;
+
+  if(S.flash>0){ ctx.fillStyle='rgba(255,47,176,'+(S.flash*0.12)+')';ctx.fillRect(0,0,W,H); }
+  ctx.restore();
+}
+
+let last=performance.now();
+function loop(t){
+  const dt=Math.min(50,t-last);last=t;
+  if(S.running) update(dt);
+  draw();
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+// ---- input ----
+const per=Math.PI*2/SIDES;
+
+// tap simple (pas de glissement) : tourne d'un cran selon le côté touché
+function tapRotate(clientX){
+  const r=cv.getBoundingClientRect();
+  const x=clientX-r.left;
+  rotate(x<W/2?-1:1);
+}
+
+// cale la rotation sur la face la plus proche
+function snapAngle(){
+  S.targetAngle=Math.round(S.targetAngle/per)*per;
+}
+
+// gestion du drag ROTATIF : on calcule l'angle du doigt autour du centre
+// et on fait suivre la rotation. Ainsi, où qu'on attrape la roue (nord, sud,
+// est, ouest), elle tourne dans le sens naturel du geste.
+const drag={active:false,lastAng:0,movedAng:0,startX:0};
+const TAP_THRESHOLD=0.05;            // rad : en dessous, c'est un tap (pas un drag)
+
+// angle du pointeur par rapport au centre du canvas
+function pointerAngle(e){
+  const r=cv.getBoundingClientRect();
+  const x=e.clientX-r.left-CX;
+  const y=e.clientY-r.top-CY;
+  return Math.atan2(y,x);
+}
+
+function onDown(e){
+  if(!S.running) return;
+  drag.active=true;
+  drag.lastAng=pointerAngle(e);
+  drag.movedAng=0;
+  drag.startX=e.clientX;
+  cv.setPointerCapture && cv.setPointerCapture(e.pointerId);
+}
+function onMove(e){
+  if(!drag.active||!S.running) return;
+  const a=pointerAngle(e);
+  let da=a-drag.lastAng;
+  // corrige le saut de discontinuité atan2 (-π <-> π)
+  if(da>Math.PI) da-=Math.PI*2;
+  if(da<-Math.PI) da+=Math.PI*2;
+  drag.lastAng=a;
+  drag.movedAng+=Math.abs(da);
+  if(drag.movedAng>TAP_THRESHOLD){
+    // la roue suit exactement la rotation du doigt
+    S.targetAngle += da;
+  }
+}
+function onUp(e){
+  if(!drag.active) return;
+  drag.active=false;
+  if(drag.movedAng<=TAP_THRESHOLD){
+    // presque pas de rotation -> tap : tourne d'un cran selon le côté touché
+    tapRotate(e.clientX!==undefined?e.clientX:drag.startX);
+  } else {
+    // glissement -> on cale sur la face la plus proche
+    snapAngle();
+    beep(320,0.05,'sine',0.06);
+  }
+}
+
+cv.addEventListener('pointerdown',onDown);
+cv.addEventListener('pointermove',onMove);
+cv.addEventListener('pointerup',onUp);
+cv.addEventListener('pointercancel',onUp);
+
+window.addEventListener('keydown',e=>{
+  if(!S.running) return;
+  if(e.key==='ArrowLeft'||e.key==='a'||e.key==='q') rotate(-1);
+  if(e.key==='ArrowRight'||e.key==='d') rotate(1);
+});
+
+function startGame(){
+  initAudio(); if(S.audio&&S.audio.state==='suspended') S.audio.resume();
+  document.getElementById('start').classList.add('hidden');
+  document.getElementById('over').classList.add('hidden');
+  reset();
+}
+document.getElementById('playBtn').onclick=startGame;
+document.getElementById('againBtn').onclick=startGame;
+
+/* =====================================================================
+   COUCHE PUBLICITÉ — prête pour GameDistribution.
+   ---------------------------------------------------------------------
+   Tant que le SDK n'est pas branché, GD_READY reste false et les pubs
+   sont simulées (récompense donnée directement, pas d'interstitiel).
+   Le jeu reste 100% jouable et testable sans compte pub.
+
+   POUR ACTIVER GAMEDISTRIBUTION (quand tu auras ton game id) :
+   1) Dans le <head>, ajouter avant le SDK une balise script contenant :
+          window["GD_OPTIONS"] = {
+            gameId: "TON-GAME-ID-ICI",
+            onEvent: function(e){
+              switch(e.name){
+                case "SDK_REWARDED_WATCH_COMPLETE": Ads._grant(); break;
+                case "SDK_GAME_PAUSE":  break;   // couper le son ici si besoin
+                case "SDK_GAME_START":  break;   // reprendre le son ici
+              }
+            }
+          };
+      puis charger le SDK avec une balise script pointant vers :
+          https://html5.api.gamedistribution.com/main.min.js
+   2) Passer GD_READY à true ci-dessous.
+   3) C'est tout : showRewarded() et showInterstitial() appelleront le SDK.
+   ===================================================================== */
+const Ads = (()=>{
+  const GD_READY = false;              // <-- passer à true une fois le SDK chargé
+  const SIM_SECONDS = 5;               // durée de la pub simulée (mode dev)
+  let _rewardCb = null;
+
+  function showRewarded(onReward){
+    _rewardCb = onReward || null;
+    if(GD_READY && window.gdsdk && window.gdsdk.showAd){
+      // le SDK déclenche SDK_REWARDED_WATCH_COMPLETE -> _grant()
+      try{ window.gdsdk.showAd("rewarded"); }
+      catch(e){ _grant(); }            // en cas d'échec, on ne punit pas le joueur
+    } else {
+      // pas de SDK : overlay simulé de quelques secondes puis récompense
+      _simulateAd();
+    }
+  }
+
+  function _simulateAd(){
+    const ov=document.getElementById('adOverlay');
+    const cnt=document.getElementById('adCount');
+    let left=SIM_SECONDS;
+    ov.classList.remove('hidden');
+    cnt.textContent='Reward in '+left+'s';
+    const timer=setInterval(()=>{
+      left--;
+      if(left>0){ cnt.textContent='Reward in '+left+'s'; }
+      else{
+        clearInterval(timer);
+        ov.classList.add('hidden');
+        _grant();
+      }
+    },1000);
+  }
+
+function _grant(){
+    // suivi analytics : une pub récompensée a été regardée jusqu'au bout
+    rqPost({type:'RH_TRACK',event:'ad_rewarded_complete',game_id:'octaflux',props:{context:'continue'}});
+    const cb=_rewardCb; _rewardCb=null;
+    if(cb) cb();
+  }
+
+function showInterstitial(){
+    // suivi analytics : un interstitiel a été déclenché
+    rqPost({type:'RH_TRACK',event:'ad_interstitial_shown',game_id:'octaflux',props:{context:'game_over'}});
+    if(GD_READY && window.gdsdk && window.gdsdk.showAd){
+      try{ window.gdsdk.showAd("interstitial"); }catch(e){}
+    }
+    // sans SDK : ne rien faire (pas de pub en dev)
+  }
+
+  return { showRewarded, showInterstitial, _grant };
+})();
+
+// bouton Continuer : lance la pub récompensée, puis reprend la partie
+document.getElementById('continueBtn').onclick=()=>{
+  Ads.showRewarded(()=>{ continueRun(); });
+};
+
+document.getElementById('best').textContent=S.best;
+resize();
+})();
+</script>
+</body>
+</html>
