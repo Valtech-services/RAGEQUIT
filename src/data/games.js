@@ -55,6 +55,21 @@ export const categories = [
       ],
     },
   },
+   {
+    id: 'puzzle',
+    label: 'Puzzle',
+    image: '/categories/puzzle.jpg',
+    description: 'Match, rotate, think fast. Puzzle games that test your reflexes and your brain.',
+    seo: {
+      title: 'Free Puzzle Games | Ragequit Arcade',
+      metaDescription: 'Play the best free puzzle games online. Match, rotate and chain combos. No download, no signup required.',
+      faq: [
+        { q: 'What puzzle games are available?', a: 'OCTAFLUX — a hypnotic octagon-rotation match game where you spin a central octagon to catch and align falling pieces. New puzzle games added regularly.' },
+        { q: 'Are they free?', a: 'Yes, 100% free, no account required.' },
+        { q: 'Mobile?', a: 'Yes, puzzle games are perfect on mobile — just drag with your thumb to rotate and play.' },
+      ],
+    },
+  },
 ]
 
 /* ---- SEO global du site ---- */
@@ -62,8 +77,8 @@ export const siteSeo = {
   title: 'Ragequit Arcade — Free Online Games',
   description: 'The most addictive free online games. Simple to learn, impossible to master. A new game every week.',
   about: 'Ragequit Arcade brings you the most addictive free online games, built for solo runs or quick matches with friends. Every game runs instantly in your browser — no downloads, no sign-up, no pop-ups, no nonsense. Our games work on desktop, tablet and mobile, so you can play at home or on the move. We are building a place where a great game is always one click away.',
-  gameSelection: 'We add new games every single week. Our current titles include Rage Hockey, STAQ, Stellar Forge, Neon Rush and Virus Lab. Every game is free to play, forever.',
-  startPlaying: 'Not sure what to play? Start exploring from the homepage or pick a game from Sports Games, Arcade Games or Idle / Clicker Games.',
+  gameSelection: 'We add new games every single week. Our current titles include Rage Hockey, STAQ, Stellar Forge, Neon Rush, Virus Lab and OCTAFLUX. Every game is free to play, forever.',
+  startPlaying: 'Not sure what to play? Start exploring from the homepage or pick a game from Sports Games, Arcade Games, Idle / Clicker Games or Puzzle Games.',
   aboutUs: 'Ragequit Arcade is an independent gaming platform. Our goal is simple: create the most fun, most honest browser arcade on the web. New games drop every week — follow us on TikTok and Instagram to see what is coming next.',
   faq: [
     { q: 'What is Ragequit Arcade?', a: 'A free online gaming platform. No download, no registration required.' },
@@ -244,6 +259,39 @@ export const games = [
         { q: 'What is the goal?', a: 'Grow from a single hand pick to a galaxy-spanning civilization. Scale your energy grid and push as far up the Kardashev scale as you can.' },
         { q: 'Is Stellar Forge free?', a: 'Yes, completely free to play, no download and no signup required.' },
         { q: 'Mobile?', a: 'Yes, Stellar Forge is built for portrait mobile and works great on tablet and desktop too.' },
+      ],
+    },
+  },
+   /* ================================================================
+     OCTAFLUX — puzzle : fais tourner un octogone pour aligner les pièces
+     ================================================================ */
+  {
+    id: 'octaflux',
+    title: 'OCTAFLUX',
+    description: 'Spin a glowing octagon with your thumb and catch the pieces raining down on its eight faces. Rotate fast to line up matching colors, trigger cascading chains, and keep the flux flowing before the faces overload. Simple to grab, impossible to put down — one drag is all it takes, but mastering the spin is another story. How long can you keep the octagon alive?',
+    thumbnail: '/thumbnails/octaflux.jpg',
+    category: 'puzzle',
+    tags: ['puzzle', 'match', 'rotation', 'octagon', 'reflex', 'casual', 'chain', 'arcade'],
+    size: 'medium',
+    shimmer: true,
+    isNew: true,
+    hot: true,
+    landscape: false,
+    plays: 0,
+    modes: ['classic'],
+    defaultMode: 'classic',
+    controls: 'Drag anywhere with your thumb or mouse to rotate the octagon. Align falling pieces by matching colors on each face to clear them and chain combos. Works on mobile, tablet and desktop.',
+    author: 'Ragequit Arcade',
+    seo: {
+      title: 'OCTAFLUX — Free Octagon Match Puzzle Game | Ragequit Arcade',
+      metaDescription: 'Play OCTAFLUX free online. Rotate a glowing octagon with your thumb to catch and match falling pieces, trigger cascading chains and survive as long as you can. No download.',
+      faq: [
+        { q: 'How do you play OCTAFLUX?', a: 'Drag with your thumb or mouse to spin the central octagon. Pieces fall onto its eight faces — rotate to line up matching colors so they clear. Clearing pieces triggers cascading chains for bigger scores.' },
+        { q: 'What are cascades?', a: 'When you clear a group of matching pieces, the pieces above shift and can clear too, chaining into a cascade. Longer chains score far more points, so setting up big combos is the key to a high score.' },
+        { q: 'How does the score work?', a: 'You earn points for every piece you clear, with large bonuses for cascading chains. The faster and longer your combos, the higher your score climbs.' },
+        { q: 'Does it have a leaderboard?', a: 'Yes. Your best score is saved and shown on the global leaderboard.' },
+        { q: 'Is OCTAFLUX free?', a: 'Yes, completely free to play, no download and no signup required.' },
+        { q: 'Mobile?', a: 'Yes, OCTAFLUX is built for thumb-drag controls on portrait mobile, and works great on tablet and desktop too.' },
       ],
     },
   },
