@@ -11,7 +11,7 @@ const legalByLang = {
     "about": {
       "label": "About",
       "title": "About Ragequit Arcade",
-      "updated": "June 2026",
+      "updated": "August 2026",
       "sections": [
         {
           "paragraphs": [
@@ -64,7 +64,7 @@ const legalByLang = {
     "contact": {
       "label": "Help",
       "title": "Contact Us",
-      "updated": "June 2026",
+      "updated": "August 2026",
       "sections": [
         {
           "paragraphs": [
@@ -77,7 +77,7 @@ const legalByLang = {
     "mentions": {
       "label": "Legal",
       "title": "Legal Notice",
-      "updated": "June 2026",
+      "updated": "August 2026",
       "sections": [
         {
           "heading": "Website publisher",
@@ -114,7 +114,7 @@ const legalByLang = {
     "privacy": {
       "label": "Legal",
       "title": "Privacy Policy",
-      "updated": "June 2026",
+      "updated": "August 2026",
       "sections": [
         {
           "paragraphs": [
@@ -133,11 +133,11 @@ const legalByLang = {
             "Local storage data: game progress and preferences saved directly in your browser."
           ]
         },
-        {
+{
           "heading": "Cookies and Advertising",
           "paragraphs": [
-            "We use cookies and similar technologies to provide and improve our services. Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this and other websites.",
-            "You may opt out of personalized advertising by visiting Google Ads Settings (adssettings.google.com). For users in the EEA, we request consent before any non-essential cookies are placed."
+            "We use cookies and similar technologies to provide and improve our services. We use Google AdSense to display advertising and Google Analytics to measure audience. Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this and other websites.",
+            "Google's use of advertising cookies enables it and its partners to serve ads to you based on your visits to this and other sites. You may opt out of personalized advertising by visiting Google Ads Settings (adssettings.google.com). For users in the EEA, the UK and Switzerland, we request consent through a Google-certified consent management platform before any non-essential cookies are placed."
           ]
         },
         {
@@ -169,7 +169,7 @@ const legalByLang = {
     "terms": {
       "label": "Legal",
       "title": "Terms of Use",
-      "updated": "June 2026",
+      "updated": "August 2026",
       "sections": [
         {
           "paragraphs": [
@@ -210,7 +210,7 @@ const legalByLang = {
     "cookies": {
       "label": "Legal",
       "title": "Cookie Policy",
-      "updated": "June 2026",
+      "updated": "August 2026",
       "sections": [
         {
           "paragraphs": [
@@ -267,7 +267,7 @@ const legalByLang = {
     "about": {
       "label": "À propos",
       "title": "À propos de Ragequit Arcade",
-      "updated": "Juin 2026",
+      "updated": "Août 2026",
       "sections": [
         {
           "paragraphs": [
@@ -320,7 +320,7 @@ const legalByLang = {
     "contact": {
       "label": "Aide",
       "title": "Nous contacter",
-      "updated": "Juin 2026",
+      "updated": "Août 2026",
       "sections": [
         {
           "paragraphs": [
@@ -333,7 +333,7 @@ const legalByLang = {
     "mentions": {
       "label": "Légal",
       "title": "Mentions légales",
-      "updated": "Juin 2026",
+      "updated": "Août 2026",
       "sections": [
         {
           "heading": "Éditeur du site",
@@ -370,7 +370,7 @@ const legalByLang = {
     "privacy": {
       "label": "Légal",
       "title": "Politique de confidentialité",
-      "updated": "Juin 2026",
+      "updated": "Août 2026",
       "sections": [
         {
           "paragraphs": [
@@ -389,11 +389,11 @@ const legalByLang = {
             "Données de stockage local : progression et préférences enregistrées directement dans ton navigateur."
           ]
         },
-        {
+{
           "heading": "Cookies et publicité",
           "paragraphs": [
-            "Nous utilisons des cookies et technologies similaires pour fournir et améliorer nos services. Des fournisseurs tiers, dont Google, utilisent des cookies pour diffuser des annonces basées sur tes visites précédentes sur ce site et d'autres.",
-            "Tu peux désactiver la publicité personnalisée via les paramètres Google Ads (adssettings.google.com). Pour les utilisateurs de l'EEE, nous demandons le consentement avant tout cookie non essentiel."
+            "Nous utilisons des cookies et technologies similaires pour fournir et améliorer nos services. Nous utilisons Google AdSense pour diffuser de la publicité et Google Analytics pour mesurer l'audience. Des fournisseurs tiers, dont Google, utilisent des cookies pour diffuser des annonces basées sur tes visites précédentes sur ce site et d'autres.",
+            "L'utilisation de cookies publicitaires par Google permet à Google et à ses partenaires de te diffuser des annonces basées sur tes visites sur ce site et d'autres. Tu peux désactiver la publicité personnalisée via les paramètres Google Ads (adssettings.google.com). Pour les utilisateurs de l'EEE, du Royaume-Uni et de la Suisse, nous recueillons le consentement via une plateforme de gestion du consentement certifiée par Google avant tout cookie non essentiel."
           ]
         },
         {
@@ -425,7 +425,7 @@ const legalByLang = {
     "terms": {
       "label": "Légal",
       "title": "Conditions d'utilisation",
-      "updated": "Juin 2026",
+      "updated": "Août 2026",
       "sections": [
         {
           "paragraphs": [
@@ -466,7 +466,7 @@ const legalByLang = {
     "cookies": {
       "label": "Légal",
       "title": "Politique de cookies",
-      "updated": "Juin 2026",
+      "updated": "Août 2026",
       "sections": [
         {
           "paragraphs": [
@@ -523,7 +523,7 @@ const legalByLang = {
     "about": {
       "label": "Acerca de",
       "title": "Acerca de Ragequit Arcade",
-      "updated": "Junio 2026",
+      "updated": "Agosto 2026",
       "sections": [
         {
           "paragraphs": [
@@ -576,7 +576,7 @@ const legalByLang = {
     "contact": {
       "label": "Ayuda",
       "title": "Contáctanos",
-      "updated": "Junio 2026",
+      "updated": "Agosto 2026",
       "sections": [
         {
           "paragraphs": [
@@ -589,7 +589,7 @@ const legalByLang = {
     "mentions": {
       "label": "Legal",
       "title": "Aviso legal",
-      "updated": "Junio 2026",
+      "updated": "Agosto 2026",
       "sections": [
         {
           "heading": "Editor del sitio",
@@ -626,7 +626,7 @@ const legalByLang = {
     "privacy": {
       "label": "Legal",
       "title": "Política de privacidad",
-      "updated": "Junio 2026",
+      "updated": "Agosto 2026",
       "sections": [
         {
           "paragraphs": [
@@ -681,7 +681,7 @@ const legalByLang = {
     "terms": {
       "label": "Legal",
       "title": "Términos de uso",
-      "updated": "Junio 2026",
+      "updated": "Agosto 2026",
       "sections": [
         {
           "paragraphs": [
@@ -722,7 +722,7 @@ const legalByLang = {
     "cookies": {
       "label": "Legal",
       "title": "Política de cookies",
-      "updated": "Junio 2026",
+      "updated": "Agosto 2026",
       "sections": [
         {
           "paragraphs": [
@@ -779,7 +779,7 @@ const legalByLang = {
     "about": {
       "label": "Sobre",
       "title": "Sobre a Ragequit Arcade",
-      "updated": "Junho 2026",
+      "updated": "Agosto 2026",
       "sections": [
         {
           "paragraphs": [
@@ -832,7 +832,7 @@ const legalByLang = {
     "contact": {
       "label": "Ajuda",
       "title": "Contacta-nos",
-      "updated": "Junho 2026",
+      "updated": "Agosto 2026",
       "sections": [
         {
           "paragraphs": [
@@ -845,7 +845,7 @@ const legalByLang = {
     "mentions": {
       "label": "Legal",
       "title": "Aviso legal",
-      "updated": "Junho 2026",
+      "updated": "Agosto 2026",
       "sections": [
         {
           "heading": "Editor do site",
@@ -882,7 +882,7 @@ const legalByLang = {
     "privacy": {
       "label": "Legal",
       "title": "Política de privacidade",
-      "updated": "Junho 2026",
+      "updated": "Agosto 2026",
       "sections": [
         {
           "paragraphs": [
@@ -937,7 +937,7 @@ const legalByLang = {
     "terms": {
       "label": "Legal",
       "title": "Termos de utilização",
-      "updated": "Junho 2026",
+      "updated": "Agosto 2026",
       "sections": [
         {
           "paragraphs": [
@@ -978,7 +978,7 @@ const legalByLang = {
     "cookies": {
       "label": "Legal",
       "title": "Política de cookies",
-      "updated": "Junho 2026",
+      "updated": "Agosto 2026",
       "sections": [
         {
           "paragraphs": [
@@ -1035,7 +1035,7 @@ const legalByLang = {
     "about": {
       "label": "Über uns",
       "title": "Über Ragequit Arcade",
-      "updated": "Juni 2026",
+      "updated": "August 2026",
       "sections": [
         {
           "paragraphs": [
@@ -1088,7 +1088,7 @@ const legalByLang = {
     "contact": {
       "label": "Hilfe",
       "title": "Kontakt",
-      "updated": "Juni 2026",
+      "updated": "August 2026",
       "sections": [
         {
           "paragraphs": [
@@ -1101,7 +1101,7 @@ const legalByLang = {
     "mentions": {
       "label": "Rechtliches",
       "title": "Impressum",
-      "updated": "Juni 2026",
+      "updated": "August 2026",
       "sections": [
         {
           "heading": "Herausgeber der Website",
@@ -1138,7 +1138,7 @@ const legalByLang = {
     "privacy": {
       "label": "Rechtliches",
       "title": "Datenschutzerklärung",
-      "updated": "Juni 2026",
+      "updated": "August 2026",
       "sections": [
         {
           "paragraphs": [
@@ -1193,7 +1193,7 @@ const legalByLang = {
     "terms": {
       "label": "Rechtliches",
       "title": "Nutzungsbedingungen",
-      "updated": "Juni 2026",
+      "updated": "August 2026",
       "sections": [
         {
           "paragraphs": [
@@ -1234,7 +1234,7 @@ const legalByLang = {
     "cookies": {
       "label": "Rechtliches",
       "title": "Cookie-Richtlinie",
-      "updated": "Juni 2026",
+      "updated": "August 2026",
       "sections": [
         {
           "paragraphs": [
