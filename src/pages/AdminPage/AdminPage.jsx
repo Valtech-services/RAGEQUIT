@@ -449,6 +449,11 @@ newUsers, sVisitors, sPlays, sAds, sHome, sSignups,
           onExport={() => exportXlsx('categories', ['Catégorie','Events'], catRows)}>
           <Table cols={['Catégorie','Events']} rows={catRows} />
         </Panel>
+        <Panel title="Parties par jeu" subtitle="Nombre de parties lancées"
+          onExport={() => exportXlsx('parties_par_jeu', ['Jeu','Parties'], gameRows)}>
+          <MiniChart data={m.sPlays} color={C.green} type="bar" />
+          <Table cols={['Jeu','Parties']} rows={gameRows} empty="Aucune partie sur la période" />
+        </Panel>
         <Panel title="Appareils" subtitle="D'où viennent les visites"
           onExport={() => exportXlsx('appareils', ['Appareil','Events','%'], devRows)}>
           <Table cols={['Appareil','Events','%']} rows={devRows} />
