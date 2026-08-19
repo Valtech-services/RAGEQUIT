@@ -252,7 +252,7 @@ function GameTester(){
 
 // ── DASHBOARD ────────────────────────────────────────────────────────────
 function Dashboard(){
-  const [period, setPeriod] = useState(7)
+  const [period, setPeriod] = useState(1)
   const [d, setD] = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -324,17 +324,19 @@ function Dashboard(){
 
     // Inscrits SUR LA PÉRIODE (nouveaux comptes créés dans la fenêtre), en plus
     // du total, pour rester cohérent avec les autres KPIs filtrés.
-    const newUsers = users.filter(u => u.created_at && new Date(u.created_at) >= sinceDate).length
-
+const newUsersList = users.filter(u => u.created_at && new Date(u.created_at) >= sinceDate)
+    const newUsers = newUsersList.length
     const sVisitors  = dailyUnique(ev, period, vid)
     const sPlays     = dailySeries(gameStarts, period)
     const sAds       = dailySeries(adsWatched, period)
     const sHome      = dailySeries(homeVisits, period)
+    // Série des nouveaux inscrits par jour (basée sur created_at des profils).
+    const sSignups   = dailySeries(newUsersList, period)
     return {
       visits, homeVisits, gameStarts, gameEnds, adsWatched,
       allVisitors: allVisitors.size, loggedVisitors: loggedVisitors.size, anonVisitors: anonVisitors.size,
       playsByGame, byCategory, byDevice, byCountry, completion, adsPerPlay, loggedRate,
-      newUsers, sVisitors, sPlays, sAds, sHome,
+newUsers, sVisitors, sPlays, sAds, sHome, sSignups,
     }
   }, [d, period])
 
@@ -349,9 +351,9 @@ function Dashboard(){
 
   return (
     <div className="adm-body">
-      <div className="adm-period adm-period--inline">
-        {[7,14,30].map(p => (
-          <button key={p} className={`adm-period__btn ${period===p?'is-active':''}`} onClick={() => setPeriod(p)}>{p}j</button>
+<div className="adm-period adm-period--inline">
+        {[1,7,14,30].map(p => (
+          <button key={p} className={`adm-period__btn ${period===p?'is-active':''}`} onClick={() => setPeriod(p)}>{p===1?'Jour':p+'j'}</button>
         ))}
         <button className="adm-refresh" onClick={load} title="Rafraîchir">↺</button>
       </div>
@@ -393,10 +395,13 @@ function Dashboard(){
         </ResponsiveContainer>
       </section>
       <section className="adm-grid">
-        <Panel title="Parties par jeu" subtitle="Nombre de parties lancées"
-          onExport={() => exportXlsx('parties_par_jeu', ['Jeu','Parties'], gameRows)}>
-          <MiniChart data={m.sPlays} color={C.green} type="bar" />
-          <Table cols={['Jeu','Parties']} rows={gameRows} empty="Aucune partie sur la période" />
+<Panel title="Nouveaux inscrits par jour" subtitle="Comptes créés sur la période"
+          onExport={() => exportXlsx('nouveaux_inscrits', ['Jour','Inscrits'], m.sSignups.map(x => [x.date, x.value]))}>
+          <MiniChart data={m.sSignups} color={C.violet} type="bar" />
+          <Table cols={['Indicateur','Valeur']} rows={[
+            ['Nouveaux sur la période', fmt(m.newUsers)],
+            ['Total inscrits', fmt(users.length)],
+          ]} />
         </Panel>
         <Panel title="Pubs récompensées" subtitle="Vidéos vues en entier (revive / double)"
           onExport={() => exportXlsx('pubs', ['Jour','Pubs'], m.sAds.map(x => [x.date, x.value]))}>
