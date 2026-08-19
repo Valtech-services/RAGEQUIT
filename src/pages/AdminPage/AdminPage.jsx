@@ -71,6 +71,32 @@ function dailyUnique(events, period, idFn){
   return Object.entries(byDay).map(([date, set]) => ({ date: date.slice(5), value: set.size }))
 }
 
+// Série HORAIRE (événements par heure) pour la journée en cours, heure locale.
+function hourlySeries(events){
+  const byHour = {}
+  for(let h = 0; h < 24; h++) byHour[h] = 0
+  const todayKey = localDayKey(new Date())
+  events.forEach(e => {
+    if(localDayKey(e.created_at) !== todayKey) return
+    const h = new Date(e.created_at).getHours()
+    byHour[h] += 1
+  })
+  return Object.entries(byHour).map(([h, value]) => ({ date: String(h).padStart(2,'0') + 'h', value }))
+}
+// Série HORAIRE de visiteurs uniques par heure, journée en cours.
+function hourlyUnique(events, idFn){
+  const byHour = {}
+  for(let h = 0; h < 24; h++) byHour[h] = new Set()
+  const todayKey = localDayKey(new Date())
+  events.forEach(e => {
+    if(localDayKey(e.created_at) !== todayKey) return
+    const h = new Date(e.created_at).getHours()
+    const id = idFn(e)
+    if(id) byHour[h].add(id)
+  })
+  return Object.entries(byHour).map(([h, set]) => ({ date: String(h).padStart(2,'0') + 'h', value: set.size }))
+}
+
 function exportXlsx(filename, cols, rows){
   const ws = XLSX.utils.aoa_to_sheet([cols, ...rows])
   const wb = XLSX.utils.book_new()
@@ -307,7 +333,6 @@ function Dashboard(){
     const visits      = ev.filter(e => e.event === 'page_view')
     const homeVisits  = visits.filter(e => e.url === '/')
     const gameStarts  = ev.filter(e => e.event === 'game_start')
-    const gameEnds    = ev.filter(e => e.event === 'game_end')
     const adsWatched  = ev.filter(e => e.event === 'ad_rewarded_complete')
     const allVisitors    = new Set(ev.map(vid).filter(Boolean))
     const loggedVisitors = new Set(ev.filter(isLogged).map(vid).filter(Boolean))
@@ -316,26 +341,26 @@ function Dashboard(){
     const byCategory  = groupCount(ev.filter(e => e.category), e => e.category)
     const byDevice    = groupCount(ev, e => e.device)
     const byCountry   = groupCount(ev.filter(e => e.country), e => e.country)
-    const completion = gameStarts.length
-      ? Math.min(100, Math.round(gameEnds.length / gameStarts.length * 100))
-      : 0
-    const adsPerPlay = gameStarts.length ? (adsWatched.length / gameStarts.length).toFixed(2) : '0'
+const adsPerPlay = gameStarts.length ? (adsWatched.length / gameStarts.length).toFixed(2) : '0'
+    // Engagement : parties lancées par visiteur unique (indicateur fiable).
+    const playsPerVisitor = allVisitors.size ? (gameStarts.length / allVisitors.size).toFixed(1) : '0'
     const loggedRate = allVisitors.size ? Math.round(loggedVisitors.size / allVisitors.size * 100) : 0
 
     // Inscrits SUR LA PÉRIODE (nouveaux comptes créés dans la fenêtre), en plus
     // du total, pour rester cohérent avec les autres KPIs filtrés.
 const newUsersList = users.filter(u => u.created_at && new Date(u.created_at) >= sinceDate)
     const newUsers = newUsersList.length
-    const sVisitors  = dailyUnique(ev, period, vid)
-    const sPlays     = dailySeries(gameStarts, period)
-    const sAds       = dailySeries(adsWatched, period)
-    const sHome      = dailySeries(homeVisits, period)
-    // Série des nouveaux inscrits par jour (basée sur created_at des profils).
-    const sSignups   = dailySeries(newUsersList, period)
+// Vue "Jour" (period === 1) : on affiche heure par heure. Sinon, jour par jour.
+    const hourly = period === 1
+    const sVisitors  = hourly ? hourlyUnique(ev, vid)         : dailyUnique(ev, period, vid)
+    const sPlays     = hourly ? hourlySeries(gameStarts)      : dailySeries(gameStarts, period)
+    const sAds       = hourly ? hourlySeries(adsWatched)      : dailySeries(adsWatched, period)
+    const sHome      = hourly ? hourlySeries(homeVisits)      : dailySeries(homeVisits, period)
+    const sSignups   = hourly ? hourlySeries(newUsersList)    : dailySeries(newUsersList, period)
     return {
-      visits, homeVisits, gameStarts, gameEnds, adsWatched,
+visits, homeVisits, gameStarts, adsWatched,
       allVisitors: allVisitors.size, loggedVisitors: loggedVisitors.size, anonVisitors: anonVisitors.size,
-      playsByGame, byCategory, byDevice, byCountry, completion, adsPerPlay, loggedRate,
+      playsByGame, byCategory, byDevice, byCountry, adsPerPlay, loggedRate, playsPerVisitor,
 newUsers, sVisitors, sPlays, sAds, sHome, sSignups,
     }
   }, [d, period])
@@ -361,8 +386,8 @@ newUsers, sVisitors, sPlays, sAds, sHome, sSignups,
         <Kpi label="Visiteurs uniques" value={m.allVisitors} color={C.cyan} sub={`${period} derniers jours`} />
         <Kpi label="dont connectés" value={m.loggedVisitors} color={C.violet} sub={`${m.loggedRate}% des visiteurs`} />
         <Kpi label="dont anonymes" value={m.anonVisitors} color={C.magenta} sub="sans compte" />
-        <Kpi label="Parties lancées" value={m.gameStarts.length} color={C.green} />
-        <Kpi label="Parties terminées" value={m.gameEnds.length} color={C.yellow} sub={`${m.completion}% de complétion`} />
+<Kpi label="Parties lancées" value={m.gameStarts.length} color={C.green} />
+        <Kpi label="Parties / visiteur" value={m.playsPerVisitor} color={C.yellow} sub="engagement moyen" />
         <Kpi label="Pubs récompensées vues" value={m.adsWatched.length} color="#FF8C42" sub={`${m.adsPerPlay} / partie`} />
         <Kpi label="Nouveaux inscrits" value={m.newUsers} color={C.violet} sub={`${fmt(users.length)} au total`} />
         <Kpi label="Messages non lus" value={unread} color={C.red} />
@@ -370,8 +395,8 @@ newUsers, sVisitors, sPlays, sAds, sHome, sSignups,
       <section className="adm-hero-chart">
         <div className="adm-panel__head">
           <div>
-            <h3 className="adm-panel__title">Visiteurs uniques par jour</h3>
-            <p className="adm-panel__sub">Une personne = un visiteur, qu'elle soit connectée ou non. Un même visiteur peut apparaître sur plusieurs jours, donc la somme des barres dépasse le total unique de la période (c'est normal). Sans adresse IP (RGPD).</p>
+<h3 className="adm-panel__title">{period === 1 ? 'Visiteurs uniques par heure (aujourd\'hui)' : 'Visiteurs uniques par jour'}</h3>
+            <p className="adm-panel__sub">{period === 1 ? 'Visiteurs uniques pour chaque heure de la journée en cours (heure locale). Sans adresse IP (RGPD).' : 'Une personne = un visiteur, qu\'elle soit connectée ou non. Un même visiteur peut apparaître sur plusieurs jours, donc la somme des barres dépasse le total unique de la période (c\'est normal). Sans adresse IP (RGPD).'}</p>
           </div>
         </div>
         <ResponsiveContainer width="100%" height={240}>
@@ -406,10 +431,10 @@ newUsers, sVisitors, sPlays, sAds, sHome, sSignups,
         <Panel title="Pubs récompensées" subtitle="Vidéos vues en entier (revive / double)"
           onExport={() => exportXlsx('pubs', ['Jour','Pubs'], m.sAds.map(x => [x.date, x.value]))}>
           <MiniChart data={m.sAds} color="#FF8C42" />
-          <Table cols={['Indicateur','Valeur']} rows={[
+<Table cols={['Indicateur','Valeur']} rows={[
             ['Total pubs vues', fmt(m.adsWatched.length)],
             ['Pubs par partie', m.adsPerPlay],
-            ['Parties terminées', `${m.completion}%`],
+            ['Parties / visiteur', m.playsPerVisitor],
           ]} />
         </Panel>
         <Panel title="Pages d'accueil vues" subtitle="Visites de la page d'accueil"
