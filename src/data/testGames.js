@@ -33,15 +33,5 @@ export const testGames = [
     orientation: 'portrait',          // 'portrait' (9:16) ou 'landscape'
     file: '/games/bird-blitz.html',
     notes: 'Arcade flappy-style. Mobile-first 9:16. À tester avant publication.'
-  },
-  {
-    id: 'stellar-forge',
-    title: 'Stellar Forge',
-    description: 'Idle clicker spatial : extrais du minerai, automatise, construis ton energie et grimpe l echelle de Kardashev de la planete a la galaxie.',
-    thumbnail: '/thumbnails/stellar-forge.jpg',
-    category: 'idle',
-    orientation: 'portrait',
-    file: '/games/stellar-forge.html',
-    notes: 'Idle clicker spatial. Mobile-first portrait. Progression Kardashev + colonisation planetes.'
   }
 ]
