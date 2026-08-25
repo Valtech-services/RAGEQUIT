@@ -1,0 +1,2223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0b1120">
+<meta name="description" content="Defend the world's greatest monuments from a flock of birds!">
+<title>POO DEFENSE — Ragequit Arcade</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#fbbf24;--gold-deep:#f59e0b;--red:#ef4444;--neon:#a3e635;--neon-deep:#65a30d;
+  --ink:#0b1120;--ink-2:#111a2e;--sky-glass:rgba(11,17,32,.72);
+  --vh:1vh;
+}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-action:none;-webkit-user-select:none;user-select:none;
+  font-family:'Trebuchet MS','Segoe UI',system-ui,sans-serif;-webkit-tap-highlight-color:transparent;}
+
+/* ===== FRAME ===== */
+#gameFrame{position:relative;margin:auto;overflow:hidden;cursor:crosshair;background:#0b1120;
+  box-shadow:0 30px 90px rgba(0,0,0,.6);isolation:isolate;}
+@media(min-width:821px){
+  body{display:flex;align-items:center;justify-content:center;height:100vh;height:calc(var(--vh)*100)}
+  #gameFrame{width:min(1120px,96vw);height:min(700px,94vh);border-radius:18px;border:1px solid rgba(255,255,255,.06)}
+}
+@media(max-width:820px){
+  #gameFrame{width:100vw;height:100vh;height:calc(var(--vh)*100);border-radius:0}
+}
+
+/* ===== SCENE LAYERS ===== */
+.layer{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+#bgScene{z-index:1}
+#bgScene svg{width:100%;height:100%;display:block}
+#fogVeil{z-index:35;display:none}
+#fogVeil.on{display:block}
+.monument-wrap{z-index:9}
+#agentsLayer{z-index:12}
+#shopLayer{z-index:14}
+#birdsLayer{z-index:20}
+#projectilesLayer{z-index:26}
+#fxLayer{z-index:30}
+.hud{z-index:100}
+
+
+/* ===== COIN ICON ===== */
+.coin{display:inline-block;width:15px;height:15px;border-radius:50%;
+  background:radial-gradient(circle at 34% 32%,#fff3b0,#ffcf33 46%,#c98a12);
+  border:1.5px solid #a56b0d;box-shadow:0 0 6px rgba(255,207,51,.45),inset 0 -2px 0 rgba(0,0,0,.2);
+  vertical-align:middle;position:relative;flex:0 0 auto}
+.coin::after{content:'';position:absolute;inset:0;margin:auto;width:5px;height:8px;border:1.4px solid #a56b0d;border-radius:50%}
+.coin.lg{width:22px;height:22px}
+
+/* ===== HUD ===== */
+.hud{position:absolute;top:0;left:0;right:clamp(108px,25vw,144px);display:flex;justify-content:flex-start;gap:clamp(4px,1vw,8px);
+  padding:clamp(12px,2vw,18px) clamp(8px,1.4vw,12px) 0;pointer-events:none;flex-wrap:nowrap}
+.hud-box{background:var(--sky-glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:clamp(6px,1vw,10px) clamp(7px,1.3vw,13px);
+  color:#fff;text-align:center;box-shadow:0 6px 22px rgba(0,0,0,.35);flex:1 1 0;max-width:130px;min-width:0}
+.hud-label{font-size:clamp(6px,1.05vw,9px);text-transform:uppercase;letter-spacing:1px;opacity:.62;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hud-val{font-size:clamp(15px,2.7vw,23px);font-weight:900;display:flex;align-items:center;justify-content:center;gap:4px;line-height:1.1}
+.score{color:var(--neon)}.coins{color:var(--gold)}.clean{color:#38bdf8}.wave{color:#d8b4fe}
+
+.top-btns{position:absolute;top:clamp(12px,2vw,18px);right:clamp(8px,1.6vw,14px);z-index:101;display:flex;gap:clamp(5px,1vw,8px)}
+.round-btn{background:var(--sky-glass);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);
+  border-radius:50%;width:clamp(32px,5.4vw,42px);height:clamp(32px,5.4vw,42px);color:#fff;
+  font-size:clamp(12px,2.2vw,16px);cursor:pointer;pointer-events:auto;display:flex;align-items:center;justify-content:center;font-weight:800;position:relative}
+.round-btn:active{transform:scale(.92)}
+
+/* ===== MONUMENT HEALTH BAR (under monument, monument-width) ===== */
+.mon-health{position:relative;width:100%;min-width:clamp(120px,20vw,180px);height:clamp(14px,2.4vw,18px);margin-top:8px;
+  background:rgba(10,16,28,.72);border:1px solid rgba(255,255,255,.18);border-radius:10px;overflow:hidden;
+  box-shadow:0 3px 10px rgba(0,0,0,.35)}
+.mon-health-fill{height:100%;width:100%;background:linear-gradient(90deg,#22d3ee,#0284c7);
+  transition:width .4s,background .3s}
+.mon-health-txt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:clamp(9px,1.7vw,12px);font-weight:900;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.7);letter-spacing:.5px}
+
+/* ===== MONUMENT ===== */
+.monument-wrap{position:absolute;bottom:clamp(52px,12.5%,100px);left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;filter:drop-shadow(0 12px 20px rgba(0,0,0,.28))}
+.monument-wrap svg{display:block;height:clamp(150px,34vh,320px);width:auto}
+.shield{position:absolute;inset:-4%;border:2.5px solid rgba(56,189,248,.6);border-radius:14px;opacity:0;
+  transition:opacity .3s;box-shadow:0 0 42px rgba(56,189,248,.35),inset 0 0 30px rgba(56,189,248,.1);pointer-events:none;z-index:3}
+.shield.active{opacity:1;animation:shieldPulse 1.3s ease-in-out infinite alternate}
+@keyframes shieldPulse{0%{opacity:.4}100%{opacity:.9}}
+
+/* ===== STAINS (accumulate + slight drip) ===== */
+.stain{position:absolute;z-index:8;pointer-events:none;animation:plop .25s ease-out;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.35));transform:translate(-50%,-50%)}
+@keyframes plop{0%{transform:translate(-50%,-50%) scale(2.2)}100%{transform:translate(-50%,-50%) scale(1)}}
+/* flying dropping */
+.poo-drop{position:absolute;width:11px;height:14px;border-radius:50% 50% 50% 50%/40% 40% 60% 60%;
+  z-index:22;pointer-events:none;box-shadow:0 1px 2px rgba(0,0,0,.4);transform-origin:center}
+
+/* ===== BIRDS (detailed SVG) ===== */
+.bird{position:absolute;cursor:crosshair;pointer-events:auto;will-change:transform;animation:bob 1s ease-in-out infinite}
+.bird .bsvg{display:block;width:100%;height:100%;overflow:visible}
+.bird .wg{transform-box:fill-box;animation:flap .34s ease-in-out infinite alternate}
+@keyframes bob{0%,100%{margin-top:0}50%{margin-top:3px}}
+@keyframes flap{0%{transform:rotate(-6deg) scaleY(1)}100%{transform:rotate(4deg) scaleY(.7)}}
+.dead{pointer-events:none}
+.dead .wg{animation:none}
+
+/* per-type sizes (facing right; JS flips via scaleX) */
+.t-pigeon{width:clamp(34px,6.4vw,50px);height:clamp(24px,4.5vw,35px)}
+.t-seagull{width:clamp(36px,6.8vw,52px);height:clamp(25px,4.8vw,37px)}
+.t-eagle{width:clamp(46px,8.6vw,66px);height:clamp(32px,6vw,46px)}
+.t-eagle .wg{animation-duration:.28s}
+.t-albatross{width:clamp(54px,10vw,78px);height:clamp(32px,5.8vw,45px)}
+.t-albatross .wg{animation-duration:.5s}
+.t-crow{width:clamp(36px,6.8vw,52px);height:clamp(25px,4.8vw,37px)}
+
+/* ===== PROJECTILES / FX ===== */
+.proj{position:absolute;width:clamp(6px,1vw,8px);height:clamp(6px,1vw,8px);background:#fff;border-radius:50%;
+  box-shadow:0 0 9px #fff,0 0 16px var(--neon);z-index:26;pointer-events:none}
+.boom{position:absolute;border-radius:50%;background:radial-gradient(circle,#fff59d,#f4511e 55%,transparent);
+  z-index:30;pointer-events:none;animation:boom .45s ease-out forwards}
+@keyframes boom{0%{transform:translate(-50%,-50%) scale(0);opacity:1}100%{transform:translate(-50%,-50%) scale(3.6);opacity:0}}
+/* explosion FX */
+.exp-core{position:absolute;border-radius:50%;background:radial-gradient(circle,#fffde7 0%,#ffd54f 30%,#ff7043 60%,#e53935 80%,transparent);
+  z-index:31;pointer-events:none;transform:translate(-50%,-50%);animation:expCore .4s ease-out forwards}
+@keyframes expCore{0%{transform:translate(-50%,-50%) scale(.2);opacity:1}100%{transform:translate(-50%,-50%) scale(1.6);opacity:0}}
+.exp-ring{position:absolute;border-radius:50%;border:3px solid #ffe082;z-index:30;pointer-events:none;
+  transform:translate(-50%,-50%);animation:expRing .5s ease-out forwards}
+@keyframes expRing{0%{transform:translate(-50%,-50%) scale(.1);opacity:.9;border-width:4px}100%{transform:translate(-50%,-50%) scale(2.4);opacity:0;border-width:1px}}
+.exp-part{position:absolute;border-radius:50%;z-index:32;pointer-events:none;transform:translate(-50%,-50%)}
+.exp-smoke{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(120,120,120,.55),rgba(90,90,90,0));
+  z-index:29;pointer-events:none;transform:translate(-50%,-50%);animation:expSmoke .9s ease-out forwards}
+@keyframes expSmoke{0%{transform:translate(-50%,-50%) scale(.3);opacity:.7}100%{transform:translate(-50%,-60%) scale(1.8);opacity:0}}
+.ft{position:absolute;pointer-events:none;font-weight:900;font-size:clamp(14px,3.4vw,19px);z-index:150;
+  animation:ftUp .9s ease-out forwards;text-shadow:0 2px 6px rgba(0,0,0,.7);white-space:nowrap}
+@keyframes ftUp{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-52px) scale(1.25);opacity:0}}
+.warning{position:absolute;top:20%;left:50%;transform:translateX(-50%);color:var(--red);font-weight:900;
+  font-size:clamp(15px,4.2vw,26px);text-shadow:0 0 24px rgba(239,68,68,.6);z-index:150;pointer-events:none;
+  opacity:0;transition:opacity .3s;text-align:center;white-space:nowrap;letter-spacing:1px}
+.warning.show{opacity:1;animation:warnPulse .6s ease-in-out infinite alternate}
+@keyframes warnPulse{from{transform:translateX(-50%) scale(1)}to{transform:translateX(-50%) scale(1.08)}}
+
+/* ===== AGENTS ===== */
+.agent{position:absolute;bottom:clamp(46px,11%,90px);z-index:12;pointer-events:none;transition:left .7s ease-in-out}
+.dca{position:absolute;bottom:clamp(44px,10.5%,86px);z-index:13;pointer-events:none;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}
+.dca svg{width:clamp(58px,11vw,86px);height:auto;display:block}
+.dca-barrel{transition:transform .09s ease-out;transform-box:fill-box}
+.agent svg{width:clamp(24px,4.6vw,36px);height:auto;display:block}
+.bubble{position:absolute;top:-16px;left:50%;transform:translateX(-50%);width:15px;height:15px;
+  background:radial-gradient(circle,#e0f7fa,#4dd0e1);border-radius:50%;box-shadow:0 0 8px #26c6da;
+  animation:bubblePop .7s ease-out forwards}
+@keyframes bubblePop{0%{transform:translateX(-50%) scale(0)}55%{transform:translateX(-50%) scale(1.3)}100%{transform:translateX(-50%) scale(1);opacity:0}}
+
+/* ===== IN-SCENE SHOP ===== */
+#shopLayer{position:absolute;inset:0;pointer-events:none}
+.shop-building{position:absolute;bottom:clamp(46px,11%,90px);right:clamp(8px,3vw,34px);cursor:pointer;
+  pointer-events:auto;transition:transform .18s;filter:drop-shadow(0 8px 14px rgba(0,0,0,.4))}
+.shop-building:hover{transform:translateY(-3px) scale(1.04)}
+.shop-building:active{transform:scale(.95)}
+.shop-building svg{width:clamp(74px,14vw,124px);height:auto;display:block}
+.shop-tag{position:absolute;top:-16px;left:50%;transform:translateX(-50%);background:var(--gold);color:#3a2600;
+  font-size:clamp(9px,1.8vw,11px);font-weight:900;padding:2px 9px;border-radius:20px;white-space:nowrap;
+  box-shadow:0 3px 8px rgba(0,0,0,.3);animation:tagBob 1.6s ease-in-out infinite}
+@keyframes tagBob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-4px)}}
+
+/* ===== OVERLAYS (screens/map/shop) ===== */
+.screen{position:absolute;inset:0;z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:clamp(12px,2.4vw,18px);background:linear-gradient(180deg,rgba(11,17,32,.94),rgba(17,26,46,.96));
+  backdrop-filter:blur(18px);opacity:0;pointer-events:none;transition:opacity .45s;text-align:center;padding:clamp(20px,5vw,34px)}
+.screen.active{opacity:1;pointer-events:auto}
+.brandmark{display:flex;align-items:center;gap:10px;margin-bottom:2px}
+.brandmark svg{width:clamp(42px,9vw,62px);height:auto}
+.screen h1{font-size:clamp(30px,8.5vw,66px);font-weight:900;letter-spacing:1px;line-height:.95;
+  background:linear-gradient(92deg,var(--gold),#ff8f00 60%,var(--red));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.screen h2{font-size:clamp(20px,5.5vw,42px);font-weight:900;color:#fff}
+.screen p{color:rgba(255,255,255,.82);font-size:clamp(14px,3.4vw,17px);max-width:470px;line-height:1.65}
+.screen p strong{color:var(--neon)}
+.btn{padding:clamp(12px,3vw,16px) clamp(26px,6.5vw,40px);border-radius:50px;border:none;
+  font-size:clamp(14px,3.4vw,17px);font-weight:800;cursor:pointer;transition:transform .14s,box-shadow .14s,filter .14s;
+  text-transform:uppercase;letter-spacing:.8px;color:var(--ink)}
+.btn:hover{transform:translateY(-3px);filter:brightness(1.06)}
+.btn:active{transform:translateY(0) scale(.97)}
+.btn-primary{background:linear-gradient(92deg,var(--neon),var(--neon-deep));box-shadow:0 6px 22px rgba(163,230,53,.35)}
+.btn-gold{background:linear-gradient(92deg,var(--gold),var(--gold-deep));color:#3a2600;box-shadow:0 6px 22px rgba(251,191,36,.35)}
+.btn-blue{background:linear-gradient(92deg,#38bdf8,#0284c7);color:#fff;box-shadow:0 6px 22px rgba(56,189,248,.35)}
+.btn-revive{background:linear-gradient(92deg,#a3e635,#65a30d);color:#14210a;box-shadow:0 6px 26px rgba(163,230,53,.45);
+  display:inline-flex;align-items:center;gap:9px;animation:reviveGlow 1.6s ease-in-out infinite alternate}
+@keyframes reviveGlow{0%{box-shadow:0 6px 22px rgba(163,230,53,.35)}100%{box-shadow:0 6px 30px rgba(163,230,53,.6)}}
+.ad-badge{background:#14210a;color:#a3e635;font-size:.62em;font-weight:900;padding:2px 6px;border-radius:5px;letter-spacing:1px;line-height:1}
+.ad-badge.sm{font-size:8px;padding:1px 3px;position:absolute;top:-4px;right:-4px}
+.gold-btn{position:relative;color:var(--gold);font-weight:900;font-size:clamp(12px,2.2vw,15px)}
+.x2-active{animation:x2pulse .8s ease-in-out infinite alternate}
+@keyframes x2pulse{0%{box-shadow:0 0 0 rgba(251,191,36,0)}100%{box-shadow:0 0 16px rgba(251,191,36,.7)}}
+
+/* AD OVERLAY */
+#adOverlay{position:absolute;inset:0;z-index:400;background:rgba(6,10,20,.94);backdrop-filter:blur(6px);
+  display:none;align-items:center;justify-content:center;padding:24px}
+#adOverlay.show{display:flex}
+.ad-box{text-align:center;color:#fff}
+.ad-tag{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,.5);margin-bottom:20px}
+.ad-anim{width:90px;height:90px;margin:0 auto 22px;display:flex;align-items:center;justify-content:center}
+.ad-coin{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 34% 32%,#fff3b0,#ffcf33 46%,#c98a12);
+  border:3px solid #a56b0d;animation:adspin 1s linear infinite}
+@keyframes adspin{0%{transform:rotateY(0)}100%{transform:rotateY(360deg)}}
+.ad-msg{font-size:clamp(15px,3.6vw,19px);font-weight:800}
+.ad-msg span{color:var(--gold)}
+.btn-row{display:flex;gap:clamp(9px,2.2vw,14px);flex-wrap:wrap;justify-content:center;margin-top:6px}
+.stats{display:flex;gap:clamp(14px,3.4vw,28px);margin:6px 0;flex-wrap:wrap;justify-content:center}
+.stat{text-align:center}.stat-num{font-size:clamp(24px,6vw,38px);font-weight:900;color:var(--gold)}
+.stat-label{font-size:clamp(10px,2.2vw,12px);text-transform:uppercase;opacity:.7;color:#fff;letter-spacing:1px}
+
+/* MAP */
+.map{position:absolute;inset:0;z-index:300;background:linear-gradient(180deg,#0a1526,#132238 55%,#0a1526);
+  backdrop-filter:blur(18px);opacity:0;pointer-events:none;transition:opacity .45s;display:flex;flex-direction:column;
+  align-items:center;padding:clamp(18px,4.5vw,30px);overflow-y:auto}
+.map.active{opacity:1;pointer-events:auto}
+.map-title{font-size:clamp(24px,7vw,46px);font-weight:900;text-transform:uppercase;margin-bottom:4px;letter-spacing:1px;
+  background:linear-gradient(92deg,var(--gold),#ff8f00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.map-sub{color:rgba(255,255,255,.62);font-size:clamp(12px,3vw,15px);margin-bottom:clamp(16px,4vw,26px);text-align:center}
+.map-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(150px,42vw,210px),1fr));
+  gap:clamp(10px,2.4vw,16px);width:100%;max-width:960px}
+.map-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:16px;
+  padding:clamp(10px,2.6vw,16px);text-align:center;cursor:pointer;transition:transform .22s,background .22s,box-shadow .22s;position:relative;overflow:hidden}
+.map-card::before{content:'';position:absolute;inset:0;opacity:.14;transition:opacity .22s}
+.map-card:hover{transform:translateY(-5px);background:rgba(255,255,255,.1);box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.map-card:hover::before{opacity:.24}
+.map-thumb{position:relative;height:clamp(64px,17vw,110px);border-radius:10px;overflow:hidden;margin-bottom:8px}
+.map-thumb svg{width:100%;height:100%;display:block}
+.mc-name{color:#fff;font-size:clamp(11px,2.5vw,14px);font-weight:800;position:relative}
+.mc-city{color:rgba(255,255,255,.5);font-size:clamp(9px,2vw,11px);position:relative}
+.mc-best{color:var(--gold);font-size:clamp(9px,2vw,12px);font-weight:800;margin-top:3px;position:relative}
+.mc-perks{margin-top:8px;display:flex;flex-direction:column;gap:4px;text-align:left;position:relative}
+.mc-bonus,.mc-malus{font-size:clamp(8px,1.8vw,10.5px);line-height:1.25;font-weight:600;display:flex;gap:5px;align-items:flex-start;
+  padding:4px 6px;border-radius:7px}
+.mc-bonus{color:#b6f0c0;background:rgba(74,222,128,.1)}
+.mc-malus{color:#f6b4b4;background:rgba(248,113,113,.1)}
+.pk-ic{font-size:8px;line-height:1.5;flex:none}
+
+/* SHOP OVERLAY */
+.shop{position:absolute;inset:0;z-index:250;background:linear-gradient(180deg,rgba(11,17,32,.97),rgba(17,26,46,.98));
+  backdrop-filter:blur(16px);opacity:0;pointer-events:none;transition:opacity .3s;display:flex;flex-direction:column;
+  align-items:center;padding:clamp(52px,12vw,72px) clamp(14px,4vw,26px) clamp(16px,4vw,26px);overflow-y:auto}
+.shop.active{opacity:1;pointer-events:auto}
+.shop h2{color:#fff;font-size:clamp(22px,6vw,34px);font-weight:900;letter-spacing:1px}
+.shop-sub{color:rgba(255,255,255,.55);font-size:clamp(12px,3vw,15px);margin-bottom:4px}
+.shop-bal{position:absolute;top:clamp(14px,3.5vw,20px);left:clamp(16px,4vw,24px);color:var(--gold);
+  font-weight:900;font-size:clamp(16px,4vw,22px);display:flex;align-items:center;gap:6px}
+.close-x{position:absolute;top:clamp(12px,3vw,18px);right:clamp(16px,4vw,24px);background:none;border:none;color:#fff;
+  font-size:clamp(24px,5.5vw,32px);cursor:pointer;z-index:2;font-weight:300;line-height:1;padding:6px}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(138px,30vw,172px),1fr));
+  gap:clamp(11px,2.8vw,16px);width:100%;max-width:660px;margin-top:16px}
+.shop-item{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.025));
+  border:1px solid rgba(255,255,255,.11);border-radius:16px;padding:clamp(13px,3.3vw,18px);text-align:center;
+  cursor:pointer;transition:transform .18s,background .18s,box-shadow .18s;position:relative}
+.shop-item:hover{transform:translateY(-4px);background:rgba(255,255,255,.12);box-shadow:0 10px 26px rgba(0,0,0,.3)}
+.shop-item.locked{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))}
+.si-icon{width:clamp(40px,9vw,54px);height:clamp(40px,9vw,54px);margin:0 auto 10px;
+  background:rgba(255,255,255,.08);border-radius:14px;display:flex;align-items:center;justify-content:center}
+.si-icon svg{width:64%;height:64%}
+.si-name{font-size:clamp(13px,3vw,15px);font-weight:800;color:#fff;margin-bottom:5px}
+.si-desc{font-size:clamp(10px,2.5vw,12px);color:rgba(255,255,255,.55);margin-bottom:10px;line-height:1.4;min-height:2.6em}
+.si-price{font-size:clamp(14px,3vw,16px);font-weight:900;color:var(--gold);display:flex;align-items:center;justify-content:center;gap:5px}
+.si-owned{position:absolute;top:8px;right:9px;background:var(--neon);color:var(--ink);font-size:clamp(9px,2vw,11px);
+  font-weight:900;padding:3px 9px;border-radius:50px}
+
+/* WAVE SCREEN */
+/* NON-BLOCKING WAVE OVERLAY */
+#waveOverlay{position:absolute;top:22%;left:50%;transform:translateX(-50%) translateY(-10px);
+  z-index:120;text-align:center;pointer-events:none;opacity:0;transition:opacity .4s,transform .4s;
+  background:var(--sky-glass);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:clamp(12px,2.6vw,20px) clamp(20px,5vw,40px);
+  box-shadow:0 10px 34px rgba(0,0,0,.4)}
+#waveOverlay.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.wo-num{font-size:clamp(24px,6vw,44px);font-weight:900;color:var(--neon);line-height:1;text-shadow:0 0 26px rgba(163,230,53,.4)}
+.wo-count{font-size:clamp(13px,3vw,17px);color:#fff;font-weight:800;margin-top:6px;text-transform:uppercase;letter-spacing:1.5px}
+.wo-list{font-size:clamp(11px,2.6vw,14px);color:rgba(255,255,255,.75);margin-top:6px}
+
+/* PERK BANNER (start of level) */
+#perkBanner{position:absolute;top:34%;left:50%;transform:translateX(-50%) translateY(8px);z-index:118;
+  pointer-events:none;opacity:0;transition:opacity .45s,transform .45s;text-align:center;
+  background:var(--sky-glass);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:clamp(10px,2.2vw,16px) clamp(16px,4vw,28px);
+  box-shadow:0 10px 30px rgba(0,0,0,.4);min-width:min(84vw,420px)}
+#perkBanner.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.pb-title{font-size:clamp(16px,4vw,24px);font-weight:900;color:#fff;margin-bottom:8px}
+.pb-row{display:flex;justify-content:space-between;gap:14px;align-items:center;font-size:clamp(11px,2.5vw,14px);
+  font-weight:700;padding:6px 10px;border-radius:9px;margin-top:5px;text-align:left}
+.pb-row>span:first-child{flex:none;font-weight:900;letter-spacing:.5px}
+.pb-bonus{background:rgba(74,222,128,.14);color:#b6f0c0}
+.pb-malus{background:rgba(248,113,113,.14);color:#f6b4b4}
+
+/* ACTIVE TIMED ITEMS (left column under HUD) */
+#activeItems{position:absolute;left:clamp(10px,2vw,18px);top:clamp(72px,15vw,104px);z-index:95;
+  display:flex;flex-direction:column;gap:6px;pointer-events:none;width:clamp(128px,30vw,168px)}
+.ai{display:flex;align-items:center;gap:8px;background:var(--sky-glass);backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:6px 8px;
+  box-shadow:0 4px 14px rgba(0,0,0,.3)}
+.ai-ic{width:22px;height:22px;flex:0 0 auto}.ai-ic svg{width:100%;height:100%}
+.ai-body{flex:1;min-width:0}
+.ai-top{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.ai-name{font-size:clamp(9px,2vw,11px);font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ai-sec{font-size:clamp(9px,2vw,11px);font-weight:900;color:var(--gold);flex:0 0 auto}
+.ai-bar{height:4px;background:rgba(255,255,255,.14);border-radius:3px;margin-top:4px;overflow:hidden}
+.ai-bar span{display:block;height:100%;background:linear-gradient(90deg,var(--neon),var(--neon-deep));border-radius:3px;transition:width .25s linear}
+
+/* CROSSHAIR (desktop only) */
+#crosshair{position:absolute;width:30px;height:30px;z-index:110;pointer-events:none;display:none;
+  transform:translate(-50%,-50%);border:2px solid rgba(163,230,53,.9);border-radius:50%;
+  box-shadow:0 0 8px rgba(163,230,53,.5),inset 0 0 6px rgba(163,230,53,.3)}
+#crosshair::before,#crosshair::after{content:'';position:absolute;background:rgba(163,230,53,.9)}
+#crosshair::before{left:50%;top:-7px;width:2px;height:6px;transform:translateX(-50%)}
+#crosshair::after{left:50%;bottom:-7px;width:2px;height:6px;transform:translateX(-50%)}
+@media(pointer:coarse){#crosshair{display:none!important}}
+
+/* SCORE CARD (offscreen render) */
+.score-card{position:fixed;left:-9999px;top:0;width:1080px;height:1920px;
+  background:linear-gradient(180deg,#0a1526,#132238 55%,#0a1526);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:38px;padding:100px;text-align:center}
+.sc-title{font-size:84px;font-weight:900;background:linear-gradient(92deg,var(--gold),#ff8f00);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.sc-monument{font-size:52px;color:rgba(255,255,255,.85);font-weight:300}
+.sc-score{font-size:190px;font-weight:900;color:var(--neon);text-shadow:0 0 54px rgba(163,230,53,.45);line-height:1}
+.sc-label{font-size:36px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:8px}
+.sc-footer{font-size:34px;color:var(--gold);margin-top:44px;font-weight:700}
+.sc-url{font-size:28px;color:rgba(255,255,255,.42);margin-top:20px;letter-spacing:3px}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.05ms!important}
+}
+</style>
+</head>
+<body>
+
+<!-- SCORE CARD (rendered offscreen for sharing) -->
+<div class="score-card" id="scoreCard">
+  <div class="sc-title">POO DEFENSE</div>
+  <div class="sc-monument" id="scMonument">Eiffel Tower</div>
+  <div class="sc-label">SCORE</div>
+  <div class="sc-score" id="scScore">0</div>
+  <div class="sc-footer" id="scFooter">Beat that.</div>
+  <div class="sc-url">ragequit-arcade.com</div>
+</div>
+
+<div id="gameFrame">
+  <!-- SCENE LAYERS -->
+  <div class="layer" id="bgScene"></div>
+  <div class="layer" id="fogVeil"></div>
+
+
+
+  <div class="hud">
+    <div class="hud-box"><div class="hud-label">Score</div><div class="hud-val score" id="hudScore">0</div></div>
+    <div class="hud-box"><div class="hud-label">Gold</div><div class="hud-val coins" id="hudCoins"><span class="coin"></span>0</div></div>
+    <div class="hud-box"><div class="hud-label">Wave</div><div class="hud-val wave" id="hudWave">0</div></div>
+  </div>
+
+  <div class="top-btns">
+    <button class="round-btn gold-btn" id="x2Btn" onclick="watchDoubleGold()" title="Watch ad: double gold"><span class="ad-badge sm">AD</span>×2</button>
+    <button class="round-btn" id="musicBtn" onclick="toggleMusic()" title="Sound">♪</button>
+    <button class="round-btn" onclick="togglePause()" title="Pause" id="pauseBtn">⏸</button>
+  </div>
+
+  <!-- PAUSE -->
+  <div class="screen" id="pauseScreen">
+    <h2>Paused</h2>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="resumeGame()">Resume</button>
+      <button class="btn btn-gold" onclick="quitToMenu()">Back to menu</button>
+    </div>
+  </div>
+
+  <!-- ACTIVE TIMED ITEMS -->
+  <div id="activeItems"></div>
+
+  <!-- MONUMENT -->
+  <div class="monument-wrap" id="monumentWrap">
+    <div class="shield" id="shield"></div>
+    <div id="monumentShape"></div>
+    <div class="mon-health">
+      <div class="mon-health-fill" id="cleanFill"></div>
+      <span class="mon-health-txt" id="cleanPct">100%</span>
+    </div>
+  </div>
+
+  <div id="agentsLayer" class="layer" style="pointer-events:none"></div>
+  <div id="shopLayer"></div>
+  <div id="birdsLayer" class="layer" style="pointer-events:none"></div>
+  <div id="fxLayer" class="layer"></div>
+  <div class="warning" id="warning">CLEANLINESS CRITICAL!</div>
+  <div id="crosshair"></div>
+
+  <!-- NON-BLOCKING WAVE OVERLAY -->
+  <div id="waveOverlay">
+    <div class="wo-num" id="woNum">Wave 1</div>
+    <div class="wo-count" id="woCount">0 birds inbound</div>
+    <div class="wo-list" id="woList"></div>
+  </div>
+
+  <div id="perkBanner">
+    <div class="pb-title" id="pbTitle">Paris</div>
+    <div class="pb-row pb-bonus"><span>▲ BONUS</span><span id="pbBonus"></span></div>
+    <div class="pb-row pb-malus"><span>▼ MALUS</span><span id="pbMalus"></span></div>
+  </div>
+
+  <!-- AD OVERLAY (simulated rewarded ad) -->
+  <div id="adOverlay">
+    <div class="ad-box">
+      <div class="ad-tag">Rewarded Ad</div>
+      <div class="ad-anim"><div class="ad-coin"></div></div>
+      <div class="ad-msg">Your reward in <span id="adCount">3</span>s…</div>
+    </div>
+  </div>
+
+  <!-- START -->
+  <div class="screen active" id="startScreen">
+    <div class="brandmark">
+      <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#5c4018"/><ellipse cx="32" cy="30" rx="15" ry="12" fill="#3d2b10"/><ellipse cx="32" cy="40" rx="9" ry="7" fill="#3d2b10"/></svg>
+    </div>
+    <h1>POO DEFENSE</h1>
+    <p>A flock of birds wants to defile the world's greatest monuments.<br><br>
+    <strong>Tap or click</strong> the birds before they drop their payload.<br>
+    <strong>Hire</strong> cleaners and auto-cannons from the shop.<br>
+    <strong>Earn</strong> gold with every kill and unlock heavy gear.<br><br>
+    Watch out for <strong>gold-thief crows</strong>.</p>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="showMap()">Play</button>
+    </div>
+  </div>
+
+  <!-- GAME OVER -->
+  <div class="screen" id="goScreen">
+    <h2 id="goTitle">Monument defiled!</h2>
+    <div class="stats">
+      <div class="stat"><div class="stat-num" id="finalScore">0</div><div class="stat-label">Score</div></div>
+      <div class="stat"><div class="stat-num" id="finalWave">0</div><div class="stat-label">Waves</div></div>
+      <div class="stat"><div class="stat-num" id="finalCoins">0</div><div class="stat-label">Gold</div></div>
+      <div class="stat"><div class="stat-num" id="bestScore">0</div><div class="stat-label">Best</div></div>
+    </div>
+    <button class="btn btn-revive" id="reviveBtn" onclick="watchRevive()">
+      <span class="ad-badge">AD</span> Revive at 50% clean
+    </button>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="startGame()">Play again</button>
+      <button class="btn btn-primary" onclick="showMap()">Map</button>
+    </div>
+  </div>
+
+  <!-- SHOP -->
+  <div class="shop" id="shopOverlay">
+    <div class="shop-bal"><span class="coin lg"></span><span id="shopCoins">0</span></div>
+    <button class="close-x" onclick="toggleShop()">×</button>
+    <h2>Arsenal</h2>
+    <p class="shop-sub">Every item is time-limited. Spend gold to defend the monument.</p>
+    <div class="shop-grid" id="shopGrid"></div>
+  </div>
+
+  <!-- MAP -->
+  <div class="map" id="mapOverlay">
+    <button class="close-x" onclick="hideMap()">×</button>
+    <div class="map-title">World map</div>
+    <div class="map-sub">Pick a monument. Each one keeps its own endless score.</div>
+    <div class="map-grid" id="mapGrid"></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* ============================================================
+   POO DEFENSE — Ragequit Arcade
+   Reconstruction premium : scènes en couches par monument.
+   ============================================================ */
+
+/* ---------- Fix mobile viewport height (100vh bug) ---------- */
+function setVH(){document.documentElement.style.setProperty('--vh',(window.innerHeight*0.01)+'px');}
+setVH();addEventListener('resize',setVH);addEventListener('orientationchange',()=>setTimeout(setVH,200));
+
+/* ============================================================
+   MONUMENT + THEME DEFINITIONS
+   Each monument carries: SVG art, a palette, sky gradient,
+   celestial body, atmosphere, distant skyline and mid-ground
+   scenery so the whole landscape changes per monument.
+   ============================================================ */
+
+/* Reusable SVG helpers ------------------------------------- */
+function g(...c){return c.join('');}
+
+/* ============================================================
+   REALISTIC LAYERED SCENES v2
+   Background SVG viewBox 1000x600, horizon at y=460.
+   ============================================================ */
+const HZ=460;
+function rng(seed){let s=seed>>>0;return()=>(s=(s*1664525+1013904223)>>>0)/4294967296;}
+/* ---------- shared atmosphere ---------- */
+function clouds(seed,n,yTop,yBot,op){
+  const r=rng(seed);let s='';
+  for(let i=0;i<n;i++){const y=yTop+r()*(yBot-yTop),x=r()*1000,w=80+r()*150,h=w*(0.26+r()*0.1),o=op*(0.55+r()*0.45);
+    s+=`<g opacity="${o.toFixed(2)}"><ellipse cx="${x}" cy="${y}" rx="${w}" ry="${h}" fill="#ffffff"/><ellipse cx="${x-w*0.4}" cy="${y+h*0.35}" rx="${w*0.55}" ry="${h*0.75}" fill="#fff"/><ellipse cx="${x+w*0.45}" cy="${y+h*0.28}" rx="${w*0.5}" ry="${h*0.7}" fill="#fff"/><ellipse cx="${x}" cy="${y+h*0.45}" rx="${w*0.85}" ry="${h*0.7}" fill="#fff"/></g>`;}
+  return s;
+}
+function vBirds(seed,n){const r=rng(seed);let s='';for(let i=0;i<n;i++){const x=r()*900+50,y=50+r()*130,sc=(0.5+r()*0.7).toFixed(2);s+=`<path d="M0 0 q5 -4 10 0 q5 -4 10 0" fill="none" stroke="#42505f" stroke-width="1.5" opacity="${(0.25+r()*0.3).toFixed(2)}" transform="translate(${x} ${y}) scale(${sc})"/>`;}return s;}
+
+/* window-lit building block */
+function bldg(x,y,w,h,col,winCol,seed,lit){
+  const r=rng(seed);let s=`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${col}"/>`;
+  const cols=Math.max(2,Math.floor(w/14)),rows=Math.max(2,Math.floor(h/18));
+  const gx=(w-cols*8)/(cols+1),gy=(h-rows*11)/(rows+1);
+  for(let c=0;c<cols;c++)for(let rr=0;rr<rows;rr++){
+    const on=lit?(r()<0.5):true;
+    s+=`<rect x="${(x+gx+c*(8+gx)).toFixed(1)}" y="${(y+gy+rr*(11+gy)).toFixed(1)}" width="8" height="11" fill="${winCol}" opacity="${on?(0.5+r()*0.5).toFixed(2):'0.14'}"/>`;
+  }
+  // subtle right-side shadow
+  s+=`<rect x="${x+w-5}" y="${y}" width="5" height="${h}" fill="#000" opacity="0.12"/>`;
+  return s;
+}
+
+/* ============================================================ NEW YORK ============================================================ */
+function bg_newyork(){
+  const r=rng(77);
+  let far='',x=0;
+  while(x<1000){const w=24+r()*38,h=60+r()*140;far+=`<rect x="${x.toFixed(1)}" y="${(HZ-h).toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" fill="#7286a0"/>`;x+=w+2+r()*5;}
+  let mid='';x=-10;
+  const cols_=['#3c4a60','#44536b','#374357','#4a5a74'];
+  while(x<1010){const w=42+r()*54,h=120+r()*230,y=HZ-h;mid+=bldg(x,y,w,h,cols_[Math.floor(r()*cols_.length)],'#ffe6a0',(x*13|0)+1,true);x+=w+4+r()*5;}
+  // Empire-State-ish spire near left-centre
+  const es=`<g>${bldg(300,150,58,310,'#41506a','#ffe6a0',9,true)}<rect x="316" y="120" width="26" height="34" fill="#41506a"/><rect x="324" y="92" width="10" height="30" fill="#41506a"/><rect x="327" y="66" width="4" height="28" fill="#5a6b86"/></g>`;
+  return {
+    sky:`<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#95bcda"/><stop offset="52%" stop-color="#bcd7ea"/><stop offset="100%" stop-color="#e4eef5"/></linearGradient>`,
+    body:`${clouds(3,4,60,190,0.55)}${vBirds(21,5)}
+      <g opacity="0.85">${far}</g>
+      <g>${mid}${es}</g>
+      <rect x="0" y="${HZ}" width="1000" height="${600-HZ}" fill="#356389"/>
+      <g stroke="#bfe0f2" stroke-width="2" opacity="0.3" fill="none">${Array.from({length:8}).map((_,i)=>`<path d="M0 ${HZ+16+i*18} q60 -6 120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0"/>`).join('')}</g>
+      <!-- Liberty Island base -->
+      <ellipse cx="500" cy="${HZ+8}" rx="170" ry="22" fill="#5c6d54"/>
+      <path d="M360 ${HZ+4} L640 ${HZ+4} L620 ${HZ+30} L380 ${HZ+30} Z" fill="#8a9a78"/>
+      <rect x="430" y="${HZ-8}" width="140" height="20" fill="#9aa888" rx="3"/>`
+  };
+}
+
+/* ============================================================ PARIS (Eiffel & Arc share) ============================================================ */
+function bg_paris(sunset){
+  const r=rng(sunset?51:12);
+  // Haussmann rooftops far
+  let far='',x=-10;
+  while(x<1010){const w=60+r()*40,h=70+r()*40,y=HZ-h;
+    far+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#8a94a2"/><path d="M${x} ${y} L${x+w/2} ${y-14} L${x+w} ${y} Z" fill="#6f7a89"/>`;
+    x+=w+2;}
+  // Haussmann detailed mid
+  let mid='';x=-20;
+  while(x<1020){const w=84+r()*50,h=150+r()*70,y=HZ-h;
+    mid+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#cbb99b"/>`;
+    // mansard roof
+    mid+=`<path d="M${x-4} ${y} L${x+10} ${y-22} L${x+w-10} ${y-22} L${x+w+4} ${y} Z" fill="#54606e"/>`;
+    // window rows with balconies
+    const rows=Math.floor(h/40),cols=Math.max(3,Math.floor(w/26));
+    for(let rr=0;rr<rows;rr++){const wy=y+18+rr*40;
+      for(let c=0;c<cols;c++){const wx=x+12+c*((w-24)/(cols-1||1));
+        mid+=`<rect x="${wx-6}" y="${wy}" width="12" height="20" fill="#8fa6b8" opacity="0.85" rx="1"/><rect x="${wx-6}" y="${wy}" width="12" height="20" fill="none" stroke="#5c6672" stroke-width="1"/>`;
+        mid+=`<rect x="${wx-8}" y="${wy+20}" width="16" height="2.5" fill="#3e4650"/>`;
+      }
+      mid+=`<rect x="${x}" y="${wy-4}" width="${w}" height="2" fill="#a2917a" opacity="0.6"/>`;
+    }
+    x+=w+3;}
+  const skyC=sunset
+    ?`<stop offset="0" stop-color="#f3a85f"/><stop offset="45%" stop-color="#f6c68f"/><stop offset="100%" stop-color="#fbe3c2"/>`
+    :`<stop offset="0" stop-color="#7fb3dd"/><stop offset="50%" stop-color="#abcfe6"/><stop offset="100%" stop-color="#dcebf2"/>`;
+  return {
+    sky:`<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">${skyC}</linearGradient>`,
+    body:`${clouds(sunset?8:5,4,60,180,sunset?0.4:0.6)}${vBirds(31,4)}
+      <g opacity="0.8">${far}</g>
+      <g>${mid}</g>
+      <!-- boulevard / ground -->
+      <rect x="0" y="${HZ}" width="1000" height="${600-HZ}" fill="#8a8f79"/>
+      <rect x="0" y="${HZ}" width="1000" height="14" fill="#6f7563"/>
+      <ellipse cx="500" cy="${HZ+30}" rx="380" ry="26" fill="#9aa07f" opacity="0.7"/>`
+  };
+}
+
+/* ============================================================ LONDON (Big Ben) ============================================================ */
+function bg_london(){
+  const r=rng(88);
+  let far='',x=-10;
+  while(x<1010){const w=40+r()*46,h=60+r()*120,y=HZ-h;far+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#8792a0"/>`;x+=w+3;}
+  // a distant dome (St Paul's-ish) + London Eye hint
+  far+=`<circle cx="760" cy="${HZ-70}" r="34" fill="#94a0ad"/><rect x="756" y="${HZ-110}" width="8" height="20" fill="#94a0ad"/>`;
+  far+=`<circle cx="180" cy="${HZ-120}" r="70" fill="none" stroke="#8f9aa8" stroke-width="4" opacity="0.7"/>`;
+  let mid='';x=-20;
+  while(x<1020){const w=70+r()*50,h=120+r()*120,y=HZ-h;
+    mid+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#6f7787"/>`;
+    const rows=Math.floor(h/22),cols=Math.max(3,Math.floor(w/20));
+    for(let rr=0;rr<rows;rr++)for(let c=0;c<cols;c++){mid+=`<rect x="${x+10+c*((w-20)/(cols-1||1))-5}" y="${y+12+rr*22}" width="10" height="14" fill="#c8b88f" opacity="${(0.5+r()*0.4).toFixed(2)}"/>`;}
+    // pitched roof
+    mid+=`<path d="M${x} ${y} L${x+w/2} ${y-18} L${x+w} ${y} Z" fill="#565e6c"/>`;
+    x+=w+4;}
+  return {
+    sky:`<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f9bab"/><stop offset="55%" stop-color="#b3bdc9"/><stop offset="100%" stop-color="#d6dde4"/></linearGradient>`,
+    body:`${clouds(5,6,50,220,0.55)}
+      <rect x="0" y="0" width="1000" height="${HZ}" fill="#c2cbd4" opacity="0.28"/>
+      <g opacity="0.8">${far}</g>
+      <g>${mid}</g>
+      <!-- Thames -->
+      <rect x="0" y="${HZ}" width="1000" height="${600-HZ}" fill="#5a6b74"/>
+      <g stroke="#aab8c0" stroke-width="2" opacity="0.3" fill="none">${Array.from({length:6}).map((_,i)=>`<path d="M0 ${HZ+18+i*20} q80 -5 160 0 t160 0 t160 0 t160 0 t160 0 t160 0"/>`).join('')}</g>
+      <rect x="0" y="${HZ-4}" width="1000" height="12" fill="#4a5560"/>`
+  };
+}
+
+/* ============================================================ CAIRO (Pyramids) ============================================================ */
+function bg_cairo(){
+  const r=rng(64);
+  // distant dunes
+  let dunes='';
+  for(let i=0;i<4;i++){const y=HZ-40-i*8;dunes+=`<path d="M0 ${y} Q250 ${y-30-i*6} 500 ${y-6} T1000 ${y-10} L1000 ${HZ} L0 ${HZ} Z" fill="#d9b775" opacity="${(0.4+i*0.14).toFixed(2)}"/>`;}
+  // two smaller background pyramids
+  const pyr=(cx,base,col)=>`<path d="M${cx} ${HZ-base} L${cx-base*0.9} ${HZ} L${cx+base*0.9} ${HZ} Z" fill="${col}"/>`;
+  return {
+    sky:`<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5aa6da"/><stop offset="50%" stop-color="#9fccea"/><stop offset="100%" stop-color="#ecdcae"/></linearGradient>`,
+    body:`${clouds(9,3,50,150,0.4)}
+      ${dunes}
+      ${pyr(230,150,'#c99f5f')}${pyr(330,110,'#bd9455')}
+      <!-- desert ground -->
+      <rect x="0" y="${HZ}" width="1000" height="${600-HZ}" fill="#e0bd7e"/>
+      <rect x="0" y="${HZ}" width="1000" height="${600-HZ}" fill="url(#sand)"/>
+      <ellipse cx="500" cy="${HZ+40}" rx="420" ry="30" fill="#cda868" opacity="0.5"/>
+      <!-- heat haze -->
+      <rect x="0" y="${HZ-6}" width="1000" height="30" fill="#f2d79a" opacity="0.25"/>`,
+    extraDefs:`<linearGradient id="sand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6c384"/><stop offset="1" stop-color="#c99f57"/></linearGradient>`
+  };
+}
+
+/* ============================================================ AGRA (Taj Mahal) ============================================================ */
+function bg_agra(){
+  const r=rng(43);
+  // hazy tree line + minarets far
+  let trees='',x=0;
+  while(x<1000){trees+=`<circle cx="${x}" cy="${HZ-12}" r="${16+r()*14}" fill="#7d9a6a" opacity="0.5"/>`;x+=30+r()*20;}
+  return {
+    sky:`<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2a765"/><stop offset="45%" stop-color="#f8c890"/><stop offset="100%" stop-color="#fce7c6"/></linearGradient>`,
+    body:`${clouds(6,4,60,170,0.4)}
+      <circle cx="800" cy="120" r="46" fill="#fff4d6" opacity="0.85"/>
+      <g opacity="0.7">${trees}</g>
+      <!-- reflecting pool + garden ground -->
+      <rect x="0" y="${HZ}" width="1000" height="${600-HZ}" fill="#8a9b74"/>
+      <rect x="380" y="${HZ+8}" width="240" height="${600-HZ-8}" fill="#6f96a8"/>
+      <g stroke="#bcd6e0" stroke-width="1.5" opacity="0.4" fill="none">${Array.from({length:4}).map((_,i)=>`<path d="M390 ${HZ+22+i*20} q30 -4 60 0 t60 0 t60 0 t60 0"/>`).join('')}</g>
+      <rect x="0" y="${HZ}" width="1000" height="10" fill="#6f7d5c"/>`
+  };
+}
+
+/* ============================================================ SYDNEY (Opera House) ============================================================ */
+function bg_sydney(){
+  const r=rng(55);
+  // Harbour Bridge far
+  const bridge=`<g opacity="0.85"><path d="M120 ${HZ-30} Q500 ${HZ-170} 880 ${HZ-30}" fill="none" stroke="#5a6672" stroke-width="10"/>
+    <rect x="112" y="${HZ-90}" width="16" height="60" fill="#5a6672"/><rect x="872" y="${HZ-90}" width="16" height="60" fill="#5a6672"/>
+    <g stroke="#5a6672" stroke-width="3">${Array.from({length:14}).map((_,i)=>{const bx=150+i*52;const t=HZ-30-Math.sin((bx-120)/760*Math.PI)*140;return `<line x1="${bx}" y1="${t}" x2="${bx}" y2="${HZ-30}"/>`;}).join('')}</g></g>`;
+  let city='',x=560;
+  while(x<1000){const w=26+r()*30,h=50+r()*120;city+=`<rect x="${x}" y="${HZ-h}" width="${w}" height="${h}" fill="#7a8794"/>`;x+=w+3;}
+  return {
+    sky:`<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3fb1e6"/><stop offset="55%" stop-color="#82cff0"/><stop offset="100%" stop-color="#cdeefb"/></linearGradient>`,
+    body:`${clouds(4,3,50,150,0.55)}${vBirds(12,4)}
+      <g opacity="0.7">${city}</g>
+      ${bridge}
+      <rect x="0" y="${HZ}" width="1000" height="${600-HZ}" fill="#2f8fc4"/>
+      <g stroke="#cdeefb" stroke-width="2" opacity="0.35" fill="none">${Array.from({length:7}).map((_,i)=>`<path d="M0 ${HZ+16+i*18} q60 -6 120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0 t120 0"/>`).join('')}</g>
+      <!-- quay under opera -->
+      <rect x="330" y="${HZ-6}" width="340" height="26" fill="#8a8073" rx="3"/>`
+  };
+}
+
+/* ============================================================ ROME (Colosseum) ============================================================ */
+function bg_rome(){
+  const r=rng(61);
+  // umbrella pines + ruins far
+  let pines='';for(let i=0;i<7;i++){const px=80+i*130+r()*40;pines+=`<g><rect x="${px-3}" y="${HZ-70}" width="6" height="70" fill="#6b5136"/><ellipse cx="${px}" cy="${HZ-78}" rx="46" ry="24" fill="#3f6b3a"/></g>`;}
+  let ruins='',x=-10;
+  while(x<1010){const w=50+r()*40,h=70+r()*90,y=HZ-h;ruins+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#c3ab7f" opacity="0.85"/>`;
+    // arches
+    ruins+=`<path d="M${x+8} ${HZ} L${x+8} ${y+30} Q${x+w/2} ${y+8} ${x+w-8} ${y+30} L${x+w-8} ${HZ} Z" fill="#a2895f" opacity="0.5"/>`;x+=w+10;}
+  return {
+    sky:`<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#efb45f"/><stop offset="50%" stop-color="#f6d18a"/><stop offset="100%" stop-color="#fdeec6"/></linearGradient>`,
+    body:`${clouds(7,4,60,180,0.4)}
+      <g opacity="0.6">${ruins}</g>
+      <g opacity="0.85">${pines}</g>
+      <rect x="0" y="${HZ}" width="1000" height="${600-HZ}" fill="#b39a6b"/>
+      <rect x="0" y="${HZ}" width="1000" height="12" fill="#8f7a52"/>
+      <ellipse cx="500" cy="${HZ+34}" rx="400" ry="26" fill="#c2a874" opacity="0.5"/>`
+  };
+}
+
+/* ============================================================ RIO (Christ the Redeemer) ============================================================ */
+function bg_rio(){
+  const r=rng(72);
+  // Sugarloaf mountains + sea
+  const mtn=`<path d="M-20 ${HZ} Q120 ${HZ-180} 260 ${HZ} Z" fill="#2f6b46"/>
+    <path d="M180 ${HZ} Q360 ${HZ-240} 540 ${HZ} Z" fill="#357a4e"/>
+    <path d="M620 ${HZ} Q760 ${HZ-150} 900 ${HZ} Z" fill="#2f6b46"/>
+    <path d="M820 ${HZ} Q920 ${HZ-120} 1020 ${HZ} Z" fill="#357a4e"/>`;
+  return {
+    sky:`<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#39b6ec"/><stop offset="55%" stop-color="#77ccf2"/><stop offset="100%" stop-color="#c4ecfb"/></linearGradient>`,
+    body:`${clouds(4,3,50,140,0.55)}${vBirds(9,5)}
+      ${mtn}
+      <rect x="0" y="${HZ}" width="1000" height="${600-HZ}" fill="#2f9fc9"/>
+      <g stroke="#c4ecfb" stroke-width="2" opacity="0.3" fill="none">${Array.from({length:6}).map((_,i)=>`<path d="M0 ${HZ+18+i*20} q80 -5 160 0 t160 0 t160 0 t160 0 t160 0 t160 0"/>`).join('')}</g>
+      <!-- beach strip -->
+      <path d="M0 ${HZ} Q500 ${HZ-14} 1000 ${HZ} L1000 ${HZ+18} L0 ${HZ+18} Z" fill="#ecd9a8"/>
+      <!-- Corcovado peak under statue -->
+      <path d="M420 ${HZ+6} L500 ${HZ-40} L580 ${HZ+6} Z" fill="#4a6b4a"/>`
+  };
+}
+
+/* ============================================================ DUBAI (Burj Khalifa) — night ============================================================ */
+function bg_dubai(){
+  const r=rng(99);
+  let stars='';for(let i=0;i<70;i++){stars+=`<circle cx="${(r()*1000).toFixed(0)}" cy="${(r()*300).toFixed(0)}" r="${(0.6+r()*1.4).toFixed(1)}" fill="#fff" opacity="${(0.3+r()*0.6).toFixed(2)}"/>`;}
+  let city='',x=-10;
+  while(x<1010){const w=34+r()*44,h=90+r()*180,y=HZ-h;city+=bldg(x,y,w,h,'#1f2b40','#8fd0ff',(x*7|0)+3,true);x+=w+5+r()*4;}
+  return {
+    sky:`<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f1e40"/><stop offset="55%" stop-color="#233c6e"/><stop offset="100%" stop-color="#4a5f8e"/></linearGradient>`,
+    body:`${stars}
+      <circle cx="820" cy="110" r="34" fill="#f4f7ff"/><circle cx="808" cy="104" r="30" fill="#233c6e"/>
+      <g>${city}</g>
+      <rect x="0" y="${HZ}" width="1000" height="${600-HZ}" fill="#141d33"/>
+      <rect x="0" y="${HZ}" width="1000" height="12" fill="#0c1526"/>
+      <g fill="#e8c26a" opacity="0.7">${Array.from({length:8}).map((_,i)=>`<rect x="${40+i*130}" y="${HZ+30}" width="50" height="5" rx="2"/>`).join('')}</g>`
+  };
+}
+
+const MON2={
+
+eiffel:`<svg viewBox="0 0 200 300"><defs>
+  <linearGradient id="eA" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9a7b52"/><stop offset=".5" stop-color="#b8975f"/><stop offset="1" stop-color="#7d6039"/></linearGradient>
+  <linearGradient id="eB" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#836039"/></linearGradient></defs>
+  <g fill="url(#eA)" stroke="#5c4527" stroke-width="1">
+    <!-- antenna -->
+    <rect x="97" y="8" width="6" height="18" fill="#6f5537"/><circle cx="100" cy="10" r="3" fill="#ffd54f"/>
+    <!-- top section -->
+    <path d="M92 40 L108 40 L104 26 L96 26 Z"/>
+    <path d="M88 78 L112 78 L108 40 L92 40 Z"/>
+    <!-- second platform -->
+    <rect x="84" y="74" width="32" height="6" fill="#6f5537"/>
+    <path d="M78 150 L122 150 L112 80 L88 80 Z"/>
+    <!-- first platform -->
+    <rect x="72" y="146" width="56" height="8" fill="#6f5537"/>
+    <!-- legs -->
+    <path d="M56 292 L84 292 L100 154 L78 154 Z" opacity="0.96"/>
+    <path d="M144 292 L116 292 L100 154 L122 154 Z" opacity="0.96"/>
+    <!-- inner leg shading -->
+    <path d="M80 292 L96 292 L104 154 L92 154 Z" fill="#6f5537" opacity="0.5"/>
+  </g>
+  <!-- lattice detail -->
+  <g stroke="#4a3720" stroke-width="1" fill="none" opacity="0.55">
+    <path d="M88 80 L112 150 M112 80 L88 150"/>
+    <path d="M78 154 L122 292 M122 154 L78 292"/>
+    <path d="M84 110 L116 110 M80 130 L120 130 M74 200 L126 200 M68 250 L132 250"/>
+    <path d="M100 80 L100 292"/>
+  </g>
+  <!-- arch between legs -->
+  <path d="M78 292 Q100 230 122 292 L114 292 Q100 250 86 292 Z" fill="#5c4527" opacity="0.7"/>
+  <!-- sun highlight left -->
+  <path d="M88 80 L92 80 L80 292 L72 292 Z" fill="#d8b884" opacity="0.35"/>
+</svg>`,
+
+arc:`<svg viewBox="0 0 200 300"><defs>
+  <linearGradient id="arA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#efe3c8"/><stop offset="1" stop-color="#c4a068"/></linearGradient>
+  <linearGradient id="arB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0e5cc"/><stop offset="1" stop-color="#cbb488"/></linearGradient></defs>
+  <rect x="30" y="70" width="140" height="222" fill="url(#arB)" stroke="#a68a5c" stroke-width="1.5"/>
+  <!-- attic top -->
+  <rect x="24" y="56" width="152" height="18" rx="2" fill="#dccaa2" stroke="#a68a5c"/>
+  <!-- big arch -->
+  <path d="M68 292 L68 150 Q100 104 132 150 L132 292 Z" fill="#4a3f2a"/>
+  <path d="M76 292 L76 156 Q100 118 124 156 L124 292 Z" fill="#3a3120"/>
+  <!-- side reliefs -->
+  <rect x="40" y="90" width="20" height="70" fill="#b39a68" opacity="0"/>
+  <rect x="40" y="90" width="20" height="70" fill="#c9b48a" stroke="#a68a5c"/>
+  <rect x="140" y="90" width="20" height="70" fill="#c9b48a" stroke="#a68a5c"/>
+  <!-- figures hint -->
+  <g fill="#8a7048" opacity="0.4"><rect x="44" y="96" width="12" height="58" rx="4"/><rect x="144" y="96" width="12" height="58" rx="4"/></g>
+  <!-- cornice lines -->
+  <g stroke="#8a7048" opacity="0.4" stroke-width="1.5"><line x1="30" y1="88" x2="170" y2="88"/><line x1="30" y1="250" x2="170" y2="250"/></g>
+  <!-- left light -->
+  <rect x="30" y="70" width="10" height="222" fill="#fff" opacity="0.18"/>
+</svg>`,
+
+bigben:`<svg viewBox="0 0 200 300"><defs>
+  <linearGradient id="bbA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d0aa62"/><stop offset="1" stop-color="#8f7139"/></linearGradient></defs>
+  <!-- spire -->
+  <path d="M74 54 L100 10 L126 54 Z" fill="#4a6b52"/>
+  <path d="M84 54 L100 26 L116 54 Z" fill="#3d5a44"/>
+  <rect x="94" y="8" width="12" height="6" fill="#6f5537"/><circle cx="100" cy="8" r="3" fill="#ffd54f"/>
+  <rect x="78" y="54" width="44" height="22" fill="#9c7c44"/>
+  <!-- belfry -->
+  <rect x="82" y="76" width="36" height="34" fill="#b3a88f" opacity="0"/>
+  <rect x="82" y="76" width="36" height="34" fill="#c9a45e" stroke="#8a6d3a"/>
+  <g fill="#5c4527" opacity="0.5"><rect x="88" y="82" width="8" height="22" rx="4"/><rect x="104" y="82" width="8" height="22" rx="4"/></g>
+  <!-- clock face -->
+  <rect x="80" y="110" width="40" height="40" rx="3" fill="#f4ead0" stroke="#8a6d3a" stroke-width="1.5"/>
+  <circle cx="100" cy="130" r="15" fill="#fffef2" stroke="#5c4527" stroke-width="1.5"/>
+  <g stroke="#111"><line x1="100" y1="130" x2="100" y2="119" stroke-width="1.8"/><line x1="100" y1="130" x2="109" y2="134" stroke-width="1.8"/></g>
+  <g fill="#5c4527">${Array.from({length:12}).map((_,i)=>{const a=i*30*Math.PI/180;return `<circle cx="${(100+Math.sin(a)*12).toFixed(1)}" cy="${(130-Math.cos(a)*12).toFixed(1)}" r="0.9"/>`;}).join('')}</g>
+  <!-- tower shaft -->
+  <rect x="78" y="150" width="44" height="142" fill="url(#bbA)" stroke="#5c4527" stroke-width="1.2"/>
+  <g fill="#5c4527" opacity="0.45">${[0,1,2,3].map(rr=>`<rect x="86" y="${162+rr*30}" width="9" height="18" rx="4"/><rect x="105" y="${162+rr*30}" width="9" height="18" rx="4"/>`).join('')}</g>
+  <rect x="78" y="150" width="8" height="142" fill="#fff" opacity="0.14"/>
+  <rect x="72" y="288" width="56" height="6" fill="#6f5537"/>
+</svg>`,
+
+liberty:`<svg viewBox="0 0 200 300"><defs>
+  <linearGradient id="liA" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9fe0cf"/><stop offset=".5" stop-color="#6fc0ab"/><stop offset="1" stop-color="#3f8f7a"/></linearGradient></defs>
+  <!-- torch -->
+  <g><rect x="128" y="40" width="8" height="34" fill="#5aa591" transform="rotate(12 132 57)"/>
+    <path d="M138 26 Q132 14 126 26 Q130 20 132 30 Q134 20 138 26Z" fill="#ffd54f"/><ellipse cx="132" cy="24" rx="8" ry="6" fill="#ffe89a" opacity="0.8"/></g>
+  <!-- crown head -->
+  <g fill="url(#liA)" stroke="#3a7d6c" stroke-width="1">
+    <circle cx="96" cy="48" r="12"/>
+    <!-- crown spikes -->
+    <g>${Array.from({length:7}).map((_,i)=>{const a=(i-3)*22*Math.PI/180;return `<path d="M${96+Math.sin(a)*11} ${48-Math.cos(a)*11} l${Math.sin(a)*9} ${-Math.cos(a)*9} l3 3 z"/>`;}).join('')}</g>
+    <!-- robe -->
+    <path d="M88 60 L104 60 L120 150 L76 150 Z"/>
+    <path d="M76 150 L120 150 L126 176 L70 176 Z"/>
+    <!-- arm up holding torch -->
+    <path d="M104 66 L128 44 L134 52 L110 78 Z"/>
+    <!-- tablet arm -->
+    <rect x="70" y="96" width="18" height="14" rx="2" transform="rotate(-12 79 103)"/>
+  </g>
+  <!-- robe folds -->
+  <g stroke="#3a7d6c" stroke-width="1" opacity="0.4" fill="none"><path d="M96 66 L92 150 M104 70 L112 150 M88 90 L84 150"/></g>
+  <!-- pedestal -->
+  <rect x="66" y="176" width="68" height="34" fill="#cbb48a" stroke="#a68a5c"/>
+  <rect x="56" y="210" width="88" height="82" fill="#b39a6e" stroke="#8a7048"/>
+  <g fill="#8a7048" opacity="0.5"><rect x="62" y="226" width="76" height="2"/><rect x="62" y="250" width="76" height="2"/><rect x="62" y="274" width="76" height="2"/></g>
+  <!-- star fort hint -->
+  <path d="M56 292 L60 280 L72 280 L64 288 L68 300 L56 292 Z" fill="#9a835c" opacity="0.6"/>
+</svg>`,
+
+pyramid:`<svg viewBox="0 0 200 300"><defs>
+  <linearGradient id="pyL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#edcd8a"/><stop offset="1" stop-color="#d3a35c"/></linearGradient>
+  <linearGradient id="pyL2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ecca85"/><stop offset="1" stop-color="#cfa25c"/></linearGradient>
+  <linearGradient id="pyR" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b98d4d"/><stop offset="1" stop-color="#8f6530"/></linearGradient></defs>
+  <!-- shadow -->
+  <ellipse cx="100" cy="290" rx="96" ry="12" fill="#8a6a33" opacity="0.35"/>
+  <path d="M100 30 L18 288 L100 288 Z" fill="url(#pyL2)"/>
+  <path d="M100 30 L182 288 L100 288 Z" fill="url(#pyR)"/>
+  <!-- weathered block courses -->
+  <g stroke="#8a6a33" stroke-width="0.7" opacity="0.35">
+    ${Array.from({length:10}).map((_,i)=>{const y=60+i*23;const lx=100-(y-30)/258*82;const rx=100+(y-30)/258*82;return `<line x1="${lx}" y1="${y}" x2="${rx}" y2="${y}"/>`;}).join('')}
+    <line x1="100" y1="30" x2="100" y2="288"/>
+  </g>
+  <!-- cap stone lit -->
+  <path d="M100 30 L90 62 L110 62 Z" fill="#f6e4b0"/>
+  <!-- entrance -->
+  <path d="M92 288 L92 250 L108 250 L108 288 Z" fill="#5a3f1c"/>
+  <path d="M92 250 L100 240 L108 250 Z" fill="#6b4d24"/>
+</svg>`,
+
+taj:`<svg viewBox="0 0 200 300"><defs>
+  <linearGradient id="tjA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e3d9ca"/></linearGradient></defs>
+  <!-- platform -->
+  <rect x="16" y="250" width="168" height="42" fill="#e8dcc8" stroke="#cbbfa8"/>
+  <!-- minarets -->
+  <g fill="url(#tjA)" stroke="#cbbfa8" stroke-width="1">
+    <rect x="22" y="120" width="12" height="130" rx="6"/><circle cx="28" cy="116" r="6"/><path d="M28 104 l0 -8" stroke="#cbbfa8"/>
+    <rect x="166" y="120" width="12" height="130" rx="6"/><circle cx="172" cy="116" r="6"/><path d="M172 104 l0 -8" stroke="#cbbfa8"/>
+    <rect x="44" y="150" width="9" height="100" rx="4"/><circle cx="48.5" cy="147" r="4"/>
+    <rect x="147" y="150" width="9" height="100" rx="4"/><circle cx="151.5" cy="147" r="4"/>
+  </g>
+  <!-- main structure -->
+  <rect x="58" y="150" width="84" height="100" fill="url(#tjA)" stroke="#cbbfa8"/>
+  <!-- central dome -->
+  <path d="M100 40 Q66 84 66 120 Q66 150 100 150 Q134 150 134 120 Q134 84 100 40Z" fill="url(#tjA)" stroke="#cbbfa8"/>
+  <path d="M100 30 Q94 40 100 48 Q106 40 100 30Z" fill="#d4af37"/>
+  <!-- side domes -->
+  <path d="M72 150 Q72 132 84 132 Q96 132 96 150Z" fill="url(#tjA)" stroke="#cbbfa8"/>
+  <path d="M104 150 Q104 132 116 132 Q128 132 128 150Z" fill="url(#tjA)" stroke="#cbbfa8"/>
+  <!-- iwan arch -->
+  <path d="M84 250 L84 190 Q100 166 116 190 L116 250 Z" fill="#8a7660"/>
+  <path d="M90 250 L90 196 Q100 178 110 196 L110 250 Z" fill="#6f5f4a"/>
+  <!-- soft shading -->
+  <path d="M100 40 Q66 84 66 120 Q66 150 100 150 L100 40Z" fill="#000" opacity="0.05"/>
+</svg>`,
+
+opera:`<svg viewBox="0 0 200 300"><defs>
+  <linearGradient id="opA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dbe4ea"/></linearGradient>
+  <linearGradient id="opB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f8fb"/><stop offset="1" stop-color="#cfdbe3"/></linearGradient></defs>
+  <!-- podium -->
+  <path d="M12 268 L188 268 L180 292 L20 292 Z" fill="#8a7660"/>
+  <rect x="12" y="262" width="176" height="8" fill="#9c8b72"/>
+  <!-- sail shells, overlapping for depth -->
+  <path d="M30 268 Q40 150 96 268 Z" fill="url(#opB)" stroke="#c3ccd2"/>
+  <path d="M60 268 Q74 120 140 268 Z" fill="url(#opA)" stroke="#c3ccd2"/>
+  <path d="M104 268 Q126 108 182 268 Z" fill="url(#opB)" stroke="#c3ccd2"/>
+  <path d="M92 268 Q104 160 138 268 Z" fill="url(#opA)" stroke="#c3ccd2"/>
+  <path d="M20 268 Q30 200 64 268 Z" fill="url(#opA)" stroke="#c3ccd2"/>
+  <!-- shell rib highlights -->
+  <g stroke="#c3ccd2" stroke-width="0.8" opacity="0.6" fill="none">
+    <path d="M44 266 Q52 165 92 262"/><path d="M74 266 Q86 135 136 262"/><path d="M116 266 Q132 128 176 262"/>
+  </g>
+  <!-- shadow sides -->
+  <path d="M96 268 Q74 120 140 268 Z" fill="#000" opacity="0.04"/>
+</svg>`,
+
+colosseum:`<svg viewBox="0 0 200 300"><defs>
+  <linearGradient id="coA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ecd7ac"/><stop offset="1" stop-color="#c2a068"/></linearGradient>
+  <linearGradient id="coB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ecd7ac"/><stop offset="1" stop-color="#c4a56d"/></linearGradient></defs>
+  <ellipse cx="100" cy="288" rx="86" ry="12" fill="#8a6a33" opacity="0.3"/>
+  <path d="M22 140 Q100 108 178 140 L178 262 Q100 284 22 262 Z" fill="url(#coB)" stroke="#9c7c44" stroke-width="1.5"/>
+  <!-- broken top-right -->
+  <path d="M120 132 Q150 112 178 130 L178 156 Q150 138 128 156 Z" fill="#d8c39a" opacity="0.6"/>
+  <!-- arch rows -->
+  <g fill="#5c4527" opacity="0.5">
+    ${[0,1].map(row=>{const cy=152+row*34;return Array.from({length:9}).map((_,i)=>{const cx=30+i*17.5;const ry2=(cx-100)/100;return `<path d="M${cx-5} ${cy+9} L${cx-5} ${cy} Q${cx} ${cy-8} ${cx+5} ${cy} L${cx+5} ${cy+9} Z"/>`;}).join('');}).join('')}
+  </g>
+  <!-- lower rectangular openings -->
+  <g fill="#5c4527" opacity="0.5">${Array.from({length:9}).map((_,i)=>`<rect x="${28+i*17.5}" y="224" width="9" height="20" rx="1"/>`).join('')}</g>
+  <!-- top rim -->
+  <path d="M22 140 Q100 108 178 140" fill="none" stroke="#b89354" stroke-width="3"/>
+  <!-- left light -->
+  <path d="M22 140 Q60 122 60 140 L60 260 Q40 250 22 262 Z" fill="#fff" opacity="0.12"/>
+</svg>`,
+
+christ:`<svg viewBox="0 0 200 300"><defs>
+  <linearGradient id="chA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d2dae0"/><stop offset="1" stop-color="#a7b3bd"/></linearGradient></defs>
+  <!-- pedestal base -->
+  <path d="M64 292 L136 292 L118 210 L82 210 Z" fill="#8a99a6"/>
+  <rect x="80" y="200" width="40" height="14" fill="#9aa7b2"/>
+  <g fill="#7a8894" opacity="0.5"><rect x="84" y="230" width="32" height="2"/><rect x="82" y="252" width="36" height="2"/><rect x="80" y="274" width="40" height="2"/></g>
+  <!-- robe body -->
+  <g fill="url(#chA)" stroke="#93a0ac" stroke-width="1">
+    <path d="M86 100 L114 100 L120 205 L80 205 Z"/>
+    <!-- head -->
+    <circle cx="100" cy="50" r="12"/>
+    <rect x="94" y="60" width="12" height="16" rx="3"/>
+    <!-- outstretched arms -->
+    <rect x="34" y="80" width="132" height="15" rx="7"/>
+    <!-- hands -->
+    <rect x="30" y="80" width="10" height="18" rx="4"/><rect x="160" y="80" width="10" height="18" rx="4"/>
+  </g>
+  <!-- robe fold shading -->
+  <g stroke="#93a0ac" stroke-width="1" opacity="0.4" fill="none"><path d="M100 76 L100 205 M92 100 L88 205 M108 100 L112 205"/></g>
+  <path d="M86 100 L92 100 L86 205 L80 205Z" fill="#fff" opacity="0.2"/>
+</svg>`,
+
+burj:`<svg viewBox="0 0 200 300"><defs>
+  <linearGradient id="buA" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e6eef6"/><stop offset=".5" stop-color="#b6cbdd"/><stop offset="1" stop-color="#7f99af"/></linearGradient></defs>
+  <!-- tiered spire -->
+  <path d="M100 8 L104 60 L96 60 Z" fill="#9fb3c6"/>
+  <path d="M94 60 L106 60 L110 120 L90 120 Z" fill="url(#buA)"/>
+  <path d="M90 120 L110 120 L116 190 L84 190 Z" fill="url(#buA)"/>
+  <path d="M84 190 L116 190 L124 292 L76 292 Z" fill="url(#buA)"/>
+  <!-- setback wings -->
+  <path d="M84 190 L92 190 L96 292 L76 292 Z" fill="#9db3c8" opacity="0.7"/>
+  <path d="M108 190 L116 190 L124 292 L104 292 Z" fill="#8aa1b8" opacity="0.7"/>
+  <!-- vertical mullions -->
+  <g stroke="#6f8598" stroke-width="0.7" opacity="0.5">${Array.from({length:9}).map((_,i)=>`<line x1="${84+i*4}" y1="190" x2="${86+i*4}" y2="292"/>`).join('')}</g>
+  <g stroke="#6f8598" stroke-width="0.6" opacity="0.4">${Array.from({length:8}).map((_,i)=>`<line x1="76" y1="${200+i*11}" x2="124" y2="${200+i*11}"/>`).join('')}</g>
+  <!-- spire glow -->
+  <path d="M100 8 L100 60" stroke="#dbe8f4" stroke-width="1.5"/><circle cx="100" cy="9" r="2.5" fill="#ffe89a"/>
+  <!-- lit windows -->
+  <g fill="#bfe0ff" opacity="0.6">${Array.from({length:22}).map((_,i)=>`<rect x="${88+(i%4)*8}" y="${196+(i%9)*10}" width="4" height="6"/>`).join('')}</g>
+  <path d="M84 190 L90 190 L82 292 L76 292Z" fill="#fff" opacity="0.25"/>
+</svg>`,
+
+angkor:`<svg viewBox="0 0 200 300"><defs>
+  <linearGradient id="anA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9b083"/><stop offset="1" stop-color="#9a7f56"/></linearGradient>
+  <linearGradient id="anB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bda474"/><stop offset="1" stop-color="#8f7449"/></linearGradient></defs>
+  <ellipse cx="100" cy="290" rx="92" ry="10" fill="#6b5533" opacity="0.3"/>
+  <!-- base terraces -->
+  <rect x="18" y="250" width="164" height="42" fill="url(#anB)" stroke="#75603c" stroke-width="1"/>
+  <rect x="30" y="228" width="140" height="26" fill="url(#anA)" stroke="#75603c"/>
+  <g stroke="#75603c" opacity="0.4" stroke-width="1"><line x1="30" y1="240" x2="170" y2="240"/><line x1="18" y1="270" x2="182" y2="270"/></g>
+  <!-- gallery with small arched openings -->
+  <g fill="#5f4d30" opacity="0.55">${Array.from({length:7}).map((_,i)=>`<path d="M${34+i*20} 250 l0 -12 q6 -6 12 0 l0 12 Z"/>`).join('')}</g>
+  <!-- corner towers (lotus-bud) -->
+  ${[42,158].map(cx=>`<g>
+    <rect x="${cx-9}" y="150" width="18" height="80" fill="url(#anA)" stroke="#75603c"/>
+    <path d="M${cx-9} 150 Q${cx} 120 ${cx+9} 150 Z" fill="#b39a68"/>
+    <path d="M${cx-9} 150 Q${cx} 118 ${cx+9} 150 Z" fill="#c9b083" stroke="#75603c"/>
+    <path d="M${cx-5} 122 Q${cx} 104 ${cx+5} 122 Z" fill="#bda474"/>
+    <rect x="${cx-1.5}" y="98" width="3" height="10" fill="#8f7449"/>
+  </g>`).join('')}
+  <!-- central tower (tallest lotus) -->
+  <rect x="86" y="120" width="28" height="115" fill="url(#anA)" stroke="#75603c" stroke-width="1.2"/>
+  <path d="M86 120 Q100 78 114 120 Z" fill="#c9b083" stroke="#75603c"/>
+  <path d="M90 96 Q100 66 110 96 Z" fill="#bda474" stroke="#75603c"/>
+  <path d="M94 76 Q100 54 106 76 Z" fill="#c9b083"/>
+  <rect x="98" y="46" width="4" height="14" fill="#8f7449"/><circle cx="100" cy="45" r="3" fill="#d8b45f"/>
+  <!-- tiers lines on central -->
+  <g stroke="#75603c" opacity="0.4" stroke-width="1"><line x1="86" y1="150" x2="114" y2="150"/><line x1="86" y1="180" x2="114" y2="180"/><line x1="86" y1="210" x2="114" y2="210"/></g>
+  <!-- central doorway -->
+  <path d="M92 235 l0 -22 q8 -8 16 0 l0 22 Z" fill="#4a3a22"/>
+  <!-- left light -->
+  <rect x="86" y="120" width="6" height="115" fill="#fff" opacity="0.12"/>
+</svg>`,
+
+pagoda:`<svg viewBox="0 0 200 300"><defs>
+  <linearGradient id="pgRoof" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4656"/><stop offset="1" stop-color="#26303c"/></linearGradient>
+  <linearGradient id="pgWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b23c2e"/><stop offset="1" stop-color="#8f2c20"/></linearGradient></defs>
+  <ellipse cx="100" cy="290" rx="70" ry="9" fill="#5a3a2a" opacity="0.3"/>
+  <!-- finial -->
+  <rect x="98" y="14" width="4" height="20" fill="#d8b45f"/><circle cx="100" cy="13" r="4" fill="#e8c26a"/>
+  <g stroke="#d8b45f" stroke-width="1"><circle cx="100" cy="24" r="5" fill="none"/></g>
+  <!-- 5 tiers, each = red body + wide upturned roof, shrinking upward -->
+  ${[0,1,2,3,4].map(i=>{
+    const y=44+i*44;           // roof baseline for tier i
+    const halfW=26+i*11;       // widening downward
+    const bodyW=30+i*9;
+    return `<g>
+      <!-- roof -->
+      <path d="M${100-halfW} ${y} Q100 ${y-16} ${100+halfW} ${y} Q${100+halfW-6} ${y+8} 100 ${y+9} Q${100-halfW+6} ${y+8} ${100-halfW} ${y} Z" fill="url(#pgRoof)" stroke="#1c242e" stroke-width="1"/>
+      <!-- upturned eaves tips -->
+      <path d="M${100-halfW} ${y} q-6 -2 -9 -6" stroke="#1c242e" stroke-width="2" fill="none"/>
+      <path d="M${100+halfW} ${y} q6 -2 9 -6" stroke="#1c242e" stroke-width="2" fill="none"/>
+      <!-- body below roof -->
+      <rect x="${100-bodyW/2}" y="${y+8}" width="${bodyW}" height="30" fill="url(#pgWall)" stroke="#6f2318" stroke-width="1"/>
+      <!-- railing -->
+      <rect x="${100-bodyW/2-2}" y="${y+36}" width="${bodyW+4}" height="4" fill="#7a2a1e"/>
+      <!-- window -->
+      <rect x="${100-6}" y="${y+14}" width="12" height="16" rx="1" fill="#2a1a12" opacity="0.6"/>
+      <g stroke="#e8c26a" opacity="0.4" stroke-width="0.8"><line x1="${100-bodyW/2+4}" y1="${y+8}" x2="${100-bodyW/2+4}" y2="${y+36}"/><line x1="${100+bodyW/2-4}" y1="${y+8}" x2="${100+bodyW/2-4}" y2="${y+36}"/></g>
+    </g>`;
+  }).join('')}
+  <!-- ground floor door -->
+  <path d="M92 288 l0 -26 q8 -6 16 0 l0 26 Z" fill="#3a1c12"/>
+</svg>`
+};
+
+/* ============================================================ ANGKOR WAT — Siem Reap (jungle, golden morning) ============================================================ */
+function bg_angkor(){
+  const r=rng(33);
+  // jungle tree line
+  let jungle='',x=-20;
+  while(x<1020){const h=40+r()*50;jungle+=`<ellipse cx="${x}" cy="${HZ-h/2}" rx="${30+r()*24}" ry="${h}" fill="#2f5a34" opacity="0.8"/>`;x+=34+r()*20;}
+  let palms='';for(let i=0;i<5;i++){const px=90+i*200+r()*60;palms+=`<g><rect x="${px-3}" y="${HZ-90}" width="6" height="90" fill="#6b5136"/>${Array.from({length:6}).map((_,k)=>`<path d="M${px} ${HZ-90} q${(k-3)*16} -6 ${(k-3)*26} 14" stroke="#3f6b3a" stroke-width="4" fill="none"/>`).join('')}</g>`;}
+  return {
+    sky:`<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2c56a"/><stop offset="45%" stop-color="#f7d79b"/><stop offset="100%" stop-color="#fbeccb"/></linearGradient>`,
+    body:`${clouds(6,3,50,150,0.4)}${vBirds(15,4)}
+      <circle cx="800" cy="120" r="44" fill="#fff6dc" opacity="0.85"/>
+      <g opacity="0.85">${jungle}</g>
+      <g>${palms}</g>
+      <!-- moat water -->
+      <rect x="0" y="${HZ}" width="1000" height="${600-HZ}" fill="#6f96a0"/>
+      <rect x="340" y="${HZ+6}" width="320" height="${600-HZ-6}" fill="#5c8792"/>
+      <g stroke="#bcd6dc" stroke-width="1.5" opacity="0.35" fill="none">${Array.from({length:5}).map((_,i)=>`<path d="M0 ${HZ+18+i*18} q80 -5 160 0 t160 0 t160 0 t160 0 t160 0 t160 0"/>`).join('')}</g>
+      <!-- causeway to temple -->
+      <rect x="430" y="${HZ-4}" width="140" height="24" fill="#a08a5f" rx="2"/>
+      <rect x="0" y="${HZ}" width="1000" height="10" fill="#5f4d30"/>`
+  };
+}
+
+/* ============================================================ JAPANESE PAGODA — Kyoto (cherry blossom, Fuji) ============================================================ */
+function bg_pagoda(){
+  const r=rng(46);
+  // Mount Fuji
+  const fuji=`<path d="M540 ${HZ} L760 ${HZ-190} L980 ${HZ} Z" fill="#8aa2c4" opacity="0.7"/><path d="M720 ${HZ-150} L760 ${HZ-190} L800 ${HZ-150} Q760 ${HZ-140} 720 ${HZ-150}Z" fill="#fff" opacity="0.9"/>`;
+  // cherry trees
+  let cherry='';for(let i=0;i<7;i++){const px=60+i*140+r()*40;cherry+=`<g><rect x="${px-4}" y="${HZ-56}" width="8" height="56" fill="#5a4030"/><circle cx="${px}" cy="${HZ-66}" r="${24+r()*12}" fill="#f7b8d0"/><circle cx="${px-16}" cy="${HZ-56}" r="16" fill="#f4a8c4"/><circle cx="${px+16}" cy="${HZ-58}" r="18" fill="#f9c4d8"/></g>`;}
+  // torii gate in distance
+  const torii=`<g fill="#c0392b" opacity="0.9"><rect x="150" y="${HZ-70}" width="6" height="70"/><rect x="196" y="${HZ-70}" width="6" height="70"/><rect x="138" y="${HZ-74}" width="76" height="7" rx="2"/><rect x="146" y="${HZ-62}" width="60" height="5"/></g>`;
+  return {
+    sky:`<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fc4e6"/><stop offset="50%" stop-color="#bfe0f0"/><stop offset="100%" stop-color="#e9f4fb"/></linearGradient>`,
+    body:`${clouds(7,3,50,140,0.5)}${vBirds(18,4)}
+      ${fuji}
+      ${torii}
+      <g>${cherry}</g>
+      <!-- ground -->
+      <rect x="0" y="${HZ}" width="1000" height="${600-HZ}" fill="#7d9268"/>
+      <rect x="0" y="${HZ}" width="1000" height="12" fill="#63764f"/>
+      <!-- stone path + lanterns -->
+      <rect x="440" y="${HZ}" width="120" height="${600-HZ}" fill="#b9b09a" opacity="0.7"/>
+      ${[400,600].map(lx=>`<g><rect x="${lx-5}" y="${HZ+14}" width="10" height="20" fill="#6b6152"/><path d="M${lx-9} ${HZ+14} L${lx+9} ${HZ+14} L${lx+5} ${HZ+6} L${lx-5} ${HZ+6}Z" fill="#7a7060"/></g>`).join('')}
+      <!-- pink petals -->
+      <g fill="#f7b8d0" opacity="0.6">${Array.from({length:14}).map(()=>`<circle cx="${(r()*1000).toFixed(0)}" cy="${(HZ-40+r()*80).toFixed(0)}" r="2"/>`).join('')}</g>`
+  };
+}
+
+/* ============================================================ MONUMENT REGISTRY (v2) ============================================================ */
+const MONUMENTS = [
+  {id:'eiffel',   name:'Eiffel Tower',      city:'Paris',       art:MON2.eiffel,    bg:()=>bg_paris(false), accent:'#b8975f',
+    perk:{bonus:'+15% gold (tourist city)', malus:'Some birds drop twice', goldMult:1.15, doublePoo:true}},
+  {id:'bigben',   name:'Big Ben',           city:'London',      art:MON2.bigben,    bg:()=>bg_london(),     accent:'#c9a45e',
+    perk:{bonus:'-15% shop prices (English market)', malus:'English Fog (reduced visibility)', shopMult:0.85, fog:'#9aa7b0'}},
+  {id:'liberty',  name:'Statue of Liberty', city:'New York',    art:MON2.liberty,   bg:()=>bg_newyork(),    accent:'#6fc0ab',
+    perk:{bonus:'+20% gold (American dream)', malus:'More birds (big city)', goldMult:1.20, birdMult:1.3}},
+  {id:'pyramid',  name:'Pyramids of Giza',  city:'Cairo',       art:MON2.pyramid,   bg:()=>bg_cairo(),      accent:'#d3a35c',
+    perk:{bonus:'+25% gold (pharaoh treasures)', malus:'Sandstorm: +20% dirt per dropping', goldMult:1.25, dirtMult:1.2}},
+  {id:'taj',      name:'Taj Mahal',         city:'Agra',        art:MON2.taj,       bg:()=>bg_agra(),       accent:'#e6ddd0',
+    perk:{bonus:'-20% dirt per dropping (smooth marble)', malus:'More birds', dirtMult:0.8, birdMult:1.3}},
+  {id:'opera',    name:'Sydney Opera House',city:'Sydney',      art:MON2.opera,     bg:()=>bg_sydney(),     accent:'#dfe6ea',
+    perk:{bonus:'+15% gold', malus:'Faster birds', goldMult:1.15, speedMult:1.25}},
+  {id:'colosseum',name:'Colosseum',         city:'Rome',        art:MON2.colosseum, bg:()=>bg_rome(),       accent:'#c2a068',
+    perk:{bonus:'Roman rigor: -20% dirt & slower cleanliness loss', malus:'Many more birds', dirtMult:0.8, birdMult:1.5}},
+  {id:'christ',   name:'Christ the Redeemer',city:'Rio',        art:MON2.christ,    bg:()=>bg_rio(),        accent:'#c3ccd2',
+    perk:{bonus:'Slower birds & +25% gold (commanding height)', malus:'Canopy (reduced visibility)', goldMult:1.25, speedMult:0.75, fog:'#2f6b3a'}},
+  {id:'angkor',   name:'Angkor Wat',        city:'Siem Reap',   art:MON2.angkor,    bg:()=>bg_angkor(),     accent:'#c9b083',
+    perk:{bonus:'+25% gold (Khmer treasure)', malus:'Jungle swarm (far more birds)', goldMult:1.25, birdMult:1.6}},
+  {id:'pagoda',   name:'Japanese Pagoda',   city:'Kyoto',       art:MON2.pagoda,    bg:()=>bg_pagoda(),     accent:'#b23c2e',
+    perk:{bonus:'Serenity: -50% dirt per dropping', malus:'+40% bird speed', dirtMult:0.5, speedMult:1.4}}
+];
+/* Background images (drop your generated art here; SVG scene is the fallback). */
+const IMG_DIR='images/';
+MONUMENTS.forEach(m=>{ m.imgMobile=IMG_DIR+'bg_'+m.id+'_mobile.webp'; m.imgDesktop=IMG_DIR+'bg_'+m.id+'_desktop.webp'; });
+const MONMAP = Object.fromEntries(MONUMENTS.map(m=>[m.id,m]));
+/* current world's perk (bonus/malus), with safe defaults */
+function perk(){
+  const p=(S&&MONMAP[S.monId]&&MONMAP[S.monId].perk)||{};
+  return {goldMult:p.goldMult||1, birdMult:p.birdMult||1, speedMult:p.speedMult||1,
+          dirtMult:p.dirtMult||1, shopMult:p.shopMult||1, doublePoo:!!p.doublePoo,
+          fog:p.fog||null, bonus:p.bonus||'', malus:p.malus||''};
+}
+
+/* ============================================================
+   MONUMENT HIT-BOXES — droppings can only land INSIDE these
+   polygons (normalized 0..1 over the monument box). Traced to
+   each monument silhouette (viewBox 200x300).
+   ============================================================ */
+const HITBOX={
+  eiffel:[[.50,.06],[.55,.35],[.63,.64],[.78,.93],[.60,.93],[.60,.80],[.40,.80],[.40,.93],[.22,.93],[.37,.64],[.45,.35]],
+  bigben:[[.37,.19],[.50,.06],[.63,.19],[.61,.42],[.60,.90],[.40,.90],[.39,.42]],
+  liberty:[[.45,.05],[.55,.05],[.57,.45],[.60,.46],[.60,.57],[.68,.58],[.68,.90],[.32,.90],[.32,.58],[.40,.57],[.40,.46],[.43,.45]],
+  pyramid:[[.50,.12],[.86,.90],[.14,.90]],
+  taj:[[.32,.30],[.36,.12],[.50,.12],[.64,.30],[.64,.46],[.86,.78],[.86,.90],[.14,.90],[.14,.78],[.36,.46]],
+  opera:[[.12,.90],[.22,.52],[.35,.80],[.42,.44],[.64,.78],[.52,.40],[.86,.80],[.88,.90]],
+  colosseum:[[.18,.47],[.50,.37],[.82,.47],[.82,.84],[.50,.90],[.18,.84]],
+  christ:[[.46,.20],[.54,.20],[.54,.29],[.76,.30],[.76,.34],[.56,.37],[.68,.94],[.32,.94],[.44,.37],[.24,.34],[.24,.30],[.46,.29]],
+  angkor:[[.43,.40],[.43,.26],[.50,.18],[.57,.26],[.57,.40],[.78,.50],[.91,.83],[.91,.97],[.09,.97],[.09,.83],[.22,.50]],
+  pagoda:[[.44,.15],[.56,.15],[.60,.30],[.66,.45],[.72,.62],[.80,.80],[.66,.97],[.34,.97],[.20,.80],[.28,.62],[.34,.45],[.40,.30]]
+};
+function pointInPoly(u,v,poly){
+  let inside=false;
+  for(let i=0,j=poly.length-1;i<poly.length;j=i++){
+    const xi=poly[i][0],yi=poly[i][1],xj=poly[j][0],yj=poly[j][1];
+    if(((yi>v)!==(yj>v)) && (u < (xj-xi)*(v-yi)/(yj-yi)+xi)) inside=!inside;
+  }
+  return inside;
+}
+function randomInMonument(id){
+  const poly=HITBOX[id]||[[.2,.2],[.8,.2],[.8,.9],[.2,.9]];
+  for(let k=0;k<40;k++){
+    const u=Math.random(),v=.06+Math.random()*.9;
+    if(pointInPoly(u,v,poly))return {u,v};
+  }
+  let cu=0,cv=0;poly.forEach(p=>{cu+=p[0];cv+=p[1];});return {u:cu/poly.length,v:cv/poly.length};
+}
+
+function sceneThumb(m){
+  const s=m.bg();
+  return `<svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"><defs>${s.sky}${s.extraDefs||''}</defs><rect width="1000" height="600" fill="url(#sky)"/>${s.body}<g transform="translate(400 210)">${m.art}</g></svg>`;
+}
+
+function buildScene(m){
+  const s=m.bg();
+  const bgEl=document.getElementById('bgScene');
+  // SVG scene is drawn first (instant, and it's the fallback)
+  bgEl.innerHTML=`<svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><defs>${s.sky}${s.extraDefs||''}</defs><rect width="1000" height="600" fill="url(#sky)"/>${s.body}</svg>`;
+  document.getElementById('monumentShape').innerHTML=m.art;
+  // Try to load the real artwork image; if present it covers the SVG. If missing, SVG stays.
+  const portrait=window.innerHeight>=window.innerWidth;
+  const src=portrait?m.imgMobile:m.imgDesktop;
+  const img=new Image();
+  img.onload=()=>{
+    bgEl.style.backgroundImage=`url("${src}")`;
+    bgEl.style.backgroundSize='cover';
+    bgEl.style.backgroundPosition='center bottom';
+    bgEl.classList.add('has-img');
+    // hide the monument SVG when a full-scene image is used (monument is inside the image)
+    document.getElementById('monumentShape').style.opacity='0';
+  };
+  img.onerror=()=>{ bgEl.classList.remove('has-img'); document.getElementById('monumentShape').style.opacity=''; };
+  img.src=src;
+  // fog / canopy veil
+  const veil=document.getElementById('fogVeil');
+  const fog=(m.perk&&m.perk.fog)||null;
+  if(fog){
+    const c=hexToRgb(fog);
+    veil.style.background=`linear-gradient(180deg, rgba(${c},0.8) 0%, rgba(${c},0.55) 28%, rgba(${c},0) 50%)`;
+    veil.classList.add('on');
+  }else{
+    veil.classList.remove('on');veil.style.background='';
+  }
+}
+function hexToRgb(h){h=h.replace('#','');const n=parseInt(h,16);return `${(n>>16)&255},${(n>>8)&255},${n&255}`;}
+
+/* ============================================================
+   GAME STATE
+   ============================================================ */
+const F=document.getElementById('gameFrame');
+const layers={birds:document.getElementById('birdsLayer'),proj:document.getElementById('projectilesLayer'),
+  fx:document.getElementById('fxLayer'),agents:document.getElementById('agentsLayer'),shop:document.getElementById('shopLayer')};
+
+const STORE_KEY='pooDefenseBest_v2';
+const SAFE_LS={get(k){try{return localStorage.getItem(k);}catch(e){return null;}},set(k,v){try{localStorage.setItem(k,v);}catch(e){}}};
+let bests={};try{bests=JSON.parse(SAFE_LS.get(STORE_KEY)||'{}');}catch(e){bests={};}
+
+let S=null;
+let running=false, rafId=null, lastT=0, spawnAcc=0, musicOn=true, paused=false;
+
+/* ============================================================
+   BIRDS — detailed SVG, each with its own look.
+   viewBox 0 0 100 70, facing RIGHT by default.
+   Wing is a separate <g class="wg"> flapped via CSS.
+   ============================================================ */
+const BIRD_SVG = {
+
+/* PIGEON — small, grey, plump, green neck sheen */
+pigeon:`<svg viewBox="0 0 100 70" class="bsvg">
+  <ellipse cx="52" cy="60" rx="20" ry="4" fill="#000" opacity="0.12"/>
+  <!-- tail -->
+  <path d="M14 40 L2 34 L4 46 L16 46 Z" fill="#5f6f80"/>
+  <!-- body -->
+  <ellipse cx="50" cy="40" rx="26" ry="17" fill="#8493a3"/>
+  <path d="M50 24 Q74 24 76 40 Q74 52 50 54 Q40 40 50 24Z" fill="#98a6b5"/>
+  <!-- neck sheen -->
+  <ellipse cx="66" cy="30" rx="8" ry="6" fill="#5fae8f" opacity="0.7"/>
+  <ellipse cx="68" cy="33" rx="5" ry="4" fill="#a76fae" opacity="0.5"/>
+  <!-- head -->
+  <circle cx="74" cy="27" r="11" fill="#7d8c9c"/>
+  <!-- beak -->
+  <path d="M84 27 l10 -2 l-1 5 l-9 1 Z" fill="#3a4450"/>
+  <circle cx="83" cy="24" r="1.6" fill="#e8b04a"/>
+  <!-- eye -->
+  <circle cx="79" cy="24" r="3" fill="#fff"/><circle cx="80" cy="24" r="1.8" fill="#1a1f26"/>
+  <!-- wing (animated) -->
+  <g class="wg" style="transform-origin:46px 34px">
+    <path d="M46 34 Q30 14 12 22 Q26 30 34 40 Q40 42 46 40Z" fill="#63707f"/>
+    <path d="M46 34 Q34 20 20 24" fill="none" stroke="#4f5b68" stroke-width="1.5"/>
+  </g>
+</svg>`,
+
+/* SEAGULL — white, slim, orange beak */
+seagull:`<svg viewBox="0 0 100 70" class="bsvg">
+  <ellipse cx="52" cy="60" rx="20" ry="4" fill="#000" opacity="0.1"/>
+  <path d="M16 40 L3 36 L5 46 L18 46 Z" fill="#d7dee5"/>
+  <ellipse cx="50" cy="40" rx="27" ry="15" fill="#fbfdff"/>
+  <path d="M52 26 Q76 26 78 40 Q76 51 52 52 Q44 40 52 26Z" fill="#eef3f7"/>
+  <circle cx="76" cy="28" r="10" fill="#ffffff"/>
+  <path d="M85 29 l11 1 l-3 4 l-8 -1 Z" fill="#f5a623"/>
+  <path d="M85 33 l8 1 l-2 2 l-6 -1Z" fill="#d97b1a"/>
+  <circle cx="80" cy="26" r="2.8" fill="#fff" stroke="#1a1f26" stroke-width="0.6"/><circle cx="80.5" cy="26" r="1.6" fill="#1a1f26"/>
+  <!-- grey wingtip -->
+  <g class="wg" style="transform-origin:46px 36px">
+    <path d="M46 36 Q28 16 8 20 Q24 30 32 40 Q40 44 46 41Z" fill="#eef3f7"/>
+    <path d="M14 22 Q22 26 30 34" fill="none" stroke="#9aa7b3" stroke-width="3"/>
+  </g>
+</svg>`,
+
+/* EAGLE — bald eagle: white head, brown body, yellow hooked beak, fast */
+eagle:`<svg viewBox="0 0 100 70" class="bsvg">
+  <ellipse cx="52" cy="62" rx="24" ry="4" fill="#000" opacity="0.12"/>
+  <!-- fanned tail -->
+  <path d="M10 42 L-2 34 L0 40 L-2 48 L12 48 Z" fill="#f4f4f0"/>
+  <!-- brown body -->
+  <ellipse cx="50" cy="42" rx="30" ry="16" fill="#4a3526"/>
+  <path d="M52 28 Q80 28 82 44 Q78 54 52 56 Q44 42 52 28Z" fill="#5b4230"/>
+  <!-- feather texture -->
+  <g stroke="#3a291c" stroke-width="1" opacity="0.5"><path d="M40 34 q6 4 0 10 M52 32 q6 5 0 11 M64 34 q5 4 0 9"/></g>
+  <!-- white head -->
+  <circle cx="76" cy="30" r="12" fill="#fbfbf7"/>
+  <path d="M64 34 Q70 40 78 38" fill="#fbfbf7"/>
+  <!-- yellow hooked beak -->
+  <path d="M87 28 q10 -1 11 4 q-1 3 -5 4 q3 -4 -1 -6 q-3 -1 -5 0Z" fill="#f5b301"/>
+  <path d="M92 33 q3 1 4 4 q-3 0 -5 -2Z" fill="#d99400"/>
+  <!-- fierce eye -->
+  <circle cx="80" cy="27" r="3.4" fill="#ffd24a"/><circle cx="81" cy="27" r="2" fill="#1a1206"/>
+  <path d="M74 24 Q80 22 85 25" stroke="#caa020" stroke-width="1.4" fill="none"/>
+  <!-- big wing -->
+  <g class="wg" style="transform-origin:48px 36px">
+    <path d="M48 36 Q26 10 2 16 Q22 26 30 40 Q40 46 48 42Z" fill="#402d20"/>
+    <g stroke="#2e2015" stroke-width="1.4" opacity="0.6"><path d="M10 18 Q20 24 30 34 M18 16 Q26 24 34 33 M26 15 Q32 24 38 32"/></g>
+  </g>
+</svg>`,
+
+/* ALBATROSS — big, very long wings, white */
+albatross:`<svg viewBox="0 0 120 70" class="bsvg">
+  <ellipse cx="60" cy="62" rx="28" ry="4" fill="#000" opacity="0.1"/>
+  <path d="M22 42 L8 38 L10 46 L24 47 Z" fill="#d2dae2"/>
+  <ellipse cx="58" cy="42" rx="30" ry="14" fill="#fcfeff"/>
+  <path d="M60 30 Q86 30 88 43 Q84 52 60 53 Q52 42 60 30Z" fill="#eef3f8"/>
+  <circle cx="86" cy="32" r="10" fill="#ffffff"/>
+  <path d="M95 33 l14 1 l-3 5 l-11 -1Z" fill="#f0b64a"/>
+  <path d="M95 37 l10 1 l-2 3 l-8 -1Z" fill="#d38f2a"/>
+  <circle cx="90" cy="30" r="2.8" fill="#fff" stroke="#1a1f26" stroke-width="0.6"/><circle cx="90.5" cy="30" r="1.6" fill="#1a1f26"/>
+  <!-- extra-long wing with dark tips -->
+  <g class="wg" style="transform-origin:54px 38px">
+    <path d="M54 38 Q26 8 -8 16 Q6 20 20 28 Q34 36 44 40 Q50 43 54 41Z" fill="#f2f6fa"/>
+    <path d="M-8 16 Q4 18 16 24" stroke="#40474f" stroke-width="4" fill="none"/>
+    <path d="M20 28 Q30 32 40 38" stroke="#c3ccd4" stroke-width="2" fill="none"/>
+  </g>
+</svg>`,
+
+/* CROW — glossy black, red eye, gold-thief */
+crow:`<svg viewBox="0 0 100 70" class="bsvg">
+  <ellipse cx="52" cy="60" rx="20" ry="4" fill="#000" opacity="0.14"/>
+  <path d="M12 40 L0 33 L2 42 L1 50 L16 48 Z" fill="#12161c"/>
+  <ellipse cx="50" cy="41" rx="27" ry="16" fill="#1b2129"/>
+  <path d="M52 27 Q78 27 80 42 Q76 53 52 54 Q45 41 52 27Z" fill="#262d37"/>
+  <!-- blue-black sheen -->
+  <ellipse cx="60" cy="34" rx="10" ry="6" fill="#3a4a6a" opacity="0.4"/>
+  <circle cx="76" cy="29" r="11" fill="#20272f"/>
+  <path d="M86 28 l12 -1 l-2 5 l-10 1Z" fill="#0e1116"/>
+  <!-- red thief eye -->
+  <circle cx="80" cy="26" r="3.4" fill="#ff5a5a"/><circle cx="81" cy="26" r="1.8" fill="#5c0d0d"/>
+  <g class="wg" style="transform-origin:46px 35px">
+    <path d="M46 35 Q26 12 4 18 Q22 28 30 40 Q40 45 46 41Z" fill="#161b22"/>
+    <g stroke="#0a0d12" stroke-width="1.4" opacity="0.7"><path d="M10 20 Q20 26 30 36 M18 18 Q26 26 34 34"/></g>
+  </g>
+</svg>`
+};
+
+const BIRDS={
+  pigeon:{cls:'t-pigeon',hp:1,speed:1.7,reward:5,dropChance:.5,score:10},
+  seagull:{cls:'t-seagull',hp:1,speed:2.1,reward:7,dropChance:.55,score:14},
+  eagle:{cls:'t-eagle',hp:2,speed:2.8,reward:16,dropChance:.7,score:28},
+  albatross:{cls:'t-albatross',hp:3,speed:1.5,reward:18,dropChance:.65,score:30},
+  crow:{cls:'t-crow',hp:1,speed:2.4,reward:0,dropChance:0,score:18,thief:true}
+};
+
+/* Arsenal — every item is TIMED. dur = seconds active. */
+const SHOP=[
+  {id:'shotgun',name:'Shotgun',desc:'Center shot plus 4 blasts around it.',price:120,dur:20,
+    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#a3e635" stroke-width="2"><circle cx="12" cy="12" r="2.5" fill="#a3e635"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>'},
+  {id:'dca',name:'AA Battery',desc:'Auto anti-bird cannon. Fires on its own.',price:140,dur:22,
+    icon:'<svg viewBox="0 0 24 24" fill="#f59e0b"><rect x="10" y="12" width="4" height="10"/><path d="M12 12 20 5" stroke="#f59e0b" stroke-width="3"/><circle cx="12" cy="12" r="3.5"/><path d="M6 22h12" stroke="#f59e0b" stroke-width="2"/></svg>'},
+  {id:'agent',name:'Cleaner',desc:'Auto-scrubs droppings off the monument.',price:90,dur:22,
+    icon:'<svg viewBox="0 0 24 24" fill="#38bdf8"><circle cx="12" cy="7" r="4"/><path d="M5 22c0-4 3-7 7-7s7 3 7 7z"/></svg>'},
+  {id:'shield',name:'Shield',desc:'Blocks all droppings.',price:100,dur:12,
+    icon:'<svg viewBox="0 0 24 24" fill="#38bdf8"><path d="M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6z"/></svg>'},
+  {id:'bomb',name:'Air Strike',desc:'Wipes every bird on screen. Instant.',price:150,instant:true,
+    icon:'<svg viewBox="0 0 24 24" fill="#ef4444"><circle cx="11" cy="15" r="7"/><path d="M15 6l3-3 2 2-3 3" stroke="#ef4444" stroke-width="2"/></svg>'}
+];
+
+function nowMon(){return MONMAP[S.monId];}
+function frameRect(){return F.getBoundingClientRect();}
+function monRect(){return document.getElementById('monumentShape').getBoundingClientRect();}
+
+/* ---------- SESSION ---------- */
+function initSession(monId){
+  clearActiveItems();
+  S={monId,score:0,coins:0,clean:100,wave:0,queue:[],spawned:0,
+     birds:[],
+     shieldBlock:false,agentActive:false,dcaActive:false,shotgunActive:false,
+     items:{},            // id -> {until, dur}
+     phase:'idle',        // idle | buffer | overlay | fighting
+     phaseUntil:0,fightUntil:0,
+     lastFire:0,fireDelay:110,
+     goldMult:1,reviveUsed:false,
+     dirtCount:0};        // accumulated droppings
+  buildScene(nowMon());
+  document.getElementById('shield').classList.remove('active');
+  layers.birds.innerHTML='';layers.fx.innerHTML='';layers.agents.innerHTML='';
+  document.getElementById('activeItems').innerHTML='';
+  const x2=document.getElementById('x2Btn');if(x2){x2.classList.remove('x2-active');x2.disabled=false;x2.style.opacity='';}
+  clearStains();
+  renderShopBuilding();
+  syncHUD();
+}
+function clearActiveItems(){ if(S&&S._agentIv)clearInterval(S._agentIv); if(S&&S._dcaIv)clearInterval(S._dcaIv); }
+function clearStains(){ document.querySelectorAll('.stain').forEach(s=>s.remove()); }
+
+function startGame(){hideAll();initSession(S?S.monId:MONUMENTS[0].id);beginRun();}
+
+/* Wave labels (English) */
+const BIRD_NAMES={pigeon:'Pigeons',seagull:'Seagulls',eagle:'Eagles',albatross:'Albatrosses',crow:'Gold-thief crows'};
+
+function waveComp(w){
+  const count=Math.round((8+w*3)*perk().birdMult);const out=[];
+  for(let i=0;i<count;i++){
+    let pool=['pigeon','pigeon','seagull'];
+    if(w>=2)pool.push('seagull','crow');
+    if(w>=3)pool.push('crow','eagle');
+    if(w>=4)pool.push('albatross','eagle');
+    if(w>=5)pool.push('eagle','eagle','seagull');
+    if(w>=7)pool.push('eagle','albatross');
+    out.push(pool[Math.floor(Math.random()*pool.length)]);
+  }
+  return out;
+}
+
+/* ---------- RUN LOOP (never blocks) ----------
+   Phases: buffer(2s empty) -> overlay(announce) -> buffer(2s empty) -> fighting(spawn+fight) -> repeat
+*/
+function beginRun(){
+  Audio2.init();Audio2.resume();
+  if(musicOn&&!Audio2.musicOn)Audio2.startMusic();
+  showPerkBanner();
+  running=true;lastT=performance.now();spawnAcc=0;
+  queueNextWave(0);                 // start first wave prep immediately
+  cancelAnimationFrame(rafId);rafId=requestAnimationFrame(loop);
+}
+function showPerkBanner(){
+  const m=MONMAP[S.monId];if(!m||!m.perk)return;
+  document.getElementById('pbTitle').textContent=m.name;
+  document.getElementById('pbBonus').textContent=m.perk.bonus||'—';
+  document.getElementById('pbMalus').textContent=m.perk.malus||'—';
+  const b=document.getElementById('perkBanner');
+  b.classList.add('show');
+  clearTimeout(b._t);b._t=setTimeout(()=>b.classList.remove('show'),3200);
+}
+function queueNextWave(preDelay){
+  // pre-buffer with no birds
+  S.phase='buffer';
+  S.phaseUntil=performance.now()+ (preDelay!=null?preDelay:2000);
+  S._pendingWave=true;
+}
+function showWaveOverlay(){
+  S.wave++;
+  S.queue=waveComp(S.wave);S.spawned=0;
+  const counts={};S.queue.forEach(k=>counts[k]=(counts[k]||0)+1);
+  const lines=Object.keys(counts).map(k=>`${counts[k]} ${BIRD_NAMES[k]}`).join(' · ');
+  document.getElementById('woNum').textContent='Wave '+S.wave;
+  document.getElementById('woCount').textContent=S.queue.length+' birds inbound';
+  document.getElementById('woList').textContent=lines;
+  const ov=document.getElementById('waveOverlay');
+  ov.classList.add('show');
+  syncHUD();
+  // overlay visible ~2s, then post-buffer 2s, then fight
+  S.phase='overlay';S.phaseUntil=performance.now()+2000;
+}
+
+function loop(t){
+  if(!running)return;
+  const dt=Math.min(50,t-lastT);lastT=t;
+  const fr=frameRect();
+  const now=performance.now();
+
+  // ---- phase machine ----
+  if(S.phase==='buffer'){
+    if(now>=S.phaseUntil){
+      if(S._pendingWave){S._pendingWave=false;showWaveOverlay();}
+      else{S.phase='fighting';spawnAcc=0;}
+    }
+  }else if(S.phase==='overlay'){
+    if(now>=S.phaseUntil){
+      document.getElementById('waveOverlay').classList.remove('show');
+      // post-overlay empty buffer
+      S.phase='buffer';S.phaseUntil=now+2000;S._pendingWave=false;
+    }
+  }else if(S.phase==='fighting'){
+    spawnAcc+=dt;
+    const interval=Math.max(180,520-S.wave*32);
+    if(S.spawned<S.queue.length && spawnAcc>=interval){spawnAcc=0;spawnBird(S.queue[S.spawned++],fr);}
+
+    // once all birds are out, give a combat window; then survivors fly off
+    if(S.spawned>=S.queue.length && !S.fightUntil){
+      S.fightUntil=now + Math.max(3500, 2800+S.queue.length*450);
+    }
+    if(S.fightUntil && now>=S.fightUntil){
+      // send remaining live birds home (they leave the way they came)
+      for(const b of S.birds){ if(!b.dead && !b.leaving){ b.leaving=true; } }
+    }
+    // wave ends when no birds remain (killed or gone)
+    if(S.spawned>=S.queue.length && S.birds.filter(b=>!b.dead).length===0){
+      S.fightUntil=0;
+      S.coins+=20+S.wave*5;updateBest();syncHUD();
+      queueNextWave(2000);
+    }
+  }
+
+  // ---- birds ----
+  for(const b of S.birds){
+    if(b.dead){ updateDeadBird(b,dt,fr); continue; }
+    updateBirdPath(b,dt,fr);
+  }
+  S.birds=S.birds.filter(b=>b.el.isConnected);
+
+  // ---- timed items countdown ----
+  updateActiveItems(now);
+
+  rafId=requestAnimationFrame(loop);
+}
+
+/* ============================================================
+   FLIGHT PATHS — 25 curved routes across the sky over the monument.
+   Each path is a cubic Bézier in normalized frame coords (0..1).
+   Birds ride s:0->1 (out) then 1->0 (back), looping, pooing on each
+   pass over the monument, always facing their direction of travel.
+   ============================================================ */
+let PATHS=null;
+function buildPaths(){
+  PATHS=[];
+  // vary arc height, control spread, and vertical band; all cross the centre (over monument)
+  for(let i=0;i<25;i++){
+    const r=(i+0.5)/25;                     // 0..1 spread
+    const topY=0.14+ (i%5)*0.02;            // entry/exit altitude band (below HUD)
+    const arc=0.22+ (i%7)*0.045;            // how high the belly of the curve sits
+    const midY=topY+arc;
+    const wobble=(i%3-1)*0.06;              // asymmetry
+    // P0 left edge, P1/P2 control (dip toward centre), P3 right edge
+    PATHS.push([
+      [-0.08, topY+ (i%4)*0.015],
+      [0.30+wobble, midY+0.10],
+      [0.70+wobble, midY-0.02],
+      [1.08, topY+ ((i+2)%4)*0.015]
+    ]);
+  }
+}
+function bezier(p,s){
+  const mt=1-s, a=mt*mt*mt, bb=3*mt*mt*s, c=3*mt*s*s, d=s*s*s;
+  return [a*p[0][0]+bb*p[1][0]+c*p[2][0]+d*p[3][0],
+          a*p[0][1]+bb*p[1][1]+c*p[2][1]+d*p[3][1]];
+}
+function bezierTangent(p,s){
+  const mt=1-s;
+  const a=3*mt*mt, bb=6*mt*s, c=3*s*s;
+  return [a*(p[1][0]-p[0][0])+bb*(p[2][0]-p[1][0])+c*(p[3][0]-p[2][0]),
+          a*(p[1][1]-p[0][1])+bb*(p[2][1]-p[1][1])+c*(p[3][1]-p[2][1])];
+}
+
+function updateBirdPath(b,dt,fr){
+  const spd=b.pathSpeed*(dt/16);
+  b.s += b.dir*spd;
+
+  // end-of-wave: survivors leave by where they came from
+  if(b.leaving){
+    if(b.s<=-0.05||b.s>=1.05){removeBird(b);return;}
+  }else{
+    // bounce at both ends -> back-and-forth, resets poo flag each pass
+    if(b.s>=1){b.s=1;b.dir=-1;b.pooedPass=false;}
+    else if(b.s<=0){b.s=0;b.dir=1;b.pooedPass=false;}
+  }
+
+  const P=b.path;
+  const pt=bezier(P,Math.max(0,Math.min(1,b.s)));
+  const px=pt[0]*fr.width, py=pt[1]*fr.height;
+  b.x=px - b.w/2; b.y=py - b.h/2;
+
+  // facing = direction of travel (tangent * dir)
+  const tg=bezierTangent(P,Math.max(0,Math.min(1,b.s)));
+  let dirX=tg[0]*b.dir;
+  const faceLeft = dirX<0;
+  const ang=Math.atan2(tg[1]*b.dir, dirX)*180/Math.PI;
+  const tilt=Math.max(-18,Math.min(18,ang*0.35));
+  b.el.style.transform=`translate(${b.x}px,${b.y}px) scaleX(${faceLeft?-1:1}) rotate(${faceLeft?-tilt:tilt}deg)`;
+
+  // crow steals gold near centre
+  if(b.type.thief){
+    if(!b.stole && overMonument(b,fr) && Math.random()<0.06 && S.coins>0){stealGold(b,fr);b.stole=true;}
+    return;
+  }
+  // poo on each pass over the monument
+  if(!b.pooedPass && overMonument(b,fr)){
+    launchPoo(b,fr); b.pooedPass=true;
+    // Paris malus: some birds drop twice (not all)
+    if(perk().doublePoo && Math.random()<0.4){ setTimeout(()=>{ if(b.el&&!b.dead)launchPoo(b,fr); },260); }
+  }
+}
+function overMonument(b,fr){
+  const mr=monRect();
+  const cx=mr.left+mr.width/2-fr.left;
+  const bx=b.x+b.w/2;
+  return Math.abs(bx-cx)<mr.width*0.5;
+}
+
+/* Dead bird falls from where it died (JS-driven, never jumps to a corner). */
+function updateDeadBird(b,dt,fr){
+  b.vy=(b.vy||0)+0.05*dt;
+  b.y+=b.vy*dt*0.06;
+  b.spin=(b.spin||0)+dt*0.6;
+  b.deadOp=(b.deadOp==null?1:b.deadOp)-dt*0.0016;
+  b.el.style.opacity=Math.max(0,b.deadOp);
+  b.el.style.transform=`translate(${b.x}px,${b.y}px) rotate(${b.spin}deg)`;
+  if(b.y>fr.height+80||b.deadOp<=0){removeBird(b);}
+}
+
+/* HUD bottom in px */
+function hudBottom(fr){
+  const hud=document.querySelector('.hud');
+  if(!hud)return fr.height*0.16;
+  const hr=hud.getBoundingClientRect();
+  return (hr.bottom-fr.top)+6;
+}
+
+/* ---------- BIRDS ---------- */
+function spawnBird(kind,fr){
+  if(!PATHS)buildPaths();
+  const type=BIRDS[kind];
+  const el=document.createElement('div');
+  el.className='bird '+type.cls;
+  el.innerHTML=BIRD_SVG[kind];
+  layers.birds.appendChild(el);
+  const rect=el.getBoundingClientRect();
+  const w=rect.width||46,h=rect.height||32;
+  const path=PATHS[Math.floor(Math.random()*PATHS.length)];
+  const fromLeft=Math.random()<0.5;
+  const baseSpeed=(0.0016+type.speed*0.0011+S.wave*0.00006)*0.95*perk().speedMult;
+  const b={el,type,kind,hp:type.hp,w,h,dead:false,
+    path, dir:fromLeft?1:-1, s:fromLeft?0:1,
+    pathSpeed:baseSpeed*(0.85+Math.random()*0.4),
+    pooedPass:false, stole:false, leaving:false, vy:0};
+  const pt=bezier(path,b.s);
+  b.x=pt[0]*fr.width-w/2; b.y=pt[1]*fr.height-h/2;
+  el.style.transform=`translate(${b.x}px,${b.y}px)`;
+  S.birds.push(b);
+}
+function removeBird(b){if(b.el)b.el.remove();}
+
+/* ---------- CROSSHAIR (desktop mouse only) ---------- */
+const crosshair=document.getElementById('crosshair');
+let isTouch=false;
+window.addEventListener('touchstart',()=>{isTouch=true;if(crosshair)crosshair.style.display='none';},{passive:true,once:true});
+F.addEventListener('pointermove',e=>{
+  if(e.pointerType==='touch'||isTouch)return;
+  const fr=frameRect();
+  crosshair.style.display='block';
+  crosshair.style.left=(e.clientX-fr.left)+'px';
+  crosshair.style.top=(e.clientY-fr.top)+'px';
+});
+F.addEventListener('pointerleave',()=>{if(crosshair)crosshair.style.display='none';});
+
+/* ---------- FIRE (impact at pointer) ---------- */
+F.addEventListener('pointerdown',e=>{
+  if(!running||S.phase!=='fighting'&&S.birds.filter(b=>!b.dead).length===0){/* still allow shooting anytime birds exist */}
+  if(!running)return;
+  const fr=frameRect();
+  const touch=e.pointerType==='touch';
+  shootAt(e.clientX-fr.left, e.clientY-fr.top, fr, touch);
+},{passive:true});
+
+function shootAt(tx,ty,fr,touch){
+  const now=performance.now();
+  if(now-S.lastFire<S.fireDelay)return;
+  S.lastFire=now;
+  Audio2.shoot();
+
+  const baseR=touch?40:24;
+  // Shotgun: center + 4 offset blasts (up/down/left/right)
+  let points=[[tx,ty]];
+  if(S.shotgunActive){
+    const o=touch?46:38;
+    points=[[tx,ty],[tx,ty-o],[tx,ty+o],[tx-o,ty],[tx+o,ty]];
+  }
+  const struck=new Set();
+  for(const [px,py] of points){
+    explode(px,py,1.15,false);   // real blast on every shot
+    let best=null,bd=1e9;
+    for(const b of S.birds){
+      if(b.dead||struck.has(b))continue;
+      const d=Math.hypot(px-(b.x+b.w/2),py-(b.y+b.h/2));
+      if(d<baseR+b.w*0.5 && d<bd){bd=d;best=b;}
+    }
+    if(best){struck.add(best);tagHit(best,px,py);}
+  }
+}
+function tagHit(b,ix,iy){
+  b.hp--;
+  if(b.hp<=0){
+    b.dead=true;b.vy=-0.4;
+    Audio2.hit();
+    explode(b.x+b.w/2,b.y+b.h/2, b.kind==='albatross'?1.3:b.kind==='eagle'?1.1:0.85, false);
+    const reward=Math.round(b.type.reward*S.goldMult*perk().goldMult);
+    S.coins+=reward;S.score+=b.type.score;
+    if(reward){floatText(b.x,b.y,'+'+reward,'#fbbf24');Audio2.coin();}
+    syncHUD();
+  }else{
+    Audio2.hit();
+    floatText(b.x+b.w/2,b.y,'-1','#fff');
+  }
+}
+
+/* ---------- POO: launches from bird, falls onto monument, accumulates ---------- */
+const STAIN_COLS=['#8a8f96','#9aa0a6','#7c828a']; // greyish
+function launchPoo(b,fr){
+  if(S.shieldBlock){floatText(b.x+b.w/2,b.y,'blocked','#38bdf8');return;}
+  const mr=monRect();
+  const sx=b.x+b.w/2, sy=b.y+b.h;
+  // pick a landing point strictly INSIDE the monument silhouette
+  const {u,v}=randomInMonument(S.monId);
+  const tx=(mr.left-fr.left)+u*mr.width;
+  const ty=(mr.top-fr.top)+v*mr.height;
+  const drop=document.createElement('div');drop.className='poo-drop';
+  const col=STAIN_COLS[Math.floor(Math.random()*STAIN_COLS.length)];
+  drop.style.background=col;
+  drop.style.left=sx+'px';drop.style.top=sy+'px';
+  layers.fx.appendChild(drop);
+  const dur=520;const t0=performance.now();
+  (function fly(){
+    const p=Math.min(1,(performance.now()-t0)/dur);
+    const cx=sx+(tx-sx)*p;
+    const cy=sy+(ty-sy)*p + Math.sin(Math.PI*p)*(-8);
+    drop.style.transform=`translate(${cx-sx}px,${cy-sy}px)`;
+    if(p<1)requestAnimationFrame(fly);
+    else{drop.remove();addStain(u,v,col);}
+  })();
+}
+function addStain(u,v,col){
+  S.dirtCount++;
+  Audio2.poo();
+  const el=document.createElement('div');el.className='stain';
+  el.dataset.u=u;el.dataset.v=v;
+  const sz=15+Math.random()*11;
+  el.innerHTML=`<svg width="${sz}" height="${sz}" viewBox="0 0 26 30">
+    <path d="M13 1 C6 1 2 8 4 13 C1 15 2 21 8 20 C10 22 16 22 18 20 C24 21 25 15 22 13 C24 8 20 1 13 1Z" fill="${col}"/>
+    <path d="M11 19 q-1 6 0 9 q1 2 2 0 q1 -4 0 -9Z" fill="${col}" opacity=".8"/>
+    <ellipse cx="10" cy="9" rx="2.4" ry="1.5" fill="#fff" opacity=".3"/></svg>`;
+  positionStain(el);
+  layers.fx.appendChild(el);
+  S.clean=Math.max(0,S.clean-4*perk().dirtMult);updateDirt();syncHUD();
+  warn(S.clean<=25);
+  if(S.clean<=0)gameOver();
+}
+/* place a stain from its stored (u,v) relative to the current monument box */
+function positionStain(el){
+  const fr=frameRect(),mr=monRect();
+  const u=parseFloat(el.dataset.u),v=parseFloat(el.dataset.v);
+  el.style.left=((mr.left-fr.left)+u*mr.width)+'px';
+  el.style.top=((mr.top-fr.top)+v*mr.height)+'px';
+}
+/* keep stains glued to the monument on resize */
+addEventListener('resize',()=>{document.querySelectorAll('.stain').forEach(positionStain);});
+function stealGold(b,fr){
+  const amount=Math.min(S.coins,10+S.wave*2);
+  S.coins-=amount;floatText(b.x,b.y,'-'+amount,'#ef4444');syncHUD();
+}
+function updateDirt(){
+  const fill=document.getElementById('cleanFill');fill.style.width=S.clean+'%';
+  fill.style.background=S.clean>50?'linear-gradient(90deg,#22d3ee,#0284c7)':
+    S.clean>25?'linear-gradient(90deg,#fbbf24,#f59e0b)':'linear-gradient(90deg,#ef4444,#b91c1c)';
+  const pct=document.getElementById('cleanPct');if(pct)pct.textContent=Math.round(S.clean)+'%';
+}
+function warn(show){document.getElementById('warning').classList.toggle('show',show);}
+
+/* Cleaner agent: scrubs stains while active */
+function agentTickOnce(){
+  if(!S||!S.agentActive)return;
+  const stains=document.querySelectorAll('.stain');
+  if(stains.length){
+    const target=stains[0];target.style.transition='opacity .4s';target.style.opacity=0;
+    setTimeout(()=>target.remove(),400);
+    S.clean=Math.min(100,S.clean+3);updateDirt();syncHUD();
+    if(S.clean>25)warn(false);
+    const a=layers.agents.querySelector('.agent');
+    if(a){const bub=document.createElement('div');bub.className='bubble';a.appendChild(bub);setTimeout(()=>bub.remove(),700);}
+  }
+}
+
+/* ---------- FX ---------- */
+function spark(x,y){
+  const el=document.createElement('div');el.className='boom';
+  el.style.left=x+'px';el.style.top=y+'px';el.style.width='24px';el.style.height='24px';
+  layers.fx.appendChild(el);setTimeout(()=>el.remove(),400);
+}
+/* rich explosion: fireball core + shockwave ring + flying debris + smoke */
+function explode(x,y,scale=1,sound=true){
+  if(sound)Audio2.explosion();
+  const F=layers.fx;
+  // core
+  const core=document.createElement('div');core.className='exp-core';
+  const cs=48*scale;core.style.cssText+=`left:${x}px;top:${y}px;width:${cs}px;height:${cs}px`;
+  F.appendChild(core);setTimeout(()=>core.remove(),400);
+  // shockwave ring
+  const ring=document.createElement('div');ring.className='exp-ring';
+  const rs=40*scale;ring.style.cssText+=`left:${x}px;top:${y}px;width:${rs}px;height:${rs}px`;
+  F.appendChild(ring);setTimeout(()=>ring.remove(),500);
+  // smoke puffs
+  for(let i=0;i<2+Math.round(scale);i++){
+    const sm=document.createElement('div');sm.className='exp-smoke';
+    const ss=(30+Math.random()*24)*scale;
+    sm.style.cssText+=`left:${x+(Math.random()*20-10)}px;top:${y+(Math.random()*10-8)}px;width:${ss}px;height:${ss}px;animation-delay:${i*40}ms`;
+    F.appendChild(sm);setTimeout(()=>sm.remove(),950+i*40);
+  }
+  // debris particles (JS-animated)
+  const cols=['#ffd54f','#ff7043','#ffe082','#e53935','#fff'];
+  const n=Math.round(10*scale);
+  for(let i=0;i<n;i++){
+    const p=document.createElement('div');p.className='exp-part';
+    const sz=(3+Math.random()*4)*scale;
+    p.style.cssText+=`left:${x}px;top:${y}px;width:${sz}px;height:${sz}px;background:${cols[i%cols.length]}`;
+    F.appendChild(p);
+    const ang=Math.random()*Math.PI*2, sp=(2+Math.random()*4)*scale;
+    let vx=Math.cos(ang)*sp, vy=Math.sin(ang)*sp-1.5, px=x, py=y, life=1, t0=performance.now();
+    (function step(){
+      const dt=16;vy+=0.35;px+=vx;py+=vy;life-=0.03;
+      p.style.left=px+'px';p.style.top=py+'px';p.style.opacity=Math.max(0,life);
+      if(life>0)requestAnimationFrame(step);else p.remove();
+    })();
+  }
+}
+function floatText(x,y,txt,col){
+  const el=document.createElement('div');el.className='ft';el.textContent=txt;el.style.color=col;
+  el.style.left=x+'px';el.style.top=y+'px';layers.fx.appendChild(el);setTimeout(()=>el.remove(),900);
+}
+
+/* ---------- GAME OVER ---------- */
+function gameOver(){
+  running=false;cancelAnimationFrame(rafId);warn(false);updateBest();clearActiveItems();
+  Audio2.gameover();
+  document.getElementById('finalScore').textContent=S.score;
+  document.getElementById('finalWave').textContent=S.wave;
+  document.getElementById('finalCoins').textContent=S.coins;
+  document.getElementById('bestScore').textContent=bests[S.monId]||0;
+  document.getElementById('goTitle').textContent=nowMon().name+' defiled!';
+  // revive offered once per run
+  document.getElementById('reviveBtn').style.display=S.reviveUsed?'none':'inline-flex';
+  document.getElementById('goScreen').classList.add('active');
+}
+function updateBest(){
+  if(!bests[S.monId]||S.score>bests[S.monId]){bests[S.monId]=S.score;SAFE_LS.set(STORE_KEY,JSON.stringify(bests));}
+}
+
+/* ---------- HUD ---------- */
+function syncHUD(){
+  document.getElementById('hudScore').textContent=S.score;
+  document.getElementById('hudCoins').innerHTML='<span class="coin"></span>'+S.coins;
+  document.getElementById('hudWave').textContent=S.wave;
+  updateDirt();
+}
+
+/* ---------- ACTIVE ITEMS (timed) ---------- */
+function activateItem(it){
+  const now=performance.now();
+  S.items[it.id]={until:now+it.dur*1000,dur:it.dur,name:it.name,icon:it.icon};
+  if(it.id==='shotgun')S.shotgunActive=true;
+  if(it.id==='shield'){S.shieldBlock=true;document.getElementById('shield').classList.add('active');}
+  if(it.id==='agent'){ if(!S.agentActive){S.agentActive=true;spawnAgent();} if(S._agentIv)clearInterval(S._agentIv); if(running){S._agentIv=setInterval(agentTickOnce,850);} }
+  if(it.id==='dca'){ if(!S.dcaActive){S.dcaActive=true;spawnDCA();} if(S._dcaIv)clearInterval(S._dcaIv); if(running){S._dcaIv=setInterval(dcaTick,1000);} }
+  renderActiveItems();
+}
+function expireItem(id){
+  delete S.items[id];
+  if(id==='shotgun')S.shotgunActive=false;
+  if(id==='shield'){S.shieldBlock=false;document.getElementById('shield').classList.remove('active');}
+  if(id==='agent'){S.agentActive=false;if(S._agentIv)clearInterval(S._agentIv);layers.agents.querySelectorAll('.agent').forEach(a=>a.remove());}
+  if(id==='dca'){S.dcaActive=false;if(S._dcaIv)clearInterval(S._dcaIv);layers.agents.querySelectorAll('.dca').forEach(a=>a.remove());}
+  renderActiveItems();
+}
+function updateActiveItems(now){
+  let dirty=false;
+  for(const id in S.items){
+    if(now>=S.items[id].until){expireItem(id);dirty=true;}
+  }
+  // update countdown bars
+  const box=document.getElementById('activeItems');
+  for(const id in S.items){
+    const el=box.querySelector(`[data-it="${id}"] .ai-bar span`);
+    if(el){const it=S.items[id];const left=Math.max(0,(it.until-now)/1000);el.style.width=(left/it.dur*100)+'%';
+      const sec=box.querySelector(`[data-it="${id}"] .ai-sec`);if(sec)sec.textContent=Math.ceil(left)+'s';}
+  }
+}
+function renderActiveItems(){
+  const box=document.getElementById('activeItems');box.innerHTML='';
+  for(const id in S.items){
+    const it=S.items[id];
+    const d=document.createElement('div');d.className='ai';d.setAttribute('data-it',id);
+    d.innerHTML=`<div class="ai-ic">${it.icon}</div><div class="ai-body"><div class="ai-top"><span class="ai-name">${it.name}</span><span class="ai-sec">${it.dur}s</span></div><div class="ai-bar"><span style="width:100%"></span></div></div>`;
+    box.appendChild(d);
+  }
+}
+
+/* ---------- SHOP ---------- */
+function renderShopBuilding(){
+  layers.shop.innerHTML=`<div class="shop-building" onclick="toggleShop()">
+    <svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sbWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b3550"/><stop offset="1" stop-color="#1a2136"/></linearGradient>
+        <linearGradient id="sbRoof" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a3e635"/><stop offset="1" stop-color="#65a30d"/></linearGradient>
+        <linearGradient id="sbAwn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset="1" stop-color="#f59e0b"/></linearGradient>
+      </defs>
+      <rect x="14" y="52" width="92" height="92" rx="6" fill="url(#sbWall)" stroke="#0e1626" stroke-width="1.5"/>
+      <g stroke="#0e1626" stroke-width=".8" opacity=".4"><line x1="14" y1="74" x2="106" y2="74"/><line x1="14" y1="96" x2="106" y2="96"/><line x1="14" y1="118" x2="106" y2="118"/></g>
+      <rect x="24" y="60" width="20" height="18" rx="2" fill="#7dd3fc" opacity=".85"/>
+      <rect x="76" y="60" width="20" height="18" rx="2" fill="#7dd3fc" opacity=".85"/>
+      <rect x="24" y="60" width="20" height="18" rx="2" fill="none" stroke="#0e1626" stroke-width="1"/>
+      <rect x="76" y="60" width="20" height="18" rx="2" fill="none" stroke="#0e1626" stroke-width="1"/>
+      <rect x="48" y="104" width="24" height="40" rx="3" fill="#0e1626"/>
+      <rect x="51" y="107" width="18" height="37" rx="2" fill="#3a4763"/>
+      <circle cx="65" cy="126" r="2" fill="#fbbf24"/>
+      <path d="M8 52 L112 52 L118 68 L2 68 Z" fill="url(#sbAwn)"/>
+      <path d="M2 68 L14 52 L26 68 L38 52 L50 68 L62 52 L74 68 L86 52 L98 68 L110 52 L118 68" fill="none" stroke="#fff" stroke-width="2.5" opacity=".85"/>
+      <path d="M8 52 L60 16 L112 52 Z" fill="url(#sbRoof)"/>
+      <rect x="30" y="34" width="60" height="16" rx="4" fill="#0e1626" stroke="#a3e635" stroke-width="1.5"/>
+      <text x="60" y="46" text-anchor="middle" fill="#a3e635" font-size="10" font-weight="900" font-family="Trebuchet MS,Arial" letter-spacing="1.5">SHOP</text>
+      <rect x="82" y="20" width="8" height="16" fill="#2b3550"/><rect x="80" y="16" width="12" height="5" fill="#1a2136"/>
+    </svg></div>`;
+}
+function toggleShop(){
+  const o=document.getElementById('shopOverlay');
+  const open=!o.classList.contains('active');
+  if(open){
+    renderShop();
+    S._shopFroze=freezeRun();   // pause the run while shopping
+  }else{
+    if(S._shopFroze){unfreezeRun();S._shopFroze=false;}  // resume, timers continue
+  }
+  o.classList.toggle('active',open);
+}
+function priceOf(it){ return Math.max(1, Math.round(it.price*perk().shopMult)); }
+function renderShop(){
+  document.getElementById('shopCoins').textContent=S.coins;
+  const grid=document.getElementById('shopGrid');grid.innerHTML='';
+  for(const it of SHOP){
+    const active=S.items[it.id];
+    const price=priceOf(it);
+    const locked=S.coins<price;
+    const div=document.createElement('div');
+    div.className='shop-item'+(locked?' locked':'');
+    div.innerHTML=`${active?'<span class="si-owned">Active</span>':''}
+      <div class="si-icon">${it.icon}</div>
+      <div class="si-name">${it.name}</div>
+      <div class="si-desc">${it.desc}</div>
+      <div class="si-price"><span class="coin"></span>${price}${it.dur?` · ${it.dur}s`:''}</div>`;
+    div.onclick=()=>buy(it);
+    grid.appendChild(div);
+  }
+}
+function buy(it){
+  const price=priceOf(it);
+  if(S.coins<price)return;
+  Audio2.buy();
+  S.coins-=price;
+  if(it.instant){airstrike();}
+  else{activateItem(it);}
+  syncHUD();renderShop();
+}
+function airstrike(){
+  Audio2.explosion();
+  for(const b of S.birds){if(!b.dead){b.dead=true;b.vy=-0.3;explode(b.x+b.w/2,b.y+b.h/2,1.2,false);
+    S.coins+=b.type.reward;S.score+=b.type.score;}}
+  const flash=document.createElement('div');
+  flash.style.cssText='position:absolute;inset:0;background:#fff;opacity:.55;z-index:40;pointer-events:none;transition:opacity .5s';
+  layers.fx.appendChild(flash);requestAnimationFrame(()=>flash.style.opacity=0);setTimeout(()=>flash.remove(),500);
+  syncHUD();
+}
+function spawnAgent(){
+  const el=document.createElement('div');el.className='agent';
+  el.innerHTML=`<svg viewBox="0 0 24 40"><rect x="8" y="0" width="8" height="8" rx="4" fill="#ffcc80"/><rect x="6" y="8" width="12" height="16" rx="4" fill="#1976d2"/><rect x="7" y="22" width="4" height="14" rx="2" fill="#1565c0"/><rect x="13" y="22" width="4" height="14" rx="2" fill="#1565c0"/><rect x="2" y="10" width="4" height="10" rx="2" fill="#ffcc80"/><rect x="18" y="10" width="4" height="10" rx="2" fill="#ffcc80"/></svg>`;
+  el.style.left='24px';
+  layers.agents.appendChild(el);
+  setInterval(()=>{if(el.isConnected){el.style.left=(20+Math.random()*(frameRect().width*0.5))+'px';}},2400);
+}
+
+/* ---------- DCA ---------- */
+function spawnDCA(){
+  const el=document.createElement('div');el.className='dca';
+  el.innerHTML=`<svg viewBox="0 0 80 70">
+    <ellipse cx="38" cy="63" rx="30" ry="4" fill="#000" opacity="0.18"/>
+    <g fill="#4a5a48" stroke="#37432f" stroke-width="0.8">
+      <path d="M6 60 L30 50 L34 54 L12 64 Z"/>
+      <path d="M70 60 L46 50 L42 54 L64 64 Z"/>
+      <rect x="30" y="50" width="20" height="10" rx="2"/>
+    </g>
+    <circle cx="20" cy="58" r="5" fill="#2b2b2b"/><circle cx="20" cy="58" r="2" fill="#555"/>
+    <circle cx="58" cy="58" r="5" fill="#2b2b2b"/><circle cx="58" cy="58" r="2" fill="#555"/>
+    <path d="M30 52 L50 52 L46 44 L34 44 Z" fill="#5a6b56"/>
+    <path d="M22 46 L40 40 L46 44 L44 52 L26 54 Z" fill="#5f7059" stroke="#3f4c39" stroke-width="1"/>
+    <path d="M24 47 L40 42" stroke="#7a8c72" stroke-width="1" opacity="0.6"/>
+    <circle cx="38" cy="44" r="6" fill="#6b7d63"/>
+    <rect x="30" y="41" width="8" height="7" rx="1" fill="#4a5a48"/>
+    <g class="dca-barrel" transform-origin="38px 44px">
+      <rect x="36" y="6" width="4" height="40" rx="1.5" fill="#6b7565"/>
+      <rect x="37" y="6" width="1.4" height="40" fill="#8b9581" opacity="0.7"/>
+      <rect x="34.5" y="2" width="7" height="8" rx="1.5" fill="#57614e"/>
+      <rect x="34.5" y="4.5" width="7" height="1.6" fill="#3f4839"/>
+      <rect x="32" y="20" width="3" height="22" rx="1" fill="#57614e"/>
+    </g></svg>`;
+  el.style.left='calc(24% - 30px)';
+  layers.agents.appendChild(el);
+}
+function dcaTick(){
+  if(!S||!S.dcaActive)return;
+  const guns=layers.agents.querySelectorAll('.dca');
+  const fr=frameRect();
+  guns.forEach(gun=>{
+    const gr=gun.getBoundingClientRect();
+    const gx=gr.left+gr.width/2-fr.left, gy=gr.top-fr.top+gr.height*0.1;
+    let best=null,bd=1e9;
+    for(const b of S.birds){if(b.dead)continue;const d=Math.hypot((b.x+b.w/2)-gx,(b.y+b.h/2)-gy);if(d<bd){bd=d;best=b;}}
+    if(best){
+      const barrel=gun.querySelector('.dca-barrel');
+      const tx=best.x+best.w/2, ty=best.y+best.h/2;
+      // barrel rests pointing UP (-y). angle so it points at target:
+      const ang=Math.atan2(tx-gx, gy-ty)*180/Math.PI;
+      if(barrel){
+        barrel.setAttribute('transform',`rotate(${ang}) translate(0 2)`);
+        setTimeout(()=>barrel.setAttribute('transform',`rotate(${ang})`),70); // recoil
+      }
+      // muzzle flash at barrel tip
+      const bl=34*(gr.width/80); // barrel length scaled
+      const rad=ang*Math.PI/180;
+      const mx=gx+Math.sin(rad)*bl, my=gy-Math.cos(rad)*bl;
+      muzzleFlash(mx,my);
+      tracer(mx,my,tx,ty);
+      tagHit(best,tx,ty);
+    }
+  });
+}
+function muzzleFlash(x,y){
+  const el=document.createElement('div');
+  el.style.cssText=`position:absolute;left:${x}px;top:${y}px;width:16px;height:16px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#fff,#ffd54f 50%,transparent);z-index:29;pointer-events:none;opacity:1;transition:opacity .12s`;
+  layers.fx.appendChild(el);requestAnimationFrame(()=>el.style.opacity=0);setTimeout(()=>el.remove(),140);
+}
+function tracer(x1,y1,x2,y2){
+  const len=Math.hypot(x2-x1,y2-y1);const ang=Math.atan2(y2-y1,x2-x1)*180/Math.PI;
+  const el=document.createElement('div');
+  el.style.cssText=`position:absolute;left:${x1}px;top:${y1}px;width:${len}px;height:2px;background:linear-gradient(90deg,#fbbf24,transparent);transform-origin:0 50%;transform:rotate(${ang}deg);z-index:28;pointer-events:none;opacity:.9;transition:opacity .25s`;
+  layers.fx.appendChild(el);requestAnimationFrame(()=>el.style.opacity=0);setTimeout(()=>el.remove(),250);
+  spark(x2,y2);
+}
+
+/* ---------- MAP ---------- */
+function renderMap(){
+  const grid=document.getElementById('mapGrid');grid.innerHTML='';
+  for(const m of MONUMENTS){
+    const p=m.perk||{};
+    const card=document.createElement('div');card.className='map-card';
+    card.innerHTML=`<div class="map-thumb">${sceneThumb(m)}</div>
+      <div class="mc-name">${m.name}</div>
+      <div class="mc-city">${m.city}</div>
+      <div class="mc-best">Best: ${bests[m.id]||0}</div>
+      <div class="mc-perks">
+        <div class="mc-bonus"><span class="pk-ic">▲</span>${p.bonus||'—'}</div>
+        <div class="mc-malus"><span class="pk-ic">▼</span>${p.malus||'—'}</div>
+      </div>`;
+    card.onclick=()=>{hideMap();initSession(m.id);beginRun();};
+    grid.appendChild(card);
+  }
+}
+function showMap(){running=false;cancelAnimationFrame(rafId);hideAll();renderMap();document.getElementById('mapOverlay').classList.add('active');}
+function hideMap(){document.getElementById('mapOverlay').classList.remove('active');}
+function togglePause(){
+  if(!S) return;
+  if(paused) resumeGame(); else pauseGame();
+}
+/* freeze the run loop + item/phase timers (shared by pause, shop, backgrounding) */
+function freezeRun(){
+  if(!running) return false;
+  running=false;cancelAnimationFrame(rafId);
+  S._pauseAt=performance.now();
+  if(S._agentIv){clearInterval(S._agentIv);S._agentIv=null;}
+  if(S._dcaIv){clearInterval(S._dcaIv);S._dcaIv=null;}
+  return true;
+}
+function unfreezeRun(){
+  const delta=performance.now()-(S._pauseAt||performance.now());
+  for(const id in S.items){S.items[id].until+=delta;}
+  if(S.phaseUntil)S.phaseUntil+=delta;
+  if(S.fightUntil)S.fightUntil+=delta;
+  if(S.agentActive){S._agentIv=setInterval(agentTickOnce,850);}
+  if(S.dcaActive){S._dcaIv=setInterval(dcaTick,1000);}
+  running=true;lastT=performance.now();
+  cancelAnimationFrame(rafId);rafId=requestAnimationFrame(loop);
+}
+function pauseGame(){
+  if(!freezeRun()) return;
+  paused=true;
+  document.getElementById('pauseBtn').textContent='▶';
+  document.getElementById('pauseScreen').classList.add('active');
+}
+function resumeGame(){
+  if(!paused) return;
+  paused=false;
+  document.getElementById('pauseScreen').classList.remove('active');
+  document.getElementById('pauseBtn').textContent='⏸';
+  unfreezeRun();
+}
+function quitToMenu(){
+  paused=false;running=false;cancelAnimationFrame(rafId);clearActiveItems();
+  document.getElementById('pauseScreen').classList.remove('active');
+  document.getElementById('pauseBtn').textContent='⏸';
+  document.getElementById('waveOverlay').classList.remove('show');
+  hideAll();
+  document.getElementById('startScreen').classList.add('active');
+}
+function pauseToMap(){showMap();}
+
+/* ---------- SCORE CARD / SHARE ---------- */
+function generateScoreCard(){
+  document.getElementById('scMonument').textContent=nowMon().name;
+  document.getElementById('scScore').textContent=S.score;
+  const card=document.getElementById('scoreCard');
+  card.style.left='0';card.style.zIndex='9999';
+  setTimeout(()=>{card.style.left='-9999px';card.style.zIndex='';},2600);
+}
+function share(){
+  const txt=`I scored ${S?S.score:0} points defending ${nowMon().name} in POO DEFENSE! Beat that: ragequit-arcade.com`;
+  if(navigator.share){navigator.share({title:'POO DEFENSE',text:txt,url:'https://ragequit-arcade.com'}).catch(()=>{});}
+  else if(navigator.clipboard){navigator.clipboard.writeText(txt);alert('Score copied!\n\n'+txt);}
+  else alert(txt);
+}
+
+/* ---------- MUSIC ---------- */
+/* ============================================================
+   AUDIO — fully synthesized via Web Audio API (no files).
+   SFX: shoot, hit, poo, buy, explosion, gameover, coin.
+   Music: gentle looping chord/arpeggio pad, toggled by music btn.
+   ============================================================ */
+const Audio2={
+  ctx:null, master:null, musicGain:null, sfxGain:null, musicOn:false, timer:null, step:0,
+  init(){
+    if(this.ctx)return;
+    try{
+      this.ctx=new (window.AudioContext||window.webkitAudioContext)();
+      this.master=this.ctx.createGain();this.master.gain.value=0.9;this.master.connect(this.ctx.destination);
+      this.sfxGain=this.ctx.createGain();this.sfxGain.gain.value=0.55;this.sfxGain.connect(this.master);
+      this.musicGain=this.ctx.createGain();this.musicGain.gain.value=0.0;this.musicGain.connect(this.master);
+    }catch(e){}
+  },
+  resume(){ if(this.ctx&&this.ctx.state==='suspended')this.ctx.resume(); },
+  // one-shot oscillator
+  blip(freq,dur,type='square',vol=0.5,slideTo,dest){
+    if(!this.ctx)return;
+    const o=this.ctx.createOscillator(),g=this.ctx.createGain();
+    o.type=type;o.frequency.value=freq;
+    if(slideTo)o.frequency.exponentialRampToValueAtTime(Math.max(1,slideTo),this.ctx.currentTime+dur);
+    g.gain.setValueAtTime(vol,this.ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001,this.ctx.currentTime+dur);
+    o.connect(g);g.connect(dest||this.sfxGain);o.start();o.stop(this.ctx.currentTime+dur+0.02);
+  },
+  noise(dur,vol=0.5,filterFreq=1200){
+    if(!this.ctx)return;
+    const n=Math.floor(this.ctx.sampleRate*dur);
+    const buf=this.ctx.createBuffer(1,n,this.ctx.sampleRate);const d=buf.getChannelData(0);
+    for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n);
+    const src=this.ctx.createBufferSource();src.buffer=buf;
+    const f=this.ctx.createBiquadFilter();f.type='lowpass';f.frequency.value=filterFreq;
+    const g=this.ctx.createGain();g.gain.value=vol;
+    src.connect(f);f.connect(g);g.connect(this.sfxGain);src.start();
+  },
+  shoot(){ this.resume(); this.blip(680,0.08,'square',0.28,180); this.noise(0.05,0.12,3000); },
+  hit(){ this.resume(); this.blip(320,0.12,'triangle',0.4,90); },
+  poo(){ this.resume(); this.blip(160,0.16,'sawtooth',0.25,60); },
+  buy(){ this.resume(); this.blip(520,0.08,'square',0.3); setTimeout(()=>this.blip(780,0.1,'square',0.3),80); },
+  coin(){ this.resume(); this.blip(900,0.06,'square',0.25); setTimeout(()=>this.blip(1250,0.08,'square',0.22),60); },
+  explosion(){ this.resume(); this.noise(0.5,0.6,900); this.blip(90,0.4,'sawtooth',0.4,30); },
+  gameover(){ this.resume(); [440,330,247,196].forEach((f,i)=>setTimeout(()=>this.blip(f,0.3,'triangle',0.35),i*160)); },
+  // ambient music: slow arpeggio pad
+  startMusic(){
+    if(!this.ctx||this.musicOn)return;
+    this.musicOn=true;
+    this.musicGain.gain.linearRampToValueAtTime(0.18,this.ctx.currentTime+1.5);
+    const chords=[[220,277,330],[196,247,294],[247,311,370],[165,220,262]]; // Am F C? gentle
+    this.step=0;
+    const playStep=()=>{
+      if(!this.musicOn)return;
+      const ch=chords[Math.floor(this.step/4)%chords.length];
+      const note=ch[this.step%3];
+      this.blip(note,0.9,'sine',0.5,null,this.musicGain);
+      if(this.step%4===0)this.blip(ch[0]/2,1.6,'triangle',0.4,null,this.musicGain); // bass
+      this.step++;
+    };
+    playStep();
+    this.timer=setInterval(playStep,420);
+  },
+  stopMusic(){
+    this.musicOn=false;
+    if(this.timer){clearInterval(this.timer);this.timer=null;}
+    if(this.ctx)this.musicGain.gain.linearRampToValueAtTime(0.0,this.ctx.currentTime+0.6);
+  }
+};
+
+function toggleMusic(){
+  Audio2.init();Audio2.resume();
+  musicOn=!musicOn;
+  document.getElementById('musicBtn').textContent=musicOn?'♪':'♪̷';
+  if(musicOn)Audio2.startMusic(); else Audio2.stopMusic();
+}
+
+/* ============================================================
+   REWARDED ADS
+   showAd(type, onReward) — stub ready to wire to GameDistribution
+   (gdsdk.showAd) or AdSense H5. Currently grants the reward
+   immediately after a short simulated ad.
+   ============================================================ */
+function showAd(type,onReward){
+  // TODO: replace with real SDK, e.g.:
+  //   gdsdk.showAd(gdsdk.AdType.Rewarded).then(onReward).catch(()=>{});
+  const ov=document.getElementById('adOverlay');
+  ov.classList.add('show');
+  let n=3;const label=document.getElementById('adCount');
+  label.textContent=n;
+  const iv=setInterval(()=>{n--;label.textContent=n;if(n<=0){clearInterval(iv);ov.classList.remove('show');onReward&&onReward();}},1000);
+}
+
+/* Double all gold earned for the rest of the run */
+function watchDoubleGold(){
+  if(S.goldMult>1){floatTextCenter('Gold already doubled');return;}
+  const wasRunning=running;
+  if(wasRunning)pauseGame();
+  showAd('rewarded',()=>{
+    S.goldMult=2;
+    const b=document.getElementById('x2Btn');b.classList.add('x2-active');b.disabled=true;b.style.opacity=.7;
+    floatTextCenter('Gold x2 for this run!');
+    if(wasRunning)resumeGame();
+  });
+}
+
+/* Revive: restore monument to 50% clean, resume the current wave. Once per run. */
+function watchRevive(){
+  if(S.reviveUsed)return;
+  showAd('rewarded',()=>{
+    S.reviveUsed=true;
+    S.clean=50;updateDirt();warn(false);
+    // clear the flock so the player gets a breather
+    for(const b of S.birds){if(b.el)b.el.remove();}
+    S.birds=[];
+    document.getElementById('goScreen').classList.remove('active');
+    document.getElementById('reviveBtn').style.display='none';
+    syncHUD();
+    // resume into a fresh buffer -> next wave
+    S.fightUntil=0;running=true;lastT=performance.now();
+    queueNextWave(1500);
+    cancelAnimationFrame(rafId);rafId=requestAnimationFrame(loop);
+  });
+}
+
+function floatTextCenter(txt){
+  const fr=frameRect();
+  floatText(fr.width/2-40, fr.height*0.4, txt, '#a3e635');
+}
+
+/* ---------- UTIL ---------- */
+function hideAll(){document.querySelectorAll('.screen,.map,.shop,.wave-screen').forEach(e=>e.classList.remove('active'));}
+
+/* ---------- BOOT ---------- */
+/* auto-pause when the game goes to the background (tab hidden / screen locked) */
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){
+    Audio2.stopMusic();
+    if(running && !paused){ pauseGame(); S._bgPaused=true; }
+  }else{
+    if(musicOn && !Audio2.musicOn && S && !paused) Audio2.startMusic();
+  }
+});
+
+initSession(MONUMENTS[0].id);
+running=false;
+</script>
+</body>
+</html>
