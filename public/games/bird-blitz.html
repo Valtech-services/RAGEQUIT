@@ -222,6 +222,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 .map-card:hover::before{opacity:.24}
 .map-thumb{position:relative;height:clamp(64px,17vw,110px);border-radius:10px;overflow:hidden;margin-bottom:8px}
 .map-thumb svg{width:100%;height:100%;display:block}
+.map-thumb .thumb-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .mc-name{color:#fff;font-size:clamp(11px,2.5vw,14px);font-weight:800;position:relative}
 .mc-city{color:rgba(255,255,255,.5);font-size:clamp(9px,2vw,11px);position:relative}
 .mc-best{color:var(--gold);font-size:clamp(9px,2vw,12px);font-weight:800;margin-top:3px;position:relative}
@@ -1093,7 +1094,7 @@ const MONUMENTS = [
     perk:{bonus:'Serenity: -50% dirt per dropping', malus:'+40% bird speed', dirtMult:0.5, speedMult:1.4}}
 ];
 /* Background images (drop your generated art here; SVG scene is the fallback). */
-const IMG_DIR='images/';
+const IMG_DIR='/games/bird-blitz/';
 MONUMENTS.forEach(m=>{ m.imgMobile=IMG_DIR+'bg_'+m.id+'_mobile.webp'; m.imgDesktop=IMG_DIR+'bg_'+m.id+'_desktop.webp'; });
 const MONMAP = Object.fromEntries(MONUMENTS.map(m=>[m.id,m]));
 /* current world's perk (bonus/malus), with safe defaults */
@@ -1140,7 +1141,10 @@ function randomInMonument(id){
 
 function sceneThumb(m){
   const s=m.bg();
-  return `<svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"><defs>${s.sky}${s.extraDefs||''}</defs><rect width="1000" height="600" fill="url(#sky)"/>${s.body}<g transform="translate(400 210)">${m.art}</g></svg>`;
+  const svg=`<svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"><defs>${s.sky}${s.extraDefs||''}</defs><rect width="1000" height="600" fill="url(#sky)"/>${s.body}<g transform="translate(400 210)">${m.art}</g></svg>`;
+  // real desktop artwork on top; if it 404s, it hides itself and the SVG shows through
+  const img=`<img class="thumb-img" src="${m.imgDesktop}" alt="" loading="lazy" onerror="this.style.display='none'">`;
+  return svg+img;
 }
 
 function buildScene(m){
