@@ -12,30 +12,93 @@ export default function SeoBlock({ type, data }) {
   return (
     <div className="seo-block">
       <div className="seo-block__inner">
-
+        
         {/* TYPE SITE — page d'accueil */}
         {type === 'site' && (
           <>
             <span className="seo-block__label">{t('seo.aboutLabel')}</span>
-            <h2 className="seo-block__title">{t('seo.freeOnlineGames')}</h2>
-            <p className="seo-block__text">{t('seo.intro')}</p>
-
-            <h3 className="seo-block__subtitle">{t('seo.selectionTitle')}</h3>
+            <h2 className="seo-block__title">Free Online Games at Ragequit Arcade</h2>
             <p className="seo-block__text">
-              {t('seo.selectionText')}{' '}
-              <Link to="/game/rage-hockey" className="seo-block__link">Rage Hockey</Link>,{' '}
-              <Link to="/game/staq" className="seo-block__link">STAQ</Link>.
+              Ragequit Arcade is a free online games platform built for players who want fun without friction.
+              Every game runs instantly in your browser — no downloads, no installs, no sign-up walls and no
+              intrusive pop-ups. Whether you have five minutes on your phone or a long session at your desk, our
+              games load in a single click and work smoothly on mobile, tablet and desktop. We design, build and
+              run every game ourselves, so what you play here you will not find anywhere else.
             </p>
 
-            <h3 className="seo-block__subtitle">{t('seo.startTitle')}</h3>
-            <p className="seo-block__text">{t('seo.startText')}</p>
+            <h3 className="seo-block__subtitle">Our current games</h3>
+            <p className="seo-block__text">
+              We add new games regularly. Here is what you can play right now, each one free and unlimited:
+            </p>
             <ul className="seo-block__list">
-              <li><Link to="/category/sports" className="seo-block__link">{t('categoryTitles.sports')}</Link></li>
-              <li><Link to="/category/arcade" className="seo-block__link">{t('categoryTitles.arcade')}</Link></li>
+              <li>
+                <Link to="/game/rage-hockey" className="seo-block__link">Rage Hockey</Link> — a brutal, fast-paced
+                air hockey game with three arenas, a punishing AI and a local two-player mode. First to seven wins.
+              </li>
+              <li>
+                <Link to="/game/staq" className="seo-block__link">STAQ</Link> — a one-tap block-stacking game where
+                precision is everything. Chain perfect drops, ride your combo and see how high your tower climbs.
+              </li>
+              <li>
+                <Link to="/game/neon-rush" className="seo-block__link">Neon Rush</Link> — a hypnotic 3D endless
+                runner through a retro-futuristic neon tunnel. Dodge across three lanes and chain near-misses for
+                huge combos.
+              </li>
+              <li>
+                <Link to="/game/stellar-forge" className="seo-block__link">Stellar Forge</Link> — a science-based
+                idle clicker where you mine ore, automate an energy empire and climb the real Kardashev scale from
+                planet to galaxy.
+              </li>
+              <li>
+                <Link to="/game/virus-lab" className="seo-block__link">Virus Lab</Link> — a one-of-a-kind strategy
+                game where you program a virus genome, conquer a petri dish and battle other players' strains in an
+                asynchronous arena.
+              </li>
+              <li>
+                <Link to="/game/octaflux" className="seo-block__link">OCTAFLUX</Link> — a fast octagon-rotation
+                puzzle game. Spin the core with your thumb to match falling pieces and trigger cascading chains.
+              </li>
             </ul>
 
-            <h3 className="seo-block__subtitle">{t('seo.aboutUsTitle')}</h3>
-            <p className="seo-block__text">{t('seo.aboutUsText')}</p>
+            <h3 className="seo-block__subtitle">Browse by category</h3>
+            <p className="seo-block__text">
+              Not sure what to play? Explore our games by category and find the style that fits your mood:
+            </p>
+            <ul className="seo-block__list">
+              <li>
+                <Link to="/category/sports" className="seo-block__link">Sports Games</Link> — competitive, physical
+                and rage-inducing.
+              </li>
+              <li>
+                <Link to="/category/arcade" className="seo-block__link">Arcade Games</Link> — reflex, survival and
+                pure score-chasing.
+              </li>
+              <li>
+                <Link to="/category/idle" className="seo-block__link">Idle / Clicker Games</Link> — tap, automate
+                and watch your numbers grow, even while you are away.
+              </li>
+              <li>
+                <Link to="/category/puzzle" className="seo-block__link">Puzzle Games</Link> — match, rotate and
+                think fast under pressure.
+              </li>
+            </ul>
+
+            <h3 className="seo-block__subtitle">Why play at Ragequit Arcade</h3>
+            <p className="seo-block__text">
+              Every game is completely free, with no pay-to-win mechanics and no hidden costs. You can jump in
+              instantly without an account, or create a free profile to save your scores and climb our global
+              leaderboards. Because we build our games in-house rather than reposting clones, each title has its
+              own identity, its own controls and its own reason to come back. We are a small independent studio
+              obsessed with making browser games that are genuinely fun to lose at — hence the name.
+            </p>
+
+            <h3 className="seo-block__subtitle">About us</h3>
+            <p className="seo-block__text">
+              Ragequit Arcade is an independent gaming platform. We design, build and run every game ourselves —
+              no third-party clones, no pay-to-win, no nonsense. Our goal is simple: create the most fun, most
+              honest browser arcade on the web. New games drop regularly, so follow us on TikTok and Instagram to
+              see what is coming next.
+            </p>
 
             {siteFaq.length > 0 && (
               <div className="seo-block__faq">
