@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0b1120">
 <meta name="description" content="Defend the world's greatest monuments from a flock of birds!">
-<title>POO DEFENSE — Ragequit Arcade</title>
+<title>BIRD BLITZ — Ragequit Arcade</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -83,6 +83,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
   transition:opacity .3s;box-shadow:0 0 42px rgba(56,189,248,.35),inset 0 0 30px rgba(56,189,248,.1);pointer-events:none;z-index:3}
 .shield.active{opacity:1;animation:shieldPulse 1.3s ease-in-out infinite alternate}
 @keyframes shieldPulse{0%{opacity:.4}100%{opacity:.9}}
+.shield-hp{position:absolute;top:-14px;left:12%;right:12%;height:6px;border-radius:4px;
+  background:rgba(10,20,32,.7);overflow:hidden;border:1px solid rgba(56,189,248,.5)}
+.shield-hp-fill{height:100%;background:linear-gradient(90deg,#38bdf8,#0ea5e9);transition:width .2s}
 
 /* ===== STAINS (accumulate + slight drip) ===== */
 .stain{position:absolute;z-index:8;pointer-events:none;animation:plop .25s ease-out;
@@ -142,6 +145,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 .dca svg{width:clamp(58px,11vw,86px);height:auto;display:block}
 .dca-barrel{transition:transform .09s ease-out;transform-box:fill-box}
 .agent svg{width:clamp(24px,4.6vw,36px);height:auto;display:block}
+.agent .sprite-img{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:clamp(30px,6vw,46px);height:auto;pointer-events:none}
+.dca .sprite-img{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:clamp(58px,11vw,86px);height:auto;pointer-events:none}
 .bubble{position:absolute;top:-16px;left:50%;transform:translateX(-50%);width:15px;height:15px;
   background:radial-gradient(circle,#e0f7fa,#4dd0e1);border-radius:50%;box-shadow:0 0 8px #26c6da;
   animation:bubblePop .7s ease-out forwards}
@@ -164,8 +169,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
   gap:clamp(12px,2.4vw,18px);background:linear-gradient(180deg,rgba(11,17,32,.94),rgba(17,26,46,.96));
   backdrop-filter:blur(18px);opacity:0;pointer-events:none;transition:opacity .45s;text-align:center;padding:clamp(20px,5vw,34px)}
 .screen.active{opacity:1;pointer-events:auto}
-.brandmark{display:flex;align-items:center;gap:10px;margin-bottom:2px}
-.brandmark svg{width:clamp(42px,9vw,62px);height:auto}
+.bb-logo{display:flex;justify-content:center;margin-bottom:10px}
+.bb-title-img{width:clamp(240px,70vw,440px);height:auto;display:block;filter:drop-shadow(0 8px 20px rgba(0,0,0,.5))}
+.bb-tag{color:rgba(255,255,255,.85);font-size:clamp(14px,3.4vw,17px);max-width:470px;line-height:1.65}
+.bb-tag strong{color:var(--neon)}
+.bb-play{font-size:clamp(16px,4vw,20px);padding:clamp(14px,3.4vw,18px) clamp(34px,8vw,54px)}
 .screen h1{font-size:clamp(30px,8.5vw,66px);font-weight:900;letter-spacing:1px;line-height:.95;
   background:linear-gradient(92deg,var(--gold),#ff8f00 60%,var(--red));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .screen h2{font-size:clamp(20px,5.5vw,42px);font-weight:900;color:#fff}
@@ -213,25 +221,23 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 .map-title{font-size:clamp(24px,7vw,46px);font-weight:900;text-transform:uppercase;margin-bottom:4px;letter-spacing:1px;
   background:linear-gradient(92deg,var(--gold),#ff8f00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .map-sub{color:rgba(255,255,255,.62);font-size:clamp(12px,3vw,15px);margin-bottom:clamp(16px,4vw,26px);text-align:center}
-.map-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(150px,42vw,210px),1fr));
-  gap:clamp(10px,2.4vw,16px);width:100%;max-width:960px}
-.map-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:16px;
-  padding:clamp(10px,2.6vw,16px);text-align:center;cursor:pointer;transition:transform .22s,background .22s,box-shadow .22s;position:relative;overflow:hidden}
-.map-card::before{content:'';position:absolute;inset:0;opacity:.14;transition:opacity .22s}
-.map-card:hover{transform:translateY(-5px);background:rgba(255,255,255,.1);box-shadow:0 12px 30px rgba(0,0,0,.35)}
-.map-card:hover::before{opacity:.24}
-.map-thumb{position:relative;height:clamp(64px,17vw,110px);border-radius:10px;overflow:hidden;margin-bottom:8px}
+.map-grid{display:flex;flex-direction:column;gap:clamp(14px,3vw,22px);width:100%;max-width:640px;margin:0 auto}
+.map-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:18px;
+  padding:0;text-align:left;cursor:pointer;transition:transform .22s,background .22s,box-shadow .22s;position:relative;overflow:hidden}
+.map-card:hover{transform:translateY(-4px);background:rgba(255,255,255,.09);box-shadow:0 14px 34px rgba(0,0,0,.4)}
+.map-thumb{position:relative;width:100%;aspect-ratio:16/9;border-radius:0;overflow:hidden}
 .map-thumb svg{width:100%;height:100%;display:block}
 .map-thumb .thumb-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.mc-name{color:#fff;font-size:clamp(11px,2.5vw,14px);font-weight:800;position:relative}
-.mc-city{color:rgba(255,255,255,.5);font-size:clamp(9px,2vw,11px);position:relative}
-.mc-best{color:var(--gold);font-size:clamp(9px,2vw,12px);font-weight:800;margin-top:3px;position:relative}
-.mc-perks{margin-top:8px;display:flex;flex-direction:column;gap:4px;text-align:left;position:relative}
-.mc-bonus,.mc-malus{font-size:clamp(8px,1.8vw,10.5px);line-height:1.25;font-weight:600;display:flex;gap:5px;align-items:flex-start;
-  padding:4px 6px;border-radius:7px}
-.mc-bonus{color:#b6f0c0;background:rgba(74,222,128,.1)}
-.mc-malus{color:#f6b4b4;background:rgba(248,113,113,.1)}
-.pk-ic{font-size:8px;line-height:1.5;flex:none}
+.mc-body{padding:clamp(12px,3vw,18px)}
+.mc-name{color:#fff;font-size:clamp(18px,5vw,26px);font-weight:900}
+.mc-city{color:rgba(255,255,255,.55);font-size:clamp(12px,3.2vw,16px);margin-top:1px}
+.mc-best{color:var(--gold);font-size:clamp(13px,3.4vw,17px);font-weight:800;margin-top:4px}
+.mc-perks{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.mc-bonus,.mc-malus{font-size:clamp(12px,3.2vw,15px);line-height:1.3;font-weight:700;display:flex;gap:8px;align-items:flex-start;
+  padding:7px 11px;border-radius:9px}
+.mc-bonus{color:#b6f0c0;background:rgba(74,222,128,.12)}
+.mc-malus{color:#f6b4b4;background:rgba(248,113,113,.12)}
+.pk-ic{font-size:11px;line-height:1.35;flex:none}
 
 /* SHOP OVERLAY */
 .shop{position:absolute;inset:0;z-index:250;background:linear-gradient(180deg,rgba(11,17,32,.97),rgba(17,26,46,.98));
@@ -254,6 +260,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 .si-icon{width:clamp(40px,9vw,54px);height:clamp(40px,9vw,54px);margin:0 auto 10px;
   background:rgba(255,255,255,.08);border-radius:14px;display:flex;align-items:center;justify-content:center}
 .si-icon svg{width:64%;height:64%}
+.si-icon{position:relative}
+.si-icon .si-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .si-name{font-size:clamp(13px,3vw,15px);font-weight:800;color:#fff;margin-bottom:5px}
 .si-desc{font-size:clamp(10px,2.5vw,12px);color:rgba(255,255,255,.55);margin-bottom:10px;line-height:1.4;min-height:2.6em}
 .si-price{font-size:clamp(14px,3vw,16px);font-weight:900;color:var(--gold);display:flex;align-items:center;justify-content:center;gap:5px}
@@ -262,29 +270,24 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 
 /* WAVE SCREEN */
 /* NON-BLOCKING WAVE OVERLAY */
-#waveOverlay{position:absolute;top:22%;left:50%;transform:translateX(-50%) translateY(-10px);
+#waveOverlay{position:absolute;top:15%;left:50%;transform:translateX(-50%) translateY(-10px);
   z-index:120;text-align:center;pointer-events:none;opacity:0;transition:opacity .4s,transform .4s;
-  background:var(--sky-glass);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:clamp(12px,2.6vw,20px) clamp(20px,5vw,40px);
-  box-shadow:0 10px 34px rgba(0,0,0,.4)}
+  background:var(--sky-glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:clamp(18px,3.4vw,28px) clamp(20px,4.5vw,40px);
+  box-shadow:0 12px 40px rgba(0,0,0,.45);width:min(92vw,560px)}
 #waveOverlay.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.wo-num{font-size:clamp(24px,6vw,44px);font-weight:900;color:var(--neon);line-height:1;text-shadow:0 0 26px rgba(163,230,53,.4)}
-.wo-count{font-size:clamp(13px,3vw,17px);color:#fff;font-weight:800;margin-top:6px;text-transform:uppercase;letter-spacing:1.5px}
-.wo-list{font-size:clamp(11px,2.6vw,14px);color:rgba(255,255,255,.75);margin-top:6px}
-
-/* PERK BANNER (start of level) */
-#perkBanner{position:absolute;top:34%;left:50%;transform:translateX(-50%) translateY(8px);z-index:118;
-  pointer-events:none;opacity:0;transition:opacity .45s,transform .45s;text-align:center;
-  background:var(--sky-glass);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:clamp(10px,2.2vw,16px) clamp(16px,4vw,28px);
-  box-shadow:0 10px 30px rgba(0,0,0,.4);min-width:min(84vw,420px)}
-#perkBanner.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.pb-title{font-size:clamp(16px,4vw,24px);font-weight:900;color:#fff;margin-bottom:8px}
-.pb-row{display:flex;justify-content:space-between;gap:14px;align-items:center;font-size:clamp(11px,2.5vw,14px);
-  font-weight:700;padding:6px 10px;border-radius:9px;margin-top:5px;text-align:left}
-.pb-row>span:first-child{flex:none;font-weight:900;letter-spacing:.5px}
-.pb-bonus{background:rgba(74,222,128,.14);color:#b6f0c0}
-.pb-malus{background:rgba(248,113,113,.14);color:#f6b4b4}
+.wo-num{font-size:clamp(34px,9vw,60px);font-weight:900;color:var(--neon);line-height:1;text-shadow:0 0 28px rgba(163,230,53,.45)}
+.wo-count{font-size:clamp(16px,4vw,22px);color:#fff;font-weight:800;margin-top:8px;text-transform:uppercase;letter-spacing:1.5px}
+.wo-list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.wb-card{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;padding:10px 14px;text-align:left}
+.wb-sprite{flex:none;width:clamp(46px,10vw,64px);height:clamp(34px,7vw,46px);display:flex;align-items:center;justify-content:center}
+.wb-sprite svg{width:100%;height:100%}
+.wb-sprite .wg{animation:none}
+.wb-x{flex:none;font-size:clamp(20px,5vw,30px);font-weight:900;color:var(--gold);min-width:clamp(40px,10vw,58px)}
+.wb-info{flex:1;min-width:0}
+.wb-name{font-size:clamp(15px,3.6vw,20px);font-weight:900;color:#fff}
+.wb-trait{font-size:clamp(12px,2.9vw,15px);color:rgba(255,255,255,.7);font-weight:600;margin-top:2px}
 
 /* ACTIVE TIMED ITEMS (left column under HUD) */
 #activeItems{position:absolute;left:clamp(10px,2vw,18px);top:clamp(72px,15vw,104px);z-index:95;
@@ -330,7 +333,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 
 <!-- SCORE CARD (rendered offscreen for sharing) -->
 <div class="score-card" id="scoreCard">
-  <div class="sc-title">POO DEFENSE</div>
+  <div class="sc-title">BIRD BLITZ</div>
   <div class="sc-monument" id="scMonument">Eiffel Tower</div>
   <div class="sc-label">SCORE</div>
   <div class="sc-score" id="scScore">0</div>
@@ -393,12 +396,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
     <div class="wo-list" id="woList"></div>
   </div>
 
-  <div id="perkBanner">
-    <div class="pb-title" id="pbTitle">Paris</div>
-    <div class="pb-row pb-bonus"><span>▲ BONUS</span><span id="pbBonus"></span></div>
-    <div class="pb-row pb-malus"><span>▼ MALUS</span><span id="pbMalus"></span></div>
-  </div>
-
   <!-- AD OVERLAY (simulated rewarded ad) -->
   <div id="adOverlay">
     <div class="ad-box">
@@ -410,17 +407,16 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 
   <!-- START -->
   <div class="screen active" id="startScreen">
-    <div class="brandmark">
-      <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#5c4018"/><ellipse cx="32" cy="30" rx="15" ry="12" fill="#3d2b10"/><ellipse cx="32" cy="40" rx="9" ry="7" fill="#3d2b10"/></svg>
+    <div class="bb-logo">
+      <img src="/games/bird-blitz/bird-blitz-titre.webp" alt="Bird Blitz" class="bb-title-img">
     </div>
-    <h1>POO DEFENSE</h1>
-    <p>A flock of birds wants to defile the world's greatest monuments.<br><br>
+    <p class="bb-tag">A flock of birds wants to defile the world's greatest monuments.<br><br>
     <strong>Tap or click</strong> the birds before they drop their payload.<br>
     <strong>Hire</strong> cleaners and auto-cannons from the shop.<br>
     <strong>Earn</strong> gold with every kill and unlock heavy gear.<br><br>
     Watch out for <strong>gold-thief crows</strong>.</p>
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="showMap()">Play</button>
+      <button class="btn btn-primary bb-play" onclick="showMap()">Play</button>
     </div>
   </div>
 
@@ -1307,10 +1303,10 @@ crow:`<svg viewBox="0 0 100 70" class="bsvg">
 };
 
 const BIRDS={
-  pigeon:{cls:'t-pigeon',hp:1,speed:1.7,reward:5,dropChance:.5,score:10},
-  seagull:{cls:'t-seagull',hp:1,speed:2.1,reward:7,dropChance:.55,score:14},
-  eagle:{cls:'t-eagle',hp:2,speed:2.8,reward:16,dropChance:.7,score:28},
-  albatross:{cls:'t-albatross',hp:3,speed:1.5,reward:18,dropChance:.65,score:30},
+  pigeon:{cls:'t-pigeon',hp:1,speed:1.7,reward:4,dropChance:.5,score:10},
+  seagull:{cls:'t-seagull',hp:1,speed:2.1,reward:5,dropChance:.55,score:14},
+  eagle:{cls:'t-eagle',hp:2,speed:2.8,reward:11,dropChance:.7,score:28},
+  albatross:{cls:'t-albatross',hp:3,speed:1.5,reward:13,dropChance:.65,score:30},
   crow:{cls:'t-crow',hp:1,speed:2.4,reward:0,dropChance:0,score:18,thief:true}
 };
 
@@ -1322,7 +1318,7 @@ const SHOP=[
     icon:'<svg viewBox="0 0 24 24" fill="#f59e0b"><rect x="10" y="12" width="4" height="10"/><path d="M12 12 20 5" stroke="#f59e0b" stroke-width="3"/><circle cx="12" cy="12" r="3.5"/><path d="M6 22h12" stroke="#f59e0b" stroke-width="2"/></svg>'},
   {id:'agent',name:'Cleaner',desc:'Auto-scrubs droppings off the monument.',price:90,dur:22,
     icon:'<svg viewBox="0 0 24 24" fill="#38bdf8"><circle cx="12" cy="7" r="4"/><path d="M5 22c0-4 3-7 7-7s7 3 7 7z"/></svg>'},
-  {id:'shield',name:'Shield',desc:'Blocks all droppings.',price:100,dur:12,
+  {id:'shield',name:'Shield',desc:'Absorbs 8 droppings, then breaks.',price:100,hp:8,
     icon:'<svg viewBox="0 0 24 24" fill="#38bdf8"><path d="M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6z"/></svg>'},
   {id:'bomb',name:'Air Strike',desc:'Wipes every bird on screen. Instant.',price:150,instant:true,
     icon:'<svg viewBox="0 0 24 24" fill="#ef4444"><circle cx="11" cy="15" r="7"/><path d="M15 6l3-3 2 2-3 3" stroke="#ef4444" stroke-width="2"/></svg>'}
@@ -1337,7 +1333,7 @@ function initSession(monId){
   clearActiveItems();
   S={monId,score:0,coins:0,clean:100,wave:0,queue:[],spawned:0,
      birds:[],
-     shieldBlock:false,agentActive:false,dcaActive:false,shotgunActive:false,
+     shieldBlock:false,shieldHp:0,agentActive:false,dcaActive:false,shotgunActive:false,
      items:{},            // id -> {until, dur}
      phase:'idle',        // idle | buffer | overlay | fighting
      phaseUntil:0,fightUntil:0,
@@ -1381,19 +1377,9 @@ function waveComp(w){
 function beginRun(){
   Audio2.init();Audio2.resume();
   if(musicOn&&!Audio2.musicOn)Audio2.startMusic();
-  showPerkBanner();
   running=true;lastT=performance.now();spawnAcc=0;
   queueNextWave(0);                 // start first wave prep immediately
   cancelAnimationFrame(rafId);rafId=requestAnimationFrame(loop);
-}
-function showPerkBanner(){
-  const m=MONMAP[S.monId];if(!m||!m.perk)return;
-  document.getElementById('pbTitle').textContent=m.name;
-  document.getElementById('pbBonus').textContent=m.perk.bonus||'—';
-  document.getElementById('pbMalus').textContent=m.perk.malus||'—';
-  const b=document.getElementById('perkBanner');
-  b.classList.add('show');
-  clearTimeout(b._t);b._t=setTimeout(()=>b.classList.remove('show'),3200);
 }
 function queueNextWave(preDelay){
   // pre-buffer with no birds
@@ -1401,19 +1387,35 @@ function queueNextWave(preDelay){
   S.phaseUntil=performance.now()+ (preDelay!=null?preDelay:2000);
   S._pendingWave=true;
 }
+const BIRD_INFO={
+  pigeon:{name:'Pigeon',hits:'1 hit',trait:'Basic dropper'},
+  seagull:{name:'Seagull',hits:'1 hit',trait:'Quick flyer'},
+  eagle:{name:'Eagle',hits:'2 hits',trait:'Fastest — hard to hit'},
+  albatross:{name:'Albatross',hits:'3 hits',trait:'Huge & tanky'},
+  crow:{name:'Crow',hits:'1 hit',trait:'Steals your gold'}
+};
 function showWaveOverlay(){
   S.wave++;
   S.queue=waveComp(S.wave);S.spawned=0;
   const counts={};S.queue.forEach(k=>counts[k]=(counts[k]||0)+1);
-  const lines=Object.keys(counts).map(k=>`${counts[k]} ${BIRD_NAMES[k]}`).join(' · ');
   document.getElementById('woNum').textContent='Wave '+S.wave;
   document.getElementById('woCount').textContent=S.queue.length+' birds inbound';
-  document.getElementById('woList').textContent=lines;
+  // build rich bird cards: sprite ×N + traits
+  const order=['pigeon','seagull','eagle','albatross','crow'];
+  const list=document.getElementById('woList');
+  list.innerHTML=order.filter(k=>counts[k]).map(k=>{
+    const info=BIRD_INFO[k];
+    return `<div class="wb-card">
+      <div class="wb-sprite">${BIRD_SVG[k]}</div>
+      <div class="wb-x">×${counts[k]}</div>
+      <div class="wb-info"><div class="wb-name">${info.name}</div>
+        <div class="wb-trait">${info.hits} · ${info.trait}</div></div>
+    </div>`;
+  }).join('');
   const ov=document.getElementById('waveOverlay');
   ov.classList.add('show');
   syncHUD();
-  // overlay visible ~2s, then post-buffer 2s, then fight
-  S.phase='overlay';S.phaseUntil=performance.now()+2000;
+  S.phase='overlay';S.phaseUntil=performance.now()+2600;
 }
 
 function loop(t){
@@ -1450,7 +1452,7 @@ function loop(t){
     // wave ends when no birds remain (killed or gone)
     if(S.spawned>=S.queue.length && S.birds.filter(b=>!b.dead).length===0){
       S.fightUntil=0;
-      S.coins+=20+S.wave*5;updateBest();syncHUD();
+      S.coins+=14+S.wave*3;updateBest();syncHUD();
       queueNextWave(2000);
     }
   }
@@ -1659,7 +1661,13 @@ function tagHit(b,ix,iy){
 /* ---------- POO: launches from bird, falls onto monument, accumulates ---------- */
 const STAIN_COLS=['#8a8f96','#9aa0a6','#7c828a']; // greyish
 function launchPoo(b,fr){
-  if(S.shieldBlock){floatText(b.x+b.w/2,b.y,'blocked','#38bdf8');return;}
+  if(S.shieldBlock){
+    floatText(b.x+b.w/2,b.y,'blocked','#38bdf8');
+    S.shieldHp=(S.shieldHp||0)-1;
+    updateShieldUI();
+    if(S.shieldHp<=0)breakShield();
+    return;
+  }
   const mr=monRect();
   const sx=b.x+b.w/2, sy=b.y+b.h;
   // pick a landing point strictly INSIDE the monument silhouette
@@ -1807,17 +1815,39 @@ function syncHUD(){
 /* ---------- ACTIVE ITEMS (timed) ---------- */
 function activateItem(it){
   const now=performance.now();
+  if(it.id==='shield'){
+    S.shieldHp=(S.shieldHp||0)+it.hp;   // stack if bought again
+    S.shieldBlock=true;
+    document.getElementById('shield').classList.add('active');
+    updateShieldUI();
+    renderActiveItems();
+    return;
+  }
   S.items[it.id]={until:now+it.dur*1000,dur:it.dur,name:it.name,icon:it.icon};
   if(it.id==='shotgun')S.shotgunActive=true;
-  if(it.id==='shield'){S.shieldBlock=true;document.getElementById('shield').classList.add('active');}
   if(it.id==='agent'){ if(!S.agentActive){S.agentActive=true;spawnAgent();} if(S._agentIv)clearInterval(S._agentIv); if(running){S._agentIv=setInterval(agentTickOnce,850);} }
   if(it.id==='dca'){ if(!S.dcaActive){S.dcaActive=true;spawnDCA();} if(S._dcaIv)clearInterval(S._dcaIv); if(running){S._dcaIv=setInterval(dcaTick,1000);} }
+  renderActiveItems();
+}
+function updateShieldUI(){
+  const el=document.getElementById('shield');
+  let bar=document.getElementById('shieldHp');
+  if(!bar){bar=document.createElement('div');bar.id='shieldHp';bar.className='shield-hp';el.appendChild(bar);}
+  const it=SHOP.find(x=>x.id==='shield');
+  const max=it?it.hp:8;
+  bar.innerHTML=`<div class="shield-hp-fill" style="width:${Math.max(0,Math.min(100,(S.shieldHp/max)*100))}%"></div>`;
+}
+function breakShield(){
+  S.shieldBlock=false;S.shieldHp=0;
+  const el=document.getElementById('shield');
+  el.classList.remove('active');
+  const bar=document.getElementById('shieldHp');if(bar)bar.remove();
+  Audio2.explosion();
   renderActiveItems();
 }
 function expireItem(id){
   delete S.items[id];
   if(id==='shotgun')S.shotgunActive=false;
-  if(id==='shield'){S.shieldBlock=false;document.getElementById('shield').classList.remove('active');}
   if(id==='agent'){S.agentActive=false;if(S._agentIv)clearInterval(S._agentIv);layers.agents.querySelectorAll('.agent').forEach(a=>a.remove());}
   if(id==='dca'){S.dcaActive=false;if(S._dcaIv)clearInterval(S._dcaIv);layers.agents.querySelectorAll('.dca').forEach(a=>a.remove());}
   renderActiveItems();
@@ -1893,10 +1923,10 @@ function renderShop(){
     const div=document.createElement('div');
     div.className='shop-item'+(locked?' locked':'');
     div.innerHTML=`${active?'<span class="si-owned">Active</span>':''}
-      <div class="si-icon">${it.icon}</div>
+      <div class="si-icon">${it.icon}<img class="si-img" src="${IMG_DIR}icon_${it.id==='dca'?'aabattery':it.id==='bomb'?'airstrike':it.id}.webp" alt="" loading="lazy" onerror="this.style.display='none'"></div>
       <div class="si-name">${it.name}</div>
       <div class="si-desc">${it.desc}</div>
-      <div class="si-price"><span class="coin"></span>${price}${it.dur?` · ${it.dur}s`:''}</div>`;
+      <div class="si-price"><span class="coin"></span>${price}${it.dur?` · ${it.dur}s`:it.hp?` · ${it.hp} hp`:''}</div>`;
     div.onclick=()=>buy(it);
     grid.appendChild(div);
   }
@@ -1921,7 +1951,7 @@ function airstrike(){
 }
 function spawnAgent(){
   const el=document.createElement('div');el.className='agent';
-  el.innerHTML=`<svg viewBox="0 0 24 40"><rect x="8" y="0" width="8" height="8" rx="4" fill="#ffcc80"/><rect x="6" y="8" width="12" height="16" rx="4" fill="#1976d2"/><rect x="7" y="22" width="4" height="14" rx="2" fill="#1565c0"/><rect x="13" y="22" width="4" height="14" rx="2" fill="#1565c0"/><rect x="2" y="10" width="4" height="10" rx="2" fill="#ffcc80"/><rect x="18" y="10" width="4" height="10" rx="2" fill="#ffcc80"/></svg>`;
+  el.innerHTML=`<svg viewBox="0 0 24 40"><rect x="8" y="0" width="8" height="8" rx="4" fill="#ffcc80"/><rect x="6" y="8" width="12" height="16" rx="4" fill="#1976d2"/><rect x="7" y="22" width="4" height="14" rx="2" fill="#1565c0"/><rect x="13" y="22" width="4" height="14" rx="2" fill="#1565c0"/><rect x="2" y="10" width="4" height="10" rx="2" fill="#ffcc80"/><rect x="18" y="10" width="4" height="10" rx="2" fill="#ffcc80"/></svg><img class="sprite-img" src="${IMG_DIR}sprite_cleaner.webp" alt="" onerror="this.style.display='none'">`;
   el.style.left='24px';
   layers.agents.appendChild(el);
   setInterval(()=>{if(el.isConnected){el.style.left=(20+Math.random()*(frameRect().width*0.5))+'px';}},2400);
@@ -1950,7 +1980,7 @@ function spawnDCA(){
       <rect x="34.5" y="2" width="7" height="8" rx="1.5" fill="#57614e"/>
       <rect x="34.5" y="4.5" width="7" height="1.6" fill="#3f4839"/>
       <rect x="32" y="20" width="3" height="22" rx="1" fill="#57614e"/>
-    </g></svg>`;
+    </g></svg><img class="sprite-img" src="${IMG_DIR}sprite_dca.webp" alt="" onerror="this.style.display='none'">`;
   el.style.left='calc(24% - 30px)';
   layers.agents.appendChild(el);
 }
@@ -2002,12 +2032,14 @@ function renderMap(){
     const p=m.perk||{};
     const card=document.createElement('div');card.className='map-card';
     card.innerHTML=`<div class="map-thumb">${sceneThumb(m)}</div>
-      <div class="mc-name">${m.name}</div>
-      <div class="mc-city">${m.city}</div>
-      <div class="mc-best">Best: ${bests[m.id]||0}</div>
-      <div class="mc-perks">
-        <div class="mc-bonus"><span class="pk-ic">▲</span>${p.bonus||'—'}</div>
-        <div class="mc-malus"><span class="pk-ic">▼</span>${p.malus||'—'}</div>
+      <div class="mc-body">
+        <div class="mc-name">${m.name}</div>
+        <div class="mc-city">${m.city}</div>
+        <div class="mc-best">Best: ${bests[m.id]||0}</div>
+        <div class="mc-perks">
+          <div class="mc-bonus"><span class="pk-ic">▲</span>${p.bonus||'—'}</div>
+          <div class="mc-malus"><span class="pk-ic">▼</span>${p.malus||'—'}</div>
+        </div>
       </div>`;
     card.onclick=()=>{hideMap();initSession(m.id);beginRun();};
     grid.appendChild(card);
@@ -2070,8 +2102,8 @@ function generateScoreCard(){
   setTimeout(()=>{card.style.left='-9999px';card.style.zIndex='';},2600);
 }
 function share(){
-  const txt=`I scored ${S?S.score:0} points defending ${nowMon().name} in POO DEFENSE! Beat that: ragequit-arcade.com`;
-  if(navigator.share){navigator.share({title:'POO DEFENSE',text:txt,url:'https://ragequit-arcade.com'}).catch(()=>{});}
+  const txt=`I scored ${S?S.score:0} points defending ${nowMon().name} in BIRD BLITZ! Beat that: ragequit-arcade.com`;
+  if(navigator.share){navigator.share({title:'BIRD BLITZ',text:txt,url:'https://ragequit-arcade.com'}).catch(()=>{});}
   else if(navigator.clipboard){navigator.clipboard.writeText(txt);alert('Score copied!\n\n'+txt);}
   else alert(txt);
 }
