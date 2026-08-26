@@ -222,23 +222,20 @@ function GameTester(){
     return () => { document.body.style.overflow = '' }
   }, [active])
   if(active){
-    const landscape = active.orientation === 'landscape'
     return (
       <div className="gt-player">
         <div className="gt-player__bar">
           <button className="gt-player__back" onClick={() => setActive(null)}>‹ Retour aux jeux</button>
           <span className="gt-player__name">{active.title}</span>
-          <span className="gt-player__badge">{landscape ? 'Paysage' : 'Portrait'}</span>
+          <span className="gt-player__badge">Conditions réelles</span>
         </div>
-        <div className="gt-player__stage">
-          <div className={`gt-frame ${landscape ? 'gt-frame--land' : 'gt-frame--port'}`}>
-            <iframe
-              title={active.title}
-              src={active.file}
-              className="gt-iframe"
-              allow="autoplay; fullscreen; gamepad"
-            />
-          </div>
+        <div className="gt-player__stage gt-player__stage--real">
+          <iframe
+            title={active.title}
+            src={active.file}
+            className="gt-iframe gt-iframe--real"
+            allow="autoplay; fullscreen; gamepad"
+          />
         </div>
       </div>
     )
@@ -247,8 +244,9 @@ function GameTester(){
     <div className="gt">
       <p className="gt-intro">
         Ces jeux sont en test et ne sont <strong>pas visibles sur le site public</strong>.
-        Lance-les ici pour les essayer avant de les publier. Pour ajouter un jeu, édite
-        <code> src/data/testGames.js</code>.
+        Le jeu s'affiche ici <strong>dans les conditions réelles de ton écran</strong> : version mobile
+        sur smartphone ou tablette, version desktop sur ordinateur — exactement comme sur le site.
+        Pour ajouter un jeu, édite <code>src/data/testGames.js</code>.
       </p>
       {testGames.length === 0 ? (
         <p className="adm-empty">Aucun jeu en test pour le moment.</p>
