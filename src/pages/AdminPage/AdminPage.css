@@ -190,3 +190,16 @@
   .gt-grid{grid-template-columns:1fr;}
   .gt-player__stage{padding:6px;}
 }
+/* GameTester — affichage en conditions réelles (plein écran, sans cadre imposé) */
+.gt-player__stage--real{
+  position: absolute;
+  inset: 0;
+  top: 52px; /* hauteur de la barre du haut */
+  background: #000;
+}
+.gt-iframe--real{
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
