@@ -9,7 +9,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --gold:#fbbf24;--gold-deep:#f59e0b;--red:#ef4444;--neon:#a3e635;--neon-deep:#65a30d;
+  --gold:#ffcf33;--gold-deep:#f59e0b;--red:#ef4444;--neon:#38bdf8;--neon-deep:#0ea5e9;
   --ink:#0b1120;--ink-2:#111a2e;--sky-glass:rgba(11,17,32,.72);
   --vh:1vh;
 }
@@ -31,6 +31,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 .layer{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 #bgScene{z-index:1}
 #bgScene svg{width:100%;height:100%;display:block}
+#bgScene .scene-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center bottom;display:block}
 #fogVeil{z-index:35;display:none}
 #fogVeil.on{display:block}
 .monument-wrap{z-index:9}
@@ -98,9 +99,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 /* ===== BIRDS (detailed SVG) ===== */
 .bird{position:absolute;cursor:crosshair;pointer-events:auto;will-change:transform;animation:bob 1s ease-in-out infinite}
 .bird .bsvg{display:block;width:100%;height:100%;overflow:visible}
-.bird .wg{transform-box:fill-box;animation:flap .34s ease-in-out infinite alternate}
-@keyframes bob{0%,100%{margin-top:0}50%{margin-top:3px}}
-@keyframes flap{0%{transform:rotate(-6deg) scaleY(1)}100%{transform:rotate(4deg) scaleY(.7)}}
+.bird .wg{transform-box:fill-box;animation:flap .3s ease-in-out infinite alternate}
+@keyframes bob{0%,100%{margin-top:0}50%{margin-top:4px}}
+@keyframes flap{0%{transform:rotate(-24deg) scaleY(1.05)}55%{transform:rotate(6deg) scaleY(.8)}100%{transform:rotate(22deg) scaleY(.55)}}
 .dead{pointer-events:none}
 .dead .wg{animation:none}
 
@@ -184,7 +185,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
   text-transform:uppercase;letter-spacing:.8px;color:var(--ink)}
 .btn:hover{transform:translateY(-3px);filter:brightness(1.06)}
 .btn:active{transform:translateY(0) scale(.97)}
-.btn-primary{background:linear-gradient(92deg,var(--neon),var(--neon-deep));box-shadow:0 6px 22px rgba(163,230,53,.35)}
+.btn-primary{background:linear-gradient(92deg,var(--neon),var(--neon-deep));box-shadow:0 6px 22px rgba(56,189,248,.4)}
 .btn-gold{background:linear-gradient(92deg,var(--gold),var(--gold-deep));color:#3a2600;box-shadow:0 6px 22px rgba(251,191,36,.35)}
 .btn-blue{background:linear-gradient(92deg,#38bdf8,#0284c7);color:#fff;box-shadow:0 6px 22px rgba(56,189,248,.35)}
 .btn-revive{background:linear-gradient(92deg,#a3e635,#65a30d);color:#14210a;box-shadow:0 6px 26px rgba(163,230,53,.45);
@@ -276,7 +277,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
   border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:clamp(18px,3.4vw,28px) clamp(20px,4.5vw,40px);
   box-shadow:0 12px 40px rgba(0,0,0,.45);width:min(92vw,560px)}
 #waveOverlay.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.wo-num{font-size:clamp(34px,9vw,60px);font-weight:900;color:var(--neon);line-height:1;text-shadow:0 0 28px rgba(163,230,53,.45)}
+.wo-num{font-size:clamp(34px,9vw,60px);font-weight:900;color:var(--neon);line-height:1;text-shadow:0 0 28px rgba(56,189,248,.45)}
 .wo-count{font-size:clamp(16px,4vw,22px);color:#fff;font-weight:800;margin-top:8px;text-transform:uppercase;letter-spacing:1.5px}
 .wo-list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
 .wb-card{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
@@ -305,9 +306,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 
 /* CROSSHAIR (desktop only) */
 #crosshair{position:absolute;width:30px;height:30px;z-index:110;pointer-events:none;display:none;
-  transform:translate(-50%,-50%);border:2px solid rgba(163,230,53,.9);border-radius:50%;
-  box-shadow:0 0 8px rgba(163,230,53,.5),inset 0 0 6px rgba(163,230,53,.3)}
-#crosshair::before,#crosshair::after{content:'';position:absolute;background:rgba(163,230,53,.9)}
+  transform:translate(-50%,-50%);border:2px solid rgba(56,189,248,.9);border-radius:50%;
+  box-shadow:0 0 8px rgba(56,189,248,.5),inset 0 0 6px rgba(56,189,248,.3)}
+#crosshair::before,#crosshair::after{content:'';position:absolute;background:rgba(56,189,248,.9)}
 #crosshair::before{left:50%;top:-7px;width:2px;height:6px;transform:translateX(-50%)}
 #crosshair::after{left:50%;bottom:-7px;width:2px;height:6px;transform:translateX(-50%)}
 @media(pointer:coarse){#crosshair{display:none!important}}
@@ -319,7 +320,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 .sc-title{font-size:84px;font-weight:900;background:linear-gradient(92deg,var(--gold),#ff8f00);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .sc-monument{font-size:52px;color:rgba(255,255,255,.85);font-weight:300}
-.sc-score{font-size:190px;font-weight:900;color:var(--neon);text-shadow:0 0 54px rgba(163,230,53,.45);line-height:1}
+.sc-score{font-size:190px;font-weight:900;color:var(--neon);text-shadow:0 0 54px rgba(56,189,248,.45);line-height:1}
 .sc-label{font-size:36px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:8px}
 .sc-footer{font-size:34px;color:var(--gold);margin-top:44px;font-weight:700}
 .sc-url{font-size:28px;color:rgba(255,255,255,.42);margin-top:20px;letter-spacing:3px}
@@ -355,7 +356,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
   </div>
 
   <div class="top-btns">
-    <button class="round-btn gold-btn" id="x2Btn" onclick="watchDoubleGold()" title="Watch ad: double gold"><span class="ad-badge sm">AD</span>×2</button>
     <button class="round-btn" id="musicBtn" onclick="toggleMusic()" title="Sound">♪</button>
     <button class="round-btn" onclick="togglePause()" title="Pause" id="pauseBtn">⏸</button>
   </div>
@@ -1149,20 +1149,16 @@ function buildScene(m){
   // SVG scene is drawn first (instant, and it's the fallback)
   bgEl.innerHTML=`<svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><defs>${s.sky}${s.extraDefs||''}</defs><rect width="1000" height="600" fill="url(#sky)"/>${s.body}</svg>`;
   document.getElementById('monumentShape').innerHTML=m.art;
-  // Try to load the real artwork image; if present it covers the SVG. If missing, SVG stays.
+  // Real artwork on top of the SVG (same approach as the map thumbs). If it 404s, it hides and SVG shows.
   const portrait=window.innerHeight>=window.innerWidth;
   const src=portrait?m.imgMobile:m.imgDesktop;
-  const img=new Image();
-  img.onload=()=>{
-    bgEl.style.backgroundImage=`url("${src}")`;
-    bgEl.style.backgroundSize='cover';
-    bgEl.style.backgroundPosition='center bottom';
-    bgEl.classList.add('has-img');
-    // hide the monument SVG when a full-scene image is used (monument is inside the image)
-    document.getElementById('monumentShape').style.opacity='0';
-  };
-  img.onerror=()=>{ bgEl.classList.remove('has-img'); document.getElementById('monumentShape').style.opacity=''; };
+  const img=document.createElement('img');
+  img.className='scene-img';
+  img.alt='';
+  img.onload=()=>{ document.getElementById('monumentShape').style.opacity='0'; };
+  img.onerror=()=>{ img.remove(); document.getElementById('monumentShape').style.opacity=''; };
   img.src=src;
+  bgEl.appendChild(img);
   // fog / canopy veil
   const veil=document.getElementById('fogVeil');
   const fog=(m.perk&&m.perk.fog)||null;
@@ -1199,33 +1195,40 @@ const BIRD_SVG = {
 
 /* PIGEON — small, grey, plump, green neck sheen */
 pigeon:`<svg viewBox="0 0 100 70" class="bsvg">
-  <ellipse cx="52" cy="60" rx="20" ry="4" fill="#000" opacity="0.12"/>
+  <ellipse cx="52" cy="62" rx="22" ry="4" fill="#000" opacity="0.12"/>
   <!-- tail -->
-  <path d="M14 40 L2 34 L4 46 L16 46 Z" fill="#5f6f80"/>
-  <!-- body -->
-  <ellipse cx="50" cy="40" rx="26" ry="17" fill="#8493a3"/>
-  <path d="M50 24 Q74 24 76 40 Q74 52 50 54 Q40 40 50 24Z" fill="#98a6b5"/>
-  <!-- neck sheen -->
-  <ellipse cx="66" cy="30" rx="8" ry="6" fill="#5fae8f" opacity="0.7"/>
-  <ellipse cx="68" cy="33" rx="5" ry="4" fill="#a76fae" opacity="0.5"/>
+  <path d="M22 42 L11 36 L13 44 L12 50 L26 48 Z" fill="#5a6a7a"/>
+  <path d="M24 43 L14 40 L26 46 Z" fill="#6b7b8c" opacity="0.7"/>
+  <!-- body: plump -->
+  <ellipse cx="52" cy="42" rx="27" ry="18" fill="#8fa0b2"/>
+  <path d="M52 25 Q78 26 79 43 Q76 56 50 57 Q42 42 52 25Z" fill="#a1b1c1"/>
+  <!-- lower belly lighter -->
+  <ellipse cx="54" cy="50" rx="18" ry="8" fill="#b3c1cf" opacity="0.6"/>
+  <!-- neck iridescence -->
+  <path d="M64 30 Q74 30 74 40 Q70 46 62 44 Q60 36 64 30Z" fill="#4fae86" opacity="0.75"/>
+  <ellipse cx="69" cy="35" rx="5" ry="5" fill="#a76fae" opacity="0.5"/>
   <!-- head -->
-  <circle cx="74" cy="27" r="11" fill="#7d8c9c"/>
-  <!-- beak -->
-  <path d="M84 27 l10 -2 l-1 5 l-9 1 Z" fill="#3a4450"/>
-  <circle cx="83" cy="24" r="1.6" fill="#e8b04a"/>
+  <circle cx="76" cy="27" r="12" fill="#8493a4"/>
+  <path d="M76 16 Q86 18 86 27 Q82 20 76 19Z" fill="#93a1b1" opacity="0.7"/>
+  <!-- beak with cere -->
+  <path d="M86 27 l11 -2 l-1 5 l-10 2 Z" fill="#43505c"/>
+  <ellipse cx="85" cy="24.5" rx="2.4" ry="1.6" fill="#eef2f6"/>
   <!-- eye -->
-  <circle cx="79" cy="24" r="3" fill="#fff"/><circle cx="80" cy="24" r="1.8" fill="#1a1f26"/>
-  <!-- wing (animated) -->
-  <g class="wg" style="transform-origin:46px 34px">
-    <path d="M46 34 Q30 14 12 22 Q26 30 34 40 Q40 42 46 40Z" fill="#63707f"/>
-    <path d="M46 34 Q34 20 20 24" fill="none" stroke="#4f5b68" stroke-width="1.5"/>
+  <circle cx="80" cy="24" r="3.4" fill="#fff"/><circle cx="81" cy="24" r="2.1" fill="#f6a417"/><circle cx="81.4" cy="24" r="1" fill="#1a1f26"/>
+  <!-- feet -->
+  <path d="M50 58 l-1 5 M54 58 l1 5" stroke="#e79aa0" stroke-width="2" stroke-linecap="round"/>
+  <!-- wing (animated) — broad, layered feathers -->
+  <g class="wg" style="transform-origin:50px 36px">
+    <path d="M50 36 Q30 12 6 20 Q22 30 32 42 Q42 46 50 42Z" fill="#6b7b8c"/>
+    <path d="M50 36 Q34 20 16 24 Q30 30 38 40 Q44 42 50 40Z" fill="#7d8ca0"/>
+    <g stroke="#556374" stroke-width="1.2" opacity="0.6" fill="none"><path d="M12 22 Q24 28 34 38 M20 21 Q30 28 38 36 M28 22 Q35 28 41 35"/></g>
   </g>
 </svg>`,
 
 /* SEAGULL — white, slim, orange beak */
 seagull:`<svg viewBox="0 0 100 70" class="bsvg">
   <ellipse cx="52" cy="60" rx="20" ry="4" fill="#000" opacity="0.1"/>
-  <path d="M16 40 L3 36 L5 46 L18 46 Z" fill="#d7dee5"/>
+  <path d="M24 40 L11 36 L13 46 L26 46 Z" fill="#d7dee5"/>
   <ellipse cx="50" cy="40" rx="27" ry="15" fill="#fbfdff"/>
   <path d="M52 26 Q76 26 78 40 Q76 51 52 52 Q44 40 52 26Z" fill="#eef3f7"/>
   <circle cx="76" cy="28" r="10" fill="#ffffff"/>
@@ -1243,7 +1246,7 @@ seagull:`<svg viewBox="0 0 100 70" class="bsvg">
 eagle:`<svg viewBox="0 0 100 70" class="bsvg">
   <ellipse cx="52" cy="62" rx="24" ry="4" fill="#000" opacity="0.12"/>
   <!-- fanned tail -->
-  <path d="M10 42 L-2 34 L0 40 L-2 48 L12 48 Z" fill="#f4f4f0"/>
+  <path d="M22 42 L10 34 L12 40 L10 48 L24 48 Z" fill="#f4f4f0"/>
   <!-- brown body -->
   <ellipse cx="50" cy="42" rx="30" ry="16" fill="#4a3526"/>
   <path d="M52 28 Q80 28 82 44 Q78 54 52 56 Q44 42 52 28Z" fill="#5b4230"/>
@@ -1268,7 +1271,7 @@ eagle:`<svg viewBox="0 0 100 70" class="bsvg">
 /* ALBATROSS — big, very long wings, white */
 albatross:`<svg viewBox="0 0 120 70" class="bsvg">
   <ellipse cx="60" cy="62" rx="28" ry="4" fill="#000" opacity="0.1"/>
-  <path d="M22 42 L8 38 L10 46 L24 47 Z" fill="#d2dae2"/>
+  <path d="M30 42 L16 38 L18 46 L32 47 Z" fill="#d2dae2"/>
   <ellipse cx="58" cy="42" rx="30" ry="14" fill="#fcfeff"/>
   <path d="M60 30 Q86 30 88 43 Q84 52 60 53 Q52 42 60 30Z" fill="#eef3f8"/>
   <circle cx="86" cy="32" r="10" fill="#ffffff"/>
@@ -1286,7 +1289,7 @@ albatross:`<svg viewBox="0 0 120 70" class="bsvg">
 /* CROW — glossy black, red eye, gold-thief */
 crow:`<svg viewBox="0 0 100 70" class="bsvg">
   <ellipse cx="52" cy="60" rx="20" ry="4" fill="#000" opacity="0.14"/>
-  <path d="M12 40 L0 33 L2 42 L1 50 L16 48 Z" fill="#12161c"/>
+  <path d="M22 40 L10 33 L12 42 L11 50 L26 48 Z" fill="#12161c"/>
   <ellipse cx="50" cy="41" rx="27" ry="16" fill="#1b2129"/>
   <path d="M52 27 Q78 27 80 42 Q76 53 52 54 Q45 41 52 27Z" fill="#262d37"/>
   <!-- blue-black sheen -->
@@ -1318,7 +1321,7 @@ const SHOP=[
     icon:'<svg viewBox="0 0 24 24" fill="#f59e0b"><rect x="10" y="12" width="4" height="10"/><path d="M12 12 20 5" stroke="#f59e0b" stroke-width="3"/><circle cx="12" cy="12" r="3.5"/><path d="M6 22h12" stroke="#f59e0b" stroke-width="2"/></svg>'},
   {id:'agent',name:'Cleaner',desc:'Auto-scrubs droppings off the monument.',price:90,dur:22,
     icon:'<svg viewBox="0 0 24 24" fill="#38bdf8"><circle cx="12" cy="7" r="4"/><path d="M5 22c0-4 3-7 7-7s7 3 7 7z"/></svg>'},
-  {id:'shield',name:'Shield',desc:'Absorbs 8 droppings, then breaks.',price:100,hp:8,
+  {id:'shield',name:'Shield',desc:'Absorbs 16 droppings, then breaks.',price:100,hp:16,
     icon:'<svg viewBox="0 0 24 24" fill="#38bdf8"><path d="M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6z"/></svg>'},
   {id:'bomb',name:'Air Strike',desc:'Wipes every bird on screen. Instant.',price:150,instant:true,
     icon:'<svg viewBox="0 0 24 24" fill="#ef4444"><circle cx="11" cy="15" r="7"/><path d="M15 6l3-3 2 2-3 3" stroke="#ef4444" stroke-width="2"/></svg>'}
@@ -1632,7 +1635,7 @@ function shootAt(tx,ty,fr,touch){
   }
   const struck=new Set();
   for(const [px,py] of points){
-    explode(px,py,1.15,false);   // real blast on every shot
+    explode(px,py,1.0,false,true);   // light blast on every shot (no particles)
     let best=null,bd=1e9;
     for(const b of S.birds){
       if(b.dead||struck.has(b))continue;
@@ -1729,14 +1732,24 @@ function warn(show){document.getElementById('warning').classList.toggle('show',s
 /* Cleaner agent: scrubs stains while active */
 function agentTickOnce(){
   if(!S||!S.agentActive)return;
-  const stains=document.querySelectorAll('.stain');
-  if(stains.length){
-    const target=stains[0];target.style.transition='opacity .4s';target.style.opacity=0;
-    setTimeout(()=>target.remove(),400);
-    S.clean=Math.min(100,S.clean+3);updateDirt();syncHUD();
-    if(S.clean>25)warn(false);
-    const a=layers.agents.querySelector('.agent');
-    if(a){const bub=document.createElement('div');bub.className='bubble';a.appendChild(bub);setTimeout(()=>bub.remove(),700);}
+  const stains=[...document.querySelectorAll('.stain')];
+  if(!stains.length)return;
+  // clean several stains across the whole monument area each tick
+  const batch=Math.min(3,stains.length);
+  for(let i=0;i<batch;i++){
+    const target=stains[i];
+    target.style.transition='opacity .35s';target.style.opacity=0;
+    setTimeout(()=>target.remove(),350);
+    S.clean=Math.min(100,S.clean+2.5);
+  }
+  updateDirt();syncHUD();
+  if(S.clean>25)warn(false);
+  // move the cleaner toward the stained monument + scrub bubbles
+  const a=layers.agents.querySelector('.agent');
+  if(a){
+    const fr=frameRect(),mr=monRect();
+    a.style.left=((mr.left-fr.left)+mr.width*(0.2+Math.random()*0.6))+'px';
+    for(let i=0;i<batch;i++){const bub=document.createElement('div');bub.className='bubble';a.appendChild(bub);setTimeout(()=>bub.remove(),700);}
   }
 }
 
@@ -1747,36 +1760,35 @@ function spark(x,y){
   layers.fx.appendChild(el);setTimeout(()=>el.remove(),400);
 }
 /* rich explosion: fireball core + shockwave ring + flying debris + smoke */
-function explode(x,y,scale=1,sound=true){
+function explode(x,y,scale=1,sound=true,light=false){
   if(sound)Audio2.explosion();
   const F=layers.fx;
-  // core
+  // core (CSS animation, cheap)
   const core=document.createElement('div');core.className='exp-core';
-  const cs=48*scale;core.style.cssText+=`left:${x}px;top:${y}px;width:${cs}px;height:${cs}px`;
-  F.appendChild(core);setTimeout(()=>core.remove(),400);
-  // shockwave ring
+  const cs=44*scale;core.style.cssText+=`left:${x}px;top:${y}px;width:${cs}px;height:${cs}px`;
+  F.appendChild(core);setTimeout(()=>core.remove(),380);
+  // shockwave ring (CSS animation, cheap)
   const ring=document.createElement('div');ring.className='exp-ring';
-  const rs=40*scale;ring.style.cssText+=`left:${x}px;top:${y}px;width:${rs}px;height:${rs}px`;
-  F.appendChild(ring);setTimeout(()=>ring.remove(),500);
-  // smoke puffs
-  for(let i=0;i<2+Math.round(scale);i++){
-    const sm=document.createElement('div');sm.className='exp-smoke';
-    const ss=(30+Math.random()*24)*scale;
-    sm.style.cssText+=`left:${x+(Math.random()*20-10)}px;top:${y+(Math.random()*10-8)}px;width:${ss}px;height:${ss}px;animation-delay:${i*40}ms`;
-    F.appendChild(sm);setTimeout(()=>sm.remove(),950+i*40);
-  }
-  // debris particles (JS-animated)
-  const cols=['#ffd54f','#ff7043','#ffe082','#e53935','#fff'];
-  const n=Math.round(10*scale);
+  const rs=38*scale;ring.style.cssText+=`left:${x}px;top:${y}px;width:${rs}px;height:${rs}px`;
+  F.appendChild(ring);setTimeout(()=>ring.remove(),460);
+  // LIGHT mode (every shot): stop here — no smoke, no JS particles. Keeps mobile smooth.
+  if(light) return;
+  // heavy mode (bird kills / airstrike): a few smoke puffs + few debris
+  const sm=document.createElement('div');sm.className='exp-smoke';
+  const ss=(30+Math.random()*20)*scale;
+  sm.style.cssText+=`left:${x}px;top:${y-4}px;width:${ss}px;height:${ss}px`;
+  F.appendChild(sm);setTimeout(()=>sm.remove(),900);
+  const cols=['#ffd54f','#ff7043','#ffe082'];
+  const n=Math.min(6,Math.round(4*scale));   // capped low
   for(let i=0;i<n;i++){
     const p=document.createElement('div');p.className='exp-part';
-    const sz=(3+Math.random()*4)*scale;
+    const sz=(3+Math.random()*3)*scale;
     p.style.cssText+=`left:${x}px;top:${y}px;width:${sz}px;height:${sz}px;background:${cols[i%cols.length]}`;
     F.appendChild(p);
-    const ang=Math.random()*Math.PI*2, sp=(2+Math.random()*4)*scale;
-    let vx=Math.cos(ang)*sp, vy=Math.sin(ang)*sp-1.5, px=x, py=y, life=1, t0=performance.now();
+    const ang=Math.random()*Math.PI*2, sp=(2+Math.random()*3)*scale;
+    let vx=Math.cos(ang)*sp, vy=Math.sin(ang)*sp-1.5, px=x, py=y, life=1;
     (function step(){
-      const dt=16;vy+=0.35;px+=vx;py+=vy;life-=0.03;
+      vy+=0.35;px+=vx;py+=vy;life-=0.045;
       p.style.left=px+'px';p.style.top=py+'px';p.style.opacity=Math.max(0,life);
       if(life>0)requestAnimationFrame(step);else p.remove();
     })();
@@ -2219,7 +2231,7 @@ function watchRevive(){
   if(S.reviveUsed)return;
   showAd('rewarded',()=>{
     S.reviveUsed=true;
-    S.clean=50;updateDirt();warn(false);
+    S.clean=100;updateDirt();warn(false);
     // clear the flock so the player gets a breather
     for(const b of S.birds){if(b.el)b.el.remove();}
     S.birds=[];
