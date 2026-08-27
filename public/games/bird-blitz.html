@@ -21,7 +21,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
   box-shadow:0 30px 90px rgba(0,0,0,.6);isolation:isolate;}
 @media(min-width:821px){
   body{display:flex;align-items:center;justify-content:center;height:100vh;height:calc(var(--vh)*100)}
-  #gameFrame{width:min(1120px,96vw);height:min(700px,94vh);border-radius:18px;border:1px solid rgba(255,255,255,.06)}
+  #gameFrame{width:min(1600px,98vw);height:min(900px,96vh);border-radius:18px;border:1px solid rgba(255,255,255,.06)}
 }
 @media(max-width:820px){
   #gameFrame{width:100vw;height:100vh;height:calc(var(--vh)*100);border-radius:0}
@@ -83,13 +83,15 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
   color:#fff;font-size:clamp(10px,2.4vw,13px);font-weight:800;padding:4px 10px;border-radius:20px;box-shadow:0 0 12px var(--pc)}
 .pw-badge span{font-size:clamp(12px,2.8vw,15px)}
 
-/* BOTTOM ITEM BAR */
-.item-bar{position:absolute;left:0;right:0;bottom:0;z-index:70;display:flex;justify-content:center;
-  gap:clamp(6px,1.8vw,12px);padding:clamp(6px,1.6vw,10px) clamp(6px,2vw,14px) clamp(10px,2.4vw,16px);
-  pointer-events:none}
-.item-btn{pointer-events:auto;position:relative;flex:1 1 0;max-width:clamp(64px,15vw,92px);
+/* SIDE ITEM RAILS (symmetric columns on left & right edges) */
+.item-bar{position:absolute;inset:0;z-index:70;pointer-events:none}
+.item-rail{position:absolute;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;
+  gap:clamp(8px,1.6vh,14px);pointer-events:none}
+.item-rail.left{left:clamp(8px,1.6vw,18px)}
+.item-rail.right{right:clamp(8px,1.6vw,18px)}
+.item-btn{pointer-events:auto;position:relative;width:clamp(58px,7.6vw,84px);
   background:rgba(11,17,32,.82);border:1.5px solid rgba(255,255,255,.14);border-radius:14px;
-  padding:clamp(6px,1.6vw,9px) 4px clamp(4px,1.2vw,6px);cursor:pointer;transition:transform .12s,border-color .2s,opacity .2s;
+  padding:clamp(6px,1vh,9px) 4px clamp(4px,.8vh,6px);cursor:pointer;transition:transform .12s,border-color .2s,opacity .2s;
   display:flex;flex-direction:column;align-items:center;gap:2px;opacity:.5}
 .item-btn.affordable{opacity:1;border-color:var(--neon);box-shadow:0 0 14px rgba(56,189,248,.3)}
 .item-btn.affordable:active{transform:scale(.93)}
@@ -99,14 +101,14 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 @keyframes armPulse{0%{box-shadow:0 0 10px rgba(245,158,11,.4)}100%{box-shadow:0 0 22px rgba(245,158,11,.8)}}
 .item-btn.deny{animation:denyShake .3s}
 @keyframes denyShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-.ib-icon{position:relative;width:clamp(26px,6vw,36px);height:clamp(26px,6vw,36px)}
+.ib-icon{position:relative;width:clamp(26px,3.4vw,36px);height:clamp(26px,3.4vw,36px)}
 .ib-icon svg{width:100%;height:100%}
 .ib-icon .ib-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
-.ib-price{display:flex;align-items:center;gap:2px;font-size:clamp(10px,2.5vw,13px);font-weight:900;color:var(--gold)}
+.ib-price{display:flex;align-items:center;gap:2px;font-size:clamp(10px,1.5vw,13px);font-weight:900;color:var(--gold)}
 .coin.sm{width:11px;height:11px}
-.ib-cd{display:none;position:absolute;top:2px;right:4px;font-size:clamp(9px,2.2vw,11px);font-weight:900;
+.ib-cd{display:none;position:absolute;top:2px;right:4px;font-size:clamp(9px,1.3vw,11px);font-weight:900;
   color:#fff;background:rgba(0,0,0,.5);border-radius:8px;padding:0 4px}
-.ib-armed{display:none;position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);white-space:nowrap;
+.ib-armed{display:none;position:absolute;bottom:-15px;left:50%;transform:translateX(-50%);white-space:nowrap;
   font-size:9px;font-weight:900;color:#f59e0b;letter-spacing:.5px}
 .item-btn.armed .ib-armed{display:block}
 
@@ -1212,25 +1214,25 @@ function bg_pagoda(){
 /* ============================================================ MONUMENT REGISTRY (v2) ============================================================ */
 const MONUMENTS = [
   {id:'eiffel',   name:'Eiffel Tower',      city:'Paris',       art:MON2.eiffel,    bg:()=>bg_paris(false), accent:'#b8975f',
-    perk:{bonus:'+15% gold (tourist city)', malus:'Some birds drop twice', goldMult:1.15, doublePoo:true}},
+    perk:{bonus:'Tourist City: +15% Gold', malus:'Pickpocket Pigeons: some birds drop twice', goldMult:1.15, doublePoo:true}},
   {id:'bigben',   name:'Big Ben',           city:'London',      art:MON2.bigben,    bg:()=>bg_london(),     accent:'#c9a45e',
-    perk:{bonus:'-15% shop prices (English market)', malus:'English Fog (reduced visibility)', shopMult:0.85, fog:'#9aa7b0'}},
+    perk:{bonus:'English Market: -15% Shop Prices', malus:'Rush Hour: +30% More Birds', shopMult:0.85, birdMult:1.3}},
   {id:'liberty',  name:'Statue of Liberty', city:'New York',    art:MON2.liberty,   bg:()=>bg_newyork(),    accent:'#6fc0ab',
-    perk:{bonus:'+20% gold (American dream)', malus:'More birds (big city)', goldMult:1.20, birdMult:1.3}},
+    perk:{bonus:'American Dream: +20% Gold', malus:'Big City: +30% More Birds', goldMult:1.20, birdMult:1.3}},
   {id:'pyramid',  name:'Pyramids of Giza',  city:'Cairo',       art:MON2.pyramid,   bg:()=>bg_cairo(),      accent:'#d3a35c',
-    perk:{bonus:'+25% gold (pharaoh treasures)', malus:'Sandstorm: +20% dirt per dropping', goldMult:1.25, dirtMult:1.2}},
+    perk:{bonus:'Pharaoh Treasure: +25% Gold', malus:'Sandstorm: +20% Dirt per Dropping', goldMult:1.25, dirtMult:1.2}},
   {id:'taj',      name:'Taj Mahal',         city:'Agra',        art:MON2.taj,       bg:()=>bg_agra(),       accent:'#e6ddd0',
-    perk:{bonus:'-20% dirt per dropping (smooth marble)', malus:'More birds', dirtMult:0.8, birdMult:1.3}},
+    perk:{bonus:'Smooth Marble: -20% Dirt per Dropping', malus:'Sacred Site: +30% More Birds', dirtMult:0.8, birdMult:1.3}},
   {id:'opera',    name:'Sydney Opera House',city:'Sydney',      art:MON2.opera,     bg:()=>bg_sydney(),     accent:'#dfe6ea',
-    perk:{bonus:'+15% gold', malus:'Faster birds', goldMult:1.15, speedMult:1.25}},
+    perk:{bonus:'Festival Crowd: +15% Gold', malus:'Sea Breeze: +25% Bird Speed', goldMult:1.15, speedMult:1.25}},
   {id:'colosseum',name:'Colosseum',         city:'Rome',        art:MON2.colosseum, bg:()=>bg_rome(),       accent:'#c2a068',
-    perk:{bonus:'Roman rigor: -20% dirt & slower cleanliness loss', malus:'Many more birds', dirtMult:0.8, birdMult:1.5}},
+    perk:{bonus:'Roman Rigor: -20% Dirt per Dropping', malus:'Gladiator Horde: +50% More Birds', dirtMult:0.8, birdMult:1.5}},
   {id:'christ',   name:'Christ the Redeemer',city:'Rio',        art:MON2.christ,    bg:()=>bg_rio(),        accent:'#c3ccd2',
-    perk:{bonus:'Slower birds & +25% gold (commanding height)', malus:'Canopy (reduced visibility)', goldMult:1.25, speedMult:0.75, fog:'#2f6b3a'}},
+    perk:{bonus:'Commanding Height: +25% Gold & -25% Bird Speed', malus:'Steep Climb: -50% Power-up Drops', goldMult:1.25, speedMult:0.75, powerupMult:0.5}},
   {id:'angkor',   name:'Angkor Wat',        city:'Siem Reap',   art:MON2.angkor,    bg:()=>bg_angkor(),     accent:'#c9b083',
-    perk:{bonus:'+25% gold (Khmer treasure)', malus:'Jungle swarm (far more birds)', goldMult:1.25, birdMult:1.6}},
+    perk:{bonus:'Khmer Treasure: +25% Gold', malus:'Jungle Swarm: +60% More Birds', goldMult:1.25, birdMult:1.6}},
   {id:'pagoda',   name:'Japanese Pagoda',   city:'Kyoto',       art:MON2.pagoda,    bg:()=>bg_pagoda(),     accent:'#b23c2e',
-    perk:{bonus:'Serenity: -50% dirt per dropping', malus:'+40% bird speed', dirtMult:0.5, speedMult:1.4}}
+    perk:{bonus:'Zen Serenity: -50% Dirt per Dropping', malus:'Swift Winds: +40% Bird Speed', dirtMult:0.5, speedMult:1.4}}
 ];
 /* Background images (drop your generated art here; SVG scene is the fallback). */
 const IMG_DIR='/games/bird-blitz/';
@@ -1241,7 +1243,7 @@ function perk(){
   const p=(S&&MONMAP[S.monId]&&MONMAP[S.monId].perk)||{};
   return {goldMult:p.goldMult||1, birdMult:p.birdMult||1, speedMult:p.speedMult||1,
           dirtMult:p.dirtMult||1, shopMult:p.shopMult||1, doublePoo:!!p.doublePoo,
-          fog:p.fog||null, bonus:p.bonus||'', malus:p.malus||''};
+          powerupMult:p.powerupMult||1, fog:p.fog||null, bonus:p.bonus||'', malus:p.malus||''};
 }
 
 /* ============================================================
@@ -2040,8 +2042,8 @@ const POWERUPS={
   gold:{name:'Gold Rush',color:'#facc15',dur:8000,icon:'★',msg:'Gold rush ×2!'}
 };
 function maybeDropPowerup(x,y,boss){
-  // bosses always drop; normal birds base 4% + Lucky Drop upgrade (+2%/lvl)
-  const chance=0.04+upgLevel('luckydrop')*0.02;
+  // bosses always drop; normal birds base 4% + Lucky Drop upgrade, scaled by world power-up rate
+  const chance=(0.04+upgLevel('luckydrop')*0.02)*perk().powerupMult;
   if(!boss && Math.random()>chance) return;
   const keys=Object.keys(POWERUPS);
   const key=keys[Math.floor(Math.random()*keys.length)];
@@ -2360,7 +2362,7 @@ function renderActiveItems(){
 function renderItemBar(){
   const bar=document.getElementById('shopLayer');
   bar.className='item-bar';
-  bar.innerHTML=SHOP.map(it=>{
+  const btnHtml=it=>{
     const price=priceOf(it);
     const imgName=it.id==='bomb'?'airstrike':it.id;
     return `<button class="item-btn" data-id="${it.id}" title="${it.name}">
@@ -2369,7 +2371,11 @@ function renderItemBar(){
       <div class="ib-cd"></div>
       <div class="ib-armed">TAP TO PLACE</div>
     </button>`;
-  }).join('');
+  };
+  const half=Math.ceil(SHOP.length/2);
+  const left=SHOP.slice(0,half), right=SHOP.slice(half);
+  bar.innerHTML=`<div class="item-rail left">${left.map(btnHtml).join('')}</div>`
+              +`<div class="item-rail right">${right.map(btnHtml).join('')}</div>`;
   bar.querySelectorAll('.item-btn').forEach(btn=>{
     btn.addEventListener('pointerdown',ev=>{ev.stopPropagation();const id=btn.dataset.id;buyItem(SHOP.find(x=>x.id===id));});
   });
@@ -2704,19 +2710,25 @@ const Audio2={
   startMusic(){
     if(!this.ctx||this.musicOn)return;
     this.musicOn=true;
-    this.musicGain.gain.linearRampToValueAtTime(0.18,this.ctx.currentTime+1.5);
-    const chords=[[220,277,330],[196,247,294],[247,311,370],[165,220,262]]; // Am F C? gentle
+    this.musicGain.gain.linearRampToValueAtTime(0.28,this.ctx.currentTime+1.2);
+    // upbeat loop: bouncy melody + walking bass + light hats
+    const A=220,C=261.63,D=293.66,E=329.63,F=349.23,G=392,Ah=440,Ch=523.25,Dh=587.33,Eh=659.25;
+    const melody=[E,G,Ah,G, E,D,C,D, E,G,Ah,Ch, Ah,G,E,D,
+                  C,E,G,E, F,Ah,G,F, E,G,E,D, C,C,C,0];
+    const bass  =[A,0,A,0, F,0,F,0, C,0,C,0, G,0,G,0,
+                  A,0,A,0, F,0,F,0, C,0,G,0, A,0,A,0];
     this.step=0;
     const playStep=()=>{
       if(!this.musicOn)return;
-      const ch=chords[Math.floor(this.step/4)%chords.length];
-      const note=ch[this.step%3];
-      this.blip(note,0.9,'sine',0.5,null,this.musicGain);
-      if(this.step%4===0)this.blip(ch[0]/2,1.6,'triangle',0.4,null,this.musicGain); // bass
+      const i=this.step%melody.length;
+      const mn=melody[i];
+      if(mn)this.blip(mn,0.34,'square',0.16,null,this.musicGain);      // melody (chiptune-ish)
+      const bn=bass[i];
+      if(bn)this.blip(bn/2,0.5,'triangle',0.4,null,this.musicGain);    // bass
       this.step++;
     };
     playStep();
-    this.timer=setInterval(playStep,420);
+    this.timer=setInterval(playStep,200);
   },
   stopMusic(){
     this.musicOn=false;
