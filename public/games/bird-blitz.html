@@ -747,6 +747,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 
 <script>
 'use strict';
+
+  // Communication avec le site parent (Ragequit Arcade).
+function rqPost(msg){ try{ window.parent.postMessage(msg,'*'); }catch(e){} }
 /* ============================================================
    POO DEFENSE — Ragequit Arcade
    Reconstruction premium : scènes en couches par monument.
@@ -2494,6 +2497,9 @@ function gameOver(){
   Audio2.gameover();
   const gained=earnedStars(S.score,S.wave);
   grantStars(gained);
+  // envoi du score au leaderboard du site, par monument (via le champ mode)
+  rqPost({type:'BIRD_BLITZ_SCORE',game:'bird-blitz',mode:S.monId,
+    score:S.score,scoreLabel:S.score+' pts · '+nowMon().name});
   document.getElementById('finalScore').textContent=S.score;
   document.getElementById('finalWave').textContent=S.wave;
   document.getElementById('bestScore').textContent=bests[S.monId]||0;
@@ -3074,7 +3080,10 @@ function showAd(type,onReward){
   ov.classList.add('show');
   let n=3;const label=document.getElementById('adCount');
   label.textContent=n;
-  const iv=setInterval(()=>{n--;label.textContent=n;if(n<=0){clearInterval(iv);ov.classList.remove('show');onReward&&onReward();}},1000);
+  const iv=setInterval(()=>{n--;label.textContent=n;if(n<=0){clearInterval(iv);ov.classList.remove('show');
+    // suivi analytics : pub récompensée regardée en entier
+    rqPost({type:'RH_TRACK',event:'ad_rewarded_complete',game_id:'bird-blitz',props:{context:type||'rewarded'}});
+    onReward&&onReward();}},1000);
 }
 
 /* Double all gold earned for the rest of the run */
