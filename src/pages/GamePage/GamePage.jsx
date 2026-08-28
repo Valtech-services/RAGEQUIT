@@ -138,12 +138,13 @@ async function saveVirusLabCloud(){
       if(d.type === 'VIRUS_LAB_REQUEST_LOGIN'){
         signInGoogle()
         return
-        // --- Virus Lab : le jeu demande une sauvegarde cloud ---
+      }
+      // --- Virus Lab : le jeu demande une sauvegarde cloud ---
       if(d.type === 'VIRUS_LAB_SAVE_CLOUD'){
         await saveVirusLabCloud()
         return
       }
-        // --- Virus Lab : le jeu demande la liste des virus publiés (arène) ---
+      // --- Virus Lab : le jeu demande la liste des virus publiés (arène) ---
       if(d.type === 'VIRUS_LAB_ARENA_REQUEST'){
         const { data } = await supabase
           .from('virus_lab_arena')
@@ -156,7 +157,7 @@ async function saveVirusLabCloud(){
         }, '*')
         return
       }
-        // --- Virus Lab : le jeu est prêt pour sa sauvegarde cloud ---
+      // --- Virus Lab : le jeu est prêt pour sa sauvegarde cloud ---
       if(d.type === 'VIRUS_LAB_CLOUD_READY' && user){
         const { data } = await supabase
           .from('game_saves')
@@ -170,13 +171,6 @@ async function saveVirusLabCloud(){
           )
         }
         return
-      }
-      // --- Virus Lab : publier le virus dans l'arène ---
-      if(d.type === 'VIRUS_LAB_PUBLISH'){
-        if(user && d.payload) await publishVirusLab(d.payload)
-        else iframeRef.current?.contentWindow?.postMessage({ type: 'VIRUS_LAB_PUBLISHED', ok: false }, '*')
-        return
-      }
       }
 
       // --- Stellar Forge : le jeu est prêt → on lui renvoie sa sauvegarde cloud ---
