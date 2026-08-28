@@ -10,6 +10,22 @@ import { useTranslation } from 'react-i18next'
 import './LeaderboardPage.css'
 import { track } from '../../lib/analytics'
 
+// Noms d'affichage des monuments de Bird Blitz (les modes = ids de monuments).
+const MONUMENT_NAMES = {
+  eiffel: 'Eiffel Tower', bigben: 'Big Ben', liberty: 'Statue of Liberty',
+  pyramid: 'Pyramids of Giza', taj: 'Taj Mahal', opera: 'Sydney Opera House',
+  colosseum: 'Colosseum', christ: 'Christ the Redeemer', angkor: 'Angkor Wat',
+  pagoda: 'Japanese Pagoda',
+}
+// Libellé lisible d'un mode, selon le jeu.
+function modeLabel(m, t) {
+  if (MONUMENT_NAMES[m]) return MONUMENT_NAMES[m]
+  if (m === 'survival') return t('leaderboard.survival')
+  if (m === 'classic')  return t('leaderboard.classic')
+  if (m === 'arena')    return 'Arena'
+  // par défaut : mode capitalisé
+  return m.charAt(0).toUpperCase() + m.slice(1)
+}
 /*
   LeaderboardPage
   - Recherche temps réel filtrée sur games.js
@@ -190,7 +206,7 @@ export default function LeaderboardPage() {
                   <button key={m}
                     className={`lbpage__mode-tab ${mode === m ? 'is-active' : ''}`}
                     onClick={() => { track('leaderboard_mode_change', { game_id: gameId, props: { mode: m } }); setMode(m) }}>
-                    {m === 'survival' ? t('leaderboard.survival') : t('leaderboard.classic')}
+                  {modeLabel(m, t)}
                   </button>
                 ))}
               </div>
