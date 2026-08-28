@@ -325,8 +325,8 @@ export const games = [
     hot: true,
     landscape: false,
     plays: 0,
-    modes: ['classic'],
-    defaultMode: 'classic',
+    modes: ['eiffel','bigben','liberty','pyramid','taj','opera','colosseum','christ','angkor','pagoda'],
+    defaultMode: 'eiffel',
     controls: 'Tap or click a bird to shoot it. On desktop, a crosshair follows your mouse for precise aim. Tap the item buttons on the sides of the screen to fire your shotgun, deploy a shield, call an air strike, throw a net, trigger slow-motion or drop a decoy. Grab falling power-ups before they hit the ground. Works on mobile, tablet and desktop.',
     author: 'Ragequit Arcade',
     seo: {
