@@ -75,17 +75,26 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
   border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff,var(--pc) 65%);border:3px solid #fff;
   box-shadow:0 0 18px var(--pc),0 4px 10px rgba(0,0,0,.4);z-index:60;cursor:pointer;pointer-events:auto;
   display:flex;align-items:center;justify-content:center;animation:puPulse .8s ease-in-out infinite alternate}
-.powerup span{font-size:clamp(20px,4.6vw,28px);filter:drop-shadow(0 1px 1px rgba(0,0,0,.4))}
+.powerup span{font-size:clamp(20px,4.6vw,28px);filter:drop-shadow(0 1px 1px rgba(0,0,0,.4));display:flex;width:62%;height:62%}
+.powerup span svg{width:100%;height:100%}
 @keyframes puPulse{0%{transform:translate(-50%,-50%) scale(1)}100%{transform:translate(-50%,-50%) scale(1.12)}}
 .power-badges{position:absolute;top:clamp(112px,22vw,150px);left:50%;transform:translateX(-50%);z-index:104;
   display:flex;gap:6px;pointer-events:none;flex-wrap:wrap;justify-content:center;max-width:90vw}
 .pw-badge{display:flex;align-items:center;gap:5px;background:rgba(11,17,32,.8);border:1px solid var(--pc);
   color:#fff;font-size:clamp(10px,2.4vw,13px);font-weight:800;padding:4px 10px;border-radius:20px;box-shadow:0 0 12px var(--pc)}
-.pw-badge span{font-size:clamp(12px,2.8vw,15px)}
+.pw-badge span{font-size:clamp(12px,2.8vw,15px);display:flex;width:16px;height:16px}
+.pw-badge span svg{width:100%;height:100%}
+/* bullet rain prompt + bullets */
+.rain-prompt{position:absolute;top:clamp(90px,20vw,130px);left:50%;transform:translateX(-50%);z-index:110;
+  background:rgba(255,207,51,.95);color:#3a2600;font-weight:900;font-size:clamp(13px,3.2vw,16px);
+  padding:8px 18px;border-radius:20px;box-shadow:0 4px 16px rgba(0,0,0,.4);animation:rainPromptPulse .8s ease-in-out infinite alternate;pointer-events:none}
+@keyframes rainPromptPulse{0%{transform:translateX(-50%) scale(1)}100%{transform:translateX(-50%) scale(1.06)}}
+.rain-bullet{position:absolute;width:4px;height:14px;border-radius:2px;background:linear-gradient(#fff,#ffcf33);
+  box-shadow:0 0 6px #ffcf33;z-index:58;pointer-events:none;transform:translate(-50%,0)}
 
 /* SIDE ITEM RAILS (symmetric columns on left & right edges) */
 .item-bar{position:absolute;inset:0;z-index:70;pointer-events:none}
-.item-rail{position:absolute;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;
+.item-rail{position:absolute;bottom:clamp(70px,13vh,120px);display:flex;flex-direction:column-reverse;
   gap:clamp(8px,1.6vh,14px);pointer-events:none}
 .item-rail.left{left:clamp(8px,1.6vw,18px)}
 .item-rail.right{right:clamp(8px,1.6vw,18px)}
@@ -104,6 +113,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 .ib-icon{position:relative;width:clamp(26px,3.4vw,36px);height:clamp(26px,3.4vw,36px)}
 .ib-icon svg{width:100%;height:100%}
 .ib-icon .ib-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.ib-name{font-size:clamp(8px,1.3vw,10px);font-weight:800;color:#dbe6f5;letter-spacing:.2px;line-height:1;
+  text-align:center;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
 .ib-price{display:flex;align-items:center;gap:2px;font-size:clamp(10px,1.5vw,13px);font-weight:900;color:var(--gold)}
 .coin.sm{width:11px;height:11px}
 .ib-cd{display:none;position:absolute;top:2px;right:4px;font-size:clamp(9px,1.3vw,11px);font-weight:900;
@@ -111,6 +122,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 .ib-armed{display:none;position:absolute;bottom:-15px;left:50%;transform:translateX(-50%);white-space:nowrap;
   font-size:9px;font-weight:900;color:#f59e0b;letter-spacing:.5px}
 .item-btn.armed .ib-armed{display:block}
+/* cooldown overlay */
+.item-btn.cooling{opacity:.55;border-color:rgba(255,255,255,.1);pointer-events:none;filter:grayscale(.7)}
+.ib-cool{position:absolute;inset:0;border-radius:14px;overflow:hidden;pointer-events:none}
+.ib-cool-fill{position:absolute;top:0;left:0;right:0;background:rgba(6,12,24,.66);width:100%}
+.ib-cool-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:clamp(16px,3.6vw,22px);font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.7)}
 
 /* NET & DECOY field FX */
 .net-fx{position:absolute;transform:translate(-50%,-50%);z-index:14;pointer-events:none;
@@ -246,9 +263,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
   background:linear-gradient(180deg,rgba(255,207,51,.16),rgba(255,207,51,.06));
   border:1px solid rgba(255,207,51,.45);padding:6px 20px;border-radius:24px;margin:10px 0 20px;
   box-shadow:0 4px 14px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.15)}
-.menu-buttons{display:flex;flex-direction:column;gap:clamp(9px,1.8vw,12px);width:min(90vw,340px)}
-.menu-btn{position:relative;display:flex;align-items:center;gap:14px;text-align:left;
-  font-size:clamp(15px,3.6vw,18px);font-weight:800;letter-spacing:.5px;padding:clamp(12px,2.6vw,15px) clamp(16px,3.6vw,20px);
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(9px,2vw,13px);width:min(92vw,440px)}
+.menu-btn{position:relative;display:flex;align-items:center;gap:12px;text-align:left;
+  font-size:clamp(13px,3.2vw,16px);font-weight:800;letter-spacing:.4px;padding:clamp(12px,2.6vw,16px) clamp(14px,3vw,18px);
   color:#eaf2ff;width:100%;border-radius:16px;
   background:linear-gradient(180deg,rgba(255,255,255,.11),rgba(255,255,255,.04));
   border:1px solid rgba(255,255,255,.14);
@@ -257,26 +274,31 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 .menu-btn:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.28);
   box-shadow:0 10px 26px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.2)}
 .menu-btn:active{transform:translateY(0) scale(.985)}
-.mb-ic{flex:none;width:clamp(28px,6.5vw,34px);height:clamp(28px,6.5vw,34px);display:flex;align-items:center;justify-content:center;
+.mb-ic{flex:none;width:clamp(26px,6vw,32px);height:clamp(26px,6vw,32px);display:flex;align-items:center;justify-content:center;
   border-radius:10px;background:rgba(255,255,255,.08);color:#9fd2ff}
 .mb-ic svg{width:64%;height:64%}
 .mb-label{flex:1}
 .mb-dot{width:9px;height:9px;border-radius:50%;background:#ef4444;box-shadow:0 0 8px #ef4444;display:none}
 .mb-dot.on{display:block}
-.menu-play{font-size:clamp(19px,4.8vw,24px);font-weight:900;letter-spacing:1px;padding:clamp(16px,3.6vw,20px) clamp(18px,4vw,24px);
+/* PLAY spans both columns, at the bottom, bigger + animated */
+.menu-play{grid-column:1 / -1;justify-content:center;order:99;
+  font-size:clamp(22px,5.6vw,28px);font-weight:900;letter-spacing:1.5px;padding:clamp(18px,4vw,24px);
   color:#04222e;border-color:transparent;
   background:linear-gradient(180deg,#7cd4ff,#38bdf8 55%,#12a2e8);
-  box-shadow:0 10px 28px rgba(56,189,248,.5),inset 0 1px 0 rgba(255,255,255,.5)}
-.menu-play:hover{box-shadow:0 14px 34px rgba(56,189,248,.6),inset 0 1px 0 rgba(255,255,255,.6)}
-.menu-play .mb-ic{background:rgba(4,34,46,.18);color:#04222e}
+  box-shadow:0 10px 28px rgba(56,189,248,.5),inset 0 1px 0 rgba(255,255,255,.5);
+  animation:playPulse 1.8s ease-in-out infinite}
+@keyframes playPulse{0%,100%{transform:scale(1);box-shadow:0 10px 28px rgba(56,189,248,.5),inset 0 1px 0 rgba(255,255,255,.5)}
+  50%{transform:scale(1.035);box-shadow:0 14px 38px rgba(56,189,248,.7),inset 0 1px 0 rgba(255,255,255,.6)}}
+.menu-play .mb-ic{flex:none;background:rgba(4,34,46,.18);color:#04222e;width:clamp(30px,7vw,38px);height:clamp(30px,7vw,38px)}
+.menu-play .mb-label{flex:none}
 .menu-settings{opacity:.82;font-weight:700}
 .menu-settings .mb-ic{color:#c7d3e2}
 
 /* BACK BUTTON */
-.btn-back{margin-top:clamp(16px,4vw,26px);color:#eaf2ff;font-weight:800;padding:10px 26px;border-radius:14px;
-  background:linear-gradient(180deg,rgba(255,255,255,.11),rgba(255,255,255,.04));
-  border:1px solid rgba(255,255,255,.18);box-shadow:0 4px 14px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.14)}
-.btn-back:hover{border-color:rgba(255,255,255,.3)}
+.btn-back{margin-top:clamp(16px,4vw,26px);color:#3a2600;font-weight:900;padding:11px 30px;border-radius:14px;
+  background:linear-gradient(180deg,#ffd54a,#f5b301);border:1px solid rgba(255,255,255,.3);
+  box-shadow:0 6px 18px rgba(245,179,1,.4),inset 0 1px 0 rgba(255,255,255,.4)}
+.btn-back:hover{filter:brightness(1.06)}
 
 /* INFO SCREENS (powers / birds) */
 .info-list{display:flex;flex-direction:column;gap:clamp(10px,2.4vw,14px);width:100%;max-width:560px;margin:0 auto}
@@ -607,10 +629,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
       <img src="/games/bird-blitz/bird-blitz-titre.webp" alt="Bird Blitz" class="bb-title-img">
     </div>
     <div class="menu-stars"><span class="star-ic">★</span><span id="menuStars">0</span></div>
-    <div class="menu-buttons">
-      <button class="btn menu-btn menu-play" onclick="showMap()">
-        <span class="mb-ic"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
-        <span class="mb-label">PLAY</span></button>
+    <div class="menu-grid">
       <button class="btn menu-btn" onclick="showMap()">
         <span class="mb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg></span>
         <span class="mb-label">MONUMENTS</span></button>
@@ -624,11 +643,14 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
         <span class="mb-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg></span>
         <span class="mb-label">POWERS</span></button>
       <button class="btn menu-btn" onclick="showBirds()">
-        <span class="mb-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 8c4-3 8 0 11 2 2-1 5-2 9-1-3 2-3 5-7 6-5 2-10 0-13-4z"/></svg></span>
+        <span class="mb-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 4a2 2 0 100 4 2 2 0 000-4z"/><path d="M14 7c-3 0-5 2-6 4L4 13l3 1-2 4 5-3c3 0 5-1 6-4 1 .5 2 .3 3-.5-1 0-1.4-.6-1.5-1.3C17.2 8 16 7 14 7z"/><path d="M4 13l-2 3 3-1z"/></svg></span>
         <span class="mb-label">BIRDS</span></button>
       <button class="btn menu-btn menu-settings" onclick="showSettings()">
-        <span class="mb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></span>
+        <span class="mb-ic"><svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M12 1l1.5 2.4 2.7-.9.5 2.8 2.8.5-.9 2.7L21 12l-2.4 1.5.9 2.7-2.8.5-.5 2.8-2.7-.9L12 21l-1.5-2.4-2.7.9-.5-2.8-2.8-.5.9-2.7L3 12l2.4-1.5-.9-2.7 2.8-.5.5-2.8 2.7.9zm0 6.5a4.5 4.5 0 100 9 4.5 4.5 0 000-9zm0 2.5a2 2 0 110 4 2 2 0 010-4z"/></svg></span>
         <span class="mb-label">SETTINGS</span></button>
+      <button class="btn menu-btn menu-play" onclick="showMap()">
+        <span class="mb-ic"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        <span class="mb-label">PLAY</span></button>
     </div>
   </div>
 
@@ -1373,16 +1395,17 @@ function perk(){
    each monument silhouette (viewBox 200x300).
    ============================================================ */
 const HITBOX={
-  eiffel:[[.50,.06],[.55,.35],[.63,.64],[.78,.93],[.60,.93],[.60,.80],[.40,.80],[.40,.93],[.22,.93],[.37,.64],[.45,.35]],
-  bigben:[[.37,.19],[.50,.06],[.63,.19],[.61,.42],[.60,.90],[.40,.90],[.39,.42]],
-  liberty:[[.45,.05],[.55,.05],[.57,.45],[.60,.46],[.60,.57],[.68,.58],[.68,.90],[.32,.90],[.32,.58],[.40,.57],[.40,.46],[.43,.45]],
-  pyramid:[[.50,.12],[.86,.90],[.14,.90]],
-  taj:[[.32,.30],[.36,.12],[.50,.12],[.64,.30],[.64,.46],[.86,.78],[.86,.90],[.14,.90],[.14,.78],[.36,.46]],
-  opera:[[.12,.90],[.22,.52],[.35,.80],[.42,.44],[.64,.78],[.52,.40],[.86,.80],[.88,.90]],
-  colosseum:[[.18,.47],[.50,.37],[.82,.47],[.82,.84],[.50,.90],[.18,.84]],
-  christ:[[.46,.20],[.54,.20],[.54,.29],[.76,.30],[.76,.34],[.56,.37],[.68,.94],[.32,.94],[.44,.37],[.24,.34],[.24,.30],[.46,.29]],
-  angkor:[[.43,.40],[.43,.26],[.50,.18],[.57,.26],[.57,.40],[.78,.50],[.91,.83],[.91,.97],[.09,.97],[.09,.83],[.22,.50]],
-  pagoda:[[.44,.15],[.56,.15],[.60,.30],[.66,.45],[.72,.62],[.80,.80],[.66,.97],[.34,.97],[.20,.80],[.28,.62],[.34,.45],[.40,.30]]
+  // Traced on the full-scene desktop images (u,v as fractions of the whole frame).
+  eiffel:[[.50,.09],[.52,.30],[.55,.55],[.60,.78],[.545,.82],[.515,.60],[.485,.60],[.455,.82],[.40,.78],[.45,.55],[.48,.30]],
+  bigben:[[.455,.32],[.485,.35],[.485,.50],[.51,.52],[.51,.82],[.45,.82],[.45,.52],[.475,.50],[.475,.35]],
+  liberty:[[.49,.13],[.515,.14],[.52,.34],[.535,.40],[.535,.52],[.565,.55],[.565,.80],[.435,.80],[.435,.55],[.465,.52],[.465,.40],[.48,.34]],
+  pyramid:[[.50,.52],[.615,.72],[.385,.72]],
+  taj:[[.44,.34],[.47,.27],[.53,.27],[.56,.34],[.56,.44],[.60,.50],[.60,.62],[.40,.62],[.40,.50],[.44,.44]],
+  opera:[[.40,.72],[.42,.60],[.47,.66],[.485,.56],[.545,.64],[.55,.57],[.60,.66],[.615,.72]],
+  colosseum:[[.33,.50],[.44,.42],[.55,.50],[.55,.74],[.44,.78],[.33,.74]],
+  christ:[[.475,.32],[.505,.32],[.505,.38],[.55,.40],[.55,.42],[.515,.44],[.53,.66],[.45,.66],[.47,.44],[.435,.42],[.435,.40],[.475,.38]],
+  angkor:[[.44,.40],[.47,.34],[.50,.30],[.53,.34],[.56,.40],[.62,.52],[.66,.70],[.34,.70],[.38,.52]],
+  pagoda:[[.475,.22],[.505,.22],[.52,.34],[.55,.46],[.58,.60],[.615,.78],[.55,.84],[.45,.84],[.385,.78],[.42,.60],[.45,.46],[.48,.34]]
 };
 function pointInPoly(u,v,poly){
   let inside=false;
@@ -1418,11 +1441,12 @@ function buildScene(m){
   // Real artwork on top of the SVG (same approach as the map thumbs). If it 404s, it hides and SVG shows.
   const portrait=window.innerHeight>=window.innerWidth;
   const src=portrait?m.imgMobile:m.imgDesktop;
+  S._fullImg=false; S._portrait=portrait;
   const img=document.createElement('img');
   img.className='scene-img';
   img.alt='';
-  img.onload=()=>{ document.getElementById('monumentShape').style.opacity='0'; };
-  img.onerror=()=>{ img.remove(); document.getElementById('monumentShape').style.opacity=''; };
+  img.onload=()=>{ document.getElementById('monumentShape').style.opacity='0'; S._fullImg=true; };
+  img.onerror=()=>{ img.remove(); document.getElementById('monumentShape').style.opacity=''; S._fullImg=false; };
   img.src=src;
   bgEl.appendChild(img);
   // fog / canopy veil
@@ -1693,25 +1717,31 @@ const BIRDS={
 
 /* Arsenal — every item is TIMED. dur = seconds active. */
 const SHOP=[
-  {id:'shotgun',name:'Shotgun',desc:'Center shot plus 4 blasts around it.',price:120,dur:20,
-    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#a3e635" stroke-width="2"><circle cx="12" cy="12" r="2.5" fill="#a3e635"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>'},
-  {id:'agent',name:'Cleaner',desc:'Auto-scrubs droppings off the monument.',price:90,dur:22,
-    icon:'<svg viewBox="0 0 24 24" fill="#38bdf8"><circle cx="12" cy="7" r="4"/><path d="M5 22c0-4 3-7 7-7s7 3 7 7z"/></svg>'},
-  {id:'shield',name:'Shield',desc:'Absorbs 16 droppings, then breaks.',price:100,hp:16,
-    icon:'<svg viewBox="0 0 24 24" fill="#38bdf8"><path d="M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6z"/></svg>'},
-  {id:'bomb',name:'Air Strike',desc:'Wipes every bird on screen. Instant.',price:150,instant:true,
-    icon:'<svg viewBox="0 0 24 24" fill="#ef4444"><circle cx="11" cy="15" r="7"/><path d="M15 6l3-3 2 2-3 3" stroke="#ef4444" stroke-width="2"/></svg>'},
-  {id:'net',name:'Net',desc:'Tap a spot to drop a net that traps birds crossing it.',price:110,place:true,dur:5,
-    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.6"><path d="M4 4h16v16H4z"/><path d="M4 9h16M4 14h16M9 4v16M14 4v16"/></svg>'},
-  {id:'slowmo',name:'Slow-Mo',desc:'Slows every bird down for a few seconds.',price:130,dur:6,
-    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#a5f3fc" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>'},
-  {id:'decoy',name:'Decoy',desc:'Tap a spot to lure birds away — the monument stays clean while it lasts.',price:140,place:true,dur:8,
-    icon:'<svg viewBox="0 0 24 24" fill="#f59e0b"><path d="M4 14c0-4 4-7 8-7 3 0 5 2 5 4l3 1-3 2c-1 3-4 5-8 5-4 0-5-3-5-5z"/><circle cx="9" cy="12" r="1.2" fill="#3a2600"/></svg>'}
+  {id:'shotgun',name:'Shotgun',desc:'Center shot plus 4 blasts around it.',price:120,dur:20,cd:12,
+    icon:'<svg viewBox="0 0 24 24"><rect x="1" y="12.4" width="15" height="1.8" rx="0.6" fill="#6b7280"/><rect x="1" y="10.4" width="15" height="2" rx="0.6" fill="#9ca3af"/><path d="M1 14h4l1 3H2z" fill="#7c4a21"/><path d="M4.5 14h2.2v4.2c0 .5-.4.9-.9.9H5.4c-.5 0-.9-.4-.9-.9z" fill="#8a5a2b"/><path d="M6.5 14.2h2.6l1 2.2H6.5z" fill="#5b3a1a"/><path d="M9 15.6q1.6.4 1.6 1.6H9z" fill="#5b3a1a"/><rect x="15.5" y="10.2" width="1.6" height="4.2" rx="0.5" fill="#4b5563"/></svg>'},
+  {id:'agent',name:'Cleaner',desc:'Auto-scrubs droppings off the monument.',price:90,dur:22,cd:14,
+    icon:'<svg viewBox="0 0 24 24"><rect x="11" y="2" width="2" height="12" rx="1" fill="#8a5a2b"/><path d="M7 13h10l-1.5 5h-7z" fill="#38bdf8"/><path d="M8 18h8l-.6 3H8.6z" fill="#0ea5e9"/><g stroke="#e0f2fe" stroke-width="0.7"><path d="M9 13.5v4M11 13.5v4M13 13.5v4M15 13.5v4"/></g></svg>'},
+  {id:'shield',name:'Shield',desc:'Absorbs 16 droppings, then breaks.',price:100,hp:16,cd:15,
+    icon:'<svg viewBox="0 0 24 24"><path d="M12 2 4 5.5v6C4 17 7.5 20.5 12 22c4.5-1.5 8-5 8-10.5v-6z" fill="#38bdf8"/><path d="M12 4.2 6 6.8v4.6c0 4.2 2.6 7 6 8.2z" fill="#7dd3fc" opacity="0.6"/><path d="M9 12l2 2 4-4.5" stroke="#04222e" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>'},
+  {id:'bomb',name:'Air Strike',desc:'Wipes normal birds; halves a boss. Instant.',price:250,instant:true,cd:18,
+    icon:'<svg viewBox="0 0 24 24"><path d="M12 2l2.5 5.5L20 5l-2 5.5 4 1.5-4 1.5 2 5.5-5.5-2.5L12 22l-2.5-5.5L4 19l2-5.5-4-1.5 4-1.5L4 5l5.5 2.5z" fill="#ef4444"/><circle cx="12" cy="12" r="3.5" fill="#fbbf24"/></svg>'},
+  {id:'net',name:'Net',desc:'Tap a spot to drop a net that traps birds crossing it.',price:110,place:true,dur:5,cd:10,
+    icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.4"><path d="M12 3a9 9 0 019 9 9 9 0 01-9 9 9 9 0 01-9-9 9 9 0 019-9z"/><path d="M3 12h18M12 3v18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg>'},
+  {id:'slowmo',name:'Slow-Mo',desc:'Slows every bird down for a few seconds.',price:150,dur:6,cd:12,
+    icon:'<svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="2" rx="1" fill="#a5f3fc"/><rect x="11" y="3.5" width="2" height="2" fill="#a5f3fc"/><circle cx="12" cy="14" r="7.5" fill="none" stroke="#a5f3fc" stroke-width="2"/><path d="M12 14V9.5" stroke="#a5f3fc" stroke-width="2" stroke-linecap="round"/><path d="M12 14l3 2" stroke="#67e8f9" stroke-width="2" stroke-linecap="round"/></svg>'},
+  {id:'decoy',name:'Decoy',desc:'Tap a spot to lure birds away — the monument stays clean while it lasts.',price:140,place:true,dur:8,cd:14,
+    icon:'<svg viewBox="0 0 24 24"><ellipse cx="7" cy="15" rx="2.4" ry="1.7" fill="#f59e0b"/><ellipse cx="13" cy="11" rx="2.4" ry="1.7" fill="#fbbf24"/><ellipse cx="17" cy="16" rx="2.4" ry="1.7" fill="#f59e0b"/><ellipse cx="7" cy="15" rx="1" ry="0.7" fill="#7c2d12"/><ellipse cx="13" cy="11" rx="1" ry="0.7" fill="#7c2d12"/><ellipse cx="17" cy="16" rx="1" ry="0.7" fill="#7c2d12"/></svg>'}
 ];
 
 function nowMon(){return MONMAP[S.monId];}
 function frameRect(){return F.getBoundingClientRect();}
 function monRect(){return document.getElementById('monumentShape').getBoundingClientRect();}
+/* Reference box for droppings: the full game frame when a full-scene image is loaded
+   (hit-boxes are traced on the whole image), else the small monument SVG box. */
+function monBox(){
+  if(S&&S._fullImg){const fr=frameRect();return {left:fr.left,top:fr.top,width:fr.width,height:fr.height};}
+  return monRect();
+}
 
 /* ---------- SESSION ---------- */
 function initSession(monId){
@@ -1720,7 +1750,7 @@ function initSession(monId){
   const fireDelay=110;   // fixed: firing speed is up to the player's tapping
   S={monId,score:0,coins:startGold,clean:100,wave:0,queue:[],spawned:0,
      birds:[],
-     shieldBlock:false,shieldHp:0,agentActive:false,shotgunActive:false,combo:0,comboUntil:0,powerups:[],power:{},nets:[],_armedItem:null,
+     shieldBlock:false,shieldHp:0,agentActive:false,shotgunActive:false,combo:0,comboUntil:0,powerups:[],power:{},nets:[],_armedItem:null,cooldowns:{},
      items:{},            // id -> {until, dur}
      phase:'idle',        // idle | buffer | overlay | fighting
      phaseUntil:0,fightUntil:0,
@@ -1739,7 +1769,7 @@ function initSession(monId){
 function clearActiveItems(){ if(S&&S._agentIv)clearInterval(S._agentIv);
   if(S&&S.powerups){S.powerups.forEach(p=>p.el&&p.el.remove());S.powerups=[];}
   if(S&&S.nets){S.nets.forEach(n=>n.el&&n.el.remove());S.nets=[];}
-  if(S){S._armedItem=null;if(S._decoyEl){S._decoyEl.remove();S._decoyEl=null;}}
+  if(S){S._armedItem=null;S._armedRain=false;const rp=document.getElementById('rainPrompt');if(rp)rp.remove();if(S._decoyEl){S._decoyEl.remove();S._decoyEl=null;}}
   if(S)S.power={};
   const pb=document.getElementById('powerBadges');if(pb)pb.innerHTML='';
   const ct=document.getElementById('comboTag');if(ct)ct.classList.remove('show');
@@ -2025,7 +2055,20 @@ function updateBirdPath(b,dt,fr){
     if(perk().doublePoo && Math.random()<0.4){ setTimeout(()=>{ if(b.el&&!b.dead&&!decoyActive())launchPoo(b,fr); },260); }
   }
 }
+/* Horizontal band (center + half-width, as fractions of the frame) where the
+   monument actually sits in each full-scene image — birds poo when above it. */
+const MON_BAND={
+  eiffel:[0.50,0.16], bigben:[0.48,0.20], liberty:[0.50,0.14], pyramid:[0.50,0.30],
+  taj:[0.50,0.20], opera:[0.50,0.22], colosseum:[0.44,0.22], christ:[0.49,0.16],
+  angkor:[0.50,0.30], pagoda:[0.48,0.16]
+};
 function overMonument(b,fr){
+  const band=MON_BAND[S.monId]||[0.5,0.2];
+  if(S&&S._fullImg){
+    const cx=band[0]*fr.width;
+    const bx=b.x+b.w/2;
+    return Math.abs(bx-cx)<band[1]*fr.width;
+  }
   const mr=monRect();
   const cx=mr.left+mr.width/2-fr.left;
   const bx=b.x+b.w/2;
@@ -2100,6 +2143,7 @@ F.addEventListener('pointerdown',e=>{
   const fr=frameRect();
   const px=e.clientX-fr.left, py=e.clientY-fr.top;
   // armed placement mode (net / decoy): tap places the item instead of shooting
+  if(S._armedRain){ unleashRain(px,py); return; }
   if(S._armedItem){ placeArmedItem(px,py); return; }
   const touch=e.pointerType==='touch';
   shootAt(px, py, fr, touch);
@@ -2156,11 +2200,15 @@ function showCombo(){
   setTimeout(()=>el.classList.remove('pop'),160);
 }
 /* ---------- POWER-UPS (fall from a killed bird; tap to grab) ---------- */
+const PU_ICON={
+  freeze:'<svg viewBox="0 0 24 24" fill="none" stroke="#0a2b3a" stroke-width="1.6" stroke-linecap="round"><path d="M12 2v20M2 12h20M4.5 4.5l15 15M19.5 4.5l-15 15"/><path d="M12 5l-2 2M12 5l2 2M12 19l-2-2M12 19l2-2M5 12l2-2M5 12l2 2M19 12l-2-2M19 12l-2 2M6.5 6.5l.3 2.5M6.5 6.5l2.5.3M17.5 17.5l-.3-2.5M17.5 17.5l-2.5-.3M17.5 6.5l-.3 2.5M17.5 6.5l-2.5.3M6.5 17.5l.3-2.5M6.5 17.5l2.5-.3"/></svg>',
+  rain:'<svg viewBox="0 0 24 24" fill="none" stroke="#3a2600" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="6" r="3" fill="#3a2600"/><path d="M8 12v4M12 12v6M16 12v4M6 14v2M18 14v2"/></svg>',
+  gold:'<svg viewBox="0 0 24 24"><ellipse cx="7" cy="18" rx="5.5" ry="2.2" fill="#a9760a"/><rect x="1.5" y="15" width="11" height="3" fill="#d99a1c"/><ellipse cx="7" cy="15" rx="5.5" ry="2.2" fill="#ffd54a"/><ellipse cx="16" cy="18.5" rx="5" ry="2" fill="#a9760a"/><rect x="11" y="16" width="10" height="2.5" fill="#d99a1c"/><ellipse cx="16" cy="16" rx="5" ry="2" fill="#ffd54a"/><ellipse cx="11" cy="12" rx="5.5" ry="2.2" fill="#a9760a"/><rect x="5.5" y="9.2" width="11" height="2.8" fill="#e8b420"/><ellipse cx="11" cy="9.2" rx="5.5" ry="2.2" fill="#ffe27a"/><text x="11" y="10.4" text-anchor="middle" font-size="3.4" font-weight="900" fill="#a9760a">$</text></svg>'
+};
 const POWERUPS={
-  rapid:{name:'Rapid Fire',color:'#38bdf8',dur:6000,icon:'⚡',msg:'Rapid fire!'},
-  freeze:{name:'Time Freeze',color:'#a5f3fc',dur:5000,icon:'❄',msg:'Time freeze!'},
-  rain:{name:'Bullet Rain',color:'#ffcf33',dur:0,icon:'☄',msg:'Bullet rain!'},
-  gold:{name:'Gold Rush',color:'#facc15',dur:8000,icon:'★',msg:'Gold rush ×2!'}
+  freeze:{name:'Time Freeze',color:'#a5f3fc',dur:5000,icon:PU_ICON.freeze,msg:'Time freeze!'},
+  rain:{name:'Bullet Rain',color:'#ffcf33',dur:0,icon:PU_ICON.rain,msg:'Tap a zone!'},
+  gold:{name:'Gold Rush',color:'#facc15',dur:8000,icon:PU_ICON.gold,msg:'Gold rush x2!'}
 };
 function maybeDropPowerup(x,y,boss){
   // bosses always drop; normal birds base 4% + Lucky Drop upgrade, scaled by world power-up rate
@@ -2194,11 +2242,52 @@ function activatePowerup(key){
   Audio2.buy();
   trackChallenge('powerup',1);
   floatTextCenter(p.msg);
-  if(key==='rain'){ airstrike(); return; }
+  if(key==='rain'){ S._armedRain=true; showRainPrompt(true); updateItemBar&&updateItemBar(); return; }
   const now=performance.now();
   S.power[key]=now+p.dur;
-  if(key==='rapid')S.fireDelay=Math.round(S.baseFireDelay*0.5);
   renderPowerBadges();
+}
+function showRainPrompt(show){
+  let el=document.getElementById('rainPrompt');
+  if(show){
+    if(!el){el=document.createElement('div');el.id='rainPrompt';el.className='rain-prompt';el.textContent='Tap a zone to rain bullets';document.getElementById('gameFrame').appendChild(el);}
+  }else if(el){el.remove();}
+}
+/* rain of bullets over a chosen zone for 3s */
+function unleashRain(cx,cy){
+  S._armedRain=false; showRainPrompt(false);
+  const fr=frameRect();
+  const zoneW=fr.width*0.30;
+  const t0=performance.now(), dur=3000;
+  const tick=()=>{
+    if(!running)return;
+    const now=performance.now();
+    if(now-t0>dur)return;
+    // spawn a couple of falling bullets in the zone; kill birds they touch
+    for(let i=0;i<3;i++){
+      const bx=cx-zoneW/2+Math.random()*zoneW;
+      const by=cy-fr.height*0.2+Math.random()*20;
+      const bl=document.createElement('div');bl.className='rain-bullet';
+      bl.style.left=bx+'px';bl.style.top=by+'px';
+      layers.fx.appendChild(bl);
+      const bt0=performance.now();
+      (function fall(){
+        const p=(performance.now()-bt0)/600;
+        const y=by+p*fr.height*0.5;
+        bl.style.transform=`translateY(${y-by}px)`;
+        // hit detection
+        for(const b of S.birds){ if(b.dead)continue;
+          if(Math.abs((b.x+b.w/2)-bx)<b.w*0.6 && Math.abs((b.y+b.h/2)-y)<b.h*0.6){
+            tagHit(b, bx, y); break;
+          }
+        }
+        if(p<1&&running)requestAnimationFrame(fall); else bl.remove();
+      })();
+    }
+    setTimeout(tick,90);
+  };
+  tick();
+  explode(cx,cy,1.2,true);
 }
 function updatePowerTimers(now){
   if(!S.power)return;
@@ -2264,7 +2353,7 @@ function launchPoo(b,fr){
     if(S.shieldHp<=0)breakShield();
     return;
   }
-  const mr=monRect();
+  const mr=monBox();
   const sx=b.x+b.w/2, sy=b.y+b.h;
   // pick a landing point strictly INSIDE the monument silhouette
   const {u,v}=randomInMonument(S.monId);
@@ -2276,25 +2365,29 @@ function launchPoo(b,fr){
   drop.style.left=sx+'px';drop.style.top=sy+'px';
   layers.fx.appendChild(drop);
   const dur=520;const t0=performance.now();
+  let landed=false;
+  const land=()=>{ if(landed)return;landed=true;drop.remove();addStain(u,v,col); };
   (function fly(){
     const p=Math.min(1,(performance.now()-t0)/dur);
     const cx=sx+(tx-sx)*p;
     const cy=sy+(ty-sy)*p + Math.sin(Math.PI*p)*(-8);
     drop.style.transform=`translate(${cx-sx}px,${cy-sy}px)`;
-    if(p<1)requestAnimationFrame(fly);
-    else{drop.remove();addStain(u,v,col);}
+    if(p<1&&!landed)requestAnimationFrame(fly);
+    else land();
   })();
+  setTimeout(land,dur+400);   // safety: never leave a floating projectile
 }
 function addStain(u,v,col){
   S.dirtCount++;
   Audio2.poo();
   const el=document.createElement('div');el.className='stain';
   el.dataset.u=u;el.dataset.v=v;
-  const sz=15+Math.random()*11;
-  el.innerHTML=`<svg width="${sz}" height="${sz}" viewBox="0 0 26 30">
-    <path d="M13 1 C6 1 2 8 4 13 C1 15 2 21 8 20 C10 22 16 22 18 20 C24 21 25 15 22 13 C24 8 20 1 13 1Z" fill="${col}"/>
-    <path d="M11 19 q-1 6 0 9 q1 2 2 0 q1 -4 0 -9Z" fill="${col}" opacity=".8"/>
-    <ellipse cx="10" cy="9" rx="2.4" ry="1.5" fill="#fff" opacity=".3"/></svg>`;
+  const sz=14+Math.random()*10;
+  // pure-CSS organic splat (no inline SVG — renders reliably on mobile Safari)
+  el.style.width=sz+'px';el.style.height=(sz*0.9)+'px';
+  el.style.background=col;
+  const r=()=>40+Math.floor(Math.random()*30);
+  el.style.borderRadius=`${r()}% ${r()}% ${r()}% ${r()}% / ${r()}% ${r()}% ${r()}% ${r()}%`;
   positionStain(el);
   layers.fx.appendChild(el);
   S.clean=Math.max(0,S.clean-4*perk().dirtMult);updateDirt();syncHUD();
@@ -2303,7 +2396,7 @@ function addStain(u,v,col){
 }
 /* place a stain from its stored (u,v) relative to the current monument box */
 function positionStain(el){
-  const fr=frameRect(),mr=monRect();
+  const fr=frameRect(),mr=monBox();
   const u=parseFloat(el.dataset.u),v=parseFloat(el.dataset.v);
   el.style.left=((mr.left-fr.left)+u*mr.width)+'px';
   el.style.top=((mr.top-fr.top)+v*mr.height)+'px';
@@ -2340,8 +2433,10 @@ function agentTickOnce(){
   // move the cleaner toward the stained monument + scrub bubbles
   const a=layers.agents.querySelector('.agent');
   if(a){
-    const fr=frameRect(),mr=monRect();
-    a.style.left=((mr.left-fr.left)+mr.width*(0.2+Math.random()*0.6))+'px';
+    const fr=frameRect();
+    const band=MON_BAND[S.monId]||[0.5,0.2];
+    const cx=band[0]*fr.width, hw=band[1]*fr.width;
+    a.style.left=(cx-hw+Math.random()*hw*2)+'px';
     for(let i=0;i<batch;i++){const bub=document.createElement('div');bub.className='bubble';a.appendChild(bub);setTimeout(()=>bub.remove(),700);}
   }
 }
@@ -2488,6 +2583,7 @@ function renderItemBar(){
     const imgName=it.id==='bomb'?'airstrike':it.id;
     return `<button class="item-btn" data-id="${it.id}" title="${it.name}">
       <div class="ib-icon">${it.icon}<img class="ib-img" src="${IMG_DIR}icon_${imgName}.webp" alt="" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="ib-name">${it.name}</div>
       <div class="ib-price"><span class="coin sm"></span>${price}</div>
       <div class="ib-cd"></div>
       <div class="ib-armed">TAP TO PLACE</div>
@@ -2510,11 +2606,21 @@ function updateItemBar(){
     const price=priceOf(it);
     const active=S.items&&S.items[it.id];
     const afford=S.coins>=price;
-    btn.classList.toggle('affordable',afford&&!active);
-    btn.classList.toggle('too-dear',!afford&&!active);
+    const cooling=onCooldown(it.id);
+    btn.classList.toggle('affordable',afford&&!active&&!cooling);
+    btn.classList.toggle('too-dear',(!afford&&!active)&&!cooling);
     btn.classList.toggle('active',!!active);
     btn.classList.toggle('armed',S._armedItem===it.id);
-    // countdown for timed items
+    btn.classList.toggle('cooling',cooling);
+    // cooldown overlay: shade fills from the top, timer number
+    let cdWrap=btn.querySelector('.ib-cool');
+    if(cooling){
+      if(!cdWrap){cdWrap=document.createElement('div');cdWrap.className='ib-cool';cdWrap.innerHTML='<div class="ib-cool-fill"></div><div class="ib-cool-num"></div>';btn.appendChild(cdWrap);}
+      const total=it.cd*1000, left=S.cooldowns[it.id]-now, frac=Math.max(0,Math.min(1,left/total));
+      cdWrap.querySelector('.ib-cool-fill').style.height=(frac*100)+'%';
+      cdWrap.querySelector('.ib-cool-num').textContent=Math.ceil(left/1000);
+    }else if(cdWrap){cdWrap.remove();}
+    // countdown for active timed items (kept, but hidden while cooling)
     const cd=btn.querySelector('.ib-cd');
     if(active&&it.dur){const left=Math.max(0,(active.until-now)/1000);cd.textContent=Math.ceil(left)+'s';cd.style.display='block';}
     else if(it.id==='shield'&&S.shieldBlock){cd.textContent=(S.shieldHp||0);cd.style.display='block';}
@@ -2522,10 +2628,14 @@ function updateItemBar(){
   });
 }
 function priceOf(it){ return Math.max(1, Math.round(it.price*perk().shopMult)); }
+function onCooldown(id){ return S.cooldowns && S.cooldowns[id] && performance.now()<S.cooldowns[id]; }
+function startCooldown(it){ if(!S.cooldowns)S.cooldowns={}; if(it.cd)S.cooldowns[it.id]=performance.now()+it.cd*1000; }
 function buyItem(it){
   if(!S||!running&&!S._armedItem)return;
-  // if item needs placement, arm it (next tap on the field places it)
   const price=priceOf(it);
+  // blocked while recharging
+  if(onCooldown(it.id)){ flashItemDenied(it.id); return; }
+  // if item needs placement, arm it (next tap on the field places it)
   if(it.place){
     if(S.coins<price){flashItemDenied(it.id);return;}
     S._armedItem=(S._armedItem===it.id)?null:it.id;   // toggle arm
@@ -2535,6 +2645,7 @@ function buyItem(it){
   if(S.coins<price){flashItemDenied(it.id);return;}
   Audio2.buy();
   S.coins-=price;
+  startCooldown(it);
   if(it.instant){airstrike();}
   else{activateItem(it);}
   syncHUD();updateItemBar();
@@ -2549,6 +2660,7 @@ function placeArmedItem(x,y){
   const price=priceOf(it);
   if(S.coins<price){S._armedItem=null;updateItemBar();return false;}
   Audio2.buy();S.coins-=price;
+  startCooldown(it);
   if(it.id==='net')dropNet(x,y);
   else if(it.id==='decoy')dropDecoy(x,y);
   S._armedItem=null;
@@ -2588,8 +2700,21 @@ function dropDecoy(x,y){
 }
 function airstrike(){
   Audio2.explosion();
-  for(const b of S.birds){if(!b.dead){b.dead=true;b.vy=-0.3;explode(b.x+b.w/2,b.y+b.h/2,1.2,false);
-    S.coins+=b.type.reward;S.score+=b.type.score;}}
+  for(const b of S.birds){
+    if(b.dead)continue;
+    if(b.type.boss){
+      // a boss only takes half its remaining HP from an air strike
+      const dmg=Math.ceil(b.hp/2);
+      b.hp-=dmg;
+      if(b.el){const f=b.el.querySelector('.boss-hp-fill');if(f)f.style.width=Math.max(0,(b.hp/b.maxHp)*100)+'%';}
+      explode(b.x+b.w/2,b.y+b.h/2,1.6,false);
+      if(b.hp<=0){b.dead=true;b.vy=-0.4;S.coins+=b.type.reward;S.score+=b.type.score;floatTextCenter('Pigeon King down!');}
+      else{floatText(b.x+b.w/2,b.y,'-50% HP','#ff8a8a');}
+      continue;
+    }
+    b.dead=true;b.vy=-0.3;explode(b.x+b.w/2,b.y+b.h/2,1.2,false);
+    S.coins+=b.type.reward;S.score+=b.type.score;
+  }
   const flash=document.createElement('div');
   flash.style.cssText='position:absolute;inset:0;background:#fff;opacity:.55;z-index:40;pointer-events:none;transition:opacity .5s';
   layers.fx.appendChild(flash);requestAnimationFrame(()=>flash.style.opacity=0);setTimeout(()=>flash.remove(),500);
@@ -2657,10 +2782,9 @@ function showMap(){running=false;cancelAnimationFrame(rafId);hideAll();renderMap
 function hideMap(){document.getElementById('mapOverlay').classList.remove('active');}
 /* menu info descriptions */
 const POWER_DESC={
-  rapid:'Doubles your firing speed for a few seconds.',
-  freeze:'Slows every bird to a crawl — great to clear a rush.',
-  rain:'Instantly wipes every bird on screen.',
-  gold:'Doubles all gold you earn for a short while.'
+  freeze:'Slows every bird to a crawl for 5 seconds, so they barely move and rarely drop. Grab the orb and it triggers instantly — buys you time to clear a crowded wave.',
+  rain:'Grab the orb, then tap anywhere: a storm of bullets pours over that spot for 3 seconds, shredding any bird that flies through it. Aim it where the birds are thickest.',
+  gold:'Doubles all the gold you earn for 8 seconds. Grab it right before a big wave or a boss to cash in — pair it with fast kills for a huge payout.'
 };
 const BIRD_DESC={
   pigeon:'The basic troublemaker. One hit, low reward, comes in numbers.',
