@@ -101,18 +101,19 @@
   border-color: transparent;
   box-shadow: 0 4px 14px rgba(124,58,237,0.4);
 }
-
-/* Onglets mode — dégradé violet propre */
-.lbpage__mode-tabs { display: flex; gap: 8px; }
+/* Onglets mode — s'enroulent proprement (gère 2 modes comme 10 monuments) */
+.lbpage__mode-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
 .lbpage__mode-tab {
-  flex: 1; padding: 12px;
-  border-radius: var(--radius-md);
+  flex: 0 1 auto;            /* ne s'étire plus : largeur selon le contenu */
+  padding: 9px 16px;
+  border-radius: var(--radius-full);
   border: none;
   background: rgba(255,255,255,0.2);
   font-family: var(--font-body); font-size: var(--text-sm); font-weight: 700;
   color: rgba(255,255,255,0.8); cursor: pointer;
   transition: all var(--transition-fast);
   backdrop-filter: blur(4px);
+  white-space: nowrap;       /* le nom du monument ne se coupe pas */
 }
 .lbpage__mode-tab:hover { background: rgba(255,255,255,0.35); color: #ffffff; }
 .lbpage__mode-tab.is-active {
@@ -267,7 +268,7 @@
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: var(--cell); justify-content: stretch;
   }
-  .lbpage__mode-tabs { flex-direction: column; }
+  .lbpage__mode-tabs { flex-direction: row; flex-wrap: wrap; }
   .lbpage__td { padding: 11px 14px; }
   .lbpage__th { padding: 10px 14px; }
   .lbpage__player-rank { padding: 10px 14px; gap: 8px; flex-wrap: wrap; }
