@@ -247,12 +247,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 @keyframes tagBob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-4px)}}
 
 /* ===== OVERLAYS (screens/map/shop) ===== */
-.screen{position:absolute;inset:0;z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;
+.screen{position:absolute;inset:0;z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:safe center;
   gap:clamp(12px,2.4vw,18px);
   background:radial-gradient(120% 90% at 50% 0%,#16305a 0%,#0e1e3a 45%,#0a1424 100%);
-  opacity:0;pointer-events:none;transition:opacity .45s;text-align:center;padding:clamp(20px,5vw,34px);overflow:hidden}
+  opacity:0;pointer-events:none;transition:opacity .45s;text-align:center;
+  padding:clamp(20px,5vw,34px);overflow-y:auto}
 .screen.active{opacity:1;pointer-events:auto}
-.bb-logo{display:flex;justify-content:center;margin-bottom:10px}
+.bb-logo{display:flex;justify-content:center;margin:auto auto 10px;flex:none}
 .bb-title-img{width:clamp(240px,70vw,440px);height:auto;display:block;filter:drop-shadow(0 8px 20px rgba(0,0,0,.5))}
 .bb-tag{color:rgba(255,255,255,.85);font-size:clamp(14px,3.4vw,17px);max-width:470px;line-height:1.65}
 .bb-tag strong{color:var(--neon)}
@@ -643,10 +644,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
         <span class="mb-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg></span>
         <span class="mb-label">POWERS</span></button>
       <button class="btn menu-btn" onclick="showBirds()">
-        <span class="mb-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 4a2 2 0 100 4 2 2 0 000-4z"/><path d="M14 7c-3 0-5 2-6 4L4 13l3 1-2 4 5-3c3 0 5-1 6-4 1 .5 2 .3 3-.5-1 0-1.4-.6-1.5-1.3C17.2 8 16 7 14 7z"/><path d="M4 13l-2 3 3-1z"/></svg></span>
+        <span class="mb-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 5c-1 .3-1.8.3-2.6-.2-.6 1-1.7 1.4-2.9 1.4-2.8 0-5 2.2-5 5v.6L3 15c0 0 .8 2.4 3.4 3.3-1 .9-2.4 1.3-3.4 1.3 1.8 1.4 4 1.9 6 1.5 3.4-.7 6-3.7 6-7.3V13l3.6-3.2c-.6.1-1.2.1-1.7-.1C20 8.8 21 7 21 5z"/><circle cx="15.5" cy="8.5" r="1" fill="#0e1e3a"/></svg></span>
         <span class="mb-label">BIRDS</span></button>
       <button class="btn menu-btn menu-settings" onclick="showSettings()">
-        <span class="mb-ic"><svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M12 1l1.5 2.4 2.7-.9.5 2.8 2.8.5-.9 2.7L21 12l-2.4 1.5.9 2.7-2.8.5-.5 2.8-2.7-.9L12 21l-1.5-2.4-2.7.9-.5-2.8-2.8-.5.9-2.7L3 12l2.4-1.5-.9-2.7 2.8-.5.5-2.8 2.7.9zm0 6.5a4.5 4.5 0 100 9 4.5 4.5 0 000-9zm0 2.5a2 2 0 110 4 2 2 0 010-4z"/></svg></span>
+        <span class="mb-ic"><svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"><path d="M10.3 1.3h3.4l.5 2.6c.5.2 1 .4 1.4.7l2.5-1 1.7 3-2 1.7c0 .3.1.5.1.8s0 .5-.1.8l2 1.7-1.7 3-2.5-1c-.4.3-.9.5-1.4.7l-.5 2.6h-3.4l-.5-2.6c-.5-.2-1-.4-1.4-.7l-2.5 1-1.7-3 2-1.7c0-.3-.1-.5-.1-.8s0-.5.1-.8l-2-1.7 1.7-3 2.5 1c.4-.3.9-.5 1.4-.7zM12 8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"/></svg></span>
         <span class="mb-label">SETTINGS</span></button>
       <button class="btn menu-btn menu-play" onclick="showMap()">
         <span class="mb-ic"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
