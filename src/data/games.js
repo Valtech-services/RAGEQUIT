@@ -70,6 +70,21 @@ export const categories = [
       ],
     },
   },
+     {
+    id: 'shooting',
+    label: 'Shooting',
+    image: '/categories/shooting.jpg',
+    description: 'Aim, shoot, survive. Fast-paced shooting games that test your reflexes and precision.',
+    seo: {
+      title: 'Free Shooting Games | Ragequit Arcade',
+      metaDescription: 'Play the best free shooting games online. Take aim, chain combos and survive the waves. No download, no signup required.',
+      faq: [
+        { q: 'What shooting games are available?', a: 'Bird Blitz — a tower-defense shooter where you protect world monuments from waves of birds. Take aim, buy weapons and upgrade between runs. New shooting games added regularly.' },
+        { q: 'Are they free?', a: 'Yes, 100% free, no account required.' },
+        { q: 'Mobile?', a: 'Yes, shooting games work on mobile, tablet and desktop — just tap to aim and fire.' },
+      ],
+    },
+  },
 ]
 
 /* ---- SEO global du site ---- */
@@ -302,7 +317,7 @@ export const games = [
     title: 'Bird Blitz',
     description: 'The world\u2019s greatest monuments are under attack — not by armies, but by an endless flock of mischievous birds determined to cover them in droppings. Take aim and shoot pigeons, seagulls, eagles, albatrosses and thieving crows out of the sky before they defile the Eiffel Tower, Big Ben, the Statue of Liberty and seven more world landmarks. Earn gold for every hit, chain your shots for huge combo multipliers, and spend your earnings on shotguns, shields, air strikes, nets and slow-motion to survive ever-tougher waves. Every tenth wave unleashes a giant boss, and permanent star upgrades let you come back stronger. A fast, funny and surprisingly deep browser tower-defense shooter.',
     thumbnail: '/thumbnails/bird-blitz.jpg',
-    category: 'arcade',
+    category: 'shooting',
     tags: ['tower-defense', 'shooter', 'arcade', 'birds', 'monuments', 'action', 'combo', 'waves', 'upgrades'],
     size: 'large',
     shimmer: true,
