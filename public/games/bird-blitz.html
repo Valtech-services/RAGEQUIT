@@ -231,14 +231,78 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 
 /* ===== OVERLAYS (screens/map/shop) ===== */
 .screen{position:absolute;inset:0;z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:clamp(12px,2.4vw,18px);background:linear-gradient(180deg,rgba(11,17,32,.94),rgba(17,26,46,.96));
-  backdrop-filter:blur(18px);opacity:0;pointer-events:none;transition:opacity .45s;text-align:center;padding:clamp(20px,5vw,34px)}
+  gap:clamp(12px,2.4vw,18px);
+  background:radial-gradient(120% 90% at 50% 0%,#16305a 0%,#0e1e3a 45%,#0a1424 100%);
+  opacity:0;pointer-events:none;transition:opacity .45s;text-align:center;padding:clamp(20px,5vw,34px);overflow:hidden}
 .screen.active{opacity:1;pointer-events:auto}
 .bb-logo{display:flex;justify-content:center;margin-bottom:10px}
 .bb-title-img{width:clamp(240px,70vw,440px);height:auto;display:block;filter:drop-shadow(0 8px 20px rgba(0,0,0,.5))}
 .bb-tag{color:rgba(255,255,255,.85);font-size:clamp(14px,3.4vw,17px);max-width:470px;line-height:1.65}
 .bb-tag strong{color:var(--neon)}
 .bb-play{font-size:clamp(16px,4vw,20px);padding:clamp(14px,3.4vw,18px) clamp(34px,8vw,54px)}
+
+/* MAIN MENU */
+.menu-stars{display:inline-flex;align-items:center;gap:7px;font-size:clamp(17px,4.2vw,23px);font-weight:900;color:var(--gold);
+  background:linear-gradient(180deg,rgba(255,207,51,.16),rgba(255,207,51,.06));
+  border:1px solid rgba(255,207,51,.45);padding:6px 20px;border-radius:24px;margin:10px 0 20px;
+  box-shadow:0 4px 14px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.15)}
+.menu-buttons{display:flex;flex-direction:column;gap:clamp(9px,1.8vw,12px);width:min(90vw,340px)}
+.menu-btn{position:relative;display:flex;align-items:center;gap:14px;text-align:left;
+  font-size:clamp(15px,3.6vw,18px);font-weight:800;letter-spacing:.5px;padding:clamp(12px,2.6vw,15px) clamp(16px,3.6vw,20px);
+  color:#eaf2ff;width:100%;border-radius:16px;
+  background:linear-gradient(180deg,rgba(255,255,255,.11),rgba(255,255,255,.04));
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 6px 18px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.14);
+  transition:transform .14s,box-shadow .2s,border-color .2s,background .2s}
+.menu-btn:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.28);
+  box-shadow:0 10px 26px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.2)}
+.menu-btn:active{transform:translateY(0) scale(.985)}
+.mb-ic{flex:none;width:clamp(28px,6.5vw,34px);height:clamp(28px,6.5vw,34px);display:flex;align-items:center;justify-content:center;
+  border-radius:10px;background:rgba(255,255,255,.08);color:#9fd2ff}
+.mb-ic svg{width:64%;height:64%}
+.mb-label{flex:1}
+.mb-dot{width:9px;height:9px;border-radius:50%;background:#ef4444;box-shadow:0 0 8px #ef4444;display:none}
+.mb-dot.on{display:block}
+.menu-play{font-size:clamp(19px,4.8vw,24px);font-weight:900;letter-spacing:1px;padding:clamp(16px,3.6vw,20px) clamp(18px,4vw,24px);
+  color:#04222e;border-color:transparent;
+  background:linear-gradient(180deg,#7cd4ff,#38bdf8 55%,#12a2e8);
+  box-shadow:0 10px 28px rgba(56,189,248,.5),inset 0 1px 0 rgba(255,255,255,.5)}
+.menu-play:hover{box-shadow:0 14px 34px rgba(56,189,248,.6),inset 0 1px 0 rgba(255,255,255,.6)}
+.menu-play .mb-ic{background:rgba(4,34,46,.18);color:#04222e}
+.menu-settings{opacity:.82;font-weight:700}
+.menu-settings .mb-ic{color:#c7d3e2}
+
+/* BACK BUTTON */
+.btn-back{margin-top:clamp(16px,4vw,26px);color:#eaf2ff;font-weight:800;padding:10px 26px;border-radius:14px;
+  background:linear-gradient(180deg,rgba(255,255,255,.11),rgba(255,255,255,.04));
+  border:1px solid rgba(255,255,255,.18);box-shadow:0 4px 14px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.14)}
+.btn-back:hover{border-color:rgba(255,255,255,.3)}
+
+/* INFO SCREENS (powers / birds) */
+.info-list{display:flex;flex-direction:column;gap:clamp(10px,2.4vw,14px);width:100%;max-width:560px;margin:0 auto}
+.info-card{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;padding:clamp(12px,3vw,16px);text-align:left}
+.ic-icon{flex:none;width:clamp(50px,12vw,68px);height:clamp(50px,12vw,68px);display:flex;align-items:center;justify-content:center;position:relative}
+.ic-icon svg{width:100%;height:100%}
+.ic-icon .ic-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.ic-icon.bird-icon .wg{animation:none}
+.pu-orb{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff,var(--pc) 65%);
+  border:3px solid #fff;display:flex;align-items:center;justify-content:center;box-shadow:0 0 14px var(--pc)}
+.pu-orb span{font-size:clamp(20px,5vw,28px)}
+.ic-body{flex:1;min-width:0}
+.ic-name{font-size:clamp(15px,3.8vw,19px);font-weight:900;color:#fff;display:flex;align-items:center;gap:8px}
+.ic-hits{font-size:clamp(10px,2.5vw,12px);font-weight:800;color:var(--neon);background:rgba(56,189,248,.14);padding:2px 8px;border-radius:10px}
+.ic-desc{font-size:clamp(12px,3vw,14.5px);color:rgba(255,255,255,.7);margin-top:3px;line-height:1.35}
+
+/* SETTINGS */
+.settings-box{width:100%;max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.set-row{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px 18px;font-size:clamp(15px,3.8vw,18px);font-weight:800;color:#fff}
+.set-toggle{background:var(--neon);color:#04222e;font-weight:900;padding:8px 22px;min-width:70px}
+.set-htp{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:clamp(14px,3.4vw,20px);text-align:left}
+.htp-title{font-size:clamp(16px,4vw,20px);font-weight:900;color:var(--gold);margin-bottom:8px}
+.set-htp p{color:rgba(255,255,255,.8);font-size:clamp(13px,3.2vw,15px);line-height:1.7;margin:0}
+.set-htp strong{color:var(--neon)}
 .screen h1{font-size:clamp(30px,8.5vw,66px);font-weight:900;letter-spacing:1px;line-height:.95;
   background:linear-gradient(92deg,var(--gold),#ff8f00 60%,var(--red));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .screen h2{font-size:clamp(20px,5.5vw,42px);font-weight:900;color:#fff}
@@ -279,8 +343,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 .stat-label{font-size:clamp(10px,2.2vw,12px);text-transform:uppercase;opacity:.7;color:#fff;letter-spacing:1px}
 
 /* MAP */
-.map{position:absolute;inset:0;z-index:300;background:linear-gradient(180deg,#0a1526,#132238 55%,#0a1526);
-  backdrop-filter:blur(18px);opacity:0;pointer-events:none;transition:opacity .45s;display:flex;flex-direction:column;
+.map{position:absolute;inset:0;z-index:300;background:radial-gradient(120% 90% at 50% 0%,#16305a 0%,#0e1e3a 45%,#0a1424 100%);
+  opacity:0;pointer-events:none;transition:opacity .45s;display:flex;flex-direction:column;
   align-items:center;padding:clamp(18px,4.5vw,30px);overflow-y:auto}
 .map.active{opacity:1;pointer-events:auto}
 .map-title{font-size:clamp(24px,7vw,46px);font-weight:900;text-transform:uppercase;margin-bottom:4px;letter-spacing:1px;
@@ -542,14 +606,70 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
     <div class="bb-logo">
       <img src="/games/bird-blitz/bird-blitz-titre.webp" alt="Bird Blitz" class="bb-title-img">
     </div>
-    <p class="bb-tag">A flock of birds wants to defile the world's greatest monuments.<br><br>
-    <strong>Tap or click</strong> the birds before they drop their payload.<br>
-    <strong>Hire</strong> cleaners and auto-cannons from the shop.<br>
-    <strong>Earn</strong> gold with every kill and unlock heavy gear.<br><br>
-    Watch out for <strong>gold-thief crows</strong>.</p>
-    <div class="btn-row">
-      <button class="btn btn-primary bb-play" onclick="showMap()">Play</button>
+    <div class="menu-stars"><span class="star-ic">★</span><span id="menuStars">0</span></div>
+    <div class="menu-buttons">
+      <button class="btn menu-btn menu-play" onclick="showMap()">
+        <span class="mb-ic"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+        <span class="mb-label">PLAY</span></button>
+      <button class="btn menu-btn" onclick="showMap()">
+        <span class="mb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg></span>
+        <span class="mb-label">MONUMENTS</span></button>
+      <button class="btn menu-btn" onclick="showDailies()">
+        <span class="mb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></span>
+        <span class="mb-label">DAILY</span><span class="mb-dot" id="menuDailyDot"></span></button>
+      <button class="btn menu-btn" onclick="showUpgrades()">
+        <span class="mb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg></span>
+        <span class="mb-label">UPGRADES</span></button>
+      <button class="btn menu-btn" onclick="showPowers()">
+        <span class="mb-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg></span>
+        <span class="mb-label">POWERS</span></button>
+      <button class="btn menu-btn" onclick="showBirds()">
+        <span class="mb-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 8c4-3 8 0 11 2 2-1 5-2 9-1-3 2-3 5-7 6-5 2-10 0-13-4z"/></svg></span>
+        <span class="mb-label">BIRDS</span></button>
+      <button class="btn menu-btn menu-settings" onclick="showSettings()">
+        <span class="mb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg></span>
+        <span class="mb-label">SETTINGS</span></button>
     </div>
+  </div>
+
+  <!-- POWERS INFO -->
+  <div class="map" id="powersOverlay">
+    <button class="close-x" onclick="hidePowers()">×</button>
+    <div class="map-title">Power-ups</div>
+    <div class="map-sub">Birds sometimes drop these. Tap them before they hit the ground.</div>
+    <div class="info-list" id="powersList"></div>
+    <button class="btn btn-back" onclick="hidePowers()">‹ Menu</button>
+  </div>
+
+  <!-- BIRDS INFO -->
+  <div class="map" id="birdsOverlay">
+    <button class="close-x" onclick="hideBirds()">×</button>
+    <div class="map-title">Birds</div>
+    <div class="map-sub">Know your enemy. Each bird has its own tricks.</div>
+    <div class="info-list" id="birdsInfoList"></div>
+    <button class="btn btn-back" onclick="hideBirds()">‹ Menu</button>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="map" id="settingsOverlay">
+    <button class="close-x" onclick="hideSettings()">×</button>
+    <div class="map-title">Settings</div>
+    <div class="settings-box">
+      <div class="set-row">
+        <span>Music &amp; Sound</span>
+        <button class="btn set-toggle" id="soundToggle" onclick="toggleSoundSetting()">ON</button>
+      </div>
+      <div class="set-htp">
+        <div class="htp-title">How to play</div>
+        <p>A flock of birds wants to defile the world's greatest monuments.<br>
+        <strong>Tap or click</strong> the birds before they drop their payload.<br>
+        <strong>Buy</strong> gear from the side rails — it activates instantly, no menus.<br>
+        <strong>Net</strong> and <strong>Decoy</strong>: tap the item, then tap the field to place it.<br>
+        <strong>Chain kills</strong> for combos, grab falling power-ups, and survive the boss every 10 waves.<br>
+        Watch out for <strong>gold-thief crows</strong>.</p>
+      </div>
+    </div>
+    <button class="btn btn-back" onclick="hideSettings()">‹ Menu</button>
   </div>
 
   <!-- GAME OVER -->
@@ -577,11 +697,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
     <div class="map-title">World map</div>
     <div class="map-topbar">
       <div class="stars-balance"><span class="star-ic">★</span><span id="mapStars">0</span></div>
-      <button class="btn btn-daily" onclick="showDailies()">Daily <span class="daily-dot" id="dailyDot"></span></button>
-      <button class="btn btn-upg" onclick="showUpgrades()">Upgrades</button>
     </div>
     <div class="map-sub">Pick a monument. Each one keeps its own endless score.</div>
     <div class="map-grid" id="mapGrid"></div>
+    <button class="btn btn-back" onclick="hideMap();backToMenu()">‹ Menu</button>
   </div>
 
   <div class="map" id="dailyOverlay">
@@ -590,14 +709,16 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
     <div class="map-topbar"><div class="stars-balance"><span class="star-ic">★</span><span id="dailyStars">0</span></div></div>
     <div class="map-sub">New challenges every day. Complete them for stars.</div>
     <div class="daily-list" id="dailyList"></div>
+    <button class="btn btn-back" onclick="hideDailies()">‹ Menu</button>
   </div>
 
   <div class="map" id="upgradeOverlay">
     <button class="close-x" onclick="hideUpgrades()">×</button>
     <div class="map-title">Upgrades</div>
     <div class="map-topbar"><div class="stars-balance"><span class="star-ic">★</span><span id="upgStars">0</span></div></div>
-    <div class="map-sub">Permanent boosts, paid with stars earned each run.</div>
+    <div class="map-sub">Permanent boosts, paid with stars. Earn stars by finishing runs — higher waves &amp; score give more.</div>
     <div class="upg-grid" id="upgGrid"></div>
+    <button class="btn btn-back" onclick="hideUpgrades()">‹ Menu</button>
   </div>
 </div>
 
@@ -1214,7 +1335,7 @@ function bg_pagoda(){
 /* ============================================================ MONUMENT REGISTRY (v2) ============================================================ */
 const MONUMENTS = [
   {id:'eiffel',   name:'Eiffel Tower',      city:'Paris',       art:MON2.eiffel,    bg:()=>bg_paris(false), accent:'#b8975f',
-    perk:{bonus:'Tourist City: +15% Gold', malus:'Pickpocket Pigeons: some birds drop twice', goldMult:1.15, doublePoo:true}},
+    perk:{bonus:'Tourist City: +15% Gold', malus:'Pickpocket: some birds drop twice', goldMult:1.15, doublePoo:true}},
   {id:'bigben',   name:'Big Ben',           city:'London',      art:MON2.bigben,    bg:()=>bg_london(),     accent:'#c9a45e',
     perk:{bonus:'English Market: -15% Shop Prices', malus:'Rush Hour: +30% More Birds', shopMult:0.85, birdMult:1.3}},
   {id:'liberty',  name:'Statue of Liberty', city:'New York',    art:MON2.liberty,   bg:()=>bg_newyork(),    accent:'#6fc0ab',
@@ -2534,10 +2655,72 @@ function floatMapMsg(txt){
 }
 function showMap(){running=false;cancelAnimationFrame(rafId);hideAll();renderMap();document.getElementById('mapOverlay').classList.add('active');}
 function hideMap(){document.getElementById('mapOverlay').classList.remove('active');}
-function showUpgrades(){renderUpgrades();document.getElementById('upgradeOverlay').classList.add('active');}
-function hideUpgrades(){document.getElementById('upgradeOverlay').classList.remove('active');renderMap();}
-function showDailies(){renderDailies();document.getElementById('dailyOverlay').classList.add('active');}
-function hideDailies(){document.getElementById('dailyOverlay').classList.remove('active');renderMap();}
+/* menu info descriptions */
+const POWER_DESC={
+  rapid:'Doubles your firing speed for a few seconds.',
+  freeze:'Slows every bird to a crawl — great to clear a rush.',
+  rain:'Instantly wipes every bird on screen.',
+  gold:'Doubles all gold you earn for a short while.'
+};
+const BIRD_DESC={
+  pigeon:'The basic troublemaker. One hit, low reward, comes in numbers.',
+  seagull:'Faster than a pigeon and just as messy. Still one hit.',
+  eagle:'The speedster. Takes 2 hits and is hard to track.',
+  albatross:'A flying tank — 3 hits to bring down, but big and slow.',
+  crow:'Ignores the monument and dives for your gold. Stop it fast.',
+  boss:'The Pigeon King. Appears every 10 waves, tanky, and rains droppings. Big reward.'
+};
+function svgIconForPower(key){
+  const c=POWERUPS[key].color;
+  return `<div class="pu-orb" style="--pc:${c}"><span>${POWERUPS[key].icon}</span></div>`;
+}
+function showPowers(){
+  const box=document.getElementById('powersList');
+  box.innerHTML=Object.keys(POWERUPS).map(k=>{
+    const p=POWERUPS[k];
+    const img=`${IMG_DIR}power_${k}.webp`;
+    return `<div class="info-card">
+      <div class="ic-icon">${svgIconForPower(k)}<img class="ic-img" src="${img}" alt="" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="ic-body"><div class="ic-name">${p.name}</div><div class="ic-desc">${POWER_DESC[k]}</div></div>
+    </div>`;
+  }).join('');
+  hideAll();document.getElementById('powersOverlay').classList.add('active');
+}
+function hidePowers(){document.getElementById('powersOverlay').classList.remove('active');backToMenu();}
+function showBirds(){
+  const order=['pigeon','seagull','eagle','albatross','crow','boss'];
+  const box=document.getElementById('birdsInfoList');
+  box.innerHTML=order.map(k=>{
+    const info=BIRD_INFO[k]||{name:'Pigeon King',hits:'40+ hits'};
+    const name=k==='boss'?'Pigeon King':info.name;
+    return `<div class="info-card">
+      <div class="ic-icon bird-icon">${BIRD_SVG[k]}</div>
+      <div class="ic-body"><div class="ic-name">${name} <span class="ic-hits">${k==='boss'?'Boss':info.hits}</span></div>
+        <div class="ic-desc">${BIRD_DESC[k]}</div></div>
+    </div>`;
+  }).join('');
+  hideAll();document.getElementById('birdsOverlay').classList.add('active');
+}
+function hideBirds(){document.getElementById('birdsOverlay').classList.remove('active');backToMenu();}
+function showSettings(){
+  document.getElementById('soundToggle').textContent=musicOn?'ON':'OFF';
+  hideAll();document.getElementById('settingsOverlay').classList.add('active');
+}
+function hideSettings(){document.getElementById('settingsOverlay').classList.remove('active');backToMenu();}
+function toggleSoundSetting(){
+  toggleMusic();
+  document.getElementById('soundToggle').textContent=musicOn?'ON':'OFF';
+}
+function backToMenu(){
+  hideAll();
+  const s=document.getElementById('startScreen');s.classList.add('active');
+  const st=document.getElementById('menuStars');if(st)st.textContent=PROFILE.stars;
+  const dot=document.getElementById('menuDailyDot');if(dot)dot.classList.toggle('on',dailiesReadyCount()>0);
+}
+function showUpgrades(){renderUpgrades();hideAll();document.getElementById('upgradeOverlay').classList.add('active');}
+function hideUpgrades(){document.getElementById('upgradeOverlay').classList.remove('active');backToMenu();}
+function showDailies(){renderDailies();hideAll();document.getElementById('dailyOverlay').classList.add('active');}
+function hideDailies(){document.getElementById('dailyOverlay').classList.remove('active');backToMenu();}
 function renderDailies(){
   document.getElementById('dailyStars').textContent=PROFILE.stars;
   const list=getDailies();
@@ -2710,25 +2893,34 @@ const Audio2={
   startMusic(){
     if(!this.ctx||this.musicOn)return;
     this.musicOn=true;
-    this.musicGain.gain.linearRampToValueAtTime(0.28,this.ctx.currentTime+1.2);
-    // upbeat loop: bouncy melody + walking bass + light hats
-    const A=220,C=261.63,D=293.66,E=329.63,F=349.23,G=392,Ah=440,Ch=523.25,Dh=587.33,Eh=659.25;
-    const melody=[E,G,Ah,G, E,D,C,D, E,G,Ah,Ch, Ah,G,E,D,
-                  C,E,G,E, F,Ah,G,F, E,G,E,D, C,C,C,0];
-    const bass  =[A,0,A,0, F,0,F,0, C,0,C,0, G,0,G,0,
-                  A,0,A,0, F,0,F,0, C,0,G,0, A,0,A,0];
+    this.musicGain.gain.linearRampToValueAtTime(0.14,this.ctx.currentTime+2.0);
+    // calm, airy loop: soft sine melody with rests + gentle sine bass, long progression
+    const C=261.63,D=293.66,E=329.63,F=349.23,G=392,A=440,B=493.88,Ch=523.25,Dh=587.33,Eh=659.25;
+    // 0 = rest. Longer, sparser phrase over a I–vi–IV–V feel, repeated with variation.
+    const melody=[
+      E,0,G,0, C,0,0,0,  A,0,G,0, E,0,0,0,
+      F,0,A,0, G,0,0,0,  G,0,E,0, D,0,0,0,
+      E,0,G,0, Ch,0,0,0, B,0,G,0, A,0,0,0,
+      F,0,E,0, D,0,0,0,  C,0,0,0, 0,0,0,0
+    ];
+    const bass=[
+      C,0,0,0, 0,0,0,0,  A,0,0,0, 0,0,0,0,
+      F,0,0,0, 0,0,0,0,  G,0,0,0, 0,0,0,0,
+      C,0,0,0, 0,0,0,0,  A,0,0,0, 0,0,0,0,
+      F,0,0,0, 0,0,0,0,  G,0,0,0, 0,0,0,0
+    ];
     this.step=0;
     const playStep=()=>{
       if(!this.musicOn)return;
       const i=this.step%melody.length;
       const mn=melody[i];
-      if(mn)this.blip(mn,0.34,'square',0.16,null,this.musicGain);      // melody (chiptune-ish)
+      if(mn)this.blip(mn,0.9,'sine',0.12,null,this.musicGain);      // soft melody
       const bn=bass[i];
-      if(bn)this.blip(bn/2,0.5,'triangle',0.4,null,this.musicGain);    // bass
+      if(bn)this.blip(bn/2,1.8,'sine',0.22,null,this.musicGain);    // warm low bass
       this.step++;
     };
     playStep();
-    this.timer=setInterval(playStep,200);
+    this.timer=setInterval(playStep,380);
   },
   stopMusic(){
     this.musicOn=false;
@@ -2813,6 +3005,8 @@ document.addEventListener('visibilitychange',()=>{
 
 initSession(MONUMENTS[0].id);
 running=false;
+(()=>{const st=document.getElementById('menuStars');if(st)st.textContent=PROFILE.stars;
+  const dot=document.getElementById('menuDailyDot');if(dot)dot.classList.toggle('on',dailiesReadyCount()>0);})();
 </script>
 </body>
 </html>
