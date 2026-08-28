@@ -247,15 +247,15 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 @keyframes tagBob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-4px)}}
 
 /* ===== OVERLAYS (screens/map/shop) ===== */
-.screen{position:absolute;inset:0;z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
-  gap:clamp(10px,2vw,16px);
+.screen{position:absolute;inset:0;z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:clamp(6px,1.4vw,12px);
   background:radial-gradient(120% 90% at 50% 0%,#16305a 0%,#0e1e3a 45%,#0a1424 100%);
   opacity:0;pointer-events:none;transition:opacity .45s;text-align:center;
-  padding:clamp(16px,4vw,28px);overflow-y:auto}
+  padding:clamp(14px,3vw,24px);overflow-y:auto}
 .screen.active{opacity:1;pointer-events:auto}
-.bb-logo{display:flex;justify-content:center;margin:auto auto 6px;flex:none}
+.bb-logo{display:flex;justify-content:center;margin-bottom:4px;flex:none}
 .menu-grid{margin-bottom:auto}
-.bb-title-img{width:clamp(240px,70vw,440px);height:auto;display:block;filter:drop-shadow(0 8px 20px rgba(0,0,0,.5))}
+.bb-title-img{width:clamp(180px,42vw,300px);height:auto;display:block;filter:drop-shadow(0 6px 16px rgba(0,0,0,.5))}
 .bb-tag{color:rgba(255,255,255,.85);font-size:clamp(14px,3.4vw,17px);max-width:470px;line-height:1.65}
 .bb-tag strong{color:var(--neon)}
 .bb-play{font-size:clamp(16px,4vw,20px);padding:clamp(14px,3.4vw,18px) clamp(34px,8vw,54px)}
@@ -263,7 +263,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--ink);touch-act
 /* MAIN MENU */
 .menu-stars{display:inline-flex;align-items:center;gap:7px;font-size:clamp(17px,4.2vw,23px);font-weight:900;color:var(--gold);
   background:linear-gradient(180deg,rgba(255,207,51,.16),rgba(255,207,51,.06));
-  border:1px solid rgba(255,207,51,.45);padding:6px 20px;border-radius:24px;margin:10px 0 20px;
+  border:1px solid rgba(255,207,51,.45);padding:5px 18px;border-radius:24px;margin:4px 0 12px;
   box-shadow:0 4px 14px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.15)}
 .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(9px,2vw,13px);width:min(92vw,440px)}
 .menu-btn{position:relative;display:flex;align-items:center;gap:12px;text-align:left;
@@ -1718,19 +1718,19 @@ const BIRDS={
 
 /* Arsenal — every item is TIMED. dur = seconds active. */
 const SHOP=[
-  {id:'shotgun',name:'Shotgun',desc:'Center shot plus 4 blasts around it.',price:120,dur:20,cd:12,
+  {id:'shotgun',name:'Shotgun',desc:'Center shot plus 4 blasts around it.',price:120,dur:20,cd:22,
     icon:'<svg viewBox="0 0 24 24"><rect x="1" y="12.4" width="15" height="1.8" rx="0.6" fill="#6b7280"/><rect x="1" y="10.4" width="15" height="2" rx="0.6" fill="#9ca3af"/><path d="M1 14h4l1 3H2z" fill="#7c4a21"/><path d="M4.5 14h2.2v4.2c0 .5-.4.9-.9.9H5.4c-.5 0-.9-.4-.9-.9z" fill="#8a5a2b"/><path d="M6.5 14.2h2.6l1 2.2H6.5z" fill="#5b3a1a"/><path d="M9 15.6q1.6.4 1.6 1.6H9z" fill="#5b3a1a"/><rect x="15.5" y="10.2" width="1.6" height="4.2" rx="0.5" fill="#4b5563"/></svg>'},
-  {id:'agent',name:'Cleaner',desc:'Auto-scrubs droppings off the monument.',price:90,dur:22,cd:14,
+  {id:'agent',name:'Cleaner',desc:'Auto-scrubs droppings off the monument.',price:90,dur:22,cd:24,
     icon:'<svg viewBox="0 0 24 24"><rect x="11" y="2" width="2" height="12" rx="1" fill="#8a5a2b"/><path d="M7 13h10l-1.5 5h-7z" fill="#38bdf8"/><path d="M8 18h8l-.6 3H8.6z" fill="#0ea5e9"/><g stroke="#e0f2fe" stroke-width="0.7"><path d="M9 13.5v4M11 13.5v4M13 13.5v4M15 13.5v4"/></g></svg>'},
-  {id:'shield',name:'Shield',desc:'Absorbs 16 droppings, then breaks.',price:100,hp:16,cd:15,
+  {id:'shield',name:'Shield',desc:'Absorbs 16 droppings, then breaks.',price:100,hp:16,cd:25,
     icon:'<svg viewBox="0 0 24 24"><path d="M12 2 4 5.5v6C4 17 7.5 20.5 12 22c4.5-1.5 8-5 8-10.5v-6z" fill="#38bdf8"/><path d="M12 4.2 6 6.8v4.6c0 4.2 2.6 7 6 8.2z" fill="#7dd3fc" opacity="0.6"/><path d="M9 12l2 2 4-4.5" stroke="#04222e" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>'},
-  {id:'bomb',name:'Air Strike',desc:'Wipes normal birds; halves a boss. Instant.',price:250,instant:true,cd:18,
+  {id:'bomb',name:'Air Strike',desc:'Wipes normal birds; halves a boss. Instant.',price:250,instant:true,cd:28,
     icon:'<svg viewBox="0 0 24 24"><path d="M12 2l2.5 5.5L20 5l-2 5.5 4 1.5-4 1.5 2 5.5-5.5-2.5L12 22l-2.5-5.5L4 19l2-5.5-4-1.5 4-1.5L4 5l5.5 2.5z" fill="#ef4444"/><circle cx="12" cy="12" r="3.5" fill="#fbbf24"/></svg>'},
-  {id:'net',name:'Net',desc:'Tap a spot to drop a net that traps birds crossing it.',price:110,place:true,dur:5,cd:10,
+  {id:'net',name:'Net',desc:'Tap a spot to drop a net that traps birds crossing it.',price:110,place:true,dur:5,cd:20,
     icon:'<svg viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.4"><path d="M12 3a9 9 0 019 9 9 9 0 01-9 9 9 9 0 01-9-9 9 9 0 019-9z"/><path d="M3 12h18M12 3v18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg>'},
-  {id:'slowmo',name:'Slow-Mo',desc:'Slows every bird down for a few seconds.',price:150,dur:6,cd:12,
+  {id:'slowmo',name:'Slow-Mo',desc:'Slows every bird down for a few seconds.',price:150,dur:6,cd:22,
     icon:'<svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="2" rx="1" fill="#a5f3fc"/><rect x="11" y="3.5" width="2" height="2" fill="#a5f3fc"/><circle cx="12" cy="14" r="7.5" fill="none" stroke="#a5f3fc" stroke-width="2"/><path d="M12 14V9.5" stroke="#a5f3fc" stroke-width="2" stroke-linecap="round"/><path d="M12 14l3 2" stroke="#67e8f9" stroke-width="2" stroke-linecap="round"/></svg>'},
-  {id:'decoy',name:'Decoy',desc:'Tap a spot to lure birds away — the monument stays clean while it lasts.',price:140,place:true,dur:8,cd:14,
+  {id:'decoy',name:'Decoy',desc:'Tap a spot to lure birds away — the monument stays clean while it lasts.',price:140,place:true,dur:8,cd:24,
     icon:'<svg viewBox="0 0 24 24"><ellipse cx="7" cy="15" rx="2.4" ry="1.7" fill="#f59e0b"/><ellipse cx="13" cy="11" rx="2.4" ry="1.7" fill="#fbbf24"/><ellipse cx="17" cy="16" rx="2.4" ry="1.7" fill="#f59e0b"/><ellipse cx="7" cy="15" rx="1" ry="0.7" fill="#7c2d12"/><ellipse cx="13" cy="11" rx="1" ry="0.7" fill="#7c2d12"/><ellipse cx="17" cy="16" rx="1" ry="0.7" fill="#7c2d12"/></svg>'}
 ];
 
