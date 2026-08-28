@@ -109,7 +109,19 @@ export async function getLeaderboard(game, mode, limit = 20, difficulty = null, 
       .limit(limit)
 
     if (!error && data && data.length > 0) {
-      return data.map((row, i) => ({
+      // Sécurité : ne garder que le meilleur score par joueur (évite tout doublon
+      // d'affichage même si la table contient d'anciennes lignes en double).
+      // data est déjà trié par score décroissant, donc la première occurrence
+      // d'un nom est son meilleur score.
+      const seen = new Set()
+      const deduped = []
+      for (const row of data) {
+        const key = row.username || 'Anonymous'
+        if (seen.has(key)) continue
+        seen.add(key)
+        deduped.push(row)
+      }
+      return deduped.map((row, i) => ({
         rank:       i + 1,
         name:       row.username || 'Anonymous',
         score:      row.score,
