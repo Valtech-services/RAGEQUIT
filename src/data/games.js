@@ -346,4 +346,40 @@ export const games = [
       ],
     },
   },
+     /* ================================================================
+     SNAKE CANDY ARENA — arcade : le serpent revisité, bonbons & combos
+     ================================================================ */
+  {
+    id: 'snake',
+    title: 'Snake Candy Arena',
+    description: 'The classic snake game, reinvented with candy, combos and bonus animals. Guide your glowing snake around a neon arena, devour candy to grow one segment at a time, and chain your pickups fast to build a combo multiplier that sends your score soaring. Every few candies, a bonus animal appears for a limited time — grab it before it vanishes for a big point spike. The longer you get, the less room you have, until the whole board is a maze of your own tail. Fill the entire arena for the perfect run, and if you crash, watch an ad to revive and keep your score alive. Easy to pick up, deliciously hard to master.',
+    thumbnail: '/thumbnails/snake.jpg',
+    category: 'arcade',
+    tags: ['snake', 'arcade', 'candy', 'combo', 'retro', 'reflex', 'casual', 'high-score'],
+    size: 'medium',
+    shimmer: true,
+    isNew: true,
+    hot: true,
+    landscape: false,
+    plays: 0,
+    modes: ['classic'],
+    defaultMode: 'classic',
+    controls: 'Use the arrow keys or W A S D to steer on desktop. On mobile, swipe in the direction you want to go. Eat the pink candy to grow and score, grab the glowing bonus animals for extra points, and avoid crashing into your own tail. Works on mobile, tablet and desktop.',
+    author: 'Ragequit Arcade',
+    seo: {
+      title: 'Snake Candy Arena — Free Snake Game with Combos | Ragequit Arcade',
+      metaDescription: 'Play Snake Candy Arena free online. A neon twist on classic snake: eat candy, chain combos for a score multiplier, catch bonus animals and fill the whole arena. No download, no signup.',
+      faq: [
+        { q: 'How do you play Snake Candy Arena?', a: 'You steer a snake that moves continuously around a neon arena. Use the arrow keys or W A S D on desktop, or swipe on mobile. Eat the pink candy to grow one segment longer and score points. The run ends if you crash into your own tail, so the longer you get, the more carefully you have to plan your path.' },
+        { q: 'How does the combo system work?', a: 'Eating candy quickly, one piece after another, builds a combo multiplier. Each candy in a chain is worth more than the last, up to a high multiplier, so the faster you feed your snake the bigger your score grows. If you wait too long between candies, the combo resets to the start.' },
+        { q: 'What are the bonus animals?', a: 'Every few candies, a glowing bonus animal appears somewhere on the board for a limited time, shown by a countdown timer. Reaching it before it disappears rewards you with a big burst of points — worth double, boosted by your current combo — and grows your snake by one more segment.' },
+        { q: 'How does scoring work?', a: 'You earn points for every candy and every bonus animal you eat, all multiplied by your active combo. Building long combo chains and catching bonus animals at high multipliers is the key to topping the leaderboard. Your best score is saved to the global leaderboard.' },
+        { q: 'What is the perfect run?', a: 'The final candy can only be eaten once your snake has grown to fill the entire arena. Manage to take that last candy with the board completely packed and you trigger a perfect "arena filled" finale worth a big bonus — the ultimate Snake Candy Arena challenge.' },
+        { q: 'Can I continue after crashing?', a: 'Yes. When you crash, you can watch a short ad once to revive and keep your current score instead of starting over, so a single mistake does not have to end a great run.' },
+        { q: 'What tips help me score higher?', a: 'Move in calm, deliberate patterns and keep an escape route open so you never box your own tail into a corner. Try to eat candy in quick succession to keep your combo high, and always plan a safe path to the bonus animal before you chase it. Patience and route planning beat raw speed.' },
+        { q: 'Is Snake Candy Arena free?', a: 'Yes, completely free to play, no download and no signup required.' },
+        { q: 'Mobile?', a: 'Yes. Snake Candy Arena works on mobile, tablet and desktop. On touch screens you swipe to steer, and on desktop you use the keyboard.' },
+      ],
+    },
+  },
 ]
