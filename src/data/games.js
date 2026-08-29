@@ -92,7 +92,7 @@ export const siteSeo = {
   title: 'Ragequit Arcade — Free Online Games',
   description: 'The most addictive free online games. Simple to learn, impossible to master. A new game every week.',
   about: 'Ragequit Arcade brings you the most addictive free online games, built for solo runs or quick matches with friends. Every game runs instantly in your browser — no downloads, no sign-up, no pop-ups, no nonsense. Our games work on desktop, tablet and mobile, so you can play at home or on the move. We are building a place where a great game is always one click away.',
-    gameSelection: 'We add new games every single week. Our current titles include Rage Hockey, STAQ, Stellar Forge, Neon Rush, Virus Lab, OCTAFLUX and Bird Blitz. Every game is free to play, forever.',
+  gameSelection: 'We add new games every single week. Our current titles include Rage Hockey, STAQ, Stellar Forge, Neon Rush, Virus Lab, OCTAFLUX, Bird Blitz and Snake Candy Arena. Every game is free to play, forever.',
   aboutUs: 'Ragequit Arcade is an independent gaming platform. Our goal is simple: create the most fun, most honest browser arcade on the web. New games drop every week — follow us on TikTok and Instagram to see what is coming next.',
   faq: [
     { q: 'What is Ragequit Arcade?', a: 'A free online gaming platform. No download, no registration required.' },
