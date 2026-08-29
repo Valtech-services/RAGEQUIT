@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
@@ -55,34 +55,34 @@
   <section class="game-wrap" id="wrap">
     <div class="topbar">
       <div class="hud">
-        <div class="pill"><small>Points</small><b id="score">0</b></div>
-        <div class="pill"><small>Longueur</small><b id="length">3</b></div>
-        <div class="pill"><small>Bonbons</small><b id="candies">0</b></div>
-        <div class="pill"><small>Animaux</small><b id="animals">0</b></div>
+        <div class="pill"><small>Score</small><b id="score">0</b></div>
+        <div class="pill"><small>Length</small><b id="length">3</b></div>
+        <div class="pill"><small>Candies</small><b id="candies">0</b></div>
+        <div class="pill"><small>Animals</small><b id="animals">0</b></div>
         <div class="pill timer-pill"><small>Timer</small><b id="timer">—</b></div>
       </div>
     </div>
-    <canvas id="game" aria-label="Jeu Snake Candy Arena"></canvas>
+    <canvas id="game" aria-label="Snake Candy Arena game"></canvas>
     <div class="toast" id="toast"></div>
     <div class="overlay" id="overlay">
       <div class="card">
         <h1>Snake<br>Candy Arena</h1>
-        <p class="sub">Mange les bonbons, grandis et attrape parfois un animal bonus avant la fin du chrono.</p>
+        <p class="sub">Eat candies, grow longer, and sometimes catch a bonus animal before time runs out.</p>
         
       <div id="adPanel" class="ad-panel" style="display:none">
-        <div class="ad-label">PUBLICITÉ</div>
+        <div class="ad-label">ADVERTISEMENT</div>
         <div class="ad-box">
           <div class="ad-spinner"></div>
-          <div class="ad-title">Une pause avant de repartir</div>
-          <div class="ad-text">Regarde la publicité pour reprendre avec ton score actuel.</div>
+          <div class="ad-title">A short break before you restart</div>
+          <div class="ad-text">Watch the ad to continue with your current score.</div>
           <div class="ad-count" id="adCount">3</div>
         </div>
-        <button id="revive" class="primary" disabled>Rejouer avec mon score</button>
-        <button id="noAd" class="secondary">Nouvelle partie</button>
+        <button id="revive" class="primary" disabled>Continue with my score</button>
+        <button id="noAd" class="secondary">New game</button>
       </div>
 
-      <button id="start" type="button" onclick="window.__snakeStartGame && window.__snakeStartGame()">Jouer</button>
-        <div class="tiny">Glisse sur l'écran pour diriger le serpent.</div>
+      <button id="start" type="button" onclick="window.__snakeStartGame && window.__snakeStartGame()">Play</button>
+        <div class="tiny">Swipe on the screen to control the snake.</div>
       </div>
     </div>
   </section>
@@ -90,7 +90,7 @@
 <script>
 (() => {
   'use strict';
-  // Communication avec le site parent (Ragequit Arcade).
+  // Communication with the parent site (Ragequit Arcade).
   function rqPost(msg){ try{ window.parent.postMessage(msg,'*'); }catch(e){} }
   const canvas = document.getElementById('game');
   const ctx = canvas.getContext('2d');
@@ -114,7 +114,7 @@
   let savedRun = null;
 
 
-  // Grille fixe, volontairement pensée pour un terrain 9:16.
+  // Fixed grid, intentionally designed for a 9:16 playfield.
   const COLS = 15, ROWS = 27;
   const CELL = 32;
   const TAU = Math.PI * 2;
@@ -161,31 +161,39 @@
   
   function hideAdPanel(){
     clearInterval(adTimer);
+    adTimer=null;
     adPanel.style.display='none';
     startBtn.style.display='';
   }
 
   function reviveWithScore(){
-    if(!savedRun || reviveBtn.disabled) return;
-    // suivi analytics : pub récompensée regardée en entier (revive)
+    // Restore the exact snapshot from game over. Never reset or respawn the candy.
+    if(!savedRun || reviveBtn.disabled || state!=='over') return;
+
+    // Prevent double activation while the snapshot is being restored.
+    reviveBtn.disabled=true;
+
+    // Analytics only. The leaderboard score hook in gameOver() remains untouched.
     rqPost({type:'RH_TRACK',event:'ad_rewarded_complete',game_id:'snake',props:{context:'revive'}});
+
+    const run=savedRun;
+    snake=run.snake.map(p=>({x:p.x,y:p.y}));
+    dir={...run.dir};
+    nextDir={...run.nextDir};
+    candy=run.candy?{...run.candy}:null;
+    candyCount=run.candyCount;
+    animal=run.animal?{...run.animal,pos:{...run.animal.pos}}:null;
+    animalCount=run.animalCount;
+    score=run.score;
+    combo=run.combo;
+    comboExpire=run.comboExpire;
+    growthPending=run.growthPending;
+    speed=run.speed;
+
+    // Hide the game-over UI only after the saved state has been restored.
     hideAdPanel();
-
-    snake=savedRun.snake.map(p=>({x:p.x,y:p.y}));
-    dir={...savedRun.dir};
-    nextDir={...savedRun.nextDir};
-    candy=savedRun.candy?{...savedRun.candy}:null;
-    candyCount=savedRun.candyCount;
-    animal=savedRun.animal?{...savedRun.animal,pos:{...savedRun.animal.pos}}:null;
-    animalCount=savedRun.animalCount;
-    score=savedRun.score;
-    combo=savedRun.combo;
-    comboExpire=savedRun.comboExpire;
-    growthPending=savedRun.growthPending;
-    speed=savedRun.speed;
-
-    state='playing';
     overlay.style.display='none';
+    state='playing';
     lastTime=performance.now();
     accumulator=0;
     cancelAnimationFrame(raf);
@@ -193,7 +201,8 @@
     updateHud();
   }
 
-  reviveBtn.addEventListener('click',reviveWithScore);
+  // Direct handler: reliable for both desktop click and mobile pointer/click behavior.
+  reviveBtn.onclick=reviveWithScore;
   noAdBtn.addEventListener('click',()=>{
     clearInterval(adTimer);
     hideAdPanel();
@@ -235,13 +244,13 @@ function reset(){
   startBtn.onclick=function(e){e.preventDefault();startGame();return false;};
   window.__snakeStartGame=startGame;
 
-  function gameOver(title='Partie terminée'){
+  function gameOver(title='Game over'){
     state='over';
     if(score>best){best=score;localStorage.setItem('snakeCandyBest',best)}
-    // envoi du score au leaderboard du site
+    // Send the score to the site leaderboard
     rqPost({type:'SNAKE_SCORE',game:'snake',mode:'classic',score:score,scoreLabel:score+' pts'});
 
-    // Sauvegarde exacte de la partie pour permettre une reprise avec le score.
+    // Save the exact game state so the player can continue with the current score.
     savedRun={
       snake:snake.map(p=>({x:p.x,y:p.y})),
       dir:{...dir},
@@ -258,8 +267,8 @@ function reset(){
     };
 
     overlay.style.display='flex';
-    overlay.querySelector('h1').innerHTML=title+'<br><span style="font-size:.48em;color:#fff">Score : '+score+'</span>';
-    overlay.querySelector('.sub').textContent='Longueur '+snake.length+' • Bonbons '+candyCount+' • Animaux bonus '+animalCount;
+    overlay.querySelector('h1').innerHTML=title+'<br><span style="font-size:.48em;color:#fff">Score: '+score+'</span>';
+    overlay.querySelector('.sub').textContent='Length '+snake.length+' • Candies '+candyCount+' • Bonus animals '+animalCount;
 
     startBtn.style.display='none';
     adPanel.style.display='block';
@@ -281,40 +290,40 @@ function reset(){
 
     updateHud();
   }
-  function finale(){
+  function finishGame(){
     state='win';
     score += 1000;
     if(score>best){best=score;localStorage.setItem('snakeCandyBest',best)}
     burst({x:Math.floor(COLS/2),y:Math.floor(ROWS/2)},'#ffd34d',70);
     overlay.style.display='flex';
-    overlay.querySelector('h1').innerHTML='ÉCRAN REMPLI !<br><span style="font-size:.48em;color:#ffd34d">+1000 points</span>';
-    overlay.querySelector('.sub').textContent='Tu as pris le dernier bonbon alors que le serpent occupait toute la grille prédéfinie. Finale parfaite.';
-    startBtn.textContent='Rejouer'; updateHud();
+    overlay.querySelector('h1').innerHTML='SCREEN FILLED!<br><span style="font-size:.48em;color:#ffd34d">+1000 points</span>';
+    overlay.querySelector('.sub').textContent='You collected the final candy while the snake occupied the entire predefined grid. Perfect finish.';
+    startBtn.textContent='Play again'; updateHud();
   }
   function eatCandy(){
     candyCount++;
-    growthPending++; // EXACTEMENT +1 segment pour chaque bonbon
+    growthPending++; // EXACTLY +1 segment for every candy
     const value=Math.min(50,10+combo*5);
     score+=value; combo=Math.min(9,combo+1); comboExpire=performance.now()+3200;
     const eaten={x:candy.x,y:candy.y};
     burst(eaten,'#ff4fd8',18);
     candy=null;
     if(candyCount % 4===0 && !animal) spawnAnimal();
-    // Le dernier bonbon ne peut être consommé que lorsque toutes les cases sont remplies.
-    if(snake.length + growthPending >= COLS*ROWS){ finale(); return; }
+    // The final candy can only be collected when every cell is filled.
+    if(snake.length + growthPending >= COLS*ROWS){ finishGame(); return; }
     spawnCandy(); speed=Math.max(72,125-(snake.length-3)*1.2);
   }
   function eatAnimal(){
     animalCount++;
-    growthPending++; // +1 segment pour l'animal
-    const animalPoints = 150 * combo * 2; // l'animal vaut simplement x2 points
+    growthPending++; // +1 segment for the animal
+    const animalPoints = 150 * combo * 2; // the animal simply awards x2 points
     score += animalPoints;
     combo=Math.min(9,combo+2);
     bonusUntil=0;
     const eaten={x:animal.pos.x,y:animal.pos.y};
     burst(eaten,'#58e8ff',34);
-    toastMsg('ANIMAL BONUS ×2 +'+animalPoints+' • LONGUEUR +1');
-    // NE PAS déplacer/recréer le bonbon rose.
+    toastMsg('ANIMAL BONUS ×2 +'+animalPoints+' • LENGTH +1');
+    // DO NOT move or recreate the pink candy.
     animal=null;
     speed=Math.max(65,speed-5);
   }
@@ -325,14 +334,14 @@ function reset(){
     head.x=(head.x+COLS)%COLS; head.y=(head.y+ROWS)%ROWS;
     const willEatCandy=candy&&same(head,candy), willEatAnimal=animal&&same(head,animal.pos);
     const bodyCheck=snake.slice(0,willEatCandy?snake.length:snake.length-1);
-    if(bodyCheck.some(s=>same(s,head))){gameOver('Aïe !');return}
+    if(bodyCheck.some(s=>same(s,head))){gameOver('Ouch!');return}
     snake.unshift(head);
     if(willEatCandy) eatCandy();
     if(state!=='playing') return;
     if(willEatAnimal) eatAnimal();
 
-    // On retire toujours UNE queue par déplacement, sauf pour chaque segment
-    // de croissance gagné. Ainsi chaque nourriture donne réellement +1 segment.
+    // We remove ONE tail segment per move, except for each growth segment
+    // earned. This ensures every food item really adds +1 segment.
     if(growthPending>0) growthPending--;
     else snake.pop();
     if(performance.now()>comboExpire) combo=1;
@@ -381,7 +390,7 @@ function reset(){
   function drawSnake(){
     const b=boardSize();
 
-    // Corps plus riche : vrai dégradé vert -> cyan -> bleu + texture d'écailles.
+    // Richer body: true green -> cyan -> blue gradient + subtle scale texture.
     for(let i=snake.length-1;i>=0;i--){
       const seg=snake[i];
       const x=b.ox+seg.x*b.cell+2, y=b.oy+seg.y*b.cell+2, sz=b.cell-4;
@@ -398,7 +407,7 @@ function reset(){
       ctx.fillStyle=grad;
       roundRect(x,y,sz,sz,Math.max(5,b.cell*.28));ctx.fill();
 
-      // Motif d'écailles léger.
+      // Subtle scale pattern.
       ctx.shadowBlur=0;
       ctx.globalAlpha=.32;
       ctx.strokeStyle='rgba(230,255,255,.72)';
@@ -417,7 +426,7 @@ function reset(){
       ctx.restore();
     }
 
-    // Tête détaillée et légèrement plus grande.
+    // Detailed and slightly larger head.
     const h=snake[0];
     const cx=b.ox+(h.x+.5)*b.cell, cy=b.oy+(h.y+.5)*b.cell;
     const hs=b.cell*1.14;
@@ -434,7 +443,7 @@ function reset(){
     roundRect(hx,hy,hs,hs,hs*.34);ctx.fill();
     ctx.shadowBlur=0;
 
-    // Écailles de la tête.
+    // Head scales.
     ctx.strokeStyle='rgba(10,100,95,.30)';
     ctx.lineWidth=Math.max(.6,b.cell*.028);
     for(let r=0;r<3;r++) for(let c=0;c<4;c++){
@@ -460,7 +469,7 @@ function reset(){
     }
     eyes.forEach(e=>eye(e.x,e.y));
 
-    // Museau, narines et sourire.
+    // Snout, nostrils, and smile.
     ctx.fillStyle='rgba(255,235,188,.72)';
     roundRect(hx+hs*.17,hy+hs*.61,hs*.66,hs*.22,hs*.11);ctx.fill();
 
@@ -476,7 +485,7 @@ function reset(){
     const mx=cx+fx*hs*.18, my=cy+fy*hs*.30+hs*.08;
     ctx.arc(mx,my,hs*.18,.10*Math.PI,.90*Math.PI);ctx.stroke();
 
-    // Petites crêtes lumineuses.
+    // Small glowing ridges.
     ctx.fillStyle='rgba(112,240,255,.9)';
     for(let k=-1;k<=1;k++){
       const px=cx-fx*hs*.30+sx*k*hs*.15, py=cy-fy*hs*.30+sy*k*hs*.15;
