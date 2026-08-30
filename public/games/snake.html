@@ -30,7 +30,7 @@
   .toast{position:absolute;left:50%;top:28%;transform:translate(-50%,-50%) scale(.8);opacity:0;pointer-events:none;z-index:8;padding:12px 18px;border-radius:18px;background:#17102eea;border:1px solid #ffffff2b;box-shadow:0 12px 40px #0008;text-align:center;font-weight:900;font-size:18px;white-space:nowrap}
   .toast.show{animation:pop 1.35s ease forwards}@keyframes pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.8)}15%,75%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-65%) scale(1.03)}}
   .tiny{font-size:11px;color:#8f85b0;margin-top:10px}
-  @media (max-width:680px){body{padding:5px}.app{display:block;width:100%}.game-wrap{width:min(100%,540px);max-height:none}.topbar{gap:5px;padding:0 2px 6px}.hud{gap:4px}.pill{min-width:0;padding:5px 4px;border-radius:10px}.pill small{font-size:7px}.pill b{font-size:14px}.controls{grid-template-columns:repeat(3,27px);gap:2px}.controls button{padding:3px;font-size:13px;border-radius:8px}.overlay{inset:7px}.card{padding:22px 16px}}
+  @media (max-width:680px){body{padding:5px}.app{display:block;width:100%}.game-wrap{width:min(100%,540px)}.topbar{gap:5px;padding:0 2px 6px}.hud{gap:4px}.pill{min-width:0;padding:5px 4px;border-radius:10px}.pill small{font-size:7px}.pill b{font-size:14px}.controls{grid-template-columns:repeat(3,27px);gap:2px}.controls button{padding:3px;font-size:13px;border-radius:8px}.overlay{inset:7px}.card{padding:22px 16px}}
   @media (max-width:390px){.game-wrap{border-radius:22px;padding:5px}.game-wrap canvas,.overlay{border-radius:17px}.topbar{gap:3px}.hud{gap:2px}.pill{padding:4px 2px}.pill small{font-size:6px}.pill b{font-size:12px}.controls{grid-template-columns:repeat(3,23px)}.controls button{font-size:11px}}
 
   .game-wrap{max-height:calc(var(--vh, 1vh) * 100 - 24px)}
@@ -185,36 +185,34 @@
   }
 
   function reviveWithScore(){
-    // Restore the exact snapshot from game over. Never reset or respawn the candy.
-    if(!savedRun || reviveBtn.disabled || state!=='over') return;
+    if(reviveBtn.disabled || state!=='over') return;
 
-    // Prevent double activation while the snapshot is being restored.
+    // Prevent double activation.
     reviveBtn.disabled=true;
     reviveUsed=true;   // une seule pub-revive par partie
 
-    // Analytics only. The leaderboard score hook in gameOver() remains untouched.
+    // Analytics only.
     rqPost({type:'RH_TRACK',event:'ad_rewarded_complete',game_id:'snake',props:{context:'revive'}});
 
-    const run=savedRun;
-    snake=run.snake.map(p=>({x:p.x,y:p.y}));
-    dir={...run.dir};
-    nextDir={...run.nextDir};
-    candy=run.candy?{...run.candy}:null;
-    candyCount=run.candyCount;
-    animal=run.animal?{...run.animal,pos:{...run.animal.pos}}:null;
-    animalCount=run.animalCount;
-    score=run.score;
-    combo=run.combo;
-    comboExpire=run.comboExpire;
-    growthPending=run.growthPending;
-    speed=run.speed;
+    // On GARDE le score, mais on repart avec un serpent neuf au centre
+    // (comme un début de partie), pour ne pas se faire remordre aussitôt.
+    const keptScore=score;
+    const keptCandies=candyCount;
+    const keptAnimals=animalCount;
+    const cx=Math.floor(COLS/2), cy=Math.floor(ROWS/2);
+    snake=[{x:cx,y:cy},{x:cx-1,y:cy},{x:cx-2,y:cy}];
+    dir={x:1,y:0}; nextDir={x:1,y:0};
+    growthPending=0; combo=1; comboExpire=0;
+    animal=null; bonusUntil=0; particles=[]; accumulator=0; speed=125;
+    // on restaure les compteurs conservés
+    score=keptScore; candyCount=keptCandies; animalCount=keptAnimals;
+    spawnCandy();
 
-    // Hide the game-over UI only after the saved state has been restored.
+    // Hide the game-over UI and resume.
     hideAdPanel();
     overlay.style.display='none';
     state='playing';
     lastTime=performance.now();
-    accumulator=0;
     cancelAnimationFrame(raf);
     raf=requestAnimationFrame(loop);
     updateHud();
