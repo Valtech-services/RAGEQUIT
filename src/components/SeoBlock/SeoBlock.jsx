@@ -1,6 +1,23 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { games, categories } from '../../data/games'
 import './SeoBlock.css'
+
+// Première phrase d'une description (pour la liste des jeux sur la home).
+function firstSentence(text) {
+  if (!text) return ''
+  const match = text.match(/^[^.!?]*[.!?]/)
+  return match ? match[0].trim() : text
+}
+
+// Petite intro par catégorie, pour la home.
+const CATEGORY_BLURBS = {
+  sports: 'competitive, physical and rage-inducing.',
+  arcade: 'reflex, survival and pure score-chasing.',
+  idle: 'tap, automate and watch your numbers grow, even while you are away.',
+  puzzle: 'match, rotate and think fast under pressure.',
+  shooting: 'aim, shoot and survive wave after wave.',
+}
 
 export default function SeoBlock({ type, data }) {
   const { t, i18n } = useTranslation()
@@ -9,10 +26,13 @@ export default function SeoBlock({ type, data }) {
   // FAQ d'accueil traduite (depuis les fichiers de langue, pas games.js)
   const siteFaq = i18n.getResource(i18n.language, 'translation', 'siteFaq') || []
 
+  // Catégories réelles (on retire "all", qui n'est pas une vraie catégorie).
+  const realCategories = categories.filter(c => c.id !== 'all')
+
   return (
     <div className="seo-block">
       <div className="seo-block__inner">
-        
+
         {/* TYPE SITE — page d'accueil */}
         {type === 'site' && (
           <>
@@ -31,33 +51,12 @@ export default function SeoBlock({ type, data }) {
               We add new games regularly. Here is what you can play right now, each one free and unlimited:
             </p>
             <ul className="seo-block__list">
-              <li>
-                <Link to="/game/rage-hockey" className="seo-block__link">Rage Hockey</Link> — a brutal, fast-paced
-                air hockey game with three arenas, a punishing AI and a local two-player mode. First to seven wins.
-              </li>
-              <li>
-                <Link to="/game/staq" className="seo-block__link">STAQ</Link> — a one-tap block-stacking game where
-                precision is everything. Chain perfect drops, ride your combo and see how high your tower climbs.
-              </li>
-              <li>
-                <Link to="/game/neon-rush" className="seo-block__link">Neon Rush</Link> — a hypnotic 3D endless
-                runner through a retro-futuristic neon tunnel. Dodge across three lanes and chain near-misses for
-                huge combos.
-              </li>
-              <li>
-                <Link to="/game/stellar-forge" className="seo-block__link">Stellar Forge</Link> — a science-based
-                idle clicker where you mine ore, automate an energy empire and climb the real Kardashev scale from
-                planet to galaxy.
-              </li>
-              <li>
-                <Link to="/game/virus-lab" className="seo-block__link">Virus Lab</Link> — a one-of-a-kind strategy
-                game where you program a virus genome, conquer a petri dish and battle other players' strains in an
-                asynchronous arena.
-              </li>
-              <li>
-                <Link to="/game/octaflux" className="seo-block__link">OCTAFLUX</Link> — a fast octagon-rotation
-                puzzle game. Spin the core with your thumb to match falling pieces and trigger cascading chains.
-              </li>
+              {games.map(g => (
+                <li key={g.id}>
+                  <Link to={`/game/${g.id}`} className="seo-block__link">{g.title}</Link>
+                  {' — '}{firstSentence(g.description)}
+                </li>
+              ))}
             </ul>
 
             <h3 className="seo-block__subtitle">Browse by category</h3>
@@ -65,22 +64,12 @@ export default function SeoBlock({ type, data }) {
               Not sure what to play? Explore our games by category and find the style that fits your mood:
             </p>
             <ul className="seo-block__list">
-              <li>
-                <Link to="/category/sports" className="seo-block__link">Sports Games</Link> — competitive, physical
-                and rage-inducing.
-              </li>
-              <li>
-                <Link to="/category/arcade" className="seo-block__link">Arcade Games</Link> — reflex, survival and
-                pure score-chasing.
-              </li>
-              <li>
-                <Link to="/category/idle" className="seo-block__link">Idle / Clicker Games</Link> — tap, automate
-                and watch your numbers grow, even while you are away.
-              </li>
-              <li>
-                <Link to="/category/puzzle" className="seo-block__link">Puzzle Games</Link> — match, rotate and
-                think fast under pressure.
-              </li>
+              {realCategories.map(c => (
+                <li key={c.id}>
+                  <Link to={`/category/${c.id}`} className="seo-block__link">{c.label} Games</Link>
+                  {CATEGORY_BLURBS[c.id] ? ` — ${CATEGORY_BLURBS[c.id]}` : ''}
+                </li>
+              ))}
             </ul>
 
             <h3 className="seo-block__subtitle">Why play at Ragequit Arcade</h3>
