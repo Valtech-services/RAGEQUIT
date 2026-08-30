@@ -9,10 +9,10 @@
   :root{--bg:#0b0720;--panel:#171033;--ink:#fff;--muted:#b9addf;--accent:#ff4fd8;--cyan:#48eaff;--lime:#a7ff4f;--gold:#ffd34d;}
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;width:100%;min-height:100%;background:radial-gradient(circle at 50% 15%,#281653 0,#0b0720 48%,#05030e 100%);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;overflow-x:hidden}
-  body{display:flex;justify-content:center;align-items:center;min-height:100dvh;padding:12px}
+  body{display:flex;justify-content:center;align-items:center;min-height:calc(var(--vh, 1vh) * 100);padding:12px}
   .app{width:min(100%,760px);display:flex;justify-content:center;align-items:center}
   .game-wrap{position:relative;width:min(100%,540px);margin:auto;border:2px solid #6f55b8;border-radius:28px;padding:7px;background:linear-gradient(145deg,#2a1954,#100a29);box-shadow:0 18px 60px #0008,0 0 40px #7d3cff22;overflow:hidden}
-  canvas{display:block;width:100%;height:auto;aspect-ratio:15/27;max-height:calc(100dvh - 105px);object-fit:contain;border-radius:21px;background:#100b25;touch-action:none}
+   canvas{display:block;width:100%;height:auto;aspect-ratio:15/27;max-height:calc(var(--vh, 1vh) * 100 - 105px);object-fit:contain;border-radius:21px;background:#100b25;touch-action:none}
   .topbar{display:flex;align-items:center;gap:8px;padding:0 4px 9px}.hud{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;flex:1;min-width:0;pointer-events:none}.pill{background:#0d0920cc;border:1px solid #ffffff1c;backdrop-filter:blur(8px);border-radius:13px;padding:6px 10px;min-width:76px;text-align:center;box-shadow:0 4px 14px #0004}
   .pill small{display:block;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.12em}.pill b{font-size:17px;line-height:1.1}
   .overlay{pointer-events:auto;position:absolute;left:7px;right:7px;top:74px;bottom:7px;display:flex;align-items:center;justify-content:center;padding:24px;border-radius:21px;background:#080515aa;backdrop-filter:blur(6px);text-align:center;z-index:5}
@@ -33,9 +33,9 @@
   @media (max-width:680px){body{padding:5px}.app{display:block;width:100%}.game-wrap{width:min(100%,540px);max-height:none}.topbar{gap:5px;padding:0 2px 6px}.hud{gap:4px}.pill{min-width:0;padding:5px 4px;border-radius:10px}.pill small{font-size:7px}.pill b{font-size:14px}.controls{grid-template-columns:repeat(3,27px);gap:2px}.controls button{padding:3px;font-size:13px;border-radius:8px}.overlay{inset:7px}.card{padding:22px 16px}}
   @media (max-width:390px){.game-wrap{border-radius:22px;padding:5px}.game-wrap canvas,.overlay{border-radius:17px}.topbar{gap:3px}.hud{gap:2px}.pill{padding:4px 2px}.pill small{font-size:6px}.pill b{font-size:12px}.controls{grid-template-columns:repeat(3,23px)}.controls button{font-size:11px}}
 
-  .game-wrap{max-height:calc(100dvh - 24px)}
-  @media (max-width:680px){.game-wrap{max-height:calc(100dvh - 8px)}canvas{max-height:calc(100dvh - 92px)}}
-  @media (max-width:390px){canvas{max-height:calc(100dvh - 82px)}}
+  .game-wrap{max-height:calc(var(--vh, 1vh) * 100 - 24px)}
+  @media (max-width:680px){.game-wrap{max-height:calc(var(--vh, 1vh) * 100 - 8px)}canvas{max-height:calc(var(--vh, 1vh) * 100 - 92px)}}
+  @media (max-width:390px){canvas{max-height:calc(var(--vh, 1vh) * 100 - 82px)}}
 </style>
 
 <style id="ad-panel-style">
@@ -90,6 +90,15 @@
 <script>
 (() => {
   'use strict';
+    // Mesure la hauteur réelle du viewport et l'expose en --vh.
+  // Corrige le bug mobile où la barre du navigateur "mange" le bas du jeu.
+  function setVH(){
+    const h = window.innerHeight;
+    document.documentElement.style.setProperty('--vh', (h * 0.01) + 'px');
+  }
+  setVH();
+  window.addEventListener('resize', setVH);
+  window.addEventListener('orientationchange', () => setTimeout(setVH, 200));
   // Communication with the parent site (Ragequit Arcade).
   function rqPost(msg){ try{ window.parent.postMessage(msg,'*'); }catch(e){} }
   const canvas = document.getElementById('game');
