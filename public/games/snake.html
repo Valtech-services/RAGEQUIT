@@ -69,16 +69,22 @@
         <h1>Snake<br>Candy Arena</h1>
         <p class="sub">Eat candies, grow longer, and sometimes catch a bonus animal before time runs out.</p>
         
+      <!-- Game over : boutons de choix (aucune pub tant qu'on ne clique pas) -->
+      <div id="gameOverPanel" style="display:none;width:100%">
+        <button id="watchAd" class="primary" style="width:100%;margin-top:8px">▶ Watch ad to continue with my score</button>
+        <button id="noAd" class="secondary" style="width:100%;margin-top:8px">Play again</button>
+      </div>
+
+      <!-- Écran pub simulée : caché, ne s'affiche qu'au clic sur "Watch ad" -->
       <div id="adPanel" class="ad-panel" style="display:none">
         <div class="ad-label">ADVERTISEMENT</div>
         <div class="ad-box">
           <div class="ad-spinner"></div>
           <div class="ad-title">A short break before you restart</div>
-          <div class="ad-text">Watch the ad to continue with your current score.</div>
+          <div class="ad-text">Your reward is coming…</div>
           <div class="ad-count" id="adCount">3</div>
         </div>
-        <button id="revive" class="primary" disabled>Continue with my score</button>
-        <button id="noAd" class="secondary">New game</button>
+        <button id="revive" class="primary" disabled style="width:100%;margin-top:8px">Continue with my score</button>
       </div>
 
       <button id="start" type="button" onclick="window.__snakeStartGame && window.__snakeStartGame()">Play</button>
@@ -118,6 +124,8 @@
   const reviveBtn = document.getElementById('revive');
   const noAdBtn = document.getElementById('noAd');
   const adCountEl = document.getElementById('adCount');
+  const watchAdBtn = document.getElementById('watchAd');
+  const gameOverPanel = document.getElementById('gameOverPanel');
   let reviveUsed = false;
   let adTimer = null;
   let savedRun = null;
@@ -172,6 +180,7 @@
     clearInterval(adTimer);
     adTimer=null;
     adPanel.style.display='none';
+    if(gameOverPanel) gameOverPanel.style.display='none';
     startBtn.style.display='';
   }
 
@@ -181,6 +190,7 @@
 
     // Prevent double activation while the snapshot is being restored.
     reviveBtn.disabled=true;
+    reviveUsed=true;   // une seule pub-revive par partie
 
     // Analytics only. The leaderboard score hook in gameOver() remains untouched.
     rqPost({type:'RH_TRACK',event:'ad_rewarded_complete',game_id:'snake',props:{context:'revive'}});
@@ -209,12 +219,14 @@
     raf=requestAnimationFrame(loop);
     updateHud();
   }
-
+  // Le bouton "Watch ad" lance la simulation de pub (et rien d'autre avant le clic).
+  watchAdBtn.onclick=startAdSimulation;
   // Direct handler: reliable for both desktop click and mobile pointer/click behavior.
   reviveBtn.onclick=reviveWithScore;
   noAdBtn.addEventListener('click',()=>{
     clearInterval(adTimer);
     hideAdPanel();
+    gameOverPanel.style.display='none';
     savedRun=null;
     startGame();
   });
@@ -249,7 +261,7 @@ function reset(){
     } touchStart=null;
   });
 
-  function startGame(){ hideAdPanel(); savedRun=null; reset(); state='playing'; overlay.style.display='none'; lastTime=performance.now(); accumulator=0; cancelAnimationFrame(raf); raf=requestAnimationFrame(loop); }
+  function startGame(){ hideAdPanel(); gameOverPanel.style.display='none'; savedRun=null; reviveUsed=false; reset(); state='playing'; overlay.style.display='none'; lastTime=performance.now(); accumulator=0; cancelAnimationFrame(raf); raf=requestAnimationFrame(loop); }
   startBtn.onclick=function(e){e.preventDefault();startGame();return false;};
   window.__snakeStartGame=startGame;
 
@@ -279,11 +291,24 @@ function reset(){
     overlay.querySelector('h1').innerHTML=title+'<br><span style="font-size:.48em;color:#fff">Score: '+score+'</span>';
     overlay.querySelector('.sub').textContent='Length '+snake.length+' • Candies '+candyCount+' • Bonus animals '+animalCount;
 
+    // On affiche l'écran game over avec les DEUX boutons de choix.
+    // Aucune pub ne se lance ici : elle ne démarrera qu'au clic sur "Watch ad".
     startBtn.style.display='none';
-    adPanel.style.display='block';
-    reviveBtn.disabled=true;
+    adPanel.style.display='none';          // l'écran pub reste caché
+    gameOverPanel.style.display='block';   // on montre les boutons de choix
+    // Le bouton pub n'est proposé qu'une seule fois par partie.
+    watchAdBtn.style.display = reviveUsed ? 'none' : 'block';
     noAdBtn.disabled=false;
 
+    updateHud();
+  }
+
+  // Lance la simulation de pub UNIQUEMENT quand le joueur clique sur "Watch ad".
+  function startAdSimulation(){
+    if(reviveUsed) return;
+    gameOverPanel.style.display='none';   // on cache les boutons de choix
+    adPanel.style.display='block';        // on montre l'écran pub
+    reviveBtn.disabled=true;
     let left=3;
     adCountEl.textContent=left;
     clearInterval(adTimer);
@@ -292,12 +317,11 @@ function reset(){
       adCountEl.textContent=Math.max(0,left);
       if(left<=0){
         clearInterval(adTimer);
-        reviveBtn.disabled=false;
+        adTimer=null;
+        reviveBtn.disabled=false;        // le joueur peut maintenant reprendre
         adCountEl.textContent='✓';
       }
     },1000);
-
-    updateHud();
   }
   function finishGame(){
     state='win';
