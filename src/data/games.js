@@ -85,6 +85,22 @@ export const categories = [
       ],
     },
   },
+     {
+    id: 'brain',
+    label: 'Brain',
+    image: '/categories/brain.jpg',
+    description: 'Memory, logic and focus. Brain games that sharpen your mind while you play. Train your memory, test your reflexes under pressure, and see how far your concentration can take you. Every brain game on Ragequit Arcade runs free in your browser, with no download and no signup — perfect for a quick mental workout or a long high-score session. Challenge yourself, beat your own record, and climb the global leaderboards.',
+    seo: {
+      title: 'Free Brain Games | Ragequit Arcade',
+      metaDescription: 'Play the best free brain games online. Train your memory, focus and logic with fast, addictive challenges. No download, no signup required.',
+      faq: [
+        { q: 'What are brain games?', a: 'Brain games are challenges built around memory, logic, focus and quick thinking rather than pure reflexes alone. They give your mind a workout while staying fun and fast-paced. On Ragequit Arcade, our flagship brain game is FLASHOUT, a neon memory game where symbols flash and then flip, and you have to match every pair from memory before the timer runs out.' },
+        { q: 'Do brain games really help?', a: 'While no game is a substitute for real training, memory and focus games are a fun way to challenge your concentration and short-term memory. The real appeal is the challenge: remembering more, reacting faster and beating your own best score each time.' },
+        { q: 'Are they free?', a: 'Yes, 100% free to play, with no account required. Create a free profile if you want to save your scores and appear on the global leaderboards.' },
+        { q: 'Mobile?', a: 'Yes, brain games are perfect on mobile, tablet and desktop — most just need a tap, so you can train your memory anywhere.' },
+      ],
+    },
+  },
 ]
 
 /* ---- SEO global du site ---- */
