@@ -771,6 +771,7 @@ body.menu-open .main{visibility:hidden;}
   function gameOver(){
     stopClock(); S.lock=true;
     Sound.dead();
+    finalizeGame();                        // envoie le score au leaderboard dès la mort (une seule fois)
     const prevBest=S.best;                 // best before this run may overwrite it
     el('finalScore').textContent=S.score.toLocaleString('en-US');
     el('finalWave').textContent=S.wave;
