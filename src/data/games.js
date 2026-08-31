@@ -382,4 +382,40 @@ export const games = [
       ],
     },
   },
+     /* ================================================================
+     FLASHOUT — puzzle / mémoire : mémorise, associe, survis
+     ================================================================ */
+  {
+    id: 'flashout',
+    title: 'FLASHOUT',
+    description: 'Memorize. Match. Survive. FLASHOUT is a fast, neon memory game that turns the classic pairs concept into a high-pressure arcade challenge. At the start of each level the board flashes its glowing symbols — triangles, hearts, hexagons, stars and diamonds — for a split second, then flips them face down. Race against a draining timer to find every matching pair from memory before the clock hits zero. Clear a level and the next one gets bigger and tougher, with more cards and less margin for error. Chain matches without a mistake to build a combo streak that multiplies your score, because here your score is what matters, not just how far you got. Play it cool in Normal mode, or switch to Hard mode where every wrong flip costs you precious seconds. One glance is all you get — how many levels can you keep in your head before you flash out?',
+    thumbnail: '/thumbnails/flashout.jpg',
+    category: 'puzzle',
+    tags: ['memory', 'puzzle', 'neon', 'pairs', 'brain', 'combo', 'reflex', 'concentration'],
+    size: 'medium',
+    shimmer: true,
+    isNew: true,
+    hot: true,
+    landscape: false,
+    plays: 0,
+    modes: ['normal', 'hard'],
+    defaultMode: 'normal',
+    controls: 'Watch the symbols flash at the start of each level, then tap or click the face-down cards to find matching pairs from memory before the timer runs out. Works on mobile, tablet and desktop — no keyboard needed.',
+    author: 'Ragequit Arcade',
+    seo: {
+      title: 'FLASHOUT — Free Neon Memory Match Game | Ragequit Arcade',
+      metaDescription: 'Play FLASHOUT free online. A fast neon memory game: the symbols flash, then flip — find every matching pair from memory before the timer runs out. Build combos, beat your score. No download.',
+      faq: [
+        { q: 'How do you play FLASHOUT?', a: 'At the start of every level, the grid briefly flashes all of its glowing symbols, then flips them face down. Your job is to remember where each symbol was and tap the cards to find every matching pair before the countdown timer reaches zero. Clear the board to advance to the next, larger level.' },
+        { q: 'What is the difference between Normal and Hard mode?', a: 'In Normal mode, a wrong match costs you nothing but time on the clock, so you can play more freely. In Hard mode, every incorrect flip immediately subtracts two seconds from your timer, punishing guesses and rewarding players who truly memorize the board. Each mode has its own leaderboard.' },
+        { q: 'How does scoring work?', a: 'You earn points for every pair you match, and your score — not the level you reached — is the main way players are ranked. Matching pairs quickly and without mistakes builds a combo streak that multiplies the points you earn, so a clean, fast run scores far higher than a slow, error-filled one at the same level.' },
+        { q: 'What is the combo streak?', a: 'Each correct match in a row without a mistake increases your combo multiplier. The longer your streak, the more every pair is worth. A single wrong flip breaks the streak and resets the multiplier, so keeping your concentration through a whole level is the key to a top score.' },
+        { q: 'Does the game get harder?', a: 'Yes. Each level you clear adds more cards to the grid and gives you a tighter time budget, so you have to memorize more symbols in the same short flash. The difficulty ramps steadily, which is why reaching the higher levels — and doing it with a big combo — is such a satisfying challenge.' },
+        { q: 'Can I retry a level?', a: 'When you run out of time, you can watch a short ad once to retry the level you failed instead of ending your run, giving you another shot at keeping your score alive.' },
+        { q: 'Does it have a leaderboard?', a: 'Yes. Your best score is saved and shown on the global leaderboard, with separate rankings for Normal and Hard mode so you can compete on equal footing.' },
+        { q: 'Is FLASHOUT free?', a: 'Yes, completely free to play, no download and no signup required.' },
+        { q: 'Mobile?', a: 'Yes. FLASHOUT is built for touch and works on mobile, tablet and desktop. Just tap the cards — no keyboard needed.' },
+      ],
+    },
+  },
 ]
