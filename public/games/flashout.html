@@ -771,7 +771,9 @@ body.menu-open .main{visibility:hidden;}
   function gameOver(){
     stopClock(); S.lock=true;
     Sound.dead();
-    finalizeGame();                        // envoie le score au leaderboard dès la mort (une seule fois)
+    // Envoie le score au leaderboard. Si un retry par pub est encore possible,
+    // on attend (le score final sera envoyé à la vraie fin). Sinon, on envoie maintenant.
+    if(S.retryUsed) finalizeGame();
     const prevBest=S.best;                 // best before this run may overwrite it
     el('finalScore').textContent=S.score.toLocaleString('en-US');
     el('finalWave').textContent=S.wave;
@@ -954,6 +956,11 @@ body.menu-open .main{visibility:hidden;}
     badge.textContent=MODES[S.mode].label;
     badge.classList.toggle('hard',S.mode==='hard');
   })();
+
+  // Filet de sécurité : si le joueur quitte la page sur l'écran de mort, on envoie son score.
+  window.addEventListener('pagehide', () => {
+    if(el('deadOverlay').classList.contains('show')) finalizeGame();
+  });
 
   // initial menu is visible at load
   enterMenu();
