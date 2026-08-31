@@ -399,14 +399,14 @@ export const games = [
     },
   },
      /* ================================================================
-     FLASHOUT — puzzle / mémoire : mémorise, associe, survis
+     FLASHOUT — brain / mémoire : mémorise, associe, survis
      ================================================================ */
   {
     id: 'flashout',
     title: 'FLASHOUT',
     description: 'Memorize. Match. Survive. FLASHOUT is a fast, neon memory game that turns the classic pairs concept into a high-pressure arcade challenge. At the start of each level the board flashes its glowing symbols — triangles, hearts, hexagons, stars and diamonds — for a split second, then flips them face down. Race against a draining timer to find every matching pair from memory before the clock hits zero. Clear a level and the next one gets bigger and tougher, with more cards and less margin for error. Chain matches without a mistake to build a combo streak that multiplies your score, because here your score is what matters, not just how far you got. Play it cool in Normal mode, or switch to Hard mode where every wrong flip costs you precious seconds. One glance is all you get — how many levels can you keep in your head before you flash out?',
     thumbnail: '/thumbnails/flashout.jpg',
-    category: 'puzzle',
+    category: 'brain',
     tags: ['memory', 'puzzle', 'neon', 'pairs', 'brain', 'combo', 'reflex', 'concentration'],
     size: 'medium',
     shimmer: true,
