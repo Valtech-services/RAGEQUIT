@@ -296,6 +296,14 @@ if (d.type.endsWith('_SCORE')) {
   /* ---- MODE ACCUEIL : façon Poki ---- */
   return (
     <div className="mgp mgp--preview">
+            <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true">
+        <defs>
+          <linearGradient id="rqGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#00D9FF" />
+            <stop offset="100%" stopColor="#FF2D78" />
+          </linearGradient>
+        </defs>
+      </svg>
       <div className="mgp__header">
         <div className="mgp__header-nav">
           <Navbar inGrid={true} />
