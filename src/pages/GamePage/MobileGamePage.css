@@ -218,6 +218,7 @@
   font-weight: 700;
 }
 /* Barre d'actions (like / dislike / report) sur l'écran d'accueil du jeu */
+/* Barre d'actions (like / dislike / report) sur l'écran d'accueil du jeu */
 .mgp__actions {
   display: flex;
   gap: 10px;
@@ -227,14 +228,26 @@
 .mgp__action {
   width: 38px; height: 38px;
   border-radius: 10px;
-  border: 1.5px solid rgba(255,255,255,0.15);
-  background: rgba(255,255,255,0.08);
-  color: #cfd4e0;
+  border: 1.5px solid rgba(0,0,0,0.08);
+  background: #ffffff;              /* carré blanc comme les titres */
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
-.mgp__action.is-up { color: #00C781; border-color: #00C781; }
-.mgp__action.is-down { color: #FF4466; border-color: #FF4466; }
+/* icône dans le dégradé cyan -> magenta du site (par défaut) */
+.mgp__action svg {
+  width: 16px; height: 16px;
+  fill: url(#rqGrad);              /* dégradé défini plus bas */
+}
+/* fallback si le dégradé SVG n'est pas dispo : couleur cyan */
+@supports not (fill: url(#rqGrad)) {
+  .mgp__action svg { fill: #00D9FF; }
+}
+/* état voté : vert pour le pouce haut, rouge pour le pouce bas */
+.mgp__action.is-up svg   { fill: #00C781; }
+.mgp__action.is-down svg { fill: #FF4466; }
+.mgp__action.is-up   { border-color: #00C781; }
+.mgp__action.is-down { border-color: #FF4466; }
 
 /* Overlay report mobile */
 .mgp__report-overlay {
