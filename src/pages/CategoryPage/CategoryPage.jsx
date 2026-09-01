@@ -14,7 +14,10 @@ export default function CategoryPage() {
   const { t } = useTranslation()
   const { id } = useParams()
   const category = categories.find(c => c.id === id)
-  usePageTitle(category ? t(`categoryTitles.${category.id}`) : t('common.notFound'))
+  usePageTitle(
+    category ? t(`categoryTitles.${category.id}`) : t('common.notFound'),
+    category?.seo?.metaDescription
+  )
 
   useEffect(() => {
     if(category) track('category_view', { category: id })
