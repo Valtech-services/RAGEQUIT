@@ -21,7 +21,7 @@ export default function MobileGamePage() {
   const iframeRef = useRef(null)
   const [playing, setPlaying] = useState(false)
   const [sessionStart] = useState(Date.now())
-  usePageTitle(game?.title)
+  usePageTitle(game?.title, game?.seo?.metaDescription)
 
   const handlePlay = () => {
     setPlaying(true)
