@@ -217,3 +217,52 @@
   color: rgba(255,255,255,0.7);
   font-weight: 700;
 }
+/* Barre d'actions (like / dislike / report) sur l'écran d'accueil du jeu */
+.mgp__actions {
+  display: flex;
+  gap: 10px;
+  padding: 10px 14px 0;
+  justify-content: flex-end;
+}
+.mgp__action {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.08);
+  color: #cfd4e0;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.mgp__action.is-up { color: #00C781; border-color: #00C781; }
+.mgp__action.is-down { color: #FF4466; border-color: #FF4466; }
+
+/* Overlay report mobile */
+.mgp__report-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(5,5,10,0.8); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.mgp__report {
+  width: 100%; max-width: 400px;
+  background: #171033; border-radius: 18px; padding: 22px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.mgp__report-title { color: #fff; font-size: 18px; font-weight: 800; margin-bottom: 10px; }
+.mgp__report-text { color: #b9addf; font-size: 14px; line-height: 1.5; margin-bottom: 12px; }
+.mgp__report-input, .mgp__report-textarea {
+  width: 100%; margin-bottom: 10px; padding: 10px 12px;
+  border-radius: 8px; border: 1.5px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.06); color: #fff;
+  font-family: inherit; font-size: 14px; outline: none; resize: vertical;
+}
+.mgp__report-send {
+  width: 100%; padding: 12px; margin-bottom: 8px;
+  border: none; border-radius: 10px; cursor: pointer;
+  background: linear-gradient(135deg,#00D9FF,#8B5CF6); color: #fff;
+  font-weight: 800; font-size: 14px;
+}
+.mgp__report-send:disabled { opacity: .5; cursor: default; }
+.mgp__report-cancel {
+  width: 100%; padding: 10px; border: none; border-radius: 10px; cursor: pointer;
+  background: transparent; color: #8a8aa5; font-size: 14px;
+}
