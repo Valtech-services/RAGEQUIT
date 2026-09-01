@@ -5,6 +5,7 @@ import { games } from '../../data/games'
 import { useAuth } from '../../context/AuthContext'
 import { supabase } from '../../lib/supabase'
 import { submitScore } from '../../data/leaderboardStore'
+import { submitVote, submitReport } from '../../data/feedbackStore'
 import { track } from '../../lib/analytics'
 import Navbar from '../../components/Navbar/Navbar'
 import GameCard from '../../components/GameCard/GameCard'
@@ -21,6 +22,12 @@ export default function MobileGamePage() {
   const iframeRef = useRef(null)
   const [playing, setPlaying] = useState(false)
   const [sessionStart] = useState(Date.now())
+  const [vote, setVote] = useState(null)
+  const [reportOpen, setReportOpen] = useState(false)
+  const [reportSubject, setReportSubject] = useState('')
+  const [reportComment, setReportComment] = useState('')
+  const [reportSent, setReportSent] = useState(false)
+  const [reportBusy, setReportBusy] = useState(false)
   usePageTitle(game?.title, game?.seo?.metaDescription)
 
   const handlePlay = () => {
@@ -298,6 +305,19 @@ if (d.type.endsWith('_SCORE')) {
           <span className="mgp__by">{t('game.by')} {game.author}</span>
         </div>
       </div>
+      <div className="mgp__actions">
+        <button className={`mgp__action ${vote==='up'?'is-up':''}`} aria-label="Like"
+          onClick={() => { const v = vote==='up'?null:'up'; setVote(v); if(v){ submitVote(game.id,'up'); track('game_vote',{game_id:game.id,props:{vote:'up'}}) } }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+        </button>
+        <button className={`mgp__action ${vote==='down'?'is-down':''}`} aria-label="Dislike"
+          onClick={() => { const v = vote==='down'?null:'down'; setVote(v); if(v){ submitVote(game.id,'down'); track('game_vote',{game_id:game.id,props:{vote:'down'}}) } }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L10.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+        </button>
+        <button className="mgp__action" aria-label="Report" onClick={() => setReportOpen(true)}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+        </button>
+      </div>
       <button
         className="mgp__hero"
         onClick={handlePlay}
@@ -333,6 +353,45 @@ if (d.type.endsWith('_SCORE')) {
           title: game.title,
         } : null}
       />
+      {reportOpen && (
+        <div className="mgp__report-overlay" onClick={() => { setReportOpen(false); setReportSent(false) }}>
+          <div className="mgp__report" onClick={e => e.stopPropagation()}>
+            <h3 className="mgp__report-title">Report a problem</h3>
+            {!user ? (
+              <>
+                <p className="mgp__report-text">You need to be signed in to report a problem or leave a comment.</p>
+                <button className="mgp__report-send" onClick={() => { setReportOpen(false); signInGoogle() }}>Sign in</button>
+                <button className="mgp__report-cancel" onClick={() => setReportOpen(false)}>Cancel</button>
+              </>
+            ) : reportSent ? (
+              <>
+                <p className="mgp__report-text">Thanks! Your report has been sent.</p>
+                <button className="mgp__report-cancel" onClick={() => { setReportOpen(false); setReportSent(false) }}>Close</button>
+              </>
+            ) : (
+              <>
+                <p className="mgp__report-text">What's wrong with {game.title}?</p>
+                <input className="mgp__report-input" type="text" placeholder="Subject"
+                  value={reportSubject} maxLength={120}
+                  onChange={e => setReportSubject(e.target.value)} />
+                <textarea className="mgp__report-textarea" rows={4} placeholder="Describe the problem or leave a comment…"
+                  value={reportComment} maxLength={1000}
+                  onChange={e => setReportComment(e.target.value)} />
+                <button className="mgp__report-send" disabled={reportBusy || !reportSubject.trim()}
+                  onClick={async () => {
+                    setReportBusy(true)
+                    const ok = await submitReport(game.id, reportSubject, reportComment, user.id)
+                    setReportBusy(false)
+                    if(ok){ setReportSent(true); setReportSubject(''); setReportComment('') }
+                  }}>
+                  {reportBusy ? 'Sending…' : 'Send report'}
+                </button>
+                <button className="mgp__report-cancel" onClick={() => setReportOpen(false)}>Cancel</button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
       <Footer />
     </div>
   )
