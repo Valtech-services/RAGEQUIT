@@ -203,3 +203,29 @@
   border: 0;
   display: block;
 }
+
+/* Tableaux dans les cartes de la grille : hauteur max + ascenseur si trop long.
+   Garde toutes les cartes à une taille cohérente même avec beaucoup de jeux. */
+.adm-grid .adm-panel .adm-table {
+  display: block;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.adm-grid .adm-panel .adm-table thead,
+.adm-grid .adm-panel .adm-table tbody {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+/* En-tête figé pendant le scroll */
+.adm-grid .adm-panel .adm-table thead {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 1;
+}
+/* Barre de défilement discrète */
+.adm-grid .adm-panel .adm-table::-webkit-scrollbar { width: 6px; }
+.adm-grid .adm-panel .adm-table::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.15); border-radius: 3px;
+}
