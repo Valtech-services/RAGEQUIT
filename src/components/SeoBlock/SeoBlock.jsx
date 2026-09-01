@@ -174,8 +174,7 @@ export default function SeoBlock({ type, data }) {
             )}
           </>
         )}
-
       </div>
     </div>
   )
-}</document_content>
+}
