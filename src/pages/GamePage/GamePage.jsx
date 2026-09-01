@@ -9,6 +9,7 @@ import SeoBlock from '../../components/SeoBlock/SeoBlock'
 import Footer from '../../components/Footer/Footer'
 import MobileGamePage from './MobileGamePage'
 import { submitScore } from '../../data/leaderboardStore'
+import { submitVote, submitReport } from '../../data/feedbackStore'
 import usePageTitle from '../../hooks/usePageTitle'
 import { track } from '../../lib/analytics'
 import './GamePage.css'
@@ -27,6 +28,10 @@ function GamePageDesktop() {
   const [playing, setPlaying]       = useState(false)
   const [vote, setVote]             = useState(null)
   const [reportOpen, setReportOpen] = useState(false)
+  const [reportSubject, setReportSubject] = useState('')
+  const [reportComment, setReportComment] = useState('')
+  const [reportSent, setReportSent] = useState(false)
+  const [reportBusy, setReportBusy] = useState(false)
   const [sessionStart]              = useState(Date.now())
   usePageTitle(game?.title, game?.seo?.metaDescription)
 
@@ -303,11 +308,11 @@ async function saveVirusLabCloud(){
               </div>
               <div className="gamepage__bar-actions">
                 <button className={`gamepage__action ${vote==='up'?'is-up':''}`} title="Like"
-                  onClick={() => { setVote(vote==='up'?null:'up'); track('game_vote', {game_id: game.id, props:{vote:'up'}}) }}>
+                  onClick={() => { const v = vote==='up'?null:'up'; setVote(v); if(v){ submitVote(game.id,'up'); track('game_vote', {game_id: game.id, props:{vote:'up'}}) } }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
                 </button>
                 <button className={`gamepage__action ${vote==='down'?'is-down':''}`} title="Dislike"
-                  onClick={() => { setVote(vote==='down'?null:'down'); track('game_vote', {game_id: game.id, props:{vote:'down'}}) }}>
+                  onClick={() => { const v = vote==='down'?null:'down'; setVote(v); if(v){ submitVote(game.id,'down'); track('game_vote', {game_id: game.id, props:{vote:'down'}}) } }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L10.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
                 </button>
                 <button className="gamepage__action" title="Report" onClick={() => setReportOpen(true)}>
@@ -350,16 +355,41 @@ async function saveVirusLabCloud(){
       </div>
       <SeoBlock type="game" data={game.seo ? { ...game.seo, description: game.description, controls: game.controls, author: game.author, title: game.title } : null} />
       {reportOpen && (
-        <div className="gamepage__report-overlay" onClick={() => setReportOpen(false)}>
+        <div className="gamepage__report-overlay" onClick={() => { setReportOpen(false); setReportSent(false) }}>
           <div className="gamepage__report" onClick={e => e.stopPropagation()}>
             <h3 className="gamepage__report-title">Report a problem</h3>
-            <p className="gamepage__report-text">What's wrong with {game.title}?</p>
-            <div className="gamepage__report-options">
-              {["Game won\u2019t load","Game freezes or crashes","Controls don\u2019t work","Inappropriate content","Other"].map(opt => (
-                <button key={opt} className="gamepage__report-opt" onClick={() => setReportOpen(false)}>{opt}</button>
-              ))}
-            </div>
-            <button className="gamepage__report-cancel" onClick={() => setReportOpen(false)}>Cancel</button>
+            {!user ? (
+              <>
+                <p className="gamepage__report-text">You need to be signed in to report a problem or leave a comment.</p>
+                <button className="gamepage__report-opt" onClick={() => { setReportOpen(false); signInGoogle() }}>Sign in</button>
+                <button className="gamepage__report-cancel" onClick={() => setReportOpen(false)}>Cancel</button>
+              </>
+            ) : reportSent ? (
+              <>
+                <p className="gamepage__report-text">Thanks! Your report has been sent.</p>
+                <button className="gamepage__report-cancel" onClick={() => { setReportOpen(false); setReportSent(false) }}>Close</button>
+              </>
+            ) : (
+              <>
+                <p className="gamepage__report-text">What's wrong with {game.title}?</p>
+                <input className="gamepage__report-input" type="text" placeholder="Subject"
+                  value={reportSubject} maxLength={120}
+                  onChange={e => setReportSubject(e.target.value)} />
+                <textarea className="gamepage__report-textarea" rows={4} placeholder="Describe the problem or leave a comment…"
+                  value={reportComment} maxLength={1000}
+                  onChange={e => setReportComment(e.target.value)} />
+                <button className="gamepage__report-opt" disabled={reportBusy || !reportSubject.trim()}
+                  onClick={async () => {
+                    setReportBusy(true)
+                    const ok = await submitReport(game.id, reportSubject, reportComment, user.id)
+                    setReportBusy(false)
+                    if(ok){ setReportSent(true); setReportSubject(''); setReportComment('') }
+                  }}>
+                  {reportBusy ? 'Sending…' : 'Send report'}
+                </button>
+                <button className="gamepage__report-cancel" onClick={() => setReportOpen(false)}>Cancel</button>
+              </>
+            )}
           </div>
         </div>
       )}
