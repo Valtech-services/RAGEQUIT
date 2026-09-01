@@ -41,9 +41,10 @@ let _country = null
 async function getCountry(){
   if(_country) return _country
   try {
-    const r = await fetch('https://ip-api.com/json/?fields=countryCode', { cache: 'force-cache' })
+    // ipwho.is : HTTPS, gratuit, sans clé, fonctionne depuis le navigateur.
+    const r = await fetch('https://ipwho.is/?fields=country_code', { cache: 'force-cache' })
     const d = await r.json()
-    _country = d.countryCode || null
+    _country = d.country_code || null
   } catch(e) { _country = null }
   return _country
 }
