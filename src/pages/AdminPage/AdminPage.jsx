@@ -300,18 +300,42 @@ function Dashboard(){
   const load = useCallback(async () => {
     setLoading(true)
     const since = localDayStart(period - 1).toISOString()
-    const [ev, sc, us, ms] = await Promise.all([
+    const [ev, sc, us, ms, vt, rp] = await Promise.all([
       // Événements : on pagine pour tout récupérer (peut dépasser 1000 lignes).
       fetchAll(() => supabase.from('analytics_events').select('*').gte('created_at', since).order('created_at', { ascending: true })),
       fetchAll(() => supabase.from('scores').select('*').gte('created_at', since).order('created_at', { ascending: false })),
       supabase.from('profiles').select('id, username, country, created_at'),
       supabase.from('contact_messages').select('*').order('created_at', { ascending: false }),
+      // Votes : tous (pas filtrés par période, ce sont des totaux cumulés par jeu).
+      fetchAll(() => supabase.from('game_votes').select('game_id, vote')),
+      // Signalements : les plus récents d'abord.
+      supabase.from('game_reports').select('*').order('created_at', { ascending: false }),
     ])
     setD({
       ev: ev || [],
       scores: sc || [],
       users: us.data || [],
       messages: ms.data || [],
+      votes: vt || [],
+      reports: rp.data || [],
+    })    const [ev, sc, us, ms, vt, rp] = await Promise.all([
+      // Événements : on pagine pour tout récupérer (peut dépasser 1000 lignes).
+      fetchAll(() => supabase.from('analytics_events').select('*').gte('created_at', since).order('created_at', { ascending: true })),
+      fetchAll(() => supabase.from('scores').select('*').gte('created_at', since).order('created_at', { ascending: false })),
+      supabase.from('profiles').select('id, username, country, created_at'),
+      supabase.from('contact_messages').select('*').order('created_at', { ascending: false }),
+      // Votes : tous (pas filtrés par période, ce sont des totaux cumulés par jeu).
+      fetchAll(() => supabase.from('game_votes').select('game_id, vote')),
+      // Signalements : les plus récents d'abord.
+      supabase.from('game_reports').select('*').order('created_at', { ascending: false }),
+    ])
+    setD({
+      ev: ev || [],
+      scores: sc || [],
+      users: us.data || [],
+      messages: ms.data || [],
+      votes: vt || [],
+      reports: rp.data || [],
     })
     setLoading(false)
   }, [period, fetchAll])
@@ -319,6 +343,7 @@ function Dashboard(){
   useEffect(() => { load() }, [load])
 
   async function markRead(id){ await supabase.from('contact_messages').update({ read: true }).eq('id', id); load() }
+  async function markReportRead(id){ await supabase.from('game_reports').update({ read: true }).eq('id', id); load() }
   async function deleteScore(id){ if(!window.confirm('Supprimer ce score ?')) return; await supabase.from('scores').delete().eq('id', id); load() }
 
   const m = useMemo(() => {
@@ -355,22 +380,37 @@ const newUsersList = users.filter(u => u.created_at && new Date(u.created_at) >=
     const sAds       = hourly ? hourlySeries(adsWatched)      : dailySeries(adsWatched, period)
     const sHome      = hourly ? hourlySeries(homeVisits)      : dailySeries(homeVisits, period)
     const sSignups   = hourly ? hourlySeries(newUsersList)    : dailySeries(newUsersList, period)
+
+    // Votes par jeu : compte les pouces haut et bas pour chaque jeu.
+    const votes = d.votes || []
+    const votesByGame = {}
+    votes.forEach(v => {
+      if(!votesByGame[v.game_id]) votesByGame[v.game_id] = { up: 0, down: 0 }
+      if(v.vote === 'up') votesByGame[v.game_id].up++
+      else if(v.vote === 'down') votesByGame[v.game_id].down++
+    })
+
     return {
 visits, homeVisits, gameStarts, adsWatched,
       allVisitors: allVisitors.size, loggedVisitors: loggedVisitors.size, anonVisitors: anonVisitors.size,
       playsByGame, byCategory, byDevice, byCountry, adsPerPlay, loggedRate, playsPerVisitor,
-newUsers, sVisitors, sPlays, sAds, sHome, sSignups,
+newUsers, sVisitors, sPlays, sAds, sHome, sSignups, votesByGame,
     }
   }, [d, period])
 
   if(loading) return <div className="adm-loading">Chargement…</div>
   if(!d || !m) return <div className="adm-loading">Aucune donnée.</div>
-  const { ev, scores, users, messages } = d
+  const { ev, scores, users, messages, reports } = d
   const unread = messages.filter(x => !x.read).length
   const gameRows = sortDesc(m.playsByGame).map(([g,n]) => [g, fmt(n)])
   const catRows  = sortDesc(m.byCategory).map(([c,n]) => [c, fmt(n)])
   const devRows  = sortDesc(m.byDevice).map(([dv,n]) => [dv || '—', fmt(n), pct(n, ev.length)])
   const ctyRows  = sortDesc(m.byCountry).slice(0,8).map(([c,n]) => [c, fmt(n)])
+    // Lignes votes par jeu, triées par total de votes décroissant.
+  const voteRows = Object.entries(m.votesByGame)
+    .sort((a,b) => (b[1].up + b[1].down) - (a[1].up + a[1].down))
+    .map(([g, v]) => [g, `👍 ${fmt(v.up)}`, `👎 ${fmt(v.down)}`])
+  const unreadReports = reports.filter(r => !r.read).length
 
   return (
     <div className="adm-body">
@@ -458,7 +498,11 @@ newUsers, sVisitors, sPlays, sAds, sHome, sSignups,
         </Panel>
         <Panel title="Pays" subtitle="Provenance géographique (sans IP)"
           onExport={() => exportXlsx('pays', ['Pays','Events'], ctyRows)}>
-          <Table cols={['Pays','Events']} rows={ctyRows} empty="Aucune donnée pays" />
+          <Table cols={['Pays','Events']} rows={ctyRows} empty="Aucune donnée pays (ip-api parfois bloqué)" />
+        </Panel>
+        <Panel title="Votes par jeu" subtitle="Pouces haut / bas (cumul, 1 par visiteur)"
+          onExport={() => exportXlsx('votes', ['Jeu','Pouces haut','Pouces bas'], voteRows)}>
+          <Table cols={['Jeu','👍','👎']} rows={voteRows} empty="Aucun vote pour l'instant" />
         </Panel>
       </section>
       <section className="adm-wide">
@@ -495,6 +539,34 @@ newUsers, sVisitors, sPlays, sAds, sHome, sSignups,
               })}
             </tbody>
           </table>
+        )}
+      </section>
+      <section className="adm-wide">
+        <div className="adm-panel__head">
+          <div><h3 className="adm-panel__title">Signalements de jeux {unreadReports > 0 && <span style={{color:C.red}}>({unreadReports} non lus)</span>}</h3>
+            <p className="adm-panel__sub">Bugs et remarques remontés par les joueurs connectés</p></div>
+        </div>
+        {reports.length === 0 ? <p className="adm-empty">Aucun signalement</p> : (
+          <div className="adm-msgs">
+            {reports.map(r => {
+              const u = users.find(u => u.id === r.user_id)
+              return (
+                <div key={r.id} className={`adm-msg ${r.read ? '' : 'adm-msg--unread'}`}>
+                  <div className="adm-msg__top">
+                    <span className="adm-msg__subj">[{r.game_id}] {r.subject}</span>
+                    <span className="adm-msg__date">{new Date(r.created_at).toLocaleString('fr-FR')}</span>
+                  </div>
+                  {r.comment && <p className="adm-msg__body">{r.comment}</p>}
+                  <div className="adm-msg__foot">
+                    <span className="adm-msg__mail">{u?.username || 'Joueur'}</span>
+                    <div className="adm-msg__act">
+                      {!r.read && <button className="adm-msg__mark" onClick={() => markReportRead(r.id)}>Marquer lu</button>}
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
         )}
       </section>
       <section className="adm-wide">
