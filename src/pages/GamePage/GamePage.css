@@ -308,3 +308,20 @@
   .gamepage { --side: 170px; --cell: 110px; }
 }
 /* En dessous de 768px c'est MobileGamePage qui prend le relais (wrapper) */
+
+.gamepage__report-input,
+.gamepage__report-textarea {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1.5px solid #e0e0e6;
+  font-family: inherit;
+  font-size: 14px;
+  color: #111;
+  outline: none;
+  resize: vertical;
+}
+.gamepage__report-input:focus,
+.gamepage__report-textarea:focus { border-color: var(--color-accent, #00D9FF); }
+.gamepage__report-opt:disabled { opacity: .5; cursor: default; }
