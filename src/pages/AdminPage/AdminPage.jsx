@@ -297,7 +297,7 @@ function Dashboard(){
     return all
   }, [])
 
-  const load = useCallback(async () => {
+   const load = useCallback(async () => {
     setLoading(true)
     const since = localDayStart(period - 1).toISOString()
     const [ev, sc, us, ms, vt, rp] = await Promise.all([
@@ -306,25 +306,7 @@ function Dashboard(){
       fetchAll(() => supabase.from('scores').select('*').gte('created_at', since).order('created_at', { ascending: false })),
       supabase.from('profiles').select('id, username, country, created_at'),
       supabase.from('contact_messages').select('*').order('created_at', { ascending: false }),
-      // Votes : tous (pas filtrés par période, ce sont des totaux cumulés par jeu).
-      fetchAll(() => supabase.from('game_votes').select('game_id, vote')),
-      // Signalements : les plus récents d'abord.
-      supabase.from('game_reports').select('*').order('created_at', { ascending: false }),
-    ])
-    setD({
-      ev: ev || [],
-      scores: sc || [],
-      users: us.data || [],
-      messages: ms.data || [],
-      votes: vt || [],
-      reports: rp.data || [],
-    })    const [ev, sc, us, ms, vt, rp] = await Promise.all([
-      // Événements : on pagine pour tout récupérer (peut dépasser 1000 lignes).
-      fetchAll(() => supabase.from('analytics_events').select('*').gte('created_at', since).order('created_at', { ascending: true })),
-      fetchAll(() => supabase.from('scores').select('*').gte('created_at', since).order('created_at', { ascending: false })),
-      supabase.from('profiles').select('id, username, country, created_at'),
-      supabase.from('contact_messages').select('*').order('created_at', { ascending: false }),
-      // Votes : tous (pas filtrés par période, ce sont des totaux cumulés par jeu).
+      // Votes : tous (totaux cumulés par jeu).
       fetchAll(() => supabase.from('game_votes').select('game_id, vote')),
       // Signalements : les plus récents d'abord.
       supabase.from('game_reports').select('*').order('created_at', { ascending: false }),
