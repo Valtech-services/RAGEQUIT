@@ -17,6 +17,7 @@ const CATEGORY_BLURBS = {
   idle: 'tap, automate and watch your numbers grow, even while you are away.',
   puzzle: 'match, rotate and think fast under pressure.',
   shooting: 'aim, shoot and survive wave after wave.',
+  brain: 'memory, focus and logic challenges to sharpen your mind.',
 }
 
 export default function SeoBlock({ type, data }) {
@@ -28,6 +29,11 @@ export default function SeoBlock({ type, data }) {
 
   // Catégories réelles (on retire "all", qui n'est pas une vraie catégorie).
   const realCategories = categories.filter(c => c.id !== 'all')
+
+  // Jeux de la catégorie courante (pour la liste cliquable en page catégorie).
+  const categoryGames = type === 'category' && data.id
+    ? games.filter(g => g.category === data.id)
+    : []
 
   return (
     <div className="seo-block">
@@ -109,6 +115,20 @@ export default function SeoBlock({ type, data }) {
             <h2 className="seo-block__title">{t(`categoryTitles.${data.id}`)}</h2>
             <p className="seo-block__text">{data.description}</p>
 
+            {categoryGames.length > 0 && (
+              <>
+                <h3 className="seo-block__subtitle">Games in this category</h3>
+                <ul className="seo-block__list">
+                  {categoryGames.map(g => (
+                    <li key={g.id}>
+                      <Link to={`/game/${g.id}`} className="seo-block__link">{g.title}</Link>
+                      {' — '}{firstSentence(g.description)}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+
             {data.seo?.faq && data.seo.faq.length > 0 && (
               <div className="seo-block__faq">
                 {data.seo.faq.map((item, i) => (
@@ -158,4 +178,4 @@ export default function SeoBlock({ type, data }) {
       </div>
     </div>
   )
-}
+}</document_content>
