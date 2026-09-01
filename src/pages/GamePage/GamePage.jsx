@@ -28,7 +28,7 @@ function GamePageDesktop() {
   const [vote, setVote]             = useState(null)
   const [reportOpen, setReportOpen] = useState(false)
   const [sessionStart]              = useState(Date.now())
-  usePageTitle(game?.title)
+  usePageTitle(game?.title, game?.seo?.metaDescription)
 
   // Track page vue jeu
   useEffect(() => {
