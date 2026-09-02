@@ -113,7 +113,8 @@
     "language": "Language",
     "selectLanguage": "Select your language",
     "copyright": "© {{year}} Ragequit Arcade. All rights reserved.",
-    "manageCookies": "Manage cookies"
+    "manageCookies": "Manage cookies",
+    "blog": "Blog",
   },
   "home": {
     "newGames": "New games",
