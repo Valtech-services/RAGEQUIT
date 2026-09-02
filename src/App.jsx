@@ -7,6 +7,8 @@ import LeaderboardPage from './pages/LeaderboardPage/LeaderboardPage'
 import LegalPage from './pages/LegalPage/LegalPage'
 import CookieBanner from './components/CookieBanner/CookieBanner'
 import AdminPage from './pages/AdminPage/AdminPage'
+import BlogPage from './pages/BlogPage/BlogPage'
+import ArticlePage from './pages/BlogPage/ArticlePage'
 
 /* Remet le scroll en haut a chaque changement de page. */
 function ScrollToTop() {
@@ -26,6 +28,8 @@ export default function App() {
         <Route path="/leaderboard" element={<LeaderboardPage />} />
         <Route path="/legal/:page" element={<LegalPage />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/blog/:slug" element={<ArticlePage />} />
       </Routes>
       <CookieBanner />
     </BrowserRouter>
