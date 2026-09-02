@@ -55,7 +55,7 @@ export default function Footer() {
           <Link to="/legal/about" className="footer__link" onClick={() => footerLink('company','about')}>{t('footer.aboutUs')}</Link>
           <Link to="/legal/contact" className="footer__link" onClick={() => footerLink('company','contact')}>{t('footer.contact')}</Link>
           <Link to="/legal/mentions" className="footer__link" onClick={() => footerLink('company','mentions')}>{t('footer.legalNotice')}</Link>
-        </div>
+          <Link to="/blog" className="footer__link" onClick={() => footerLink('company','blog')}>{t('footer.blog')}</Link>
         <div className="footer__col">
           <span className="footer__col-title">{t('footer.legal')}</span>
           <Link to="/legal/privacy" className="footer__link" onClick={() => footerLink('legal','privacy')}>{t('footer.privacy')}</Link>
