@@ -192,32 +192,33 @@
 /* ---- Police du titre = police de titre du site (comme les SeoBlocks) ---- */
 .gamecard__title { font-family: var(--font-display); }
 
-/* ---- SHIMMER : balayage brillant premium en diagonale, en boucle ----
-   Un reflet traverse la carte du coin haut-gauche vers le bas-droite,
-   toutes les 4 secondes. Actif seulement sur les cartes .shimmer-effect
-   (donc les jeux avec shimmer:true dans games.js). */
+/* ---- SHIMMER premium : bande de lumière fine qui balaye en diagonale ----
+   Actif seulement sur les cartes .shimmer-effect (jeux shimmer:true).
+   Une bande brillante traverse la carte du haut-gauche au bas-droite,
+   puis disparaît complètement. Boucle toutes les 4,5s. */
+.shimmer-effect { position: relative; }
 .shimmer-effect::after {
   content: '';
   position: absolute;
-  inset: 0;
-  z-index: 5;                 /* au-dessus de l'image, sous les badges */
+  top: -60%;
+  left: -60%;
+  width: 60%;
+  height: 220%;
+  z-index: 5;
   pointer-events: none;
   background: linear-gradient(
-    115deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.55) 48%,
-    rgba(255, 255, 255, 0.85) 50%,
-    rgba(255, 255, 255, 0.55) 52%,
-    transparent 70%
+    to right,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.25) 40%,
+    rgba(255,255,255,0.9) 50%,
+    rgba(255,255,255,0.25) 60%,
+    rgba(255,255,255,0) 100%
   );
-  background-size: 250% 250%;
-  background-position: -60% -60%;
-  animation: cardShimmer 4s ease-in-out infinite;
+  transform: rotate(25deg) translateX(-250%);
+  animation: cardShimmer 4.5s ease-in-out infinite;
 }
 @keyframes cardShimmer {
-  0%   { background-position: -60% -60%; opacity: 0; }
-  8%   { opacity: 1; }
-  22%  { background-position: 160% 160%; opacity: 1; }
-  30%  { opacity: 0; }
-  100% { background-position: 160% 160%; opacity: 0; }
+  0%   { transform: rotate(25deg) translateX(-250%); }
+  18%  { transform: rotate(25deg) translateX(350%); }
+  100% { transform: rotate(25deg) translateX(350%); }
 }
