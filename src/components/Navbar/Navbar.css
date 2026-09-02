@@ -59,11 +59,11 @@
   padding: 0;
 }
 
-/* Zone BASSE : 3 boutons — occupe le reste (40%) avec trait séparateur */
+/* Zone BASSE : 4 boutons — occupe le reste (40%) avec trait séparateur */
 .navbar--in-grid .navbar__actions {
   flex: 1;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 0;
   padding: 0;
   border-top: 1px solid rgba(16, 22, 46, 0.08);
