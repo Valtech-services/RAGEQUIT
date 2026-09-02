@@ -20,7 +20,7 @@
 .blog__header-h1 { font-weight: 900; font-size: clamp(18px,2.8vw,26px); color: #10162e; letter-spacing: .05em; }
 
 .blog__content { flex: 1; max-width: 900px; width: 100%; margin: 0 auto; padding: 24px 20px; }
-.blog__intro { color: #c8c8d8; font-size: 16px; line-height: 1.6; margin-bottom: 28px; }
+.blog__intro { color: #ffffff; font-size: 16px; line-height: 1.6; margin-bottom: 28px; opacity: 0.95; }
 .blog__empty { color: #8a8aa0; text-align: center; padding: 40px; }
 .blog__back { color: #00D9FF; font-weight: 700; text-decoration: none; display: inline-block; margin-bottom: 16px; }
 
@@ -40,27 +40,33 @@
 .blog__card-excerpt { font-size: 14px; color: #666; line-height: 1.5; flex: 1; }
 .blog__card-more { color: #00D9FF; font-weight: 800; font-size: 14px; }
 
-/* Article */
-.blog__article { max-width: 760px; width: 100%; margin: 0 auto; padding: 24px 20px; }
-.blog__article-title { font-size: clamp(26px,5vw,40px); font-weight: 900; color: #fff; line-height: 1.15; margin: 8px 0 12px; }
-.blog__article-meta { color: #8a8aa0; font-size: 14px; margin-bottom: 20px; }
-.blog__article-hero { aspect-ratio: 16/9; border-radius: 16px; overflow: hidden; margin-bottom: 28px; background: #171033; }
+/* Article — même style que le SeoBlock (carte blanche centrée) */
+.blog__article { max-width: var(--max-width); width: 100%; margin: 0 auto; padding: var(--gap-xl) var(--gap-lg); }
+.blog__article-title { font-family: var(--font-display); font-size: clamp(26px,5vw,42px); font-weight: 900; color: #ffffff; line-height: 1.15; margin: 8px 0 10px; letter-spacing: 0.02em; }
+.blog__article-meta { color: #ffffff; font-size: var(--text-sm); margin-bottom: 20px; opacity: 0.92; }
+.blog__article-hero { aspect-ratio: 16/9; border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 24px; background: #171033; box-shadow: 0 8px 40px rgba(0,0,0,0.22); }
 .blog__article-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.blog__article-body { color: #ffffff; }
-.blog__p { font-size: 17px; line-height: 1.75; margin-bottom: 20px; color: #ffffff; }
-.blog__h2 { font-size: 24px; font-weight: 800; color: #fff; margin: 32px 0 14px; }
-.blog__ul { margin: 0 0 20px 22px; }
-.blog__ul li { font-size: 17px; line-height: 1.7; margin-bottom: 8px; color: #ffffff; }
+
+/* Corps de l'article : carte blanche, texte foncé (comme SeoBlock__inner) */
+.blog__article-body {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  padding: var(--gap-xl) var(--gap-lg);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.22);
+}
+.blog__p { font-size: var(--text-md); line-height: 1.8; margin-bottom: var(--gap-md); color: #333333; }
+.blog__h2 { font-family: var(--font-body); font-size: var(--text-xl); font-weight: 800; color: #111111; margin: var(--gap-lg) 0 var(--gap-sm); }
+.blog__h2:first-child { margin-top: 0; }
+.blog__ul { list-style: none; padding: 0; margin: 0 0 var(--gap-md); }
+.blog__ul li { position: relative; padding-left: 20px; margin-bottom: 8px; font-size: var(--text-md); color: #333333; line-height: 1.7; }
+.blog__ul li::before { content: '▸'; position: absolute; left: 0; color: var(--color-accent); }
 
 /* Read next */
-.blog__related { margin-top: 44px; padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.1); }
-.blog__related-title { color: #fff; font-size: 20px; font-weight: 800; margin-bottom: 14px; }
-.blog__related-list { display: flex; flex-direction: column; gap: 10px; }
-.blog__related-item {
-  color: #00D9FF; font-weight: 700; text-decoration: none; font-size: 16px;
-  padding: 12px 16px; background: rgba(255,255,255,0.05); border-radius: 10px;
-}
-.blog__related-item:hover { background: rgba(255,255,255,0.1); }
+.blog__related { margin-top: 28px; background: #ffffff; border-radius: var(--radius-lg); padding: var(--gap-lg); box-shadow: 0 8px 40px rgba(0,0,0,0.22); }
+.blog__related-title { font-family: var(--font-display); font-size: var(--text-lg); font-weight: 800; color: #111111; margin-bottom: 14px; }
+.blog__related-list { display: flex; flex-direction: column; gap: 8px; }
+.blog__related-item { color: var(--color-accent); font-weight: 700; text-decoration: none; font-size: var(--text-md); padding: 10px 14px; background: #f4f4f6; border-radius: var(--radius-md); }
+.blog__related-item:hover { background: #eef3fb; }
 
 @media (max-width: 600px) {
   .blog__header { grid-template-columns: repeat(3,1fr); grid-auto-rows: calc((100vw - 24px - 20px)/3); }
