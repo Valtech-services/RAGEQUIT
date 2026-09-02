@@ -222,3 +222,6 @@
   18%  { transform: rotate(25deg) translateX(350%); }
   100% { transform: rotate(25deg) translateX(350%); }
 }
+/* Le titre (overlay) apparaît et monte au survol de la carte — desktop */
+.gamecard:hover .gamecard__overlay { opacity: 1; }
+.gamecard:hover .gamecard__title { transform: translateY(0); }
