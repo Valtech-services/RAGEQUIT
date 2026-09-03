@@ -30,7 +30,7 @@ export const posts = [
      {
     slug: 'why-we-build-our-own-games',
     title: 'Why We Build Our Own Games',
-    date: '2026-09-02',
+    date: '2026-08-28',
     author: 'Ragequit Arcade',
     excerpt: 'Most browser game portals are just reposting the same clones. We took the harder road: every game on Ragequit Arcade is built by us, from scratch. Here is why.',
     image: '/blog/why-we-build-our-own-games.jpg',
@@ -63,7 +63,7 @@ export const posts = [
      {
     slug: 'best-free-browser-games-2026',
     title: 'The Best Free Browser Games to Play Right Now',
-    date: '2026-09-03',
+    date: '2026-08-31',
     author: 'Ragequit Arcade',
     excerpt: 'No downloads, no installs, no sign-up walls. Here are the best free games you can play instantly in your browser on Ragequit Arcade, whatever your mood.',
     image: '/blog/best-free-browser-games.jpg',
@@ -99,7 +99,7 @@ export const posts = [
      {
     slug: 'virus-lab-strategy-guide',
     title: 'Virus Lab Strategy: Why a Shorter Genome Wins',
-    date: '2026-09-04',
+    date: '2026-09-02',
     author: 'Ragequit Arcade',
     excerpt: 'The biggest mistake new Virus Lab players make is filling every genome slot. The real secret is a short, fast, repeating sequence. Here is how to conquer the petri dish.',
     image: '/blog/virus-lab-strategy.jpg',
@@ -132,7 +132,7 @@ export const posts = [
      {
     slug: 'flashout-memory-tips',
     title: 'How to Get a High Score in FLASHOUT',
-    date: '2026-09-05',
+    date: '2026-09-03',
     author: 'Ragequit Arcade',
     excerpt: 'FLASHOUT looks like a simple memory game, but the players at the top of the leaderboard use real techniques. Here is how to memorize faster and score higher.',
     image: '/blog/flashout-tips.jpg',
