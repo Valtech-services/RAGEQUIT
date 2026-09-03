@@ -444,4 +444,39 @@ export const games = [
       ],
     },
   },
+     /* ================================================================
+     ROOFTOP RUSH — arcade : étire la planche, saute de toit en toit
+     ================================================================ */
+  {
+    id: 'rooftop-rush',
+    title: 'Rooftop Rush',
+    description: 'One tap. One plank. One wrong move and it is a very long way down. Rooftop Rush is a fast, nerve-shredding arcade game where you sprint across the rooftops of the city by stretching a plank between skyscrapers. Hold to grow the plank, release to drop it, and pray you nailed the length: too short and your hero plummets into the gap, too long and they walk straight off the end. The rooftops never stop coming, the gaps keep changing, and the only thing between you and the pavement is your timing. Chain perfect drops by hitting the red zone in the center of each rooftop to build an escalating combo multiplier — from a modest x2 all the way up to a screen-shaking x6 GODLIKE streak — and watch your score explode. But one mistimed tap breaks the whole chain, and that "COMBO LOST" moment is exactly where the rage kicks in. Play the relaxed Normal mode, or switch to Hard for tighter timing and a leaderboard that separates the truly precise from the merely lucky. Simple to understand, brutal to master, and impossible to put down after a big combo goes down in flames. How many rooftops can you clear before one bad plank ends the run?',
+    thumbnail: '/thumbnails/rooftop-rush.jpg',
+    category: 'arcade',
+    tags: ['arcade', 'reflex', 'one-tap', 'timing', 'combo', 'casual', 'rooftop', 'high-score'],
+    size: 'medium',
+    shimmer: true,
+    isNew: true,
+    hot: true,
+    landscape: false,
+    plays: 0,
+    modes: ['normal', 'hard'],
+    defaultMode: 'normal',
+    controls: 'Hold to stretch the plank, release to drop it. Time the length so it bridges the gap to the next rooftop, and aim for the red zone in the center for a perfect drop and a bigger combo. On mobile, tap and hold anywhere on the screen; on desktop, hold the mouse button or the spacebar. Works on mobile, tablet and desktop.',
+    author: 'Ragequit Arcade',
+    seo: {
+      title: 'Rooftop Rush — Free One-Tap Rooftop Arcade Game | Ragequit Arcade',
+      metaDescription: 'Play Rooftop Rush free online. Stretch a plank across skyscraper rooftops with perfect timing, chain combos up to a x6 GODLIKE streak and beat your high score. No download.',
+      faq: [
+        { q: 'How do you play Rooftop Rush?', a: 'You control a hero crossing the rooftops of the city. To bridge the gap to the next building, you hold to stretch out a plank, then release to drop it. If the plank is exactly the right length, your hero runs across safely. If it is too short they fall into the gap, and if it is too long they walk off the end. It is all about timing your release.' },
+        { q: 'How does the combo system work?', a: 'Each rooftop has a small red zone in its center. If you drop your plank so its tip lands on that red zone, you score a Perfect and your combo multiplier climbs. Chaining perfects pushes the multiplier up through escalating tiers, from x2 all the way to a x6 GODLIKE streak, with the screen shaking harder and flashing brighter as you climb. A single mistimed drop breaks the whole chain and resets your multiplier.' },
+        { q: 'What is the difference between Normal and Hard mode?', a: 'Normal mode gives you a bit more margin on your timing, so it is the place to learn the rhythm. Hard mode tightens everything up and demands far more precise plank lengths, and it has its own separate leaderboard, so the best Hard-mode scores really mean something.' },
+        { q: 'How does scoring work?', a: 'You earn points for every rooftop you clear, multiplied by your current combo. Because perfect drops raise your multiplier so steeply, a long clean streak is worth vastly more than the same number of rooftops crossed sloppily. Your best score is saved to the global leaderboard, with separate rankings for Normal and Hard mode.' },
+        { q: 'Why is it so addictive (and rage-inducing)?', a: 'Rooftop Rush is built around the tension of a growing combo. The higher your streak climbs, the more you have to lose, so a single bad tap that shatters a GODLIKE run is genuinely painful — and immediately makes you want one more try. That "so close" rage loop is exactly what the game is designed around.' },
+        { q: 'What are some tips for a high score?', a: 'Find a steady rhythm rather than rushing, since panic is what causes mistimed drops. Focus on landing the plank tip in the red zone every single time to keep your multiplier climbing, and do not get greedy when your combo is already high — a safe drop that keeps the streak alive beats a risky one that ends it. Consistency beats speed.' },
+        { q: 'Is Rooftop Rush free?', a: 'Yes, completely free to play, no download and no signup required.' },
+        { q: 'Does it work on mobile?', a: 'Yes. Rooftop Rush is built for one-tap play on portrait mobile — just tap and hold — and works great on tablet and desktop with the mouse or spacebar too.' },
+      ],
+    },
+  },
 ]
