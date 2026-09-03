@@ -18,7 +18,19 @@ const C = { cyan: '#00D9FF', violet: '#8B5CF6', magenta: '#FF2D78',
 
 // ── Helpers ────────────────────────────────────────────────────────────
 const fmt = n => (n ?? 0).toLocaleString('fr-FR')
-
+// Convertit un code pays (FR, US...) en nom lisible + drapeau emoji.
+const _countryNames = (() => {
+  try { return new Intl.DisplayNames(['fr'], { type: 'region' }) } catch(e) { return null }
+})()
+function countryFlag(code){
+  if(!code || code.length !== 2) return ''
+  return code.toUpperCase().replace(/./g, c => String.fromCodePoint(c.charCodeAt(0) + 127397))
+}
+function countryName(code){
+  if(!code) return '—'
+  const name = _countryNames ? _countryNames.of(code.toUpperCase()) : null
+  return name || code
+}
 // Clé de jour en heure LOCALE (pas UTC), pour éviter le décalage de fuseau
 // qui faisait tomber les visites du soir sur le mauvais jour.
 function localDayKey(dateLike){
@@ -387,7 +399,7 @@ newUsers, sVisitors, sPlays, sAds, sHome, sSignups, votesByGame,
   const gameRows = sortDesc(m.playsByGame).map(([g,n]) => [g, fmt(n)])
   const catRows  = sortDesc(m.byCategory).map(([c,n]) => [c, fmt(n)])
   const devRows  = sortDesc(m.byDevice).map(([dv,n]) => [dv || '—', fmt(n), pct(n, ev.length)])
-  const ctyRows  = sortDesc(m.byCountry).slice(0,8).map(([c,n]) => [c, fmt(n)])
+  const ctyRows  = sortDesc(m.byCountry).slice(0,8).map(([c,n]) => [`${countryFlag(c)} ${countryName(c)}`, fmt(n)])
     // Lignes votes par jeu, triées par total de votes décroissant.
   const voteRows = Object.entries(m.votesByGame)
     .sort((a,b) => (b[1].up + b[1].down) - (a[1].up + a[1].down))
