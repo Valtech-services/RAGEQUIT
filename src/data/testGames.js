@@ -25,13 +25,13 @@ export const testGames = [
     notes: 'Roguelite mage. Mobile-first 9:16.'
   },
   {
-    id: 'bird-blitz',
-    title: 'Bird Blitz',
-    description: 'Tap to flap through a gauntlet of obstacles and see how far you can fly.',
-    thumbnail: '/thumbnails/bird-blitz.jpg',
+    id: 'rooftop-rush',
+    title: 'Rooftop Rush',
+    description: 'Stretch a plank across skyscraper rooftops and chain perfect drops.',
+    thumbnail: '/thumbnails/rooftop-rush.jpg',
     category: 'arcade',
-    orientation: 'portrait',          // 'portrait' (9:16) ou 'landscape'
-    file: '/games/bird-blitz.html',
-    notes: 'Arcade flappy-style. Mobile-first 9:16. À tester avant publication.'
+    orientation: 'portrait',
+    file: '/games/rooftop-rush.html',
+    notes: 'Jeu de timing type stick-hero. Modes normal/hard. À tester avant publication.'
   }
 ]
