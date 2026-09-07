@@ -29,6 +29,7 @@ export const posts = [
   // },
      {
     slug: 'why-we-build-our-own-games',
+    category: 'about',
     title: 'Why We Build Our Own Games',
     date: '2026-08-25',
     author: 'Ragequit Arcade',
@@ -62,6 +63,7 @@ export const posts = [
   },
      {
     slug: 'best-free-browser-games-2026',
+    category: 'about',
     title: 'The Best Free Browser Games to Play Right Now',
     date: '2026-08-26',
     author: 'Ragequit Arcade',
@@ -98,6 +100,7 @@ export const posts = [
   },
      {
     slug: 'virus-lab-strategy-guide',
+    category: 'guides',
     title: 'Virus Lab Strategy: Why a Shorter Genome Wins',
     date: '2026-08-27',
     author: 'Ragequit Arcade',
@@ -131,6 +134,7 @@ export const posts = [
   },
      {
     slug: 'flashout-memory-tips',
+    category: 'guides',    
     title: 'How to Get a High Score in FLASHOUT',
     date: '2026-08-28',
     author: 'Ragequit Arcade',
@@ -164,6 +168,7 @@ export const posts = [
   },
    {
     slug: 'the-goal-of-ragequit-arcade',
+    category: 'about',
     title: 'The Real Goal of Ragequit Arcade',
     date: '2026-08-29',
     author: 'Ragequit Arcade',
@@ -195,6 +200,7 @@ export const posts = [
   },
      {
     slug: 'rooftop-rush-tips',
+    category: 'guides',
     title: 'Rooftop Rush: How to Chain a GODLIKE Combo',
     date: '2026-08-30',
     author: 'Ragequit Arcade',
@@ -228,6 +234,7 @@ export const posts = [
   },
      {
     slug: 'snake-candy-arena-tips',
+    category: 'guides',
     title: 'Snake Candy Arena: How to Fill the Whole Board',
     date: '2026-08-31',
     author: 'Ragequit Arcade',
@@ -261,6 +268,7 @@ export const posts = [
   },
      {
     slug: 'bird-blitz-which-monument-first',
+    category: 'guides',
     title: 'Bird Blitz: Which Monument Should You Defend First?',
     date: '2026-09-01',
     author: 'Ragequit Arcade',
@@ -294,6 +302,7 @@ export const posts = [
   },
      {
     slug: 'rage-hockey-tips',
+    category: 'guides',
     title: 'Rage Hockey: How to Win Every Arena',
     date: '2026-09-02',
     author: 'Ragequit Arcade',
@@ -327,6 +336,7 @@ export const posts = [
   },
      {
     slug: 'staq-perfect-drops',
+    category: 'guides',
     title: 'STAQ: The Secret to an Endless Perfect Streak',
     date: '2026-09-03',
     author: 'Ragequit Arcade',
@@ -360,6 +370,7 @@ export const posts = [
   },
      {
     slug: 'stellar-forge-guide',
+    category: 'guides',
     title: 'Stellar Forge: From Hand Pick to Galactic Empire',
     date: '2026-09-04',
     author: 'Ragequit Arcade',
@@ -393,6 +404,7 @@ export const posts = [
   },
      {
     slug: 'neon-rush-tips',
+    category: 'guides',
     title: 'Neon Rush: How to Survive the Tunnel and Chain Combos',
     date: '2026-09-05',
     author: 'Ragequit Arcade',
@@ -426,6 +438,7 @@ export const posts = [
   },
      {
     slug: 'octaflux-tips',
+    category: 'guides',
     title: 'OCTAFLUX: How to Trigger Massive Cascade Chains',
     date: '2026-09-06',
     author: 'Ragequit Arcade',
