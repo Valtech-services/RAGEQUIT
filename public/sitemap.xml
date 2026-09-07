@@ -92,6 +92,77 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
+  <url>
+    <loc>https://ragequit-arcade.com/game/rooftop-rush</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://ragequit-arcade.com/blog/the-goal-of-ragequit-arcade</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ragequit-arcade.com/blog/why-we-build-our-own-games</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ragequit-arcade.com/blog/best-free-browser-games-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ragequit-arcade.com/blog/virus-lab-strategy-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ragequit-arcade.com/blog/flashout-memory-tips</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ragequit-arcade.com/blog/rooftop-rush-tips</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ragequit-arcade.com/blog/snake-candy-arena-tips</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ragequit-arcade.com/blog/bird-blitz-which-monument-first</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ragequit-arcade.com/blog/rage-hockey-tips</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ragequit-arcade.com/blog/staq-perfect-drops</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ragequit-arcade.com/blog/stellar-forge-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ragequit-arcade.com/blog/neon-rush-tips</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://ragequit-arcade.com/blog/octaflux-tips</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
 
   <url>
     <loc>https://ragequit-arcade.com/legal/about</loc>
@@ -122,19 +193,5 @@
     <loc>https://ragequit-arcade.com/legal/cookies</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://ragequit-arcade.com/blog/why-we-build-our-own-games</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-    <url><loc>https://ragequit-arcade.com/blog/why-we-build-our-own-games</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://ragequit-arcade.com/blog/best-free-browser-games-2026</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://ragequit-arcade.com/blog/virus-lab-strategy-guide</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://ragequit-arcade.com/blog/flashout-memory-tips</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-    <url>
-    <loc>https://ragequit-arcade.com/game/rooftop-rush</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
   </url>
 </urlset>
