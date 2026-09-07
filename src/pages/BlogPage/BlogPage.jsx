@@ -32,26 +32,40 @@ export default function BlogPage() {
         {sorted.length === 0 ? (
           <p className="blog__empty">No articles yet. Check back soon.</p>
         ) : (
-          <div className="blog__grid">
-            {sorted.map(post => (
-              <Link key={post.slug} to={`/blog/${post.slug}`} className="blog__card">
-                {post.image && (
-                  <div className="blog__card-img">
-                    <img src={post.image} alt={post.title}
-                      onError={e => { e.currentTarget.style.display = 'none' }} />
+          <>
+            {[
+              { id: 'about', label: 'About Ragequit Arcade' },
+              { id: 'guides', label: 'Game guides' },
+            ].map(section => {
+              const inSection = sorted.filter(p => (p.category || 'guides') === section.id)
+              if (inSection.length === 0) return null
+              return (
+                <div key={section.id} className="blog__section">
+                  <h2 className="blog__section-title">{section.label}</h2>
+                  <div className="blog__grid">
+                    {inSection.map(post => (
+                      <Link key={post.slug} to={`/blog/${post.slug}`} className="blog__card">
+                        {post.image && (
+                          <div className="blog__card-img">
+                            <img src={post.image} alt={post.title}
+                              onError={e => { e.currentTarget.style.display = 'none' }} />
+                          </div>
+                        )}
+                        <div className="blog__card-body">
+                          <span className="blog__card-date">
+                            {post.date ? new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}
+                          </span>
+                          <h2 className="blog__card-title">{post.title}</h2>
+                          <p className="blog__card-excerpt">{post.excerpt}</p>
+                          <span className="blog__card-more">Read more →</span>
+                        </div>
+                      </Link>
+                    ))}
                   </div>
-                )}
-                <div className="blog__card-body">
-                  <span className="blog__card-date">
-                    {post.date ? new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}
-                  </span>
-                  <h2 className="blog__card-title">{post.title}</h2>
-                  <p className="blog__card-excerpt">{post.excerpt}</p>
-                  <span className="blog__card-more">Read more →</span>
                 </div>
-              </Link>
-            ))}
-          </div>
+              )
+            })}
+          </>
         )}
       </div>
 
