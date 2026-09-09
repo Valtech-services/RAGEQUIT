@@ -1579,7 +1579,11 @@
             if (!install) return;
             // signale au site parent (pour brancher GameDistribution plus tard)
             try { window.parent && window.parent.postMessage({ type: 'crush_depth_rewarded_ad_request' }, '*'); } catch (e) {}
-            showAdPanel(5, () => finishInstall());
+            showAdPanel(5, () => {
+                // suivi analytics : pub récompensée regardée en entier
+                try { window.parent && window.parent.postMessage({ type: 'RH_TRACK', event: 'ad_rewarded_complete', game_id: 'crush-depth', props: { context: 'skip_install' } }, '*'); } catch (e) {}
+                finishInstall();
+            });
         }
         window.buyComponent = buyComponent;
         window.skipInstallWithAd = skipInstallWithAd;
@@ -2093,6 +2097,34 @@
                 ts: Date.now(),
             };
             try { window.parent && window.parent.postMessage(payload, '*'); } catch (e) {}
+                        try { window.parent && window.parent.postMessage(payload, '*'); } catch (e) {}
+
+            // --- Envoi au leaderboard du site (format _SCORE attendu par GamePage) ---
+            // On n'envoie que si la calibration est faite (scores légitimes).
+            if (isCalibrated) {
+                // Classement 1 : profondeur maximale atteinte (plus profond = mieux)
+                try { window.parent && window.parent.postMessage({
+                    type: 'CRUSH_DEPTH_SCORE',
+                    game: 'crush-depth',
+                    mode: 'depth',
+                    score: Math.round(gameData.maxDepthReached),
+                    scoreLabel: Math.round(gameData.maxDepthReached).toLocaleString('en-US') + ' m'
+                }, '*'); } catch (e) {}
+
+                // Classement 2 : meilleur temps pour atteindre le fond (speedrun, plus rapide = mieux)
+                // Le leaderboard trie par score décroissant, donc on inverse le temps :
+                // score = 10000000 - temps_en_ms, ce qui met les temps courts en tête.
+                if (gameData.bestTimeSec !== null) {
+                    const invScore = Math.max(0, 10000000 - Math.round(gameData.bestTimeSec * 1000));
+                    try { window.parent && window.parent.postMessage({
+                        type: 'CRUSH_DEPTH_SCORE',
+                        game: 'crush-depth',
+                        mode: 'speedrun',
+                        score: invScore,
+                        scoreLabel: formatTime(gameData.bestTimeSec)
+                    }, '*'); } catch (e) {}
+                }
+            }
         }
         setInterval(postScore, 15000);
         window.addEventListener('beforeunload', postScore);
