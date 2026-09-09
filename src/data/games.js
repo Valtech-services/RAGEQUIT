@@ -500,7 +500,7 @@ export const games = [
      /* ================================================================
      CRUSH DEPTH — challenge : plonge au fond de la fosse des Mariannes
      ================================================================ */
- /* {
+ {
     id: 'crush-depth',
     title: 'Crush Depth',
     description: 'How deep can you go? Crush Depth is a hypnotic deep-sea descent to the bottom of the real Mariana Trench, the deepest place on Earth. Scroll to drive your submarine down through the ocean\u2019s five true zones, from the sunlit surface into the crushing, pitch-black Hadopelagic nearly eleven thousand meters below. Along the way you pass real landmarks scaled to their actual depth: the wreck of the Titanic at 3,800 meters, the abyssal plain, the Mid-Atlantic Ridge, and the height of Mount Everest turned completely upside down. Earn coins as you descend and spend them in the workshop on submarine components — propeller, turbine, ballast, hull and reactor — that make every future dive faster. Chase two very different goals: the greatest depth reached, and your fastest speedrun to the bottom, each with its own global leaderboard. Your records and upgrades are always saved, so every dive builds on the last. And when you finally touch the seabed at the deepest point on the planet, you might discover you were never quite alone down there. A beautiful, eerie, one-of-a-kind challenge with no equivalent in the browser.',
@@ -531,5 +531,5 @@ export const games = [
         { q: 'Mobile?', a: 'Yes. Crush Depth works on mobile, tablet and desktop, with swipe controls on touch screens.' },
       ],
     },
-  },*/
+  },
 ]
