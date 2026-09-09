@@ -25,13 +25,13 @@ export const testGames = [
     notes: 'Roguelite mage. Mobile-first 9:16.'
   },
   {
-    id: 'rooftop-rush',
-    title: 'Rooftop Rush',
-    description: 'Stretch a plank across skyscraper rooftops and chain perfect drops.',
-    thumbnail: '/thumbnails/rooftop-rush.jpg',
-    category: 'arcade',
+    id: 'crush-depth',
+    title: 'Crush Depth',
+    description: 'Dive to the bottom of the Mariana Trench, past the Titanic and the abyss.',
+    thumbnail: '/thumbnails/crush-depth.jpg',
+    category: 'challenge',
     orientation: 'portrait',
-    file: '/games/rooftop-rush.html',
-    notes: 'Jeu de timing type stick-hero. Modes normal/hard. À tester avant publication.'
+    file: '/games/crush-depth.html',
+    notes: 'Descente deep-sea. Profondeur + speedrun. À tester avant publication.'
   }
 ]
