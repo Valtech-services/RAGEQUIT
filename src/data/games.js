@@ -497,4 +497,39 @@ export const games = [
       ],
     },
   },
+     /* ================================================================
+     CRUSH DEPTH — challenge : plonge au fond de la fosse des Mariannes
+     ================================================================ */
+  {
+    id: 'crush-depth',
+    title: 'Crush Depth',
+    description: 'How deep can you go? Crush Depth is a hypnotic deep-sea descent to the bottom of the real Mariana Trench, the deepest place on Earth. Scroll to drive your submarine down through the ocean\u2019s five true zones, from the sunlit surface into the crushing, pitch-black Hadopelagic nearly eleven thousand meters below. Along the way you pass real landmarks scaled to their actual depth: the wreck of the Titanic at 3,800 meters, the abyssal plain, the Mid-Atlantic Ridge, and the height of Mount Everest turned completely upside down. Earn coins as you descend and spend them in the workshop on submarine components — propeller, turbine, ballast, hull and reactor — that make every future dive faster. Chase two very different goals: the greatest depth reached, and your fastest speedrun to the bottom, each with its own global leaderboard. Your records and upgrades are always saved, so every dive builds on the last. And when you finally touch the seabed at the deepest point on the planet, you might discover you were never quite alone down there. A beautiful, eerie, one-of-a-kind challenge with no equivalent in the browser.',
+    thumbnail: '/thumbnails/crush-depth.jpg',
+    category: 'challenge',
+    tags: ['challenge', 'deep-sea', 'descent', 'ocean', 'mariana', 'upgrade', 'speedrun', 'atmospheric', 'unique'],
+    size: 'large',
+    shimmer: true,
+    isNew: true,
+    hot: true,
+    landscape: false,
+    plays: 0,
+    modes: ['depth', 'speedrun'],
+    defaultMode: 'depth',
+    controls: 'Scroll down (or swipe up on mobile) to drive your submarine deeper into the ocean. Buy and install components in the workshop to descend faster on future dives. Tap the buttons on screen for stats, the depth map and sound. Works on mobile, tablet and desktop.',
+    author: 'Ragequit Arcade',
+    seo: {
+      title: 'Crush Depth — Free Deep-Sea Descent Challenge Game | Ragequit Arcade',
+      metaDescription: 'Play Crush Depth free online. Dive to the bottom of the real Mariana Trench, past the Titanic and the abyssal plain, upgrade your submarine and beat depth and speedrun records. No download.',
+      faq: [
+        { q: 'How do you play Crush Depth?', a: 'You pilot a submarine descending into the ocean. Scroll down on desktop, or swipe up on mobile, to drive deeper. Your goal is to reach the bottom of the Mariana Trench, nearly 11,000 meters down, passing through the ocean\u2019s five real zones as the water gets darker and the pressure builds.' },
+        { q: 'What are the real landmarks in the game?', a: 'As you descend you pass real reference points placed at their true depth: freediving and scuba records near the surface, submarine crush depth, the wreck of the Titanic at around 3,800 meters, the abyssal plain, the Mid-Atlantic Ridge, and the height of Mount Everest flipped upside down, before reaching the deepest point on Earth. It turns the dive into a genuine sense of scale.' },
+        { q: 'What are the two leaderboards?', a: 'Crush Depth has two separate challenges. The Depth leaderboard ranks the greatest depth you have reached. The Speedrun leaderboard ranks your fastest time to reach the very bottom. You can compete on both, and each has its own global ranking.' },
+        { q: 'What do the submarine components do?', a: 'As you descend you earn coins, which you spend in the workshop on five components: propeller, turbine, ballast, hull and reactor. Each level you install makes your submarine descend faster on future dives, so the deeper you go, the stronger you become. You can watch a short ad to install a component instantly.' },
+        { q: 'Does the game save my progress?', a: 'Yes. Your maximum depth, your best speedrun time, your coins, your components and every landmark you have discovered are all saved automatically. When you start a new dive, you keep everything: you never start from zero, you just try to beat your own records.' },
+        { q: 'What happens at the bottom?', a: 'When you finally reach the deepest point on Earth and your submarine settles on the seabed, a short atmospheric sequence plays out. Let us just say the deepest place on the planet might not be as empty as you expected.' },
+        { q: 'Is Crush Depth free?', a: 'Yes, completely free to play, no download and no signup required.' },
+        { q: 'Mobile?', a: 'Yes. Crush Depth works on mobile, tablet and desktop, with swipe controls on touch screens.' },
+      ],
+    },
+  },
 ]
