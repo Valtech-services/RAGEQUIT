@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Crush Depth — The Mariana Trench Challenge</title>
     <style>
         /* ============================================================
@@ -43,6 +43,7 @@
             display: block;
             width: 100vw;
             height: 100vh;
+            height: 100dvh;
             background: var(--ink);
         }
 
@@ -175,26 +176,30 @@
         .coll-depth { color: rgba(255,255,255,0.25); font-size: 11px; font-weight: 600; }
         .coll-item.found .coll-depth { color: var(--gold); }
 
-        /* Boutique */
+        /* Boutique — cartes verticales avec grande image */
         .shop-item {
             background: rgba(255, 255, 255, 0.03);
-            border-radius: 13px; padding: 14px 16px; margin-bottom: 10px;
-            display: flex; justify-content: space-between; align-items: center; gap: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 15px; margin-bottom: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .comp-hero {
+            width: 100%; height: 150px;
+            background: radial-gradient(circle at 50% 40%, rgba(217,178,90,0.16), rgba(6,12,24,0.5));
+            background-size: contain; background-position: center; background-repeat: no-repeat;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(217,178,90,0.5); font-weight: 800; font-size: 48px;
+        }
+        .comp-hero.has-img { background-color: rgba(4,10,20,0.4); }
+        @media (max-width: 480px) { .comp-hero { height: 120px; } }
+        .comp-body {
+            display: flex; align-items: flex-end; justify-content: space-between; gap: 12px;
+            padding: 12px 16px 14px;
         }
         .shop-item .info { flex: 1; min-width: 0; }
-        .comp-thumb {
-            width: 52px; height: 52px; flex-shrink: 0; border-radius: 10px;
-            background: linear-gradient(135deg, rgba(217,178,90,0.18), rgba(217,178,90,0.04));
-            border: 1px solid rgba(217,178,90,0.25);
-            background-size: cover; background-position: center;
-            display: flex; align-items: center; justify-content: center;
-            color: var(--gold); font-weight: 800; font-size: 20px;
-        }
-        .comp-thumb.has-img { border-color: rgba(217,178,90,0.4); }
-        @media (max-width: 480px) { .comp-thumb { width: 44px; height: 44px; } }
         .shop-item .row-top { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
-        .shop-item .info h3 { color: #fff; font-size: 15px; font-weight: 600; }
+        .shop-item .info h3 { color: #fff; font-size: 16px; font-weight: 700; }
         .shop-item .lvpill {
             font-size: 10px; color: var(--gold); background: rgba(217,178,90,0.12);
             border: 1px solid rgba(217,178,90,0.2); border-radius: 999px;
@@ -489,8 +494,11 @@
 
         function resizeCanvas() {
             DPR = Math.min(window.devicePixelRatio || 1, 2);
-            W = window.innerWidth;
-            H = window.innerHeight;
+            // hauteur/largeur VISIBLES réelles : visualViewport exclut les barres
+            // mobiles (barre d'adresse, etc.) ; fallback sur clientHeight/innerHeight.
+            const vv = window.visualViewport;
+            W = Math.round(vv ? vv.width : (document.documentElement.clientWidth || window.innerWidth));
+            H = Math.round(vv ? vv.height : (document.documentElement.clientHeight || window.innerHeight));
             canvas.width = W * DPR;
             canvas.height = H * DPR;
             canvas.style.width = W + 'px';
@@ -498,9 +506,49 @@
             ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
         }
         window.addEventListener('resize', resizeCanvas);
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', resizeCanvas);
+            window.visualViewport.addEventListener('scroll', resizeCanvas);
+        }
         resizeCanvas();
 
         const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+
+        // ============================================================
+        // CHARGEMENT DES IMAGES (assets externes)
+        // Chemin attendu (relatif au jeu déployé) : ./assets/
+        // Le code tente .png (transparence) puis .jpg en repli.
+        // Tant qu'une image n'est pas là, le rendu canvas d'origine sert de repli.
+        // ============================================================
+        const ASSET_BASE = './assets/';
+        const IMAGES = {};   // clé -> {img, ready}
+        function loadImage(key, name) {
+            const rec = { img: new Image(), ready: false };
+            IMAGES[key] = rec;
+            rec.img.onload = () => { rec.ready = true; };
+            rec.img.onerror = () => {
+                // repli .jpg si le .png échoue
+                if (!rec.triedJpg) {
+                    rec.triedJpg = true;
+                    rec.img.src = ASSET_BASE + name + '.jpg';
+                } else {
+                    rec.ready = false; // aucune image : on garde le rendu canvas
+                }
+            };
+            rec.img.src = ASSET_BASE + name + '.png';
+        }
+        function imgReady(key) { return IMAGES[key] && IMAGES[key].ready; }
+        // sous-marin, cthulhu (3 étapes), logo
+        loadImage('submarine', 'submarine');
+        loadImage('cthulhuEyes', 'cthulhu-eyes');
+        loadImage('cthulhuBody', 'cthulhu-body');
+        loadImage('cthulhuMouth', 'cthulhu-mouth');
+        loadImage('logo', 'logo');
+        loadImage('propeller', 'components/propeller');
+        loadImage('turbine', 'components/turbine');
+        loadImage('ballast', 'components/ballast');
+        loadImage('hull', 'components/hull');
+        loadImage('reactor', 'components/reactor');
 
         // ============================================================
         // 2. MESURE HONNÊTE DE L'ÉCRAN
@@ -1116,6 +1164,21 @@
             ctx.lineTo(x + 52 * scale, y + 18 * scale);
             ctx.closePath(); ctx.fill();
 
+            // Si l'image du sous-marin est chargée, on l'utilise à la place du
+            // dessin canvas. Ratio préservé, orientée vers la droite.
+            if (imgReady('submarine')) {
+                const im = IMAGES['submarine'].img;
+                const targetW = 150 * scale;               // largeur visée à l'écran
+                const ratio = im.height / im.width;
+                const w = targetW, h = targetW * ratio;
+                const bob = Math.sin(Date.now() / 1500) * 2; // léger balancement
+                ctx.save();
+                ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 20; ctx.shadowOffsetY = 8;
+                ctx.drawImage(im, x - w * 0.5, y - h * 0.5 + bob, w, h);
+                ctx.restore();
+                return;
+            }
+
             ctx.save();
             ctx.translate(x, y);
             ctx.scale(scale, scale);
@@ -1342,23 +1405,18 @@
                 const t = (Date.now() - a.start) / a.dur;
                 if (t < 1) {
                     const alpha = Math.sin(t * Math.PI);
-                    const yy = H / 2 - 100 - 30 * t;
-                    ctx.save(); ctx.globalAlpha = alpha; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-                    ctx.fillStyle = '#d9b25a';
-                    ctx.font = '700 26px Inter, sans-serif';
-                    ctx.shadowColor = 'rgba(217,178,90,0.5)'; ctx.shadowBlur = 30;
-                    ctx.fillText('Milestone reached', W / 2, yy);
-                    ctx.font = '700 20px Inter, sans-serif'; ctx.fillStyle = '#fff';
-                    ctx.fillText(a.m.name, W / 2, yy + 34);
-                    ctx.restore();
+                    const yy = H / 2 - 110 - 30 * t;
+                    drawNotice('Milestone reached', '#d9b25a', yy, alpha);
+                    drawNotice(a.m.name, '#ffffff', yy + 42, alpha);
                 } else badgeAnims.splice(i, 1);
             });
 
             // ---- HUD ----
-            // léger panneau sombre derrière le HUD pour que rien (poisson,
-            // particule) ne passe devant le texte et le rende illisible
+            // offset vertical : sur mobile, la plateforme Ragequit superpose une
+            // flèche "retour" en haut à gauche -> on abaisse le HUD pour l'éviter.
+            const hudTop = isTouch ? 52 : 12;
             ctx.save();
-            const hudW = 210, hudH = 214;
+            const hudW = 210, hudH = 214 + hudTop;
             const hudGrad = ctx.createLinearGradient(0, 0, hudW, 0);
             hudGrad.addColorStop(0, 'rgba(4,8,18,0.42)');
             hudGrad.addColorStop(1, 'rgba(4,8,18,0)');
@@ -1370,37 +1428,37 @@
             ctx.shadowColor = 'rgba(0,0,0,0.85)'; ctx.shadowBlur = 6; ctx.shadowOffsetY = 1;
 
             ctx.font = '700 34px Inter, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.98)';
-            ctx.fillText(formatDepth(depth), 20, 20);
+            ctx.fillText(formatDepth(depth), 20, hudTop + 8);
 
             const spd = currentSpeed();
             ctx.font = '16px Inter, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.7)';
-            ctx.fillText(`${spd.toFixed(1)} cm/s`, 22, 62);
+            ctx.fillText(`${spd.toFixed(1)} cm/s`, 22, hudTop + 50);
             // multiplicateur de descente (feedback des composants achetés)
             const dmult = descentMultiplier();
             if (dmult > 1.001) {
                 ctx.font = '700 13px Inter, sans-serif'; ctx.fillStyle = '#4ecdc4';
                 const mtxt = `×${dmult.toFixed(2)}`;
                 const sw = ctx.measureText(`${spd.toFixed(1)} cm/s`).width;
-                ctx.fillText(mtxt, 22 + sw + 12, 63);
+                ctx.fillText(mtxt, 22 + sw + 12, hudTop + 51);
             }
 
             ctx.font = '14px Inter, sans-serif'; ctx.fillStyle = 'rgba(217,178,90,0.75)';
-            ctx.fillText(`best ${gameData.bestSpeed.toFixed(1)} cm/s`, 22, 90);
+            ctx.fillText(`best ${gameData.bestSpeed.toFixed(1)} cm/s`, 22, hudTop + 78);
 
             ctx.font = '16px Inter, sans-serif'; ctx.fillStyle = '#e4c15f';
-            ctx.fillText(`${commas(gameData.coins)} coins`, 22, 116);
+            ctx.fillText(`${commas(gameData.coins)} coins`, 22, hudTop + 104);
 
             ctx.font = '12px Inter, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.45)';
-            ctx.fillText(zone.name, 22, 146);
+            ctx.fillText(zone.name, 22, hudTop + 134);
 
             ctx.font = '11px Inter, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.3)';
-            ctx.fillText(`${(gameData.totalDistanceCm / 100000).toFixed(3)} km scrolled`, 22, 168);
+            ctx.fillText(`${(gameData.totalDistanceCm / 100000).toFixed(3)} km scrolled`, 22, hudTop + 156);
 
             // barre prochain palier — nette, opaque, sans ombre
             const next = MILESTONES.find(m => !gameData.unlockedMilestones.includes(m.depth));
             if (next) {
                 const prog = clamp(depth / next.depth, 0, 1);
-                const bx = 20, by = 192, bw = 170, bh = 5;
+                const bx = 20, by = hudTop + 180, bw = 170, bh = 5;
                 ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
                 // fond opaque
                 ctx.fillStyle = '#12203a'; ctx.fillRect(bx, by, bw, bh);
@@ -1413,13 +1471,15 @@
                 ctx.fillText(`${Math.floor(prog * 100)}%`, bx + bw, by + 9);
             }
 
-            // notification
+            // notification (overlay élégant, responsive : la police se réduit
+            // pour tenir dans la largeur de l'écran, avec une pilule de fond)
             if (notification && Date.now() - notificationAt < 3000) {
-                ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-                ctx.shadowColor = 'rgba(0,0,0,0.9)'; ctx.shadowBlur = 24;
-                ctx.font = '700 22px Inter, sans-serif';
-                ctx.fillStyle = notification.color === 'var(--gold)' ? '#d9b25a' : (notification.color === 'var(--teal)' ? '#4ecdc4' : '#fff');
-                ctx.fillText(notification.text, W / 2, H * 0.22);
+                const age = Date.now() - notificationAt;
+                const inA = clamp(age / 200, 0, 1);
+                const outA = clamp((3000 - age) / 400, 0, 1);
+                drawNotice(notification.text,
+                    notification.color === 'var(--gold)' ? '#d9b25a' : (notification.color === 'var(--teal)' ? '#4ecdc4' : '#fff'),
+                    H * 0.2, inA * outA);
             }
 
             // aide au départ
@@ -1503,25 +1563,31 @@
                 }
 
                 div.innerHTML = `
-                    <div class="comp-thumb" id="thumb-${c.id}"></div>
-                    <div class="info">
-                        <div class="row-top">
-                            <h3>${c.name}</h3>
-                            <span class="lvpill">lv. ${lv}/${c.maxLevel}</span>
+                    <div class="comp-hero" id="thumb-${c.id}"></div>
+                    <div class="comp-body">
+                        <div class="info">
+                            <div class="row-top">
+                                <h3>${c.name}</h3>
+                                <span class="lvpill">lv. ${lv}/${c.maxLevel}</span>
+                            </div>
+                            <p class="desc">${c.desc}</p>
+                            <div class="lvbar"><span style="width:${(lv / c.maxLevel) * 100}%"></span></div>
+                            ${installingThis ? `<p class="gain">installing level ${install.level}…</p>` : (!maxed ? `<p class="gain">+${Math.round(c.per * 100)}% descent per level</p>` : `<p class="gain maxed">max level reached</p>`)}
                         </div>
-                        <p class="desc">${c.desc}</p>
-                        <div class="lvbar"><span style="width:${(lv / c.maxLevel) * 100}%"></span></div>
-                        ${installingThis ? `<p class="gain">installing level ${install.level}…</p>` : (!maxed ? `<p class="gain">+${Math.round(c.per * 100)}% descent per level</p>` : `<p class="gain maxed">max level reached</p>`)}
-                    </div>
-                    <div class="buy">${rightCol}</div>`;
+                        <div class="buy">${rightCol}</div>
+                    </div>`;
                 items.appendChild(div);
-                // vignette carrée : image si présente (assets/components/<id>.png),
-                // sinon placeholder dessiné (initiale)
-                const thumb = div.querySelector('.comp-thumb');
-                const img = new Image();
-                img.onload = () => { thumb.style.backgroundImage = `url(${img.src})`; thumb.classList.add('has-img'); };
-                img.onerror = () => { thumb.textContent = c.name.charAt(0); };
-                img.src = `assets/components/${c.id}.png`;
+                // grande image (assets/components/<id>.png|jpg), sinon placeholder
+                const hero = div.querySelector('.comp-hero');
+                const rec = IMAGES[c.id];
+                if (rec && rec.ready) { hero.style.backgroundImage = `url(${rec.img.src})`; hero.classList.add('has-img'); }
+                else {
+                    hero.textContent = c.name.charAt(0);
+                    // si l'image arrive plus tard, on la posera au prochain open
+                    if (rec) rec.img.addEventListener('load', () => {
+                        hero.style.backgroundImage = `url(${rec.img.src})`; hero.classList.add('has-img'); hero.textContent = '';
+                    }, { once: true });
+                }
             });
             items.querySelectorAll('.buy-btn').forEach(btn => {
                 btn.addEventListener('click', () => buyComponent(btn.dataset.id));
@@ -1935,7 +2001,50 @@
             }
             ctx.fillText(line, x, yy);
         }
+        // Notice centrée responsive : réduit la police pour tenir dans l'écran,
+        // fond pilule translucide. Utilisée pour paliers et repères.
+        function drawNotice(text, color, y, alpha) {
+            const maxW = Math.min(W - 40, 620);        // largeur dispo (marge 20px)
+            let fs = W < 480 ? 18 : 22;                // police de base
+            ctx.font = `700 ${fs}px Inter, sans-serif`;
+            // réduit tant que ça dépasse (jusqu'à 13px mini)
+            while (ctx.measureText(text).width > maxW - 32 && fs > 13) {
+                fs -= 1; ctx.font = `700 ${fs}px Inter, sans-serif`;
+            }
+            const tw = Math.min(ctx.measureText(text).width, maxW - 32);
+            const padX = 16, padY = 9;
+            const boxW = tw + padX * 2, boxH = fs + padY * 2;
+            const bx = (W - boxW) / 2, by = y - boxH / 2;
+            ctx.save();
+            ctx.globalAlpha = alpha;
+            // pilule de fond
+            ctx.fillStyle = 'rgba(6,12,24,0.82)';
+            roundRectPath(bx, by, boxW, boxH, boxH / 2); ctx.fill();
+            ctx.strokeStyle = color === '#d9b25a' ? 'rgba(217,178,90,0.5)' : 'rgba(78,205,196,0.5)';
+            ctx.lineWidth = 1.5; roundRectPath(bx, by, boxW, boxH, boxH / 2); ctx.stroke();
+            // texte (tronqué proprement si vraiment trop long)
+            ctx.fillStyle = color;
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            let t = text;
+            if (ctx.measureText(t).width > maxW - 32) {
+                while (ctx.measureText(t + '…').width > maxW - 32 && t.length > 4) t = t.slice(0, -1);
+                t += '…';
+            }
+            ctx.fillText(t, W / 2, y + 1);
+            ctx.restore();
+        }
         // dessinée par-dessus tout, appelée en fin de draw()
+        function drawContain(im, alpha, coverFrac, yBias) {
+            // dessine l'image centrée, contenue dans coverFrac de l'écran
+            const maxW = W * coverFrac, maxH = H * coverFrac;
+            const r = im.height / im.width;
+            let w = maxW, h = w * r;
+            if (h > maxH) { h = maxH; w = h / r; }
+            ctx.save();
+            ctx.globalAlpha = alpha;
+            ctx.drawImage(im, (W - w) / 2, (H - h) / 2 + (yBias || 0), w, h);
+            ctx.restore();
+        }
         function drawCinematic() {
             if (!cinematic) return;
             const t = (Date.now() - cinematic.start) / 1000; // secondes écoulées
@@ -1960,6 +2069,9 @@
                 const open = clamp(lt / 1.2, 0, 1);
                 const close = clamp((2.6 - lt) / 0.5, 0, 1);
                 const eo = open * close;
+                if (imgReady('cthulhuEyes')) {
+                    drawContain(IMAGES['cthulhuEyes'].img, eo, 0.7, -20);
+                } else {
                 const eyeH = 2 + eo * 30;
                 const glow = (0.4 + Math.sin(t * 3) * 0.15) * eo;
                 [-70, 70].forEach(dx => {
@@ -1977,6 +2089,7 @@
                     ctx.ellipse(cx + dx, cy - 30, 7, Math.max(1.5, eyeH - 6), 0, 0, Math.PI * 2);
                     ctx.fill();
                 });
+                }
             }
 
             // --- Cthulhu (4.3 -> 7.5s) : monte, plane, redescend/disparaît ---
@@ -1985,6 +2098,10 @@
                 // monte sur 1.2s, plane, repart (fondu) sur les 0.6 derniers
                 const rise = clamp(lt / 1.2, 0, 1);
                 const fade = clamp((3.3 - lt) / 0.6, 0, 1);
+                if (imgReady('cthulhuBody')) {
+                    const yBias = (1 - rise) * H * 0.5; // monte depuis le bas
+                    drawContain(IMAGES['cthulhuBody'].img, fade, 0.85, yBias);
+                } else {
                 ctx.save();
                 ctx.globalAlpha = fade;
                 const baseY = H + 60 - rise * (H * 0.5);
@@ -2015,12 +2132,25 @@
                     ctx.beginPath(); ctx.ellipse(cx + dx, baseY + 70, 14, 9, 0, 0, Math.PI * 2); ctx.fill();
                 });
                 ctx.restore();
+                }
             }
 
             // --- La gueule (5.3 -> 8s) : bouche qui grossit et engloutit ---
             if (t >= 5.3) {
                 const lt = t - 5.3;                          // 0 -> 2.7
                 const grow = clamp(lt / 2.0, 0, 1);
+                if (imgReady('cthulhuMouth')) {
+                    // l'image grossit (zoom) jusqu'à engloutir l'écran
+                    const im = IMAGES['cthulhuMouth'].img;
+                    const r = im.height / im.width;
+                    const scale = 0.3 + grow * grow * 2.2;
+                    const w = W * scale, h = w * r;
+                    ctx.save();
+                    ctx.globalAlpha = clamp(grow / 0.15, 0, 1);
+                    ctx.drawImage(im, (W - w) / 2, (H - h) / 2, w, h);
+                    ctx.restore();
+                    if (grow >= 1) { ctx.fillStyle = '#02030a'; ctx.fillRect(0, 0, W, H); }
+                } else {
                 // la bouche vient du fond vers le centre, s'ouvre et grandit
                 const mouthR = grow * grow * Math.max(W, H) * 1.2;
                 const my = lerp(H + 60, cy, clamp(lt / 1.0, 0, 1));
@@ -2047,6 +2177,7 @@
                     }
                 }
                 if (grow >= 1) { ctx.fillStyle = '#02030a'; ctx.fillRect(0, 0, W, H); }
+                }
             }
 
             if (t >= 8 && cinematic.phase < 1) {
@@ -2097,9 +2228,8 @@
                 ts: Date.now(),
             };
             try { window.parent && window.parent.postMessage(payload, '*'); } catch (e) {}
-                        try { window.parent && window.parent.postMessage(payload, '*'); } catch (e) {}
 
-            // --- Envoi au leaderboard du site (format _SCORE attendu par GamePage) ---
+            // --- Envoi au leaderboard du site (format attendu par GamePage) ---
             // On n'envoie que si la calibration est faite (scores légitimes).
             if (isCalibrated) {
                 // Classement 1 : profondeur maximale atteinte (plus profond = mieux)
@@ -2111,9 +2241,9 @@
                     scoreLabel: Math.round(gameData.maxDepthReached).toLocaleString('en-US') + ' m'
                 }, '*'); } catch (e) {}
 
-                // Classement 2 : meilleur temps pour atteindre le fond (speedrun, plus rapide = mieux)
-                // Le leaderboard trie par score décroissant, donc on inverse le temps :
-                // score = 10000000 - temps_en_ms, ce qui met les temps courts en tête.
+                // Classement 2 : meilleur temps pour atteindre le fond (speedrun).
+                // Le leaderboard trie par score décroissant, donc on inverse le
+                // temps : score = 10000000 - temps_en_ms (temps courts en tête).
                 if (gameData.bestTimeSec !== null) {
                     const invScore = Math.max(0, 10000000 - Math.round(gameData.bestTimeSec * 1000));
                     try { window.parent && window.parent.postMessage({
@@ -2187,7 +2317,7 @@
 
         // adapte le verbe d'onboarding selon la plateforme
         const wv = document.getElementById('welcome-verb');
-        if (wv) wv.textContent = isTouch ? 'Glisse ton doigt' : 'Scrolle';
+        if (wv) wv.textContent = isTouch ? 'Swipe' : 'Scroll';
         const wc = document.getElementById('welcome-calib-btn');
         if (wc && !isTouch) wc.style.display = 'none'; // calibration surtout utile sur mobile
 
