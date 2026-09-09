@@ -520,7 +520,7 @@
         // Le code tente .png (transparence) puis .jpg en repli.
         // Tant qu'une image n'est pas là, le rendu canvas d'origine sert de repli.
         // ============================================================
-        const ASSET_BASE = './assets/';
+        const ASSET_BASE = './';
         const IMAGES = {};   // clé -> {img, ready}
         function loadImage(key, name) {
             const rec = { img: new Image(), ready: false };
@@ -544,11 +544,11 @@
         loadImage('cthulhuBody', 'cthulhu-body');
         loadImage('cthulhuMouth', 'cthulhu-mouth');
         loadImage('logo', 'logo');
-        loadImage('propeller', 'components/propeller');
-        loadImage('turbine', 'components/turbine');
-        loadImage('ballast', 'components/ballast');
-        loadImage('hull', 'components/hull');
-        loadImage('reactor', 'components/reactor');
+        loadImage('propeller', 'propeller');
+        loadImage('turbine', 'turbine');
+        loadImage('ballast', 'ballast');
+        loadImage('hull', 'hull');
+        loadImage('reactor', 'reactor');
 
         // ============================================================
         // 2. MESURE HONNÊTE DE L'ÉCRAN
