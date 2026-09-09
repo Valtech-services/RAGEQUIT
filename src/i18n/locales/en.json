@@ -18,7 +18,8 @@
     "idle": "Idle / Clicker",
     "shooting": "Shooting",
     "gamesSuffix": "Games",
-    "brain": "Brain"
+    "brain": "Brain",
+    "challenge": "Challenge"
   },
   "game": {
     "play": "Play",
@@ -172,7 +173,8 @@
     "idle": "Idle / Clicker Games",
     "runner": "Runner Games",
     "shooting": "Shooting Games",
-    "brain": "Brain Games"
+    "brain": "Brain Games",
+    "challenge": "Challenge Games"
   },
   "siteFaq": [
     {
