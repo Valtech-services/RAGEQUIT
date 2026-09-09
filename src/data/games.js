@@ -106,6 +106,22 @@ export const categories = [
       ],
     },
   },
+     {
+    id: 'challenge',
+    label: 'Challenge',
+    image: '/categories/challenge.jpg',
+    description: 'Push your limits. Challenge games are built around one hard goal and the drive to beat it: go deeper, go faster, go further than anyone else. These are the games you come back to again and again, chasing that one perfect run. Our headline challenge is Crush Depth, a descent into the real Mariana Trench where you dive nearly 11,000 meters past the Titanic, the abyssal plain and the height of Everest turned upside down. Every challenge game on Ragequit Arcade is free, runs in your browser with no download, and saves your records so every run builds on the last.',
+    seo: {
+      title: 'Free Challenge Games Online | Ragequit Arcade',
+      metaDescription: 'Play the best free challenge games online at Ragequit Arcade, led by Crush Depth. Go deeper, faster and further, and beat your own records. No download.',
+      faq: [
+        { q: 'What are challenge games?', a: 'Challenge games are built around a single demanding goal and the satisfaction of beating it: reaching a greater depth, a faster time, or a longer run than before. They reward persistence and improvement rather than a one-off score. Our flagship challenge game is Crush Depth, a dive to the bottom of the Mariana Trench.' },
+        { q: 'What challenge games can I play here?', a: 'The category is led by Crush Depth, a deep-sea descent through the real zones of the ocean down to the deepest point on Earth, with depth and speedrun leaderboards. We add new challenge games regularly.' },
+        { q: 'Are they free?', a: 'Yes, 100% free to play, with no account required. Sign in to save your records to the global leaderboards.' },
+        { q: 'Mobile?', a: 'Yes, challenge games work on mobile, tablet and desktop.' },
+      ],
+    },
+  },
 ]
 
 /* ---- SEO global du site ---- */
