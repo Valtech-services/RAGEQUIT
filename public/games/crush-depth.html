@@ -73,7 +73,7 @@
         .fab:active { transform: scale(0.94); }
 
         #shop-btn {
-            bottom: 24px; right: 24px;
+            bottom: calc(24px + env(safe-area-inset-bottom)); right: 24px;
             width: auto; padding: 0 16px;
             background: linear-gradient(135deg, var(--gold), #b98f38);
             color: var(--ink);
@@ -89,9 +89,9 @@
             padding: 0 5px;
         }
 
-        #stats-btn { bottom: 24px; left: 24px; }
-        #map-btn   { bottom: 82px; left: 24px; }
-        #sound-btn { bottom: 140px; left: 24px; }
+        #stats-btn { bottom: calc(24px + env(safe-area-inset-bottom)); left: 24px; }
+        #map-btn   { bottom: calc(82px + env(safe-area-inset-bottom)); left: 24px; }
+        #sound-btn { bottom: calc(140px + env(safe-area-inset-bottom)); left: 24px; }
 
         /* ============================================================
            MODALS
@@ -376,10 +376,10 @@
             .modal-content { padding: 20px; }
             .fab { width: 44px; height: 44px; }
             #shop-btn { padding: 0 14px; height: 44px; }
-            #stats-btn { bottom: 16px; left: 16px; }
-            #map-btn   { bottom: 68px; left: 16px; }
-            #sound-btn { bottom: 120px; left: 16px; }
-            #shop-btn  { bottom: 16px; right: 16px; }
+            #stats-btn { bottom: calc(16px + env(safe-area-inset-bottom)); left: 16px; }
+            #map-btn   { bottom: calc(68px + env(safe-area-inset-bottom)); left: 16px; }
+            #sound-btn { bottom: calc(120px + env(safe-area-inset-bottom)); left: 16px; }
+            #shop-btn  { bottom: calc(16px + env(safe-area-inset-bottom)); right: 16px; }
             #share-card .big { font-size: 34px; }
         }
     </style>
@@ -520,7 +520,7 @@
         // Le code tente .png (transparence) puis .jpg en repli.
         // Tant qu'une image n'est pas là, le rendu canvas d'origine sert de repli.
         // ============================================================
-        const ASSET_BASE = './';
+        const ASSET_BASE = '/games/crush-depth/';
         const IMAGES = {};   // clé -> {img, ready}
         function loadImage(key, name) {
             const rec = { img: new Image(), ready: false };
@@ -1315,6 +1315,9 @@
             const depth = gameData.totalDepth;
             const zone = getZone(depth);
             const depthRatio = clamp(depth / TARGET_M, 0, 1);
+            // marge basse : sur mobile, on écarte les infos du tout dernier bord
+            // (au cas où une barre de navigateur mordrait le bas malgré 100dvh)
+            const safeBottom = isTouch ? 28 : 8;
 
             let sx = 0, sy = 0;
             if (shake > 0.1) { sx = (Math.random() - 0.5) * shake * 2; sy = (Math.random() - 0.5) * shake * 2; shake *= 0.94; }
@@ -1487,7 +1490,7 @@
                 ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
                 ctx.shadowBlur = 16; ctx.font = '18px Inter, sans-serif';
                 ctx.fillStyle = 'rgba(255,255,255,0.28)';
-                ctx.fillText(isTouch ? 'Swipe your finger to dive' : 'Scroll to dive', W / 2, H - 42);
+                ctx.fillText(isTouch ? 'Swipe your finger to dive' : 'Scroll to dive', W / 2, H - 42 - safeBottom);
             }
 
             // % de la fosse (honnête : peu de décimales)
@@ -1496,9 +1499,9 @@
                 ctx.font = '12px Inter, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.14)';
                 const pct = depth / TARGET_M * 100;
                 const pctText = pct < 1 ? pct.toFixed(2) + ' %' : pct.toFixed(1) + ' %';
-                ctx.fillText(`${pctText} of the trench`, W - 20, H - 16);
+                ctx.fillText(`${pctText} of the trench`, W - 20, H - 16 - safeBottom);
                 ctx.font = '10px Inter, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.08)';
-                ctx.fillText(`${formatDepth(TARGET_M - depth)} to go`, W - 20, H - 34);
+                ctx.fillText(`${formatDepth(TARGET_M - depth)} to go`, W - 20, H - 34 - safeBottom);
             }
 
             ctx.shadowBlur = 0;
