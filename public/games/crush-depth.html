@@ -883,7 +883,7 @@
             // (~0.15 pièce/m). Modéré pour que le jeu reste long, mais l'achat
             // de composants accélère un peu le farm (gratifiant). Accumulateur
             // pour ne pas perdre les fractions.
-            coinAccumulator += depthGain * 0.15;
+            coinAccumulator += depthGain * 0.50;
             if (coinAccumulator >= 1) {
                 const c = Math.floor(coinAccumulator);
                 gameData.coins += c;
