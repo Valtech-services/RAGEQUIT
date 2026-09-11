@@ -1274,39 +1274,37 @@
         // ============================================================
         // 16. DÉFILEMENT VISIBLE : lignes de profondeur qui remontent
         // ============================================================
-        function drawDepthLines(depthRatio) {
-            // Chaque ligne = un repère de profondeur fixe (tous les 10 m).
-            // Le décor défile vers le HAUT quand on descend : on soustrait
-            // scrollOffset pour faire remonter les lignes à l'écran.
-            const metersPerLine = 10;
-            const pxPerMeter = 12; // échelle visuelle
-            const spacing = metersPerLine * pxPerMeter; // px entre deux lignes
-            // position de la profondeur courante, en pixels de décor
-            const depthPx = gameData.totalDepth * pxPerMeter;
-            const off = depthPx % spacing;
-            ctx.save();
-            ctx.strokeStyle = `rgba(255,255,255,${0.06 + depthRatio * 0.04})`;
-            ctx.lineWidth = 1;
-            ctx.font = '11px Inter, sans-serif';
-            ctx.textAlign = 'right';
-            ctx.textBaseline = 'middle';
-            // ligne du bas = niveau du sous-marin (profondeur actuelle)
-            const subLineY = H * 0.5;
-            for (let i = -2; i < H / spacing + 2; i++) {
-                const y = subLineY + off + i * spacing;
-                if (y < -20 || y > H + 20) continue;
-                // profondeur associée à cette ligne : plus haut à l'écran = moins profond
-                const meters = -(gameData.totalDepth + (subLineY - y) / pxPerMeter);
-                if (meters < 0) continue;
-                ctx.beginPath();
-                ctx.moveTo(W * 0.64, y);
-                ctx.lineTo(W - 16, y);
-                ctx.stroke();
-                ctx.fillStyle = `rgba(255,255,255,${0.12 + depthRatio * 0.05})`;
-                ctx.fillText(Math.floor(meters) + ' m', W - 16, y - 8);
-            }
-            ctx.restore();
+function drawDepthLines(depthRatio) {
+    const depth = gameData.totalDepth;
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.font = '500 11px Inter, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+
+    const stepMeters = 50; // Une graduation tous les 50m
+    const pixelsPerMeter = 8; // Espace en pixels par mètre
+    const startM = Math.floor((depth - 100) / stepMeters) * stepMeters;
+    const endM = Math.ceil((depth + 100) / stepMeters) * stepMeters;
+
+    for (let m = Math.max(0, startM); m <= endM; m += stepMeters) {
+        // En descendant (depth augmente), les valeurs plus grandes (m > depth) montent depuis le bas
+        const y = (H / 2) + (m - depth) * pixelsPerMeter;
+
+        if (y >= 0 && y <= H) {
+            ctx.beginPath();
+            ctx.moveTo(W - 40, y);
+            ctx.lineTo(W - 20, y);
+            ctx.stroke();
+
+            // Affichage négatif (-50m, -100m, etc.)
+            const label = m === 0 ? '0 m' : `-${m} m`;
+            ctx.fillText(label, W - 48, y);
         }
+    }
+    ctx.restore();
+}
 
         // ============================================================
         // 17. RENDU PRINCIPAL
