@@ -690,11 +690,11 @@
         // vitesse cm/s augmente aussi. Les pièces se gagnent en descendant.
         // La vitesse totale = produit des multiplicateurs de chaque composant.
         const COMPONENTS = [
-            { id: 'propeller', name: 'Reinforced propeller', desc: 'Base thrust',           cost: 48,   maxLevel: 8, growth: 1.45, per: 0.15 },
-            { id: 'turbine',   name: 'Steam turbine',        desc: 'Higher engine output',   cost: 200,  maxLevel: 8, growth: 1.5,  per: 0.20 },
-            { id: 'ballast',   name: 'Lightened ballast',    desc: 'Faster descent',         cost: 720,  maxLevel: 6, growth: 1.55, per: 0.25 },
-            { id: 'hull',      name: 'Streamlined hull',     desc: 'Less drag',              cost: 2400, maxLevel: 6, growth: 1.6,  per: 0.30 },
-            { id: 'reactor',   name: 'Pressure reactor',     desc: 'Abyssal propulsion',     cost: 7200, maxLevel: 5, growth: 1.7,  per: 0.50 },
+            { id: 'propeller', name: 'Reinforced propeller', desc: 'Base thrust',           cost: 48,   maxLevel: 8, growth: 1.25, per: 0.15 },
+            { id: 'turbine',   name: 'Steam turbine',        desc: 'Higher engine output',   cost: 200,  maxLevel: 8, growth: 1.35,  per: 0.20 },
+            { id: 'ballast',   name: 'Lightened ballast',    desc: 'Faster descent',         cost: 720,  maxLevel: 6, growth: 1.45, per: 0.25 },
+            { id: 'hull',      name: 'Streamlined hull',     desc: 'Less drag',              cost: 1400, maxLevel: 6, growth: 1.5,  per: 0.30 },
+            { id: 'reactor',   name: 'Pressure reactor',     desc: 'Abyssal propulsion',     cost: 2200, maxLevel: 5, growth: 1.6,  per: 0.50 },
         ];
         function compCost(c, lv) { return Math.floor(c.cost * Math.pow(c.growth, lv)); }
         // multiplicateur global de descente (produit de tous les composants)
@@ -1168,7 +1168,7 @@
             // dessin canvas. Ratio préservé, orientée vers la droite.
             if (imgReady('submarine')) {
                 const im = IMAGES['submarine'].img;
-                const targetW = 150 * scale;               // largeur visée à l'écran
+                const targetW = 250 * scale;               // largeur visée à l'écran
                 const ratio = im.height / im.width;
                 const w = targetW, h = targetW * ratio;
                 const bob = Math.sin(Date.now() / 1500) * 2; // léger balancement
@@ -1296,14 +1296,14 @@
                 const y = subLineY + off + i * spacing;
                 if (y < -20 || y > H + 20) continue;
                 // profondeur associée à cette ligne : plus haut à l'écran = moins profond
-                const meters = gameData.totalDepth + ((subLineY - y) / pxPerMeter);
+                const meters = -(gameData.totalDepth + (subLineY - y) / pxPerMeter);
                 if (meters < 0) continue;
                 ctx.beginPath();
                 ctx.moveTo(W * 0.64, y);
                 ctx.lineTo(W - 16, y);
                 ctx.stroke();
                 ctx.fillStyle = `rgba(255,255,255,${0.12 + depthRatio * 0.05})`;
-                ctx.fillText(formatDepth(meters), W - 16, y - 8);
+                ctx.fillText(Math.floor(meters) + ' m', W - 16, y - 8);
             }
             ctx.restore();
         }
