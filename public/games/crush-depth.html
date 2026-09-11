@@ -940,21 +940,29 @@
             if (ad >= 90 && gap > 40) return true;
             return false;
         }
-
 window.addEventListener('wheel', (e) => {
-    e.preventDefault();
+            if (e.deltaY <= 0) return;                 // vers le haut -> ignoré
+            const now = Date.now();
+            const gap = now - lastWheelTs;
+            lastWheelTs = now;
 
-    // 1. Normalisation du delta (évite les sursauts selon les navigateurs/souris)
-    const rawDelta = Math.abs(e.deltaY);
-    
-    // 2. Réduction : on applique un coefficient (ex: 0.25) pour adoucir le scroll desktop
-    // et on plafonne l'impulsion maximale à chaque coup de molette
-    const adjustedDelta = Math.min(rawDelta * 0.25, 15);
-
-    // 3. Application à la vitesse / impulsion de descente
-    // (remplace 'addSpeed' ou 'applyImpulse' par la variable/fonction que tu utilises)
-    addSpeed(adjustedDelta); 
-}, { passive: false });
+            let rawCm;
+            if (looksLikeWheel(e, gap)) {
+                // molette : 5 cm par "cran". Un deltaY de 100 = 1 cran.
+                // deltaMode=1 (lignes) : ~3 lignes par cran -> on ramène à 1 cran.
+                let notches;
+                if (e.deltaMode === 1) notches = Math.max(1, Math.abs(e.deltaY) / 3);
+                else notches = Math.max(1, Math.round(Math.abs(e.deltaY) / 100));
+                notches = Math.min(notches, 4); // anti-triche : max 4 crans/événement
+                
+                // RÉDUCTION DESKTOP : On divise la valeur par 2.5 pour réduire la vitesse
+                rawCm = (notches * WHEEL_CM_PER_NOTCH) / 2.5;
+            } else {
+                // trackpad : déplacement physique borné
+                rawCm = Math.min(e.deltaY * (STANDARD_SCREEN_HEIGHT_CM / H), TRACKPAD_MAX_CM_PER_EVENT);
+            }
+            applyProgress(rawCm, now);
+        }, { passive: true });
 
         // Mobile : glisser le doigt vers le HAUT fait descendre (geste naturel
         // de "tirer le contenu vers le bas de l'écran = plonger").
