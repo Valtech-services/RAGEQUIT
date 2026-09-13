@@ -821,37 +821,7 @@
         //   Touche F : sauter directement au fond (déclenche la fin/cinématique)
         //   Touche R : reset complet de la sauvegarde locale (pour retester)
         // ============================================================
-        const ADMIN = { speedMult: 1 };
-        window.addEventListener('keydown', (e) => {
-            if (e.repeat) return;
-            const k = e.key.toLowerCase();
-            if (k === 't') { ADMIN.speedMult = 500; notify('ADMIN turbo x500', 'var(--teal)'); }
-            else if (k === 'f') {
-                // saut au fond -> déclenche l'exploration du fond (dialogue + ombre)
-                gameData.totalDepth = TARGET_M;
-                gameData.maxDepthReached = TARGET_M;
-                checkMilestones();
-                saveGameData();
-                notify('ADMIN: jump to bottom', 'var(--gold)');
-            }
-            else if (k === 'g') {
-                // saut direct à la cinématique Cthulhu (skip exploration)
-                gameData.totalDepth = TARGET_M;
-                gameData.maxDepthReached = TARGET_M;
-                reachedBottom = true;
-                startCinematic();
-                notify('ADMIN: cinematic', 'var(--gold)');
-            }
-            else if (k === 'r') {
-                if (confirm('ADMIN: reset all local progress?')) {
-                    localStorage.removeItem(GAME_DATA_KEY);
-                    location.reload();
-                }
-            }
-        });
-        window.addEventListener('keyup', (e) => {
-            if (e.key.toLowerCase() === 't') ADMIN.speedMult = 1;
-        });
+        const ADMIN = { speedMult: 1 }; // figé : aucun raccourci de triche #tuffeur :P
 
         // ============================================================
         // 11. ENTRÉE : progression
