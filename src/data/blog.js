@@ -470,6 +470,40 @@ export const posts = [
       { type: 'p', text: 'Watch all eight faces, hold matches to make them bigger, and above all, think in cascades: build your stacks so one clear sets off a chain reaction. Master the setup-and-detonate rhythm and your scores will leap far beyond simple matching. Now go spin something spectacular.' },
     ],
   },
+     {
+    slug: 'dead-zone-survival-tips',
+    category: 'guides',
+    title: 'Dead Zone: How to Survive Longer Against the Horde',
+    date: '2026-09-16',
+    author: 'Ragequit Arcade',
+    excerpt: 'The dead never stop coming in Dead Zone. Here is how to manage weapons, handle the spitter and keep moving to push your survival run as far as it can go.',
+    image: '/blog/dead-zone-tips.jpg',
+    seo: {
+      title: 'Dead Zone: How to Survive Longer Against the Horde | Ragequit Arcade',
+      metaDescription: 'A survival guide for Dead Zone, the top-down zombie shooter: weapon management, dealing with the spitter, movement tips and how to push deeper into the waves.',
+    },
+    content: [
+      { type: 'p', text: 'Dead Zone is not a game you win, it is a game you survive, for as long as you possibly can. The city is endless, the zombies never stop, and every wave asks more of you than the last. If your runs are ending fast, the problem is almost never your aim, it is your positioning and your priorities. Here is how the players who last the longest actually play.' },
+
+      { type: 'h2', text: 'Never stop moving' },
+      { type: 'p', text: 'The single most important rule in Dead Zone is simple: keep moving. Standing still, even to line up a perfect shot, is how you get surrounded, and once the horde closes in from every side, there is no escape. Circle, weave, and always leave yourself an open lane to retreat into. Think of your movement as constantly buying space, because the moment you run out of room, the run is over. A survivor who is always drifting toward open ground lives far longer than one who plants their feet to shoot.' },
+
+      { type: 'h2', text: 'Respect your pistol, ration everything else' },
+      { type: 'p', text: 'Your pistol has unlimited ammo, which makes it the backbone of every run. The dropped weapons — the shotgun, the minigun, the bazooka — are powerful but their ammo runs out fast, so treat them as tools for specific problems rather than your main gun. Save the shotgun for a tight cluster rushing you at close range, unleash the minigun when you are about to be overwhelmed by a crowd, and hold the bazooka for a dense pack of enemies where its huge blast pays off. Burning your best weapon on a couple of stragglers leaves you defenceless when a real crisis hits.' },
+
+      { type: 'h2', text: 'The bazooka can kill you too' },
+      { type: 'p', text: 'This one catches a lot of players out. The bazooka\u2019s explosion is enormous and does not distinguish between the dead and you. If you fire it at a zombie that is right on top of you, you will take the blast yourself, and at low health that can end your run instantly. Only use the bazooka on enemies at a safe distance, and never as a panic button when something is already in your face. For point-blank threats, the shotgun is your friend.' },
+
+      { type: 'h2', text: 'Watch for the spitter' },
+      { type: 'p', text: 'Most zombies just shamble toward you, which makes them predictable. The spitter is different: it hangs back and fires projectiles at you from range, chipping away at your health while you deal with the crowd rushing in. It is easy to ignore the spitter while you focus on the horde, and that is exactly how it kills you. Make a habit of scanning the edges of the screen for ranged enemies and dealing with them early, because unlike the shamblers, a spitter can hurt you even when nothing is close.' },
+
+      { type: 'h2', text: 'Fight for the wave, do not hide' },
+      { type: 'p', text: 'Each wave requires a kill quota before the next begins, so there is no waiting it out in a corner. This is actually a good thing: it forces you to stay aggressive and keep thinning the horde. Chaining kills also builds your combo, rewarding confident, forward play. The trick is balancing aggression with survival, pushing hard enough to clear the quota while never letting yourself get boxed in. The best runs come from players who attack with purpose but always keep one eye on their escape route.' },
+
+      { type: 'h2', text: 'The takeaway' },
+      { type: 'p', text: 'Keep moving, lean on your pistol and save your heavy weapons for real emergencies, never blow yourself up with the bazooka, deal with the spitter early, and stay aggressive enough to clear each wave. Master that balance of movement and priorities, and you will push deeper into the dead zone than you thought you could. The horde is always coming. Make it work for every step.' },
+    ],
+  },
 ]
 
 // Trouve un article par son slug.
