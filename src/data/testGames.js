@@ -25,13 +25,13 @@ export const testGames = [
     notes: 'Roguelite mage. Mobile-first 9:16.'
   },
   {
-    id: 'crush-depth',
-    title: 'Crush Depth',
-    description: 'Dive to the bottom of the Mariana Trench, past the Titanic and the abyss.',
-    thumbnail: '/thumbnails/crush-depth.jpg',
-    category: 'challenge',
+    id: 'dead-zone',
+    title: 'Dead Zone',
+    description: 'Top-down zombie survival. Blast through endless waves in a procedural city.',
+    thumbnail: '/thumbnails/dead-zone.jpg',
+    category: 'shooting',
     orientation: 'portrait',
-    file: '/games/crush-depth.html',
-    notes: 'Descente deep-sea. Profondeur + speedrun. À tester avant publication.'
-  }
+    file: '/games/dead-zone.html',
+    notes: 'Survie zombie top-down. Vagues, armes lâchées, combos. À tester avant publication.'
+  },
 ]
