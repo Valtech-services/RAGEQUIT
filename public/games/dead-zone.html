@@ -205,30 +205,22 @@
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
       font-weight: 900; font-size: 14px; letter-spacing: 3px; text-shadow: 0 0 10px rgba(0,0,0,1);
     }
-    #comboDisplay {
-      position: fixed; top: 90px; left: 50%; transform: translate(-50%, 0);
-      z-index: 5; text-align: center; pointer-events: none;
-      font-size: 28px; font-weight: 900; color: #ff0000;
-      text-shadow: 0 0 12px rgba(255, 0, 0, 0.9), 0 2px 6px rgba(0,0,0,0.8);
-      opacity: 0;
+    /* Feedback de kill (combo/double-triple kill) integre DANS le panneau
+       HUD (au lieu de flotter au centre de l'ecran independamment, ce qui
+       debordait du cadre du HUD sur petit ecran mobile - voir capture du
+       bug). Une seule ligne, largeur contrainte a celle du panneau parent,
+       qui affiche le dernier evenement puis disparait. */
+    .hudKillFeed {
+      min-height: 16px; text-align: center; pointer-events: none;
+      font-size: 13px; font-weight: 900; opacity: 0; overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap;
     }
-    #comboDisplay.active { opacity: 1; animation: comboPulse 0.3s ease-out; }
-    @keyframes comboPulse {
-      0% { transform: translate(-50%, 0) scale(1.25); }
-      100% { transform: translate(-50%, 0) scale(1); }
-    }
-    #multiKillDisplay {
-      position: fixed; top: 130px; left: 50%; transform: translate(-50%, 0);
-      z-index: 6; text-align: center; pointer-events: none;
-      font-size: 24px; font-weight: 900; color: #ffff00;
-      text-shadow: 0 0 10px rgba(255, 255, 0, 0.9), 0 2px 6px rgba(0,0,0,0.8);
-      opacity: 0;
-    }
-    #multiKillDisplay.active { opacity: 1; animation: multiKillAnim 1s ease-out; }
-    @keyframes multiKillAnim {
-      0% { transform: translate(-50%, 0) scale(0.7); opacity: 0; }
-      20% { transform: translate(-50%, 0) scale(1.15); opacity: 1; }
-      100% { transform: translate(-50%, 0) scale(1); opacity: 0; }
+    .hudKillFeed.active { opacity: 1; animation: hudKillPulse 0.3s ease-out; }
+    .hudKillFeed.combo { color: #ff8a3b; text-shadow: 0 0 8px rgba(255,138,59,0.6); }
+    .hudKillFeed.multikill { color: #ffd23b; text-shadow: 0 0 8px rgba(255,210,59,0.7); }
+    @keyframes hudKillPulse {
+      0% { transform: scale(1.15); }
+      100% { transform: scale(1); }
     }
     #comboBar {
       position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
@@ -538,8 +530,6 @@
       #bossName { font-size: 10px; letter-spacing: 1px; }
 
       #comboBar { top: 60px; width: 70vw; max-width: 220px; height: 14px; }
-      #comboDisplay { top: 70px; font-size: 20px; }
-      #multiKillDisplay { top: 100px; font-size: 17px; }
 
       #notifications { top: 90px; right: 8px; max-width: 60vw; }
       .notification { padding: 8px 12px; font-size: 11px; }
@@ -596,6 +586,7 @@
       <span class="hudBarText" id="xpText">1</span>
     </div>
     <div class="hudComboRow" id="hudComboRow"><span class="hudStatLabel">Combo</span><span class="hudStatValue" id="combo">0</span><span class="hudComboX">x</span></div>
+    <div class="hudKillFeed" id="hudKillFeed"></div>
   </div>
   <div id="miniMap"><canvas id="miniMapCanvas" width="150" height="150"></canvas></div>
   <div id="actionBar">
@@ -607,8 +598,6 @@
     </div>
   </div>
   <div id="bossBar"><div id="bossBarFill"></div><div id="bossName">BOSS</div></div>
-  <div id="comboDisplay"></div>
-  <div id="multiKillDisplay"></div>
   <div id="comboBar"><div id="comboBarFill"></div></div>
   <div id="notifications"></div>
   <div id="progressIndicator"></div>
@@ -616,13 +605,6 @@
     <div class="panel" id="mainPanel">
       <h1>DEAD ZONE</h1>
       <p>Survive endless hordes in a dead city.<br>Pick up weapons from fallen enemies and dominate!</p>
-      <p class="controls">
-        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="1.5"/><path d="M8 21h8M12 17v4"/></svg> Keyboard: Arrows <span class="key">
-          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M12 5l-4 4M12 5l4 4M3 12h18M3 12l4-4M3 12l4 4"/></svg>
-        </span> to move • Mouse to aim/shoot<br>
-        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 15h9v-3h6v3h2v3H3z" fill="currentColor" stroke="none"/><path d="M6 15V9h6l3 3"/></svg> You start with an unlimited pistol. Enemies drop shotguns, miniguns and bazookas — limited ammo, back to pistol when empty.<br>
-        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg> Hold click = Charged shot!
-      </p>
       <div>
         <button id="startBtn">START</button>
         <button id="progressionBtn" class="secondary">PROGRESSION</button>
@@ -646,6 +628,47 @@
   // large ou un PC a ecran tactile avec souris branchee.
   const isMobile = (navigator.maxTouchPoints > 0 || 'ontouchstart' in window)
     && !window.matchMedia('(pointer: fine)').matches;
+
+  // ===== SPRITES (images vue-du-dessus, fond transparent, 1:1) =====
+  // Chemins attendus : /assets/sprites/<nom>.png, relatifs a ce fichier
+  // deadzone.html. Chaque cle correspond exactement a une arme (WEAPONS)
+  // ou un type d'ennemi (ENEMY) deja utilises dans le code : deposer un
+  // fichier au bon chemin l'active automatiquement, sans autre changement.
+  // Tant qu'un fichier n'existe pas (ou n'a pas fini de charger), le rendu
+  // vectoriel existant (drawHero/drawEnemies) reste utilise a sa place - le
+  // jeu ne casse jamais si un sprite manque.
+  const SPRITE_PATHS = {
+    player_pistol: 'assets/sprites/player_pistol.png',
+    player_shotgun: 'assets/sprites/player_shotgun.png',
+    player_minigun: 'assets/sprites/player_minigun.png',
+    player_bazooka: 'assets/sprites/player_bazooka.png',
+    enemy_normal: 'assets/sprites/enemy_normal.png',
+    enemy_runner: 'assets/sprites/enemy_runner.png',
+    enemy_brute: 'assets/sprites/enemy_brute.png',
+    enemy_titan: 'assets/sprites/enemy_titan.png',
+    enemy_exploder: 'assets/sprites/enemy_exploder.png',
+    enemy_splitter: 'assets/sprites/enemy_splitter.png',
+    enemy_teleporter: 'assets/sprites/enemy_teleporter.png',
+    enemy_spitter: 'assets/sprites/enemy_spitter.png',
+    enemy_boss: 'assets/sprites/enemy_boss.png'
+  };
+  // sprites[key] -> HTMLImageElement une fois charge avec succes, sinon
+  // absent de l'objet (jamais null/undefined explicite, pour garder le test
+  // `sprites[key]` simple partout ou on l'utilise).
+  const sprites = {};
+  for (const key in SPRITE_PATHS) {
+    const img = new Image();
+    img.onload = () => { sprites[key] = img; };
+    img.onerror = () => { /* fichier absent : on reste sur le rendu vectoriel */ };
+    img.src = SPRITE_PATHS[key];
+  }
+  // Nom de sprite courant du heros, derive de l'arme equipee (voir
+  // updateWeaponUI/switchWeapon) : utilise par drawHero pour choisir
+  // sprites.player_xxx.
+  function currentPlayerSpriteKey() {
+    const names = ['player_pistol','player_shotgun','player_minigun','player_bazooka'];
+    return names[game.currentWeapon] || 'player_pistol';
+  }
 
   // ===== ICONES SVG (remplacent tous les emoji de l'UI) =====
   // Traits epures en currentColor : chaque icone herite naturellement de la
@@ -1102,7 +1125,7 @@
     xpBarFill:document.querySelector("#xpBarFill"), xpText:document.querySelector("#xpText"),
     combo:document.querySelector("#combo"), overlay:document.querySelector("#overlay"),
     hudComboRow:document.querySelector("#hudComboRow"),
-    comboDisplay:document.querySelector("#comboDisplay"), multiKillDisplay:document.querySelector("#multiKillDisplay"),
+    hudKillFeed:document.querySelector("#hudKillFeed"),
     comboBarFill:document.querySelector("#comboBarFill"), bossBar:document.querySelector("#bossBar"),
     bossBarFill:document.querySelector("#bossBarFill"), bossName:document.querySelector("#bossName"),
     notifications:document.querySelector("#notifications"), progressIndicator:document.querySelector("#progressIndicator"),
@@ -1854,7 +1877,7 @@
       }
     }
 
-    if(game.comboTimer>0) { game.comboTimer-=sec; if(game.comboTimer<=0){game.combo=0;ui.comboDisplay.classList.remove('active');world.orbitParticles.length=0;} }
+    if(game.comboTimer>0) { game.comboTimer-=sec; if(game.comboTimer<=0){game.combo=0;world.orbitParticles.length=0;} }
     if(game.multiKillTimer>0) { game.multiKillTimer-=sec; if(game.multiKillTimer<=0) game.multiKillCount=0; }
     game.saturation=1+Math.min(0.5,game.combo*0.05);
 
@@ -1896,7 +1919,10 @@
       game.waveTransition -= realSec;
       if (game.waveTransition <= 0) { game.waveTransition = 0; advanceWave(); }
     }
-    game.trauma*=Math.pow(0.84,dt);
+    // Decroissance plus rapide (0.84 -> 0.72) : le trauma doit revenir a un
+    // niveau bas entre deux impacts, meme en rafale de kills, pour eviter
+    // l'effet de tremblement permanent signale.
+    game.trauma*=Math.pow(0.72,dt);
     if(hero.iframes>0) hero.iframes-=realSec;
     if(game.flashRed>0) game.flashRed-=dt;
     if(game.flashWhite>0) game.flashWhite-=dt;
@@ -2477,15 +2503,23 @@
 
     game.hitStop=e.isBoss?10:3;
     game.flashWhite=e.isBoss?0.4:0.15;
-    game.trauma=Math.max(game.trauma,e.isBoss?40:(e.kind==="titan"?25:12));
+    // Trauma (camera shake) reduit sur un kill normal : avant, 12 minimum
+    // par kill avec une decroissance lente donnait un tremblement quasi
+    // permanent des que plusieurs ennemis mouraient rapprochees (combo dense),
+    // ce qui se lisait comme "le personnage tremble en continu" alors que
+    // c'est en realite toute la vue camera qui vibrait autour de lui.
+    game.trauma=Math.max(game.trauma,e.isBoss?40:(e.kind==="titan"?18:6));
     const hs=prevHp<=lastDamage;
     playSound('kill',1+game.combo*0.15,{headshot:hs});
     game.multiKillCount++; game.multiKillTimer=0.5;
+    // Priorite : un multi-kill (DOUBLE/TRIPLE...) est l'evenement le plus
+    // marquant, donc s'il se produit la meme frame qu'un simple palier de
+    // combo, il prend l'affichage plutot que les deux ne s'ecrasent l'un
+    // l'autre dans la meme ligne du HUD.
     if(game.multiKillCount>=2) showMultiKill(game.multiKillCount);
-    if(game.combo>1) {
+    else if(game.combo>1) {
       playSound('combo',1+game.combo*0.1);
-      ui.comboDisplay.textContent=`x${game.combo} COMBO!`;
-      ui.comboDisplay.classList.remove('active'); void ui.comboDisplay.offsetWidth; ui.comboDisplay.classList.add('active');
+      showHudKillFeed(`x${game.combo} COMBO!`, 'combo');
     }
     const deathBloodColor = ENEMY[e.kind].bloodColor || '#8b0000';
     burst(e.x,e.y,deathBloodColor,e.isBoss?80:(e.kind==="titan"?40:20));
@@ -2693,10 +2727,20 @@
     if(hd<radius){hero.health-=damage*0.5*(1-hd/radius);hero.damageFlash=1.0;game.flashRed=0.3;if(hero.health<=0)startDeathAnimation();}
   }
 
+  // Affiche un message bref dans la ligne dediee du HUD (combo ou multi-kill),
+  // integree au panneau plutot que flottante au centre de l'ecran.
+  function showHudKillFeed(text, cls) {
+    ui.hudKillFeed.textContent = text;
+    ui.hudKillFeed.className = 'hudKillFeed ' + cls;
+    void ui.hudKillFeed.offsetWidth;
+    ui.hudKillFeed.classList.add('active');
+    clearTimeout(showHudKillFeed._timer);
+    showHudKillFeed._timer = setTimeout(() => ui.hudKillFeed.classList.remove('active'), 900);
+  }
+
   function showMultiKill(c) {
     let t=c===2?"DOUBLE KILL!":c===3?"TRIPLE KILL!":c>=5?"UNSTOPPABLE!":"RAMPAGE!";
-    ui.multiKillDisplay.textContent=t;
-    ui.multiKillDisplay.classList.remove('active'); void ui.multiKillDisplay.offsetWidth; ui.multiKillDisplay.classList.add('active');
+    showHudKillFeed(t, 'multikill');
     playSound('multikill');
   }
 
@@ -2908,7 +2952,7 @@
     ctx.translate(view.w/2, view.h/2);
     ctx.rotate(camera.rotation);
     ctx.scale(camera.zoom, camera.zoom);
-    if(game.trauma>1) ctx.translate(rand(-game.trauma/2,game.trauma/2),rand(-game.trauma/2,game.trauma/2));
+    if(game.trauma>2) ctx.translate(rand(-game.trauma/3,game.trauma/3),rand(-game.trauma/3,game.trauma/3));
     ctx.translate(-view.w/2, -view.h/2);
 
     drawGround(theme);
@@ -3559,6 +3603,18 @@
     // Use visualAngle for smooth rotation
     ctx.rotate(hero.visualAngle);
 
+    // Sprite image si disponible pour l'arme actuelle (voir SPRITE_PATHS en
+    // tete de fichier) : dessine et on sort avant le rendu vectoriel de
+    // repli. La taille suit hero.radius pour rester coherente avec la
+    // hitbox/les autres elements du jeu.
+    const heroSpriteKey = currentPlayerSpriteKey();
+    if (sprites[heroSpriteKey]) {
+      const sd = hero.radius * 2.6; // diametre d'affichage du sprite
+      ctx.drawImage(sprites[heroSpriteKey], -sd/2, -sd/2, sd, sd);
+      ctx.restore();
+      return;
+    }
+
     // Damage flash: tint red
     let bodyColor = skin.color;
     if (hero.damageFlash > 0) {
@@ -3728,6 +3784,32 @@
         ctx.fill();
       }
 
+      // Sprite image si disponible pour ce type d'ennemi (voir SPRITE_PATHS
+      // en tete de fichier, cle "enemy_<kind>") : dessine et on sort avant
+      // le rendu vectoriel de repli plus bas. La barre de vie (dessinee
+      // apres ctx.restore(), plus bas dans la fonction) reste affichee
+      // normalement au-dessus, sprite ou pas.
+      const enemySpriteKey = 'enemy_' + e.kind;
+      if (sprites[enemySpriteKey]) {
+        const ed = e.radius * 2.6;
+        if (e.flash > 0) {
+          // Flash de degats : on dessine le sprite normalement puis on le
+          // reblanchit avec un calque "source-atop" (ne peint que les
+          // pixels non-transparents du sprite), pour garder le meme
+          // feedback visuel qu'en rendu vectoriel.
+          ctx.drawImage(sprites[enemySpriteKey], -ed/2, -ed/2, ed, ed);
+          ctx.globalCompositeOperation = 'source-atop';
+          ctx.fillStyle = 'rgba(255,255,255,0.7)';
+          ctx.fillRect(-ed/2, -ed/2, ed, ed);
+          ctx.globalCompositeOperation = 'source-over';
+        } else {
+          ctx.drawImage(sprites[enemySpriteKey], -ed/2, -ed/2, ed, ed);
+        }
+        ctx.restore();
+        drawEnemyHealthBar(e, p);
+        continue;
+      }
+
       const bc=ENEMY[e.kind].color;
       const r = e.radius;
       const darkBc = darkenHex(bc, 25);
@@ -3843,23 +3925,29 @@
 
       ctx.restore();
 
-      // Barre de vie au-dessus de l'ennemi : seulement s'il a deja encaisse
-      // des degats (hp < maxHp), pour ne pas saturer l'ecran de barres pleines
-      // des le debut de chaque combat. Les boss ont deja leur propre grande
-      // barre (#bossBar) donc ils n'en affichent pas une seconde ici.
-      if (!e.isBoss && e.maxHp > 0 && e.hp < e.maxHp) {
-        const ratio = Math.max(0, e.hp / e.maxHp);
-        const barW = Math.max(24, r*1.7), barH = 4;
-        const by = p.y - r - 10;
-        ctx.fillStyle = 'rgba(0,0,0,0.55)';
-        ctx.fillRect(p.x-barW/2-1, by-1, barW+2, barH+2);
-        ctx.fillStyle = 'rgba(255,255,255,0.12)';
-        ctx.fillRect(p.x-barW/2, by, barW, barH);
-        const hpColor = ratio > 0.5 ? '#4ade80' : (ratio > 0.25 ? '#fbbf24' : '#ef4444');
-        ctx.fillStyle = hpColor;
-        ctx.fillRect(p.x-barW/2, by, barW*ratio, barH);
-      }
+      drawEnemyHealthBar(e, p);
     }
+  }
+
+  // Barre de vie au-dessus de l'ennemi : seulement s'il a deja encaisse des
+  // degats (hp < maxHp), pour ne pas saturer l'ecran de barres pleines des
+  // le debut de chaque combat. Les boss ont deja leur propre grande barre
+  // (#bossBar) donc ils n'en affichent pas une seconde ici. Extraite en
+  // fonction pour etre appelee identiquement par les deux chemins de rendu
+  // d'ennemi (sprite et vectoriel).
+  function drawEnemyHealthBar(e, p) {
+    if (e.isBoss || !(e.maxHp > 0) || e.hp >= e.maxHp) return;
+    const r = e.radius;
+    const ratio = Math.max(0, e.hp / e.maxHp);
+    const barW = Math.max(24, r*1.7), barH = 4;
+    const by = p.y - r - 10;
+    ctx.fillStyle = 'rgba(0,0,0,0.55)';
+    ctx.fillRect(p.x-barW/2-1, by-1, barW+2, barH+2);
+    ctx.fillStyle = 'rgba(255,255,255,0.12)';
+    ctx.fillRect(p.x-barW/2, by, barW, barH);
+    const hpColor = ratio > 0.5 ? '#4ade80' : (ratio > 0.25 ? '#fbbf24' : '#ef4444');
+    ctx.fillStyle = hpColor;
+    ctx.fillRect(p.x-barW/2, by, barW*ratio, barH);
   }
 
   function drawOrbitParticles(){if(!world.orbitParticles.length)return;const h=worldToScreen(hero.x,hero.y);for(const p of world.orbitParticles){const x=h.x+Math.cos(p.angle)*p.distance,y=h.y+Math.sin(p.angle)*p.distance;ctx.fillStyle="#ffff00";ctx.shadowBlur=10;ctx.shadowColor="#ffff00";ctx.beginPath();ctx.arc(x,y,p.size,0,Math.PI*2);ctx.fill();}ctx.shadowBlur=0;}
@@ -3967,7 +4055,7 @@
   function showGameOverScreen(fs, st, isNew) {
     ui.overlay.classList.add('active');
     const m=Math.floor(st/60), s=st%60;
-    let h=`<div class="panel"><h1>GAME OVER</h1>`;
+    let h=`<div class="panel"><h1>YOU'RE DEAD</h1>`;
     h+=isNew?`<div class="highScore new">${icon('crown')} NEW HIGH SCORE! ${icon('crown')}</div>`:`<div class="highScore">High Score: ${getHighScore()}</div>`;
     h+=`<div class="statsGrid">`;
     h+=`<div class="statCard"><div class="label">Final Score</div><div class="value">${fs}</div></div>`;
@@ -4001,17 +4089,13 @@
 
     h += `<div class="tabs">
       <div class="tab ${tab==='skills'?'active':''}" data-tab="skills">${icon('tree')} Skills</div>
-      <div class="tab ${tab==='skins'?'active':''}" data-tab="skins">${icon('palette')} Skins</div>
       <div class="tab ${tab==='achievements'?'active':''}" data-tab="achievements">${icon('crown')} Achievements</div>
       <div class="tab ${tab==='quests'?'active':''}" data-tab="quests">${icon('scroll')} Quests</div>
-      <div class="tab ${tab==='themes'?'active':''}" data-tab="themes">${icon('map')} Themes</div>
     </div>`;
 
     if (tab === 'skills') h += renderSkillsTab();
-    else if (tab === 'skins') h += renderSkinsTab();
     else if (tab === 'achievements') h += renderAchievementsTab();
     else if (tab === 'quests') h += renderQuestsTab();
-    else if (tab === 'themes') h += renderThemesTab();
 
     h += `<button id="closeProgressionBtn" class="secondary">CLOSE</button>`;
     h += `</div>`;
@@ -4176,13 +4260,6 @@
         <div style="font-size: 20px; color: #00ffff;">Level ${progression.level}</div>
         <div style="font-size: 12px; opacity: 0.8; margin-top: 4px;">${progression.xp}/${xpForLevel(progression.level)} XP • ${progression.skillPoints} skill points</div>
       </div>
-      <p class="controls">
-        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="1.5"/><path d="M8 21h8M12 17v4"/></svg> Keyboard: Arrows <span class="key">
-          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M12 5l-4 4M12 5l4 4M3 12h18M3 12l4-4M3 12l4 4"/></svg>
-        </span> to move • Mouse to aim/shoot<br>
-        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 15h9v-3h6v3h2v3H3z" fill="currentColor" stroke="none"/><path d="M6 15V9h6l3 3"/></svg> You start with an unlimited pistol. Enemies drop shotguns, miniguns and bazookas — limited ammo, back to pistol when empty.<br>
-        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg> Hold click = Charged shot!
-      </p>
       <div>
         <button id="startBtn">START</button>
         <button id="progressionBtn" class="secondary">PROGRESSION</button>
