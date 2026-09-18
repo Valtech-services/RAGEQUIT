@@ -118,6 +118,15 @@
       border-radius: 50%; pointer-events: none; overflow: hidden;
       box-shadow: 0 8px 24px rgba(0,0,0,0.5);
     }
+    #pauseBtn {
+      position: absolute; top: 10px; right: 10px; z-index: 6;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; pointer-events: auto;
+    }
+    #pauseBtn:hover { background: rgba(255,255,255,0.14); }
+    #pauseBtn svg { width: 13px; height: 13px; color: #f2f2f2; }
 
     /* ===== BARRE D'ACTION (bas, unifiee) =====
        Avant : deux grilles independantes (armes a gauche / pouvoirs a droite)
@@ -222,16 +231,21 @@
       0% { transform: scale(1.15); }
       100% { transform: scale(1); }
     }
+    /* Barre de combo integree DANS le panneau HUD (plus un element flottant
+       independant centre sur tout l'ecran) : largeur exactement celle du
+       panneau parent, meme comportement desktop et mobile puisqu'elle suit
+       maintenant le flux normal de #hud plutot que des coordonnees fixed
+       calculees a part. */
     #comboBar {
-      position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
-      width: 300px; height: 20px; background: rgba(0, 0, 0, 0.6);
-      border: 2px solid rgba(255, 0, 0, 0.5); border-radius: 10px;
-      overflow: hidden; z-index: 5; pointer-events: none;
+      width: 100%; height: 8px; margin-top: 2px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 60, 60, 0.35); border-radius: 5px;
+      overflow: hidden; pointer-events: none;
     }
     #comboBarFill {
       height: 100%; width: 0%;
       background: linear-gradient(90deg, #ff0000, #ff6600, #ffff00);
-      transition: width 0.1s ease-out; box-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
+      transition: width 0.1s ease-out; box-shadow: 0 0 8px rgba(255, 255, 0, 0.6);
     }
     #notifications {
       position: fixed; top: 120px; right: 20px; z-index: 7;
@@ -529,8 +543,6 @@
       #bossBar { width: 90vw; height: 22px; top: 8px; }
       #bossName { font-size: 10px; letter-spacing: 1px; }
 
-      #comboBar { top: 60px; width: 70vw; max-width: 220px; height: 14px; }
-
       #notifications { top: 90px; right: 8px; max-width: 60vw; }
       .notification { padding: 8px 12px; font-size: 11px; }
 
@@ -557,7 +569,6 @@
     @media (max-height: 420px) and (orientation: landscape) {
       #hud { transform: scale(0.8); transform-origin: top left; }
       #bossBar { top: 4px; height: 18px; }
-      #comboBar { top: 40px; }
       #actionBar { transform: scale(0.85); transform-origin: bottom center; }
     }
   </style>
@@ -565,6 +576,7 @@
 <body>
   <canvas id="game"></canvas>
   <div id="hud">
+    <button id="pauseBtn" aria-label="Pause"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg></button>
     <div class="hudTitle">DEAD ZONE</div>
     <div class="hudStatsRow">
       <div class="hudStat"><span class="hudStatLabel">Score</span><span class="hudStatValue" id="score">0</span></div>
@@ -587,6 +599,7 @@
     </div>
     <div class="hudComboRow" id="hudComboRow"><span class="hudStatLabel">Combo</span><span class="hudStatValue" id="combo">0</span><span class="hudComboX">x</span></div>
     <div class="hudKillFeed" id="hudKillFeed"></div>
+    <div id="comboBar"><div id="comboBarFill"></div></div>
   </div>
   <div id="miniMap"><canvas id="miniMapCanvas" width="150" height="150"></canvas></div>
   <div id="actionBar">
@@ -598,7 +611,6 @@
     </div>
   </div>
   <div id="bossBar"><div id="bossBarFill"></div><div id="bossName">BOSS</div></div>
-  <div id="comboBar"><div id="comboBarFill"></div></div>
   <div id="notifications"></div>
   <div id="progressIndicator"></div>
   <div id="overlay">
@@ -1157,6 +1169,21 @@
     destructibles: [],
     groundCracks: [],
     puddles: [],
+    // Marquage au sol des rues (lignes centrales, passages pietons) :
+    // genere par chunk en meme temps que les blocs de batiments, pour que
+    // les rues se lisent vraiment comme des rues plutot qu'un simple vide
+    // entre les batiments.
+    roadMarkings: [],
+    // Feux tricolores (aux intersections de la grille de rues) et passages
+    // pietons (traversees perpendiculaires aux rues, pres des intersections).
+    trafficLights: [],
+    crosswalks: [],
+    // Gravats laisses par les batiments effondres (voir damageBuilding) :
+    // persistent tant que le joueur reste dans la zone, purges seulement
+    // quand le chunk correspondant est decharge (pas de chunkKey ici car un
+    // batiment detruit reste detruit meme si son chunk est recharge - voir
+    // game.destroyedBuildings).
+    buildingRubble: [],
     // Decor de parc + suivi des chunks generes (monde infini)
     trees: [],
     benches: [],
@@ -1178,7 +1205,7 @@
   };
 
   const game = {
-    active:false, score:0, points:0, wave:1, elapsed:0, elapsedSec:0,
+    active:false, paused:false, score:0, points:0, wave:1, elapsed:0, elapsedSec:0,
     spawnClock:0, trauma:0, raf:0, lastTime:0,
     combo:0, comboTimer:0, maxCombo:0,
     hitStop:0, flashRed:0, flashWhite:0,
@@ -1201,6 +1228,11 @@
     unlockedWeapons: new Set([0]),
     ammo: [Infinity, 0, 0, 0],
     ammoMax: [Infinity, 0, 0, 0],
+    // Batiments detruits (par un ennemi bloque trop longtemps contre eux) :
+    // identifies par leurs coordonnees "x,y" et memorise ici pour qu'un
+    // chunk regenere (rechargement apres eloignement) ne les fasse pas
+    // reapparaitre (generateChunk est deterministe par seed).
+    destroyedBuildings: new Set(),
     // NEW: Weather state
     lightningTimer: 0, lightningFlash: 0, lightningStrikePos: null,
     fogDensity: 0.1,
@@ -1311,7 +1343,7 @@
     for(const k in world) if (Array.isArray(world[k])) world[k].length=0;
     world.loadedChunks.clear(); // Map, pas un tableau : vidage explicite necessaire
     Object.assign(game, {
-      active:true, score:0, points:0, wave:1, elapsed:0, elapsedSec:0,
+      active:true, paused:false, score:0, points:0, wave:1, elapsed:0, elapsedSec:0,
       spawnClock:0, trauma:0, combo:0, comboTimer:0, maxCombo:0,
       hitStop:0, flashRed:0, flashWhite:0,
       multiKillTimer:0, multiKillCount:0, saturation:1.0,
@@ -1325,7 +1357,8 @@
       fogDensity: 0.1,
       heroDying: false, heroDeathTimer: 0, heroDeathPos: null, heroDeathAngle: 0,
       objectsDestroyedThisRun: 0,
-      unlockedWeapons: new Set([0]), ammo: [Infinity, 0, 0, 0], ammoMax: [Infinity, 0, 0, 0]
+      unlockedWeapons: new Set([0]), ammo: [Infinity, 0, 0, 0], ammoMax: [Infinity, 0, 0, 0],
+      destroyedBuildings: new Set()
     });
     // Base remontee de 100 a 130 : avec le bug d'i-frames corrige (voir updateEnemies),
     // 100 PV etait trop punitif des les premieres vagues pour un joueur sans competences.
@@ -1418,9 +1451,12 @@
     return 'flat';
   }
 
-  function makeBuildingAt(x, y, rng) {
-    const w = 80+rng()*70;
-    const h = 80+rng()*70;
+  // forcedW/forcedH permettent d'imposer des dimensions precises (utilise par
+  // placeBuildingRow pour aligner des batiments adjacents sans trous ni
+  // chevauchement) ; sans eux, la taille reste aleatoire comme avant.
+  function makeBuildingAt(x, y, rng, forcedW, forcedH) {
+    const w = forcedW || (80+rng()*70);
+    const h = forcedH || (80+rng()*70);
     // Texture de toit (materiau) : fait varier le rendu de la surface elle-meme,
     // independamment des elements poses dessus (roofKind). Vu du dessus, le
     // toit EST tout ce qu'on voit du batiment : il doit donc avoir une vraie
@@ -1428,6 +1464,11 @@
     const roofMaterials = ['tar', 'gravel', 'concrete'];
     const building = {
       x, y, w, h,
+      // Points de vie : un batiment percute par un ennemi bloque plus de 5s
+      // (voir updateEnemies/destructibleTimer) finit par s'effondrer. hp
+      // proportionnel a la surface pour que les gros immeubles resistent
+      // un peu plus longtemps que les petits.
+      hp: 30, maxHp: 30,
       facade: facadePalette[Math.floor(rng()*facadePalette.length)],
       roofKind: pickRoofKind(rng),
       roofMaterial: roofMaterials[Math.floor(rng()*roofMaterials.length)],
@@ -1453,6 +1494,163 @@
     return building;
   }
 
+  // Remplit un ilot rectangulaire (blockX,blockY = coin superieur-gauche,
+  // blockW x blockH) avec une rangee de batiments COLLES les uns aux autres
+  // le long du bord superieur, comme un vrai pate de maisons americain vu du
+  // dessus (facades alignees et adjacentes), plutot que des batiments
+  // eparpilles independamment avec un jitter aleatoire. Une petite marge de
+  // trottoir separe l'ilot de la rue qui l'entoure.
+  // Trois agencements d'ilot possibles, tires au hasard par placeBlock : une
+  // seule forme repetee partout rendait la ville monotone malgre les
+  // batiments colles. "row" = rangee(s) doubles comme avant, "single" = un
+  // seul gros batiment isole (tour, usine, entrepot), "courtyard" =
+  // batiments en perimetre avec un espace vide au centre (cour/parking).
+
+  function placeBuildingRowLayout(chunk, blockX, blockY, blockW, blockH, rng, overlapsExclusion) {
+    const sidewalk = 8;
+    const rowX0 = blockX + sidewalk, rowY0 = blockY + sidewalk;
+    const rowW = blockW - sidewalk*2, rowH = blockH - sidewalk*2;
+    if (rowW < 60 || rowH < 60) return;
+    const depth = Math.min(rowH, 70 + rng()*50);
+    let x = rowX0;
+    while (x < rowX0 + rowW - 30) {
+      const w = Math.min(60 + rng()*60, rowX0 + rowW - x);
+      if (w < 40) break;
+      const h = depth * (0.85 + rng()*0.3);
+      const bx = x + w/2, by = rowY0 + h/2;
+      if (!overlapsExclusion(bx, by, w, h)) chunk.buildings.push(makeBuildingAt(bx, by, rng, w, h));
+      x += w;
+    }
+    if (rowH > depth + 40) {
+      let x2 = rowX0;
+      const y2 = rowY0 + rowH - depth;
+      while (x2 < rowX0 + rowW - 30) {
+        const w = Math.min(60 + rng()*60, rowX0 + rowW - x2);
+        if (w < 40) break;
+        const h = depth * (0.85 + rng()*0.3);
+        const bx = x2 + w/2, by = y2 + depth - h/2;
+        if (!overlapsExclusion(bx, by, w, h)) chunk.buildings.push(makeBuildingAt(bx, by, rng, w, h));
+        x2 += w;
+      }
+    }
+  }
+
+  // Un seul gros batiment occupant la majeure partie de l'ilot (usine, tour,
+  // entrepot) : casse la monotonie des rangees en introduisant de temps en
+  // temps une silhouette isolee bien plus grande que ses voisins.
+  function placeSingleBuildingLayout(chunk, blockX, blockY, blockW, blockH, rng, overlapsExclusion) {
+    const margin = 10;
+    const w = blockW - margin*2, h = blockH - margin*2;
+    if (w < 60 || h < 60) return;
+    const bx = blockX + blockW/2, by = blockY + blockH/2;
+    if (!overlapsExclusion(bx, by, w, h)) chunk.buildings.push(makeBuildingAt(bx, by, rng, w, h));
+  }
+
+  // Batiments disposes en perimetre de l'ilot avec un espace vide au centre
+  // (cour interieure, parking, jardin) : une troisieme silhouette de bloc
+  // bien distincte des deux autres.
+  function placeCourtyardLayout(chunk, blockX, blockY, blockW, blockH, rng, overlapsExclusion) {
+    const sidewalk = 8;
+    const x0 = blockX + sidewalk, y0 = blockY + sidewalk;
+    const w0 = blockW - sidewalk*2, h0 = blockH - sidewalk*2;
+    if (w0 < 100 || h0 < 100) return;
+    const ringDepth = 45 + rng()*20;
+    // Bord haut et bas
+    for (const edgeY of [y0 + ringDepth/2, y0 + h0 - ringDepth/2]) {
+      let x = x0;
+      while (x < x0 + w0 - 30) {
+        const w = Math.min(50 + rng()*40, x0 + w0 - x);
+        if (w < 35) break;
+        const bx = x + w/2;
+        if (!overlapsExclusion(bx, edgeY, w, ringDepth)) chunk.buildings.push(makeBuildingAt(bx, edgeY, rng, w, ringDepth*(0.8+rng()*0.3)));
+        x += w;
+      }
+    }
+    // Bord gauche et droit (entre les deux bords deja poses, pour ne pas
+    // dupliquer les coins)
+    const innerY0 = y0 + ringDepth, innerH = h0 - ringDepth*2;
+    if (innerH > 40) {
+      for (const edgeX of [x0 + ringDepth/2, x0 + w0 - ringDepth/2]) {
+        let y = innerY0;
+        while (y < innerY0 + innerH - 30) {
+          const hh = Math.min(50 + rng()*40, innerY0 + innerH - y);
+          if (hh < 35) break;
+          const by = y + hh/2;
+          if (!overlapsExclusion(edgeX, by, ringDepth*(0.8+rng()*0.3), hh)) chunk.buildings.push(makeBuildingAt(edgeX, by, rng, ringDepth*(0.8+rng()*0.3), hh));
+          y += hh;
+        }
+      }
+    }
+  }
+
+  // Passages pietons places a partir de la position REELLE des batiments du
+  // chunk (appelee apres que tous les blocs soient generes) : pour chaque
+  // paire de batiments proches separes par une rue et suffisamment alignes
+  // (memes bornes verticales ou horizontales), pose un passage piéton entre
+  // leurs deux facades qui se font face. Respecte : max 2 passages par
+  // batiment, jamais de chevauchement entre deux passages.
+  function placeCrosswalksForBuildings(chunk, rng, streetWidth) {
+    const buildings = chunk.buildings;
+    const crossingCount = new Map(); // batiment -> nombre de passages deja poses
+    function countOf(b) { return crossingCount.get(b) || 0; }
+    function overlapsExisting(cw) {
+      return chunk.crosswalks.some(o => Math.abs(o.x-cw.x) < (o.w+cw.w)/2 && Math.abs(o.y-cw.y) < (o.h+cw.h)/2);
+    }
+    for (let i=0; i<buildings.length; i++) {
+      const a = buildings[i];
+      if (countOf(a) >= 2) continue;
+      for (let j=i+1; j<buildings.length; j++) {
+        const b = buildings[j];
+        if (countOf(a) >= 2) break;
+        if (countOf(b) >= 2) continue;
+        // Paire alignee horizontalement (meme bande en y, separee en x par
+        // une rue) : facades gauche/droite qui se font face.
+        const vGap = Math.abs(a.x - b.x) - (a.w/2 + b.w/2);
+        const vOverlapY = Math.min(a.y+a.h/2, b.y+b.h/2) - Math.max(a.y-a.h/2, b.y-b.h/2);
+        if (vGap > streetWidth*0.6 && vGap < streetWidth*1.6 && vOverlapY > 30) {
+          const midX = (a.x < b.x) ? (a.x + a.w/2 + b.x - b.w/2)/2 : (b.x + b.w/2 + a.x - a.w/2)/2;
+          const midY = (Math.max(a.y-a.h/2,b.y-b.h/2) + Math.min(a.y+a.h/2,b.y+b.h/2))/2;
+          const cw = { x: midX, y: midY, w: 14, h: Math.min(30, vOverlapY*0.7), vertical:true };
+          if (!overlapsExisting(cw) && rng() < 0.5) {
+            chunk.crosswalks.push(cw);
+            crossingCount.set(a, countOf(a)+1); crossingCount.set(b, countOf(b)+1);
+            continue;
+          }
+        }
+        // Paire alignee verticalement (meme bande en x, separee en y par une
+        // rue) : facades haut/bas qui se font face.
+        const hGap = Math.abs(a.y - b.y) - (a.h/2 + b.h/2);
+        const hOverlapX = Math.min(a.x+a.w/2, b.x+b.w/2) - Math.max(a.x-a.w/2, b.x-b.w/2);
+        if (hGap > streetWidth*0.6 && hGap < streetWidth*1.6 && hOverlapX > 30) {
+          const midY = (a.y < b.y) ? (a.y + a.h/2 + b.y - b.h/2)/2 : (b.y + b.h/2 + a.y - a.h/2)/2;
+          const midX = (Math.max(a.x-a.w/2,b.x-b.w/2) + Math.min(a.x+a.w/2,b.x+b.w/2))/2;
+          const cw = { x: midX, y: midY, w: Math.min(30, hOverlapX*0.7), h: 14, vertical:false };
+          if (!overlapsExisting(cw) && rng() < 0.5) {
+            chunk.crosswalks.push(cw);
+            crossingCount.set(a, countOf(a)+1); crossingCount.set(b, countOf(b)+1);
+          }
+        }
+      }
+    }
+  }
+
+  // Choisit un agencement pour un ilot donne et l'applique : remplace l'ancien
+  // placeBuildingRow (une seule forme possible) par un tirage entre 3
+  // silhouettes de bloc differentes, pour une ville qui varie vraiment.
+  function placeBlock(chunk, blockX, blockY, blockW, blockH, rng, excludeX, excludeY, excludeR) {
+    const hasExclusion = typeof excludeR === 'number';
+    function overlapsExclusion(bx, by, bw, bh) {
+      if (!hasExclusion) return false;
+      const cx = Math.max(bx-bw/2, Math.min(excludeX, bx+bw/2));
+      const cy = Math.max(by-bh/2, Math.min(excludeY, by+bh/2));
+      return Math.hypot(excludeX-cx, excludeY-cy) < excludeR;
+    }
+    const roll = rng();
+    if (roll < 0.55) placeBuildingRowLayout(chunk, blockX, blockY, blockW, blockH, rng, overlapsExclusion);
+    else if (roll < 0.8) placeCourtyardLayout(chunk, blockX, blockY, blockW, blockH, rng, overlapsExclusion);
+    else placeSingleBuildingLayout(chunk, blockX, blockY, blockW, blockH, rng, overlapsExclusion);
+  }
+
   // Genere le contenu d'un seul chunk (batiments, arbres de parc, bancs,
   // lampadaires, vehicules, destructibles, fissures, flaques...) selon le
   // type de quartier, et le stocke pour pouvoir le retirer proprement plus
@@ -1463,18 +1661,83 @@
     const originX = cx*CHUNK_SIZE, originY = cy*CHUNK_SIZE;
     const chunk = {
       cx, cy, type, buildings:[], trees:[], benches:[],
-      streetLights:[], vehicles:[], destructibles:[], groundCracks:[], puddles:[]
+      streetLights:[], vehicles:[], destructibles:[], groundCracks:[], puddles:[],
+      roadMarkings:[], trafficLights:[], crosswalks:[]
     };
 
     if (type === 'dense') {
-      // Grille serree, comme l'ancienne ville, mais bornee a ce chunk.
-      const spacing = 180;
-      const cells = Math.floor(CHUNK_SIZE/spacing);
-      for (let gx=0; gx<cells; gx++) for (let gy=0; gy<cells; gy++) {
-        if (rng() > 0.62) continue;
-        const bx = originX + gx*spacing + spacing/2 + (rng()-0.5)*30;
-        const by = originY + gy*spacing + spacing/2 + (rng()-0.5)*30;
-        chunk.buildings.push(makeBuildingAt(bx, by, rng));
+      // Grille de rues a l'americaine : le chunk est decoupe en blocs
+      // rectangulaires separes par des rues degagees a intervalle regulier
+      // (comme un vrai plan de ville), et chaque bloc est rempli par une
+      // RANGEE de batiments colles les uns aux autres le long de son bord
+      // (facades adjacentes, pas de jitter aleatoire qui les eparpille) -
+      // avant, les batiments etaient simplement poses sur une grille avec
+      // un decalage aleatoire, sans notion de rue ni d'ilot, ce qui donnait
+      // un aspect brouillon plutot qu'un vrai quartier.
+      const streetWidth = 70;
+      const blockSize = 220; // bloc + rue inclue dans cette periode
+      const blockInner = blockSize - streetWidth; // partie batie du bloc
+      const cells = Math.ceil(CHUNK_SIZE/blockSize);
+      // Zone degagee garantie autour de l'origine du monde (0,0), qui est
+      // toujours le point de spawn du heros : aucun batiment n'est place
+      // dans ce rayon, pour que la partie ne puisse jamais commencer
+      // enfermee dans (ou collee contre) un immeuble.
+      const nearOrigin = Math.abs(originX) < CHUNK_SIZE*2 && Math.abs(originY) < CHUNK_SIZE*2;
+      for (let gx=0; gx<cells; gx++) {
+        for (let gy=0; gy<cells; gy++) {
+          const blockX = originX + gx*blockSize;
+          const blockY = originY + gy*blockSize;
+          if (rng() > 0.85) continue; // certains ilots restent vides (parking, terrain vague)
+          if (nearOrigin) placeBlock(chunk, blockX, blockY, blockInner, blockInner, rng, 0, 0, 160);
+          else placeBlock(chunk, blockX, blockY, blockInner, blockInner, rng);
+        }
+      }
+      // Passages pietons generes en premier (a partir des batiments reels du
+      // chunk, voir placeCrosswalksForBuildings) : le marquage de ligne
+      // centrale ci-dessous les evite ensuite pour ne jamais se chevaucher.
+      placeCrosswalksForBuildings(chunk, rng, streetWidth);
+
+      // Marquage au sol des rues : ligne centrale discontinue le long de
+      // chaque bande de rue (verticale et horizontale), pour que la grille
+      // se lise vraiment comme un plan de rues plutot qu'un vide informe
+      // entre les ilots. Chaque segment est saute s'il chevaucherait un
+      // passage pieton deja pose, pour garder une coherence entre les deux
+      // marquages plutot que de les laisser se superposer au hasard.
+      function overlapsCrosswalk(x, y, w, h) {
+        return chunk.crosswalks.some(cw => Math.abs(cw.x-x) < (cw.w+w)/2+2 && Math.abs(cw.y-y) < (cw.h+h)/2+2);
+      }
+      for (let gx=0; gx<=cells; gx++) {
+        const roadCenterX = originX + gx*blockSize - streetWidth/2;
+        for (let t=0; t<CHUNK_SIZE; t+=40) {
+          const my = originY+t;
+          if (overlapsCrosswalk(roadCenterX, my, 3, 16)) continue;
+          chunk.roadMarkings.push({ x: roadCenterX, y: my, w: 3, h: 16, vertical:true });
+        }
+      }
+      for (let gy=0; gy<=cells; gy++) {
+        const roadCenterY = originY + gy*blockSize - streetWidth/2;
+        for (let t=0; t<CHUNK_SIZE; t+=40) {
+          const mx = originX+t;
+          if (overlapsCrosswalk(mx, roadCenterY, 16, 3)) continue;
+          chunk.roadMarkings.push({ x: mx, y: roadCenterY, w: 16, h: 3, vertical:false });
+        }
+      }
+      // Feux tricolores : un par intersection ayant au moins un batiment a
+      // proximite immediate (pour ne pas en poser au milieu d'un terrain
+      // vague sans aucun batiment autour).
+      for (let gx=0; gx<=cells; gx++) {
+        for (let gy=0; gy<=cells; gy++) {
+          const ix = originX + gx*blockSize - streetWidth/2;
+          const iy = originY + gy*blockSize - streetWidth/2;
+          if (rng() > 0.6) continue; // pas toutes les intersections n'ont un feu
+          const nearBuilding = chunk.buildings.some(b => Math.hypot(b.x-ix, b.y-iy) < blockSize);
+          if (!nearBuilding) continue;
+          const corner = Math.floor(rng()*4);
+          const cOff = streetWidth/2 + 6;
+          const cx = ix + (corner%2===0?-cOff:cOff);
+          const cy = iy + (corner<2?-cOff:cOff);
+          chunk.trafficLights.push({ x: cx, y: cy, phase: rng()*Math.PI*2, cycle: 4+rng()*2 });
+        }
       }
     } else if (type === 'avenue') {
       // Grande allee : une large bande degagee au centre du chunk, bordee de
@@ -1592,7 +1855,13 @@
     if (world.loadedChunks.has(key)) return;
     const chunk = generateChunk(cx, cy);
     world.loadedChunks.set(key, chunk);
-    for (const b of chunk.buildings) { b.chunkKey = key; world.buildings.push(b); }
+    for (const b of chunk.buildings) {
+      // Ne pas re-ajouter un batiment deja detruit par un ennemi lors d'un
+      // passage precedent (generateChunk redonnerait exactement le meme
+      // batiment a la meme position, seed oblige).
+      if (game.destroyedBuildings.has(b.x+','+b.y)) continue;
+      b.chunkKey = key; world.buildings.push(b);
+    }
     for (const t of chunk.trees) { t.chunkKey = key; world.trees.push(t); }
     for (const bn of chunk.benches) { bn.chunkKey = key; world.benches.push(bn); }
     for (const l of chunk.streetLights) { l.chunkKey = key; world.streetLights.push(l); }
@@ -1600,6 +1869,9 @@
     for (const d of chunk.destructibles) { d.chunkKey = key; world.destructibles.push(d); }
     for (const c of chunk.groundCracks) { c.chunkKey = key; world.groundCracks.push(c); }
     for (const p of chunk.puddles) { p.chunkKey = key; world.puddles.push(p); }
+    for (const rm of chunk.roadMarkings) { rm.chunkKey = key; world.roadMarkings.push(rm); }
+    for (const tl of chunk.trafficLights) { tl.chunkKey = key; world.trafficLights.push(tl); }
+    for (const cw of chunk.crosswalks) { cw.chunkKey = key; world.crosswalks.push(cw); }
   }
 
   // Retire du monde tous les objets appartenant a ce chunk (filtre par
@@ -1614,6 +1886,9 @@
     world.destructibles = world.destructibles.filter(d => d.chunkKey !== key);
     world.groundCracks = world.groundCracks.filter(c => c.chunkKey !== key);
     world.puddles = world.puddles.filter(p => p.chunkKey !== key);
+    world.roadMarkings = world.roadMarkings.filter(rm => rm.chunkKey !== key);
+    world.trafficLights = world.trafficLights.filter(tl => tl.chunkKey !== key);
+    world.crosswalks = world.crosswalks.filter(cw => cw.chunkKey !== key);
   }
 
   // Appelee en continu (a intervalle, pas chaque frame) pour charger les
@@ -1710,6 +1985,53 @@
 
   function collidesBuilding(x,y,r) {
     return world.buildings.some(b=>x+r>b.x-b.w/2&&x-r<b.x+b.w/2&&y+r>b.y-b.h/2&&y-r<b.y+b.h/2);
+  }
+
+  // Variante qui retourne le batiment concerne (ou null) plutot qu'un
+  // simple booleen : necessaire pour cibler les degats d'un ennemi bloque
+  // contre un batiment precis (voir updateEnemies).
+  function findCollidingBuilding(x,y,r) {
+    return world.buildings.find(b=>x+r>b.x-b.w/2&&x-r<b.x+b.w/2&&y+r>b.y-b.h/2&&y-r<b.y+b.h/2) || null;
+  }
+
+  // Inflige des degats a un batiment (ennemi bloque contre lui plus de 5s,
+  // voir updateEnemies) ; a 0 hp, le batiment s'effondre : retire de
+  // world.buildings (libere la collision et l'espace au sol), memorise dans
+  // game.destroyedBuildings pour ne pas reapparaitre si le chunk est
+  // recharge plus tard, et declenche un effondrement visuel/sonore.
+  function damageBuilding(b, damage) {
+    if (b.hp <= 0) return;
+    b.hp -= damage;
+    b.flash = 0.15;
+    if (b.hp <= 0) {
+      const idx = world.buildings.indexOf(b);
+      if (idx !== -1) world.buildings.splice(idx, 1);
+      game.destroyedBuildings.add(b.x+','+b.y);
+      // Impacts de balle deja existants sur ce batiment : les detacher
+      // n'est pas necessaire (ils sont indexes par position, pas par
+      // batiment), ils resteront simplement au sol sur les gravats.
+      burst(b.x, b.y, '#3a362e', 40);
+      burst(b.x, b.y, '#8a8072', 25);
+      createBuildingRubble(b);
+      playSound('explosion');
+      game.trauma = Math.max(game.trauma, 22);
+      game.flashWhite = 0.25;
+      game.objectsDestroyedThisRun++;
+      progression.objectsDestroyed++;
+      updateQuestProgress('destroy', 1);
+      checkUnlocks();
+      saveProgression();
+    }
+  }
+
+  // Gravats laisses au sol a l'emplacement d'un batiment effondre : un tas
+  // de decombres statique (pas de collision, purement visuel) qui remplace
+  // la silhouette du batiment, pour que sa destruction reste visible
+  // durablement plutot que de laisser un vide franc et propre.
+  function createBuildingRubble(b) {
+    world.buildingRubble.push({
+      x: b.x, y: b.y, w: b.w, h: b.h, seed: Math.random()
+    });
   }
 
   // NEW: Check collision with vehicles and destructibles
@@ -1840,6 +2162,10 @@
     if(!game.active) return;
     let dt=Math.min((now-game.lastTime)/16.6667,2.2);
     game.lastTime=now;
+    // Pause : on continue de planifier requestAnimationFrame (pour reprendre
+    // instantanement sans a-coup) mais on saute totalement simulate() -
+    // la scene reste figee, seul l'overlay de pause est visible par-dessus.
+    if(game.paused) { game.raf=requestAnimationFrame(frame); return; }
     if(game.hitStop>0) { game.hitStop-=dt; render(); game.raf=requestAnimationFrame(frame); return; }
     // dt/realDt restent en "frames a 60fps" (utilises pour mouvements/physique/rendu,
     // calibres empiriquement dans ces unites). realSec est le vrai delta-temps en
@@ -2024,12 +2350,11 @@
     hero.currentSpeed = Math.hypot(hero.vx, hero.vy);
     if (!game.heroDying) moveCircle(hero, hero.vx*dt, hero.vy*dt);
 
-    if(hero.isMoving) {
-      hero.bobPhase += hero.currentSpeed * dt * 1.5;
-      hero.bobOffset = Math.sin(hero.bobPhase) * 2.5;
-    } else {
-      hero.bobOffset *= 0.85;
-    }
+    // Effet de "bob" (oscillation verticale sinusoidale du sprite pendant
+    // le deplacement) retire : il donnait l'impression que le personnage
+    // tremble en continu des qu'il bouge, plutot qu'une vraie animation de
+    // marche lisible.
+    hero.bobOffset = 0;
 
     if(hero.currentSpeed > 2.0) {
       world.moveTrails.push({
@@ -2132,13 +2457,25 @@
   }
 
   function createEnemy() {
-    const angle=Math.random()*Math.PI*2, dist=500+Math.random()*100;
-    const x=hero.x+Math.cos(angle)*dist, y=hero.y+Math.sin(angle)*dist;
+    // Interdiction de spawn dans un batiment : re-tire la position (jusqu'a
+    // 8 essais) si le point choisi tombe a l'interieur d'un batiment. Avant,
+    // la position etait choisie au hasard sans aucune verification, un
+    // ennemi pouvait donc apparaitre coince a l'interieur d'un immeuble.
+    let x, y, tries = 0;
+    do {
+      const angle=Math.random()*Math.PI*2, dist=500+Math.random()*100;
+      x=hero.x+Math.cos(angle)*dist; y=hero.y+Math.sin(angle)*dist;
+      tries++;
+    } while (collidesBuilding(x, y, 20) && tries < 8);
+    // Tous les types de zombies sont disponibles a partir de la vague 3 (au
+    // lieu d'etre debloques progressivement jusqu'a la vague 6) : chaque
+    // probabilite grimpe des la vague 1 pour runner/brute (deja le cas),
+    // et demarre a la vague 3 pour tous les types speciaux restants.
     const rc=Math.min(0.25,game.wave*0.025), bc=Math.min(0.15,game.wave*0.02);
-    const tc=game.wave>=5?Math.min(0.08,(game.wave-5)*0.01):0;
+    const tc=game.wave>=3?Math.min(0.1,(game.wave-2)*0.02):0;
     const ec=game.wave>=3?Math.min(0.15,(game.wave-2)*0.02):0;
-    const sc=game.wave>=4?Math.min(0.1,(game.wave-3)*0.015):0;
-    const tlc=game.wave>=6?Math.min(0.12,(game.wave-5)*0.02):0;
+    const sc=game.wave>=3?Math.min(0.1,(game.wave-2)*0.02):0;
+    const tlc=game.wave>=3?Math.min(0.12,(game.wave-2)*0.02):0;
     const spc=game.wave>=3?Math.min(0.12,(game.wave-2)*0.02):0;
     let kind="normal"; const roll=Math.random(); let c=0;
     c+=tlc; if(roll<c) kind="teleporter";
@@ -2163,10 +2500,17 @@
   }
 
   function spawnBoss() {
-    const angle=Math.random()*Math.PI*2, dist=600;
+    // Meme protection anti-spawn-dans-un-batiment que createEnemy, avec un
+    // rayon de test plus large (le boss est bien plus gros).
+    let bx, by, tries = 0;
+    do {
+      const angle=Math.random()*Math.PI*2, dist=600;
+      bx=hero.x+Math.cos(angle)*dist; by=hero.y+Math.sin(angle)*dist;
+      tries++;
+    } while (collidesBuilding(bx, by, 60) && tries < 8);
     const t=ENEMY.boss;
     const boss={
-      x:hero.x+Math.cos(angle)*dist, y:hero.y+Math.sin(angle)*dist,
+      x:bx, y:by,
       radius:t.radius, speed:t.speed+game.wave*0.05,
       hp:t.hp+game.wave*10, maxHp:t.hp+game.wave*10,
       kind:'boss', flash:0, isBoss:true, visible:true,
@@ -2218,9 +2562,25 @@
         }
       }
       const dx=Math.cos(moveAngle)*step, dy=Math.sin(moveAngle)*step;
-      if(!collidesBuilding(e.x+dx,e.y,e.radius)) e.x+=dx;
-      if(!collidesBuilding(e.x,e.y+dy,e.radius)) e.y+=dy;
+      const blockedX = step>0 && collidesBuilding(e.x+dx,e.y,e.radius);
+      const blockedY = step>0 && collidesBuilding(e.x,e.y+dy,e.radius);
+      if(!blockedX) e.x+=dx;
+      if(!blockedY) e.y+=dy;
       if(collidesBuilding(e.x,e.y,e.radius)){e.x-=dx*0.5;e.y-=dy*0.5;}
+
+      // Ennemi bloque par un batiment (pas un lanceur immobile par choix,
+      // step>0 uniquement) : accumule un timer, et au-dela de 5 secondes de
+      // blocage continu, tape dans le batiment jusqu'a le detruire plutot
+      // que de rester coince indefiniment contre lui.
+      if ((blockedX || blockedY) && step > 0) {
+        e.blockedTimer = (e.blockedTimer||0) + realSec;
+        if (e.blockedTimer > 5) {
+          const target = findCollidingBuilding(e.x+dx, e.y+dy, e.radius) || findCollidingBuilding(e.x+dx, e.y, e.radius) || findCollidingBuilding(e.x, e.y+dy, e.radius);
+          if (target) damageBuilding(target, ENEMY[e.kind].damage * realSec * 2);
+        }
+      } else {
+        e.blockedTimer = 0;
+      }
 
       forEachNearbyEnemy(e, o => {
         const sx=e.x-o.x, sy=e.y-o.y, d=Math.hypot(sx,sy), md=e.radius+o.radius+4;
@@ -2233,7 +2593,13 @@
       }
 
       if(Math.hypot(hero.x-e.x,hero.y-e.y)<hero.radius+e.radius) {
-        if(hero.iframes<=0) {
+        // !game.heroDying : une fois l'animation de mort demarree, on ignore
+        // tout nouveau coup. Avant, un ennemi encore au contact pendant les
+        // 1.5s d'animation pouvait retoucher le heros (deja a 0 PV) et
+        // rappeler startDeathAnimation(), ce qui remettait heroDeathTimer a
+        // 1.5 a chaque fois - l'ecran de fin ne se declenchait alors jamais
+        // tant que le joueur restait encercle par des zombies.
+        if(hero.iframes<=0 && !game.heroDying) {
           const dmgReduction = getSkillEffect('health', 2);
           const dmg = ENEMY[e.kind].damage * dmgReduction;
           hero.health-=dmg;
@@ -2337,7 +2703,7 @@
       s.x += s.vx*dt; s.y += s.vy*dt; s.life -= dt;
       if (s.life<=0 || collidesBuilding(s.x,s.y,3)) { world.enemyShots.splice(i,1); continue; }
       if (Math.hypot(s.x-hero.x, s.y-hero.y) < hero.radius+5) {
-        if (hero.iframes<=0) {
+        if (hero.iframes<=0 && !game.heroDying) {
           const dmgReduction = getSkillEffect('health', 2);
           hero.health -= s.damage * dmgReduction;
           hero.iframes = 0.8;
@@ -2724,7 +3090,7 @@
       if (d < radius) damageObstacle(dd.x, dd.y, damage * (1 - d/radius));
     }
     const hd=Math.hypot(hero.x-x,hero.y-y);
-    if(hd<radius){hero.health-=damage*0.5*(1-hd/radius);hero.damageFlash=1.0;game.flashRed=0.3;if(hero.health<=0)startDeathAnimation();}
+    if(hd<radius && !game.heroDying){hero.health-=damage*0.5*(1-hd/radius);hero.damageFlash=1.0;game.flashRed=0.3;if(hero.health<=0)startDeathAnimation();}
   }
 
   // Affiche un message bref dans la ligne dediee du HUD (combo ou multi-kill),
@@ -2926,7 +3292,11 @@
   // coupees au-dela de combo 25 (au lieu de continuer a grossir sans fin
   // avec le combo), pour eviter que l'effet ne sature l'ecran et ne geen
   // la lisibilite en combo tres eleve.
-  function updateOrbitParticles(dt){if(game.combo<5||game.combo>25){world.orbitParticles.length=0;return;}const tc=Math.min(20,game.combo*2);while(world.orbitParticles.length<tc)world.orbitParticles.push({angle:Math.random()*Math.PI*2,distance:40+Math.random()*20,speed:2+Math.random()*2,size:2+Math.random()*3});for(const p of world.orbitParticles)p.angle+=p.speed*dt*0.1;}
+  // Particules orbitales du combo retirees a la demande (effet juge trop
+  // charge visuellement a combo eleve) : la fonction est gardee vide plutot
+  // que supprimee pour ne pas casser les appels existants dans simulate()/
+  // render(), mais ne pousse plus jamais rien dans world.orbitParticles.
+  function updateOrbitParticles(dt){ world.orbitParticles.length=0; }
   function updateDashTrails(dt){for(let i=world.dashTrails.length-1;i>=0;i--){world.dashTrails[i].life-=dt;if(world.dashTrails[i].life<=0)world.dashTrails.splice(i,1);}}
   function updateExplosions(dt){for(let i=world.explosions.length-1;i>=0;i--){const e=world.explosions[i];e.life-=dt;e.radius=e.maxRadius*(1-e.life/e.maxLife);if(e.life<=0)world.explosions.splice(i,1);}}
   function updateMoveTrails(dt){for(let i=world.moveTrails.length-1;i>=0;i--){world.moveTrails[i].life-=dt;if(world.moveTrails[i].life<=0)world.moveTrails.splice(i,1);}}
@@ -2957,11 +3327,16 @@
 
     drawGround(theme);
     drawGroundCracks();
+    // drawRoadMarkings/drawCrosswalks/drawTrafficLights retires a la demande
+    // (marquage au sol et feux juges "degueulasses" visuellement) : les
+    // donnees restent generees par chunk (au cas ou on veuille les
+    // reactiver plus tard) mais ne sont plus dessinees du tout.
     drawPuddles();
     drawStreetLightGlow(); // NEW: Light pools on ground
     drawBloodSplats(false); drawBloodTrails();
     drawGibs();
     drawBenches(); // parc : au sol, sous les arbres/batiments
+    drawBuildingRubble();
     drawBuildings();
     drawBuildingImpacts(); // par-dessus les batiments : marques de balles persistantes
     drawTrees(); // dessines apres les batiments : peuvent depasser devant si un peu plus bas a l'ecran
@@ -2985,6 +3360,7 @@
     drawScreenEffects(); drawComboBorderGlow();
 
     ctx.restore();
+    drawVignette(); // en coordonnees ecran fixes (apres restore), pour ne pas tourner/zoomer avec la camera
     drawMiniMap();
   }
 
@@ -2999,13 +3375,33 @@
     ctx.fillStyle = vign;
     ctx.fillRect(0, 0, view.w, view.h);
 
-    // Grille de joints de trottoir : gardee tres discrete (c'etait la grille
-    // d'origine), elle structure l'espace sans dominer visuellement.
-    const grid=80;
-    const ox=-((camera.x-view.w/2)%grid), oy=-((camera.y-view.h/2)%grid);
-    ctx.strokeStyle = theme.grid; ctx.lineWidth=1;
-    for(let x=ox;x<view.w;x+=grid){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,view.h);ctx.stroke();}
-    for(let y=oy;y<view.h;y+=grid){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(view.w,y);ctx.stroke();}
+    // Texture d'usure organique a la place de l'ancienne grille reguliere
+    // (qui donnait un effet "damier" repetitif tres visible). Des patchs de
+    // teinte legerement plus clairs/sombres, positionnes de facon
+    // deterministe sur une grille grossiere en coordonnees MONDE (donc
+    // stables quand la camera bouge) mais avec une taille et un decalage
+    // varies par cellule pour casser toute regularite geometrique.
+    const cell = 96;
+    const camLeft = camera.x - view.w/2/camera.zoom, camTop = camera.y - view.h/2/camera.zoom;
+    const camRight = camera.x + view.w/2/camera.zoom, camBottom = camera.y + view.h/2/camera.zoom;
+    const gx0 = Math.floor(camLeft/cell)-1, gx1 = Math.ceil(camRight/cell)+1;
+    const gy0 = Math.floor(camTop/cell)-1, gy1 = Math.ceil(camBottom/cell)+1;
+    for (let gx=gx0; gx<=gx1; gx++) {
+      for (let gy=gy0; gy<=gy1; gy++) {
+        const cellRng = mulberry32(chunkSeed(gx*7+1, gy*7+1))();
+        if (cellRng < 0.55) continue; // la plupart des cellules restent unies
+        const wx = gx*cell + cell/2 + (cellRng-0.5)*40;
+        const wy = gy*cell + cell/2 + ((cellRng*13)%1-0.5)*40;
+        const p = worldToScreen(wx, wy);
+        if (p.x < -60 || p.x > view.w+60 || p.y < -60 || p.y > view.h+60) continue;
+        const size = (30 + cellRng*50) * camera.zoom;
+        const lighter = cellRng > 0.78;
+        ctx.fillStyle = lighter ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.07)';
+        ctx.beginPath();
+        ctx.ellipse(p.x, p.y, size, size*(0.6+cellRng*0.3), cellRng*Math.PI, 0, Math.PI*2);
+        ctx.fill();
+      }
+    }
   }
 
   // Fissures d'asphalte : simples traits casses, statiques (generees une fois
@@ -3025,6 +3421,59 @@
       ctx.moveTo(p.x, p.y);
       ctx.quadraticCurveTo(mx, my, ex, ey);
       ctx.stroke();
+    }
+  }
+
+  // Marquage au sol des rues (tirets de ligne centrale, usee/decoloree
+  // comme le reste du decor delabre) : donne aux voies entre les blocs de
+  // batiments une vraie identite de rue plutot qu'un simple vide.
+  function drawRoadMarkings() {
+    ctx.fillStyle = 'rgba(200,190,150,0.22)';
+    for (const rm of world.roadMarkings) {
+      const p = worldToScreen(rm.x, rm.y);
+      if (p.x < -20 || p.x > view.w+20 || p.y < -20 || p.y > view.h+20) continue;
+      ctx.fillRect(p.x - rm.w/2, p.y - rm.h/2, rm.w, rm.h);
+    }
+  }
+
+  // Passages pietons : rangee de bandes blanches paralleles, perpendiculaires
+  // a la chaussee, usees comme le reste du marquage au sol.
+  function drawCrosswalks() {
+    ctx.fillStyle = 'rgba(200,195,175,0.28)';
+    for (const cw of world.crosswalks) {
+      const p = worldToScreen(cw.x, cw.y);
+      if (p.x < -40 || p.x > view.w+40 || p.y < -40 || p.y > view.h+40) continue;
+      const stripes = 5;
+      if (cw.vertical) {
+        const stripeH = cw.h / (stripes*2-1);
+        for (let i=0;i<stripes;i++) {
+          ctx.fillRect(p.x - cw.w/2, p.y - cw.h/2 + i*stripeH*2, cw.w, stripeH);
+        }
+      } else {
+        const stripeW = cw.w / (stripes*2-1);
+        for (let i=0;i<stripes;i++) {
+          ctx.fillRect(p.x - cw.w/2 + i*stripeW*2, p.y - cw.h/2, stripeW, cw.h);
+        }
+      }
+    }
+  }
+
+  // Feux tricolores : petit poteau avec un voyant qui alterne rouge/vert
+  // selon un cycle propre a chaque feu (phase+cycle generes par chunk), pour
+  // que les carrefours de la grille de rues aient un vrai mobilier urbain.
+  function drawTrafficLights() {
+    for (const tl of world.trafficLights) {
+      const p = worldToScreen(tl.x, tl.y);
+      if (p.x < -30 || p.x > view.w+30 || p.y < -30 || p.y > view.h+30) continue;
+      const t = (game.elapsedSec + tl.phase) % tl.cycle;
+      const isRed = t < tl.cycle*0.55;
+      ctx.fillStyle = 'rgba(0,0,0,0.4)';
+      ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, Math.PI*2); ctx.fill();
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = isRed ? '#ff3333' : '#33ff55';
+      ctx.fillStyle = isRed ? '#ff3333' : '#33ff55';
+      ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI*2); ctx.fill();
+      ctx.shadowBlur = 0;
     }
   }
 
@@ -3120,6 +3569,39 @@
   // Batiments : ombre portee, degrade de facade (au lieu d'un aplat uni), et
   // silhouette de toit variee selon roofKind pour casser la lecture "boite plate"
   // qu'on avait avant (rectangle gris + carres de fenetres, sans profondeur).
+  // Tas de gravats a l'emplacement d'un batiment effondre : silhouette
+  // irreguliere de decombres (au lieu du rectangle net du batiment), pour
+  // que sa destruction reste lisible durablement plutot que de laisser un
+  // simple trou vide dans la ville.
+  function drawBuildingRubble() {
+    for (const r of world.buildingRubble) {
+      const p = worldToScreen(r.x, r.y);
+      if (p.x<-150||p.x>view.w+150||p.y<-150||p.y>view.h+150) continue;
+      const rng = mulberry32(Math.floor(r.seed*1e9));
+      ctx.fillStyle = 'rgba(0,0,0,0.35)';
+      ctx.beginPath(); ctx.ellipse(p.x+4, p.y+4, r.w*0.42, r.h*0.42, 0, 0, Math.PI*2); ctx.fill();
+      const n = 10 + Math.floor(rng()*8);
+      for (let i=0;i<n;i++) {
+        const rx = p.x + (rng()-0.5)*r.w*0.85;
+        const ry = p.y + (rng()-0.5)*r.h*0.85;
+        const size = 6 + rng()*14;
+        ctx.fillStyle = rng()<0.5 ? '#3a362e' : '#57503f';
+        ctx.save();
+        ctx.translate(rx, ry);
+        ctx.rotate(rng()*Math.PI*2);
+        ctx.fillRect(-size/2, -size/2, size, size*0.7);
+        ctx.restore();
+      }
+      // Quelques eclats plus clairs (beton casse) pour varier la texture
+      for (let i=0;i<5;i++) {
+        const rx = p.x + (rng()-0.5)*r.w*0.7;
+        const ry = p.y + (rng()-0.5)*r.h*0.7;
+        ctx.fillStyle = 'rgba(160,150,130,0.5)';
+        ctx.beginPath(); ctx.arc(rx, ry, 3+rng()*4, 0, Math.PI*2); ctx.fill();
+      }
+    }
+  }
+
   // Batiments vus strictement du dessus : le rectangle visible EST le toit,
   // pas une facade. Avant, des "fenetres" y etaient dessinees comme sur un
   // immeuble vu de face, ce qui est incoherent en vue aerienne (priorite
@@ -3605,11 +4087,13 @@
 
     // Sprite image si disponible pour l'arme actuelle (voir SPRITE_PATHS en
     // tete de fichier) : dessine et on sort avant le rendu vectoriel de
-    // repli. La taille suit hero.radius pour rester coherente avec la
-    // hitbox/les autres elements du jeu.
+    // repli. Le multiplicateur d'affichage (3.6) est volontairement plus
+    // grand que le rayon de collision reel (hero.radius, utilise partout
+    // ailleurs pour les tests de collision/hitbox) : le personnage parait
+    // plus grand/lisible a l'ecran sans que la zone de collision ne change.
     const heroSpriteKey = currentPlayerSpriteKey();
     if (sprites[heroSpriteKey]) {
-      const sd = hero.radius * 2.6; // diametre d'affichage du sprite
+      const sd = hero.radius * 3.6; // diametre d'affichage du sprite (visuel uniquement)
       ctx.drawImage(sprites[heroSpriteKey], -sd/2, -sd/2, sd, sd);
       ctx.restore();
       return;
@@ -3791,7 +4275,19 @@
       // normalement au-dessus, sprite ou pas.
       const enemySpriteKey = 'enemy_' + e.kind;
       if (sprites[enemySpriteKey]) {
-        const ed = e.radius * 2.6;
+        // Multiplicateur d'affichage (3.6) plus grand que e.radius (le rayon
+        // de collision reel, inchange) : l'ennemi parait plus grand/lisible
+        // a l'ecran sans agrandir sa zone de collision.
+        const ed = e.radius * 3.6;
+        // Convention des sprites zombies (voir prompt de generation) : les
+        // bras tendus pointent vers le BAS de l'image source, alors que
+        // ctx.rotate(walkAngle) suppose une convention "avant = vers la
+        // droite" (angle 0). On applique donc une rotation supplementaire de
+        // +90 degres ici, seulement pour les sprites images, afin que
+        // l'avant du sprite (le bas de l'image) s'aligne avec walkAngle -
+        // le rendu vectoriel de repli plus bas n'a pas besoin de cet
+        // ajustement, il est deja dessine "avant = droite" nativement.
+        ctx.rotate(Math.PI/2);
         if (e.flash > 0) {
           // Flash de degats : on dessine le sprite normalement puis on le
           // reblanchit avec un calque "source-atop" (ne peint que les
@@ -4012,6 +4508,18 @@
     ctx.fillRect(-view.w, -view.h, view.w * 3, view.h * 3);
   }
 
+  // Vignettage permanent et discret des bords de l'ecran (independant du
+  // brouillard, qui lui n'apparait qu'a partir de certaines vagues) : assombrit
+  // legerement les coins pour guider l'oeil vers le centre d'action autour
+  // du heros, plutot qu'un cadrage plat sans aucune hierarchie visuelle.
+  function drawVignette() {
+    const g = ctx.createRadialGradient(view.w/2, view.h/2, Math.min(view.w,view.h)*0.35, view.w/2, view.h/2, Math.max(view.w,view.h)*0.75);
+    g.addColorStop(0, 'rgba(0,0,0,0)');
+    g.addColorStop(1, 'rgba(0,0,0,0.45)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, view.w, view.h);
+  }
+
   function drawScreenEffects(){
     if(game.flashRed>0){ctx.fillStyle=`rgba(255,0,0,${game.flashRed*0.5})`;ctx.fillRect(-view.w,-view.h,view.w*3,view.h*3);}
     if(game.flashWhite>0){ctx.fillStyle=`rgba(255,255,255,${game.flashWhite*2})`;ctx.fillRect(-view.w,-view.h,view.w*3,view.h*3);}
@@ -4208,10 +4716,13 @@
     let h = `<h2>Achievements (${progression.achievements.length}/${ACHIEVEMENTS.length})</h2><div class="achievementGrid">`;
     for (const ach of ACHIEVEMENTS) {
       const unlocked = progression.achievements.includes(ach.id);
+      // Verrouille : affiche desormais comment le debloquer (ach.desc decrit
+      // deja la condition, ex "Kill 50 enemies in one run") au lieu de
+      // masquer completement l'info derriere "???".
       h += `<div class="achievementCard ${unlocked ? 'unlocked' : 'locked'}">
         <div class="achIcon">${icon(ach.icon, 'ico-lg')}</div>
         <div class="achName">${ach.name}</div>
-        <div class="achDesc">${unlocked ? ach.desc : '???'}</div>
+        <div class="achDesc">${unlocked ? ach.desc : `${icon('lock')} ${ach.desc}`}</div>
       </div>`;
     }
     h += `</div>`;
@@ -4251,6 +4762,40 @@
     return h;
   }
 
+  // Pause : fige la simulation (voir la garde game.paused dans frame()) et
+  // affiche un overlay avec Reprendre / Recommencer / Menu principal. Ne
+  // touche pas a game.active (la partie reste "active", juste suspendue),
+  // pour que Reprendre revienne exactement ou la partie en etait.
+  function togglePause() {
+    if (!game.active || game.heroDying) return; // pas de pause sur le menu ou pendant l'animation de mort
+    if (game.paused) resumeGame(); else showPauseMenu();
+  }
+
+  function showPauseMenu() {
+    game.paused = true;
+    ui.overlay.classList.add('active');
+    ui.overlay.innerHTML = `<div class="panel">
+      <h1>PAUSED</h1>
+      <div>
+        <button id="resumeBtn">RESUME</button>
+        <button id="pauseRestartBtn" class="secondary">RESTART</button>
+        <button id="pauseMenuBtn" class="secondary">MAIN MENU</button>
+      </div>
+    </div>`;
+    document.querySelector('#resumeBtn').addEventListener('click', resumeGame);
+    document.querySelector('#pauseRestartBtn').addEventListener('click', () => { resetUpgrades(); start(); });
+    document.querySelector('#pauseMenuBtn').addEventListener('click', () => { game.active=false; game.paused=false; cancelAnimationFrame(game.raf); showMainMenu(); });
+  }
+
+  function resumeGame() {
+    game.paused = false;
+    ui.overlay.classList.remove('active');
+    game.lastTime = performance.now(); // evite un grand saut de dt a la reprise
+    // Pas besoin de relancer requestAnimationFrame ici : la boucle frame()
+    // continue de tourner pendant la pause (elle se contente de sauter
+    // simulate() tant que game.paused est vrai), donc retirer le flag suffit.
+  }
+
   function showMainMenu() {
     ui.overlay.classList.add('active');
     ui.overlay.innerHTML = `<div class="panel">
@@ -4276,7 +4821,8 @@
   addEventListener("beforeunload", () => {
     if (saveProgressionTimer) saveProgressionNow();
   });
-  addEventListener("keydown",e=>{input.keys.add(e.key);if([" ","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key))e.preventDefault();if(e.key==='1')switchWeapon(0);if(e.key==='2')switchWeapon(1);if(e.key==='3')switchWeapon(2);if(e.key==='4')switchWeapon(3);});
+  addEventListener("keydown",e=>{input.keys.add(e.key);if([" ","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key))e.preventDefault();if(e.key==='1')switchWeapon(0);if(e.key==='2')switchWeapon(1);if(e.key==='3')switchWeapon(2);if(e.key==='4')switchWeapon(3);if(e.key==='Escape')togglePause();});
+  document.querySelector('#pauseBtn').addEventListener('click', togglePause);
   addEventListener("keyup",e=>{input.keys.delete(e.key);if(e.key===' '){game.chargeLevel=0;input.pointer.chargeTime=0;}});
   canvas.addEventListener("mousemove",e=>{if(e.target.closest('#overlay')||e.target.closest('#hud'))return;input.pointer.x=e.clientX;input.pointer.y=e.clientY;});
   canvas.addEventListener("mousedown",e=>{if(e.target.closest('#overlay')||e.target.closest('#hud'))return;input.pointer.held=true;input.pointer.chargeTime=0;});
