@@ -2456,8 +2456,21 @@ const hero = {
     if (hero.damageFlash > 0) hero.damageFlash -= dt * 3;
     if (hero.damageFlash < 0) hero.damageFlash = 0;
 
-    // NEW: Smooth rotation toward aim
-    let angleDiff = hero.aim - hero.visualAngle;
+    // Orientation du sprite :
+    // - Si le joueur tire (ou maintient le bouton), le sprite regarde vers
+    //   la cible (hero.aim), pour que le canon soit aligne avec le tir.
+    // - Sinon, le sprite regarde dans la direction de deplacement, pour
+    //   qu'on ait l'impression qu'il marche "vers l'avant" et pas en
+    //   crabe vers la souris.
+    let targetAngle;
+    if (input.pointer.held || game.heroDying) {
+      targetAngle = hero.aim;
+    } else if (hero.currentSpeed > 0.3) {
+      targetAngle = Math.atan2(hero.vy, hero.vx);
+    } else {
+      targetAngle = hero.visualAngle; // immobile : on ne tourne pas
+    }
+    let angleDiff = targetAngle - hero.visualAngle;
     while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
     while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
     hero.visualAngle += angleDiff * Math.min(1, dt * 12);
