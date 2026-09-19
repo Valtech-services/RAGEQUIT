@@ -4341,7 +4341,7 @@ const hero = {
       // sous-repere (save/restore) : ne touche ni hero.visualAngle, ni l'arme
       // vectorielle, ni l'orientation des tirs (hero.aim).
       ctx.save();
-      ctx.rotate(Math.PI);
+      ctx.rotate(0);
       ctx.drawImage(sprites[heroSpriteKey], -sd/2, -sd/2, sd, sd);
       ctx.restore();
       ctx.restore();
