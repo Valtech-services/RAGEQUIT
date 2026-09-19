@@ -4336,15 +4336,16 @@ const hero = {
     // plus grand/lisible a l'ecran sans que la zone de collision ne change.
     const heroSpriteKey = currentPlayerSpriteKey();
     if (sprites[heroSpriteKey]) {
-      const sd = hero.radius * 3.6; // diametre d'affichage du sprite (visuel uniquement)
-      // Meme correction que pour les ennemis : le sprite regarde vers le BAS
-      // de l'image (bras/canon pointes vers le bas), alors que ctx.rotate()
-      // suppose "avant = vers la droite" (angle 0). Sans cette rotation
-      // compensatoire, le heros semble marcher a reculons quand on avance.
-      // -90 degres (et non +90) est le bon sens, verifie pour les ennemis.
-      ctx.rotate(-Math.PI/2);
+      const sd = hero.radius * 3.6;
+      // Le sprite a une convention propre ("avant" vers le bas de l'image).
+      // On la corrige DANS un sous-repere, sans toucher a l'orientation
+      // globale (hero.visualAngle) qui sert aussi aux tirs et au rendu
+      // vectoriel de repli : sinon l'arme ne suit plus le canon.
+      ctx.save();
+      ctx.rotate(Math.PI/2); // <- ajuste ici : 0, +PI/2, -PI/2, PI
       ctx.drawImage(sprites[heroSpriteKey], -sd/2, -sd/2, sd, sd);
       ctx.restore();
+      ctx.restore(); // <- ferme le ctx.save() du drawHero
       return;
     }
 
