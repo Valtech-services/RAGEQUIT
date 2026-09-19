@@ -4337,6 +4337,12 @@ const hero = {
     const heroSpriteKey = currentPlayerSpriteKey();
     if (sprites[heroSpriteKey]) {
       const sd = hero.radius * 3.6; // diametre d'affichage du sprite (visuel uniquement)
+      // Meme correction que pour les ennemis : le sprite regarde vers le BAS
+      // de l'image (bras/canon pointes vers le bas), alors que ctx.rotate()
+      // suppose "avant = vers la droite" (angle 0). Sans cette rotation
+      // compensatoire, le heros semble marcher a reculons quand on avance.
+      // -90 degres (et non +90) est le bon sens, verifie pour les ennemis.
+      ctx.rotate(-Math.PI/2);
       ctx.drawImage(sprites[heroSpriteKey], -sd/2, -sd/2, sd, sd);
       ctx.restore();
       return;
