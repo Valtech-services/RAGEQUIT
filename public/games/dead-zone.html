@@ -4336,8 +4336,14 @@ const hero = {
     // plus grand/lisible a l'ecran sans que la zone de collision ne change.
     const heroSpriteKey = currentPlayerSpriteKey();
     if (sprites[heroSpriteKey]) {
-      const sd = hero.radius * 3.6; // diametre d'affichage du sprite (visuel uniquement)
+      const sd = hero.radius * 3.6;
+      // Rotation de 180 degres appliquee UNIQUEMENT sur le sprite, dans un
+      // sous-repere (save/restore) : ne touche ni hero.visualAngle, ni l'arme
+      // vectorielle, ni l'orientation des tirs (hero.aim).
+      ctx.save();
+      ctx.rotate(Math.PI);
       ctx.drawImage(sprites[heroSpriteKey], -sd/2, -sd/2, sd, sd);
+      ctx.restore();
       ctx.restore();
       return;
     }
