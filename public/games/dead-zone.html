@@ -120,13 +120,24 @@
     }
     #pauseBtn {
       position: absolute; top: 10px; right: 10px; z-index: 6;
-      width: 26px; height: 26px; border-radius: 50%;
+      width: 26px; height: 26px; border-radius: 50%; padding: 0; margin: 0;
       background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
       display: flex; align-items: center; justify-content: center;
       cursor: pointer; pointer-events: auto;
     }
     #pauseBtn:hover { background: rgba(255,255,255,0.14); }
     #pauseBtn svg { width: 13px; height: 13px; color: #f2f2f2; }
+    /* Bouton son discret, juste a gauche du bouton pause (meme style). */
+    #soundBtn {
+      position: absolute; top: 10px; right: 44px; z-index: 6;
+      width: 26px; height: 26px; border-radius: 50%; padding: 0; margin: 0;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; pointer-events: auto;
+    }
+    #soundBtn:hover { background: rgba(255,255,255,0.14); }
+    #soundBtn svg { width: 13px; height: 13px; color: #f2f2f2; }
+    #soundBtn.muted svg { color: rgba(255,255,255,0.4); }
 
     /* ===== BARRE D'ACTION (bas, unifiee) =====
        Avant : deux grilles independantes (armes a gauche / pouvoirs a droite)
@@ -164,27 +175,32 @@
     .weaponSlot.locked { opacity: 0.35; filter: grayscale(0.6); }
     /* Anneau de munitions : conic-gradient jaune qui se vide en tournant au
        fur et a mesure des tirs (mis a jour via --ammo-pct en JS, 100% =
-       plein, 0% = vide). Positionne juste a l'interieur du bord du slot,
-       sous les icones. Absent/invisible pour le pistolet (munitions
+       plein, 0% = vide). Absent/invisible pour le pistolet (munitions
        illimitees, pas de --ammo-pct defini -> reste transparent).
        Technique : un disque en conic-gradient, perce au centre par un
-       radial-gradient transparent pour ne garder qu'un anneau fin. */
+       radial-gradient transparent pour ne garder qu'un anneau. Epaissi
+       (inset 0, rayon interieur du masque reduit a 74%) par rapport a la
+       version precedente qui etait trop fine pour se voir clairement.
+       ring-color est ajustee par arme (voir JS) pour rester lisible sur
+       fond sombre et distincte du contour actif rouge. */
     .weaponSlot .ammoRing {
-      position: absolute; inset: 2px; border-radius: 50%;
+      position: absolute; inset: 0px; border-radius: 50%;
       --ammo-pct: 0%;
       background:
-        radial-gradient(circle, transparent 62%, transparent 63%, var(--ring-color, #ffd23b) 63%, var(--ring-color, #ffd23b) 100%),
-        conic-gradient(var(--ring-color, #ffd23b) var(--ammo-pct), rgba(255,255,255,0.08) var(--ammo-pct));
-      -webkit-mask: radial-gradient(circle, transparent 62%, transparent 63%, #000 63%, #000 100%);
-      mask: radial-gradient(circle, transparent 62%, transparent 63%, #000 63%, #000 100%);
+        radial-gradient(circle, transparent 74%, transparent 75%, var(--ring-color, #ffd23b) 75%, var(--ring-color, #ffd23b) 100%),
+        conic-gradient(var(--ring-color, #ffd23b) var(--ammo-pct), rgba(255,255,255,0.1) var(--ammo-pct));
+      -webkit-mask: radial-gradient(circle, transparent 74%, transparent 75%, #000 75%, #000 100%);
+      mask: radial-gradient(circle, transparent 74%, transparent 75%, #000 75%, #000 100%);
       pointer-events: none;
+      filter: drop-shadow(0 0 3px var(--ring-color, #ffd23b));
     }
     /* Badge du nombre de munitions, au-dessus du rond (pas colle dessus). */
     .weaponSlot .ammoCount {
-      position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
-      font-size: 10px; font-weight: 800; color: #ffd23b;
+      position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
+      font-size: 11px; font-weight: 900; color: #ffd23b;
       text-shadow: 0 1px 3px rgba(0,0,0,0.9); white-space: nowrap;
-      background: rgba(0,0,0,0.55); padding: 1px 5px; border-radius: 6px;
+      background: rgba(0,0,0,0.7); padding: 1px 6px; border-radius: 6px;
+      border: 1px solid rgba(255,210,59,0.4);
       pointer-events: none;
     }
     .weaponSlot .key {
@@ -576,6 +592,7 @@
 <body>
   <canvas id="game"></canvas>
   <div id="hud">
+    <button id="soundBtn" aria-label="Toggle sound"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M16 8a5 5 0 010 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
     <button id="pauseBtn" aria-label="Pause"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg></button>
     <div class="hudTitle">DEAD ZONE</div>
     <div class="hudStatsRow">
@@ -601,12 +618,11 @@
     <div class="hudKillFeed" id="hudKillFeed"></div>
     <div id="comboBar"><div id="comboBarFill"></div></div>
   </div>
-  <div id="miniMap"><canvas id="miniMapCanvas" width="150" height="150"></canvas></div>
   <div id="actionBar">
     <div id="weaponDisplay">
       <div class="weaponSlot active" data-weapon="0"><div class="weaponIcon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 15h9v-3h6v3h2v3H3z" fill="currentColor" stroke="none"/><path d="M6 15V9h6l3 3"/></svg></div><div class="key">1</div><div class="name">PISTOL</div></div>
-      <div class="weaponSlot locked" data-weapon="1"><div class="ammoRing"></div><div class="ammoCount"></div><div class="weaponIcon"><svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2 6 6-2-4 5 5 4-6 1 1 6-4-4-4 4 1-6-6-1 5-4-4-5 6 2z"/></svg></div><div class="key">2</div><div class="name">SHOTGUN</div></div>
-      <div class="weaponSlot locked" data-weapon="2"><div class="ammoRing"></div><div class="ammoCount"></div><div class="weaponIcon"><svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg></div><div class="key">3</div><div class="name">MINIGUN</div></div>
+      <div class="weaponSlot locked" data-weapon="1"><div class="ammoRing"></div><div class="ammoCount"></div><div class="weaponIcon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 14h11v-4h7v4h2v3H2z" fill="currentColor" stroke="none"/><path d="M5 14V9h9l4 3"/><path d="M13 9V6" stroke-width="1.4"/></svg></div><div class="key">2</div><div class="name">SHOTGUN</div></div>
+      <div class="weaponSlot locked" data-weapon="2"><div class="ammoRing"></div><div class="ammoCount"></div><div class="weaponIcon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 14h9v-3h2v3h2v3H2z" fill="currentColor" stroke="none"/><path d="M13 11h9v2h-9zM13 15h9v2h-9z" fill="currentColor" stroke="none"/><path d="M4 11V8h7l2 3"/></svg></div><div class="key">3</div><div class="name">MINIGUN</div></div>
       <div class="weaponSlot locked" data-weapon="3"><div class="ammoRing"></div><div class="ammoCount"></div><div class="weaponIcon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c3 2 4 6 4 10-1 1-2 2-4 2s-3-1-4-2c0-4 1-8 4-10z" fill="currentColor" stroke="none"/><path d="M9 14l-3 3 1 4 4-1M15 14l3 3-1 4-4-1" fill="currentColor" stroke="none"/><circle cx="12" cy="9" r="1.4" fill="#0008" stroke="none"/></svg></div><div class="key">4</div><div class="name">BAZOOKA</div></div>
     </div>
   </div>
@@ -629,8 +645,7 @@
   "use strict";
   const canvas = document.querySelector("#game");
   const ctx = canvas.getContext("2d");
-  const miniMapCanvas = document.querySelector("#miniMapCanvas");
-  const miniMapCtx = miniMapCanvas.getContext("2d");
+  // miniMapCanvas retiree (minimap supprimee de l'UI) : plus de reference DOM ici.
 
   // Detection mobile/tactile : utilisee pour activer la visee+tir automatique
   // (le joueur ne gere plus que deplacement et pouvoirs sur mobile), jamais
@@ -728,6 +743,35 @@
 
   const AudioContext = window.AudioContext || window.webkitAudioContext;
   const audioCtx = new AudioContext();
+  // Noeud de gain global : tous les sons (playSound) et l'ambiance passent
+  // par ici plutot que de se connecter directement a audioCtx.destination,
+  // pour pouvoir tout couper/remettre d'un coup avec le bouton son (voir
+  // toggleSound) sans avoir a suivre individuellement chaque source active.
+  const masterGain = audioCtx.createGain();
+  masterGain.gain.value = 1;
+  masterGain.connect(audioCtx.destination);
+  let soundEnabled = true;
+
+  function toggleSound() {
+    soundEnabled = !soundEnabled;
+    masterGain.gain.setTargetAtTime(soundEnabled ? 1 : 0, audioCtx.currentTime, 0.05);
+    localStorage.setItem('deadzone_sound', soundEnabled ? '1' : '0');
+    updateSoundBtn();
+  }
+  function updateSoundBtn() {
+    const btn = document.querySelector('#soundBtn');
+    if (!btn) return;
+    btn.classList.toggle('muted', !soundEnabled);
+    btn.innerHTML = soundEnabled
+      ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M16 8a5 5 0 010 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M15 9l5 6M20 9l-5 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  }
+  // Preference de son restauree au chargement (avant meme de lancer une
+  // partie), pour respecter le choix du joueur entre deux sessions.
+  (function initSoundPref() {
+    const saved = localStorage.getItem('deadzone_sound');
+    if (saved === '0') { soundEnabled = false; masterGain.gain.value = 0; }
+  })();
 
   // ========== PROGRESSION SYSTEM ==========
   const SKILLS = {
@@ -992,7 +1036,7 @@
       const g = audioCtx.createGain();
       g.gain.setValueAtTime(0.42, now);
       g.gain.exponentialRampToValueAtTime(0.001, now+dur);
-      n.connect(f); f.connect(g); g.connect(audioCtx.destination);
+      n.connect(f); f.connect(g); g.connect(masterGain);
       n.start(now);
       // Composante grave (le "coup" ressenti dans la poitrine) : un
       // oscillateur qui chute tres vite, superpose au bruit filtre.
@@ -1002,25 +1046,88 @@
       po.frequency.exponentialRampToValueAtTime(45, now+0.12);
       pg.gain.setValueAtTime(0.5, now);
       pg.gain.exponentialRampToValueAtTime(0.001, now+0.12);
-      po.connect(pg); pg.connect(audioCtx.destination);
+      po.connect(pg); pg.connect(masterGain);
       po.start(now); po.stop(now+0.12);
       if(navigator.vibrate) navigator.vibrate(60);
     } else if (type === 'shoot') {
-      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-      o.connect(g); g.connect(audioCtx.destination);
-      o.type = 'square'; o.frequency.setValueAtTime(600*pitch,now); o.frequency.exponentialRampToValueAtTime(150*pitch,now+0.08);
-      g.gain.setValueAtTime(0.1,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.08);
-      o.start(now); o.stop(now+0.08); if(navigator.vibrate) navigator.vibrate(20);
+      // Pistolet : detonation sèche et courte (bruit filtre + punch grave
+      // bref), meme technique que le shotgun mais plus petite/nerveuse -
+      // remplace l'ancien oscillateur square qui sonnait comme un bip de
+      // synthe plutot qu'un coup de feu.
+      const dur = 0.1;
+      const n = audioCtx.createBufferSource();
+      const b = audioCtx.createBuffer(1, audioCtx.sampleRate*dur, audioCtx.sampleRate);
+      const d = b.getChannelData(0);
+      for (let i=0;i<d.length;i++) d[i] = (Math.random()*2-1) * Math.exp(-i/(audioCtx.sampleRate*0.025));
+      n.buffer = b;
+      const f = audioCtx.createBiquadFilter();
+      f.type = 'lowpass';
+      f.frequency.setValueAtTime(3500*pitch, now);
+      f.frequency.exponentialRampToValueAtTime(500*pitch, now+dur);
+      const g = audioCtx.createGain();
+      g.gain.setValueAtTime(0.28, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now+dur);
+      n.connect(f); f.connect(g); g.connect(masterGain);
+      n.start(now);
+      const po = audioCtx.createOscillator(), pg = audioCtx.createGain();
+      po.type = 'sine';
+      po.frequency.setValueAtTime(180*pitch, now);
+      po.frequency.exponentialRampToValueAtTime(60*pitch, now+0.05);
+      pg.gain.setValueAtTime(0.3, now);
+      pg.gain.exponentialRampToValueAtTime(0.001, now+0.05);
+      po.connect(pg); pg.connect(masterGain);
+      po.start(now); po.stop(now+0.05);
+      if(navigator.vibrate) navigator.vibrate(20);
     } else if (type === 'sniper') {
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination);
-      o.type='sawtooth'; o.frequency.setValueAtTime(1800*pitch,now); o.frequency.exponentialRampToValueAtTime(200*pitch,now+0.3);
-      g.gain.setValueAtTime(0.2,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.3); o.start(now); o.stop(now+0.3);
+      // Sniper : detonation puissante avec un filtre qui reste plus ouvert
+      // (son plus clair/perçant qu'un pistolet) et une traine nettement plus
+      // longue, coherente avec une arme longue portee - avant, un simple
+      // sawtooth qui glissait, sans aucune texture de detonation.
+      const dur = 0.45;
+      const n = audioCtx.createBufferSource();
+      const b = audioCtx.createBuffer(1, audioCtx.sampleRate*dur, audioCtx.sampleRate);
+      const d = b.getChannelData(0);
+      for (let i=0;i<d.length;i++) d[i] = (Math.random()*2-1) * Math.exp(-i/(audioCtx.sampleRate*0.13));
+      n.buffer = b;
+      const f = audioCtx.createBiquadFilter();
+      f.type = 'lowpass';
+      f.frequency.setValueAtTime(5200*pitch, now);
+      f.frequency.exponentialRampToValueAtTime(600*pitch, now+dur);
+      const g = audioCtx.createGain();
+      g.gain.setValueAtTime(0.4, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now+dur);
+      n.connect(f); f.connect(g); g.connect(masterGain);
+      n.start(now);
+      const po = audioCtx.createOscillator(), pg = audioCtx.createGain();
+      po.type = 'sine';
+      po.frequency.setValueAtTime(130*pitch, now);
+      po.frequency.exponentialRampToValueAtTime(35*pitch, now+0.18);
+      pg.gain.setValueAtTime(0.55, now);
+      pg.gain.exponentialRampToValueAtTime(0.001, now+0.18);
+      po.connect(pg); pg.connect(masterGain);
+      po.start(now); po.stop(now+0.18);
+      if(navigator.vibrate) navigator.vibrate(45);
     } else if (type === 'minigun') {
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination);
-      o.type='square'; o.frequency.setValueAtTime(900*pitch,now); o.frequency.exponentialRampToValueAtTime(400*pitch,now+0.03);
-      g.gain.setValueAtTime(0.06,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.03); o.start(now); o.stop(now+0.03);
+      // Minigun : tres court et sec pour tenir la cadence rapide sans se
+      // chevaucher desagreablement, mais garde le meme bruit filtre qu'un
+      // vrai coup plutot qu'un bip carre repete.
+      const dur = 0.045;
+      const n = audioCtx.createBufferSource();
+      const b = audioCtx.createBuffer(1, audioCtx.sampleRate*dur, audioCtx.sampleRate);
+      const d = b.getChannelData(0);
+      for (let i=0;i<d.length;i++) d[i] = (Math.random()*2-1) * Math.exp(-i/(audioCtx.sampleRate*0.012));
+      n.buffer = b;
+      const f = audioCtx.createBiquadFilter();
+      f.type = 'lowpass';
+      f.frequency.setValueAtTime(2800*pitch, now);
+      f.frequency.exponentialRampToValueAtTime(700*pitch, now+dur);
+      const g = audioCtx.createGain();
+      g.gain.setValueAtTime(0.16, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now+dur);
+      n.connect(f); f.connect(g); g.connect(masterGain);
+      n.start(now);
     } else if (type === 'hit') {
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination);
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(masterGain);
       o.type='sawtooth'; o.frequency.setValueAtTime(250*pitch,now); o.frequency.exponentialRampToValueAtTime(80*pitch,now+0.1);
       g.gain.setValueAtTime(0.12,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.1); o.start(now); o.stop(now+0.1);
     } else if (type === 'splat') {
@@ -1028,9 +1135,9 @@
       for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.exp(-i/(audioCtx.sampleRate*0.05));
       n.buffer=b; const f=audioCtx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=800;
       const g=audioCtx.createGain(); g.gain.setValueAtTime(0.2,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.15);
-      n.connect(f); f.connect(g); g.connect(audioCtx.destination); n.start(now);
+      n.connect(f); f.connect(g); g.connect(masterGain); n.start(now);
     } else if (type === 'kill') {
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination);
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(masterGain);
       if(extra.headshot){o.type='triangle';o.frequency.setValueAtTime(1200*pitch,now);o.frequency.exponentialRampToValueAtTime(800*pitch,now+0.1);g.gain.setValueAtTime(0.2,now);g.gain.exponentialRampToValueAtTime(0.001,now+0.15);}
       else{o.type='square';o.frequency.setValueAtTime(400*pitch,now);o.frequency.exponentialRampToValueAtTime(100*pitch,now+0.15);g.gain.setValueAtTime(0.15,now);g.gain.exponentialRampToValueAtTime(0.001,now+0.15);}
       o.start(now); o.stop(now+0.15); if(navigator.vibrate) navigator.vibrate([30,50,30]);
@@ -1039,49 +1146,49 @@
       for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.exp(-i/(audioCtx.sampleRate*0.15));
       n.buffer=b; const f=audioCtx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=400;
       const g=audioCtx.createGain(); g.gain.setValueAtTime(0.5,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.5);
-      n.connect(f); f.connect(g); g.connect(audioCtx.destination); n.start(now);
+      n.connect(f); f.connect(g); g.connect(masterGain); n.start(now);
     } else if (type === 'dash') {
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination);
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(masterGain);
       o.type='sine'; o.frequency.setValueAtTime(400,now); o.frequency.exponentialRampToValueAtTime(800,now+0.15);
       g.gain.setValueAtTime(0.15,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.15); o.start(now); o.stop(now+0.15);
     } else if (type === 'shield') {
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination);
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(masterGain);
       o.type='sine'; o.frequency.setValueAtTime(600,now); o.frequency.setValueAtTime(900,now+0.1);
       g.gain.setValueAtTime(0.2,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.3); o.start(now); o.stop(now+0.3);
     } else if (type === 'pickup') {
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination);
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(masterGain);
       o.type='sine'; o.frequency.setValueAtTime(800,now); o.frequency.exponentialRampToValueAtTime(1600,now+0.15);
       g.gain.setValueAtTime(0.1,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.15); o.start(now); o.stop(now+0.15);
     } else if (type === 'damage') {
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination);
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(masterGain);
       o.type='sawtooth'; o.frequency.setValueAtTime(120,now); o.frequency.exponentialRampToValueAtTime(40,now+0.25);
       g.gain.setValueAtTime(0.25,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.25); o.start(now); o.stop(now+0.25);
       if(navigator.vibrate) navigator.vibrate(200);
     } else if (type === 'combo') {
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination);
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(masterGain);
       o.type='sine'; o.frequency.setValueAtTime(1200*pitch,now); o.frequency.exponentialRampToValueAtTime(1800*pitch,now+0.1);
       g.gain.setValueAtTime(0.1,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.1); o.start(now); o.stop(now+0.1);
     } else if (type === 'multikill') {
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination);
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(masterGain);
       o.type='square'; o.frequency.setValueAtTime(800,now); o.frequency.setValueAtTime(1000,now+0.1); o.frequency.setValueAtTime(1200,now+0.2);
       g.gain.setValueAtTime(0.2,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.3); o.start(now); o.stop(now+0.3);
     } else if (type === 'charge') {
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination);
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(masterGain);
       o.type='sine'; o.frequency.setValueAtTime(200+extra.charge*800,now);
       g.gain.setValueAtTime(0.05,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.05); o.start(now); o.stop(now+0.05);
     } else if (type === 'boss') {
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination);
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(masterGain);
       o.type='sawtooth'; o.frequency.setValueAtTime(80,now); o.frequency.exponentialRampToValueAtTime(40,now+1.0);
       g.gain.setValueAtTime(0.3,now); g.gain.exponentialRampToValueAtTime(0.001,now+1.0); o.start(now); o.stop(now+1.0);
     } else if (type === 'levelup') {
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination);
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(masterGain);
       o.type='sine';
       o.frequency.setValueAtTime(523,now); o.frequency.setValueAtTime(659,now+0.1);
       o.frequency.setValueAtTime(784,now+0.2); o.frequency.setValueAtTime(1047,now+0.3);
       g.gain.setValueAtTime(0.2,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.5);
       o.start(now); o.stop(now+0.5);
     } else if (type === 'achievement') {
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination);
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(masterGain);
       o.type='triangle';
       o.frequency.setValueAtTime(880,now); o.frequency.setValueAtTime(1320,now+0.1);
       o.frequency.setValueAtTime(1760,now+0.2);
@@ -1093,10 +1200,10 @@
       for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.exp(-i/(audioCtx.sampleRate*0.3))*(1-i/d.length);
       n.buffer=b; const f=audioCtx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=300;
       const g=audioCtx.createGain(); g.gain.setValueAtTime(0.6,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.8);
-      n.connect(f); f.connect(g); g.connect(audioCtx.destination); n.start(now);
+      n.connect(f); f.connect(g); g.connect(masterGain); n.start(now);
       if(navigator.vibrate) navigator.vibrate([50, 100, 50, 100, 200]);
     } else if (type === 'destroy') {
-      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination);
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.connect(g); g.connect(masterGain);
       o.type='square'; o.frequency.setValueAtTime(300,now); o.frequency.exponentialRampToValueAtTime(80,now+0.15);
       g.gain.setValueAtTime(0.15,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.15);
       o.start(now); o.stop(now+0.15);
@@ -1106,8 +1213,83 @@
       for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*0.02;
       n.buffer=b; const f=audioCtx.createBiquadFilter(); f.type='highpass'; f.frequency.value=2000;
       const g=audioCtx.createGain(); g.gain.setValueAtTime(0.03,now); g.gain.exponentialRampToValueAtTime(0.001,now+0.1);
-      n.connect(f); f.connect(g); g.connect(audioCtx.destination); n.start(now);
+      n.connect(f); f.connect(g); g.connect(masterGain); n.start(now);
     }
+  }
+
+  // ===== AMBIANCE SONORE CREEPY/HORROR EN BOUCLE =====
+  // Un drone grave continu (deux oscillateurs legerement desaccordes pour un
+  // battement inquietant, filtre qui derive lentement), plus des craquements/
+  // grincements aleatoires occasionnels declenches a intervalle irregulier.
+  // Tout passe par masterGain, donc coupe automatiquement avec le bouton son.
+  let ambience = null;
+  function startAmbience() {
+    if (ambience) return; // deja demarree
+    const now = audioCtx.currentTime;
+    const bus = audioCtx.createGain();
+    bus.gain.value = 0;
+    bus.gain.linearRampToValueAtTime(0.14, now + 3); // montee lente, pas un demarrage brutal
+    bus.connect(masterGain);
+
+    // Drone grave : deux oscillateurs proches en frequence (battement lent,
+    // caracteristique du son "sourd" d'horreur), passes dans un filtre dont
+    // la coupure derive tres lentement pour eviter un son fixe et statique.
+    const o1 = audioCtx.createOscillator(), o2 = audioCtx.createOscillator();
+    o1.type = 'sine'; o2.type = 'sine';
+    o1.frequency.value = 42; o2.frequency.value = 44.5;
+    const droneFilter = audioCtx.createBiquadFilter();
+    droneFilter.type = 'lowpass'; droneFilter.frequency.value = 220;
+    o1.connect(droneFilter); o2.connect(droneFilter); droneFilter.connect(bus);
+    o1.start(now); o2.start(now);
+
+    // Derive lente et aleatoire de la frequence de coupure, pour que le
+    // drone respire au lieu de rester parfaitement statique.
+    function driftFilter() {
+      if (!ambience) return;
+      const target = 150 + Math.random()*220;
+      droneFilter.frequency.linearRampToValueAtTime(target, audioCtx.currentTime + 6 + Math.random()*4);
+      ambience.driftTimer = setTimeout(driftFilter, 6000 + Math.random()*4000);
+    }
+
+    // Craquements/grincements aleatoires : bruit filtre bref, tres espaces
+    // dans le temps, pour ponctuer le silence sans devenir previsible.
+    function scheduleCreeek() {
+      if (!ambience) return;
+      const delay = 8000 + Math.random()*14000;
+      ambience.creakTimer = setTimeout(() => {
+        const t = audioCtx.currentTime;
+        const dur = 0.4 + Math.random()*0.5;
+        const n = audioCtx.createBufferSource();
+        const b = audioCtx.createBuffer(1, audioCtx.sampleRate*dur, audioCtx.sampleRate);
+        const d = b.getChannelData(0);
+        for (let i=0;i<d.length;i++) d[i] = (Math.random()*2-1) * Math.exp(-i/(audioCtx.sampleRate*0.15));
+        n.buffer = b;
+        const f = audioCtx.createBiquadFilter();
+        f.type = 'bandpass'; f.frequency.value = 300 + Math.random()*500; f.Q.value = 3;
+        const g = audioCtx.createGain();
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(0.05 + Math.random()*0.04, t+dur*0.3);
+        g.gain.exponentialRampToValueAtTime(0.001, t+dur);
+        n.connect(f); f.connect(g); g.connect(masterGain);
+        n.start(t);
+        scheduleCreeek();
+      }, delay);
+    }
+
+    ambience = { bus, o1, o2, driftFilter, driftTimer:null, creakTimer:null };
+    driftFilter();
+    scheduleCreeek();
+  }
+
+  function stopAmbience() {
+    if (!ambience) return;
+    const now = audioCtx.currentTime;
+    ambience.bus.gain.linearRampToValueAtTime(0, now + 1);
+    clearTimeout(ambience.driftTimer);
+    clearTimeout(ambience.creakTimer);
+    const { o1, o2, bus } = ambience;
+    setTimeout(() => { o1.stop(); o2.stop(); o1.disconnect(); o2.disconnect(); bus.disconnect(); }, 1100);
+    ambience = null;
   }
 
   const WEAPONS = [
@@ -2156,6 +2338,7 @@
     resetState();
     game.lastTime=performance.now();
     game.raf=requestAnimationFrame(frame);
+    startAmbience();
   }
 
   function frame(now) {
@@ -3361,7 +3544,6 @@
 
     ctx.restore();
     drawVignette(); // en coordonnees ecran fixes (apres restore), pour ne pas tourner/zoomer avec la camera
-    drawMiniMap();
   }
 
   function drawGround(theme) {
@@ -4282,12 +4464,13 @@
         // Convention des sprites zombies (voir prompt de generation) : les
         // bras tendus pointent vers le BAS de l'image source, alors que
         // ctx.rotate(walkAngle) suppose une convention "avant = vers la
-        // droite" (angle 0). On applique donc une rotation supplementaire de
-        // +90 degres ici, seulement pour les sprites images, afin que
-        // l'avant du sprite (le bas de l'image) s'aligne avec walkAngle -
-        // le rendu vectoriel de repli plus bas n'a pas besoin de cet
-        // ajustement, il est deja dessine "avant = droite" nativement.
-        ctx.rotate(Math.PI/2);
+        // droite" (angle 0). Rotation supplementaire de -90 degres (et non
+        // +90 comme precedemment - l'ecart entre les deux vaut exactement
+        // 180 degres, ce qui donnait des zombies tournant le dos au joueur)
+        // afin que l'avant reel du sprite (le bas de l'image) s'aligne avec
+        // walkAngle. Le rendu vectoriel de repli plus bas n'a pas besoin de
+        // cet ajustement, il est deja dessine "avant = droite" nativement.
+        ctx.rotate(-Math.PI/2);
         if (e.flash > 0) {
           // Flash de degats : on dessine le sprite normalement puis on le
           // reblanchit avec un calque "source-atop" (ne peint que les
@@ -4548,6 +4731,7 @@
 
   function endGame() {
     game.active=false; cancelAnimationFrame(game.raf);
+    stopAmbience();
     const fs=Math.floor(game.score), st=Math.floor((Date.now()-game.startTime)/1000);
     const isNew=fs>getHighScore(); if(isNew) setHighScore(fs);
 
@@ -4784,7 +4968,7 @@
     </div>`;
     document.querySelector('#resumeBtn').addEventListener('click', resumeGame);
     document.querySelector('#pauseRestartBtn').addEventListener('click', () => { resetUpgrades(); start(); });
-    document.querySelector('#pauseMenuBtn').addEventListener('click', () => { game.active=false; game.paused=false; cancelAnimationFrame(game.raf); showMainMenu(); });
+    document.querySelector('#pauseMenuBtn').addEventListener('click', () => { game.active=false; game.paused=false; cancelAnimationFrame(game.raf); stopAmbience(); showMainMenu(); });
   }
 
   function resumeGame() {
@@ -4823,6 +5007,8 @@
   });
   addEventListener("keydown",e=>{input.keys.add(e.key);if([" ","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key))e.preventDefault();if(e.key==='1')switchWeapon(0);if(e.key==='2')switchWeapon(1);if(e.key==='3')switchWeapon(2);if(e.key==='4')switchWeapon(3);if(e.key==='Escape')togglePause();});
   document.querySelector('#pauseBtn').addEventListener('click', togglePause);
+  document.querySelector('#soundBtn').addEventListener('click', toggleSound);
+  updateSoundBtn(); // reflete l'etat restaure depuis localStorage des le chargement
   addEventListener("keyup",e=>{input.keys.delete(e.key);if(e.key===' '){game.chargeLevel=0;input.pointer.chargeTime=0;}});
   canvas.addEventListener("mousemove",e=>{if(e.target.closest('#overlay')||e.target.closest('#hud'))return;input.pointer.x=e.clientX;input.pointer.y=e.clientY;});
   canvas.addEventListener("mousedown",e=>{if(e.target.closest('#overlay')||e.target.closest('#hud'))return;input.pointer.held=true;input.pointer.chargeTime=0;});
