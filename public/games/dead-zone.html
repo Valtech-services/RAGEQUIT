@@ -673,12 +673,12 @@
       <div class="weaponSlot locked" data-weapon="2"><div class="ammoRing"></div><div class="ammoCount"></div><div class="weaponIcon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 14h9v-3h2v3h2v3H2z" fill="currentColor" stroke="none"/><path d="M13 11h9v2h-9zM13 15h9v2h-9z" fill="currentColor" stroke="none"/><path d="M4 11V8h7l2 3"/></svg></div><div class="key">3</div><div class="name">MINIGUN</div></div>
       <div class="weaponSlot locked" data-weapon="3"><div class="ammoRing"></div><div class="ammoCount"></div><div class="weaponIcon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c3 2 4 6 4 10-1 1-2 2-4 2s-3-1-4-2c0-4 1-8 4-10z" fill="currentColor" stroke="none"/><path d="M9 14l-3 3 1 4 4-1M15 14l3 3-1 4-4-1" fill="currentColor" stroke="none"/><circle cx="12" cy="9" r="1.4" fill="#0008" stroke="none"/></svg></div><div class="key">4</div><div class="name">BAZOOKA</div></div>
     </div>
-	  <div id="fireBtn" aria-label="Fire">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="9"/>
-    <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/>
-  </svg>
-</div>
+  </div>
+  <div id="fireBtn" aria-label="Fire">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9"/>
+      <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/>
+    </svg>
   </div>
   <div id="bossBar"><div id="bossBarFill"></div><div id="bossName">BOSS</div></div>
   <div id="notifications"></div>
@@ -2613,12 +2613,13 @@ const hero = {
     // Tir automatique (mobile uniquement) : le joueur ne gere que deplacement
     // + pouvoirs, la visee et le declenchement se font sur l'ennemi le plus
     // proche a portee. Sur desktop la visee/tir restent manuels (souris).
-    let autoFireReady = false;
-    if (isMobile) {
+    // Visée assistée sur mobile uniquement pendant qu'on maintient le bouton
+    // de tir : plus de tir automatique, c'est le joueur qui décide quand tirer
+    // (le bouton circulaire #fireBtn met input.pointer.held à true).
+    if (isMobile && input.pointer.held) {
       const target2 = findNearestEnemy(WEAPONS[game.currentWeapon].autoRange || 420);
       if (target2) {
         hero.aim = Math.atan2(target2.y-hero.y, target2.x-hero.x);
-        autoFireReady = true;
       }
     }
 
@@ -2630,7 +2631,7 @@ const hero = {
       game.chargeLevel=Math.min(1,input.pointer.chargeTime/1.5);
       if(Math.floor(input.pointer.chargeTime*20)%4===0) playSound('charge',1,{charge:game.chargeLevel});
     }
-    const wantsToFire = isMobile ? autoFireReady : (input.pointer.held||pressed(" ","fire"));
+    const wantsToFire = input.pointer.held || pressed(" ", "fire");
     if(wantsToFire&&hero.cooldown<=0 && !game.heroDying) fireWeapon();
   }
 
@@ -5121,6 +5122,35 @@ ctx.fillStyle = darkenHex(bc, 35);
     ui.weaponSlots.forEach((slot, i) => {
       slot.addEventListener('touchstart', ev => { ev.preventDefault(); ev.stopPropagation(); switchWeapon(i); }, {passive:false});
     });
+
+    // Bouton de tir circulaire : affiché seulement sur mobile (le CSS le
+    // cache par défaut avec display:none). Maintenir le doigt dessus
+    // déclenche le tir (input.pointer.held = true), le relâcher l'arrête.
+    const fireBtn = document.querySelector('#fireBtn');
+    fireBtn.style.display = 'flex';
+
+    const pressFire = (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      input.pointer.held = true;
+      input.pointer.chargeTime = 0;
+      fireBtn.classList.add('pressed');
+    };
+    const releaseFire = (ev) => {
+      if (ev) { ev.preventDefault(); ev.stopPropagation(); }
+      input.pointer.held = false;
+      game.chargeLevel = 0;
+      input.pointer.chargeTime = 0;
+      fireBtn.classList.remove('pressed');
+    };
+
+    fireBtn.addEventListener('touchstart', pressFire, {passive:false});
+    fireBtn.addEventListener('touchend', releaseFire, {passive:false});
+    fireBtn.addEventListener('touchcancel', releaseFire, {passive:false});
+    // Fallback souris (dev / tablette avec souris)
+    fireBtn.addEventListener('mousedown', pressFire);
+    fireBtn.addEventListener('mouseup', releaseFire);
+    fireBtn.addEventListener('mouseleave', releaseFire);
   }
 
   // ========== INIT ==========
