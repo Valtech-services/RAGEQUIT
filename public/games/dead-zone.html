@@ -4725,7 +4725,14 @@ ctx.fillStyle = darkenHex(bc, 35);
     if (saveProgressionTimer) { clearTimeout(saveProgressionTimer); saveProgressionTimer = null; }
     saveProgressionNow(); // flush immediat en fin de partie, pas de debounce ici
 
+    // envoi du score au leaderboard du site
+    try { window.parent && window.parent.postMessage({
+      type: 'DEAD_ZONE_SCORE', game: 'dead-zone', mode: 'classic',
+      score: fs, scoreLabel: fs.toLocaleString('en-US') + ' pts · wave ' + game.wave
+    }, '*'); } catch(e) {}
+
     showGameOverScreen(fs, st, isNew);
+  }
   }
 
   function showGameOverScreen(fs, st, isNew) {
@@ -4740,9 +4747,49 @@ ctx.fillStyle = darkenHex(bc, 35);
     h+=`<div class="statCard"><div class="label">Max Combo</div><div class="value">${game.maxCombo}x</div></div>`;
     h+=`<div class="statCard"><div class="label">Wave Reached</div><div class="value">${game.wave}</div></div>`;
     h+=`<div class="statCard"><div class="label">Objects Destroyed</div><div class="value">${game.objectsDestroyedThisRun}</div></div>`;
-    h+=`</div><button id="restartBtn">PLAY AGAIN</button></div>`;
+    // bouton pub revive : proposé une seule fois par partie
+    const reviveBtn = (!game.reviveUsed) ? `<button id="reviveBtn" style="background:linear-gradient(90deg,#a3e635,#65a30d);color:#14210a">▶ WATCH AD · REVIVE</button>` : '';
+    h+=`</div>${reviveBtn}<button id="restartBtn">PLAY AGAIN</button></div>`;
     ui.overlay.innerHTML=h;
     document.querySelector('#restartBtn').addEventListener('click',()=>{resetUpgrades();start();});
+    const rb = document.querySelector('#reviveBtn');
+    if(rb) rb.addEventListener('click', startReviveAd);
+  }
+
+  // Pub simulée de 5s, puis reprise là où le joueur est mort.
+  function startReviveAd(){
+    const ov = ui.overlay;
+    let n = 5;
+    ov.innerHTML = `<div class="panel"><h1>AD</h1><p>Reward in <span id="adCount">${n}</span>s…</p></div>`;
+    const iv = setInterval(()=>{
+      n--;
+      const c = document.querySelector('#adCount'); if(c) c.textContent = n;
+      if(n<=0){
+        clearInterval(iv);
+        // suivi analytics : pub récompensée vue en entier
+        try { window.parent && window.parent.postMessage({ type:'RH_TRACK', event:'ad_rewarded_complete', game_id:'dead-zone', props:{context:'revive'} }, '*'); } catch(e){}
+        reviveHero();
+      }
+    }, 1000);
+  }
+
+  // Reprend la partie : ressuscite le héros sur place, nettoie l'écran.
+  function reviveHero(){
+    game.reviveUsed = true;
+    game.active = true;
+	game.reviveUsed = false;
+    game.paused = false;
+    ui.overlay.classList.remove('active');
+    ui.overlay.innerHTML = '';
+    // ressuscite le héros à pleine vie, là où il est mort
+    hero.health = hero.maxHealth;
+    game.heroDying = false;
+    game.heroDeathTimer = 0;
+    // vide les ennemis pour donner un répit
+    game.enemies = [];
+    game.lastTime = performance.now();
+    cancelAnimationFrame(game.raf);
+    game.raf = requestAnimationFrame(frame);
   }
 
   function applyUpgrade(k){switch(k){case'maxHealth':hero.maxHealth+=20;hero.health=hero.maxHealth;break;case'damage':hero.damage+=0.5;break;case'speed':hero.speed+=0.5;break;case'fireRate':hero.fireDelay=Math.max(5,hero.fireDelay-2);break;case'tripleShot':hero.triple=true;break;}}
