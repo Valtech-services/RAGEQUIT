@@ -118,26 +118,34 @@
       border-radius: 50%; pointer-events: none; overflow: hidden;
       box-shadow: 0 8px 24px rgba(0,0,0,0.5);
     }
-    #pauseBtn {
-      position: absolute; top: 10px; right: 10px; z-index: 6;
-      width: 26px; height: 26px; border-radius: 50%; padding: 0; margin: 0;
-      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; pointer-events: auto;
-    }
-    #pauseBtn:hover { background: rgba(255,255,255,0.14); }
-    #pauseBtn svg { width: 13px; height: 13px; color: #f2f2f2; }
-    /* Bouton son discret, juste a gauche du bouton pause (meme style). */
-    #soundBtn {
-      position: absolute; top: 10px; right: 44px; z-index: 6;
-      width: 26px; height: 26px; border-radius: 50%; padding: 0; margin: 0;
-      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; pointer-events: auto;
-    }
-    #soundBtn:hover { background: rgba(255,255,255,0.14); }
-    #soundBtn svg { width: 13px; height: 13px; color: #f2f2f2; }
-    #soundBtn.muted svg { color: rgba(255,255,255,0.4); }
+#topRightControls {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 6;
+  display: flex;
+  gap: 8px;
+}
+
+#pauseBtn, #soundBtn {
+  position: static;   /* plus d'absolute */
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  padding: 0;
+  margin: 0;
+  background: rgba(14,14,16,0.92);
+  border: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: auto;
+  backdrop-filter: blur(10px);
+}
+#pauseBtn:hover, #soundBtn:hover { background: rgba(255,255,255,0.12); }
+#pauseBtn svg, #soundBtn svg { width: 15px; height: 15px; color: #f2f2f2; }
+#soundBtn.muted svg { color: rgba(255,255,255,0.4); }
 
     /* ===== BARRE D'ACTION (bas, unifiee) =====
        Avant : deux grilles independantes (armes a gauche / pouvoirs a droite)
@@ -555,7 +563,8 @@
       .hudBarText { font-size: 9px; }
 
       #miniMap { top: 8px; right: 8px; width: 84px; height: 84px; }
-
+#topRightControls { top: 8px; right: 8px; }
+#pauseBtn, #soundBtn { width: 28px; height: 28px; }
       #bossBar { width: 90vw; height: 22px; top: 8px; }
       #bossName { font-size: 10px; letter-spacing: 1px; }
 
@@ -591,9 +600,11 @@
 </head>
 <body>
   <canvas id="game"></canvas>
-  <div id="hud">
+ <div id="topRightControls">
     <button id="soundBtn" aria-label="Toggle sound"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M16 8a5 5 0 010 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
     <button id="pauseBtn" aria-label="Pause"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg></button>
+ </div>
+  <div id="hud">
     <div class="hudTitle">DEAD ZONE</div>
     <div class="hudStatsRow">
       <div class="hudStat"><span class="hudStatLabel">Score</span><span class="hudStatValue" id="score">0</span></div>
