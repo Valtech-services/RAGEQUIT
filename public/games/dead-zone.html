@@ -4471,19 +4471,7 @@
         // walkAngle. Le rendu vectoriel de repli plus bas n'a pas besoin de
         // cet ajustement, il est deja dessine "avant = droite" nativement.
         ctx.rotate(-Math.PI/2);
-        if (e.flash > 0) {
-          // Flash de degats : on dessine le sprite normalement puis on le
-          // reblanchit avec un calque "source-atop" (ne peint que les
-          // pixels non-transparents du sprite), pour garder le meme
-          // feedback visuel qu'en rendu vectoriel.
-          ctx.drawImage(sprites[enemySpriteKey], -ed/2, -ed/2, ed, ed);
-          ctx.globalCompositeOperation = 'source-atop';
-          ctx.fillStyle = 'rgba(255,255,255,0.7)';
-          ctx.fillRect(-ed/2, -ed/2, ed, ed);
-          ctx.globalCompositeOperation = 'source-over';
-        } else {
-          ctx.drawImage(sprites[enemySpriteKey], -ed/2, -ed/2, ed, ed);
-        }
+ctx.drawImage(sprites[enemySpriteKey], -ed/2, -ed/2, ed, ed);
         ctx.restore();
         drawEnemyHealthBar(e, p);
         continue;
