@@ -28,7 +28,8 @@
     canvas {
   display: block;
   width: 100%;
-  height: calc(var(--vh, 1vh) * 100);
+  height: 100vh;      /* fallback vieux navigateurs */
+  height: 100dvh;     /* navigateurs modernes : tient compte des barres */
   cursor: crosshair;
   touch-action: none;
   overscroll-behavior: none;
@@ -697,19 +698,12 @@
   <script>
 (() => {
   "use strict";
-    function setVH() {
-      document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
-      // Relance le resize du canvas pour qu'il prenne la nouvelle hauteur.
-      if (typeof resize === 'function') resize();
-    }
-    setVH();
-    // Rappel différé : la barre d'URL mobile peut mettre quelques centaines
-    // de ms a se stabiliser apres le chargement.
-    setTimeout(setVH, 100);
-    setTimeout(setVH, 500);
-    window.addEventListener('resize', setVH);
-    window.addEventListener('orientationchange', () => setTimeout(setVH, 200));
-    window.addEventListener('load', setVH);
+	function setVH() {
+  document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
+}
+setVH();
+window.addEventListener('resize', setVH);
+window.addEventListener('orientationchange', () => setTimeout(setVH, 200));
   const canvas = document.querySelector("#game");
   const ctx = canvas.getContext("2d");
   // miniMapCanvas retiree (minimap supprimee de l'UI) : plus de reference DOM ici.
