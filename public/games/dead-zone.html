@@ -4503,22 +4503,18 @@
         ctx.beginPath(); ctx.moveTo(0, r*0.5); ctx.lineTo(r*1.1, r*0.62); ctx.stroke();
       }
 
-      ctx.shadowBlur=e.flash>0?20:(e.isBoss?30:10);
-      ctx.shadowColor=e.flash>0?"#fff":bc;
+	ctx.shadowBlur = e.isBoss ? 30 : 10;
+	ctx.shadowColor = bc;
 
       // Corps : un seul ovale simple (contrairement a la version precedente
       // avec deux masses d'epaules distinctes, qui ne se distinguaient plus
       // a 18-40px de rayon et se lisaient comme un simple blob). La
       // silhouette humanoide vient desormais des bras/jambes tres visibles
       // + de la tete nettement detachee ci-dessous, pas de la forme du corps.
-      if (e.flash > 0) {
-        ctx.fillStyle = '#fff';
-      } else {
-        const grad = ctx.createRadialGradient(-r*0.25,-r*0.15,r*0.1, 0,0,r*0.9);
-        grad.addColorStop(0, lightenHex(bc, 30));
-        grad.addColorStop(1, bc);
-        ctx.fillStyle = grad;
-      }
+const grad = ctx.createRadialGradient(-r*0.25,-r*0.15,r*0.1, 0,0,r*0.9);
+grad.addColorStop(0, lightenHex(bc, 30));
+grad.addColorStop(1, bc);
+ctx.fillStyle = grad;
       ctx.beginPath(); ctx.ellipse(0, 0, r*0.72, r*0.9, 0, 0, Math.PI*2); ctx.fill();
       ctx.shadowBlur = 0;
       ctx.strokeStyle = 'rgba(0,0,0,0.55)';
@@ -4531,7 +4527,7 @@
       // avant, le contraste tete/corps etait trop faible pour se distinguer
       // a l'echelle reelle de rendu.
       const headX = r*0.62;
-      ctx.fillStyle = e.flash>0 ? '#fff' : darkenHex(bc, 35);
+ctx.fillStyle = darkenHex(bc, 35);
       ctx.beginPath(); ctx.arc(headX, 0, r*0.4, 0, Math.PI*2); ctx.fill();
       ctx.strokeStyle = 'rgba(0,0,0,0.7)'; ctx.lineWidth=1.5;
       ctx.beginPath(); ctx.arc(headX, 0, r*0.4, 0, Math.PI*2); ctx.stroke();
