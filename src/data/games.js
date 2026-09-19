@@ -532,4 +532,39 @@ export const games = [
       ],
     },
   },
+     /* ================================================================
+     DEAD ZONE — shooting : survie zombie en vue de dessus
+     ================================================================ */
+  {
+    id: 'dead-zone',
+    title: 'Dead Zone',
+    description: 'The city has fallen, the dead are everywhere, and you are the only thing still standing. Dead Zone is an intense top-down zombie survival shooter that drops you into an endless, procedurally generated city and dares you to see how long you can last. Move, aim and fire in every direction as relentless waves of the undead pour in from every street, alley and park. You start with a pistol and unlimited ammo, but survival means more firepower, so hunt down the weapons your fallen enemies drop: a devastating five-shot shotgun fan, a full-auto minigun that shreds crowds, and a bazooka whose massive blast will tear through a horde in one hit — just be careful, because that explosion does not care whether you are standing in it. Not every zombie shambles straight at you either. The spitter hangs back and rains projectiles from a distance, forcing you to keep moving and pick your targets. Each wave demands a kill quota before the next, tougher one begins, so there is no hiding and no slowing down. Chain your kills to build a combo, keep your nerve as the screen fills with the dead, and push deeper into a city that never ends. Dead Zone is fast, brutal and built for one thing: seeing how far you can get before the horde finally drags you down. How long can you survive the dead zone?',
+    thumbnail: '/thumbnails/dead-zone.jpg',
+    category: 'shooting',
+    tags: ['zombie', 'survival', 'shooter', 'top-down', 'action', 'waves', 'combo', 'twin-stick', 'intense'],
+    size: 'large',
+    shimmer: true,
+    isNew: true,
+    hot: true,
+    landscape: false,
+    plays: 0,
+    modes: ['classic'],
+    defaultMode: 'classic',
+    controls: 'Move your character and aim in any direction to shoot the zombies. On desktop, use the keyboard to move and the mouse to aim and fire. On mobile, use the on-screen controls to move and shoot. Pick up the weapons dropped by fallen enemies for more firepower, and keep moving to survive. Works on mobile, tablet and desktop.',
+    author: 'Ragequit Arcade',
+    seo: {
+      title: 'Dead Zone — Free Top-Down Zombie Survival Shooter | Ragequit Arcade',
+      metaDescription: 'Play Dead Zone free online. A fast top-down zombie survival shooter: blast endless waves in a procedural city, grab dropped weapons, chain combos and see how long you last. No download.',
+      faq: [
+        { q: 'How do you play Dead Zone?', a: 'Dead Zone is a top-down survival shooter. You control a survivor in a city overrun by zombies, moving in any direction while aiming and firing at the horde. On desktop you move with the keyboard and aim with the mouse; on mobile you use on-screen controls. Your goal is simple: survive as long as possible against endless, escalating waves of the undead.' },
+        { q: 'How do the weapons work?', a: 'You start with a pistol that has unlimited ammo, so you are never completely defenceless. Stronger weapons are dropped by the enemies you kill, but they come with limited ammo. These include a five-shot shotgun fan for close crowds, a full-auto minigun for shredding groups, and a bazooka with a huge area blast. The bazooka is powerful but its explosion can also hurt you, so use it with care.' },
+        { q: 'What kinds of zombies are there?', a: 'Most zombies shamble straight toward you, but not all of them. The spitter is a ranged enemy that keeps its distance and fires projectiles at you, so you cannot simply hold one position. You have to keep moving, manage the crowd rushing you, and deal with the ranged threats at the same time.' },
+        { q: 'How do the waves work?', a: 'Each wave requires you to kill a certain number of zombies before the next, harder wave begins. There is no waiting out the clock: you have to keep fighting to progress. As the waves climb, the horde grows denser and more dangerous, so your positioning and weapon choices matter more and more.' },
+        { q: 'What is the combo system?', a: 'Chaining kills quickly builds a combo, rewarding aggressive, confident play. Keeping your combo alive while the screen fills with the dead is part of the challenge, and part of what pushes you to keep taking risks instead of playing it safe.' },
+        { q: 'Is the map always the same?', a: 'No. The city is procedurally generated and effectively endless, with different districts like dense downtown blocks, wide avenues and open parks. Every run takes you through a different layout, so you can never simply memorise a safe route.' },
+        { q: 'Is Dead Zone free?', a: 'Yes, completely free to play, no download and no signup required.' },
+        { q: 'Mobile?', a: 'Yes. Dead Zone works on mobile, tablet and desktop, with on-screen controls for touch devices.' },
+      ],
+    },
+  },
 ]
