@@ -25,7 +25,14 @@
         etre interprete comme un geste de rafraichissement de page, ce qui
         redemarrait le jeu depuis le point de vue du joueur. */
     }
-    canvas { display: block; width: 100vw; height: 100vh; cursor: crosshair; touch-action: none; overscroll-behavior: none; }
+    canvas {
+  display: block;
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+  cursor: crosshair;
+  touch-action: none;
+  overscroll-behavior: none;
+}
     /* ===== HUD PRINCIPAL (haut gauche) =====
        Refonte : hierarchie claire (titre discret / stats en ligne / barres
        separees et legendees par icone) au lieu de lignes de texte empilees
@@ -549,7 +556,35 @@
     .levelInfo .skillPoints {
       font-size: 16px; color: #ffd23b; margin-top: 8px; font-weight: 700;
     }
-
+#fireBtn {
+      position: fixed;
+      right: 24px;
+      bottom: 96px;
+      z-index: 6;
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,80,80,0.55), rgba(120,10,10,0.75));
+      border: 2px solid rgba(255,90,90,0.85);
+      box-shadow: 0 0 24px rgba(255,40,40,0.45), inset 0 2px 6px rgba(255,255,255,0.15);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: transform 0.08s, box-shadow 0.08s;
+    }
+    #fireBtn svg {
+      width: 34px; height: 34px;
+      color: #fff;
+      filter: drop-shadow(0 0 6px rgba(255,80,80,0.9));
+    }
+    #fireBtn.pressed {
+      transform: scale(0.92);
+      box-shadow: 0 0 36px rgba(255,80,80,0.9), inset 0 2px 6px rgba(255,255,255,0.25);
+    }
     /* ===== RESPONSIVE (mobile/tablette portrait) ===== */
     @media (max-width: 700px) {
       #hud {
@@ -588,6 +623,8 @@
       .panel { padding: 20px; border-radius: 18px; }
       .statsGrid, .achievementGrid, .skinGrid { grid-template-columns: repeat(2, 1fr); }
       .skillTree { grid-template-columns: 1fr; }
+	  #fireBtn { right: 16px; bottom: 88px; width: 76px; height: 76px; }
+      #fireBtn svg { width: 30px; height: 30px; }
     }
 
     /* petits téléphones en paysage : le HUD haut prend trop de hauteur sinon */
@@ -636,6 +673,12 @@
       <div class="weaponSlot locked" data-weapon="2"><div class="ammoRing"></div><div class="ammoCount"></div><div class="weaponIcon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 14h9v-3h2v3h2v3H2z" fill="currentColor" stroke="none"/><path d="M13 11h9v2h-9zM13 15h9v2h-9z" fill="currentColor" stroke="none"/><path d="M4 11V8h7l2 3"/></svg></div><div class="key">3</div><div class="name">MINIGUN</div></div>
       <div class="weaponSlot locked" data-weapon="3"><div class="ammoRing"></div><div class="ammoCount"></div><div class="weaponIcon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c3 2 4 6 4 10-1 1-2 2-4 2s-3-1-4-2c0-4 1-8 4-10z" fill="currentColor" stroke="none"/><path d="M9 14l-3 3 1 4 4-1M15 14l3 3-1 4-4-1" fill="currentColor" stroke="none"/><circle cx="12" cy="9" r="1.4" fill="#0008" stroke="none"/></svg></div><div class="key">4</div><div class="name">BAZOOKA</div></div>
     </div>
+	  <div id="fireBtn" aria-label="Fire">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="9"/>
+    <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/>
+  </svg>
+</div>
   </div>
   <div id="bossBar"><div id="bossBarFill"></div><div id="bossName">BOSS</div></div>
   <div id="notifications"></div>
@@ -654,6 +697,12 @@
   <script>
 (() => {
   "use strict";
+	function setVH() {
+  document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
+}
+setVH();
+window.addEventListener('resize', setVH);
+window.addEventListener('orientationchange', () => setTimeout(setVH, 200));
   const canvas = document.querySelector("#game");
   const ctx = canvas.getContext("2d");
   // miniMapCanvas retiree (minimap supprimee de l'UI) : plus de reference DOM ici.
@@ -1434,8 +1483,8 @@
     objectsDestroyedThisRun: 0
   };
 
-  const hero = {
-    x:0, y:0, radius:16, speed:3.45, health:130, maxHealth:130,
+const hero = {
+  x:0, y:0, radius:19.2, speed:3.45, health:130, maxHealth:130,
     aim:0, visualAngle: 0, // NEW: Smooth rotation
     cooldown:0, damage:1, fireDelay:18, triple:false, iframes:0,
     vx:0, vy:0, bobPhase:0, bobOffset:0,
