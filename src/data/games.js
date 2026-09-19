@@ -535,7 +535,7 @@ export const games = [
      /* ================================================================
      DEAD ZONE — shooting : survie zombie en vue de dessus
      ================================================================ */
-  {
+ /* {
     id: 'dead-zone',
     title: 'Dead Zone',
     description: 'The city has fallen, the dead are everywhere, and you are the only thing still standing. Dead Zone is an intense top-down zombie survival shooter that drops you into an endless, procedurally generated city and dares you to see how long you can last. Move, aim and fire in every direction as relentless waves of the undead pour in from every street, alley and park. You start with a pistol and unlimited ammo, but survival means more firepower, so hunt down the weapons your fallen enemies drop: a devastating five-shot shotgun fan, a full-auto minigun that shreds crowds, and a bazooka whose massive blast will tear through a horde in one hit — just be careful, because that explosion does not care whether you are standing in it. Not every zombie shambles straight at you either. The spitter hangs back and rains projectiles from a distance, forcing you to keep moving and pick your targets. Each wave demands a kill quota before the next, tougher one begins, so there is no hiding and no slowing down. Chain your kills to build a combo, keep your nerve as the screen fills with the dead, and push deeper into a city that never ends. Dead Zone is fast, brutal and built for one thing: seeing how far you can get before the horde finally drags you down. How long can you survive the dead zone?',
@@ -566,5 +566,5 @@ export const games = [
         { q: 'Mobile?', a: 'Yes. Dead Zone works on mobile, tablet and desktop, with on-screen controls for touch devices.' },
       ],
     },
-  },
+  },*/
 ]
