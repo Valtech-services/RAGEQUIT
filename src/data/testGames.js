@@ -25,13 +25,13 @@ export const testGames = [
     notes: 'Roguelite mage. Mobile-first 9:16.'
   },
   {
-    id: 'dead-zone',
-    title: 'Dead Zone',
-    description: 'Top-down zombie survival. Blast through endless waves in a procedural city.',
-    thumbnail: '/thumbnails/dead-zone.jpg',
-    category: 'shooting',
+    id: 'voidfall',
+    title: 'VOIDFALL',
+    description: 'ARCADE RUNNER BALL SPACE',
+    thumbnail: '/thumbnails/voidfall.jpg',
+    category: 'arcade',
     orientation: 'portrait',
-    file: '/games/dead-zone.html',
-    notes: 'Survie zombie top-down. Vagues, armes lâchées, combos. À tester avant publication.'
+    file: '/games/voidfall.html',
+    notes: 'A tester laffichage + envoi run ami'
   },
 ]
