@@ -507,8 +507,8 @@ export const games = [
     thumbnail: '/thumbnails/crush-depth.jpg',
     category: 'challenge',
     tags: ['challenge', 'deep-sea', 'descent', 'ocean', 'mariana', 'upgrade', 'speedrun', 'atmospheric', 'unique'],
-    size: 'large',
-    shimmer: true,
+    size: 'medium',
+    shimmer: false,
     isNew: false,
     hot: false,
     landscape: false,
@@ -572,17 +572,17 @@ export const games = [
      Pas de leaderboard Supabase : score distance affiché en local,
      viralité via le défi d'ami (URL). Ne pas brancher submitScore.
      ================================================================ */
-/*  {
+  {
     id: 'voidfall',
     title: 'VOIDFALL',
     description: 'Plunge down an endless neon track suspended in the void and see how far you can fall before you wipe out. VOIDFALL is a fast pseudo-3D runner built on pure reflexes: the track drops, flattens and climbs in unpredictable waves, and every downhill slams your speed higher. Steer between lanes, leap over gaps and hazards, and chase one thing only — maximum distance, measured in meters. String survival streaks together to unlock aggressive neon skins, grab a single second chance from a rewarded continue when you crash, and challenge a friend to beat your exact run with one tap. No download, no signup — instant play on mobile and desktop.',
     thumbnail: '/thumbnails/voidfall.jpg',
     category: 'arcade',
     tags: ['runner', 'arcade', '3d', 'neon', 'endless', 'reflex', 'synthwave', 'slope', 'dodge', 'distance'],
-    size: 'medium',
+    size: 'large',
     shimmer: true,
     isNew: true,
-    hot: true,
+    hot: false,
     landscape: false,
     plays: 0,
     modes: ['classic'],
@@ -600,5 +600,5 @@ export const games = [
         { q: 'Is VOIDFALL free and playable on mobile?', a: 'VOIDFALL is completely free, needs no download and no signup, and runs directly in your browser on mobile, tablet and desktop. Over 85% of Ragequit players are on mobile, so the touch controls are the primary way to play.' }
       ]
     }
-  },*/
+  },
 ]
