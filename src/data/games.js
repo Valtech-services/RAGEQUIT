@@ -567,4 +567,38 @@ export const games = [
       ],
     },
   },
+     /* ================================================================
+     VOIDFALL — runner pseudo-3D néon à pentes, catégorie arcade
+     Pas de leaderboard Supabase : score distance affiché en local,
+     viralité via le défi d'ami (URL). Ne pas brancher submitScore.
+     ================================================================ */
+/*  {
+    id: 'voidfall',
+    title: 'VOIDFALL',
+    description: 'Plunge down an endless neon track suspended in the void and see how far you can fall before you wipe out. VOIDFALL is a fast pseudo-3D runner built on pure reflexes: the track drops, flattens and climbs in unpredictable waves, and every downhill slams your speed higher. Steer between lanes, leap over gaps and hazards, and chase one thing only — maximum distance, measured in meters. String survival streaks together to unlock aggressive neon skins, grab a single second chance from a rewarded continue when you crash, and challenge a friend to beat your exact run with one tap. No download, no signup — instant play on mobile and desktop.',
+    thumbnail: '/thumbnails/voidfall.jpg',
+    category: 'arcade',
+    tags: ['runner', 'arcade', '3d', 'neon', 'endless', 'reflex', 'synthwave', 'slope', 'dodge', 'distance'],
+    size: 'medium',
+    shimmer: true,
+    isNew: true,
+    hot: true,
+    landscape: false,
+    plays: 0,
+    modes: ['classic'],
+    defaultMode: 'classic',
+    controls: 'Swipe left or right to switch lanes, tap or swipe up to jump. On desktop, use the left/right arrows or A/D to steer and Space or Up to jump. Ride the downhill slopes for speed, and survive as long as you can — your score is the distance you fall, in meters.',
+    author: 'Ragequit Arcade',
+    seo: {
+      title: 'VOIDFALL — Free Neon Endless Runner Game | Ragequit Arcade',
+      metaDescription: 'Play VOIDFALL free online. A fast neon endless runner down a pseudo-3D track: steer between lanes, jump hazards, ride the slopes and chase your max distance. No download.',
+      faq: [
+        { q: 'How do you play VOIDFALL?', a: 'Swipe left or right to change lanes and tap or swipe up to jump over gaps and obstacles. On desktop use the arrow keys or A/D to steer and Space or Up to jump. Survive the neon track as long as possible — the further you fall, the higher your distance.' },
+        { q: 'How is the score calculated in VOIDFALL?', a: 'Your score is pure distance, measured in meters. There is no multiplier and no combo to manage — just push deeper down the track than your last run and beat your own record.' },
+        { q: 'What are the neon skins in VOIDFALL?', a: 'Skins are cosmetic only. You unlock them by building survival streaks across your runs. They change how your runner looks but never affect speed, handling or difficulty, so the game stays fair.' },
+        { q: 'Can I challenge a friend in VOIDFALL?', a: 'Yes. After a run you can send a challenge link with one tap. Your friend opens the same run conditions and tries to beat your distance, then can challenge you back — a quick back-and-forth that needs no account.' },
+        { q: 'Is VOIDFALL free and playable on mobile?', a: 'VOIDFALL is completely free, needs no download and no signup, and runs directly in your browser on mobile, tablet and desktop. Over 85% of Ragequit players are on mobile, so the touch controls are the primary way to play.' }
+      ]
+    }
+  },*/
 ]
