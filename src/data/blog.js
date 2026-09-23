@@ -504,6 +504,49 @@ export const posts = [
       { type: 'p', text: 'Keep moving, lean on your pistol and save your heavy weapons for real emergencies, never blow yourself up with the bazooka, deal with the spitter early, and stay aggressive enough to clear each wave. Master that balance of movement and priorities, and you will push deeper into the dead zone than you thought you could. The horde is always coming. Make it work for every step.' },
     ],
   },
+        {
+    slug: 'voidfall-tips',
+    category: 'guides',
+    title: 'VOIDFALL: How to Fall Further and Beat Your Record',
+    date: '2026-09-23',
+    author: 'Ragequit Arcade',
+    excerpt: 'VOIDFALL strips the runner down to one number: how far you fall. Here is how to read the slopes, time your jumps and push your max distance further every run.',
+    image: '/blog/voidfall-tips.jpg',
+    seo: {
+      title: 'VOIDFALL: How to Fall Further and Beat Your Record | Ragequit Arcade',
+      metaDescription: 'A tips guide for VOIDFALL, the neon endless runner: read the slopes, look ahead, time your jumps, use the center lane and your one continue to push your max distance.',
+    },
+    content: [
+      { type: 'p', text: 'VOIDFALL is our neon endless runner, and it strips the genre down to one pure idea: there is no combo to juggle, no multiplier to protect, no shop to grind. There is a single number that matters, and it is how far you fall down the track, measured in meters. This guide takes you from your very first wipeout to the kind of muscle memory that leaves your friends behind.' },
+
+      { type: 'h2', text: 'What VOIDFALL actually is' },
+      { type: 'p', text: 'You control a runner plummeting down a track suspended in an empty neon void. The track is never flat for long: it drops into steep descents, levels into short flats, then throws in brief climbs, all in an unpredictable rhythm. Gaps open in the floor, hazards block your lane, and the whole thing accelerates the longer you last. Your only job is to stay on the track and keep falling.' },
+
+      { type: 'h2', text: 'Speed comes from the downhills' },
+      { type: 'p', text: 'The most important thing to understand about VOIDFALL is that downhill slopes boost your speed. A steep descent is both your biggest source of distance and your biggest source of danger, because obstacles arrive faster than your eyes expect. Do not fight the speed, but do respect it: the moment the track tips downward, tighten your focus, because the margin for a late reaction just shrank.' },
+
+      { type: 'h2', text: 'Look far ahead, not at your runner' },
+      { type: 'p', text: 'New players stare at the runner, right where the action is, and give themselves no time to react. The fix is to keep your eyes as far up the track as you can. A hazard that appears at the top of the screen gives you the maximum time to pick a clean lane before the slope hurls you into it. Reading ahead feels unnatural at first, but it is the single biggest improvement you can make.' },
+
+      { type: 'h2', text: 'Time your jumps late' },
+      { type: 'p', text: 'Jumps in VOIDFALL follow a fixed arc, so the instinct to leap the instant you see a gap will clip you on the far edge. Jump slightly later than feels natural and let the gap come to you. For two hazards back to back, a single well-timed jump often clears both, so commit to it instead of panic-tapping, which usually drops you right between them.' },
+
+      { type: 'h2', text: 'Make the center lane your home' },
+      { type: 'p', text: 'On the flats, drift back toward the center whenever you can. From the middle you have an escape route on both sides, while from an edge lane you only have one. Treat the center as home, leave it only to route around a specific obstacle, and return as soon as the track is clear. Lane discipline is what keeps a fast run from ending on a hazard you boxed yourself against.' },
+
+      { type: 'h2', text: 'Skins and streaks never make it easier' },
+      { type: 'p', text: 'VOIDFALL rewards consistency with aggressive neon skins, unlocked by building survival streaks across your runs. This is deliberate: skins change how your runner looks and nothing else. They never touch your speed, your handling or the difficulty, and there is nothing to buy to get ahead. Every record you set is a record of skill, not gear.' },
+
+      { type: 'h2', text: 'Spend your one continue wisely' },
+      { type: 'p', text: 'When you wipe out, you get a single second chance from a rewarded continue that keeps your distance. Because it is one per run, do not burn it on a shallow crash in the first few seconds — just restart. Save it for the moment you go down deep into a record attempt, where that one continue turns a good run into your best one.' },
+
+      { type: 'h2', text: 'Challenge a friend' },
+      { type: 'p', text: 'After any run you can fire off a challenge link with one tap. Your friend opens the same run and tries to beat your exact distance, then bounces it straight back to you. It needs no account and takes seconds, and it is by far the fastest way to turn a single run into a whole evening of rematches.' },
+
+      { type: 'h2', text: 'The takeaway' },
+      { type: 'p', text: 'Ride the downhills, look far up the track, jump late, live in the center lane, and protect your one continue for the run that deserves it. Distance in VOIDFALL is a rhythm in disguise: the players who fall furthest are not the fastest reactors, they are the calmest readers of the track. Now open it up and see how deep into the void you can fall.' },
+    ],
+  },
 ]
 
 // Trouve un article par son slug.
