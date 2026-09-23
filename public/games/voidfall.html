@@ -28,14 +28,14 @@
     margin: 0; height: 100%; overflow: hidden; background: var(--void);
     font-family: var(--body); color: var(--ink);
     -webkit-tap-highlight-color: transparent;
-    user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+    r-select: none; -webkit-r-select: none; -webkit-touch-callout: none;
     overscroll-behavior: none;
   }
   canvas#game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
   .hidden { display: none !important; }
   #customizeOverlay, #achOverlay { background: rgba(6, 3, 13, 0.94); z-index: 12; }
 
-  /* ---------- Boutons HUD (pause / son) ---------- */
+  /* ---------- Boutons HUD (pa / son) ---------- */
   #hudBtns {
     position: fixed; z-index: 5;
     top: calc(10px + env(safe-area-inset-top, 0px));
@@ -250,7 +250,7 @@
 
   /* ---------- Lien de défi (repli si partage/copie impossible) ---------- */
   #linkBox { margin: 10px 0 0; text-align: left; }
-  #linkBox input { width: 100%; padding: 10px; font: 13px var(--body); color: var(--ink); background: rgba(255,255,255,.06); border: 1px solid rgba(30,242,255,.4); user-select: text; -webkit-user-select: text; }
+  #linkBox input { width: 100%; padding: 10px; font: 13px var(--body); color: var(--ink); background: rgba(255,255,255,.06); border: 1px solid rgba(30,242,255,.4); r-select: text; -webkit-r-select: text; }
 
   /* ---------- Petits écrans ---------- */
   @media (max-width: 520px) {
@@ -293,12 +293,12 @@
   <button id="btnRestart" aria-label="Restart">
     <svg viewBox="0 0 24 24"><path d="M12 5V2L7 6.5 12 11V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>
   </button>
-  <button id="btnPause" aria-label="Pause">
+  <button id="btnPa" aria-label="Pa">
     <svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
   </button>
 </div>
 
-<!-- Main screen: menu, pause, continue, game over -->
+<!-- Main screen: menu, pa, continue, game over -->
 <div id="overlay" class="overlay">
   <div class="panel" id="mainPanel">
     <h1 class="title" id="uiTitle">VOIDFALL</h1>
@@ -377,6 +377,7 @@
 <div id="toast" role="status" aria-live="polite"></div>
 <script>
 'use strict';
+function rqPost(m){ try{ window.parent.postMessage(m, '*'); }catch(e){} }
 (function () {
 
 /* =========================================================================
@@ -2404,6 +2405,7 @@ function finishRun() {
   S.mode = 'gameover';
   Sound.music(false);
   const score = Math.floor(S.pz);
+    if (score > 0) rqPost({ type: 'VOIDFALL_SCORE', game: 'voidfall', mode: 'classic', score: score, scoreLabel: score + ' m' });
   S.lastScore = score;
   S.isRecord = score > S.best;
   if (S.isRecord) { S.best = score; save('best', score); }
@@ -2500,6 +2502,7 @@ function requestRewardedAd(onReward) {
   adTimers.push(setTimeout(function () {
     root.classList.remove('visible');
     if (Sound.master && !wasMuted) Sound.master.gain.value = 0.7;
+    rqPost({ type: 'RH_TRACK', event: 'ad_rewarded_complete', game_id: 'voidfall', props: { context: 'continue' } });
     onReward();
   }, AD_DURATION));
 }
@@ -2719,6 +2722,7 @@ $('replayBack').addEventListener('click', function (e) { e.stopPropagation(); So
 // Mort validée sans passer par l'écran de fin (bouton « Rejouer à zéro »)
 function finishRunSilent() {
   const score = Math.floor(S.pz);
+    if (score > 0) rqPost({ type: 'VOIDFALL_SCORE', game: 'voidfall', mode: 'classic', score: score, scoreLabel: score + ' m' });
   if (score > S.best) { S.best = score; save('best', score); }
   S.total += score; save('total', S.total);
   checkCosmetics();
