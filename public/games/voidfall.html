@@ -2409,6 +2409,12 @@ function finishRun() {
   if (S.isRecord) { S.best = score; save('best', score); }
   S.total += score; save('total', S.total);
 
+  // envoi du score de distance au leaderboard du site
+  try { window.parent && window.parent.postMessage({
+    type: 'VOIDFALL_SCORE', game: 'voidfall', mode: 'classic',
+    score: score, scoreLabel: score.toLocaleString('en-US') + ' ' + UNIT
+  }, '*'); } catch (e) {}
+
   if (score >= 100) unlock('score_100');
   if (score >= 500) unlock('score_500');
   if (score >= 1000) unlock('score_1000');
@@ -2500,6 +2506,8 @@ function requestRewardedAd(onReward) {
   adTimers.push(setTimeout(function () {
     root.classList.remove('visible');
     if (Sound.master && !wasMuted) Sound.master.gain.value = 0.7;
+    // suivi analytics : pub récompensée vue en entier
+    try { window.parent && window.parent.postMessage({ type: 'RH_TRACK', event: 'ad_rewarded_complete', game_id: 'voidfall', props: { context: 'revive' } }, '*'); } catch (e) {}
     onReward();
   }, AD_DURATION));
 }
