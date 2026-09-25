@@ -552,8 +552,9 @@ newUsers, sVisitors, sPlays, sAds, sHome, sSignups, votesByGame,
                   </div>
                   {r.comment && <p className="adm-msg__body">{r.comment}</p>}
                   <div className="adm-msg__foot">
-                    <span className="adm-msg__mail">{u?.username || 'Joueur'}</span>
+                    <span className="adm-msg__mail">{u?.username || 'Joueur'}{r.email ? ` · ${r.email}` : ''}</span>
                     <div className="adm-msg__act">
+                      {r.email && <a className="adm-msg__reply" href={`mailto:${r.email}?subject=${encodeURIComponent('Re: [' + r.game_id + '] ' + r.subject)}`}>Répondre</a>}
                       {!r.read && <button className="adm-msg__mark" onClick={() => markReportRead(r.id)}>Marquer lu</button>}
                     </div>
                   </div>
