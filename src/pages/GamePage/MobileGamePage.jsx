@@ -388,7 +388,7 @@ if (d.type.endsWith('_SCORE')) {
                 <button className="mgp__report-send" disabled={reportBusy || !reportSubject.trim()}
                   onClick={async () => {
                     setReportBusy(true)
-                    const ok = await submitReport(game.id, reportSubject, reportComment, user.id)
+                    const ok = await submitReport(game.id, reportSubject, reportComment, user.id, user.email)
                     setReportBusy(false)
                     if(ok){ setReportSent(true); setReportSubject(''); setReportComment('') }
                   }}>
