@@ -42,7 +42,7 @@ export async function submitVote(gameId, vote) {
 
 /* ---- REPORT : signalement (connexion obligatoire) ----
    Renvoie true si enregistré, false sinon. */
-export async function submitReport(gameId, subject, comment, userId) {
+export async function submitReport(gameId, subject, comment, userId, email) {
   if (!gameId || !userId || !subject) return false
   try {
     const { error } = await supabase.from('game_reports').insert({
@@ -50,6 +50,7 @@ export async function submitReport(gameId, subject, comment, userId) {
       user_id: userId,
       subject: subject.trim(),
       comment: (comment || '').trim() || null,
+      email: email || null,
     })
     return !error
   } catch (e) {
