@@ -381,7 +381,7 @@ async function saveVirusLabCloud(){
                 <button className="gamepage__report-opt" disabled={reportBusy || !reportSubject.trim()}
                   onClick={async () => {
                     setReportBusy(true)
-                    const ok = await submitReport(game.id, reportSubject, reportComment, user.id)
+                    const ok = await submitReport(game.id, reportSubject, reportComment, user.id, user.email)
                     setReportBusy(false)
                     if(ok){ setReportSent(true); setReportSubject(''); setReportComment('') }
                   }}>
