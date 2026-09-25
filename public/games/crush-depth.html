@@ -2229,6 +2229,8 @@ function drawDepthLines(depthRatio) {
         }
         setInterval(postScore, 15000);
         window.addEventListener('beforeunload', postScore);
+        document.addEventListener('visibilitychange', () => { if (document.hidden) postScore(); });
+        window.addEventListener('pagehide', postScore);
 
         // le chrono démarre au tout premier mouvement de scroll
         function ensureRunStarted() { if (runStartTs === null) runStartTs = Date.now(); }
