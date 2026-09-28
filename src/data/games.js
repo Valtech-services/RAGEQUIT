@@ -543,7 +543,7 @@ export const games = [
     category: 'shooting',
     tags: ['zombie', 'survival', 'shooter', 'top-down', 'action', 'waves', 'combo', 'twin-stick', 'intense'],
     size: 'large',
-    shimmer: true,
+    shimmer: false,
     isNew: true,
     hot: false,
     landscape: false,
