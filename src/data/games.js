@@ -601,4 +601,56 @@ export const games = [
       ]
     }
   },
+   /* =====================================================================
+   FOX RUNNER — pack SEO (a copier dans les fichiers du site)
+   1) games.js      : ajouter l entree dans le tableau `games`
+   2) blog.js       : ajouter l article dans le tableau `posts`
+   3) testGames.js  : entree de test
+   4) sitemap.xml   : deux URLs
+   Fichier du jeu   : public/games/fox-runner.html
+   Miniature        : public/thumbnails/fox-runner.jpg  (1:1)
+   Image du blog    : public/blog/fox-runner-tips.jpg   (16:9)
+   ===================================================================== */
+ 
+/* ---------- 1) games.js ---------- */
+ /* {
+    id: 'fox-runner',
+    title: 'Fox Runner',
+    description: 'Fox Runner is a free endless runner set in an enchanted forest, where a small fox sprints across floating logs, mossy ledges and stone slabs while the day moves from morning to night around it. You tap, the fox jumps, and every meter counts toward one score: your best distance. It looks calm, but it is a sharp reflex game, because the forest keeps speeding up and never stops throwing new dangers at you. The controls use one button. Tap or click for a short hop, hold to leap higher and farther. On desktop you can use Space, the Up arrow or W, and press P or Escape to pause. On a phone, touch the screen anywhere. The forest is built from hand designed sections that alternate tension and rest, and it is always fair: every gap can be crossed with a well timed jump, but the timing window keeps shrinking as you go. Beyond plain gaps you will meet thorny brambles to jump over, low branches that force a short hop, bouncy mushrooms, logs that crumble under your feet and crows that swoop in from the right. Each time of day has its own rule. Morning is a gentle start. At midday, mushrooms launch you across wide gaps if you run straight into them. At golden hour, logs collapse shortly after you land. At night the light fades around the fox and gusts of wind push you through the air. The time of day changes every 200 meters and then the cycle repeats, faster each time. Jump at the very last moment and land on the next platform to score a perfect landing. Chain four in a row to enter Flow: the fox runs faster and every firefly you catch counts double. Fireflies are collected along the way and unlock fox skins, from Snow to Ember, Midnight and Golden. Your score stays a pure distance in meters, so leaderboards and challenges are always comparable. If you jump a little late and hit the side of a platform in classic mode, the fox grabs the edge and gets one chance to jump again, while a red glow warns you that the left edge is closing in. Three ways to play: Classic is the standard run. Hard mode is faster, has tighter timing and no wall rescue, with its own leaderboard for players who like pain. The Daily run gives every player the same course for the day, so you can compare results fairly. After any run you can send a challenge link to a friend, who will run the exact same forest and try to beat your distance. You earn medals along the way, from the oak leaf to the four leaf clover, the moon flower, the shooting star and the ivy crown, and you can compare your best with other players on the Ragequit Arcade leaderboard with a free account. Once per run you can watch a short ad to continue from the same distance. The soft music and forest sounds are generated live, and one button mutes everything. The game runs in your browser on mobile, tablet and desktop, with no download and no signup needed. Open it, tap once, and see how far the fox can run.',
+    thumbnail: '/thumbnails/fox-runner.jpg',
+    category: 'arcade',
+    tags: ['runner', 'arcade', 'endless', 'fox', 'forest', 'platformer', 'jump', 'obstacles', 'daily challenge', 'hard mode', 'one button'],
+    size: 'medium',
+    shimmer: true,
+    isNew: true,
+    hot: false,
+    landscape: false,
+    plays: 0,
+    modes: ['classic', 'hard'],
+    defaultMode: 'classic',
+    controls: 'Tap or click to jump. Tap for a short hop, hold for a high leap. On desktop use Space, the Up arrow or W to jump, and P or Escape to pause. Cross the gaps, dodge brambles, branches and crows, run into mushrooms to bounce, and beat your best distance in meters.',
+    author: 'Ragequit Arcade',
+    seo: {
+      title: 'Fox Runner - Free Endless Runner Game | Ragequit Arcade',
+      metaDescription: 'Play Fox Runner free online. Run a fox through an enchanted forest with brambles, crumbling logs, bouncy mushrooms and crows. Hard mode, daily run and friend challenges. No download.',
+      faq: [
+        { q: 'How do you play Fox Runner?', a: 'Tap or click anywhere to make the fox jump. On desktop you can also press Space, the Up arrow or W. Tap for a short hop and hold for a long, high leap. Cross the gaps, avoid the obstacles and run as far as possible before you fall or get pushed off the left edge of the screen.' },
+        { q: 'How is the score calculated in Fox Runner?', a: 'Your score is the distance you run, in meters. There is no multiplier on the score itself, so the only way to score higher is to survive longer. Classic and Hard mode each keep their own best distance, and both can be sent to the Ragequit Arcade leaderboard.' },
+        { q: 'What obstacles are there in Fox Runner?', a: 'Brambles sit on platforms and push you back if you touch them, so jump over them. Low branches hang above some brambles and force a short hop instead of a high leap. Crows fly in from the right at ground level after a warning mark. Logs can crumble and mushrooms can bounce you, depending on the time of day.' },
+        { q: 'What does each time of day do?', a: 'Every 200 meters the scenery changes and so does the rule. Morning is a gentle start. Midday brings bouncy mushrooms that carry you over wide gaps when you run into them. Golden hour makes logs crumble shortly after you land. Night reduces the light around the fox and adds gusts of wind. Then the cycle repeats at a higher speed.' },
+        { q: 'How do mushrooms work?', a: 'At midday, some platforms end with a red mushroom in front of a gap that is too high or too wide to jump normally. Do not jump: run straight into the mushroom and it launches you onto the landing platform. Jumping too early over it means missing the launch.' },
+        { q: 'What are perfect landings and Flow?', a: 'Jump at the last moment before the edge and land on the next platform to score a perfect landing. Four perfect landings in a row start Flow: the fox runs about ten percent faster and each firefly you collect counts double. Any mistake ends the streak. Flow does not change the score directly, since the score is always the distance.' },
+        { q: 'What are fireflies and how do I unlock fox skins?', a: 'Fireflies float along jumps and above high leafy ledges. Every firefly you collect adds to a lifetime total that is never spent. Snow unlocks at 250 fireflies, Ember at 500, Midnight at 1000 and Golden at 2000. Choose your skin from the Fox skins button on the start screen. Skins are cosmetic only.' },
+        { q: 'What is Hard mode?', a: 'Hard mode is faster, leaves a tighter timing window and removes the wall rescue, so touching the side of a platform ends the run. It has its own best score and its own leaderboard. It is meant for players who already run far in Classic.' },
+        { q: 'What is the Daily run?', a: 'The Daily run uses one course per day that is identical for every player, so results are directly comparable. It uses the classic rules, and your best score of the day is saved on your device. A new course appears the next day.' },
+        { q: 'How do I challenge a friend?', a: 'After a run, press Challenge a friend. The game shares a link containing your course and your distance. Your friend opens it and runs exactly the same forest, then sees whether they beat you.' },
+        { q: 'What happens if I hit the side of a platform?', a: 'In Classic and Daily, if you jump too late the fox grabs the side of the next platform and you can jump again at once. While stuck, the screen keeps scrolling and pushes the fox toward the left edge, and a red glow warns you. In Hard mode there is no rescue and the run ends.' },
+        { q: 'Does the game get harder the farther I go?', a: 'Yes, and it never stops. Speed rises for roughly the first 2000 meters, then keeps creeping up with short surges every 500 meters. The timing window keeps shrinking and harder sections appear more often.' },
+        { q: 'Can I play Fox Runner on my phone?', a: 'Yes. Fox Runner works on phones, tablets and desktop computers with touch or keyboard controls. In portrait the view is zoomed in on the fox, and landscape gives you a wider view of the platforms ahead.' },
+        { q: 'Is Fox Runner free, and do I need an account?', a: 'Fox Runner is completely free and needs no download. You can play instantly without signing up. To appear with your name on the leaderboard, create a free Ragequit Arcade account.' },
+        { q: 'How does the second chance work?', a: 'Once per run, after a crash, you can watch a short ad to continue from the same distance with a fresh platform under your feet. It works one time per run, so keep it for a run that is close to your personal best.' },
+        { q: 'What are the medals in Fox Runner?', a: 'Medals reward the distance of a single run: the oak leaf for any run, the four leaf clover at 100 meters, the moon flower at 250 meters, the shooting star at 500 meters and the ivy crown at 1000 meters.' }
+      ]
+    }
+  },*/
 ]
