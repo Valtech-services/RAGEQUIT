@@ -653,7 +653,7 @@ export const games = [
       ]
     }
   },
-     /* ================================================================
+     ===================================================================
      CITY RUNNER — Arcade : Runner sur Coruscant
      ===================================================================
      {
@@ -689,5 +689,5 @@ export const games = [
         { q: 'Is City Runner free and playable on mobile?', a: 'City Runner is completely free, needs no download and no account, and runs in your browser on phones, tablets and computers. It is built for mobile first, with one-thumb controls. Create a free Ragequit Arcade account if you want your name on the leaderboard.' }
       ]
     }
-  },*/
+  },
 ]
