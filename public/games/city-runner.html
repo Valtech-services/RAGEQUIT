@@ -308,6 +308,12 @@ html, body{
 }
 #steerPad .sp-btn svg{ width: 40px; height: 40px; fill: var(--cream); pointer-events: none; }
 #steerPad .sp-btn.on{ transform: scale(.94); background: rgba(255,208,102,.28); border-color: var(--gold); }
+/* Mobile : boutons remontés au-dessus de la barre du navigateur (Safari), HUD décalé sous la flèche retour du site */
+@media (pointer: coarse){
+  #steerPad{ bottom: calc(var(--safe-bottom) + 150px); }
+  #jumpBtn{ bottom: calc(var(--safe-bottom) + 146px); }
+  #hud{ top: calc(var(--safe-top) + 64px); }
+}
 #jumpBtn svg{ position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
 #jumpBtn .jb-track{ fill: none; stroke: rgba(240,237,228,.25); stroke-width: 5; }
 #jumpBtn .jb-ring{ fill: none; stroke: var(--gold); stroke-width: 5; stroke-linecap: round; stroke-dasharray: 213.6; stroke-dashoffset: 0; }
