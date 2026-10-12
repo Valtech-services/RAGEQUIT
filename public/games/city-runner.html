@@ -292,6 +292,22 @@ html, body{
   cursor: pointer; touch-action: none; -webkit-appearance: none; appearance: none;
 }
 #jumpBtn[hidden]{ display: none; }
+/* ---------- Direction (mobile uniquement) : ◀ ▶ côte à côte sous le pouce gauche, JUMP sous le pouce droit ---------- */
+#steerPad{
+  position: fixed; z-index: 15;
+  left: calc(var(--safe-left) + 14px); bottom: calc(var(--safe-bottom) + 22px);
+  display: flex; gap: 10px; touch-action: none; user-select: none; -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+#steerPad[hidden]{ display: none; }
+#steerPad .sp-btn{
+  width: 78px; height: 78px; border-radius: 22px;
+  background: rgba(20,12,6,.42); border: 2px solid rgba(240,237,228,.28);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .06s ease, background-color .06s ease, border-color .06s ease;
+}
+#steerPad .sp-btn svg{ width: 40px; height: 40px; fill: var(--cream); pointer-events: none; }
+#steerPad .sp-btn.on{ transform: scale(.94); background: rgba(255,208,102,.28); border-color: var(--gold); }
 #jumpBtn svg{ position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
 #jumpBtn .jb-track{ fill: none; stroke: rgba(240,237,228,.25); stroke-width: 5; }
 #jumpBtn .jb-ring{ fill: none; stroke: var(--gold); stroke-width: 5; stroke-linecap: round; stroke-dasharray: 213.6; stroke-dashoffset: 0; }
@@ -375,6 +391,11 @@ html, body{
   </svg>
   <span>JUMP</span>
 </button>
+
+<div id="steerPad" hidden aria-hidden="true">
+  <div class="sp-btn" data-dir="-1"><svg viewBox="0 0 24 24"><path d="M15.5 4 L6.5 12 L15.5 20 Z"/></svg></div>
+  <div class="sp-btn" data-dir="1"><svg viewBox="0 0 24 24"><path d="M8.5 4 L17.5 12 L8.5 20 Z"/></svg></div>
+</div>
 
 <button type="button" id="pauseBtn" aria-label="Pause" hidden>
   <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
@@ -1261,14 +1282,15 @@ function tryJump() {
   game.jumpT = 0; game.jumpQ = 0;
   Sound.jump(); vib(15);
 }
-document.addEventListener('touchstart', (e) => { if (inOverlay(e)) return; if (e.touches.length > 0) pointerDown(e.touches[0].clientX); }, { passive: true });
+// sur mobile la direction passe par les boutons ◀ ▶ (le glisser au doigt ramenait le vaisseau au relâché)
+document.addEventListener('touchstart', (e) => { if (isTouch || inOverlay(e)) return; if (e.touches.length > 0) pointerDown(e.touches[0].clientX); }, { passive: true });
 document.addEventListener('touchmove', (e) => {
   if (e.touches.length > 0) pointerMove(e.touches[0].clientX);
   if (input.pointerActive && e.cancelable) e.preventDefault();
 }, { passive: false });
 document.addEventListener('touchend', pointerUp, { passive: true });
 document.addEventListener('touchcancel', pointerUp, { passive: true });
-document.addEventListener('mousedown', (e) => { if (inOverlay(e)) return; pointerDown(e.clientX); });
+document.addEventListener('mousedown', (e) => { if (isTouch || inOverlay(e)) return; pointerDown(e.clientX); });
 document.addEventListener('mousemove', (e) => pointerMove(e.clientX));
 document.addEventListener('mouseup', pointerUp);
 const isLeft = (k) => k === 'ArrowLeft' || k === 'a' || k === 'A' || k === 'q' || k === 'Q';
@@ -1289,6 +1311,7 @@ window.addEventListener('keyup', (e) => {
    Renderer + post-process + qualité adaptative
    ============================================================ */
 const isTouch = matchMedia('(pointer: coarse)').matches;
+if (isTouch) hudHint.textContent = 'Steer: hold ◀ ▶. Jump: the JUMP button';
 let renderer;
 try {
   renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
@@ -4749,6 +4772,45 @@ function startGame() {
 function stopEv(e) { e.preventDefault(); e.stopPropagation(); }
 jumpBtn.addEventListener('pointerdown', (e) => { e.preventDefault(); e.stopPropagation(); Sound.init(); tryJump(); });
 jumpBtn.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
+
+/* Boutons de direction : un seul bloc qui suit chaque doigt (multi-touch), on peut glisser de ◀ à ▶ sans relever le pouce */
+const steerPad = document.getElementById('steerPad');
+const steerBtns = [...steerPad.querySelectorAll('.sp-btn')];
+const steerTouches = new Map(); // pointerId -> direction (-1, 0, 1)
+function steerDirAt(x) {
+  const r = steerPad.getBoundingClientRect();
+  return x < r.left + r.width / 2 ? -1 : 1;
+}
+function applySteerTouches() {
+  let l = false, r = false;
+  for (const d of steerTouches.values()) { if (d < 0) l = true; else if (d > 0) r = true; }
+  input.keyLeft = l; input.keyRight = r;
+  steerBtns[0].classList.toggle('on', l); steerBtns[1].classList.toggle('on', r);
+}
+steerPad.addEventListener('pointerdown', (e) => {
+  e.preventDefault(); e.stopPropagation(); Sound.init();
+  try { steerPad.setPointerCapture(e.pointerId); } catch (err) {}
+  steerTouches.set(e.pointerId, steerDirAt(e.clientX));
+  applySteerTouches();
+  if (steerTouches.size === 1) vib(8);
+});
+steerPad.addEventListener('pointermove', (e) => {
+  if (!steerTouches.has(e.pointerId)) return;
+  const d = steerDirAt(e.clientX);
+  if (d !== steerTouches.get(e.pointerId)) { steerTouches.set(e.pointerId, d); applySteerTouches(); }
+});
+const steerRelease = (e) => { if (steerTouches.delete(e.pointerId)) applySteerTouches(); };
+['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ev => steerPad.addEventListener(ev, steerRelease));
+steerPad.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
+steerPad.addEventListener('contextmenu', (e) => e.preventDefault());
+/* Visible sur mobile exactement quand le bouton JUMP l'est ; relâche tout quand il disparaît */
+function syncSteerPad() {
+  const hide = !isTouch || jumpBtn.hidden;
+  if (steerPad.hidden !== hide) {
+    steerPad.hidden = hide;
+    if (hide && steerTouches.size) { steerTouches.clear(); applySteerTouches(); }
+  }
+}
 jumpBtn.addEventListener('mousedown', (e) => e.stopPropagation());
 jumpBtn.addEventListener('click', (e) => e.preventDefault());
 playBtn.addEventListener('click', (e) => { stopEv(e); Sound.init(); Sound.click(); startGame(); });
@@ -4887,7 +4949,7 @@ function updateTutorial(dt) {
   tuto.t += dt;
   let slow = 1;
   if (tuto.stage === 1) {
-    coach(isTouch ? 'SWIPE LEFT / RIGHT TO STEER' : 'USE ← → TO STEER');
+    coach(isTouch ? 'HOLD ◀ ▶ TO STEER' : 'USE ← → TO STEER');
     if (tuto.t > 3.2) { tuto.stage = 2; coach(''); }
   } else if (tuto.stage === 2) {
     const wall = world.entities.find(e => e.tutorial && !e.dead);
@@ -5153,6 +5215,7 @@ function animate() {
 
   checkCollisionAndPassBy(step);
 
+  syncSteerPad();
   updateSunRays();
   composer.render();
   if (captureShot) grabShot();
