@@ -25,13 +25,13 @@ export const testGames = [
     notes: 'Roguelite mage. Mobile-first 9:16.'
   },
   {
-    id: 'voidfall',
-    title: 'VOIDFALL',
-    description: 'ARCADE RUNNER BALL SPACE',
-    thumbnail: '/thumbnails/voidfall.jpg',
+    id: 'city-runner',
+    title: 'City Runner',
+    description: 'Runner 3D dans une megapole volante : esquive, saute, combos, 9 vehicules.',
+    thumbnail: '/thumbnails/city-runner.jpg',
     category: 'arcade',
     orientation: 'portrait',
-    file: '/games/voidfall.html',
-    notes: 'A tester laffichage + envoi run ami'
+    file: '/games/city-runner.html',
+    notes: 'Three.js. Score CITY_RUNNER_SCORE, mode classic. Mettre DEBUG_MAX_CREDITS a true pour tester tous les vehicules.'
   },
 ]
