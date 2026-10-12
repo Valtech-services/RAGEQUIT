@@ -653,4 +653,41 @@ export const games = [
       ]
     }
   },
+     /* ================================================================
+     CITY RUNNER — Arcade : Runner sur Coruscant
+     ===================================================================
+     {
+    id: 'city-runner',
+    title: 'City Runner',
+    description: 'City Runner is a free 3D endless runner set in a futuristic megacity floating high above the clouds. You pilot a hover vehicle along an aerial skylane suspended over the void, weaving between glass towers, neon billboards and flying traffic while the streets of the city glow far below you. There is no download and no signup: the game runs directly in your browser on mobile, tablet and desktop, and a run starts in one tap. The goal is simple and brutal. Travel as far as you can, measured in meters, before you crash. The longer you survive, the faster you fly, and your speedometer climbs past 300 kilometers per hour. The city is generated as you play, so every run is different: open districts full of skyscrapers, narrow avenues lined with giant advertising screens and scrolling LED banners written in an alien script, and enclosed tunnels where the walls rush past inches from your wings. Obstacles come in many shapes. Some you dodge, like towering pylons, half walls, twin pillars with a narrow gap, blocks that slide from one side of the lane to the other and swarms of drones sweeping across your path. Others you jump, like laser fences, rows of floating cargo containers, barrier gates and elevator platforms that rise and fall under you. Every jump obstacle is built to be fair: the game always leaves you enough clear space before it to see it coming, and after it to land and react. You also share the skylane with flying cars. A few of them cruise in your direction at a slower speed, so you have to pass them, slip between them or jump right over them. Pass close to anything without touching it and you earn a near miss bonus. Chain near misses and jumps quickly and your combo multiplier climbs up to times five, turning one clean sequence into a huge haul of Galactic Credits. Galactic Credits are the currency of City Runner. You earn one credit per meter, plus bonuses for orbs, near misses, jumps and daily missions, and you spend them in the store on nine vehicles, from the Metro Glider hover car to the legendary Obsidian Wraith stealth fighter. Each vehicle has its own handling, speed and shield level, so the store is a real strategic choice and not only cosmetic. You can also buy shield and handling upgrades, custom paint jobs and new trail colors. Power-ups appear along the way: a magnet that pulls every orb toward you, a boost that makes you faster and lets you smash through obstacles, and an extra shield charge. Every 1000 meters the city changes district, from the golden towers of Golden Heights to the neon glow of Neon Night and the storms of Iron Rain. Three new daily missions give you a reason to come back every day, and when a run ends you can share a score card of your best distance with your friends. Controls are designed for one thumb on a phone: swipe left or right to steer and tap the jump button to leap. On desktop, use the arrow keys or A and D to steer, Space or the Up arrow to jump, and P or Escape to pause. Open City Runner, fasten your harness and see how deep into the megacity you can fly.',
+    thumbnail: '/thumbnails/city-runner.jpg',
+    category: 'arcade',
+    tags: ['runner', 'arcade', '3d', 'endless', 'futuristic', 'city', 'hover', 'flying cars', 'sci-fi', 'distance'],
+    size: 'large',
+    shimmer: true,
+    isNew: true,
+    hot: true,
+    landscape: false,
+    plays: 0,
+    modes: ['classic'],
+    defaultMode: 'classic',
+    controls: 'Swipe left or right to steer and tap the JUMP button to leap over low obstacles. On desktop use the arrow keys or A and D to steer, Space or the Up arrow to jump, and P or Escape to pause. Dodge towers, drones and flying cars, chain near misses for combos and fly as far as you can.',
+    author: 'Ragequit Arcade',
+    seo: {
+      title: 'City Runner - Free 3D Endless Runner Game | Ragequit Arcade',
+      metaDescription: 'Play City Runner free online. Fly a hover vehicle through a 3D megacity above the clouds, dodge flying cars, jump laser fences, unlock 9 vehicles and beat your distance. No download.',
+      faq: [
+        { q: 'How do you play City Runner?', a: 'Swipe left or right to steer your hover vehicle and tap the JUMP button to leap over low obstacles. On desktop, use the arrow keys or A and D to steer, Space or the Up arrow to jump, and P or Escape to pause. Avoid towers, drones, walls and flying cars, and travel as far as you can.' },
+        { q: 'How is the score calculated in City Runner?', a: 'Your score is the distance you travel, measured in meters. Your best distance is sent to the Ragequit Arcade leaderboard. Near misses, jumps, orbs and missions do not change your distance, but they earn you extra Galactic Credits.' },
+        { q: 'What are Galactic Credits?', a: 'Galactic Credits are the in-game currency. You earn one credit per meter, two per orb, a bonus for every near miss and jump, and larger rewards for daily missions. You spend them in the store on new vehicles, upgrades, paint jobs and trail colors. There is no real money involved.' },
+        { q: 'What is a near miss and how do combos work?', a: 'A near miss happens when you pass very close to an obstacle or a flying car without touching it. If you chain near misses and jumps within a few seconds, your combo multiplier rises up to times five, and every bonus in the chain is multiplied.' },
+        { q: 'Which vehicle is the best in City Runner?', a: 'Each of the nine vehicles has its own handling, speed and shield level, and the more expensive ones are stronger. The Metro Glider is free and forgiving, the Dune Bike is narrow and agile, and the Obsidian Wraith has top handling, high speed and four shield charges. Faster vehicles also earn distance faster, but they are harder to control.' },
+        { q: 'How do shields work?', a: 'Each shield charge absorbs one crash. The obstacle is destroyed or you are pushed away, and you get a short moment of invulnerability. Some vehicles start with shields, you can buy extra shield charges in the store, and a shield power-up can appear during a run.' },
+        { q: 'What are the power-ups?', a: 'The magnet pulls every nearby orb toward you, the boost makes you faster and lets you smash through obstacles for a few seconds, and the shield power-up adds one shield charge. They appear regularly on the skylane.' },
+        { q: 'What are daily missions?', a: 'Every day you get three new missions, such as reaching a distance in one run, crossing tunnels or chaining near misses. Each completed mission pays Galactic Credits, and completing all three gives a bonus. Missions reset at midnight.' },
+        { q: 'Can I continue after a crash?', a: 'Yes, once per run you can watch a short ad to continue from the same distance. It is best kept for a run that is already close to your personal record.' },
+        { q: 'Is City Runner free and playable on mobile?', a: 'City Runner is completely free, needs no download and no account, and runs in your browser on phones, tablets and computers. It is built for mobile first, with one-thumb controls. Create a free Ragequit Arcade account if you want your name on the leaderboard.' }
+      ]
+    }
+  },*/
 ]
