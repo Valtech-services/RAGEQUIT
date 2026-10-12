@@ -170,6 +170,7 @@ html, body{
   text-transform: uppercase; white-space: nowrap; pointer-events: none;
 }
 .store-credits{ display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-bottom: 14px; padding-right: 50px; min-height: 30px; color: var(--cream); }
+.store-credits .store-back{ margin-right: auto; }
 .store-credits .label{ font-weight: 900; font-size: 14px; letter-spacing: 0.05em; text-transform: uppercase; opacity: .8; }
 .store-credits .value{ font-weight: 900; font-size: 20px; letter-spacing: 0.05em; color: var(--gold); }
 .ship-card{
@@ -192,13 +193,15 @@ html, body{
 .ship-preview{ width: 92px; height: 64px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .ship-preview svg{ display: block; }
 .store-back{
-  display: block; margin: 16px 0 0 auto; padding: 10px 26px;
-  background: transparent; color: var(--cream);
-  border: 2px solid rgba(240,237,228,.8); border-radius: 8px;
-  font-family: 'Arial Black', sans-serif; font-weight: 900; font-size: 16px;
+  display: inline-flex; align-items: center; gap: 2px; padding: 6px 10px 6px 4px;
+  background: transparent; color: rgba(240,237,228,.72);
+  border: 1px solid rgba(240,237,228,.22); border-radius: 999px;
+  font-family: 'Arial Black', sans-serif; font-weight: 900; font-size: 11px;
   letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer;
+  -webkit-appearance: none; appearance: none;
 }
-.store-back:hover{ border-color: #ffd29a; box-shadow: 0 0 16px rgba(255,170,80,.4); }
+.store-back svg{ width: 16px; height: 16px; }
+.store-back:hover{ color: var(--cream); border-color: #ffd29a; }
 .store-back:focus-visible{ outline: 2px solid var(--cyan); outline-offset: 3px; }
 
 /* ---------- Fake ad ---------- */
@@ -348,16 +351,6 @@ html, body{
 .mission-bonus{ font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 11.5px; font-weight: 700; opacity: .8; margin-top: 4px; display: flex; gap: 5px; align-items: center; }
 
 /* ---------- Leaderboard ---------- */
-.lb{ width: min(320px, 100%); margin: 0 auto 18px; text-align: left; }
-.lb-title{ font-size: 13px; letter-spacing: .16em; margin-bottom: 6px; display: flex; justify-content: space-between; }
-.lb-title small{ font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; letter-spacing: 0; font-weight: 600; opacity: .65; }
-.lb-row{ display: grid; grid-template-columns: 34px 1fr auto; gap: 8px; align-items: center; padding: 5px 10px; border-radius: 6px; font-size: 13.5px; font-weight: 700; color: #e8e4d8; }
-.lb-row:nth-child(odd){ background: rgba(255,255,255,.04); }
-.lb-row .nm{ overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
-.lb-row .sc{ font-variant-numeric: tabular-nums; }
-.lb-row.me{ background: rgba(255,208,102,.16); color: var(--gold); }
-.lb-gap{ text-align: center; opacity: .5; font-size: 12px; line-height: 1; }
-.lb-empty{ font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 12.5px; opacity: .7; padding: 4px 10px; }
 
 /* ---------- Stats store ---------- */
 .ship-stats{ margin-top: 6px; display: grid; grid-template-columns: auto 1fr; gap: 3px 8px; align-items: center; font-size: 9.5px; letter-spacing: .1em; color: rgba(240,237,228,.7); }
@@ -437,7 +430,6 @@ html, body{
       <div class="stat-row"><span>Galactic Credits:</span><span class="gain gc" id="gainCredits">+0</span></div>
       <div class="stat-row"><span>Daily Missions:</span><span id="missionSum">0/3</span></div>
     </div>
-    <div class="lb" id="leaderboard"></div>
     <button type="button" class="menu-btn share" id="shareBtn">SHARE MY SCORE</button>
     <button type="button" class="menu-btn primary" id="continueBtn">Watch Ad &amp; Continue</button>
     <button type="button" class="menu-btn" id="restartBtn">RESTART</button>
@@ -459,12 +451,14 @@ html, body{
   <div class="store-panel">
     <div class="store-title-vertical">X-RACER SHOP</div>
     <div class="store-credits">
+      <button type="button" class="store-back" id="storeBackBtn" aria-label="Back">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 L8 12 L15 19" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>BACK
+      </button>
       <span class="label">Galactic Credits</span>
       <span class="value gc" id="creditsValue">0</span>
     </div>
     <div id="customize"></div>
     <div id="shipList"></div>
-    <button type="button" class="store-back" id="storeBackBtn">BACK</button>
   </div>
 </div>
 
@@ -721,7 +715,7 @@ const nearMissesEl = $('nearMisses'), hudCredits = $('hudCredits'), toastEl = $(
 /* Symbole du Galactic Credit : glyphe alien inspiré du dollar (S anguleux inversé barré de deux traits) */
 const GC_ICON = '<svg class="gc-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-label="Galactic Credits"><path d="M17.5 6.5H8.5L15.5 17.5H6.5"/><path d="M10 3v18M14 3v18" stroke-width="1.6"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg>';
 const gcHtml = (n, sign = '') => GC_ICON + '<span>' + sign + Math.floor(n).toLocaleString('en-US') + '</span>';
-const jumpsDoneEl = $('jumpsDone'), missionSumEl = $('missionSum'), lbEl = $('leaderboard'), missionsMenuEl = $('missionsMenu');
+const jumpsDoneEl = $('jumpsDone'), missionSumEl = $('missionSum'), missionsMenuEl = $('missionsMenu');
 const jumpBtn = $('jumpBtn'), jumpRing = $('jumpRing'), warnEl = $('warn'), hudShield = $('hudShield');
 const pauseBtn = $('pauseBtn'), pauseOverlay = $('pauseOverlay'), resumeBtn = $('resumeBtn'), pauseRestartBtn = $('pauseRestartBtn'), pauseExitBtn = $('pauseExitBtn');
 const comboEl = $('combo'), comboTxt = $('comboTxt'), comboBar = $('comboBar'), coachEl = $('coach'), countdownEl = $('countdown');
@@ -778,10 +772,38 @@ const Sound = (() => {
 
   function g(v) { const n = ctx.createGain(); n.gain.value = v; return n; }
 
+  /* iPhone : avec le bouton silencieux activé, iOS coupe le Web Audio. On passe la session audio en
+     « lecture » (API audioSession sur iOS 17+, sinon un <audio> silencieux en boucle lancé pendant le geste). */
+  let silentEl = null;
+  function iosPlayback() {
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+    if (silentEl || !/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent) || !('ontouchend' in document)) return;
+    try {
+      // 0,1 s de silence en WAV 8 kHz mono 8 bits
+      const n = 800, buf = new Uint8Array(44 + n), dv = new DataView(buf.buffer);
+      const w = (o, str) => { for (let i = 0; i < str.length; i++) buf[o + i] = str.charCodeAt(i); };
+      w(0, 'RIFF'); dv.setUint32(4, 36 + n, true); w(8, 'WAVEfmt '); dv.setUint32(16, 16, true);
+      dv.setUint16(20, 1, true); dv.setUint16(22, 1, true); dv.setUint32(24, 8000, true); dv.setUint32(28, 8000, true);
+      dv.setUint16(32, 1, true); dv.setUint16(34, 8, true); w(36, 'data'); dv.setUint32(40, n, true);
+      buf.fill(128, 44);
+      let bin = ''; for (let i = 0; i < buf.length; i++) bin += String.fromCharCode(buf[i]);
+      silentEl = document.createElement('audio');
+      silentEl.src = 'data:audio/wav;base64,' + btoa(bin);
+      silentEl.loop = true; silentEl.setAttribute('playsinline', ''); silentEl.setAttribute('x-webkit-airplay', 'deny');
+      silentEl.style.display = 'none'; document.body.appendChild(silentEl);
+      const pr = silentEl.play(); if (pr && pr.catch) pr.catch(() => {});
+    } catch (e) {}
+  }
+
   function init() {
-    if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
+    if (ctx) {
+      if (ctx.state !== 'running' && ctx.state !== 'closed') ctx.resume();
+      if (silentEl && silentEl.paused && !document.hidden) { const pr = silentEl.play(); if (pr && pr.catch) pr.catch(() => {}); }
+      return;
+    }
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return;
+    iosPlayback();
     ctx = new AC();
 
     comp = ctx.createDynamicsCompressor();
@@ -1240,8 +1262,11 @@ const Sound = (() => {
     lsSet(MUTE_KEY, m ? '1' : '0');
     if (ctx) master.gain.setTargetAtTime(m ? 0 : 0.85, ctx.currentTime, 0.05);
   }
-  function suspend() { if (ctx && ctx.state === 'running') ctx.suspend(); }
-  function resume() { if (ctx && ctx.state === 'suspended') ctx.resume(); }
+  function suspend() { if (ctx && ctx.state === 'running') ctx.suspend(); if (silentEl) silentEl.pause(); }
+  function resume() {
+    if (silentEl) { const pr = silentEl.play(); if (pr && pr.catch) pr.catch(() => {}); }
+    if (ctx && ctx.state !== 'running' && ctx.state !== 'closed') ctx.resume();
+  }
 
   return {
     init, setIntensity, setEngine, updateEngine, click, hover, buy, deny, launch, explosion,
@@ -1254,7 +1279,8 @@ function unlockAudio() {
   Sound.init();
   if (game.state === 'menu') { Sound.setIntensity(1); Sound.setEngine(0.07); }
 }
-['pointerdown', 'keydown', 'touchstart'].forEach(ev => window.addEventListener(ev, unlockAudio, { capture: true, passive: true }));
+// iOS ne débloque l'audio que sur certains gestes (touchend / click) : on écoute tous les gestes
+['pointerdown', 'keydown', 'touchstart', 'touchend', 'click'].forEach(ev => window.addEventListener(ev, unlockAudio, { capture: true, passive: true }));
 document.addEventListener('visibilitychange', () => { if (document.hidden) Sound.suspend(); else Sound.resume(); });
 
 function refreshMuteBtn() {
@@ -4345,59 +4371,6 @@ function submitScore() {
   const scoreLabel = score.toLocaleString('en-US') + ' m';
   try { window.parent && window.parent.postMessage({ type: GAME_TYPE, game: GAME_ID, mode: runMode, score, scoreLabel }, '*'); } catch (e) {}
 }
-/* ============================================================
-   Leaderboard (plateforme via postMessage, repli local)
-   ============================================================ */
-const RUNS_KEY = 'city_runner_runs';
-function loadRuns() { try { const r = JSON.parse(lsGet(RUNS_KEY, '[]')); return Array.isArray(r) ? r : []; } catch (e) { return []; } }
-function saveLocalRun(score) {
-  const runs = loadRuns();
-  const ex = runs.find(r => r.id === game.runId);
-  if (ex) ex.score = Math.max(ex.score, score); else runs.push({ id: game.runId, score, date: Date.now() });
-  runs.sort((a, b) => b.score - a.score);
-  lsSet(RUNS_KEY, JSON.stringify(runs.slice(0, 10)));
-}
-let lbTimer = null, lbReqId = 0;
-function lbRow(rank, name, score, me) {
-  return `<div class="lb-row${me ? ' me' : ''}"><span>#${rank}</span><span class="nm">${escHtml(name)}</span><span class="sc">${fmtN(score)} m</span></div>`;
-}
-function renderLocalLeaderboard(score) {
-  const runs = loadRuns().slice(0, 5);
-  let html = `<div class="lb-title"><span>YOUR BEST RUNS</span><small>this device</small></div>`;
-  if (!runs.length) html += `<div class="lb-empty">No runs yet.</div>`;
-  runs.forEach((r, i) => {
-    const d = new Date(r.date);
-    html += lbRow(i + 1, r.id === game.runId ? 'This run' : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }), r.score, r.id === game.runId);
-  });
-  lbEl.innerHTML = html;
-}
-function renderGlobalLeaderboard(d) {
-  const entries = Array.isArray(d.entries) ? d.entries.slice(0, 5) : [];
-  let html = `<div class="lb-title"><span>LEADERBOARD</span><small>${escHtml(d.period || 'all time')}</small></div>`;
-  if (!entries.length) html += `<div class="lb-empty">Be the first on the board.</div>`;
-  let meShown = false;
-  entries.forEach((e, i) => { const me = !!e.me; meShown = meShown || me; html += lbRow(e.rank || i + 1, e.name || 'Player', e.score || 0, me); });
-  if (!meShown && d.playerRank) html += `<div class="lb-gap">...</div>` + lbRow(d.playerRank, d.playerName || 'You', d.playerScore || Math.floor(game.distance), true);
-  lbEl.innerHTML = html;
-}
-function requestLeaderboard(score) {
-  clearTimeout(lbTimer);
-  const id = ++lbReqId;
-  const embedded = window.parent && window.parent !== window;
-  if (!embedded) { renderLocalLeaderboard(score); return; }
-  lbEl.innerHTML = `<div class="lb-title"><span>LEADERBOARD</span></div><div class="lb-empty">Loading...</div>`;
-  try { window.parent.postMessage({ type: 'RH_LEADERBOARD_REQUEST', game: GAME_ID, mode: runMode, score, limit: 5, requestId: id }, '*'); } catch (e) {}
-  lbTimer = setTimeout(() => { if (id === lbReqId) renderLocalLeaderboard(score); }, 1500);
-}
-window.addEventListener('message', (ev) => {
-  if (ev.source !== window.parent) return;
-  const d = ev.data;
-  if (!d || d.type !== 'RH_LEADERBOARD' || (d.game && d.game !== GAME_ID)) return;
-  if (d.requestId && d.requestId !== lbReqId) return;
-  clearTimeout(lbTimer);
-  renderGlobalLeaderboard(d);
-});
-
 function bankCredits() {
   const total = Math.floor(game.distance) + game.bonusGc;
   const gain = Math.max(0, total - game.creditsBanked);
@@ -4427,8 +4400,6 @@ function showGameOver() {
   game.distCounted = Math.floor(game.distance);
   missionProgress('dist_run', Math.floor(game.distance));
   missionSumEl.textContent = missionsDoneCount() + '/3';
-  saveLocalRun(score);
-  requestLeaderboard(score);
   jumpBtn.hidden = true; warnEl.classList.remove('on');
   continueBtn.style.display = game.continueAvailable ? 'block' : 'none';
   if (!game.continueAvailable) submitScore();
