@@ -75,6 +75,21 @@ async function main() {
     }
   }
   console.log(`[prerender] ${ok}/${urls.length} pages prérendues`)
+
+  // Sitemap : toute URL prérendue absente de sitemap.xml y est ajoutée
+  // automatiquement (date du jour), pour qu'aucun jeu ni article ne soit oublié.
+  const smPath = path.join(dist, 'sitemap.xml')
+  if (fs.existsSync(smPath)) {
+    let sm = fs.readFileSync(smPath, 'utf8')
+    const today = new Date().toISOString().slice(0, 10)
+    const missing = urls.filter(u => !sm.includes(`<loc>${SITE_URL}${u === '/' ? '/' : u}</loc>`))
+    if (missing.length) {
+      const add = missing.map(u => `  <url>\n    <loc>${SITE_URL}${u}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${u.startsWith('/game/') ? 'weekly' : 'monthly'}</changefreq>\n    <priority>${u.startsWith('/game/') ? '0.9' : '0.6'}</priority>\n  </url>\n`).join('')
+      sm = sm.replace('</urlset>', add + '</urlset>')
+      fs.writeFileSync(smPath, sm)
+      console.log('[prerender] sitemap : ajout automatique de ' + missing.join(', '))
+    }
+  }
   failed.forEach(f => console.warn('[prerender] échec ' + f))
   // Échec du build si trop de pages ratent : Vercel garde alors la
   // version précédente en ligne au lieu de publier un site sans contenu.

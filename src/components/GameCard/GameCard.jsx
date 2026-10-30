@@ -44,13 +44,13 @@ export default function GameCard({ game, size = 'medium', source = 'bento' }) {
           <svg className="gamecard__hot-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="hotFlame" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#ffd23f"/>
-                <stop offset="45%" stop-color="#ff8a00"/>
-                <stop offset="100%" stop-color="#e02200"/>
+                <stop offset="0%" stopColor="#ffd23f"/>
+                <stop offset="45%" stopColor="#ff8a00"/>
+                <stop offset="100%" stopColor="#e02200"/>
               </linearGradient>
               <linearGradient id="hotFlameCore" x1="12" y1="9" x2="12" y2="21" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#fff3b0"/>
-                <stop offset="100%" stop-color="#ffb020"/>
+                <stop offset="0%" stopColor="#fff3b0"/>
+                <stop offset="100%" stopColor="#ffb020"/>
               </linearGradient>
             </defs>
             <path d="M12 2c.6 2.9-.7 4.6-2 6.2-1.4 1.7-2.8 3.4-2.8 6A4.8 4.8 0 0012 19c2.9 0 5.2-2.2 5.2-5 0-2.2-1-3.6-2-5 .1 1.1-.3 2-1.2 2.6.5-2.4-.3-4.3-1.6-5.8C12.9 4.6 12.6 3.2 12 2z" fill="url(#hotFlame)"/>

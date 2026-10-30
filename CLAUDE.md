@@ -25,6 +25,12 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
 - Toute autre modification du site demandée par Laurent : fusion immédiate après tests et build.
 - Après la fusion, vérifier que le déploiement Vercel du projet `ragequit` est en état `READY` et le signaler à Laurent ; en cas d'échec, lire les logs de build et corriger dans une nouvelle PR.
 
+## Prérendu SEO (ne pas casser)
+
+- `npm run build` enchaîne `vite build`, le build serveur de `src/entry-server.jsx` puis `scripts/prerender.mjs`, qui écrit une page HTML complète par URL publique (Google et AdSense lisent le texte sans JavaScript). Les URL viennent de `games.js`, `blog.js` et `legalContent.js` : rien à déclarer à la main.
+- Un composant ne doit rien rendre qui exige le navigateur au premier rendu : pas de `createPortal` sans garde `mounted`, pas d'accès à `window` hors `useEffect` sans valeur par défaut.
+- Après chaque build, vérifier la ligne `[prerender] N/N pages prérendues`. Le build échoue si plus de 20 % des pages ratent.
+
 ## Pipeline « un jeu par jour »
 
 1. Ouvrir `backlog.md`, prendre le premier jeu au statut `à faire`.
@@ -38,7 +44,7 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
 9. PR de publication (après validation), intégration site :
    - `src/data/games.js` : nouvelle entrée à la fin du tableau `games`, même format que `city-runner` (description de 400 mots minimum, `tags`, `controls`, `author: 'Ragequit Arcade'`, `isNew: true`, `modes`, `defaultMode`, `seo` avec `title`, `metaDescription` et 8 questions de FAQ minimum).
    - `src/data/blog.js` : article guide `<id>-tips` (même format que `city-runner-tips`).
-   - `public/sitemap.xml` : URLs `/game/<id>` et `/blog/<id>-tips` avec `lastmod` du jour.
+   - `public/sitemap.xml` : URLs `/game/<id>` et `/blog/<id>-tips` avec `lastmod` du jour. (filet de sécurité : le build ajoute automatiquement toute page prérendue absente du sitemap).
    - Mettre à jour le texte de la catégorie concernée dans `categories` si le jeu y devient marquant.
    - Image de blog `public/blog/<id>-tips.jpg` (16:9), capture Playwright.
    - Retirer l'entrée du jeu de `src/data/testGames.js`.
