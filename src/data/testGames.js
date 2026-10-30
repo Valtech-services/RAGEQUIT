@@ -42,6 +42,6 @@ export const testGames = [
     category: 'arcade',
     orientation: 'portrait',
     file: '/games/linestorm.html',
-    notes: 'Score LINESTORM_SCORE, modes classic / hard / daily, label en pts. Pub revive une fois par partie. Défi ami via ?ls_seed=&ls_beat=&ls_mode='
+    notes: 'Score LINESTORM_SCORE, modes classic / hard (Daily envoyé en classic), label en pts. Pub revive une fois par partie. Défi ami via ?ls_seed=&ls_beat=&ls_mode='
   },
 ]
