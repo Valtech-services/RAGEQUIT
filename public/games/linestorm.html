@@ -34,12 +34,23 @@
   #game { position: fixed; inset: 0; width: 100%; height: 100vh; height: 100dvh; display: block; touch-action: none; }
 
   .hud {
-    position: fixed; left: 0; right: 0; top: 0; pointer-events: none;
-    padding: calc(10px + var(--safe-top)) calc(12px + var(--safe-right)) 0 calc(12px + var(--safe-left));
+    position: fixed; top: 0; left: 0; right: 0; margin: 0 auto; max-width: 520px; pointer-events: none; z-index: 5;
+    padding: calc(10px + var(--safe-top)) calc(10px + var(--safe-right)) 0 calc(10px + var(--safe-left));
     display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
   }
-  .hud__score { font-family: var(--display); font-weight: 900; font-size: 32px; letter-spacing: 1px; line-height: 1; color: #fff; text-shadow: 0 0 12px rgba(30,242,255,.7), 0 0 2px rgba(30,242,255,.9); }
-  .hud__sub { font-size: 12px; color: var(--muted); margin-top: 5px; letter-spacing: .5px; text-transform: uppercase; font-weight: 700; }
+  .hud__stats { display: flex; gap: 8px; align-items: stretch; }
+  .stat {
+    min-width: 92px; padding: 6px 12px 7px; border-radius: 12px;
+    background: rgba(10,5,24,.72); border: 1px solid rgba(255,255,255,.12);
+  }
+  .stat__label { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; }
+  .stat__val { font-family: var(--display); font-weight: 900; font-size: 26px; line-height: 1.05; letter-spacing: .5px; color: #fff; text-shadow: 0 0 10px rgba(30,242,255,.7); font-variant-numeric: tabular-nums; }
+  .stat--speed .stat__val { color: var(--cyan); transition: color .4s; }
+  .gauge { height: 4px; margin-top: 4px; border-radius: 4px; background: rgba(255,255,255,.12); overflow: hidden; }
+  .gauge i { display: block; height: 100%; width: 0%; border-radius: 4px; background: linear-gradient(90deg, var(--cyan), #8b5cf6, var(--magenta), var(--blood)); transition: width .3s linear; }
+  .stat.bump { animation: bump .5s ease-out; }
+  @keyframes bump { 0% { transform: scale(1); } 30% { transform: scale(1.12); border-color: var(--cyan); } 100% { transform: scale(1); } }
+  .hud__sub { font-size: 11px; color: var(--muted); margin: 5px 0 0 2px; letter-spacing: .5px; text-transform: uppercase; font-weight: 700; }
   .hud__right { display: flex; gap: 8px; pointer-events: auto; }
   .icon-btn {
     width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,.18);
@@ -47,7 +58,7 @@
     display: grid; place-items: center; cursor: pointer; padding: 0;
   }
   .icon-btn svg { width: 18px; height: 18px; fill: currentColor; }
-  .hud__badges { position: fixed; left: 50%; transform: translateX(-50%); top: calc(64px + var(--safe-top)); display: flex; gap: 6px; pointer-events: none; }
+  .hud__badges { position: fixed; left: 50%; transform: translateX(-50%); top: calc(96px + var(--safe-top)); display: flex; gap: 6px; pointer-events: none; }
   .badge { white-space: nowrap; font-family: var(--display); font-weight: 900; font-size: 13px; letter-spacing: 1px; padding: 4px 10px; border-radius: 999px; border: 1px solid currentColor; background: rgba(6,3,13,.6); display: none; }
   .badge.on { display: block; }
   .badge--over { color: var(--acid); text-shadow: 0 0 10px var(--acid); }
@@ -111,7 +122,10 @@
 
 <div class="hud" id="hud">
   <div>
-    <div class="hud__score" id="hudScore">0</div>
+    <div class="hud__stats">
+      <div class="stat"><div class="stat__label">Score</div><div class="stat__val" id="hudScore">0</div></div>
+      <div class="stat stat--speed" id="statSpeed"><div class="stat__label">Speed</div><div class="stat__val" id="hudSpeed">x1.0</div><div class="gauge"><i id="hudGauge"></i></div></div>
+    </div>
     <div class="hud__sub" id="hudSub">Classic</div>
   </div>
   <div class="hud__right">
@@ -377,7 +391,7 @@
       streak: 0, mult: 1, cues: hard ? 0 : CUE_WALLS,
       shield: false, ghostT: 0, slowT: 0, invuln: 1.2,
       shake: 0, hurt: 0, hurtColor: '255,59,79', pulse: 0,
-      revived: false, scoreSent: false, hintT: 4, label: '', subText: ''
+      revived: false, scoreSent: false, hintT: 4, label: '', subText: '', speedText: ''
     };
     G.label = mode === 'hard' ? 'Hard' : mode === 'daily' ? 'Daily storm' : 'Classic';
     if (challenge && seed === challenge.seed) G.label += ' · Beat ' + fmt(challenge.beat);
@@ -528,7 +542,7 @@
     G.speed = (G.hard ? 290 : 230) * SC * G.speedMul;
     if (G.time >= G.nextSpeedPop) {
       G.nextSpeedPop += 20;
-      if (G.speedMul < 2.6) { addText('SPEED UP', OX + FW / 2, H * 0.36, '#1ef2ff', 30, 1.2); Audio.sfx('speed'); }
+      if (G.speedMul < 2.6) { addText('SPEED UP', OX + FW / 2, H * 0.36, '#1ef2ff', 30, 1.2); Audio.sfx('speed'); statSpeed.classList.remove('bump'); void statSpeed.offsetWidth; statSpeed.classList.add('bump'); }
     }
     var dy = G.speed * sdt;
     G.dist += dy;
@@ -938,11 +952,17 @@
   }
 
   /* ================= HUD ================= */
-  var hudScore = document.getElementById('hudScore'), hudSub = document.getElementById('hudSub'), badgeOver = document.getElementById('badgeOver'), badgePower = document.getElementById('badgePower'), hint = document.getElementById('hint');
+  var hudScore = document.getElementById('hudScore'), hudSub = document.getElementById('hudSub'), hudSpeed = document.getElementById('hudSpeed'), hudGauge = document.getElementById('hudGauge'), statSpeed = document.getElementById('statSpeed'), badgeOver = document.getElementById('badgeOver'), badgePower = document.getElementById('badgePower'), hint = document.getElementById('hint');
   function updateHud() {
     hudScore.textContent = fmt(G.score);
-    var sub = G.label + ' · Speed x' + G.speedMul.toFixed(1);
-    if (sub !== G.subText) { G.subText = sub; hudSub.textContent = sub; }
+    if (G.label !== G.subText) { G.subText = G.label; hudSub.textContent = G.label; }
+    var sp = 'x' + G.speedMul.toFixed(1);
+    if (sp !== G.speedText) {
+      G.speedText = sp; hudSpeed.textContent = sp;
+      var k = (G.speedMul - 1) / 1.6;
+      hudGauge.style.width = Math.round(Math.min(1, k) * 100) + '%';
+      hudSpeed.style.color = k < 0.33 ? '#1ef2ff' : k < 0.66 ? '#ff2ea6' : '#ff3b4f';
+    }
     badgeOver.classList.toggle('on', G.mult > 1);
     var pw = G.slowT > 0 ? 'SLOW-MO ' + G.slowT.toFixed(1) : G.ghostT > 0 ? 'GHOST ' + G.ghostT.toFixed(1) : G.shield ? 'SHIELD' : '';
     badgePower.textContent = pw; badgePower.classList.toggle('on', !!pw);
