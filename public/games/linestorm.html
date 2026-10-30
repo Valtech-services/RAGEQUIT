@@ -108,6 +108,26 @@
   .newbest { color: var(--acid); font-family: var(--display); font-weight: 900; letter-spacing: 1px; display: none; }
   .newbest.on { display: block; }
 
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .row2 .btn { font-size: 17px; }
+  .list { text-align: left; margin: 6px 0 4px; }
+  .mission { padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,.05); border: 1px solid transparent; margin-top: 8px; font-size: 14px; color: var(--ink); }
+  .mission.done { border-color: var(--acid); }
+  .mission__bar { height: 5px; border-radius: 5px; background: rgba(255,255,255,.12); margin-top: 7px; overflow: hidden; }
+  .mission__bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--cyan), var(--acid)); }
+  .mission__meta { font-size: 12px; color: var(--muted); margin-top: 5px; display: flex; justify-content: space-between; }
+  .mission.done .mission__meta b { color: var(--acid); }
+  .skins { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 4px; }
+  .skin { padding: 10px 8px; border-radius: 12px; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.04); color: var(--ink); cursor: pointer; text-align: center; font-family: var(--body); }
+  .skin.on { border-color: var(--acid); box-shadow: 0 0 14px rgba(215,255,31,.3); }
+  .skin.locked { opacity: .45; cursor: default; }
+  .skin__name { font-family: var(--display); font-weight: 900; letter-spacing: 1px; font-size: 16px; }
+  .skin__dots { display: flex; justify-content: center; gap: 5px; margin: 7px 0 6px; }
+  .skin__dots i { width: 12px; height: 12px; border-radius: 50%; display: block; }
+  .skin__req { font-size: 11px; color: var(--muted); }
+  .skin.on .skin__req { color: var(--acid); }
+  .unlock { display: none; color: var(--acid); font-family: var(--display); font-weight: 900; letter-spacing: 1px; margin: 0 0 10px; }
+  .unlock.on { display: block; }
   .ad { position: fixed; inset: 0; z-index: 20; display: none; align-items: center; justify-content: center; background: #000;
     padding: calc(16px + var(--safe-top)) 16px calc(16px + var(--safe-bottom)); }
   .ad.on { display: flex; }
@@ -148,13 +168,37 @@
     <button class="btn" data-mode="classic">CLASSIC<small id="bestClassic">Best: 0</small></button>
     <button class="btn btn--acid" data-mode="hard">HARD<small id="bestHard">Best: 0</small></button>
     <button class="btn btn--ghost" data-mode="daily">DAILY STORM<small id="bestDaily">Same storm for everyone today</small></button>
+    <div class="row2">
+      <button class="btn btn--ghost" id="btnMissions">MISSIONS<small id="missionsCount">0/3 today</small></button>
+      <button class="btn btn--ghost" id="btnSkins">SKINS<small id="skinCount">1 unlocked</small></button>
+    </div>
     <div class="how">
       <b>Tap</b> anywhere to split your lines into a wide fan, tap again to merge them.<br>
       <b>Drag</b> to steer. On desktop: <b>arrows / A-D</b> to steer, <b>Space</b> to split, <b>P</b> to pause.<br>
       <b class="pink">Pink gates</b>: one hole per line, colored dots show where each line goes. <b>Split.</b><br>
       <b class="green">Green walls</b>: one wide gap for the whole pack. <b>Merge.</b><br>
-      Lost a line? Catch an orb of its color to bring it back. 5 clean gates in a row trigger <b>Overdrive x2</b>. The storm keeps speeding up.
+      Lost a line? Catch an orb of its color to bring it back. 5 clean gates in a row trigger <b>Overdrive x2</b>. The storm keeps speeding up and changes zone every 1,000 m.
     </div>
+  </div>
+</div>
+
+<!-- Daily missions -->
+<div class="overlay" id="ovMissions">
+  <div class="panel">
+    <div class="title2" style="color:var(--acid);text-shadow:0 0 16px rgba(215,255,31,.5)">DAILY MISSIONS</div>
+    <div class="small">Three new missions every day, in every mode. Complete 10 missions in total to unlock the Daily Hero skin.</div>
+    <div class="list" id="missionList"></div>
+    <button class="btn" data-back>BACK</button>
+  </div>
+</div>
+
+<!-- Skins -->
+<div class="overlay" id="ovSkins">
+  <div class="panel">
+    <div class="title2" style="color:var(--cyan);text-shadow:0 0 16px rgba(30,242,255,.5)">LINE SKINS</div>
+    <div class="small">Cosmetic only. Unlock them with your best score in a single run.</div>
+    <div class="skins" id="skinList"></div>
+    <button class="btn" data-back>BACK</button>
   </div>
 </div>
 
@@ -174,6 +218,8 @@
     <div class="big" id="overScore">0</div>
     <div class="newbest" id="newBest">NEW BEST</div>
     <div class="small" id="overBest">Best: 0</div>
+    <div class="unlock" id="overUnlock"></div>
+    <div class="small" id="overMissions"></div>
     <div class="small" id="overChallenge" style="display:none"></div>
     <button class="btn btn--acid" id="btnRevive">WATCH AD TO CONTINUE<small>Bring all lines back, once per run</small></button>
     <button class="btn" id="btnAgain">PLAY AGAIN</button>
@@ -199,7 +245,35 @@
   /* ================= CONSTANTS ================= */
   var GAME_ID = 'linestorm';
   var SCORE_TYPE = 'LINESTORM_SCORE';
-  var COLORS = ['#1ef2ff', '#ff2ea6', '#d7ff1f', '#ff8a1f'];
+  var SKINS = [
+    { id: 'neon',   name: 'NEON',       colors: ['#1ef2ff', '#ff2ea6', '#d7ff1f', '#ff8a1f'], req: 0 },
+    { id: 'ice',    name: 'ICE',        colors: ['#bdf6ff', '#6fd3ff', '#ffffff', '#5b8cff'], req: 2500 },
+    { id: 'sunset', name: 'SUNSET',     colors: ['#ff5f6d', '#ffc371', '#ff9a3c', '#ff2e8a'], req: 5000 },
+    { id: 'toxic',  name: 'TOXIC',      colors: ['#39ff14', '#b6ff00', '#00ffa2', '#eaff4f'], req: 10000 },
+    { id: 'royal',  name: 'ROYAL',      colors: ['#ffd700', '#b388ff', '#ffffff', '#ff6ec7'], req: 20000 },
+    { id: 'prism',  name: 'PRISM',      colors: ['#ff4d4d', '#ffd84d', '#4dff88', '#4dc3ff'], req: 35000 },
+    { id: 'hero',   name: 'DAILY HERO', colors: ['#ffffff', '#ffd700', '#ff2ea6', '#1ef2ff'], missions: 10 }
+  ];
+  var COLORS = SKINS[0].colors.slice();
+  var ZONE_LEN = 10000;         // distance units per zone = 1,000 m
+  var ZONES = [
+    { name: 'NEON NIGHT',  top: '#16082c', mid: '#0b0519', grid: '139,92,246', hor: '255,46,166' },
+    { name: 'CYBER OCEAN', top: '#061a33', mid: '#040d1f', grid: '30,242,255', hor: '30,160,255' },
+    { name: 'TOXIC GRID',  top: '#0f2208', mid: '#081205', grid: '160,255,60', hor: '120,255,40' },
+    { name: 'INFERNO',     top: '#2e0a08', mid: '#160504', grid: '255,120,40', hor: '255,60,40' },
+    { name: 'GOLDEN VOID', top: '#241a06', mid: '#120d03', grid: '255,200,60', hor: '255,170,40' },
+    { name: 'ULTRAVIOLET', top: '#2a0838', mid: '#14041c', grid: '255,46,166', hor: '200,60,255' }
+  ];
+  var MISSION_POOL = [
+    { id: 'pinkrow',   text: 'Pass {n} pink gates in a row without a hit', n: [10, 15], kind: 'run' },
+    { id: 'pink',      text: 'Pass {n} pink gates cleanly',               n: [20, 35], kind: 'sum' },
+    { id: 'green',     text: 'Pass {n} green walls cleanly',              n: [20, 35], kind: 'sum' },
+    { id: 'orb',       text: 'Collect {n} orbs',                          n: [5, 8],   kind: 'sum' },
+    { id: 'power',     text: 'Collect {n} power-ups',                     n: [3, 6],   kind: 'sum' },
+    { id: 'overdrive', text: 'Trigger Overdrive {n} times',               n: [2, 4],   kind: 'sum' },
+    { id: 'score',     text: 'Score {n} pts in one run',                  n: [3000, 6000], kind: 'run' },
+    { id: 'zone',      text: 'Reach zone {n} in one run',                 n: [2, 3],   kind: 'run' }
+  ];
   var PINK = '#ff2ea6', GREEN = '#d7ff1f', RED = '#ff3b4f';
   var FIELD_MAX = 520;
   var DISPLAY_FONT = 'Impact, "Arial Black", sans-serif';
@@ -344,7 +418,7 @@
   /* ================= CANVAS ================= */
   var cv = document.getElementById('game'), ctx = cv.getContext('2d');
   var W = 0, H = 0, DPR = 1, FW = 0, OX = 0, SC = 1;
-  var gradBg = null, gradBgOver = null, gradHorizon = null, gradTail = null;
+  var gradTail = null;
   var stars = [];
   function resize() {
     DPR = Math.min(window.devicePixelRatio || 1, 2);
@@ -355,10 +429,6 @@
     FW = Math.min(W, FIELD_MAX); OX = (W - FW) / 2;
     SC = Math.max(0.75, Math.min(1.3, H / 800));
     var headY = H * 0.74;
-    gradBg = ctx.createLinearGradient(0, 0, 0, H); gradBg.addColorStop(0, '#16082c'); gradBg.addColorStop(0.6, '#0b0519'); gradBg.addColorStop(1, '#06030d');
-    gradBgOver = ctx.createLinearGradient(0, 0, 0, H); gradBgOver.addColorStop(0, '#26102a'); gradBgOver.addColorStop(0.6, '#120a1c'); gradBgOver.addColorStop(1, '#06030d');
-    gradHorizon = ctx.createRadialGradient(OX + FW / 2, -H * 0.05, 0, OX + FW / 2, -H * 0.05, H * 0.55);
-    gradHorizon.addColorStop(0, 'rgba(255,46,166,0.22)'); gradHorizon.addColorStop(0.5, 'rgba(139,92,246,0.08)'); gradHorizon.addColorStop(1, 'rgba(139,92,246,0)');
     gradTail = ctx.createLinearGradient(0, headY + 24, 0, H);
     gradTail.addColorStop(0, 'rgba(6,3,13,0)'); gradTail.addColorStop(1, 'rgba(6,3,13,0.88)');
     if (!stars.length) for (var i = 0; i < 70; i++) stars.push({ x: Math.random(), y: Math.random() * H, z: 0.2 + Math.random() * 0.8 });
@@ -391,7 +461,8 @@
       streak: 0, mult: 1, cues: hard ? 0 : CUE_WALLS,
       shield: false, ghostT: 0, slowT: 0, invuln: 1.2,
       shake: 0, hurt: 0, hurtColor: '255,59,79', pulse: 0,
-      revived: false, scoreSent: false, hintT: 4, label: '', subText: '', speedText: ''
+      revived: false, scoreSent: false, hintT: 4, label: '', subText: '', speedText: '',
+      zone: 0, prevZone: 0, zoneBlend: 1, pinkRow: 0, unlockedBefore: unlockedIds()
     };
     G.label = mode === 'hard' ? 'Hard' : mode === 'daily' ? 'Daily storm' : 'Classic';
     if (challenge && seed === challenge.seed) G.label += ' · Beat ' + fmt(challenge.beat);
@@ -512,7 +583,7 @@
     burst(OX + ln.x, G.headY, '#ffffff', 10, 200, 2);
     addRing(OX + ln.x, G.headY, ln.color);
     G.shake = 14; hurtFx('255,59,79', 0.75);
-    G.streak = 0;
+    G.streak = 0; G.pinkRow = 0;
     if (G.mult > 1) { G.mult = 1; Audio.bpm = 126; }
     Audio.sfx('hit');
     try { if (navigator.vibrate) navigator.vibrate(40); } catch (e) {}
@@ -523,7 +594,7 @@
     if (G.shield) {
       G.shield = false; G.invuln = 0.9; G.shake = 6; hurtFx('30,242,255', 0.5);
       addRing(OX + G.cx, G.headY, '#1ef2ff');
-      G.streak = 0; if (G.mult > 1) { G.mult = 1; Audio.bpm = 126; }
+      G.streak = 0; G.pinkRow = 0; if (G.mult > 1) { G.mult = 1; Audio.bpm = 126; }
       Audio.sfx('hit');
       return true;
     }
@@ -546,6 +617,18 @@
     }
     var dy = G.speed * sdt;
     G.dist += dy;
+
+    // zones: new palette every 1,000 m
+    var zn = Math.floor(G.dist / ZONE_LEN);
+    if (zn > G.zone) {
+      G.prevZone = G.zone; G.zone = zn; G.zoneBlend = 0;
+      var zd = ZONES[zn % ZONES.length];
+      addText('ZONE ' + (zn + 1), OX + FW / 2, H * 0.3, 'rgb(' + zd.hor + ')', 40, 1.8);
+      addText(zd.name, OX + FW / 2, H * 0.3 + 40, '#ffffff', 20, 1.8);
+      Audio.sfx('over');
+      missionEvent('zone', zn + 1);
+    }
+    if (G.zoneBlend < 1) G.zoneBlend = Math.min(1, G.zoneBlend + dt / 1.6);
 
     // timers
     if (G.invuln > 0) G.invuln -= dt;
@@ -615,10 +698,14 @@
             shatter(wl);
             addText('+' + pts, OX + G.cx, hy - 34, wl.kind === 'multi' ? PINK : GREEN, 22, 0.7);
             addRing(OX + G.cx, hy, wl.kind === 'multi' ? PINK : GREEN);
+            if (wl.kind === 'multi') { G.pinkRow++; missionEvent('pink', 1); missionEvent('pinkrow', G.pinkRow); }
+            else missionEvent('green', 1);
             if (G.streak === 5 && G.mult === 1) {
               G.mult = 2; Audio.bpm = 148; Audio.sfx('over'); G.pulse = 1;
               addText('OVERDRIVE x2', OX + FW / 2, H * 0.42, GREEN, 40, 1.4);
+              missionEvent('overdrive', 1);
             }
+            missionEvent('score', Math.floor(G.score));
             G.walls.splice(w, 1);
             continue;
           } else G.score += 25;
@@ -686,6 +773,7 @@
       }
       addRing(OX + item.x, G.headY, item.color);
       Audio.sfx('orb');
+      missionEvent('orb', 1);
     } else {
       if (item.kind === 'slow') G.slowT = 3;
       else if (item.kind === 'shield') G.shield = true;
@@ -694,7 +782,100 @@
       addRing(OX + item.x, G.headY, item.color);
       addText(item.kind === 'slow' ? 'SLOW-MO' : item.kind === 'shield' ? 'SHIELD' : 'GHOST', OX + G.cx, G.headY - 40, item.color, 22, 0.9);
       Audio.sfx('power');
+      missionEvent('power', 1);
     }
+  }
+
+  /* ================= ZONES ================= */
+  function hexRgb(h) { var n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
+  function mixHex(a, b, k) { var x = hexRgb(a), y = hexRgb(b); return 'rgb(' + Math.round(lerp(x[0], y[0], k)) + ',' + Math.round(lerp(x[1], y[1], k)) + ',' + Math.round(lerp(x[2], y[2], k)) + ')'; }
+  function mixTriple(a, b, k) { var x = a.split(','), y = b.split(','); return Math.round(lerp(+x[0], +y[0], k)) + ',' + Math.round(lerp(+x[1], +y[1], k)) + ',' + Math.round(lerp(+x[2], +y[2], k)); }
+  function zoneColors() {
+    var cur = ZONES[(G ? G.zone : 0) % ZONES.length];
+    if (!G || G.zoneBlend >= 1) return { top: cur.top, mid: cur.mid, grid: cur.grid, hor: cur.hor };
+    var prev = ZONES[G.prevZone % ZONES.length], k = G.zoneBlend;
+    return { top: mixHex(prev.top, cur.top, k), mid: mixHex(prev.mid, cur.mid, k), grid: mixTriple(prev.grid, cur.grid, k), hor: mixTriple(prev.hor, cur.hor, k) };
+  }
+
+  /* ================= SKINS ================= */
+  function bestAny() { return parseInt(load('linestorm_best_any', 0), 10) || 0; }
+  function missionsTotal() { return parseInt(load('linestorm_missions_total', 0), 10) || 0; }
+  function isUnlocked(sk) { return sk.missions ? missionsTotal() >= sk.missions : bestAny() >= sk.req; }
+  function unlockedIds() { return SKINS.filter(isUnlocked).map(function (sk) { return sk.id; }); }
+  function applySkin(id) {
+    var sk = SKINS.filter(function (x) { return x.id === id; })[0];
+    if (!sk || !isUnlocked(sk)) sk = SKINS[0];
+    COLORS = sk.colors.slice();
+    save('linestorm_skin', sk.id);
+    return sk.id;
+  }
+  function renderSkins() {
+    var list = document.getElementById('skinList'), cur = load('linestorm_skin', 'neon');
+    list.innerHTML = '';
+    SKINS.forEach(function (sk) {
+      var unl = isUnlocked(sk), b = document.createElement('button');
+      b.className = 'skin' + (sk.id === cur ? ' on' : '') + (unl ? '' : ' locked');
+      var nm = document.createElement('div'); nm.className = 'skin__name'; nm.textContent = sk.name;
+      var dots = document.createElement('div'); dots.className = 'skin__dots';
+      sk.colors.forEach(function (c) { var i = document.createElement('i'); i.style.background = c; i.style.boxShadow = '0 0 8px ' + c; dots.appendChild(i); });
+      var rq = document.createElement('div'); rq.className = 'skin__req';
+      rq.textContent = sk.id === cur ? 'Equipped' : unl ? 'Tap to equip' : sk.missions ? 'Complete ' + sk.missions + ' missions' : 'Score ' + fmt(sk.req) + ' in one run';
+      b.appendChild(nm); b.appendChild(dots); b.appendChild(rq);
+      if (unl) b.addEventListener('click', function () { applySkin(sk.id); renderSkins(); refreshMenu(); });
+      list.appendChild(b);
+    });
+  }
+
+  /* ================= DAILY MISSIONS ================= */
+  var M = null;
+  function loadMissions() {
+    var today = todayKey();
+    try { M = JSON.parse(load('linestorm_missions', 'null')); } catch (e) { M = null; }
+    if (M && M.date === today && M.list && M.list.length === 3) return;
+    var rng = mulberry32(hashStr('linestorm-missions-' + today));
+    var pool = MISSION_POOL.slice(), list = [];
+    while (list.length < 3) {
+      var def = pool.splice(Math.floor(rng() * pool.length), 1)[0];
+      var target = def.n[Math.floor(rng() * def.n.length)];
+      list.push({ id: def.id, kind: def.kind, target: target, text: def.text.replace('{n}', fmt(target)), progress: 0, done: false });
+    }
+    M = { date: today, list: list };
+    save('linestorm_missions', JSON.stringify(M));
+  }
+  function missionEvent(id, value) {
+    if (!M || M.date !== todayKey()) loadMissions();
+    var changed = false;
+    for (var i = 0; i < M.list.length; i++) {
+      var m = M.list[i];
+      if (m.id !== id || m.done) continue;
+      var np = m.kind === 'sum' ? m.progress + value : Math.max(m.progress, value);
+      if (np === m.progress) continue;
+      m.progress = Math.min(np, m.target); changed = true;
+      if (m.progress >= m.target) {
+        m.done = true;
+        save('linestorm_missions_total', missionsTotal() + 1);
+        if (G && state === 'play') { addText('MISSION COMPLETE', OX + FW / 2, H * 0.24, GREEN, 26, 1.6); Audio.sfx('orb'); }
+      }
+    }
+    if (changed) save('linestorm_missions', JSON.stringify(M));
+  }
+  function missionsDone() { if (!M) loadMissions(); return M.list.filter(function (m) { return m.done; }).length; }
+  function renderMissions() {
+    loadMissions();
+    var list = document.getElementById('missionList');
+    list.innerHTML = '';
+    M.list.forEach(function (m) {
+      var d = document.createElement('div'); d.className = 'mission' + (m.done ? ' done' : '');
+      var t = document.createElement('div'); t.textContent = m.text;
+      var bar = document.createElement('div'); bar.className = 'mission__bar';
+      var fill = document.createElement('i'); fill.style.width = Math.round(m.progress / m.target * 100) + '%'; bar.appendChild(fill);
+      var meta = document.createElement('div'); meta.className = 'mission__meta';
+      var a = document.createElement('span'); a.textContent = fmt(m.progress) + ' / ' + fmt(m.target);
+      var b = document.createElement('b'); b.textContent = m.done ? 'DONE' : (m.kind === 'run' ? 'In one run' : 'Today');
+      meta.appendChild(a); meta.appendChild(b);
+      d.appendChild(t); d.appendChild(bar); d.appendChild(meta);
+      list.appendChild(d);
+    });
   }
 
   /* ================= RENDER ================= */
@@ -708,9 +889,14 @@
     var over = G && G.mult > 1;
     var t = G ? G.time : performance.now() / 1000;
 
-    // background
-    ctx.fillStyle = over ? gradBgOver : gradBg; ctx.fillRect(OX, 0, FW, H);
-    ctx.fillStyle = gradHorizon; ctx.fillRect(OX, 0, FW, H);
+    // background: zone palette, cross-faded on zone change
+    var zc = zoneColors();
+    var bg = ctx.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0, zc.top); bg.addColorStop(0.6, zc.mid); bg.addColorStop(1, '#06030d');
+    ctx.fillStyle = bg; ctx.fillRect(OX, 0, FW, H);
+    var hz = ctx.createRadialGradient(OX + FW / 2, -H * 0.05, 0, OX + FW / 2, -H * 0.05, H * 0.55);
+    hz.addColorStop(0, 'rgba(' + zc.hor + ',' + (over ? 0.3 : 0.22) + ')'); hz.addColorStop(0.5, 'rgba(' + zc.grid + ',0.08)'); hz.addColorStop(1, 'rgba(' + zc.grid + ',0)');
+    ctx.fillStyle = hz; ctx.fillRect(OX, 0, FW, H);
 
     // parallax stars
     for (var s = 0; s < stars.length; s++) {
@@ -724,7 +910,7 @@
     // scrolling grid
     var beat = over ? 0.5 + 0.5 * Math.sin(t * Math.PI * 2 * Audio.bpm / 60) : 0;
     var ga = over ? 0.07 + 0.08 * beat : 0.1 + (G ? G.pulse * 0.2 : 0);
-    ctx.strokeStyle = over ? 'rgba(215,255,31,' + ga.toFixed(3) + ')' : 'rgba(139,92,246,' + ga.toFixed(3) + ')';
+    ctx.strokeStyle = over ? 'rgba(215,255,31,' + ga.toFixed(3) + ')' : 'rgba(' + zc.grid + ',' + ga.toFixed(3) + ')';
     ctx.lineWidth = 1;
     var gs = 48, oy = dist % gs;
     ctx.beginPath();
@@ -955,7 +1141,8 @@
   var hudScore = document.getElementById('hudScore'), hudSub = document.getElementById('hudSub'), hudSpeed = document.getElementById('hudSpeed'), hudGauge = document.getElementById('hudGauge'), statSpeed = document.getElementById('statSpeed'), badgeOver = document.getElementById('badgeOver'), badgePower = document.getElementById('badgePower'), hint = document.getElementById('hint');
   function updateHud() {
     hudScore.textContent = fmt(G.score);
-    if (G.label !== G.subText) { G.subText = G.label; hudSub.textContent = G.label; }
+    var lab = G.label + ' · Zone ' + (G.zone + 1) + ' ' + ZONES[G.zone % ZONES.length].name;
+    if (lab !== G.subText) { G.subText = lab; hudSub.textContent = lab; }
     var sp = 'x' + G.speedMul.toFixed(1);
     if (sp !== G.speedText) {
       G.speedText = sp; hudSpeed.textContent = sp;
@@ -979,6 +1166,9 @@
     document.getElementById('bestHard').textContent = 'Best: ' + fmt(load(bestKey('hard'), 0));
     var bd = parseInt(load(bestKey('daily'), 0), 10);
     document.getElementById('bestDaily').textContent = bd > 0 ? 'Today: ' + fmt(bd) : 'Same storm for everyone today';
+    loadMissions();
+    document.getElementById('missionsCount').textContent = missionsDone() + '/3 today';
+    document.getElementById('skinCount').textContent = unlockedIds().length + '/' + SKINS.length + ' unlocked';
     var cb = document.getElementById('challengeBox');
     if (challenge) {
       cb.innerHTML = 'Challenge: beat <b>' + fmt(challenge.beat) + '</b> in ' + (challenge.mode === 'hard' ? 'Hard' : 'Classic') + '<br>';
@@ -1022,6 +1212,15 @@
     var bk = bestKey(G.mode), best = parseInt(load(bk, 0), 10) || 0;
     var isBest = score > best;
     if (isBest) { save(bk, score); best = score; }
+    if (score > bestAny()) save('linestorm_best_any', score);
+    missionEvent('score', score);
+    var nowUnl = unlockedIds(), fresh = nowUnl.filter(function (id) { return G.unlockedBefore.indexOf(id) < 0; });
+    var ou = document.getElementById('overUnlock');
+    if (fresh.length) {
+      ou.textContent = 'NEW SKIN UNLOCKED: ' + fresh.map(function (id) { return SKINS.filter(function (x) { return x.id === id; })[0].name; }).join(', ');
+      ou.classList.add('on'); G.unlockedBefore = nowUnl;
+    } else ou.classList.remove('on');
+    document.getElementById('overMissions').textContent = 'Daily missions: ' + missionsDone() + '/3';
     document.getElementById('deathMsg').textContent = DEATH_MSGS[Math.floor(Math.random() * DEATH_MSGS.length)];
     document.getElementById('overScore').textContent = fmt(score);
     document.getElementById('overBest').textContent = 'Best: ' + fmt(best);
@@ -1156,6 +1355,12 @@
   });
   document.getElementById('btnMenu').addEventListener('click', function () { endRun(); toMenu(); });
   document.getElementById('btnShare').addEventListener('click', shareChallenge);
+  var ovMissions = document.getElementById('ovMissions'), ovSkins = document.getElementById('ovSkins');
+  document.getElementById('btnMissions').addEventListener('click', function () { renderMissions(); show(ovMenu, false); show(ovMissions, true); });
+  document.getElementById('btnSkins').addEventListener('click', function () { renderSkins(); show(ovMenu, false); show(ovSkins, true); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-back]'), function (b) {
+    b.addEventListener('click', function () { show(ovMissions, false); show(ovSkins, false); refreshMenu(); show(ovMenu, true); });
+  });
 
   var btnMute = document.getElementById('btnMute');
   function renderMute() {
@@ -1166,6 +1371,7 @@
   btnMute.addEventListener('click', function () { Audio.init(); Audio.setMuted(!Audio.muted); renderMute(); });
 
   /* ================= BOOT ================= */
+  applySkin(load('linestorm_skin', 'neon')); loadMissions();
   resize(); renderMute(); refreshMenu();
   requestAnimationFrame(function (t) { lastT = t; loop(t); });
 
@@ -1173,7 +1379,9 @@
   window.__linestorm = {
     state: function () { return state; },
     game: function () { return G; },
-    killAll: function () { if (G) for (var i = 0; i < 4; i++) G.lines[i].alive = false; }
+    killAll: function () { if (G) for (var i = 0; i < 4; i++) G.lines[i].alive = false; },
+    missions: function () { return M; },
+    colors: function () { return COLORS.slice(); }
   };
 })();
 </script>
