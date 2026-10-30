@@ -13,7 +13,10 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
 
 - Ne jamais pousser directement sur `main`.
 - Une branche par jeu : `claude/jeu-<id>`, puis une Pull Request vers `main`.
-- Vercel génère une preview de chaque Pull Request : indiquer dans la description de la PR qu'on peut tester le jeu dessus avant de fusionner.
+- Chaque jeu passe par deux Pull Requests :
+  1. **PR de test** : le jeu va uniquement dans `src/data/testGames.js` (page admin, onglet « Test des jeux »). Invisible sur le site public. Laurent fusionne, teste dans l'admin et donne ses retours.
+  2. **PR de publication** : seulement quand Laurent écrit que le jeu est validé. Le jeu passe de `testGames.js` à `games.js`, avec blog et sitemap.
+- Les retours de Laurent sur un jeu en test se corrigent par de nouvelles PR de test, jusqu'à validation.
 
 ## Pipeline « un jeu par jour »
 
@@ -23,15 +26,20 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
 4. Concevoir la transformation (voir « Transformation obligatoire ») et l'écrire dans la PR avant le code.
 5. Réécrire le jeu en un seul fichier `public/games/<id>.html` en appliquant les règles du prompt ci-dessous.
 6. Tester avec Playwright : desktop 1280x800, iPhone portrait 390x844 (et paysage si le jeu l'exige). Vérifier : démarrage, contrôles tactiles et clavier, game over, pub revive, envoi `_SCORE` et `RH_TRACK` (écouter `message` sur la page parente), aucune erreur console, aucun bouton coupé.
-7. Miniature `public/thumbnails/<id>.jpg` (carré, 1:1) et image de blog `public/blog/<id>-tips.jpg` (16:9) : capture Playwright d'un moment de jeu spectaculaire. Ajouter dans la PR un prompt d'image pour que Laurent puisse générer une version plus belle s'il le souhaite.
-8. Intégration site :
+7. Miniature `public/thumbnails/<id>.jpg` (carré, 1:1) : capture Playwright d'un moment de jeu spectaculaire. Ajouter dans la PR un prompt d'image pour que Laurent puisse générer une version plus belle s'il le souhaite.
+8. PR de test : ajouter l'entrée dans `src/data/testGames.js` (format existant : `id`, `title`, `description` courte en français, `thumbnail`, `category`, `orientation`, `file`, `notes` avec le type du message score et le mode). Mettre à jour `backlog.md` (statut `en test (PR #n)`), puis ouvrir la PR. S'arrêter là : la publication attend la validation de Laurent.
+9. PR de publication (après validation), intégration site :
    - `src/data/games.js` : nouvelle entrée à la fin du tableau `games`, même format que `city-runner` (description de 400 mots minimum, `tags`, `controls`, `author: 'Ragequit Arcade'`, `isNew: true`, `modes`, `defaultMode`, `seo` avec `title`, `metaDescription` et 8 questions de FAQ minimum).
    - `src/data/blog.js` : article guide `<id>-tips` (même format que `city-runner-tips`).
    - `public/sitemap.xml` : URLs `/game/<id>` et `/blog/<id>-tips` avec `lastmod` du jour.
    - Mettre à jour le texte de la catégorie concernée dans `categories` si le jeu y devient marquant.
-9. Lancer `npm ci && npm run build` pour vérifier que le site compile.
-10. Mettre à jour `backlog.md` : passer le jeu en `publié (PR #n)`, puis ajouter 2 ou 3 nouveaux candidats vérifiés (licence + intérêt) en fin de liste.
-11. Ouvrir la PR. Description en français : nom du jeu, ce qui a été transformé, résultats des tests, identifiant choisi, prompt d'image.
+   - Image de blog `public/blog/<id>-tips.jpg` (16:9), capture Playwright.
+   - Retirer l'entrée du jeu de `src/data/testGames.js`.
+10. Lancer `npm ci && npm run build` pour vérifier que le site compile (avant chaque PR, test ou publication).
+11. Mettre à jour `backlog.md` : passer le jeu en `publié (PR #n)`, puis ajouter 2 ou 3 nouveaux candidats vérifiés (licence + intérêt) en fin de liste.
+12. Description de chaque PR en français : nom du jeu, ce qui a été transformé, résultats des tests, identifiant choisi, prompt d'image.
+
+La tâche quotidienne ne produit que des PR de test. Si un jeu est encore en test sans validation, elle prépare quand même le suivant : plusieurs jeux peuvent attendre dans l'admin.
 
 ## Transformation obligatoire
 
