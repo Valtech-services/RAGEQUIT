@@ -115,7 +115,8 @@
     "selectLanguage": "Выбери язык",
     "copyright": "© {{year}} Ragequit Arcade. Все права защищены.",
     "manageCookies": "Настройки cookie",
-    "blog": "Блог"
+    "blog": "Блог",
+    "idleGames": "Idle / кликер-игры"
   },
   "home": {
     "newGames": "Новые игры",

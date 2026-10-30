@@ -10,7 +10,7 @@ import CookieBanner from './components/CookieBanner/CookieBanner'
 import AdminPage from './pages/AdminPage/AdminPage'
 import BlogPage from './pages/BlogPage/BlogPage'
 import ArticlePage from './pages/BlogPage/ArticlePage'
-import { CONTENT_LANGS, langFromPath } from './i18n/locale'
+import { CONTENT_LANGS, RTL_LANGS, langFromPath } from './i18n/locale'
 
 /* Remet le scroll en haut a chaque changement de page. */
 function ScrollToTop() {
@@ -28,7 +28,9 @@ function LangSync() {
     const current = (i18n.language || 'en').slice(0, 2)
     if (urlLang !== 'en' && current !== urlLang) i18n.changeLanguage(urlLang)
     else if (urlLang === 'en' && CONTENT_LANGS.includes(current)) i18n.changeLanguage('en')
-    document.documentElement.lang = urlLang === 'en' ? (i18n.language || 'en').slice(0, 2) : urlLang
+    const shown = urlLang === 'en' ? (i18n.language || 'en').slice(0, 2) : urlLang
+    document.documentElement.lang = shown
+    document.documentElement.dir = RTL_LANGS.includes(shown) ? 'rtl' : 'ltr'
   }, [pathname, i18n])
   return null
 }

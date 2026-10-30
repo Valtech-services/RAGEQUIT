@@ -3,13 +3,16 @@
    - Anglais : à la racine (/game/linestorm)
    - Langues avec contenu traduit : préfixe (/fr/game/linestorm, /es/..., /pt/...)
    Pour ajouter une langue de contenu : l'ajouter à CONTENT_LANGS, créer
-   src/data/i18n/<code>.js (même format que fr.js) et traduire tout le contenu.
+   src/data/i18n/<code>/ (même structure que fr/) et traduire tout le contenu.
    ===================================================================== */
 import { forwardRef } from 'react'
 import { Link as RRLink, NavLink as RRNavLink, useLocation, useNavigate as rrUseNavigate } from 'react-router-dom'
 
 export const CONTENT_LANGS = ['fr', 'es', 'pt']
 export const ALL_CONTENT_LANGS = ['en', ...CONTENT_LANGS]
+/* Code régional (dates, og:locale) et sens d'écriture de chaque langue. */
+export const LOCALES = { en: 'en-US', fr: 'fr-FR', es: 'es-ES', pt: 'pt-BR', de: 'de-DE', it: 'it-IT', nl: 'nl-NL', pl: 'pl-PL', tr: 'tr-TR', ru: 'ru-RU', ar: 'ar', ja: 'ja-JP' }
+export const RTL_LANGS = ['ar']
 const PREFIX_RE = new RegExp(`^/(${CONTENT_LANGS.join('|')})(?=/|$)`)
 
 /* Langue de contenu d'un chemin : 'fr' pour /fr/..., 'en' sinon. */

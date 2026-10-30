@@ -12,8 +12,9 @@ import i18n from './i18n/i18n'
 import { AuthProvider } from './context/AuthContext'
 import App from './App.jsx'
 import { getGames, getCategories, getPosts, getSiteSeo, missingTranslations } from './data/localized'
+import './data/i18n/all.js'
 import { getLegalContent } from './data/legalContent'
-import { CONTENT_LANGS, ALL_CONTENT_LANGS, langFromPath, stripLang, withLang } from './i18n/locale'
+import { CONTENT_LANGS, ALL_CONTENT_LANGS, LOCALES, RTL_LANGS, langFromPath, stripLang, withLang } from './i18n/locale'
 
 export const SITE_URL = 'https://ragequit-arcade.com'
 export { missingTranslations, CONTENT_LANGS }
@@ -62,7 +63,7 @@ export function head(url) {
     if (l) h = { title: l.title + ' | Ragequit Arcade', description: (l.sections?.[0]?.paragraphs?.[0] || def.description).slice(0, 155), image: def.image }
   }
   const alternates = ALL_CONTENT_LANGS.map(l => ({ lang: l, href: SITE_URL + withLang(path, l) }))
-  return { ...h, lang, alternates, xDefault: SITE_URL + path }
+  return { ...h, lang, locale: (LOCALES[lang] || 'en-US').replace('-', '_'), dir: RTL_LANGS.includes(lang) ? 'rtl' : 'ltr', alternates, xDefault: SITE_URL + path }
 }
 
 export function render(url) {

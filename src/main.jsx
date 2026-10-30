@@ -6,6 +6,7 @@ import './styles/animations.css'
 import './styles/global.css'
 import i18n, { firstVisit } from './i18n/i18n'
 import { CONTENT_LANGS, langFromPath, withLang } from './i18n/locale'
+import { loadTranslations } from './data/localized'
 import { AuthProvider } from './context/AuthContext'
 import { initGA } from './lib/analytics-ga'
 import App from './App.jsx'
@@ -31,12 +32,15 @@ else if (firstVisit) {
   La page arrive déjà remplie par le prérendu (HTML lisible par Google).
   React prend ensuite le relais et redessine la page à l'identique.
 */
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <AuthProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </AuthProvider>
-  </StrictMode>
-)
+/* La traduction de la langue de la page est chargée avant le rendu (pas de flash en anglais). */
+loadTranslations(langFromPath(window.location.pathname)).finally(() => {
+  createRoot(document.getElementById('root')).render(
+    <StrictMode>
+      <AuthProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </AuthProvider>
+    </StrictMode>
+  )
+})
