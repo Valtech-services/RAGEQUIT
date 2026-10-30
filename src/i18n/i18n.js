@@ -38,6 +38,12 @@ export const LANGUAGES = [
   { code: 'ja', label: '日本語',      country: 'jp' },
 ]
 
+/* Vrai si le visiteur n'a encore jamais choisi de langue (avant que le
+   détecteur n'enregistre sa langue). Sert à la redirection de première visite. */
+let stored = null
+try { stored = localStorage.getItem('rq_lang') } catch (e) { /* ignore */ }
+export const firstVisit = !stored
+
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)

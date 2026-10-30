@@ -206,5 +206,59 @@
     "learnMore": "Más información",
     "essential": "Solo esenciales",
     "acceptAll": "Aceptar todas"
+  },
+  "ui": {
+    "home": {
+      "title": "Juegos gratis en línea en Ragequit Arcade",
+      "p1": "Ragequit Arcade es una plataforma de juegos gratis en línea pensada para divertirse sin complicaciones. Cada juego se abre al instante en el navegador: sin descargas, sin instalaciones, sin registros obligatorios y sin ventanas emergentes molestas. Tanto si tienes cinco minutos en el móvil como una sesión larga en el ordenador, nuestros juegos se cargan con un clic y funcionan perfectamente en móvil, tableta y ordenador. Diseñamos, desarrollamos y gestionamos cada juego nosotros mismos, así que lo que juegas aquí no lo encontrarás en ningún otro sitio.",
+      "gamesTitle": "Nuestros juegos actuales",
+      "gamesIntro": "Añadimos juegos nuevos con regularidad. Esto es lo que puedes jugar ahora mismo, gratis y sin límites:",
+      "catsTitle": "Explorar por categoría",
+      "catsIntro": "¿No sabes a qué jugar? Explora nuestros juegos por categoría y encuentra el estilo que va con tu humor:",
+      "whyTitle": "Por qué jugar en Ragequit Arcade",
+      "whyText": "Todos los juegos son totalmente gratis, sin mecánicas de pago para ganar ni costes ocultos. Puedes jugar al instante sin cuenta o crear un perfil gratis para guardar tus puntuaciones y subir en nuestras clasificaciones mundiales. Como creamos nuestros juegos nosotros mismos en lugar de republicar clones, cada título tiene su propia identidad, sus propios controles y su propia razón para volver. Somos un pequeño estudio independiente obsesionado con hacer juegos de navegador con los que da gusto perder: de ahí el nombre.",
+      "aboutTitle": "Quiénes somos",
+      "aboutText": "Ragequit Arcade es una plataforma de juegos independiente. Diseñamos, desarrollamos y gestionamos cada juego nosotros mismos: sin clones, sin pagar para ganar, sin tonterías. Nuestro objetivo es sencillo: crear el arcade de navegador más divertido y honesto de la web. Llegan juegos nuevos con regularidad: síguenos en TikTok e Instagram para ver lo que viene.",
+      "blurbs": {
+        "sports": "competitivos, físicos y desesperantes.",
+        "arcade": "reflejos, supervivencia y caza de puntuaciones.",
+        "idle": "toca, automatiza y mira cómo crecen tus números, incluso cuando no estás.",
+        "puzzle": "combina, gira y piensa rápido bajo presión.",
+        "shooting": "apunta, dispara y sobrevive oleada tras oleada.",
+        "brain": "memoria, concentración y lógica para afinar tu mente.",
+        "challenge": "un objetivo difícil, intentos infinitos y récords que batir."
+      }
+    },
+    "category": {
+      "gamesIn": "Juegos de esta categoría"
+    },
+    "blog": {
+      "intro": "Guías, consejos e historias del equipo de Ragequit Arcade. Aprende a dominar nuestros juegos gratis en el navegador, sube en las clasificaciones y descubre lo que estamos preparando.",
+      "metaDesc": "Guías, consejos e historias de Ragequit Arcade. Aprende a dominar nuestros juegos gratis en el navegador y a conseguir las mejores puntuaciones.",
+      "empty": "Todavía no hay artículos. Vuelve pronto.",
+      "readMore": "Leer más →",
+      "sectionAbout": "Sobre Ragequit Arcade",
+      "sectionGuides": "Guías de juegos",
+      "back": "← Volver al blog",
+      "readNext": "Sigue leyendo",
+      "notFound": "No encontrado",
+      "notFoundText": "Este artículo no existe."
+    },
+    "game": {
+      "notFound": "Juego no encontrado.",
+      "backHome": "Volver al inicio",
+      "reportTitle": "Informar de un problema",
+      "reportSignin": "Debes iniciar sesión para informar de un problema o dejar un comentario.",
+      "signIn": "Iniciar sesión",
+      "cancel": "Cancelar",
+      "thanks": "¡Gracias! Tu informe se ha enviado.",
+      "close": "Cerrar",
+      "subject": "Asunto",
+      "describe": "Describe el problema o deja un comentario…",
+      "like": "Me gusta",
+      "dislike": "No me gusta",
+      "report": "Informar",
+      "fullscreen": "Pantalla completa"
+    }
   }
 }

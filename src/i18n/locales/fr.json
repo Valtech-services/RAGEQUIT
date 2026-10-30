@@ -18,7 +18,7 @@
     "gamesSuffix": "Jeux",
     "clicker": "Clicker",
     "shooting": "Tir",
-    "brain": "Réflexion",
+    "brain": "Mémoire",
     "challenge": "Défi"
   },
   "game": {
@@ -173,7 +173,7 @@
     "idle": "Jeux Idle / Clicker",
     "runner": "Jeux de course",
     "shooting": "Jeux de tir",
-    "brain": "Jeux de réflexion",
+    "brain": "Jeux de mémoire",
     "challenge": "Jeux de défi"
   },
   "siteFaq": [
@@ -205,5 +205,59 @@
     "learnMore": "En savoir plus",
     "essential": "Essentiels uniquement",
     "acceptAll": "Tout accepter"
+  },
+  "ui": {
+    "home": {
+      "title": "Jeux gratuits en ligne sur Ragequit Arcade",
+      "p1": "Ragequit Arcade est une plateforme de jeux gratuits en ligne pensée pour s'amuser sans contrainte. Chaque jeu se lance instantanément dans le navigateur : pas de téléchargement, pas d'installation, pas d'inscription obligatoire et pas de pop-ups envahissants. Que vous ayez cinq minutes sur votre téléphone ou une longue session devant votre ordinateur, nos jeux se lancent en un clic et fonctionnent parfaitement sur mobile, tablette et ordinateur. Nous concevons, développons et faisons tourner chaque jeu nous-mêmes : ce que vous jouez ici, vous ne le trouverez nulle part ailleurs.",
+      "gamesTitle": "Nos jeux du moment",
+      "gamesIntro": "Nous ajoutons régulièrement de nouveaux jeux. Voici ce que vous pouvez jouer dès maintenant, gratuitement et sans limite :",
+      "catsTitle": "Parcourir par catégorie",
+      "catsIntro": "Vous ne savez pas à quoi jouer ? Explorez nos jeux par catégorie et trouvez le style qui correspond à votre humeur :",
+      "whyTitle": "Pourquoi jouer sur Ragequit Arcade",
+      "whyText": "Chaque jeu est entièrement gratuit, sans mécanique pay-to-win ni coût caché. Vous pouvez jouer tout de suite sans compte, ou créer un profil gratuit pour sauvegarder vos scores et grimper dans nos classements mondiaux. Comme nous créons nos jeux nous-mêmes au lieu de republier des clones, chaque titre a sa propre identité, ses propres commandes et sa propre raison de revenir. Nous sommes un petit studio indépendant obsédé par l'idée de faire des jeux de navigateur auxquels on adore perdre : d'où le nom.",
+      "aboutTitle": "Qui sommes-nous",
+      "aboutText": "Ragequit Arcade est une plateforme de jeux indépendante. Nous concevons, développons et faisons tourner chaque jeu nous-mêmes : pas de clones, pas de pay-to-win, pas de blabla. Notre objectif est simple : créer l'arcade de navigateur la plus fun et la plus honnête du web. De nouveaux jeux arrivent régulièrement : suivez-nous sur TikTok et Instagram pour découvrir les prochains.",
+      "blurbs": {
+        "sports": "compétitifs, physiques et rageants.",
+        "arcade": "réflexes, survie et course au score.",
+        "idle": "touchez, automatisez et regardez vos chiffres grimper, même quand vous êtes absent.",
+        "puzzle": "associez, faites pivoter et réfléchissez vite sous pression.",
+        "shooting": "visez, tirez et survivez vague après vague.",
+        "brain": "mémoire, concentration et logique pour aiguiser votre esprit.",
+        "challenge": "un objectif difficile, des essais infinis et des records à battre."
+      }
+    },
+    "category": {
+      "gamesIn": "Les jeux de cette catégorie"
+    },
+    "blog": {
+      "intro": "Guides, astuces et coulisses de l'équipe de Ragequit Arcade. Apprenez à maîtriser nos jeux gratuits en ligne, grimpez dans les classements et découvrez ce que nous préparons.",
+      "metaDesc": "Guides, astuces et coulisses de Ragequit Arcade. Apprenez à maîtriser nos jeux gratuits en ligne et à battre les meilleurs scores.",
+      "empty": "Aucun article pour l'instant. Revenez bientôt.",
+      "readMore": "Lire la suite →",
+      "sectionAbout": "À propos de Ragequit Arcade",
+      "sectionGuides": "Guides de jeux",
+      "back": "← Retour au blog",
+      "readNext": "À lire aussi",
+      "notFound": "Introuvable",
+      "notFoundText": "Cet article n'existe pas."
+    },
+    "game": {
+      "notFound": "Jeu introuvable.",
+      "backHome": "Retour à l'accueil",
+      "reportTitle": "Signaler un problème",
+      "reportSignin": "Vous devez être connecté pour signaler un problème ou laisser un commentaire.",
+      "signIn": "Se connecter",
+      "cancel": "Annuler",
+      "thanks": "Merci ! Votre signalement a été envoyé.",
+      "close": "Fermer",
+      "subject": "Sujet",
+      "describe": "Décrivez le problème ou laissez un commentaire…",
+      "like": "J'aime",
+      "dislike": "Je n'aime pas",
+      "report": "Signaler",
+      "fullscreen": "Plein écran"
+    }
   }
 }

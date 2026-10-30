@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { games } from '../../data/games'
+import { useGames } from '../../data/localized'
+import { useParams } from 'react-router-dom'
+import { Link } from '../../i18n/locale'
 import { useAuth } from '../../context/AuthContext'
 import { supabase } from '../../lib/supabase'
 import Navbar from '../../components/Navbar/Navbar'
@@ -22,6 +23,7 @@ export default function GamePage() {
 }
 
 function GamePageDesktop() {
+  const games = useGames()
   const { t } = useTranslation()
   const { id } = useParams()
   const game = games.find(g => g.id === id)
@@ -264,8 +266,8 @@ async function saveVirusLabCloud(){
           <div className="gamepage__nav"><Navbar inGrid={true} /></div>
         </div>
         <div className="gamepage--notfound">
-          <p>Game not found.</p>
-          <Link to="/" className="gamepage__back-link">Back to home</Link>
+          <p>{t('ui.game.notFound')}</p>
+          <Link to="/" className="gamepage__back-link">{t('ui.game.backHome')}</Link>
         </div>
       </div>
     )
@@ -309,18 +311,18 @@ async function saveVirusLabCloud(){
                 </div>
               </div>
               <div className="gamepage__bar-actions">
-                <button className={`gamepage__action ${vote==='up'?'is-up':''}`} title="Like"
+                <button className={`gamepage__action ${vote==='up'?'is-up':''}`} title={t('ui.game.like')}
                   onClick={() => { const v = vote==='up'?null:'up'; setVote(v); if(v){ submitVote(game.id,'up'); track('game_vote', {game_id: game.id, props:{vote:'up'}}) } }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
                 </button>
-                <button className={`gamepage__action ${vote==='down'?'is-down':''}`} title="Dislike"
+                <button className={`gamepage__action ${vote==='down'?'is-down':''}`} title={t('ui.game.dislike')}
                   onClick={() => { const v = vote==='down'?null:'down'; setVote(v); if(v){ submitVote(game.id,'down'); track('game_vote', {game_id: game.id, props:{vote:'down'}}) } }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L10.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
                 </button>
-                <button className="gamepage__action" title="Report" onClick={() => setReportOpen(true)}>
+                <button className="gamepage__action" title={t('ui.game.report')} onClick={() => setReportOpen(true)}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
                 </button>
-                <button className="gamepage__action gamepage__action--full" title="Fullscreen" onClick={handleFullscreen}>
+                <button className="gamepage__action gamepage__action--full" title={t('ui.game.fullscreen')} onClick={handleFullscreen}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
                 </button>
               </div>
@@ -359,25 +361,25 @@ async function saveVirusLabCloud(){
       {reportOpen && (
         <div className="gamepage__report-overlay" onClick={() => { setReportOpen(false); setReportSent(false) }}>
           <div className="gamepage__report" onClick={e => e.stopPropagation()}>
-            <h3 className="gamepage__report-title">Report a problem</h3>
+            <h3 className="gamepage__report-title">{t('ui.game.reportTitle')}</h3>
             {!user ? (
               <>
-                <p className="gamepage__report-text">You need to be signed in to report a problem or leave a comment.</p>
-                <button className="gamepage__report-opt" onClick={() => { setReportOpen(false); signInGoogle() }}>Sign in</button>
-                <button className="gamepage__report-cancel" onClick={() => setReportOpen(false)}>Cancel</button>
+                <p className="gamepage__report-text">{t('ui.game.reportSignin')}</p>
+                <button className="gamepage__report-opt" onClick={() => { setReportOpen(false); signInGoogle() }}>{t('ui.game.signIn')}</button>
+                <button className="gamepage__report-cancel" onClick={() => setReportOpen(false)}>{t('ui.game.cancel')}</button>
               </>
             ) : reportSent ? (
               <>
-                <p className="gamepage__report-text">Thanks! Your report has been sent.</p>
-                <button className="gamepage__report-cancel" onClick={() => { setReportOpen(false); setReportSent(false) }}>Close</button>
+                <p className="gamepage__report-text">{t('ui.game.thanks')}</p>
+                <button className="gamepage__report-cancel" onClick={() => { setReportOpen(false); setReportSent(false) }}>{t('ui.game.close')}</button>
               </>
             ) : (
               <>
                 <p className="gamepage__report-text">What's wrong with {game.title}?</p>
-                <input className="gamepage__report-input" type="text" placeholder="Subject"
+                <input className="gamepage__report-input" type="text" placeholder={t('ui.game.subject')}
                   value={reportSubject} maxLength={120}
                   onChange={e => setReportSubject(e.target.value)} />
-                <textarea className="gamepage__report-textarea" rows={4} placeholder="Describe the problem or leave a comment…"
+                <textarea className="gamepage__report-textarea" rows={4} placeholder={t('ui.game.describe')}
                   value={reportComment} maxLength={1000}
                   onChange={e => setReportComment(e.target.value)} />
                 <button className="gamepage__report-opt" disabled={reportBusy || !reportSubject.trim()}
@@ -389,7 +391,7 @@ async function saveVirusLabCloud(){
                   }}>
                   {reportBusy ? 'Sending…' : 'Send report'}
                 </button>
-                <button className="gamepage__report-cancel" onClick={() => setReportOpen(false)}>Cancel</button>
+                <button className="gamepage__report-cancel" onClick={() => setReportOpen(false)}>{t('ui.game.cancel')}</button>
               </>
             )}
           </div>

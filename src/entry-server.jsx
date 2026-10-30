@@ -1,58 +1,73 @@
 /* =====================================================================
    entry-server.jsx — rendu des pages en HTML au moment du build
    Utilisé uniquement par scripts/prerender.mjs (jamais chargé par les
-   visiteurs). Pour chaque URL, il renvoie le HTML de la page et ses
-   balises <title> / description, pour que Google et AdSense voient tout
-   le contenu sans exécuter le JavaScript.
+   visiteurs). Pour chaque URL (anglais à la racine, puis /fr, /es, /pt),
+   il renvoie le HTML de la page, son <title>, sa description et les
+   versions linguistiques (hreflang), pour que Google et AdSense voient
+   tout le contenu sans exécuter le JavaScript.
    ===================================================================== */
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom'
-import './i18n/i18n'
+import i18n from './i18n/i18n'
 import { AuthProvider } from './context/AuthContext'
 import App from './App.jsx'
-import { games, categories, siteSeo } from './data/games'
-import { posts } from './data/blog'
-import { legalContent } from './data/legalContent'
+import { getGames, getCategories, getPosts, getSiteSeo, missingTranslations } from './data/localized'
+import { getLegalContent } from './data/legalContent'
+import { CONTENT_LANGS, ALL_CONTENT_LANGS, langFromPath, stripLang, withLang } from './i18n/locale'
 
 export const SITE_URL = 'https://ragequit-arcade.com'
+export { missingTranslations, CONTENT_LANGS }
 
-/* Toutes les URL publiques à prérendre (l'admin est exclue). */
+/* Toutes les URL publiques à prérendre, dans chaque langue (l'admin est exclue). */
 export function routes() {
-  const list = ['/', '/blog', '/leaderboard']
-  categories.filter(c => c.id !== 'all').forEach(c => list.push('/category/' + c.id))
-  games.forEach(g => list.push('/game/' + g.id))
-  posts.forEach(p => list.push('/blog/' + p.slug))
-  Object.keys(legalContent).forEach(k => list.push('/legal/' + k))
-  return list
+  const base = ['/', '/blog', '/leaderboard']
+  getCategories('en').filter(c => c.id !== 'all').forEach(c => base.push('/category/' + c.id))
+  getGames('en').forEach(g => base.push('/game/' + g.id))
+  getPosts('en').forEach(p => base.push('/blog/' + p.slug))
+  Object.keys(getLegalContent('en')).forEach(k => base.push('/legal/' + k))
+  return ALL_CONTENT_LANGS.flatMap(l => base.map(u => withLang(u, l)))
 }
 
-/* Titre, description et image de partage de chaque URL. */
+const UI = {
+  en: { blog: 'Blog', blogDesc: 'Guides, tips and stories from Ragequit Arcade. Learn how to master our free browser games and get the highest scores.', lb: 'Leaderboards', lbDesc: 'Global leaderboards for every free game on Ragequit Arcade. See the best scores, find your rank and challenge the top players.' },
+  fr: { blog: 'Blog', blogDesc: 'Guides, astuces et coulisses de Ragequit Arcade. Apprenez à maîtriser nos jeux gratuits en ligne et à battre les meilleurs scores.', lb: 'Classements', lbDesc: 'Les classements mondiaux de tous les jeux gratuits de Ragequit Arcade. Découvrez les meilleurs scores, votre rang et défiez les meilleurs joueurs.' },
+  es: { blog: 'Blog', blogDesc: 'Guías, consejos e historias de Ragequit Arcade. Aprende a dominar nuestros juegos gratis en el navegador y a conseguir las mejores puntuaciones.', lb: 'Clasificaciones', lbDesc: 'Las clasificaciones mundiales de todos los juegos gratis de Ragequit Arcade. Mira las mejores puntuaciones, encuentra tu puesto y reta a los mejores.' },
+  pt: { blog: 'Blog', blogDesc: 'Guias, dicas e histórias da Ragequit Arcade. Aprenda a dominar os nossos jogos gratuitos no navegador e a conseguir as melhores pontuações.', lb: 'Classificações', lbDesc: 'As classificações mundiais de todos os jogos gratuitos da Ragequit Arcade. Veja as melhores pontuações, descubra a sua posição e desafie os melhores.' },
+}
+
+/* Titre, description, image, langue et versions linguistiques de chaque URL. */
 export function head(url) {
-  const def = { title: siteSeo.title, description: siteSeo.description, image: '/ragequit-logo-white.png' }
-  const [, section, id] = url.split('/')
-  if (url === '/') return def
+  const lang = langFromPath(url)
+  const path = stripLang(url)
+  const site = getSiteSeo(lang)
+  const ui = UI[lang] || UI.en
+  const def = { title: site.title, description: site.description, image: '/ragequit-logo-white.png' }
+  const [, section, id] = path.split('/')
+  let h = def
   if (section === 'game') {
-    const g = games.find(x => x.id === id)
-    if (g) return { title: g.seo?.title || g.title + ' | Ragequit Arcade', description: g.seo?.metaDescription || def.description, image: g.thumbnail }
+    const g = getGames(lang).find(x => x.id === id)
+    if (g) h = { title: g.seo?.title || g.title + ' | Ragequit Arcade', description: g.seo?.metaDescription || def.description, image: g.thumbnail }
+  } else if (section === 'category') {
+    const c = getCategories(lang).find(x => x.id === id)
+    if (c) h = { title: c.seo?.title || c.label + ' | Ragequit Arcade', description: c.seo?.metaDescription || def.description, image: c.image || def.image }
+  } else if (section === 'blog' && id) {
+    const p = getPosts(lang).find(x => x.slug === id)
+    if (p) h = { title: p.seo?.title || p.title + ' | Ragequit Arcade', description: p.seo?.metaDescription || p.excerpt, image: p.image || def.image }
+  } else if (section === 'blog') {
+    h = { title: ui.blog + ' | Ragequit Arcade', description: ui.blogDesc, image: def.image }
+  } else if (section === 'leaderboard') {
+    h = { title: ui.lb + ' | Ragequit Arcade', description: ui.lbDesc, image: def.image }
+  } else if (section === 'legal') {
+    const l = getLegalContent(lang)[id]
+    if (l) h = { title: l.title + ' | Ragequit Arcade', description: (l.sections?.[0]?.paragraphs?.[0] || def.description).slice(0, 155), image: def.image }
   }
-  if (section === 'category') {
-    const c = categories.find(x => x.id === id)
-    if (c) return { title: c.seo?.title || c.label + ' | Ragequit Arcade', description: c.seo?.metaDescription || def.description, image: c.image || def.image }
-  }
-  if (section === 'blog' && id) {
-    const p = posts.find(x => x.slug === id)
-    if (p) return { title: p.seo?.title || p.title + ' | Ragequit Arcade', description: p.seo?.metaDescription || p.excerpt, image: p.image || def.image }
-  }
-  if (section === 'blog') return { title: 'Blog | Ragequit Arcade', description: 'Guides, tips and stories from Ragequit Arcade. Learn how to master our free browser games and get the highest scores.', image: def.image }
-  if (section === 'leaderboard') return { title: 'Leaderboards | Ragequit Arcade', description: 'Global leaderboards for every free game on Ragequit Arcade. See the best scores, find your rank and challenge the top players.', image: def.image }
-  if (section === 'legal') {
-    const l = legalContent[id]
-    if (l) return { title: l.title + ' | Ragequit Arcade', description: (l.sections?.[0]?.paragraphs?.[0] || def.description).slice(0, 155), image: def.image }
-  }
-  return def
+  const alternates = ALL_CONTENT_LANGS.map(l => ({ lang: l, href: SITE_URL + withLang(path, l) }))
+  return { ...h, lang, alternates, xDefault: SITE_URL + path }
 }
 
 export function render(url) {
+  // Langue de l'interface fixée avant le rendu (ressources déjà chargées : synchrone).
+  i18n.changeLanguage(langFromPath(url))
   return renderToString(
     <AuthProvider>
       <StaticRouter location={url}>
