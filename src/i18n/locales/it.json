@@ -207,5 +207,59 @@
     "learnMore": "Scopri di più",
     "essential": "Solo essenziali",
     "acceptAll": "Accetta tutti"
+  },
+  "ui": {
+    "home": {
+      "title": "Giochi online gratis su Ragequit Arcade",
+      "p1": "Ragequit Arcade è una piattaforma di giochi online gratis pensata per chi vuole divertirsi senza ostacoli. Ogni gioco si avvia subito nel browser: niente download, niente installazioni, niente registrazioni obbligatorie e niente pop-up invadenti. Che tu abbia cinque minuti sul telefono o una lunga sessione alla scrivania, i nostri giochi si caricano con un clic e funzionano senza intoppi su smartphone, tablet e computer. Progettiamo, sviluppiamo e gestiamo ogni gioco da soli, quindi quello che giochi qui non lo trovi da nessun'altra parte.",
+      "gamesTitle": "I nostri giochi attuali",
+      "gamesIntro": "Aggiungiamo regolarmente nuovi giochi. Ecco cosa puoi giocare adesso, tutto gratis e senza limiti:",
+      "catsTitle": "Sfoglia per categoria",
+      "catsIntro": "Non sai a cosa giocare? Esplora i nostri giochi per categoria e trova lo stile adatto al tuo umore:",
+      "whyTitle": "Perché giocare su Ragequit Arcade",
+      "whyText": "Ogni gioco è completamente gratis, senza meccaniche pay-to-win e senza costi nascosti. Puoi iniziare subito senza account, oppure creare un profilo gratuito per salvare i tuoi punteggi e scalare le nostre classifiche mondiali. Dato che sviluppiamo i nostri giochi internamente invece di ripubblicare cloni, ogni titolo ha la sua identità, i suoi comandi e il suo motivo per tornare. Siamo un piccolo studio indipendente ossessionato dal creare giochi da browser in cui è divertente perfino perdere, da qui il nome.",
+      "aboutTitle": "Chi siamo",
+      "aboutText": "Ragequit Arcade è una piattaforma di giochi indipendente. Progettiamo, sviluppiamo e gestiamo ogni gioco da soli: niente cloni di terzi, niente pay-to-win, niente perdite di tempo. Il nostro obiettivo è semplice: creare l'arcade da browser più divertente e onesta del web. Nuovi giochi arrivano regolarmente, seguici su TikTok e Instagram per scoprire cosa arriva dopo.",
+      "blurbs": {
+        "sports": "competitivi, fisici e da far perdere la pazienza.",
+        "arcade": "riflessi, sopravvivenza e pura caccia al punteggio.",
+        "idle": "tocca, automatizza e guarda crescere i tuoi numeri, anche quando sei via.",
+        "puzzle": "abbina, ruota e pensa in fretta sotto pressione.",
+        "shooting": "mira, spara e sopravvivi ondata dopo ondata.",
+        "brain": "sfide di memoria, concentrazione e logica per allenare la mente.",
+        "challenge": "un obiettivo difficile, tentativi infiniti e record da battere."
+      }
+    },
+    "category": {
+      "gamesIn": "Giochi in questa categoria"
+    },
+    "blog": {
+      "intro": "Guide, consigli e storie dal team dietro Ragequit Arcade. Impara a padroneggiare i nostri giochi da browser gratis, a scalare le classifiche e scopri cosa stiamo preparando.",
+      "metaDesc": "Guide, consigli e storie di Ragequit Arcade. Impara a padroneggiare i nostri giochi da browser gratis e a ottenere i punteggi più alti.",
+      "empty": "Ancora nessun articolo. Torna presto.",
+      "readMore": "Leggi tutto →",
+      "sectionAbout": "Su Ragequit Arcade",
+      "sectionGuides": "Guide ai giochi",
+      "back": "← Torna al blog",
+      "readNext": "Leggi anche",
+      "notFound": "Non trovato",
+      "notFoundText": "Questo articolo non esiste."
+    },
+    "game": {
+      "notFound": "Gioco non trovato.",
+      "backHome": "Torna alla home",
+      "reportTitle": "Segnala un problema",
+      "reportSignin": "Devi aver effettuato l'accesso per segnalare un problema o lasciare un commento.",
+      "signIn": "Accedi",
+      "cancel": "Annulla",
+      "thanks": "Grazie! La tua segnalazione è stata inviata.",
+      "close": "Chiudi",
+      "subject": "Oggetto",
+      "describe": "Descrivi il problema o lascia un commento…",
+      "like": "Mi piace",
+      "dislike": "Non mi piace",
+      "report": "Segnala",
+      "fullscreen": "Schermo intero"
+    }
   }
 }
