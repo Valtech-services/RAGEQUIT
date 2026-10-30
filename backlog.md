@@ -6,7 +6,7 @@ Rappel : la source sert de référence de gameplay, le jeu est entièrement ré�
 
 | # | Source (référence gameplay) | Licence | Catégorie visée | Piste de transformation | Statut |
 |---|---|---|---|---|---|
-| 1 | Zolmeister/avabranch | MIT | arcade | SPLITSTORM (`splitstorm`) : 4 traînées néon, portes à écarter / murs à resserrer, orbes, Overdrive, power-ups, modes Classic / Hard / Daily, défi ami | en test (PR #3) |
+| 1 | Zolmeister/avabranch | MIT | arcade | LINESTORM (`linestorm`, ex-SPLITSTORM) : 4 lignes néon, portes à écarter / murs à resserrer, orbes, Overdrive, power-ups, vitesse croissante, modes Classic / Hard / Daily, défi ami | en test (PR #4) |
 | 2 | leereilly/Coil (Hakim El Hattab) | MIT | arcade | Encercler les ennemis avec sa traînée lumineuse, combos d'encerclement, boss toutes les 5 vagues | à faire |
 | 3 | wwwtyro/Astray | Domaine public | challenge | Labyrinthe 3D à incliner (gyroscope sur mobile), chrono, labyrinthe du jour identique pour tous, score speedrun | à faire |
 | 4 | Zolmeister/zop | MIT | puzzle | Relier les couleurs identiques en un tracé, chaînes longues = bonus, mode contre la montre | à faire |

@@ -6,7 +6,7 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
 
 - Site : https://ragequit-arcade.com — plateforme de jeux HTML5 gratuits (Vite + React + Supabase), déployée par Vercel à chaque push sur `main`.
 - Propriétaire : Laurent (Valtech Services). Communication en français, aucun emoji, réponses concises.
-- Laurent ne travaille pas en terminal : il relit et fusionne les Pull Requests depuis GitHub (souvent sur téléphone).
+- Laurent ne travaille pas en terminal et ne clique pas sur « Merge » : Claude fusionne lui-même ses Pull Requests (voir « Fusion automatique »).
 - Contenu du site (descriptions, FAQ, blog) : en anglais.
 
 ## Règle de travail Git
@@ -18,6 +18,13 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
   2. **PR de publication** : seulement quand Laurent écrit que le jeu est validé. Le jeu passe de `testGames.js` à `games.js`, avec blog et sitemap.
 - Les retours de Laurent sur un jeu en test se corrigent par de nouvelles PR de test, jusqu'à validation.
 
+### Fusion automatique
+- Toujours passer par une Pull Request (historique et retour arrière possibles), mais c'est Claude qui la fusionne via l'API GitHub (`gh api -X PUT repos/Valtech-services/ragequit/pulls/<n>/merge -f merge_method=merge`), une fois les tests Playwright et `npm run build` réussis.
+- PR de test (admin uniquement) : fusion immédiate.
+- PR de publication (mise en ligne publique) : fusion immédiate dès que Laurent a écrit que le jeu est validé ; ce message est son feu vert.
+- Toute autre modification du site demandée par Laurent : fusion immédiate après tests et build.
+- Après la fusion, vérifier que le déploiement Vercel du projet `ragequit` est en état `READY` et le signaler à Laurent ; en cas d'échec, lire les logs de build et corriger dans une nouvelle PR.
+
 ## Pipeline « un jeu par jour »
 
 1. Ouvrir `backlog.md`, prendre le premier jeu au statut `à faire`.
@@ -27,7 +34,7 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
 5. Réécrire le jeu en un seul fichier `public/games/<id>.html` en appliquant les règles du prompt ci-dessous.
 6. Tester avec Playwright : desktop 1280x800, iPhone portrait 390x844 (et paysage si le jeu l'exige). Vérifier : démarrage, contrôles tactiles et clavier, game over, pub revive, envoi `_SCORE` et `RH_TRACK` (écouter `message` sur la page parente), aucune erreur console, aucun bouton coupé.
 7. Miniature `public/thumbnails/<id>.jpg` (carré, 1:1) : capture Playwright d'un moment de jeu spectaculaire. Ajouter dans la PR un prompt d'image pour que Laurent puisse générer une version plus belle s'il le souhaite.
-8. PR de test : ajouter l'entrée dans `src/data/testGames.js` (format existant : `id`, `title`, `description` courte en français, `thumbnail`, `category`, `orientation`, `file`, `notes` avec le type du message score et le mode). Mettre à jour `backlog.md` (statut `en test (PR #n)`), puis ouvrir la PR. S'arrêter là : la publication attend la validation de Laurent.
+8. PR de test : ajouter l'entrée dans `src/data/testGames.js` (format existant : `id`, `title`, `description` courte en français, `thumbnail`, `category`, `orientation`, `file`, `notes` avec le type du message score et le mode). Mettre à jour `backlog.md` (statut `en test (PR #n)`), ouvrir la PR et la fusionner. S'arrêter là : la publication attend la validation de Laurent.
 9. PR de publication (après validation), intégration site :
    - `src/data/games.js` : nouvelle entrée à la fin du tableau `games`, même format que `city-runner` (description de 400 mots minimum, `tags`, `controls`, `author: 'Ragequit Arcade'`, `isNew: true`, `modes`, `defaultMode`, `seo` avec `title`, `metaDescription` et 8 questions de FAQ minimum).
    - `src/data/blog.js` : article guide `<id>-tips` (même format que `city-runner-tips`).
