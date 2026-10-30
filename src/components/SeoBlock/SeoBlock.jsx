@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom'
+import { Link } from '../../i18n/locale'
+import { useCategories, useGames } from '../../data/localized'
 import { useTranslation } from 'react-i18next'
-import { games, categories } from '../../data/games'
 import './SeoBlock.css'
 
 // Première phrase d'une description (pour la liste des jeux sur la home).
@@ -10,17 +10,9 @@ function firstSentence(text) {
   return match ? match[0].trim() : text
 }
 
-// Petite intro par catégorie, pour la home.
-const CATEGORY_BLURBS = {
-  sports: 'competitive, physical and rage-inducing.',
-  arcade: 'reflex, survival and pure score-chasing.',
-  idle: 'tap, automate and watch your numbers grow, even while you are away.',
-  puzzle: 'match, rotate and think fast under pressure.',
-  shooting: 'aim, shoot and survive wave after wave.',
-  brain: 'memory, focus and logic challenges to sharpen your mind.',
-}
-
 export default function SeoBlock({ type, data }) {
+  const games = useGames()
+  const categories = useCategories()
   const { t, i18n } = useTranslation()
   if (!data) return null
 
@@ -43,19 +35,11 @@ export default function SeoBlock({ type, data }) {
         {type === 'site' && (
           <>
             <span className="seo-block__label">{t('seo.aboutLabel')}</span>
-            <h2 className="seo-block__title">Free Online Games at Ragequit Arcade</h2>
-            <p className="seo-block__text">
-              Ragequit Arcade is a free online games platform built for players who want fun without friction.
-              Every game runs instantly in your browser — no downloads, no installs, no sign-up walls and no
-              intrusive pop-ups. Whether you have five minutes on your phone or a long session at your desk, our
-              games load in a single click and work smoothly on mobile, tablet and desktop. We design, build and
-              run every game ourselves, so what you play here you will not find anywhere else.
-            </p>
+            <h2 className="seo-block__title">{t('ui.home.title')}</h2>
+            <p className="seo-block__text">{t('ui.home.p1')}</p>
 
-            <h3 className="seo-block__subtitle">Our current games</h3>
-            <p className="seo-block__text">
-              We add new games regularly. Here is what you can play right now, each one free and unlimited:
-            </p>
+            <h3 className="seo-block__subtitle">{t('ui.home.gamesTitle')}</h3>
+            <p className="seo-block__text">{t('ui.home.gamesIntro')}</p>
             <ul className="seo-block__list">
               {games.map(g => (
                 <li key={g.id}>
@@ -65,35 +49,22 @@ export default function SeoBlock({ type, data }) {
               ))}
             </ul>
 
-            <h3 className="seo-block__subtitle">Browse by category</h3>
-            <p className="seo-block__text">
-              Not sure what to play? Explore our games by category and find the style that fits your mood:
-            </p>
+            <h3 className="seo-block__subtitle">{t('ui.home.catsTitle')}</h3>
+            <p className="seo-block__text">{t('ui.home.catsIntro')}</p>
             <ul className="seo-block__list">
               {realCategories.map(c => (
                 <li key={c.id}>
-                  <Link to={`/category/${c.id}`} className="seo-block__link">{c.label} Games</Link>
-                  {CATEGORY_BLURBS[c.id] ? ` — ${CATEGORY_BLURBS[c.id]}` : ''}
+                  <Link to={`/category/${c.id}`} className="seo-block__link">{t(`categoryTitles.${c.id}`, { defaultValue: c.label + ' Games' })}</Link>
+                  {i18n.exists(`ui.home.blurbs.${c.id}`) ? ` — ${t(`ui.home.blurbs.${c.id}`)}` : ''}
                 </li>
               ))}
             </ul>
 
-            <h3 className="seo-block__subtitle">Why play at Ragequit Arcade</h3>
-            <p className="seo-block__text">
-              Every game is completely free, with no pay-to-win mechanics and no hidden costs. You can jump in
-              instantly without an account, or create a free profile to save your scores and climb our global
-              leaderboards. Because we build our games in-house rather than reposting clones, each title has its
-              own identity, its own controls and its own reason to come back. We are a small independent studio
-              obsessed with making browser games that are genuinely fun to lose at — hence the name.
-            </p>
+            <h3 className="seo-block__subtitle">{t('ui.home.whyTitle')}</h3>
+            <p className="seo-block__text">{t('ui.home.whyText')}</p>
 
-            <h3 className="seo-block__subtitle">About us</h3>
-            <p className="seo-block__text">
-              Ragequit Arcade is an independent gaming platform. We design, build and run every game ourselves —
-              no third-party clones, no pay-to-win, no nonsense. Our goal is simple: create the most fun, most
-              honest browser arcade on the web. New games drop regularly, so follow us on TikTok and Instagram to
-              see what is coming next.
-            </p>
+            <h3 className="seo-block__subtitle">{t('ui.home.aboutTitle')}</h3>
+            <p className="seo-block__text">{t('ui.home.aboutText')}</p>
 
             {siteFaq.length > 0 && (
               <div className="seo-block__faq">
@@ -117,7 +88,7 @@ export default function SeoBlock({ type, data }) {
 
             {categoryGames.length > 0 && (
               <>
-                <h3 className="seo-block__subtitle">Games in this category</h3>
+                <h3 className="seo-block__subtitle">{t('ui.category.gamesIn')}</h3>
                 <ul className="seo-block__list">
                   {categoryGames.map(g => (
                     <li key={g.id}>

@@ -205,5 +205,59 @@
     "learnMore": "Learn more",
     "essential": "Essential only",
     "acceptAll": "Accept all"
+  },
+  "ui": {
+    "home": {
+      "title": "Free Online Games at Ragequit Arcade",
+      "p1": "Ragequit Arcade is a free online games platform built for players who want fun without friction. Every game runs instantly in your browser — no downloads, no installs, no sign-up walls and no intrusive pop-ups. Whether you have five minutes on your phone or a long session at your desk, our games load in a single click and work smoothly on mobile, tablet and desktop. We design, build and run every game ourselves, so what you play here you will not find anywhere else.",
+      "gamesTitle": "Our current games",
+      "gamesIntro": "We add new games regularly. Here is what you can play right now, each one free and unlimited:",
+      "catsTitle": "Browse by category",
+      "catsIntro": "Not sure what to play? Explore our games by category and find the style that fits your mood:",
+      "whyTitle": "Why play at Ragequit Arcade",
+      "whyText": "Every game is completely free, with no pay-to-win mechanics and no hidden costs. You can jump in instantly without an account, or create a free profile to save your scores and climb our global leaderboards. Because we build our games in-house rather than reposting clones, each title has its own identity, its own controls and its own reason to come back. We are a small independent studio obsessed with making browser games that are genuinely fun to lose at — hence the name.",
+      "aboutTitle": "About us",
+      "aboutText": "Ragequit Arcade is an independent gaming platform. We design, build and run every game ourselves — no third-party clones, no pay-to-win, no nonsense. Our goal is simple: create the most fun, most honest browser arcade on the web. New games drop regularly, so follow us on TikTok and Instagram to see what is coming next.",
+      "blurbs": {
+        "sports": "competitive, physical and rage-inducing.",
+        "arcade": "reflex, survival and pure score-chasing.",
+        "idle": "tap, automate and watch your numbers grow, even while you are away.",
+        "puzzle": "match, rotate and think fast under pressure.",
+        "shooting": "aim, shoot and survive wave after wave.",
+        "brain": "memory, focus and logic challenges to sharpen your mind.",
+        "challenge": "one hard goal, endless attempts and records to break."
+      }
+    },
+    "category": {
+      "gamesIn": "Games in this category"
+    },
+    "blog": {
+      "intro": "Guides, tips and stories from the team behind Ragequit Arcade. Learn how to master our free browser games, climb the leaderboards, and discover what we are building next.",
+      "metaDesc": "Guides, tips and stories from Ragequit Arcade. Learn how to master our free browser games and get the highest scores.",
+      "empty": "No articles yet. Check back soon.",
+      "readMore": "Read more →",
+      "sectionAbout": "About Ragequit Arcade",
+      "sectionGuides": "Game guides",
+      "back": "← Back to the blog",
+      "readNext": "Read next",
+      "notFound": "Not found",
+      "notFoundText": "This article does not exist."
+    },
+    "game": {
+      "notFound": "Game not found.",
+      "backHome": "Back to home",
+      "reportTitle": "Report a problem",
+      "reportSignin": "You need to be signed in to report a problem or leave a comment.",
+      "signIn": "Sign in",
+      "cancel": "Cancel",
+      "thanks": "Thanks! Your report has been sent.",
+      "close": "Close",
+      "subject": "Subject",
+      "describe": "Describe the problem or leave a comment…",
+      "like": "Like",
+      "dislike": "Dislike",
+      "report": "Report",
+      "fullscreen": "Fullscreen"
+    }
   }
 }

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
-import { games, categories } from '../../data/games'
+import { useCategories, useGames } from '../../data/localized'
+import { useParams } from 'react-router-dom'
+import { Link } from '../../i18n/locale'
 import Navbar from '../../components/Navbar/Navbar'
 import GameCard from '../../components/GameCard/GameCard'
 import SeoBlock from '../../components/SeoBlock/SeoBlock'
@@ -11,6 +12,8 @@ import { track } from '../../lib/analytics'
 import './CategoryPage.css'
 
 export default function CategoryPage() {
+  const games = useGames()
+  const categories = useCategories()
   const { t } = useTranslation()
   const { id } = useParams()
   const category = categories.find(c => c.id === id)

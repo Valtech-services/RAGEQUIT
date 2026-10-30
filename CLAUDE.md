@@ -29,7 +29,17 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
 
 - `npm run build` enchaîne `vite build`, le build serveur de `src/entry-server.jsx` puis `scripts/prerender.mjs`, qui écrit une page HTML complète par URL publique (Google et AdSense lisent le texte sans JavaScript). Les URL viennent de `games.js`, `blog.js` et `legalContent.js` : rien à déclarer à la main.
 - Un composant ne doit rien rendre qui exige le navigateur au premier rendu : pas de `createPortal` sans garde `mounted`, pas d'accès à `window` hors `useEffect` sans valeur par défaut.
-- Après chaque build, vérifier la ligne `[prerender] N/N pages prérendues`. Le build échoue si plus de 20 % des pages ratent.
+- Après chaque build, vérifier la ligne `[prerender] N/N pages prérendues` (une page par URL et par langue). Le build échoue si plus de 20 % des pages ratent.
+- Les liens internes passent par `Link`, `NavLink` et `useNavigate` de `src/i18n/locale.jsx` (pas ceux de `react-router-dom`) pour garder le préfixe de langue ; les données de contenu passent par les hooks de `src/data/localized.js` (`useGames`, `useCategories`, `usePosts`, `useSiteSeo`).
+
+## Site multilingue
+
+- L'anglais est à la racine (`/game/<id>`). Les langues de contenu ont leur préfixe d'URL : `/fr/...`, `/es/...`, `/pt/...`. Liste dans `CONTENT_LANGS` (`src/i18n/locale.jsx`). `/admin` et `/games/*.html` ne sont jamais préfixés.
+- Les textes d'interface (boutons, menus) sont dans `src/i18n/locales/<lang>.json` (12 langues). Les textes de contenu (descriptions de jeux, contrôles, SEO, FAQ, catégories, articles de blog, textes de l'accueil) sont en anglais dans `games.js`, `blog.js`, `categories`, `siteSeo`, et traduits dans `src/data/i18n/<lang>/` (`games*.js`, `posts*.js`, `categories.js`, `site.js`). `src/data/localized.js` fusionne la traduction sur l'anglais ; un champ manquant retombe sur l'anglais.
+- Format d'un jeu traduit : `{ description, controls, seo: { title, metaDescription, faq: [{ q, a }] } }`, avec **exactement le même nombre de questions FAQ** que l'anglais. Format d'un article : `{ title, excerpt, seo: { title, metaDescription }, content: [...] }`, avec **les mêmes blocs dans le même ordre** (même `type`, même nombre d'`items` pour les listes), sinon le contenu anglais est conservé.
+- Les noms de jeux, de modes, de skins et les libellés affichés dans le jeu (JUMP, Challenge a friend...) restent en anglais. Traduction naturelle, pas mot à mot, en `tu`/`vous` cohérent avec l'existant (français : vouvoiement).
+- Le build prérend chaque page dans chaque langue (balises `hreflang` + `x-default`) et affiche `[prerender] traductions <lang> : complètes` ou la liste des manques. **Une PR de publication n'est valide que si les trois lignes indiquent « complètes ».**
+- Ajouter une langue de contenu : l'ajouter à `CONTENT_LANGS`, créer `src/data/i18n/<lang>/` (copier la structure de `fr`), l'importer dans `src/data/localized.js`, ajouter ses textes `ui` dans `src/i18n/locales/<lang>.json` et ses titres dans la table `UI` de `src/entry-server.jsx`, puis traduire tout le contenu existant.
 
 ## Pipeline « un jeu par jour »
 
@@ -47,6 +57,8 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
    - `public/sitemap.xml` : URLs `/game/<id>` et `/blog/<id>-tips` avec `lastmod` du jour. (filet de sécurité : le build ajoute automatiquement toute page prérendue absente du sitemap).
    - Mettre à jour le texte de la catégorie concernée dans `categories` si le jeu y devient marquant.
    - Image de blog `public/blog/<id>-tips.jpg` (16:9), capture Playwright.
+   - **Traductions obligatoires** (voir « Site multilingue ») : pour chaque langue de `CONTENT_LANGS` (aujourd'hui `fr`, `es`, `pt`), ajouter la traduction complète du jeu dans `src/data/i18n/<lang>/games-*.js` (dernier fichier, ou nouveau fichier `games-N.js` importé dans `games.js`) et de l'article dans `src/data/i18n/<lang>/posts-*.js` (idem avec `posts.js`). Mettre à jour aussi `siteSeo.gameSelection` dans `src/data/i18n/<lang>/site.js` et la catégorie dans `categories.js` si on les modifie en anglais.
+   - `public/sitemap.xml` : ajouter aussi `/<lang>/game/<id>` et `/<lang>/blog/<id>-tips` pour chaque langue.
    - Retirer l'entrée du jeu de `src/data/testGames.js`.
 10. Lancer `npm install && npm run build` pour vérifier que le site compile (avant chaque PR, test ou publication). Ne jamais committer `package-lock.json` (annuler avec `git checkout package-lock.json`).
 11. Mettre à jour `backlog.md` : passer le jeu en `publié (PR #n)`, puis ajouter 2 ou 3 nouveaux candidats vérifiés (licence + intérêt) en fin de liste.

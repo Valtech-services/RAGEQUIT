@@ -34,12 +34,15 @@ function buildHead(template, url, h, siteUrl) {
   const abs = u => (u && u.startsWith('http') ? u : siteUrl + (u || ''))
   const canonical = siteUrl + (url === '/' ? '/' : url)
   let html = template
-    .replace(/<html lang="[^"]*">/, '<html lang="en">')
+    .replace(/<html lang="[^"]*">/, `<html lang="${h.lang || 'en'}">`)
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(h.title)}</title>`)
     .replace(/<meta name="description" content="[^"]*"\s*\/?>/, `<meta name="description" content="${esc(h.description)}" />`)
   const tags = [
     `<link rel="canonical" href="${esc(canonical)}" />`,
+    ...(h.alternates || []).map(a => `<link rel="alternate" hreflang="${a.lang}" href="${esc(a.href)}" />`),
+    ...(h.xDefault ? [`<link rel="alternate" hreflang="x-default" href="${esc(h.xDefault)}" />`] : []),
     `<meta property="og:type" content="website" />`,
+    `<meta property="og:locale" content="${{ en: 'en_US', fr: 'fr_FR', es: 'es_ES', pt: 'pt_PT' }[h.lang] || 'en_US'}" />`,
     `<meta property="og:site_name" content="Ragequit Arcade" />`,
     `<meta property="og:title" content="${esc(h.title)}" />`,
     `<meta property="og:description" content="${esc(h.description)}" />`,
@@ -56,7 +59,12 @@ async function main() {
   // Coquille vide conservée pour les URL non prérendues (admin, 404...).
   fs.writeFileSync(path.join(dist, '200.html'), template)
 
-  const { render, routes, head, SITE_URL } = await import(pathToFileURL(ssrEntry).href)
+  const { render, routes, head, SITE_URL, missingTranslations, CONTENT_LANGS } = await import(pathToFileURL(ssrEntry).href)
+  for (const l of CONTENT_LANGS) {
+    const miss = missingTranslations(l)
+    if (miss.length) console.warn(`[prerender] traductions manquantes (${l}) : ${miss.length} -> ${miss.slice(0, 8).join(', ')}${miss.length > 8 ? '…' : ''}`)
+    else console.log(`[prerender] traductions ${l} : complètes`)
+  }
   const urls = routes()
   let ok = 0
   const failed = []

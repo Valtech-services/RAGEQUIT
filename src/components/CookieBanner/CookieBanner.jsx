@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from '../../i18n/locale'
 import { useTranslation } from 'react-i18next'
 import { getConsent, setConsent } from '../../lib/consent'
 import './CookieBanner.css'

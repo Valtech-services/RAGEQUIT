@@ -206,5 +206,59 @@
     "learnMore": "Saber mais",
     "essential": "Apenas essenciais",
     "acceptAll": "Aceitar todos"
+  },
+  "ui": {
+    "home": {
+      "title": "Jogos gratuitos online na Ragequit Arcade",
+      "p1": "A Ragequit Arcade é uma plataforma de jogos gratuitos online feita para quem quer diversão sem complicações. Cada jogo abre instantaneamente no navegador: sem downloads, sem instalações, sem registos obrigatórios e sem pop-ups intrusivos. Quer tenha cinco minutos no telemóvel ou uma longa sessão no computador, os nossos jogos carregam com um clique e funcionam na perfeição no telemóvel, tablet e computador. Concebemos, desenvolvemos e gerimos cada jogo nós mesmos, por isso o que joga aqui não vai encontrar em mais lado nenhum.",
+      "gamesTitle": "Os nossos jogos atuais",
+      "gamesIntro": "Adicionamos novos jogos regularmente. Eis o que pode jogar agora mesmo, de graça e sem limites:",
+      "catsTitle": "Explorar por categoria",
+      "catsIntro": "Não sabe o que jogar? Explore os nossos jogos por categoria e encontre o estilo que combina com o seu humor:",
+      "whyTitle": "Porquê jogar na Ragequit Arcade",
+      "whyText": "Todos os jogos são totalmente gratuitos, sem mecânicas pay-to-win nem custos escondidos. Pode jogar de imediato sem conta, ou criar um perfil gratuito para guardar as suas pontuações e subir nas nossas classificações mundiais. Como criamos os nossos jogos nós mesmos em vez de republicar clones, cada título tem a sua própria identidade, os seus próprios controlos e a sua própria razão para voltar. Somos um pequeno estúdio independente obcecado em fazer jogos de navegador em que perder é realmente divertido: daí o nome.",
+      "aboutTitle": "Quem somos",
+      "aboutText": "A Ragequit Arcade é uma plataforma de jogos independente. Concebemos, desenvolvemos e gerimos cada jogo nós mesmos: sem clones, sem pay-to-win, sem complicações. O nosso objetivo é simples: criar o arcade de navegador mais divertido e mais honesto da web. Chegam novos jogos regularmente: siga-nos no TikTok e no Instagram para ver o que aí vem.",
+      "blurbs": {
+        "sports": "competitivos, físicos e de perder a paciência.",
+        "arcade": "reflexos, sobrevivência e caça às pontuações.",
+        "idle": "toque, automatize e veja os seus números crescer, mesmo quando está ausente.",
+        "puzzle": "combine, rode e pense depressa sob pressão.",
+        "shooting": "aponte, dispare e sobreviva vaga após vaga.",
+        "brain": "memória, concentração e lógica para afinar a mente.",
+        "challenge": "um objetivo difícil, tentativas infinitas e recordes para bater."
+      }
+    },
+    "category": {
+      "gamesIn": "Jogos desta categoria"
+    },
+    "blog": {
+      "intro": "Guias, dicas e histórias da equipa da Ragequit Arcade. Aprenda a dominar os nossos jogos gratuitos no navegador, suba nas classificações e descubra o que estamos a preparar.",
+      "metaDesc": "Guias, dicas e histórias da Ragequit Arcade. Aprenda a dominar os nossos jogos gratuitos no navegador e a conseguir as melhores pontuações.",
+      "empty": "Ainda não há artigos. Volte em breve.",
+      "readMore": "Ler mais →",
+      "sectionAbout": "Sobre a Ragequit Arcade",
+      "sectionGuides": "Guias de jogos",
+      "back": "← Voltar ao blog",
+      "readNext": "Leia também",
+      "notFound": "Não encontrado",
+      "notFoundText": "Este artigo não existe."
+    },
+    "game": {
+      "notFound": "Jogo não encontrado.",
+      "backHome": "Voltar ao início",
+      "reportTitle": "Reportar um problema",
+      "reportSignin": "Tem de iniciar sessão para reportar um problema ou deixar um comentário.",
+      "signIn": "Iniciar sessão",
+      "cancel": "Cancelar",
+      "thanks": "Obrigado! O seu relatório foi enviado.",
+      "close": "Fechar",
+      "subject": "Assunto",
+      "describe": "Descreva o problema ou deixe um comentário…",
+      "like": "Gosto",
+      "dislike": "Não gosto",
+      "report": "Reportar",
+      "fullscreen": "Ecrã inteiro"
+    }
   }
 }

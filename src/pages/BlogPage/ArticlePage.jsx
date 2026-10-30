@@ -1,15 +1,22 @@
 import { useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { usePosts } from '../../data/localized'
+import { useParams } from 'react-router-dom'
+import { Link } from '../../i18n/locale'
 import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Footer/Footer'
+import { useTranslation } from 'react-i18next'
+import { useLang } from '../../i18n/locale'
 import usePageTitle from '../../hooks/usePageTitle'
 import { trackPageView } from '../../lib/analytics'
-import { getPost, posts } from '../../data/blog'
 import './BlogPage.css'
 
 export default function ArticlePage() {
+  const posts = usePosts()
+  const { t } = useTranslation()
+  const lang = useLang()
+  const dateLocale = { en: 'en-US', fr: 'fr-FR', es: 'es-ES', pt: 'pt-PT' }[lang] || 'en-US'
   const { slug } = useParams()
-  const post = getPost(slug)
+  const post = posts.find(p => p.slug === slug) || null
 
   usePageTitle(
     post ? (post.seo?.title || post.title) : 'Article not found',
@@ -22,11 +29,11 @@ export default function ArticlePage() {
       <div className="blog">
         <div className="blog__header">
           <div className="blog__header-nav"><Navbar inGrid={true} /></div>
-          <div className="blog__header-title"><h1 className="blog__header-h1">Not found</h1></div>
+          <div className="blog__header-title"><h1 className="blog__header-h1">{t('ui.blog.notFound')}</h1></div>
         </div>
         <div className="blog__content">
-          <p className="blog__empty">This article does not exist.</p>
-          <Link to="/blog" className="blog__back">← Back to the blog</Link>
+          <p className="blog__empty">{t('ui.blog.notFoundText')}</p>
+          <Link to="/blog" className="blog__back">{t('ui.blog.back')}</Link>
         </div>
         <Footer />
       </div>
@@ -44,12 +51,12 @@ export default function ArticlePage() {
       </div>
 
       <article className="blog__article">
-        <Link to="/blog" className="blog__back">← Back to the blog</Link>
+        <Link to="/blog" className="blog__back">{t('ui.blog.back')}</Link>
 
         <h1 className="blog__article-title">{post.title}</h1>
         <div className="blog__article-meta">
           <span>{post.author || 'Ragequit Arcade'}</span>
-          {post.date && <span> · {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>}
+          {post.date && <span> · {new Date(post.date).toLocaleDateString(dateLocale, { year: 'numeric', month: 'long', day: 'numeric' })}</span>}
         </div>
 
         {post.image && (
@@ -73,7 +80,7 @@ export default function ArticlePage() {
 
         {others.length > 0 && (
           <div className="blog__related">
-            <h3 className="blog__related-title">Read next</h3>
+            <h3 className="blog__related-title">{t('ui.blog.readNext')}</h3>
             <div className="blog__related-list">
               {others.map(o => (
                 <Link key={o.slug} to={`/blog/${o.slug}`} className="blog__related-item">

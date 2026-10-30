@@ -1,14 +1,20 @@
 import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { usePosts } from '../../data/localized'
+import { Link } from '../../i18n/locale'
 import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Footer/Footer'
+import { useTranslation } from 'react-i18next'
+import { useLang } from '../../i18n/locale'
 import usePageTitle from '../../hooks/usePageTitle'
 import { trackPageView } from '../../lib/analytics'
-import { posts } from '../../data/blog'
 import './BlogPage.css'
 
 export default function BlogPage() {
-  usePageTitle('Blog | Ragequit Arcade', 'Guides, tips and stories from Ragequit Arcade. Learn how to master our free browser games and get the highest scores.')
+  const posts = usePosts()
+  const { t } = useTranslation()
+  const lang = useLang()
+  const dateLocale = { en: 'en-US', fr: 'fr-FR', es: 'es-ES', pt: 'pt-PT' }[lang] || 'en-US'
+  usePageTitle('Blog | Ragequit Arcade', t('ui.blog.metaDesc'))
   useEffect(() => { trackPageView() }, [])
 
   // Articles triés du plus récent au plus ancien.
@@ -24,18 +30,15 @@ export default function BlogPage() {
       </div>
 
       <div className="blog__content">
-        <p className="blog__intro">
-          Guides, tips and stories from the team behind Ragequit Arcade. Learn how to master our free
-          browser games, climb the leaderboards, and discover what we are building next.
-        </p>
+        <p className="blog__intro">{t('ui.blog.intro')}</p>
 
         {sorted.length === 0 ? (
-          <p className="blog__empty">No articles yet. Check back soon.</p>
+          <p className="blog__empty">{t('ui.blog.empty')}</p>
         ) : (
           <>
             {[
-              { id: 'about', label: 'About Ragequit Arcade' },
-              { id: 'guides', label: 'Game guides' },
+              { id: 'about', label: t('ui.blog.sectionAbout') },
+              { id: 'guides', label: t('ui.blog.sectionGuides') },
             ].map(section => {
               const inSection = sorted.filter(p => (p.category || 'guides') === section.id)
               if (inSection.length === 0) return null
@@ -53,11 +56,11 @@ export default function BlogPage() {
                         )}
                         <div className="blog__card-body">
                           <span className="blog__card-date">
-                            {post.date ? new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}
+                            {post.date ? new Date(post.date).toLocaleDateString(dateLocale, { year: 'numeric', month: 'long', day: 'numeric' }) : ''}
                           </span>
                           <h2 className="blog__card-title">{post.title}</h2>
                           <p className="blog__card-excerpt">{post.excerpt}</p>
-                          <span className="blog__card-more">Read more →</span>
+                          <span className="blog__card-more">{t('ui.blog.readMore')}</span>
                         </div>
                       </Link>
                     ))}

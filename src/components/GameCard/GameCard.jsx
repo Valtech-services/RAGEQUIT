@@ -6,7 +6,7 @@
    - Analytics au clic (track).
    Le prop "source" est passé par le parent : 'bento', 'related', 'category', 'search'
 */
-import { Link } from 'react-router-dom'
+import { Link } from '../../i18n/locale'
 import { track } from '../../lib/analytics'
 import './GameCard.css'
 

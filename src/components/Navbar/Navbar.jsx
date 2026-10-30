@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
+import { useCategories, useGames } from '../../data/localized'
 import { createPortal } from 'react-dom'
-import { Link, useNavigate } from 'react-router-dom'
-import { games, categories } from '../../data/games'
+import { Link, useNavigate } from '../../i18n/locale'
 import { useAuth } from '../../context/AuthContext'
 import { useTranslation } from 'react-i18next'
 import './Navbar.css'
@@ -37,6 +37,8 @@ const COUNTRIES = [
 ]
 
 export default function Navbar({ title, inGrid = false }) {
+  const games = useGames()
+  const categories = useCategories()
   const { t } = useTranslation()
   // Les tiroirs (portails) ne sont rendus que dans le navigateur, pas au prérendu.
   const [mounted, setMounted]         = useState(false)

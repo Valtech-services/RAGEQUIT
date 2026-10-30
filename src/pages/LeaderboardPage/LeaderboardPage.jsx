@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from '../../i18n/locale'
 import { games } from '../../data/games'
 import { supabase } from '../../lib/supabase'
 import Navbar from '../../components/Navbar/Navbar'

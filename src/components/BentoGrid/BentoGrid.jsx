@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { useCategories, useGames } from '../../data/localized'
+import { Link } from '../../i18n/locale'
 import { useTranslation } from 'react-i18next'
-import { games, categories } from '../../data/games'
 import GameCard from '../GameCard/GameCard'
 import Navbar from '../Navbar/Navbar'
 import './BentoGrid.css'
@@ -22,6 +22,8 @@ import './BentoGrid.css'
   Ce mapping est porté par le CSS (.bento__cell--{size}).
 */
 export default function BentoGrid({ showNav = true }) {
+  const games = useGames()
+  const categories = useCategories()
   const { t } = useTranslation()
   const gameCategories = categories.filter(c => c.id !== 'all')
   const catIcons = {

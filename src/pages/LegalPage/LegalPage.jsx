@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { Link } from '../../i18n/locale'
 import { useTranslation } from 'react-i18next'
 import { getLegalContent } from '../../data/legalContent'
 import { useAuth } from '../../context/AuthContext'
