@@ -30,7 +30,7 @@ export const categories = [
     id: 'arcade',
     label: 'Arcade',
     image: '/categories/arcade.jpg',
-    description: 'Stack, dodge, spread and survive — our arcade games are all about quick reflexes, tight timing and that irresistible one-more-try feeling. This is the biggest and most varied category on Ragequit Arcade, packed with pick-up-and-play titles that are simple to learn and genuinely hard to master. Stack blocks with perfect timing in STAQ, race through a hypnotic neon tunnel in Neon Rush, engineer a virus to conquer a petri dish in the strategy-driven Virus Lab, or chase a high score with candy and combos in Snake Candy Arena. Every arcade game runs free in your browser on mobile, tablet and desktop, with no download and no signup — the perfect way to fill five minutes or lose an hour.',
+    description: 'Stack, dodge, spread and survive — our arcade games are all about quick reflexes, tight timing and that irresistible one-more-try feeling. This is the biggest and most varied category on Ragequit Arcade, packed with pick-up-and-play titles that are simple to learn and genuinely hard to master. Stack blocks with perfect timing in STAQ, race through a hypnotic neon tunnel in Neon Rush, engineer a virus to conquer a petri dish in the strategy-driven Virus Lab, chase a high score with candy and combos in Snake Candy Arena, or split and merge four neon lines through an endless storm of walls in LINESTORM. Every arcade game runs free in your browser on mobile, tablet and desktop, with no download and no signup — the perfect way to fill five minutes or lose an hour.',
     seo: {
       title: 'Free Arcade Games Online | Ragequit Arcade',
       metaDescription: 'Play the best free arcade games online at Ragequit Arcade: STAQ, Neon Rush, Virus Lab, Snake Candy Arena and more. Reflex, survival and high scores. No download.',
@@ -687,6 +687,46 @@ export const games = [
         { q: 'What are daily missions?', a: 'Every day you get three new missions, such as reaching a distance in one run, crossing tunnels or chaining near misses. Each completed mission pays Galactic Credits, and completing all three gives a bonus. Missions reset at midnight.' },
         { q: 'Can I continue after a crash?', a: 'Yes, once per run you can watch a short ad to continue from the same distance. It is best kept for a run that is already close to your personal record.' },
         { q: 'Is City Runner free and playable on mobile?', a: 'City Runner is completely free, needs no download and no account, and runs in your browser on phones, tablets and computers. It is built for mobile first, with one-thumb controls. Create a free Ragequit Arcade account if you want your name on the leaderboard.' }
+      ]
+    }
+  },
+  /* ===================================================================
+     LINESTORM — Arcade : 4 lignes néon, écarter / resserrer
+     =================================================================== */
+  {
+    id: 'linestorm',
+    title: 'LINESTORM',
+    description: 'LINESTORM is a free neon arcade game where you steer four glowing lines through an endless storm of walls. Cyan, pink, lime and orange, the four lines race upward side by side, and everything in the storm is built around one decision: split them apart or pack them together. There is no download and no signup. The game runs instantly in your browser on mobile, tablet and desktop, and a run starts in one tap. The rules fit in two colors. Pink gates have one hole for each line, and every hole is marked with a dot of the matching color, so you tap to split your lines into a wide fan and thread all four through at once. Green walls have a single wide gap for the whole pack, so you tap again to merge and slip through together. Between the walls, rows of red striped debris fall toward you and always leave one safe lane to find. On a phone you drag your thumb to steer and tap anywhere to switch between split and merge. On desktop you steer with the arrow keys or A and D and press Space to split or merge. Every wall you pass cleanly shatters into sparks and adds to your score. Pass five in a row without a single hit and you enter Overdrive: the music speeds up, the grid pulses to the beat and every point counts double until your next mistake. Touching a wall costs you only the line that hit it, not the whole run, and you can catch a glowing orb of the same color to bring a lost line back. The run ends when all four lines are gone. The storm never stands still. Your speed keeps rising the longer you survive, shown live by the speed gauge at the top of the screen, and every 1,000 meters the storm moves into a new zone with its own colors, from Neon Night and Cyber Ocean to Toxic Grid, Inferno, Golden Void and Ultraviolet. Power-ups help you hold on: slow motion for three seconds, a shield that absorbs one hit and a ghost mode that lets you pass straight through walls. Three modes are available. Classic is the standard run with all four lines. Hard starts you with only two lines, runs faster, removes the orbs and has its own leaderboard. Daily Storm gives every player exactly the same course for the day. Three daily missions add fresh goals every day, seven cosmetic line skins unlock as your best score grows, and after any run you can send a challenge link so a friend plays the very same storm and tries to beat you. Once per run you can watch a short ad to bring all your lines back and keep going. Open LINESTORM, split, merge and see how deep into the storm you can go.',
+    thumbnail: '/thumbnails/linestorm.jpg',
+    category: 'arcade',
+    tags: ['arcade', 'neon', 'reflex', 'endless', 'lines', 'split', 'one tap', 'speed', 'synthwave', 'daily missions', 'hard mode', 'skins'],
+    size: 'medium',
+    shimmer: true,
+    isNew: true,
+    hot: true,
+    landscape: false,
+    plays: 0,
+    modes: ['classic', 'hard'],
+    defaultMode: 'classic',
+    controls: 'Drag left or right to steer and tap anywhere to split or merge your four lines. On desktop use the arrow keys or A and D to steer, Space to split or merge, and P or Escape to pause. Split for pink gates, merge for green walls, dodge the red debris and survive as long as you can.',
+    author: 'Ragequit Arcade',
+    seo: {
+      title: 'LINESTORM - Free Neon Arcade Game: Split, Merge, Survive | Ragequit Arcade',
+      metaDescription: 'Play LINESTORM free online. Steer four neon lines through a storm of walls: split for pink gates, merge for green walls. Rising speed, zones, skins, daily missions. No download.',
+      faq: [
+        { q: 'How do you play LINESTORM?', a: 'You control four neon lines that race upward through a storm of walls. Drag left or right to steer and tap anywhere to split the lines into a wide fan or merge them back together. On desktop, use the arrow keys or A and D to steer and Space to split or merge. Pass as many walls as you can before you lose all four lines.' },
+        { q: 'What is the difference between pink gates and green walls?', a: 'Pink gates have one hole per line, each marked with a dot of the matching color, so you must split your lines to pass. Green walls have a single wide gap for the whole pack, so you must merge your lines to slip through. Reading the next wall early and switching formation in time is the core skill of the game.' },
+        { q: 'What happens when a line hits a wall?', a: 'Only the line that touched the wall is lost, not the whole run. You keep playing with the lines you have left, and you can bring a lost line back by catching a glowing orb of the same color. The run ends when all four lines are gone.' },
+        { q: 'How is the score calculated in LINESTORM?', a: 'You earn points for the distance you travel and 100 points for every wall you pass without a hit. Pass five walls in a row cleanly to trigger Overdrive, which doubles every point until your next mistake. Orbs collected while all your lines are alive give a bonus too.' },
+        { q: 'Does LINESTORM get faster?', a: 'Yes. Your speed rises continuously the longer you survive, up to more than twice the starting speed. The speed gauge at the top of the screen shows how fast you are going, and a SPEED UP message appears every 20 seconds.' },
+        { q: 'What are the zones?', a: 'Every 1,000 meters the storm enters a new zone with its own colors: Neon Night, Cyber Ocean, Toxic Grid, Inferno, Golden Void and Ultraviolet, before the cycle starts again. Zones show how far you have gone and keep long runs visually fresh.' },
+        { q: 'What do the power-ups do?', a: 'Slow motion halves the speed of the storm for three seconds, the shield absorbs one hit without losing a line, and ghost mode lets you pass straight through walls for four seconds. They appear regularly as spinning squares marked S, B and G.' },
+        { q: 'What are the three modes?', a: 'Classic is the standard run with four lines and orbs to recover lost lines. Hard starts with only two lines, runs faster and has no orbs, with its own leaderboard. Daily Storm gives every player the same course for the day, using the Classic rules.' },
+        { q: 'How do daily missions work?', a: 'Every day you get three new missions, such as passing ten pink gates in a row without a hit, collecting orbs or reaching a zone. They count in every mode, and completing ten missions in total unlocks the Daily Hero line skin.' },
+        { q: 'How do I unlock line skins?', a: 'Skins are cosmetic only and change the colors of your four lines. Ice, Sunset, Toxic, Royal and Prism unlock as your best score in a single run reaches 2,500, 5,000, 10,000, 20,000 and 35,000 points. Daily Hero unlocks after ten completed missions. Pick your skin from the Skins button on the start screen.' },
+        { q: 'Can I challenge a friend?', a: 'Yes. After a run, press Challenge a friend to share a link with your score. Your friend plays exactly the same storm and sees whether they beat you, then can send a challenge back.' },
+        { q: 'Can I continue after losing all my lines?', a: 'Once per run you can watch a short ad to bring all your lines back and continue from the same distance and speed. Keep it for a run that is close to your best score.' },
+        { q: 'Is LINESTORM free and playable on mobile?', a: 'LINESTORM is completely free, needs no download and no account, and runs in your browser on phones, tablets and computers. It is built for one thumb on mobile. Create a free Ragequit Arcade account if you want your name on the leaderboard.' }
       ]
     }
   },

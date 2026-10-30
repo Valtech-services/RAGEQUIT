@@ -6,7 +6,7 @@ Rappel : la source sert de référence de gameplay, le jeu est entièrement ré�
 
 | # | Source (référence gameplay) | Licence | Catégorie visée | Piste de transformation | Statut |
 |---|---|---|---|---|---|
-| 1 | Zolmeister/avabranch | MIT | arcade | LINESTORM (`linestorm`, ex-SPLITSTORM) : 4 lignes néon, portes à écarter / murs à resserrer, orbes, Overdrive, power-ups, vitesse croissante, modes Classic / Hard / Daily, défi ami | en test (PR #4) |
+| 1 | Zolmeister/avabranch | MIT | arcade | LINESTORM (`linestorm`, ex-SPLITSTORM) : 4 lignes néon, portes à écarter / murs à resserrer, orbes, Overdrive, power-ups, vitesse croissante, modes Classic / Hard / Daily, défi ami, zones, skins, missions du jour | publication prête, en attente de validation (PR #7) |
 | 2 | leereilly/Coil (Hakim El Hattab) | MIT | arcade | Encercler les ennemis avec sa traînée lumineuse, combos d'encerclement, boss toutes les 5 vagues | à faire |
 | 3 | wwwtyro/Astray | Domaine public | challenge | Labyrinthe 3D à incliner (gyroscope sur mobile), chrono, labyrinthe du jour identique pour tous, score speedrun | à faire |
 | 4 | Zolmeister/zop | MIT | puzzle | Relier les couleurs identiques en un tracé, chaînes longues = bonus, mode contre la montre | à faire |
@@ -19,6 +19,8 @@ Rappel : la source sert de référence de gameplay, le jeu est entièrement ré�
 | 11 | cykod/AlienInvasion | MIT / GPL | shooting | Shoot'em up vertical mobile, tir auto, power-ups, vagues infinies | à faire |
 | 12 | Zolmeister/prism | MIT | puzzle | Grille hexagonale de couleurs à fusionner, réactions en chaîne | à faire |
 | 13 | softvar/save-the-forest | MIT | arcade | Éteindre les feux avant propagation, vent qui change, vagues chronométrées | à faire |
+| 14 | binarymax/shape | MIT | brain | Réflexe de reconnaissance de formes néon : tapoter la bonne forme avant la fin du chrono, combos, mode Hard à formes qui tournent | à faire |
+| 15 | Couchfriends/Space-Shooter | MIT | shooting | Shoot'em up spatial au pouce, vagues de drones, armes à fusionner, boss toutes les 10 vagues | à faire |
 
 ## Écartés
 
@@ -28,3 +30,5 @@ Rappel : la source sert de référence de gameplay, le jeu est entièrement ré�
 | lostdecade/onslaught_arena | Assets sous restriction de revente |
 | maettig/starship-sorades-13k | CC BY-SA (attribution obligatoire) |
 | gbatha/PolyBranch, Q42/0hh1, mindd-it/pappu-pakia, hyspace/flappy | Aucune licence |
+| nmoroze/swap | CC BY-SA (attribution obligatoire) |
+| ondras/custom-tetris | Licence BSD, mais Tetris est une marque protégée avec un « look and feel » défendu en justice : risque juridique |

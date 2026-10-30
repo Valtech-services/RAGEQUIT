@@ -34,14 +34,4 @@ export const testGames = [
     file: '/games/city-runner.html',
     notes: 'Three.js. Score CITY_RUNNER_SCORE, mode classic. Mettre DEBUG_MAX_CREDITS a true pour tester tous les vehicules.'
   },
-  {
-    id: 'linestorm',
-    title: 'LINESTORM',
-    description: 'Pilote 4 lignes néon dans une tempête de murs : écarte-les pour les portes roses, resserre-les pour les murs verts. La vitesse augmente sans fin.',
-    thumbnail: '/thumbnails/linestorm.jpg',
-    category: 'arcade',
-    orientation: 'portrait',
-    file: '/games/linestorm.html',
-    notes: 'Score LINESTORM_SCORE, modes classic / hard (Daily envoyé en classic), label en pts. Pub revive une fois par partie. Défi ami via ?ls_seed=&ls_beat=&ls_mode='
-  },
 ]
