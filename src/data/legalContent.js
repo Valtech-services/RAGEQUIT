@@ -1286,6 +1286,1798 @@ const legalByLang = {
         }
       ]
     }
+  },
+  "it": {
+    "about": {
+      "label": "Chi siamo",
+      "title": "Chi è Ragequit Arcade",
+      "updated": "Agosto 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Ragequit Arcade ti offre i giochi online gratuiti più coinvolgenti, pensati per partite in solitaria o sfide veloci con gli amici. Ogni gioco si avvia subito nel browser: niente download, niente registrazione, niente pop-up, niente complicazioni. I nostri giochi funzionano su computer, tablet e smartphone, così puoi giocare a casa o in movimento.",
+            "Stiamo costruendo un luogo in cui un grande gioco è sempre a un clic di distanza."
+          ]
+        },
+        {
+          "heading": "I nostri giochi",
+          "paragraphs": [
+            "Aggiungiamo nuovi giochi ogni settimana. Tra i titoli attuali ci sono giochi originali e frenetici come Rage Hockey e STAQ. Ogni gioco su Ragequit Arcade è gratuito, per sempre."
+          ]
+        },
+        {
+          "heading": "Inizia a giocare",
+          "paragraphs": [
+            "Non sai a cosa giocare? Inizia dalla home page oppure scegli un gioco da una delle nostre categorie: Giochi sportivi o Giochi arcade."
+          ]
+        },
+        {
+          "heading": "Chi siamo",
+          "paragraphs": [
+            "Ragequit Arcade è una piattaforma di giochi indipendente. Il nostro obiettivo è semplice: creare l'arcade per browser più divertente e più onesto del web. Nuovi giochi ogni settimana: seguici su TikTok e Instagram per scoprire le prossime uscite."
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "q": "Che cos'è Ragequit Arcade?",
+          "a": "Una piattaforma di giochi online gratuita. Nessun download e nessuna registrazione richiesti."
+        },
+        {
+          "q": "Tutti i giochi sono gratuiti?",
+          "a": "Sì, ogni gioco è completamente gratuito."
+        },
+        {
+          "q": "Ogni quanto vengono aggiunti nuovi giochi?",
+          "a": "Ogni settimana. Seguici su TikTok per essere avvisato."
+        },
+        {
+          "q": "Serve un account?",
+          "a": "Non serve un account per giocare. Creane uno per salvare i tuoi punteggi e comparire in classifica."
+        },
+        {
+          "q": "Funziona su mobile?",
+          "a": "Sì, tutti i giochi funzionano su smartphone, tablet e computer."
+        }
+      ]
+    },
+    "contact": {
+      "label": "Aiuto",
+      "title": "Contattaci",
+      "updated": "Agosto 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Hai una domanda, un bug da segnalare, un'idea per un gioco o una proposta di collaborazione? Compila il modulo qui sotto e ti risponderemo il prima possibile.",
+            "Devi aver effettuato l'accesso per inviare un messaggio."
+          ]
+        }
+      ]
+    },
+    "mentions": {
+      "label": "Note legali",
+      "title": "Note legali",
+      "updated": "Agosto 2026",
+      "sections": [
+        {
+          "heading": "Editore del sito",
+          "paragraphs": [
+            "Laurent Valard (Valtech Services)",
+            "Impresa individuale (micro-impresa)",
+            "295 Allée des Micocouliers, 04220 Sainte-Tulle, Francia",
+            "SIREN: 994 273 118 — SIRET: 994 273 118 00012",
+            "Partita IVA UE: FR11994273118",
+            "RCS: 994 273 118 R.C.S. Manosque"
+          ]
+        },
+        {
+          "heading": "Hosting",
+          "paragraphs": [
+            "Vercel Inc., 340 Pine Street Suite 701, San Francisco, CA 94104, Stati Uniti — https://vercel.com",
+            "Il sito è distribuito tramite la piattaforma Vercel. I dati sono ospitati su Supabase (Europa — regione di Francoforte)."
+          ]
+        },
+        {
+          "heading": "Proprietà intellettuale",
+          "paragraphs": [
+            "Tutti i contenuti di questo sito — testi, immagini, grafica, loghi ed elementi del marchio — sono protetti dalla legge applicabile. È vietata qualsiasi riproduzione, rappresentazione o utilizzo non autorizzato, totale o parziale."
+          ]
+        },
+        {
+          "heading": "Contatti",
+          "paragraphs": [
+            "Per qualsiasi domanda relativa a questo sito, utilizza la nostra pagina di contatto o scrivici a hello@ragequit-arcade.com."
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "label": "Note legali",
+      "title": "Informativa sulla privacy",
+      "updated": "Agosto 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "La presente Informativa sulla privacy spiega come Ragequit Arcade (\"noi\") raccoglie, utilizza e protegge le tue informazioni quando visiti ragequit-arcade.com (il \"Sito\"). Utilizzando il Sito accetti le pratiche qui descritte."
+          ]
+        },
+        {
+          "heading": "Informazioni che raccogliamo",
+          "paragraphs": [
+            "Raccogliamo informazioni limitate per gestire e migliorare il Sito:"
+          ],
+          "list": [
+            "Dati di utilizzo: pagine visitate, giochi giocati, tempo trascorso e modalità generali di interazione.",
+            "Dati del dispositivo e del browser: tipo di browser, sistema operativo, dimensioni dello schermo e posizione approssimativa basata sull'indirizzo IP.",
+            "Dati dell'account: se crei un account, conserviamo il tuo indirizzo email, il nome utente e i punteggi.",
+            "Dati di archiviazione locale: progressi e preferenze di gioco salvati direttamente nel tuo browser."
+          ]
+        },
+        {
+          "heading": "Cookie e pubblicità",
+          "paragraphs": [
+            "Utilizziamo cookie e tecnologie simili per fornire e migliorare i nostri servizi. Utilizziamo Google AdSense per mostrare la pubblicità e Google Analytics per misurare il pubblico. Fornitori terzi, tra cui Google, utilizzano cookie per mostrare annunci basati sulle tue visite precedenti a questo e ad altri siti web.",
+            "L'uso dei cookie pubblicitari da parte di Google consente a Google e ai suoi partner di mostrarti annunci in base alle tue visite a questo e ad altri siti. Puoi disattivare la pubblicità personalizzata nelle Impostazioni annunci di Google (adssettings.google.com). Per gli utenti del SEE, del Regno Unito e della Svizzera, chiediamo il consenso tramite una piattaforma di gestione del consenso certificata da Google prima di installare cookie non essenziali."
+          ]
+        },
+        {
+          "heading": "Come utilizziamo le tue informazioni",
+          "paragraphs": [
+            "Utilizziamo le informazioni raccolte per:"
+          ],
+          "list": [
+            "Gestire, mantenere e migliorare il Sito e i suoi giochi.",
+            "Mostrare pubblicità pertinente che permette ai giochi di restare gratuiti.",
+            "Salvare i tuoi punteggi e mostrarli in classifica.",
+            "Rispondere ai messaggi inviati tramite il modulo di contatto."
+          ]
+        },
+        {
+          "heading": "I tuoi diritti",
+          "paragraphs": [
+            "Ai sensi del GDPR hai il diritto di accedere ai tuoi dati personali, rettificarli o cancellarli. Per esercitare questi diritti scrivici a hello@ragequit-arcade.com."
+          ]
+        },
+        {
+          "heading": "Privacy dei minori",
+          "paragraphs": [
+            "Il Sito è destinato a un pubblico generale. Non raccogliamo consapevolmente informazioni personali di bambini di età inferiore a 13 anni."
+          ]
+        }
+      ]
+    },
+    "terms": {
+      "label": "Note legali",
+      "title": "Condizioni d'uso",
+      "updated": "Agosto 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Benvenuto su Ragequit Arcade. Accedendo a ragequit-arcade.com o utilizzandolo, accetti di essere vincolato dalle presenti Condizioni d'uso."
+          ]
+        },
+        {
+          "heading": "Utilizzo del Sito",
+          "paragraphs": [
+            "Ragequit Arcade offre giochi gratuiti per browser destinati a un intrattenimento personale e non commerciale."
+          ],
+          "list": [
+            "Non puoi copiare, distribuire o modificare alcuna parte del Sito senza autorizzazione.",
+            "Non puoi utilizzare sistemi automatizzati per accedere al Sito oltre il normale utilizzo umano.",
+            "Non puoi tentare di ottenere un accesso non autorizzato a qualsiasi parte del Sito."
+          ]
+        },
+        {
+          "heading": "Proprietà intellettuale",
+          "paragraphs": [
+            "Tutti i contenuti del Sito sono di proprietà di Ragequit Arcade o dei suoi licenziatari e sono protetti dalle leggi sulla proprietà intellettuale."
+          ]
+        },
+        {
+          "heading": "Esclusione di garanzie",
+          "paragraphs": [
+            "Il Sito è fornito \"così com'è\", senza garanzie di alcun tipo. Non garantiamo che il Sito sia privo di interruzioni o di errori."
+          ]
+        },
+        {
+          "heading": "Limitazione di responsabilità",
+          "paragraphs": [
+            "Nella misura massima consentita dalla legge, Ragequit Arcade non sarà responsabile di danni indiretti o consequenziali derivanti dall'uso del Sito."
+          ]
+        }
+      ]
+    },
+    "cookies": {
+      "label": "Note legali",
+      "title": "Cookie Policy",
+      "updated": "Agosto 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "La presente Cookie Policy spiega come Ragequit Arcade (gestito da Valtech Services) utilizza i cookie e tecnologie simili su ragequit-arcade.com, perché li utilizziamo e quali scelte hai a disposizione. Utilizzando il Sito accetti l'uso dei cookie descritto qui, nel rispetto delle opzioni di consenso indicate di seguito."
+          ]
+        },
+        {
+          "heading": "Che cosa sono i cookie?",
+          "paragraphs": [
+            "I cookie sono piccoli file di testo salvati sul tuo dispositivo quando visiti un sito web. Sono ampiamente utilizzati per far funzionare i siti, ricordare le tue preferenze e fornire informazioni ai proprietari dei siti. Per le stesse finalità possono essere utilizzate anche tecnologie simili, come l'archiviazione locale e i pixel."
+          ]
+        },
+        {
+          "heading": "Tipi di cookie che utilizziamo",
+          "paragraphs": [
+            "Utilizziamo le seguenti categorie di cookie:"
+          ],
+          "list": [
+            "Cookie essenziali: strettamente necessari al funzionamento del Sito, ad esempio per ricordare la tua scelta sui cookie, la lingua e mantenere l'accesso. Non possono essere disattivati.",
+            "Cookie analitici: ci aiutano a capire come i visitatori interagiscono con il Sito (ad esempio quali giochi sono più giocati) per migliorarlo. Vengono installati solo se accetti i cookie non essenziali.",
+            "Cookie pubblicitari: utilizzati da noi e dai nostri partner pubblicitari (che possono includere Google e reti pubblicitarie di giochi) per mostrare annunci pertinenti e misurarne il rendimento. Vengono installati solo se accetti i cookie non essenziali."
+          ]
+        },
+        {
+          "heading": "Cookie di terze parti",
+          "paragraphs": [
+            "Alcuni cookie sono installati da terze parti che ci forniscono servizi, come fornitori di analisi e reti pubblicitarie. Queste terze parti possono utilizzare i cookie per raccogliere informazioni sulla tua attività su diversi siti web. Non controlliamo questi cookie: consulta le informative sulla privacy e sui cookie delle terze parti interessate.",
+            "Quando la pubblicità è fornita da Google, l'uso dei cookie pubblicitari consente a Google e ai suoi partner di mostrare annunci in base alle tue visite a questo e ad altri siti. Puoi informarti e gestire la pubblicità personalizzata nelle Impostazioni annunci di Google (adssettings.google.com)."
+          ]
+        },
+        {
+          "heading": "Il tuo consenso e come gestire i cookie",
+          "paragraphs": [
+            "Alla tua prima visita, un banner ti permette di accettare tutti i cookie o solo quelli essenziali. Nessun cookie analitico o pubblicitario viene installato finché non dai il consenso. Puoi modificare la tua scelta in qualsiasi momento con il link \"Gestisci cookie\" nel piè di pagina, che riapre il banner.",
+            "Puoi anche controllare o eliminare i cookie dalle impostazioni del browser. La maggior parte dei browser consente di rifiutare o rimuovere i cookie; tuttavia, bloccare i cookie essenziali può influire sul funzionamento del Sito."
+          ]
+        },
+        {
+          "heading": "Modifiche alla presente policy",
+          "paragraphs": [
+            "Potremmo aggiornare questa Cookie Policy per riflettere cambiamenti tecnologici, normativi o delle nostre pratiche. La data di \"Ultimo aggiornamento\" in alto indica l'ultima revisione. Ti invitiamo a consultare periodicamente questa pagina."
+          ]
+        },
+        {
+          "heading": "Contatti",
+          "paragraphs": [
+            "Per domande sul nostro utilizzo dei cookie puoi scriverci a hello@ragequit-arcade.com."
+          ]
+        }
+      ]
+    }
+  },
+  "nl": {
+    "about": {
+      "label": "Over ons",
+      "title": "Over Ragequit Arcade",
+      "updated": "Augustus 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Ragequit Arcade biedt je de meest verslavende gratis online games, gemaakt voor solo-runs of snelle potjes met vrienden. Elke game start meteen in je browser: geen downloads, geen registratie, geen pop-ups, geen gedoe. Onze games werken op computer, tablet en mobiel, zodat je thuis of onderweg kunt spelen.",
+            "We bouwen een plek waar een goede game altijd maar één klik verwijderd is."
+          ]
+        },
+        {
+          "heading": "Onze games",
+          "paragraphs": [
+            "We voegen elke week nieuwe games toe. Onze huidige titels zijn onder meer snelle originele games zoals Rage Hockey en STAQ. Elke game op Ragequit Arcade is gratis, voor altijd."
+          ]
+        },
+        {
+          "heading": "Begin met spelen",
+          "paragraphs": [
+            "Weet je niet wat je wilt spelen? Begin op de homepage of kies een game uit een van onze categorieën: Sportgames of Arcadegames."
+          ]
+        },
+        {
+          "heading": "Wie we zijn",
+          "paragraphs": [
+            "Ragequit Arcade is een onafhankelijk gameplatform. Ons doel is eenvoudig: de leukste en eerlijkste browser-arcade van het web maken. Elke week nieuwe games: volg ons op TikTok en Instagram om te zien wat eraan komt."
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "q": "Wat is Ragequit Arcade?",
+          "a": "Een gratis online gameplatform. Geen download en geen registratie nodig."
+        },
+        {
+          "q": "Zijn alle games gratis?",
+          "a": "Ja, elke game is volledig gratis te spelen."
+        },
+        {
+          "q": "Hoe vaak komen er nieuwe games bij?",
+          "a": "Elke week. Volg ons op TikTok om op de hoogte te blijven."
+        },
+        {
+          "q": "Heb ik een account nodig?",
+          "a": "Je hebt geen account nodig om te spelen. Maak er een aan om je scores op te slaan en in het klassement te verschijnen."
+        },
+        {
+          "q": "Werkt het op mobiel?",
+          "a": "Ja, alle games werken op mobiel, tablet en computer."
+        }
+      ]
+    },
+    "contact": {
+      "label": "Hulp",
+      "title": "Contact",
+      "updated": "Augustus 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Heb je een vraag, een bug om te melden, een idee voor een game of een samenwerkingsvoorstel? Vul het formulier hieronder in en we nemen zo snel mogelijk contact met je op.",
+            "Je moet ingelogd zijn om een bericht te sturen."
+          ]
+        }
+      ]
+    },
+    "mentions": {
+      "label": "Juridisch",
+      "title": "Juridische informatie",
+      "updated": "Augustus 2026",
+      "sections": [
+        {
+          "heading": "Uitgever van de website",
+          "paragraphs": [
+            "Laurent Valard (Valtech Services)",
+            "Eenmanszaak (micro-onderneming)",
+            "295 Allée des Micocouliers, 04220 Sainte-Tulle, Frankrijk",
+            "SIREN: 994 273 118 — SIRET: 994 273 118 00012",
+            "EU-btw-nummer: FR11994273118",
+            "RCS: 994 273 118 R.C.S. Manosque"
+          ]
+        },
+        {
+          "heading": "Hosting",
+          "paragraphs": [
+            "Vercel Inc., 340 Pine Street Suite 701, San Francisco, CA 94104, Verenigde Staten — https://vercel.com",
+            "De site wordt gepubliceerd via het Vercel-platform. Gegevens worden gehost bij Supabase (Europa — regio Frankfurt)."
+          ]
+        },
+        {
+          "heading": "Intellectueel eigendom",
+          "paragraphs": [
+            "Alle inhoud van deze website — teksten, beelden, afbeeldingen, logo's en merkelementen — is beschermd door de toepasselijke wetgeving. Elke ongeoorloofde verveelvoudiging, weergave of exploitatie, geheel of gedeeltelijk, is verboden."
+          ]
+        },
+        {
+          "heading": "Contact",
+          "paragraphs": [
+            "Voor vragen over deze website kun je onze contactpagina gebruiken of ons mailen op hello@ragequit-arcade.com."
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "label": "Juridisch",
+      "title": "Privacybeleid",
+      "updated": "Augustus 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Dit privacybeleid legt uit hoe Ragequit Arcade (\"wij\", \"ons\") je gegevens verzamelt, gebruikt en beschermt wanneer je ragequit-arcade.com (de \"Site\") bezoekt. Door de Site te gebruiken ga je akkoord met de hier beschreven werkwijze."
+          ]
+        },
+        {
+          "heading": "Gegevens die we verzamelen",
+          "paragraphs": [
+            "We verzamelen beperkte gegevens om de Site te laten werken en te verbeteren:"
+          ],
+          "list": [
+            "Gebruiksgegevens: bezochte pagina's, gespeelde games, bestede tijd en algemene interactiepatronen.",
+            "Apparaat- en browsergegevens: type browser, besturingssysteem, schermformaat en geschatte locatie op basis van het IP-adres.",
+            "Accountgegevens: als je een account aanmaakt, bewaren we je e-mailadres, gebruikersnaam en scores.",
+            "Lokale opslag: voortgang en voorkeuren die rechtstreeks in je browser worden opgeslagen."
+          ]
+        },
+        {
+          "heading": "Cookies en advertenties",
+          "paragraphs": [
+            "We gebruiken cookies en vergelijkbare technologieën om onze diensten te leveren en te verbeteren. We gebruiken Google AdSense om advertenties te tonen en Google Analytics om het publiek te meten. Externe partijen, waaronder Google, gebruiken cookies om advertenties te tonen op basis van je eerdere bezoeken aan deze en andere websites.",
+            "Dankzij advertentiecookies kunnen Google en zijn partners je advertenties tonen op basis van je bezoeken aan deze en andere sites. Je kunt gepersonaliseerde advertenties uitschakelen via Google Advertentie-instellingen (adssettings.google.com). Voor gebruikers in de EER, het VK en Zwitserland vragen we toestemming via een door Google gecertificeerd platform voor toestemmingsbeheer voordat niet-essentiële cookies worden geplaatst."
+          ]
+        },
+        {
+          "heading": "Hoe we je gegevens gebruiken",
+          "paragraphs": [
+            "We gebruiken de verzamelde gegevens om:"
+          ],
+          "list": [
+            "De Site en haar games te laten werken, te onderhouden en te verbeteren.",
+            "Relevante advertenties te tonen waardoor de games gratis blijven.",
+            "Je scores op te slaan en in het klassement te tonen.",
+            "Te antwoorden op berichten die via het contactformulier zijn verstuurd."
+          ]
+        },
+        {
+          "heading": "Je rechten",
+          "paragraphs": [
+            "Op grond van de AVG heb je het recht om je persoonsgegevens in te zien, te corrigeren of te laten verwijderen. Neem hiervoor contact op via hello@ragequit-arcade.com."
+          ]
+        },
+        {
+          "heading": "Privacy van kinderen",
+          "paragraphs": [
+            "De Site is bedoeld voor een algemeen publiek. We verzamelen niet bewust persoonsgegevens van kinderen jonger dan 13 jaar."
+          ]
+        }
+      ]
+    },
+    "terms": {
+      "label": "Juridisch",
+      "title": "Gebruiksvoorwaarden",
+      "updated": "Augustus 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Welkom bij Ragequit Arcade. Door ragequit-arcade.com te bezoeken of te gebruiken, ga je akkoord met deze gebruiksvoorwaarden."
+          ]
+        },
+        {
+          "heading": "Gebruik van de Site",
+          "paragraphs": [
+            "Ragequit Arcade biedt gratis browsergames voor persoonlijk, niet-commercieel vermaak."
+          ],
+          "list": [
+            "Je mag geen enkel deel van de Site kopiëren, verspreiden of wijzigen zonder toestemming.",
+            "Je mag geen geautomatiseerde systemen gebruiken om de Site te bezoeken op een manier die normaal menselijk gebruik overschrijdt.",
+            "Je mag niet proberen ongeoorloofd toegang te krijgen tot enig deel van de Site."
+          ]
+        },
+        {
+          "heading": "Intellectueel eigendom",
+          "paragraphs": [
+            "Alle inhoud op de Site is eigendom van Ragequit Arcade of zijn licentiegevers en is beschermd door wetten op het intellectueel eigendom."
+          ]
+        },
+        {
+          "heading": "Uitsluiting van garanties",
+          "paragraphs": [
+            "De Site wordt geleverd \"zoals hij is\", zonder enige garantie. We garanderen niet dat de Site ononderbroken of foutloos zal werken."
+          ]
+        },
+        {
+          "heading": "Beperking van aansprakelijkheid",
+          "paragraphs": [
+            "Voor zover wettelijk toegestaan is Ragequit Arcade niet aansprakelijk voor indirecte schade of gevolgschade die voortvloeit uit je gebruik van de Site."
+          ]
+        }
+      ]
+    },
+    "cookies": {
+      "label": "Juridisch",
+      "title": "Cookiebeleid",
+      "updated": "Augustus 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Dit cookiebeleid legt uit hoe Ragequit Arcade (beheerd door Valtech Services) cookies en vergelijkbare technologieën gebruikt op ragequit-arcade.com, waarom we ze gebruiken en welke keuzes je hebt. Door de Site te gebruiken ga je akkoord met het hier beschreven gebruik van cookies, binnen de onderstaande toestemmingsopties."
+          ]
+        },
+        {
+          "heading": "Wat zijn cookies?",
+          "paragraphs": [
+            "Cookies zijn kleine tekstbestanden die op je apparaat worden geplaatst wanneer je een website bezoekt. Ze worden veel gebruikt om websites te laten werken, je voorkeuren te onthouden en informatie te geven aan de eigenaars van de site. Vergelijkbare technologieën zoals lokale opslag en pixels kunnen voor dezelfde doeleinden worden gebruikt."
+          ]
+        },
+        {
+          "heading": "Soorten cookies die we gebruiken",
+          "paragraphs": [
+            "We gebruiken de volgende categorieën cookies:"
+          ],
+          "list": [
+            "Essentiële cookies: strikt noodzakelijk voor de werking van de Site, onder meer om je cookiekeuze en taal te onthouden en je ingelogd te houden. Deze kunnen niet worden uitgeschakeld.",
+            "Analytische cookies: helpen ons te begrijpen hoe bezoekers de Site gebruiken (bijvoorbeeld welke games het meest gespeeld worden), zodat we haar kunnen verbeteren. Ze worden alleen geplaatst als je niet-essentiële cookies accepteert.",
+            "Advertentiecookies: gebruikt door ons en onze advertentiepartners (waaronder Google en advertentienetwerken voor games) om relevante advertenties te tonen en hun prestaties te meten. Ze worden alleen geplaatst als je niet-essentiële cookies accepteert."
+          ]
+        },
+        {
+          "heading": "Cookies van derden",
+          "paragraphs": [
+            "Sommige cookies worden geplaatst door derden die ons diensten leveren, zoals analyse- en advertentienetwerken. Deze derden kunnen cookies gebruiken om informatie te verzamelen over je activiteit op verschillende websites. Wij hebben geen controle over deze cookies; raadpleeg het privacy- en cookiebeleid van de betreffende partij voor meer informatie.",
+            "Wanneer advertenties door Google worden getoond, kunnen Google en zijn partners dankzij advertentiecookies advertenties tonen op basis van je bezoeken aan deze en andere sites. Via Google Advertentie-instellingen (adssettings.google.com) kun je gepersonaliseerde advertenties bekijken en beheren."
+          ]
+        },
+        {
+          "heading": "Je toestemming en het beheren van cookies",
+          "paragraphs": [
+            "Bij je eerste bezoek kun je via een cookiebanner alle cookies accepteren of alleen de essentiële. Er worden geen analytische of advertentiecookies geplaatst voordat je toestemming geeft. Je kunt je keuze altijd wijzigen via de link \"Cookies beheren\" onderaan de pagina, die de banner opnieuw opent.",
+            "Je kunt cookies ook beheren of verwijderen via de instellingen van je browser. De meeste browsers laten je cookies weigeren of verwijderen; het blokkeren van essentiële cookies kan echter de werking van de Site beïnvloeden."
+          ]
+        },
+        {
+          "heading": "Wijzigingen in dit beleid",
+          "paragraphs": [
+            "We kunnen dit cookiebeleid af en toe bijwerken om veranderingen in technologie, wetgeving of onze werkwijze te weerspiegelen. De datum \"Laatst bijgewerkt\" bovenaan geeft aan wanneer het voor het laatst is herzien. We raden je aan deze pagina regelmatig te bekijken."
+          ]
+        },
+        {
+          "heading": "Contact",
+          "paragraphs": [
+            "Heb je vragen over ons gebruik van cookies? Mail ons op hello@ragequit-arcade.com."
+          ]
+        }
+      ]
+    }
+  },
+  "pl": {
+    "about": {
+      "label": "O nas",
+      "title": "O Ragequit Arcade",
+      "updated": "Sierpień 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Ragequit Arcade to najbardziej wciągające darmowe gry online, stworzone do samotnych rozgrywek lub szybkich meczów ze znajomymi. Każda gra uruchamia się od razu w przeglądarce: bez pobierania, bez rejestracji, bez wyskakujących okienek, bez zbędnych komplikacji. Nasze gry działają na komputerze, tablecie i telefonie, więc możesz grać w domu i w drodze.",
+            "Tworzymy miejsce, w którym świetna gra jest zawsze o jedno kliknięcie dalej."
+          ]
+        },
+        {
+          "heading": "Nasze gry",
+          "paragraphs": [
+            "Co tydzień dodajemy nowe gry. Wśród obecnych tytułów są dynamiczne, autorskie gry, takie jak Rage Hockey i STAQ. Każda gra w Ragequit Arcade jest darmowa, na zawsze."
+          ]
+        },
+        {
+          "heading": "Zacznij grać",
+          "paragraphs": [
+            "Nie wiesz, w co zagrać? Zacznij od strony głównej lub wybierz grę z jednej z naszych kategorii: Gry sportowe lub Gry zręcznościowe."
+          ]
+        },
+        {
+          "heading": "Kim jesteśmy",
+          "paragraphs": [
+            "Ragequit Arcade to niezależna platforma z grami. Nasz cel jest prosty: stworzyć najzabawniejszy i najuczciwszy salon gier w przeglądarce. Nowe gry co tydzień: obserwuj nas na TikToku i Instagramie, aby zobaczyć, co nadchodzi."
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "q": "Czym jest Ragequit Arcade?",
+          "a": "Darmową platformą z grami online. Bez pobierania i bez rejestracji."
+        },
+        {
+          "q": "Czy wszystkie gry są darmowe?",
+          "a": "Tak, każda gra jest całkowicie darmowa."
+        },
+        {
+          "q": "Jak często pojawiają się nowe gry?",
+          "a": "Co tydzień. Obserwuj nas na TikToku, aby nie przegapić nowości."
+        },
+        {
+          "q": "Czy potrzebuję konta?",
+          "a": "Do gry konto nie jest potrzebne. Załóż je, aby zapisywać wyniki i pojawić się w rankingu."
+        },
+        {
+          "q": "Czy działa na telefonie?",
+          "a": "Tak, wszystkie gry działają na telefonie, tablecie i komputerze."
+        }
+      ]
+    },
+    "contact": {
+      "label": "Pomoc",
+      "title": "Kontakt",
+      "updated": "Sierpień 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Masz pytanie, chcesz zgłosić błąd, zaproponować grę lub współpracę? Wypełnij poniższy formularz, a odpowiemy najszybciej, jak to możliwe.",
+            "Aby wysłać wiadomość, musisz być zalogowany."
+          ]
+        }
+      ]
+    },
+    "mentions": {
+      "label": "Informacje prawne",
+      "title": "Nota prawna",
+      "updated": "Sierpień 2026",
+      "sections": [
+        {
+          "heading": "Wydawca serwisu",
+          "paragraphs": [
+            "Laurent Valard (Valtech Services)",
+            "Jednoosobowa działalność gospodarcza (mikroprzedsiębiorstwo)",
+            "295 Allée des Micocouliers, 04220 Sainte-Tulle, Francja",
+            "SIREN: 994 273 118 — SIRET: 994 273 118 00012",
+            "Numer VAT UE: FR11994273118",
+            "RCS: 994 273 118 R.C.S. Manosque"
+          ]
+        },
+        {
+          "heading": "Hosting",
+          "paragraphs": [
+            "Vercel Inc., 340 Pine Street Suite 701, San Francisco, CA 94104, Stany Zjednoczone — https://vercel.com",
+            "Serwis jest publikowany za pośrednictwem platformy Vercel. Dane są przechowywane w Supabase (Europa — region Frankfurt)."
+          ]
+        },
+        {
+          "heading": "Własność intelektualna",
+          "paragraphs": [
+            "Wszystkie treści tego serwisu — teksty, obrazy, grafiki, logotypy i elementy marki — są chronione obowiązującym prawem. Wszelkie nieuprawnione powielanie, prezentowanie lub wykorzystywanie, w całości lub w części, jest zabronione."
+          ]
+        },
+        {
+          "heading": "Kontakt",
+          "paragraphs": [
+            "W sprawie pytań dotyczących serwisu skorzystaj ze strony kontaktowej lub napisz na hello@ragequit-arcade.com."
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "label": "Informacje prawne",
+      "title": "Polityka prywatności",
+      "updated": "Sierpień 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Niniejsza Polityka prywatności wyjaśnia, w jaki sposób Ragequit Arcade (\"my\") zbiera, wykorzystuje i chroni Twoje dane podczas korzystania z ragequit-arcade.com (\"Serwis\"). Korzystając z Serwisu, akceptujesz opisane tu zasady."
+          ]
+        },
+        {
+          "heading": "Jakie dane zbieramy",
+          "paragraphs": [
+            "Zbieramy ograniczone dane, aby prowadzić i ulepszać Serwis:"
+          ],
+          "list": [
+            "Dane o korzystaniu: odwiedzone strony, rozegrane gry, spędzony czas i ogólne wzorce interakcji.",
+            "Dane urządzenia i przeglądarki: typ przeglądarki, system operacyjny, rozmiar ekranu i przybliżona lokalizacja na podstawie adresu IP.",
+            "Dane konta: jeśli założysz konto, przechowujemy Twój adres e-mail, nazwę użytkownika i wyniki.",
+            "Dane zapisane lokalnie: postępy i ustawienia gier zapisane bezpośrednio w przeglądarce."
+          ]
+        },
+        {
+          "heading": "Pliki cookie i reklamy",
+          "paragraphs": [
+            "Używamy plików cookie i podobnych technologii, aby świadczyć i ulepszać nasze usługi. Korzystamy z Google AdSense do wyświetlania reklam i z Google Analytics do pomiaru oglądalności. Zewnętrzni dostawcy, w tym Google, używają plików cookie do wyświetlania reklam na podstawie Twoich wcześniejszych wizyt w tym i innych serwisach.",
+            "Reklamowe pliki cookie pozwalają Google i jego partnerom wyświetlać Ci reklamy na podstawie wizyt w tym i innych serwisach. Możesz zrezygnować z reklam spersonalizowanych w Ustawieniach reklam Google (adssettings.google.com). W przypadku użytkowników z EOG, Wielkiej Brytanii i Szwajcarii prosimy o zgodę za pośrednictwem certyfikowanej przez Google platformy do zarządzania zgodami, zanim zostaną zapisane jakiekolwiek nieniezbędne pliki cookie."
+          ]
+        },
+        {
+          "heading": "Jak wykorzystujemy dane",
+          "paragraphs": [
+            "Zebrane dane wykorzystujemy, aby:"
+          ],
+          "list": [
+            "Prowadzić, utrzymywać i ulepszać Serwis oraz gry.",
+            "Wyświetlać trafne reklamy, dzięki którym gry pozostają darmowe.",
+            "Zapisywać Twoje wyniki i pokazywać je w rankingu.",
+            "Odpowiadać na wiadomości wysłane przez formularz kontaktowy."
+          ]
+        },
+        {
+          "heading": "Twoje prawa",
+          "paragraphs": [
+            "Zgodnie z RODO masz prawo dostępu do swoich danych osobowych, ich sprostowania lub usunięcia. Aby skorzystać z tych praw, napisz na hello@ragequit-arcade.com."
+          ]
+        },
+        {
+          "heading": "Prywatność dzieci",
+          "paragraphs": [
+            "Serwis jest przeznaczony dla ogółu odbiorców. Nie zbieramy świadomie danych osobowych dzieci poniżej 13. roku życia."
+          ]
+        }
+      ]
+    },
+    "terms": {
+      "label": "Informacje prawne",
+      "title": "Regulamin",
+      "updated": "Sierpień 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Witaj w Ragequit Arcade. Korzystając z ragequit-arcade.com, zgadzasz się przestrzegać niniejszego Regulaminu."
+          ]
+        },
+        {
+          "heading": "Korzystanie z Serwisu",
+          "paragraphs": [
+            "Ragequit Arcade udostępnia darmowe gry przeglądarkowe do osobistej, niekomercyjnej rozrywki."
+          ],
+          "list": [
+            "Nie możesz kopiować, rozpowszechniać ani modyfikować żadnej części Serwisu bez zgody.",
+            "Nie możesz używać zautomatyzowanych systemów do korzystania z Serwisu w sposób wykraczający poza normalne użycie przez człowieka.",
+            "Nie możesz podejmować prób nieuprawnionego dostępu do jakiejkolwiek części Serwisu."
+          ]
+        },
+        {
+          "heading": "Własność intelektualna",
+          "paragraphs": [
+            "Wszystkie treści w Serwisie są własnością Ragequit Arcade lub jego licencjodawców i są chronione prawem własności intelektualnej."
+          ]
+        },
+        {
+          "heading": "Wyłączenie gwarancji",
+          "paragraphs": [
+            "Serwis jest udostępniany \"w stanie, w jakim jest\", bez jakichkolwiek gwarancji. Nie gwarantujemy, że Serwis będzie działał bez przerw i błędów."
+          ]
+        },
+        {
+          "heading": "Ograniczenie odpowiedzialności",
+          "paragraphs": [
+            "W najszerszym zakresie dozwolonym przez prawo Ragequit Arcade nie ponosi odpowiedzialności za szkody pośrednie lub wtórne wynikające z korzystania z Serwisu."
+          ]
+        }
+      ]
+    },
+    "cookies": {
+      "label": "Informacje prawne",
+      "title": "Polityka plików cookie",
+      "updated": "Sierpień 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Niniejsza Polityka plików cookie wyjaśnia, w jaki sposób Ragequit Arcade (prowadzony przez Valtech Services) używa plików cookie i podobnych technologii w serwisie ragequit-arcade.com, dlaczego to robimy i jakie masz możliwości wyboru. Korzystając z Serwisu, akceptujesz opisane tu użycie plików cookie, z zastrzeżeniem poniższych opcji zgody."
+          ]
+        },
+        {
+          "heading": "Czym są pliki cookie?",
+          "paragraphs": [
+            "Pliki cookie to małe pliki tekstowe zapisywane na Twoim urządzeniu podczas odwiedzania strony internetowej. Są powszechnie używane, aby strony działały, zapamiętywały Twoje ustawienia i dostarczały informacji ich właścicielom. W tych samych celach mogą być używane podobne technologie, takie jak pamięć lokalna i piksele."
+          ]
+        },
+        {
+          "heading": "Rodzaje używanych plików cookie",
+          "paragraphs": [
+            "Używamy następujących kategorii plików cookie:"
+          ],
+          "list": [
+            "Niezbędne pliki cookie: konieczne do działania Serwisu, m.in. do zapamiętania Twojego wyboru dotyczącego cookie, języka i utrzymania zalogowania. Nie można ich wyłączyć.",
+            "Analityczne pliki cookie: pomagają nam zrozumieć, jak odwiedzający korzystają z Serwisu (np. w które gry grają najczęściej), abyśmy mogli go ulepszać. Są zapisywane tylko po zaakceptowaniu nieniezbędnych plików cookie.",
+            "Reklamowe pliki cookie: używane przez nas i naszych partnerów reklamowych (w tym Google i sieci reklamowe dla gier) do wyświetlania trafnych reklam i mierzenia ich skuteczności. Są zapisywane tylko po zaakceptowaniu nieniezbędnych plików cookie."
+          ]
+        },
+        {
+          "heading": "Pliki cookie stron trzecich",
+          "paragraphs": [
+            "Niektóre pliki cookie zapisują podmioty trzecie świadczące nam usługi, takie jak dostawcy analityki i sieci reklamowe. Mogą one używać plików cookie do zbierania informacji o Twojej aktywności w różnych serwisach. Nie kontrolujemy tych plików cookie; więcej informacji znajdziesz w politykach prywatności i cookie tych podmiotów.",
+            "Gdy reklamy wyświetla Google, reklamowe pliki cookie pozwalają Google i jego partnerom pokazywać reklamy na podstawie Twoich wizyt w tym i innych serwisach. Reklamami spersonalizowanymi możesz zarządzać w Ustawieniach reklam Google (adssettings.google.com)."
+          ]
+        },
+        {
+          "heading": "Twoja zgoda i zarządzanie plikami cookie",
+          "paragraphs": [
+            "Przy pierwszej wizycie baner pozwala zaakceptować wszystkie pliki cookie lub tylko niezbędne. Analityczne i reklamowe pliki cookie nie są zapisywane bez Twojej zgody. Swój wybór możesz zmienić w dowolnym momencie za pomocą linku \"Zarządzaj cookies\" w stopce, który ponownie otwiera baner.",
+            "Możesz też kontrolować lub usuwać pliki cookie w ustawieniach przeglądarki. Większość przeglądarek pozwala odrzucać lub usuwać pliki cookie; zablokowanie niezbędnych plików cookie może jednak wpłynąć na działanie Serwisu."
+          ]
+        },
+        {
+          "heading": "Zmiany niniejszej polityki",
+          "paragraphs": [
+            "Możemy okresowo aktualizować tę Politykę, aby uwzględnić zmiany technologiczne, prawne lub w naszych praktykach. Data \"Ostatniej aktualizacji\" u góry wskazuje, kiedy ją ostatnio zmieniono. Zachęcamy do regularnego sprawdzania tej strony."
+          ]
+        },
+        {
+          "heading": "Kontakt",
+          "paragraphs": [
+            "Jeśli masz pytania dotyczące plików cookie, napisz na hello@ragequit-arcade.com."
+          ]
+        }
+      ]
+    }
+  },
+  "tr": {
+    "about": {
+      "label": "Hakkımızda",
+      "title": "Ragequit Arcade Hakkında",
+      "updated": "Ağustos 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Ragequit Arcade, tek başına oynamak ya da arkadaşlarınla hızlı maçlar yapmak için tasarlanmış en bağımlılık yapan ücretsiz çevrim içi oyunları sunar. Her oyun tarayıcında anında açılır: indirme yok, kayıt yok, açılır pencere yok, karmaşa yok. Oyunlarımız bilgisayar, tablet ve telefonda çalışır; evde de yolda da oynayabilirsin.",
+            "Harika bir oyunun her zaman bir tık uzakta olduğu bir yer inşa ediyoruz."
+          ]
+        },
+        {
+          "heading": "Oyunlarımız",
+          "paragraphs": [
+            "Her hafta yeni oyunlar ekliyoruz. Mevcut oyunlarımız arasında Rage Hockey ve STAQ gibi hızlı tempolu özgün oyunlar var. Ragequit Arcade'deki her oyun sonsuza dek ücretsizdir."
+          ]
+        },
+        {
+          "heading": "Oynamaya başla",
+          "paragraphs": [
+            "Ne oynayacağından emin değil misin? Ana sayfadan keşfetmeye başla ya da kategorilerimizden birinden bir oyun seç: Spor Oyunları veya Arcade Oyunları."
+          ]
+        },
+        {
+          "heading": "Biz kimiz",
+          "paragraphs": [
+            "Ragequit Arcade bağımsız bir oyun platformudur. Amacımız basit: internetteki en eğlenceli ve en dürüst tarayıcı arcade'ini yaratmak. Her hafta yeni oyunlar geliyor: sırada ne olduğunu görmek için bizi TikTok ve Instagram'da takip et."
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "q": "Ragequit Arcade nedir?",
+          "a": "Ücretsiz bir çevrim içi oyun platformu. İndirme ya da kayıt gerekmez."
+        },
+        {
+          "q": "Tüm oyunlar ücretsiz mi?",
+          "a": "Evet, her oyun tamamen ücretsizdir."
+        },
+        {
+          "q": "Yeni oyunlar ne sıklıkla ekleniyor?",
+          "a": "Her hafta. Haberdar olmak için bizi TikTok'ta takip et."
+        },
+        {
+          "q": "Hesap gerekli mi?",
+          "a": "Oynamak için hesap gerekmez. Skorlarını kaydetmek ve sıralamada görünmek için bir hesap oluşturabilirsin."
+        },
+        {
+          "q": "Mobilde çalışıyor mu?",
+          "a": "Evet, tüm oyunlar telefon, tablet ve bilgisayarda çalışır."
+        }
+      ]
+    },
+    "contact": {
+      "label": "Yardım",
+      "title": "Bize Ulaşın",
+      "updated": "Ağustos 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Bir sorun, bildirmek istediğin bir hata, bir oyun önerin ya da iş birliği fikrin mi var? Aşağıdaki formu doldur, en kısa sürede sana dönelim.",
+            "Mesaj göndermek için giriş yapmış olman gerekir."
+          ]
+        }
+      ]
+    },
+    "mentions": {
+      "label": "Yasal",
+      "title": "Yasal Bildirim",
+      "updated": "Ağustos 2026",
+      "sections": [
+        {
+          "heading": "Site yayıncısı",
+          "paragraphs": [
+            "Laurent Valard (Valtech Services)",
+            "Şahıs işletmesi (mikro işletme)",
+            "295 Allée des Micocouliers, 04220 Sainte-Tulle, Fransa",
+            "SIREN: 994 273 118 — SIRET: 994 273 118 00012",
+            "AB KDV numarası: FR11994273118",
+            "RCS: 994 273 118 R.C.S. Manosque"
+          ]
+        },
+        {
+          "heading": "Barındırma",
+          "paragraphs": [
+            "Vercel Inc., 340 Pine Street Suite 701, San Francisco, CA 94104, Amerika Birleşik Devletleri — https://vercel.com",
+            "Site Vercel platformu üzerinden yayınlanır. Veriler Supabase'de (Avrupa — Frankfurt bölgesi) barındırılır."
+          ]
+        },
+        {
+          "heading": "Fikri mülkiyet",
+          "paragraphs": [
+            "Bu sitedeki tüm içerikler — metinler, görseller, grafikler, logolar ve marka öğeleri — yürürlükteki yasalarla korunmaktadır. Tamamen veya kısmen izinsiz çoğaltma, gösterme veya kullanma yasaktır."
+          ]
+        },
+        {
+          "heading": "İletişim",
+          "paragraphs": [
+            "Bu siteyle ilgili her türlü soru için iletişim sayfamızı kullanabilir veya hello@ragequit-arcade.com adresine yazabilirsin."
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "label": "Yasal",
+      "title": "Gizlilik Politikası",
+      "updated": "Ağustos 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Bu Gizlilik Politikası, ragequit-arcade.com'u (\"Site\") ziyaret ettiğinde Ragequit Arcade'in (\"biz\") bilgilerini nasıl topladığını, kullandığını ve koruduğunu açıklar. Siteyi kullanarak burada açıklanan uygulamaları kabul etmiş olursun."
+          ]
+        },
+        {
+          "heading": "Topladığımız bilgiler",
+          "paragraphs": [
+            "Siteyi işletmek ve geliştirmek için sınırlı bilgi topluyoruz:"
+          ],
+          "list": [
+            "Kullanım verileri: ziyaret edilen sayfalar, oynanan oyunlar, geçirilen süre ve genel etkileşim biçimleri.",
+            "Cihaz ve tarayıcı verileri: tarayıcı türü, işletim sistemi, ekran boyutu ve IP adresine dayalı yaklaşık konum.",
+            "Hesap verileri: hesap oluşturursan e-posta adresini, kullanıcı adını ve skorlarını saklarız.",
+            "Yerel depolama verileri: doğrudan tarayıcına kaydedilen oyun ilerlemesi ve tercihler."
+          ]
+        },
+        {
+          "heading": "Çerezler ve reklamlar",
+          "paragraphs": [
+            "Hizmetlerimizi sunmak ve geliştirmek için çerezler ve benzeri teknolojiler kullanıyoruz. Reklam göstermek için Google AdSense'i, kitle ölçümü için Google Analytics'i kullanıyoruz. Google dahil üçüncü taraf sağlayıcılar, bu ve diğer sitelere yaptığın önceki ziyaretlere göre reklam göstermek için çerez kullanır.",
+            "Reklam çerezleri, Google'ın ve iş ortaklarının bu ve diğer sitelere yaptığın ziyaretlere göre sana reklam göstermesini sağlar. Kişiselleştirilmiş reklamları Google Reklam Ayarları'ndan (adssettings.google.com) devre dışı bırakabilirsin. AEA, Birleşik Krallık ve İsviçre'deki kullanıcılar için, zorunlu olmayan çerezler yerleştirilmeden önce Google sertifikalı bir onay yönetim platformu aracılığıyla onay istiyoruz."
+          ]
+        },
+        {
+          "heading": "Bilgilerini nasıl kullanıyoruz",
+          "paragraphs": [
+            "Toplanan bilgileri şu amaçlarla kullanırız:"
+          ],
+          "list": [
+            "Siteyi ve oyunlarını işletmek, sürdürmek ve geliştirmek.",
+            "Oyunların ücretsiz kalmasını sağlayan ilgili reklamları göstermek.",
+            "Skorlarını kaydetmek ve sıralamada göstermek.",
+            "İletişim formu üzerinden gönderilen mesajlara yanıt vermek."
+          ]
+        },
+        {
+          "heading": "Hakların",
+          "paragraphs": [
+            "GDPR kapsamında kişisel verilerine erişme, bunları düzeltme veya silme hakkına sahipsin. Bu hakları kullanmak için hello@ragequit-arcade.com adresine yaz."
+          ]
+        },
+        {
+          "heading": "Çocukların gizliliği",
+          "paragraphs": [
+            "Site genel bir kitleye yöneliktir. 13 yaşından küçük çocuklardan bilerek kişisel bilgi toplamıyoruz."
+          ]
+        }
+      ]
+    },
+    "terms": {
+      "label": "Yasal",
+      "title": "Kullanım Koşulları",
+      "updated": "Ağustos 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Ragequit Arcade'e hoş geldin. ragequit-arcade.com'a erişerek veya onu kullanarak bu Kullanım Koşulları'na bağlı olmayı kabul edersin."
+          ]
+        },
+        {
+          "heading": "Sitenin kullanımı",
+          "paragraphs": [
+            "Ragequit Arcade, kişisel ve ticari olmayan eğlence için ücretsiz tarayıcı oyunları sunar."
+          ],
+          "list": [
+            "Sitenin herhangi bir bölümünü izinsiz kopyalayamaz, dağıtamaz veya değiştiremezsin.",
+            "Siteye normal insan kullanımını aşacak şekilde otomatik sistemlerle erişemezsin.",
+            "Sitenin herhangi bir bölümüne yetkisiz erişim sağlamaya çalışamazsın."
+          ]
+        },
+        {
+          "heading": "Fikri mülkiyet",
+          "paragraphs": [
+            "Sitedeki tüm içerikler Ragequit Arcade'e veya lisans verenlerine aittir ve fikri mülkiyet yasalarıyla korunur."
+          ]
+        },
+        {
+          "heading": "Garanti reddi",
+          "paragraphs": [
+            "Site, hiçbir garanti verilmeksizin \"olduğu gibi\" sunulur. Sitenin kesintisiz veya hatasız çalışacağını garanti etmiyoruz."
+          ]
+        },
+        {
+          "heading": "Sorumluluğun sınırlandırılması",
+          "paragraphs": [
+            "Yasaların izin verdiği en geniş ölçüde Ragequit Arcade, Siteyi kullanmandan doğan dolaylı veya sonuç olarak ortaya çıkan zararlardan sorumlu tutulamaz."
+          ]
+        }
+      ]
+    },
+    "cookies": {
+      "label": "Yasal",
+      "title": "Çerez Politikası",
+      "updated": "Ağustos 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Bu Çerez Politikası, Ragequit Arcade'in (Valtech Services tarafından işletilir) ragequit-arcade.com'da çerezleri ve benzeri teknolojileri nasıl kullandığını, neden kullandığımızı ve hangi seçeneklere sahip olduğunu açıklar. Siteyi kullanarak, aşağıdaki onay seçeneklerine bağlı olarak burada açıklanan çerez kullanımını kabul edersin."
+          ]
+        },
+        {
+          "heading": "Çerez nedir?",
+          "paragraphs": [
+            "Çerezler, bir web sitesini ziyaret ettiğinde cihazına yerleştirilen küçük metin dosyalarıdır. Sitelerin çalışmasını sağlamak, tercihlerini hatırlamak ve site sahiplerine bilgi sağlamak için yaygın olarak kullanılırlar. Aynı amaçlarla yerel depolama ve pikseller gibi benzer teknolojiler de kullanılabilir."
+          ]
+        },
+        {
+          "heading": "Kullandığımız çerez türleri",
+          "paragraphs": [
+            "Aşağıdaki çerez kategorilerini kullanıyoruz:"
+          ],
+          "list": [
+            "Zorunlu çerezler: Sitenin çalışması için kesinlikle gereklidir; çerez tercihini, dilini hatırlamak ve oturumunu açık tutmak gibi. Devre dışı bırakılamazlar.",
+            "Analiz çerezleri: ziyaretçilerin Siteyi nasıl kullandığını (örneğin en çok hangi oyunların oynandığını) anlamamıza ve Siteyi geliştirmemize yardımcı olur. Yalnızca zorunlu olmayan çerezleri kabul edersen yerleştirilir.",
+            "Reklam çerezleri: biz ve reklam ortaklarımız (Google ve oyun reklam ağları dahil olabilir) tarafından ilgili reklamları göstermek ve performanslarını ölçmek için kullanılır. Yalnızca zorunlu olmayan çerezleri kabul edersen yerleştirilir."
+          ]
+        },
+        {
+          "heading": "Üçüncü taraf çerezleri",
+          "paragraphs": [
+            "Bazı çerezler, bize hizmet sunan analiz sağlayıcıları ve reklam ağları gibi üçüncü taraflarca yerleştirilir. Bu üçüncü taraflar, farklı sitelerdeki etkinliğin hakkında bilgi toplamak için çerez kullanabilir. Bu çerezleri kontrol etmiyoruz; daha fazla bilgi için ilgili tarafın gizlilik ve çerez politikalarına bakabilirsin.",
+            "Reklamlar Google tarafından sunulduğunda, reklam çerezleri Google'ın ve iş ortaklarının bu ve diğer sitelere yaptığın ziyaretlere göre reklam göstermesini sağlar. Kişiselleştirilmiş reklamları Google Reklam Ayarları'ndan (adssettings.google.com) inceleyip yönetebilirsin."
+          ]
+        },
+        {
+          "heading": "Onayın ve çerezleri yönetme",
+          "paragraphs": [
+            "Siteyi ilk ziyaretinde bir çerez bandı, tüm çerezleri veya yalnızca zorunlu olanları kabul etmeni sağlar. Onay vermeden hiçbir analiz veya reklam çerezi yerleştirilmez. Seçimini istediğin zaman alt bilgideki \"Çerezleri yönet\" bağlantısıyla değiştirebilirsin; bu bağlantı bandı yeniden açar.",
+            "Çerezleri tarayıcı ayarlarından da kontrol edebilir veya silebilirsin. Çoğu tarayıcı çerezleri reddetmene veya kaldırmana izin verir; ancak zorunlu çerezleri engellemek Sitenin çalışmasını etkileyebilir."
+          ]
+        },
+        {
+          "heading": "Bu politikadaki değişiklikler",
+          "paragraphs": [
+            "Bu Çerez Politikası'nı teknolojideki, yasalardaki veya uygulamalarımızdaki değişiklikleri yansıtmak için zaman zaman güncelleyebiliriz. Üstteki \"Son güncelleme\" tarihi en son ne zaman değiştirildiğini gösterir. Bu sayfayı düzenli olarak incelemeni öneririz."
+          ]
+        },
+        {
+          "heading": "İletişim",
+          "paragraphs": [
+            "Çerez kullanımımızla ilgili soruların için hello@ragequit-arcade.com adresine yazabilirsin."
+          ]
+        }
+      ]
+    }
+  },
+  "ru": {
+    "about": {
+      "label": "О нас",
+      "title": "О Ragequit Arcade",
+      "updated": "Август 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Ragequit Arcade — это самые затягивающие бесплатные онлайн-игры для одиночных забегов и быстрых матчей с друзьями. Каждая игра запускается сразу в браузере: без загрузок, без регистрации, без всплывающих окон и лишних сложностей. Наши игры работают на компьютере, планшете и телефоне, так что играть можно дома и в дороге.",
+            "Мы создаём место, где отличная игра всегда в одном клике."
+          ]
+        },
+        {
+          "heading": "Наши игры",
+          "paragraphs": [
+            "Мы добавляем новые игры каждую неделю. Среди текущих — динамичные оригинальные игры, такие как Rage Hockey и STAQ. Каждая игра на Ragequit Arcade бесплатна навсегда."
+          ]
+        },
+        {
+          "heading": "Начните играть",
+          "paragraphs": [
+            "Не знаете, во что сыграть? Начните с главной страницы или выберите игру в одной из наших категорий: Спортивные игры или Аркадные игры."
+          ]
+        },
+        {
+          "heading": "Кто мы",
+          "paragraphs": [
+            "Ragequit Arcade — независимая игровая платформа. Наша цель проста: создать самую весёлую и честную браузерную аркаду в интернете. Новые игры каждую неделю — подписывайтесь на нас в TikTok и Instagram, чтобы узнавать о новинках."
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "q": "Что такое Ragequit Arcade?",
+          "a": "Бесплатная платформа онлайн-игр. Без загрузки и без регистрации."
+        },
+        {
+          "q": "Все игры бесплатные?",
+          "a": "Да, каждая игра полностью бесплатна."
+        },
+        {
+          "q": "Как часто появляются новые игры?",
+          "a": "Каждую неделю. Подпишитесь на нас в TikTok, чтобы не пропустить."
+        },
+        {
+          "q": "Нужен ли аккаунт?",
+          "a": "Для игры аккаунт не нужен. Создайте его, чтобы сохранять результаты и попасть в таблицу лидеров."
+        },
+        {
+          "q": "Работает на телефоне?",
+          "a": "Да, все игры работают на телефоне, планшете и компьютере."
+        }
+      ]
+    },
+    "contact": {
+      "label": "Помощь",
+      "title": "Связаться с нами",
+      "updated": "Август 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Есть вопрос, ошибка, идея игры или предложение о сотрудничестве? Заполните форму ниже, и мы ответим как можно скорее.",
+            "Чтобы отправить сообщение, нужно войти в аккаунт."
+          ]
+        }
+      ]
+    },
+    "mentions": {
+      "label": "Правовая информация",
+      "title": "Правовая информация",
+      "updated": "Август 2026",
+      "sections": [
+        {
+          "heading": "Издатель сайта",
+          "paragraphs": [
+            "Laurent Valard (Valtech Services)",
+            "Индивидуальный предприниматель (микропредприятие)",
+            "295 Allée des Micocouliers, 04220 Sainte-Tulle, Франция",
+            "SIREN: 994 273 118 — SIRET: 994 273 118 00012",
+            "Номер НДС ЕС: FR11994273118",
+            "RCS: 994 273 118 R.C.S. Manosque"
+          ]
+        },
+        {
+          "heading": "Хостинг",
+          "paragraphs": [
+            "Vercel Inc., 340 Pine Street Suite 701, San Francisco, CA 94104, США — https://vercel.com",
+            "Сайт размещается через платформу Vercel. Данные хранятся в Supabase (Европа — регион Франкфурт)."
+          ]
+        },
+        {
+          "heading": "Интеллектуальная собственность",
+          "paragraphs": [
+            "Всё содержимое сайта — тексты, изображения, графика, логотипы и элементы бренда — защищено применимым законодательством. Любое несанкционированное воспроизведение, демонстрация или использование, полностью или частично, запрещено."
+          ]
+        },
+        {
+          "heading": "Контакты",
+          "paragraphs": [
+            "По любым вопросам о сайте используйте страницу контактов или пишите на hello@ragequit-arcade.com."
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "label": "Правовая информация",
+      "title": "Политика конфиденциальности",
+      "updated": "Август 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Настоящая Политика конфиденциальности объясняет, как Ragequit Arcade («мы») собирает, использует и защищает ваши данные при посещении ragequit-arcade.com («Сайт»). Используя Сайт, вы соглашаетесь с описанными здесь правилами."
+          ]
+        },
+        {
+          "heading": "Какие данные мы собираем",
+          "paragraphs": [
+            "Мы собираем ограниченный объём данных для работы и улучшения Сайта:"
+          ],
+          "list": [
+            "Данные об использовании: посещённые страницы, сыгранные игры, проведённое время и общие модели взаимодействия.",
+            "Данные устройства и браузера: тип браузера, операционная система, размер экрана и примерное местоположение по IP-адресу.",
+            "Данные аккаунта: если вы создаёте аккаунт, мы храним ваш email, имя пользователя и результаты.",
+            "Данные локального хранилища: прогресс и настройки игр, сохранённые прямо в вашем браузере."
+          ]
+        },
+        {
+          "heading": "Cookie и реклама",
+          "paragraphs": [
+            "Мы используем файлы cookie и аналогичные технологии для работы и улучшения наших сервисов. Мы используем Google AdSense для показа рекламы и Google Analytics для измерения аудитории. Сторонние поставщики, включая Google, используют cookie для показа рекламы на основе ваших предыдущих посещений этого и других сайтов.",
+            "Рекламные cookie позволяют Google и его партнёрам показывать вам рекламу на основе посещений этого и других сайтов. Отказаться от персонализированной рекламы можно в Настройках рекламы Google (adssettings.google.com). Для пользователей из ЕЭЗ, Великобритании и Швейцарии мы запрашиваем согласие через сертифицированную Google платформу управления согласием до установки любых необязательных cookie."
+          ]
+        },
+        {
+          "heading": "Как мы используем данные",
+          "paragraphs": [
+            "Мы используем собранные данные, чтобы:"
+          ],
+          "list": [
+            "Обеспечивать работу, поддержку и улучшение Сайта и игр.",
+            "Показывать релевантную рекламу, благодаря которой игры остаются бесплатными.",
+            "Сохранять ваши результаты и показывать их в таблице лидеров.",
+            "Отвечать на сообщения, отправленные через форму обратной связи."
+          ]
+        },
+        {
+          "heading": "Ваши права",
+          "paragraphs": [
+            "В соответствии с GDPR вы имеете право на доступ к своим персональным данным, их исправление или удаление. Для этого напишите на hello@ragequit-arcade.com."
+          ]
+        },
+        {
+          "heading": "Конфиденциальность детей",
+          "paragraphs": [
+            "Сайт предназначен для широкой аудитории. Мы сознательно не собираем персональные данные детей младше 13 лет."
+          ]
+        }
+      ]
+    },
+    "terms": {
+      "label": "Правовая информация",
+      "title": "Условия использования",
+      "updated": "Август 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Добро пожаловать в Ragequit Arcade. Заходя на ragequit-arcade.com или используя его, вы соглашаетесь соблюдать настоящие Условия использования."
+          ]
+        },
+        {
+          "heading": "Использование Сайта",
+          "paragraphs": [
+            "Ragequit Arcade предлагает бесплатные браузерные игры для личного некоммерческого развлечения."
+          ],
+          "list": [
+            "Запрещено копировать, распространять или изменять любую часть Сайта без разрешения.",
+            "Запрещено использовать автоматизированные системы для доступа к Сайту сверх обычного человеческого использования.",
+            "Запрещено пытаться получить несанкционированный доступ к любой части Сайта."
+          ]
+        },
+        {
+          "heading": "Интеллектуальная собственность",
+          "paragraphs": [
+            "Всё содержимое Сайта принадлежит Ragequit Arcade или его лицензиарам и защищено законами об интеллектуальной собственности."
+          ]
+        },
+        {
+          "heading": "Отказ от гарантий",
+          "paragraphs": [
+            "Сайт предоставляется «как есть», без каких-либо гарантий. Мы не гарантируем бесперебойную и безошибочную работу Сайта."
+          ]
+        },
+        {
+          "heading": "Ограничение ответственности",
+          "paragraphs": [
+            "В максимальной степени, допустимой законом, Ragequit Arcade не несёт ответственности за косвенный или последующий ущерб, связанный с использованием Сайта."
+          ]
+        }
+      ]
+    },
+    "cookies": {
+      "label": "Правовая информация",
+      "title": "Политика использования cookie",
+      "updated": "Август 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "Настоящая Политика объясняет, как Ragequit Arcade (управляется Valtech Services) использует файлы cookie и аналогичные технологии на ragequit-arcade.com, зачем мы это делаем и какой у вас есть выбор. Используя Сайт, вы соглашаетесь с описанным здесь использованием cookie с учётом приведённых ниже вариантов согласия."
+          ]
+        },
+        {
+          "heading": "Что такое cookie?",
+          "paragraphs": [
+            "Cookie — это небольшие текстовые файлы, которые сохраняются на вашем устройстве при посещении сайта. Они широко используются для работы сайтов, запоминания ваших настроек и предоставления информации владельцам сайтов. Для тех же целей могут использоваться аналогичные технологии, например локальное хранилище и пиксели."
+          ]
+        },
+        {
+          "heading": "Какие cookie мы используем",
+          "paragraphs": [
+            "Мы используем следующие категории cookie:"
+          ],
+          "list": [
+            "Необходимые cookie: строго необходимы для работы Сайта, например чтобы запомнить ваш выбор по cookie, язык и сохранить вход в аккаунт. Их нельзя отключить.",
+            "Аналитические cookie: помогают понять, как посетители используют Сайт (например, в какие игры играют чаще всего), чтобы улучшать его. Устанавливаются только если вы принимаете необязательные cookie.",
+            "Рекламные cookie: используются нами и нашими рекламными партнёрами (включая Google и игровые рекламные сети) для показа релевантной рекламы и оценки её эффективности. Устанавливаются только если вы принимаете необязательные cookie."
+          ]
+        },
+        {
+          "heading": "Cookie третьих сторон",
+          "paragraphs": [
+            "Некоторые cookie устанавливают третьи стороны, предоставляющие нам услуги, например поставщики аналитики и рекламные сети. Они могут использовать cookie для сбора информации о вашей активности на разных сайтах. Мы не контролируем эти cookie; подробнее см. политики конфиденциальности и cookie соответствующих сторон.",
+            "Когда рекламу показывает Google, рекламные cookie позволяют Google и его партнёрам показывать объявления на основе ваших посещений этого и других сайтов. Управлять персонализированной рекламой можно в Настройках рекламы Google (adssettings.google.com)."
+          ]
+        },
+        {
+          "heading": "Ваше согласие и управление cookie",
+          "paragraphs": [
+            "При первом посещении баннер позволяет принять все cookie или только необходимые. Аналитические и рекламные cookie не устанавливаются без вашего согласия. Вы можете изменить выбор в любой момент по ссылке «Настройки cookie» внизу страницы — она снова откроет баннер.",
+            "Вы также можете управлять cookie или удалять их в настройках браузера. Большинство браузеров позволяют отклонять или удалять cookie, однако блокировка необходимых cookie может повлиять на работу Сайта."
+          ]
+        },
+        {
+          "heading": "Изменения политики",
+          "paragraphs": [
+            "Мы можем время от времени обновлять эту Политику с учётом изменений в технологиях, законодательстве или нашей практике. Дата «Последнее обновление» вверху показывает, когда она менялась в последний раз. Рекомендуем периодически просматривать эту страницу."
+          ]
+        },
+        {
+          "heading": "Контакты",
+          "paragraphs": [
+            "Если у вас есть вопросы об использовании cookie, напишите нам на hello@ragequit-arcade.com."
+          ]
+        }
+      ]
+    }
+  },
+  "ar": {
+    "about": {
+      "label": "من نحن",
+      "title": "عن Ragequit Arcade",
+      "updated": "أغسطس 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "يقدّم لك Ragequit Arcade أكثر الألعاب المجانية عبر الإنترنت إدمانًا، مصمّمة للعب الفردي أو للمباريات السريعة مع الأصدقاء. تعمل كل لعبة فورًا في متصفحك: بلا تنزيل، بلا تسجيل، بلا نوافذ منبثقة، وبلا تعقيد. ألعابنا تعمل على الكمبيوتر والجهاز اللوحي والهاتف، لتلعب في المنزل أو أثناء التنقل.",
+            "نحن نبني مكانًا تكون فيه لعبة رائعة دائمًا على بُعد نقرة واحدة."
+          ]
+        },
+        {
+          "heading": "ألعابنا",
+          "paragraphs": [
+            "نضيف ألعابًا جديدة كل أسبوع. تشمل عناويننا الحالية ألعابًا أصلية سريعة الإيقاع مثل Rage Hockey وSTAQ. كل لعبة على Ragequit Arcade مجانية إلى الأبد."
+          ]
+        },
+        {
+          "heading": "ابدأ اللعب",
+          "paragraphs": [
+            "لا تعرف ماذا تلعب؟ ابدأ الاستكشاف من الصفحة الرئيسية أو اختر لعبة من إحدى فئاتنا: الألعاب الرياضية أو ألعاب الأركيد."
+          ]
+        },
+        {
+          "heading": "من نحن",
+          "paragraphs": [
+            "Ragequit Arcade منصة ألعاب مستقلة. هدفنا بسيط: إنشاء أمتع وأصدق صالة ألعاب للمتصفح على الويب. ألعاب جديدة كل أسبوع، تابعنا على TikTok وInstagram لتعرف ما هو قادم."
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "q": "ما هو Ragequit Arcade؟",
+          "a": "منصة ألعاب مجانية عبر الإنترنت. لا حاجة إلى تنزيل أو تسجيل."
+        },
+        {
+          "q": "هل جميع الألعاب مجانية؟",
+          "a": "نعم، كل لعبة مجانية بالكامل."
+        },
+        {
+          "q": "كم مرة تُضاف ألعاب جديدة؟",
+          "a": "كل أسبوع. تابعنا على TikTok لتصلك التنبيهات."
+        },
+        {
+          "q": "هل أحتاج إلى حساب؟",
+          "a": "لا تحتاج إلى حساب للعب. أنشئ حسابًا لحفظ نتائجك والظهور في لوحة المتصدرين."
+        },
+        {
+          "q": "هل تعمل على الهاتف؟",
+          "a": "نعم، جميع الألعاب تعمل على الهاتف والجهاز اللوحي والكمبيوتر."
+        }
+      ]
+    },
+    "contact": {
+      "label": "مساعدة",
+      "title": "اتصل بنا",
+      "updated": "أغسطس 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "لديك سؤال أو خطأ تريد الإبلاغ عنه أو اقتراح لعبة أو فكرة شراكة؟ املأ النموذج أدناه وسنرد عليك في أقرب وقت ممكن.",
+            "يجب تسجيل الدخول لإرسال رسالة."
+          ]
+        }
+      ]
+    },
+    "mentions": {
+      "label": "قانوني",
+      "title": "إشعار قانوني",
+      "updated": "أغسطس 2026",
+      "sections": [
+        {
+          "heading": "ناشر الموقع",
+          "paragraphs": [
+            "Laurent Valard (Valtech Services)",
+            "مؤسسة فردية (مؤسسة صغيرة جدًا)",
+            "295 Allée des Micocouliers, 04220 Sainte-Tulle، فرنسا",
+            "SIREN: 994 273 118 — SIRET: 994 273 118 00012",
+            "رقم ضريبة القيمة المضافة الأوروبي: FR11994273118",
+            "RCS: 994 273 118 R.C.S. Manosque"
+          ]
+        },
+        {
+          "heading": "الاستضافة",
+          "paragraphs": [
+            "Vercel Inc., 340 Pine Street Suite 701, San Francisco, CA 94104، الولايات المتحدة — https://vercel.com",
+            "يُنشر الموقع عبر منصة Vercel. تُستضاف البيانات لدى Supabase (أوروبا — منطقة فرانكفورت)."
+          ]
+        },
+        {
+          "heading": "الملكية الفكرية",
+          "paragraphs": [
+            "جميع محتويات هذا الموقع — النصوص والصور والرسومات والشعارات وعناصر العلامة التجارية — محمية بموجب القانون المعمول به. يُحظر أي نسخ أو عرض أو استغلال غير مصرح به، كليًا أو جزئيًا."
+          ]
+        },
+        {
+          "heading": "التواصل",
+          "paragraphs": [
+            "لأي سؤال يتعلق بهذا الموقع، استخدم صفحة الاتصال أو راسلنا على hello@ragequit-arcade.com."
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "label": "قانوني",
+      "title": "سياسة الخصوصية",
+      "updated": "أغسطس 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "توضّح سياسة الخصوصية هذه كيف يجمع Ragequit Arcade (\"نحن\") معلوماتك ويستخدمها ويحميها عند زيارتك ragequit-arcade.com (\"الموقع\"). باستخدامك الموقع، فإنك توافق على الممارسات الموضحة هنا."
+          ]
+        },
+        {
+          "heading": "المعلومات التي نجمعها",
+          "paragraphs": [
+            "نجمع معلومات محدودة لتشغيل الموقع وتحسينه:"
+          ],
+          "list": [
+            "بيانات الاستخدام: الصفحات التي تمت زيارتها والألعاب التي لُعبت والوقت المستغرق وأنماط التفاعل العامة.",
+            "بيانات الجهاز والمتصفح: نوع المتصفح ونظام التشغيل وحجم الشاشة والموقع التقريبي استنادًا إلى عنوان IP.",
+            "بيانات الحساب: إذا أنشأت حسابًا، نحفظ بريدك الإلكتروني واسم المستخدم ونتائجك.",
+            "بيانات التخزين المحلي: تقدّم اللعب والتفضيلات المحفوظة مباشرة في متصفحك."
+          ]
+        },
+        {
+          "heading": "ملفات تعريف الارتباط والإعلانات",
+          "paragraphs": [
+            "نستخدم ملفات تعريف الارتباط والتقنيات المشابهة لتقديم خدماتنا وتحسينها. نستخدم Google AdSense لعرض الإعلانات وGoogle Analytics لقياس الجمهور. يستخدم مزوّدون خارجيون، ومنهم Google، ملفات تعريف الارتباط لعرض إعلانات بناءً على زياراتك السابقة لهذا الموقع ومواقع أخرى.",
+            "تتيح ملفات تعريف الارتباط الإعلانية لـ Google وشركائه عرض إعلانات لك بناءً على زياراتك لهذا الموقع ومواقع أخرى. يمكنك إلغاء الإعلانات المخصصة من إعدادات إعلانات Google (adssettings.google.com). بالنسبة للمستخدمين في المنطقة الاقتصادية الأوروبية والمملكة المتحدة وسويسرا، نطلب الموافقة عبر منصة إدارة موافقة معتمدة من Google قبل وضع أي ملفات تعريف ارتباط غير أساسية."
+          ]
+        },
+        {
+          "heading": "كيف نستخدم معلوماتك",
+          "paragraphs": [
+            "نستخدم المعلومات المجمّعة من أجل:"
+          ],
+          "list": [
+            "تشغيل الموقع وألعابه وصيانتها وتحسينها.",
+            "عرض إعلانات ملائمة تُبقي الألعاب مجانية.",
+            "حفظ نتائجك وعرضها في لوحة المتصدرين.",
+            "الرد على الرسائل المرسلة عبر نموذج الاتصال."
+          ]
+        },
+        {
+          "heading": "حقوقك",
+          "paragraphs": [
+            "بموجب اللائحة العامة لحماية البيانات (GDPR)، يحق لك الوصول إلى بياناتك الشخصية أو تصحيحها أو حذفها. لممارسة هذه الحقوق، راسلنا على hello@ragequit-arcade.com."
+          ]
+        },
+        {
+          "heading": "خصوصية الأطفال",
+          "paragraphs": [
+            "الموقع موجّه لجمهور عام. لا نجمع عن قصد معلومات شخصية من أطفال دون 13 عامًا."
+          ]
+        }
+      ]
+    },
+    "terms": {
+      "label": "قانوني",
+      "title": "شروط الاستخدام",
+      "updated": "أغسطس 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "مرحبًا بك في Ragequit Arcade. بدخولك إلى ragequit-arcade.com أو استخدامه، فإنك توافق على الالتزام بشروط الاستخدام هذه."
+          ]
+        },
+        {
+          "heading": "استخدام الموقع",
+          "paragraphs": [
+            "يقدّم Ragequit Arcade ألعاب متصفح مجانية للترفيه الشخصي غير التجاري."
+          ],
+          "list": [
+            "لا يجوز لك نسخ أي جزء من الموقع أو توزيعه أو تعديله دون إذن.",
+            "لا يجوز لك استخدام أنظمة آلية للوصول إلى الموقع بطريقة تتجاوز الاستخدام البشري المعتاد.",
+            "لا يجوز لك محاولة الوصول غير المصرّح به إلى أي جزء من الموقع."
+          ]
+        },
+        {
+          "heading": "الملكية الفكرية",
+          "paragraphs": [
+            "جميع محتويات الموقع ملك لـ Ragequit Arcade أو للجهات المرخِّصة له، وهي محمية بقوانين الملكية الفكرية."
+          ]
+        },
+        {
+          "heading": "إخلاء المسؤولية عن الضمانات",
+          "paragraphs": [
+            "يُقدَّم الموقع \"كما هو\" دون أي ضمانات. لا نضمن أن يعمل الموقع دون انقطاع أو أخطاء."
+          ]
+        },
+        {
+          "heading": "تحديد المسؤولية",
+          "paragraphs": [
+            "إلى أقصى حد يسمح به القانون، لا يتحمل Ragequit Arcade المسؤولية عن أي أضرار غير مباشرة أو تبعية ناتجة عن استخدامك للموقع."
+          ]
+        }
+      ]
+    },
+    "cookies": {
+      "label": "قانوني",
+      "title": "سياسة ملفات تعريف الارتباط",
+      "updated": "أغسطس 2026",
+      "sections": [
+        {
+          "paragraphs": [
+            "توضّح هذه السياسة كيف يستخدم Ragequit Arcade (الذي تديره Valtech Services) ملفات تعريف الارتباط والتقنيات المشابهة على ragequit-arcade.com، ولماذا نستخدمها، والخيارات المتاحة لك. باستخدامك الموقع، فإنك توافق على استخدام ملفات تعريف الارتباط كما هو موضح هنا، وفقًا لخيارات الموافقة أدناه."
+          ]
+        },
+        {
+          "heading": "ما هي ملفات تعريف الارتباط؟",
+          "paragraphs": [
+            "ملفات تعريف الارتباط ملفات نصية صغيرة تُحفظ على جهازك عند زيارة موقع ويب. تُستخدم على نطاق واسع لتشغيل المواقع وتذكّر تفضيلاتك وتزويد أصحاب المواقع بالمعلومات. وقد تُستخدم تقنيات مشابهة مثل التخزين المحلي والبكسلات للأغراض نفسها."
+          ]
+        },
+        {
+          "heading": "أنواع ملفات تعريف الارتباط التي نستخدمها",
+          "paragraphs": [
+            "نستخدم الفئات التالية:"
+          ],
+          "list": [
+            "ملفات أساسية: ضرورية لعمل الموقع، مثل تذكّر اختيارك بشأن ملفات تعريف الارتباط ولغتك وإبقائك مسجّل الدخول. لا يمكن تعطيلها.",
+            "ملفات التحليلات: تساعدنا على فهم كيفية تفاعل الزوار مع الموقع (مثل الألعاب الأكثر لعبًا) لتحسينه. لا تُوضع إلا إذا قبلت الملفات غير الأساسية.",
+            "ملفات الإعلانات: نستخدمها نحن وشركاؤنا الإعلانيون (وقد يشمل ذلك Google وشبكات إعلانات الألعاب) لعرض إعلانات ملائمة وقياس أدائها. لا تُوضع إلا إذا قبلت الملفات غير الأساسية."
+          ]
+        },
+        {
+          "heading": "ملفات تعريف الارتباط الخاصة بأطراف ثالثة",
+          "paragraphs": [
+            "تضع بعض الملفات أطرافٌ ثالثة تقدّم لنا خدمات، مثل مزوّدي التحليلات وشبكات الإعلانات. وقد تستخدمها لجمع معلومات عن نشاطك عبر مواقع مختلفة. نحن لا نتحكم في هذه الملفات؛ يُرجى الرجوع إلى سياسات الخصوصية وملفات تعريف الارتباط الخاصة بتلك الأطراف لمزيد من المعلومات.",
+            "عندما تعرض Google الإعلانات، تتيح ملفات تعريف الارتباط الإعلانية لـ Google وشركائه عرض إعلانات بناءً على زياراتك لهذا الموقع ومواقع أخرى. يمكنك التعرّف على الإعلانات المخصصة والتحكم فيها من إعدادات إعلانات Google (adssettings.google.com)."
+          ]
+        },
+        {
+          "heading": "موافقتك وكيفية إدارة ملفات تعريف الارتباط",
+          "paragraphs": [
+            "عند زيارتك الأولى، يتيح لك شريط ملفات تعريف الارتباط قبول جميع الملفات أو الأساسية فقط. لا تُوضع أي ملفات تحليلات أو إعلانات قبل موافقتك. يمكنك تغيير اختيارك في أي وقت عبر رابط \"إدارة ملفات تعريف الارتباط\" في أسفل الصفحة، الذي يعيد فتح الشريط.",
+            "يمكنك أيضًا التحكم في ملفات تعريف الارتباط أو حذفها من إعدادات متصفحك. تتيح معظم المتصفحات رفضها أو إزالتها، لكن حظر الملفات الأساسية قد يؤثر في عمل الموقع."
+          ]
+        },
+        {
+          "heading": "التغييرات على هذه السياسة",
+          "paragraphs": [
+            "قد نحدّث هذه السياسة من حين لآخر لتعكس التغييرات في التقنية أو القانون أو ممارساتنا. يشير تاريخ \"آخر تحديث\" في الأعلى إلى آخر مراجعة لها. ننصحك بمراجعة هذه الصفحة بانتظام."
+          ]
+        },
+        {
+          "heading": "التواصل",
+          "paragraphs": [
+            "إذا كانت لديك أسئلة حول استخدامنا لملفات تعريف الارتباط، راسلنا على hello@ragequit-arcade.com."
+          ]
+        }
+      ]
+    }
+  },
+  "ja": {
+    "about": {
+      "label": "概要",
+      "title": "Ragequit Arcadeについて",
+      "updated": "2026年8月",
+      "sections": [
+        {
+          "paragraphs": [
+            "Ragequit Arcadeは、ひとりでのプレイにも友だちとの対戦にも最適な、夢中になれる無料オンラインゲームをお届けします。すべてのゲームはブラウザですぐに遊べます。ダウンロードも登録もポップアップも不要、面倒なことは一切ありません。パソコン、タブレット、スマートフォンに対応しているので、自宅でも外出先でも遊べます。",
+            "私たちは、最高のゲームにいつでもワンクリックでたどり着ける場所をつくっています。"
+          ]
+        },
+        {
+          "heading": "ゲームについて",
+          "paragraphs": [
+            "毎週新しいゲームを追加しています。現在のタイトルには、Rage HockeyやSTAQなどテンポの速いオリジナルゲームがあります。Ragequit Arcadeのゲームはすべて、ずっと無料です。"
+          ]
+        },
+        {
+          "heading": "さっそく遊ぼう",
+          "paragraphs": [
+            "何で遊ぶか迷ったら、ホームページから探すか、カテゴリー（スポーツゲーム、アーケードゲーム）からゲームを選んでください。"
+          ]
+        },
+        {
+          "heading": "私たちについて",
+          "paragraphs": [
+            "Ragequit Arcadeは独立系のゲームプラットフォームです。目標はシンプル。ウェブでいちばん楽しく、いちばん誠実なブラウザアーケードをつくることです。毎週新作が登場します。TikTokとInstagramをフォローして、最新情報をチェックしてください。"
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "q": "Ragequit Arcadeとは？",
+          "a": "無料のオンラインゲームプラットフォームです。ダウンロードも登録も不要です。"
+        },
+        {
+          "q": "すべてのゲームが無料ですか？",
+          "a": "はい、すべてのゲームが完全無料です。"
+        },
+        {
+          "q": "新しいゲームはどのくらいの頻度で追加されますか？",
+          "a": "毎週です。TikTokをフォローすると通知を受け取れます。"
+        },
+        {
+          "q": "アカウントは必要ですか？",
+          "a": "プレイにアカウントは不要です。スコアを保存してランキングに載るにはアカウントを作成してください。"
+        },
+        {
+          "q": "スマホで遊べますか？",
+          "a": "はい、すべてのゲームがスマートフォン、タブレット、パソコンで遊べます。"
+        }
+      ]
+    },
+    "contact": {
+      "label": "ヘルプ",
+      "title": "お問い合わせ",
+      "updated": "2026年8月",
+      "sections": [
+        {
+          "paragraphs": [
+            "ご質問、バグの報告、ゲームのアイデア、提携のご提案などがあれば、下のフォームからお送りください。できるだけ早くご返信します。",
+            "メッセージを送信するにはログインが必要です。"
+          ]
+        }
+      ]
+    },
+    "mentions": {
+      "label": "法的情報",
+      "title": "運営者情報",
+      "updated": "2026年8月",
+      "sections": [
+        {
+          "heading": "サイト運営者",
+          "paragraphs": [
+            "Laurent Valard (Valtech Services)",
+            "個人事業主（マイクロ企業）",
+            "295 Allée des Micocouliers, 04220 Sainte-Tulle, フランス",
+            "SIREN: 994 273 118 — SIRET: 994 273 118 00012",
+            "EU VAT番号: FR11994273118",
+            "RCS: 994 273 118 R.C.S. Manosque"
+          ]
+        },
+        {
+          "heading": "ホスティング",
+          "paragraphs": [
+            "Vercel Inc., 340 Pine Street Suite 701, San Francisco, CA 94104, アメリカ合衆国 — https://vercel.com",
+            "本サイトはVercelプラットフォームで公開されています。データはSupabase（ヨーロッパ・フランクフルトリージョン）に保存されています。"
+          ]
+        },
+        {
+          "heading": "知的財産",
+          "paragraphs": [
+            "本サイトのすべてのコンテンツ（テキスト、画像、グラフィック、ロゴ、ブランド要素）は適用法により保護されています。全部または一部を問わず、無断での複製、表示、利用を禁じます。"
+          ]
+        },
+        {
+          "heading": "お問い合わせ",
+          "paragraphs": [
+            "本サイトに関するご質問は、お問い合わせページまたは hello@ragequit-arcade.com までご連絡ください。"
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "label": "法的情報",
+      "title": "プライバシーポリシー",
+      "updated": "2026年8月",
+      "sections": [
+        {
+          "paragraphs": [
+            "本プライバシーポリシーは、ragequit-arcade.com（以下「本サイト」）をご利用の際に、Ragequit Arcade（以下「当方」）がお客様の情報をどのように収集、利用、保護するかを説明するものです。本サイトを利用することで、ここに記載された取り扱いに同意したものとみなされます。"
+          ]
+        },
+        {
+          "heading": "収集する情報",
+          "paragraphs": [
+            "本サイトの運営と改善のため、限られた情報を収集します。"
+          ],
+          "list": [
+            "利用データ：閲覧ページ、プレイしたゲーム、滞在時間、一般的な操作傾向。",
+            "端末・ブラウザのデータ：ブラウザの種類、OS、画面サイズ、IPアドレスに基づくおおよその位置情報。",
+            "アカウントデータ：アカウントを作成した場合、メールアドレス、ユーザー名、スコアを保存します。",
+            "ローカルストレージのデータ：ブラウザに直接保存されるゲームの進行状況や設定。"
+          ]
+        },
+        {
+          "heading": "Cookieと広告",
+          "paragraphs": [
+            "当方はサービスの提供と改善のためにCookieおよび類似の技術を使用します。広告の表示にはGoogle AdSenseを、アクセス解析にはGoogle Analyticsを使用しています。Googleを含む第三者配信事業者は、本サイトや他のサイトへの過去のアクセス情報に基づいて広告を配信するためにCookieを使用します。",
+            "広告Cookieにより、Googleとそのパートナーは本サイトや他のサイトへのアクセスに基づいて広告を表示できます。パーソナライズ広告はGoogle広告設定（adssettings.google.com）で無効にできます。EEA、英国、スイスのユーザーについては、必須でないCookieを設置する前に、Google認定の同意管理プラットフォームを通じて同意を取得します。"
+          ]
+        },
+        {
+          "heading": "情報の利用目的",
+          "paragraphs": [
+            "収集した情報は以下の目的で利用します。"
+          ],
+          "list": [
+            "本サイトとゲームの運営、保守、改善。",
+            "ゲームを無料で提供し続けるための関連性の高い広告の表示。",
+            "スコアの保存とランキングへの表示。",
+            "お問い合わせフォームから送信されたメッセージへの返信。"
+          ]
+        },
+        {
+          "heading": "お客様の権利",
+          "paragraphs": [
+            "GDPRに基づき、お客様は自身の個人データへのアクセス、訂正、削除を求める権利があります。これらの権利を行使するには hello@ragequit-arcade.com までご連絡ください。"
+          ]
+        },
+        {
+          "heading": "子どものプライバシー",
+          "paragraphs": [
+            "本サイトは一般の方を対象としています。13歳未満の子どもの個人情報を意図的に収集することはありません。"
+          ]
+        }
+      ]
+    },
+    "terms": {
+      "label": "法的情報",
+      "title": "利用規約",
+      "updated": "2026年8月",
+      "sections": [
+        {
+          "paragraphs": [
+            "Ragequit Arcadeへようこそ。ragequit-arcade.comにアクセスまたは利用することで、本利用規約に同意したものとみなされます。"
+          ]
+        },
+        {
+          "heading": "本サイトの利用",
+          "paragraphs": [
+            "Ragequit Arcadeは、個人的かつ非商用の娯楽を目的とした無料のブラウザゲームを提供します。"
+          ],
+          "list": [
+            "許可なく本サイトの一部を複製、配布、改変することはできません。",
+            "通常の人間による利用を超える方法で、自動化されたシステムを使って本サイトにアクセスすることはできません。",
+            "本サイトのいかなる部分にも不正にアクセスしようとしてはなりません。"
+          ]
+        },
+        {
+          "heading": "知的財産",
+          "paragraphs": [
+            "本サイトのすべてのコンテンツはRagequit Arcadeまたはそのライセンサーに帰属し、知的財産法により保護されています。"
+          ]
+        },
+        {
+          "heading": "保証の否認",
+          "paragraphs": [
+            "本サイトは「現状のまま」提供され、いかなる保証もありません。本サイトが中断なく、またはエラーなく動作することを保証するものではありません。"
+          ]
+        },
+        {
+          "heading": "責任の制限",
+          "paragraphs": [
+            "法律で認められる最大限の範囲で、Ragequit Arcadeは本サイトの利用に起因する間接的または結果的な損害について責任を負いません。"
+          ]
+        }
+      ]
+    },
+    "cookies": {
+      "label": "法的情報",
+      "title": "Cookieポリシー",
+      "updated": "2026年8月",
+      "sections": [
+        {
+          "paragraphs": [
+            "本Cookieポリシーは、Ragequit Arcade（運営：Valtech Services）がragequit-arcade.comでCookieおよび類似の技術をどのように、なぜ使用しているか、そしてお客様が選べる選択肢について説明します。本サイトを利用することで、以下の同意の選択肢に従い、ここに記載されたCookieの使用に同意したものとみなされます。"
+          ]
+        },
+        {
+          "heading": "Cookieとは？",
+          "paragraphs": [
+            "Cookieとは、ウェブサイトを訪問した際にお使いの端末に保存される小さなテキストファイルです。サイトを機能させたり、設定を記憶したり、サイト運営者に情報を提供したりするために広く使われています。同じ目的で、ローカルストレージやピクセルなどの類似技術が使われることもあります。"
+          ]
+        },
+        {
+          "heading": "使用するCookieの種類",
+          "paragraphs": [
+            "当方は以下のカテゴリーのCookieを使用します。"
+          ],
+          "list": [
+            "必須Cookie：本サイトの動作に不可欠なもので、Cookieの選択内容や言語の記憶、ログイン状態の維持などに使われます。無効にすることはできません。",
+            "分析Cookie：訪問者が本サイトをどのように利用しているか（よく遊ばれているゲームなど）を把握し、改善するために使います。必須でないCookieを許可した場合にのみ設置されます。",
+            "広告Cookie：当方および広告パートナー（Googleやゲーム向け広告ネットワークを含む場合があります）が、関連性の高い広告を表示し、その効果を測定するために使用します。必須でないCookieを許可した場合にのみ設置されます。"
+          ]
+        },
+        {
+          "heading": "第三者のCookie",
+          "paragraphs": [
+            "一部のCookieは、分析サービスや広告ネットワークなど当方にサービスを提供する第三者によって設置されます。これらの第三者は、さまざまなサイトでのお客様の行動に関する情報を収集するためにCookieを使用することがあります。当方はこれらのCookieを管理していないため、詳しくは各第三者のプライバシーポリシーおよびCookieポリシーをご確認ください。",
+            "Googleが広告を配信する場合、広告Cookieにより、Googleとそのパートナーは本サイトや他のサイトへのアクセスに基づいて広告を表示できます。パーソナライズ広告についてはGoogle広告設定（adssettings.google.com）で確認・管理できます。"
+          ]
+        },
+        {
+          "heading": "同意とCookieの管理方法",
+          "paragraphs": [
+            "初回訪問時に表示されるバナーで、すべてのCookieを許可するか、必須のCookieのみを許可するかを選べます。同意いただくまで、分析Cookieや広告Cookieは設置されません。フッターの「Cookie設定」リンクからバナーを再表示し、いつでも選択を変更できます。",
+            "ブラウザの設定からCookieを管理または削除することもできます。多くのブラウザでCookieの拒否や削除が可能ですが、必須Cookieをブロックすると本サイトが正しく動作しない場合があります。"
+          ]
+        },
+        {
+          "heading": "本ポリシーの変更",
+          "paragraphs": [
+            "技術、法律、または当方の運用の変更を反映するため、本Cookieポリシーを随時更新することがあります。上部の「最終更新日」が最後に改訂された日付を示します。定期的にこのページをご確認ください。"
+          ]
+        },
+        {
+          "heading": "お問い合わせ",
+          "paragraphs": [
+            "Cookieの使用に関するご質問は hello@ragequit-arcade.com までご連絡ください。"
+          ]
+        }
+      ]
+    }
   }
 }
 

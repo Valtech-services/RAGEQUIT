@@ -15,7 +15,11 @@
     "puzzle": "Bulmaca",
     "clicker": "Tıklama",
     "runner": "Koşu",
-    "gamesSuffix": "Oyunlar"
+    "gamesSuffix": "Oyunlar",
+    "idle": "Idle / Clicker",
+    "shooting": "Nişancı",
+    "brain": "Zekâ",
+    "challenge": "Meydan Okuma"
   },
   "game": {
     "play": "Oyna",
@@ -109,7 +113,9 @@
     "cookies": "Çerez politikası",
     "language": "Dil",
     "selectLanguage": "Dilini seç",
-    "copyright": "© {{year}} Ragequit Arcade. Tüm hakları saklıdır."
+    "copyright": "© {{year}} Ragequit Arcade. Tüm hakları saklıdır.",
+    "manageCookies": "Çerezleri yönet",
+    "blog": "Blog"
   },
   "home": {
     "newGames": "Yeni oyunlar",
@@ -130,7 +136,7 @@
     "freeOnlineGames": "Ücretsiz online oyunlar",
     "intro": "Ragequit Arcade, tek başına ya da arkadaşlarınla hızlı maçlar için en bağımlılık yapan ücretsiz online oyunları sunar. Her oyun tarayıcında anında açılır — indirme yok, kayıt yok, pop-up yok, saçmalık yok. Oyunlarımız bilgisayar, tablet ve telefonda çalışır. İyi bir oyunun her zaman bir tık uzakta olduğu bir yer inşa ediyoruz.",
     "selectionTitle": "Oyun seçkimiz",
-    "selectionText": "Her hafta yeni oyunlar ekliyoruz. Mevcut oyunlarımız arasında Rage Hockey ve STAQ var. Her oyun sonsuza dek ücretsiz.",
+    "selectionText": "Düzenli olarak yeni oyunlar ekliyoruz. Güncel oyunlarımız: LINESTORM, City Runner, Fox Runner, VOIDFALL, Dead Zone, Crush Depth, Rooftop Rush, FLASHOUT, Bird Blitz, OCTAFLUX, Stellar Forge, Virus Lab, Neon Rush, Snake Candy Arena, STAQ, Rage Hockey. Her oyun sonsuza dek ücretsiz.",
     "startTitle": "Oynamaya başla",
     "startText": "Ne oynayacağını bilmiyor musun? Ana sayfadan keşfet ya da popüler kategorilerimizden bir oyun seç:",
     "aboutUsTitle": "Hakkımızda",
@@ -165,7 +171,11 @@
     "arcade": "Arcade oyunları",
     "puzzle": "Bulmaca oyunları",
     "clicker": "Tıklama oyunları",
-    "runner": "Koşu oyunları"
+    "runner": "Koşu oyunları",
+    "idle": "Idle / Clicker Oyunları",
+    "shooting": "Nişancı Oyunları",
+    "brain": "Zekâ Oyunları",
+    "challenge": "Meydan Okuma Oyunları"
   },
   "siteFaq": [
     {
@@ -188,5 +198,13 @@
       "q": "Mobil?",
       "a": "Evet, tüm oyunlar mobil, tablet ve masaüstünde çalışır."
     }
-  ]
+  ],
+  "cookies": {
+    "aria": "Çerez onayı",
+    "title": "Çerez kullanıyoruz",
+    "body": "Oyunlarımızı ücretsiz tutmak, trafiği analiz etmek ve ilgili reklamlar göstermek için çerez kullanıyoruz. Tüm çerezleri veya yalnızca zorunlu olanları kabul edebilirsiniz.",
+    "learnMore": "Daha fazla bilgi",
+    "essential": "Yalnızca zorunlu",
+    "acceptAll": "Tümünü kabul et"
+  }
 }

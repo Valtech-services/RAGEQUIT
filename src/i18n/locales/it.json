@@ -15,7 +15,11 @@
     "puzzle": "Puzzle",
     "clicker": "Clicker",
     "runner": "Runner",
-    "gamesSuffix": "Giochi"
+    "gamesSuffix": "Giochi",
+    "idle": "Idle / Clicker",
+    "shooting": "Sparatutto",
+    "brain": "Logica",
+    "challenge": "Sfida"
   },
   "game": {
     "play": "Gioca",
@@ -109,7 +113,9 @@
     "cookies": "Politica sui cookie",
     "language": "Lingua",
     "selectLanguage": "Scegli la tua lingua",
-    "copyright": "© {{year}} Ragequit Arcade. Tutti i diritti riservati."
+    "copyright": "© {{year}} Ragequit Arcade. Tutti i diritti riservati.",
+    "manageCookies": "Gestisci cookie",
+    "blog": "Blog"
   },
   "home": {
     "newGames": "Nuovi giochi",
@@ -130,7 +136,7 @@
     "freeOnlineGames": "Giochi gratis online",
     "intro": "Ragequit Arcade ti offre i giochi gratis online più coinvolgenti, pensati per giocare da solo o per partite veloci con gli amici. Ogni gioco parte subito nel browser — niente download, niente registrazione, niente pop-up, niente complicazioni. I nostri giochi funzionano su computer, tablet e cellulare. Stiamo costruendo un posto dove un bel gioco è sempre a un clic di distanza.",
     "selectionTitle": "La nostra selezione di giochi",
-    "selectionText": "Aggiungiamo nuovi giochi ogni settimana. I titoli attuali includono Rage Hockey e STAQ. Ogni gioco è gratis, per sempre.",
+    "selectionText": "Aggiungiamo nuovi giochi regolarmente. I nostri titoli attuali: LINESTORM, City Runner, Fox Runner, VOIDFALL, Dead Zone, Crush Depth, Rooftop Rush, FLASHOUT, Bird Blitz, OCTAFLUX, Stellar Forge, Virus Lab, Neon Rush, Snake Candy Arena, STAQ, Rage Hockey. Ogni gioco è gratis, per sempre.",
     "startTitle": "Inizia a giocare",
     "startText": "Non sai a cosa giocare? Esplora dalla home page o scegli un gioco da una delle nostre categorie popolari:",
     "aboutUsTitle": "Chi siamo",
@@ -165,7 +171,11 @@
     "arcade": "Giochi arcade",
     "puzzle": "Giochi di puzzle",
     "clicker": "Giochi clicker",
-    "runner": "Giochi runner"
+    "runner": "Giochi runner",
+    "idle": "Giochi Idle / Clicker",
+    "shooting": "Giochi sparatutto",
+    "brain": "Giochi di logica",
+    "challenge": "Giochi di sfida"
   },
   "siteFaq": [
     {
@@ -188,5 +198,13 @@
       "q": "Mobile?",
       "a": "Sì, tutti i giochi funzionano su cellulare, tablet e computer."
     }
-  ]
+  ],
+  "cookies": {
+    "aria": "Consenso ai cookie",
+    "title": "Usiamo i cookie",
+    "body": "Usiamo i cookie per mantenere gratuiti i nostri giochi, analizzare il traffico e mostrare annunci pertinenti. Puoi accettare tutti i cookie o solo quelli essenziali.",
+    "learnMore": "Scopri di più",
+    "essential": "Solo essenziali",
+    "acceptAll": "Accetta tutti"
+  }
 }

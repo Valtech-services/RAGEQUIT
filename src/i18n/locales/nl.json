@@ -15,7 +15,11 @@
     "puzzle": "Puzzel",
     "clicker": "Clicker",
     "runner": "Runner",
-    "gamesSuffix": "Spellen"
+    "gamesSuffix": "Spellen",
+    "idle": "Idle / Clicker",
+    "shooting": "Schieten",
+    "brain": "Denken",
+    "challenge": "Uitdaging"
   },
   "game": {
     "play": "Spelen",
@@ -109,7 +113,9 @@
     "cookies": "Cookiebeleid",
     "language": "Taal",
     "selectLanguage": "Kies je taal",
-    "copyright": "© {{year}} Ragequit Arcade. Alle rechten voorbehouden."
+    "copyright": "© {{year}} Ragequit Arcade. Alle rechten voorbehouden.",
+    "manageCookies": "Cookies beheren",
+    "blog": "Blog"
   },
   "home": {
     "newGames": "Nieuwe spellen",
@@ -130,7 +136,7 @@
     "freeOnlineGames": "Gratis online spellen",
     "intro": "Ragequit Arcade biedt je de meest verslavende gratis online spellen, voor solo-runs of snelle potjes met vrienden. Elk spel start direct in je browser — geen downloads, geen registratie, geen pop-ups, geen onzin. Onze spellen werken op desktop, tablet en mobiel. We bouwen een plek waar een goed spel altijd één klik verwijderd is.",
     "selectionTitle": "Onze spelselectie",
-    "selectionText": "We voegen elke week nieuwe spellen toe. Onze huidige titels zijn Rage Hockey en STAQ. Elk spel is voor altijd gratis.",
+    "selectionText": "We voegen regelmatig nieuwe games toe. Onze huidige titels: LINESTORM, City Runner, Fox Runner, VOIDFALL, Dead Zone, Crush Depth, Rooftop Rush, FLASHOUT, Bird Blitz, OCTAFLUX, Stellar Forge, Virus Lab, Neon Rush, Snake Candy Arena, STAQ, Rage Hockey. Elke game is voor altijd gratis.",
     "startTitle": "Begin met spelen",
     "startText": "Weet je niet wat je wilt spelen? Verken vanaf de homepage of kies een spel uit een van onze populaire categorieën:",
     "aboutUsTitle": "Over ons",
@@ -165,7 +171,11 @@
     "arcade": "Arcadespellen",
     "puzzle": "Puzzelspellen",
     "clicker": "Clickerspellen",
-    "runner": "Runnerspellen"
+    "runner": "Runnerspellen",
+    "idle": "Idle- & Clickergames",
+    "shooting": "Schietgames",
+    "brain": "Denkspellen",
+    "challenge": "Uitdagingsgames"
   },
   "siteFaq": [
     {
@@ -188,5 +198,13 @@
       "q": "Mobiel?",
       "a": "Ja, alle spellen werken op mobiel, tablet en desktop."
     }
-  ]
+  ],
+  "cookies": {
+    "aria": "Cookietoestemming",
+    "title": "Wij gebruiken cookies",
+    "body": "We gebruiken cookies om onze games gratis te houden, verkeer te analyseren en relevante advertenties te tonen. Je kunt alle cookies accepteren of alleen de noodzakelijke.",
+    "learnMore": "Meer informatie",
+    "essential": "Alleen noodzakelijke",
+    "acceptAll": "Alles accepteren"
+  }
 }

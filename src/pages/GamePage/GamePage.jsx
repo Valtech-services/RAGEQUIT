@@ -11,6 +11,7 @@ import MobileGamePage from './MobileGamePage'
 import { submitScore } from '../../data/leaderboardStore'
 import { submitVote, submitReport } from '../../data/feedbackStore'
 import usePageTitle from '../../hooks/usePageTitle'
+import { useTranslation } from 'react-i18next'
 import { track } from '../../lib/analytics'
 import './GamePage.css'
 
@@ -21,6 +22,7 @@ export default function GamePage() {
 }
 
 function GamePageDesktop() {
+  const { t } = useTranslation()
   const { id } = useParams()
   const game = games.find(g => g.id === id)
   const { recordPlay, user, profile, signInGoogle } = useAuth()
@@ -292,7 +294,7 @@ async function saveVirusLabCloud(){
                   <button className="gamepage__play-btn" onClick={handlePlay} aria-label="Play">
                     <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                   </button>
-                  <span className="gamepage__play-label">Play</span>
+                  <span className="gamepage__play-label">{t('game.play')}</span>
                 </div>
               )}
             </div>
