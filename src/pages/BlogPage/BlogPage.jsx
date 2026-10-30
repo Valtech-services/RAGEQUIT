@@ -4,7 +4,7 @@ import { Link } from '../../i18n/locale'
 import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Footer/Footer'
 import { useTranslation } from 'react-i18next'
-import { useLang } from '../../i18n/locale'
+import { useLang, LOCALES } from '../../i18n/locale'
 import usePageTitle from '../../hooks/usePageTitle'
 import { trackPageView } from '../../lib/analytics'
 import './BlogPage.css'
@@ -13,7 +13,7 @@ export default function BlogPage() {
   const posts = usePosts()
   const { t } = useTranslation()
   const lang = useLang()
-  const dateLocale = { en: 'en-US', fr: 'fr-FR', es: 'es-ES', pt: 'pt-PT' }[lang] || 'en-US'
+  const dateLocale = LOCALES[lang] || 'en-US'
   usePageTitle('Blog | Ragequit Arcade', t('ui.blog.metaDesc'))
   useEffect(() => { trackPageView() }, [])
 

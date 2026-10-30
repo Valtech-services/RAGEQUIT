@@ -115,7 +115,8 @@
     "selectLanguage": "言語を選ぶ",
     "copyright": "© {{year}} Ragequit Arcade. 無断転載禁止。",
     "manageCookies": "Cookie設定",
-    "blog": "ブログ"
+    "blog": "ブログ",
+    "idleGames": "放置・クリッカーゲーム"
   },
   "home": {
     "newGames": "新着ゲーム",

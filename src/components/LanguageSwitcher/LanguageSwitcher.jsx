@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { createPortal } from 'react-dom'
 import { LANGUAGES } from '../../i18n/i18n'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { CONTENT_LANGS, withLang } from '../../i18n/locale'
+import { CONTENT_LANGS, RTL_LANGS, withLang } from '../../i18n/locale'
+import { loadTranslations } from '../../data/localized'
 import Flag from './flags.jsx'
 import './LanguageSwitcher.css'
 
@@ -21,14 +22,16 @@ export default function LanguageSwitcher() {
     || LANGUAGES.find(l => i18n.language?.startsWith(l.code))
     || LANGUAGES[0]
 
-  function pick(code) {
-    // Langues avec contenu traduit : on change d'URL (/fr/..., /es/..., /pt/...).
+  async function pick(code) {
+    // Langues avec contenu traduit : on change d'URL (/fr/..., /de/..., ...).
     // Autres langues : interface traduite, contenu anglais à la racine.
-    const target = withLang(pathname, CONTENT_LANGS.includes(code) ? code : 'en') + search
+    setOpen(false)
+    const content = CONTENT_LANGS.includes(code)
+    if (content) await loadTranslations(code)
+    const target = withLang(pathname, content ? code : 'en') + search
     if (target !== pathname + search) navigate(target)
     i18n.changeLanguage(code)
-    document.documentElement.dir = code === 'ar' ? 'rtl' : 'ltr'
-    setOpen(false)
+    document.documentElement.dir = RTL_LANGS.includes(code) ? 'rtl' : 'ltr'
   }
 
   return (

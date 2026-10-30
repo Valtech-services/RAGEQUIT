@@ -39,7 +39,8 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
 - Format d'un jeu traduit : `{ description, controls, seo: { title, metaDescription, faq: [{ q, a }] } }`, avec **exactement le même nombre de questions FAQ** que l'anglais. Format d'un article : `{ title, excerpt, seo: { title, metaDescription }, content: [...] }`, avec **les mêmes blocs dans le même ordre** (même `type`, même nombre d'`items` pour les listes), sinon le contenu anglais est conservé.
 - Les noms de jeux, de modes, de skins et les libellés affichés dans le jeu (JUMP, Challenge a friend...) restent en anglais. Traduction naturelle, pas mot à mot, en `tu`/`vous` cohérent avec l'existant (français : vouvoiement).
 - Le build prérend chaque page dans chaque langue (balises `hreflang` + `x-default`) et affiche `[prerender] traductions <lang> : complètes` ou la liste des manques. **Une PR de publication n'est valide que si les trois lignes indiquent « complètes ».**
-- Ajouter une langue de contenu : l'ajouter à `CONTENT_LANGS`, créer `src/data/i18n/<lang>/` (copier la structure de `fr`), l'importer dans `src/data/localized.js`, ajouter ses textes `ui` dans `src/i18n/locales/<lang>.json` et ses titres dans la table `UI` de `src/entry-server.jsx`, puis traduire tout le contenu existant.
+- Chaque langue est un fichier JS séparé chargé à la demande par le navigateur (`loadTranslations`), détecté automatiquement par `import.meta.glob` : aucun import à ajouter. Le prérendu charge toutes les langues via `src/data/i18n/all.js`.
+- Ajouter une langue de contenu : créer `src/data/i18n/<lang>/` (copier la structure de `fr`) avec tout le contenu traduit, ajouter ses textes `ui` dans `src/i18n/locales/<lang>.json` et ses titres dans la table `UI` de `src/entry-server.jsx`, puis l'ajouter à `CONTENT_LANGS` (c'est ce qui crée les URL). L'arabe s'affiche de droite à gauche (`RTL_LANGS`).
 
 ## Pipeline « un jeu par jour »
 

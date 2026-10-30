@@ -34,7 +34,7 @@ function buildHead(template, url, h, siteUrl) {
   const abs = u => (u && u.startsWith('http') ? u : siteUrl + (u || ''))
   const canonical = siteUrl + (url === '/' ? '/' : url)
   let html = template
-    .replace(/<html lang="[^"]*">/, `<html lang="${h.lang || 'en'}">`)
+    .replace(/<html lang="[^"]*">/, `<html lang="${h.lang || 'en'}"${h.dir === 'rtl' ? ' dir="rtl"' : ''}>`)
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(h.title)}</title>`)
     .replace(/<meta name="description" content="[^"]*"\s*\/?>/, `<meta name="description" content="${esc(h.description)}" />`)
   const tags = [
@@ -42,7 +42,7 @@ function buildHead(template, url, h, siteUrl) {
     ...(h.alternates || []).map(a => `<link rel="alternate" hreflang="${a.lang}" href="${esc(a.href)}" />`),
     ...(h.xDefault ? [`<link rel="alternate" hreflang="x-default" href="${esc(h.xDefault)}" />`] : []),
     `<meta property="og:type" content="website" />`,
-    `<meta property="og:locale" content="${{ en: 'en_US', fr: 'fr_FR', es: 'es_ES', pt: 'pt_PT' }[h.lang] || 'en_US'}" />`,
+    `<meta property="og:locale" content="${h.locale || 'en_US'}" />`,
     `<meta property="og:site_name" content="Ragequit Arcade" />`,
     `<meta property="og:title" content="${esc(h.title)}" />`,
     `<meta property="og:description" content="${esc(h.description)}" />`,
