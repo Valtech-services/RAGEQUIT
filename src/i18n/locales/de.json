@@ -207,5 +207,59 @@
     "learnMore": "Mehr erfahren",
     "essential": "Nur notwendige",
     "acceptAll": "Alle akzeptieren"
+  },
+  "ui": {
+    "home": {
+      "title": "Kostenlose Online-Spiele bei Ragequit Arcade",
+      "p1": "Ragequit Arcade ist eine Plattform für kostenlose Online-Spiele, gemacht für alle, die Spaß ohne Hürden wollen. Jedes Spiel startet sofort im Browser: keine Downloads, keine Installation, keine Anmeldepflicht und keine nervigen Pop-ups. Ob fünf Minuten am Handy oder eine lange Session am Schreibtisch: Unsere Spiele laden mit einem Klick und laufen flüssig auf Handy, Tablet und Computer. Wir entwerfen, entwickeln und betreiben jedes Spiel selbst, was du hier spielst, findest du nirgendwo sonst.",
+      "gamesTitle": "Unsere aktuellen Spiele",
+      "gamesIntro": "Wir fügen regelmäßig neue Spiele hinzu. Das kannst du jetzt spielen, jedes kostenlos und unbegrenzt:",
+      "catsTitle": "Nach Kategorie stöbern",
+      "catsIntro": "Du weißt nicht, was du spielen sollst? Entdecke unsere Spiele nach Kategorie und finde den Stil, der zu deiner Laune passt:",
+      "whyTitle": "Warum bei Ragequit Arcade spielen",
+      "whyText": "Jedes Spiel ist komplett kostenlos, ohne Pay-to-win und ohne versteckte Kosten. Du kannst sofort ohne Konto loslegen oder ein kostenloses Profil erstellen, um deine Punkte zu speichern und in unseren weltweiten Ranglisten aufzusteigen. Da wir unsere Spiele selbst entwickeln, statt Klone neu zu veröffentlichen, hat jeder Titel seine eigene Identität, seine eigene Steuerung und seinen eigenen Grund, zurückzukommen. Wir sind ein kleines unabhängiges Studio, das besessen davon ist, Browserspiele zu bauen, bei denen sogar das Verlieren Spaß macht, daher der Name.",
+      "aboutTitle": "Über uns",
+      "aboutText": "Ragequit Arcade ist eine unabhängige Spieleplattform. Wir entwerfen, entwickeln und betreiben jedes Spiel selbst: keine fremden Klone, kein Pay-to-win, kein Schnickschnack. Unser Ziel ist einfach: die unterhaltsamste und ehrlichste Browser-Arcade im Netz. Neue Spiele erscheinen regelmäßig, folge uns auf TikTok und Instagram, um zu sehen, was als Nächstes kommt.",
+      "blurbs": {
+        "sports": "wettkampfstark, körperlich und zum Ausrasten.",
+        "arcade": "Reflexe, Überleben und pure Jagd nach Highscores.",
+        "idle": "tippen, automatisieren und zusehen, wie deine Zahlen wachsen, auch wenn du weg bist.",
+        "puzzle": "kombinieren, drehen und unter Druck schnell denken.",
+        "shooting": "zielen, schießen und Welle um Welle überleben.",
+        "brain": "Gedächtnis-, Konzentrations- und Logikaufgaben, die deinen Kopf schärfen.",
+        "challenge": "ein schweres Ziel, endlose Versuche und Rekorde zum Brechen."
+      }
+    },
+    "category": {
+      "gamesIn": "Spiele in dieser Kategorie"
+    },
+    "blog": {
+      "intro": "Guides, Tipps und Geschichten vom Team hinter Ragequit Arcade. Lerne, unsere kostenlosen Browserspiele zu meistern, in den Ranglisten aufzusteigen, und erfahre, woran wir als Nächstes arbeiten.",
+      "metaDesc": "Guides, Tipps und Geschichten von Ragequit Arcade. Lerne, unsere kostenlosen Browserspiele zu meistern und die besten Punktzahlen zu holen.",
+      "empty": "Noch keine Artikel. Schau bald wieder vorbei.",
+      "readMore": "Weiterlesen →",
+      "sectionAbout": "Über Ragequit Arcade",
+      "sectionGuides": "Spiele-Guides",
+      "back": "← Zurück zum Blog",
+      "readNext": "Weiterlesen",
+      "notFound": "Nicht gefunden",
+      "notFoundText": "Dieser Artikel existiert nicht."
+    },
+    "game": {
+      "notFound": "Spiel nicht gefunden.",
+      "backHome": "Zurück zur Startseite",
+      "reportTitle": "Problem melden",
+      "reportSignin": "Du musst angemeldet sein, um ein Problem zu melden oder einen Kommentar zu hinterlassen.",
+      "signIn": "Anmelden",
+      "cancel": "Abbrechen",
+      "thanks": "Danke! Deine Meldung wurde gesendet.",
+      "close": "Schließen",
+      "subject": "Betreff",
+      "describe": "Beschreibe das Problem oder hinterlasse einen Kommentar…",
+      "like": "Gefällt mir",
+      "dislike": "Gefällt mir nicht",
+      "report": "Melden",
+      "fullscreen": "Vollbild"
+    }
   }
 }
