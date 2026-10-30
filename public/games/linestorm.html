@@ -1201,7 +1201,8 @@
     if (!G || G.scoreSent) return;
     G.scoreSent = true;
     var score = Math.floor(G.score);
-    post({ type: SCORE_TYPE, game: GAME_ID, mode: G.mode, score: score, scoreLabel: score.toLocaleString('en-US') + ' pts' });
+    // Daily Storm uses the Classic rules: its scores go to the Classic leaderboard
+    post({ type: SCORE_TYPE, game: GAME_ID, mode: G.mode === 'hard' ? 'hard' : 'classic', score: score, scoreLabel: score.toLocaleString('en-US') + ' pts' });
   }
 
   function gameOver() {
