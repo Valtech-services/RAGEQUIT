@@ -34,4 +34,14 @@ export const testGames = [
     file: '/games/city-runner.html',
     notes: 'Three.js. Score CITY_RUNNER_SCORE, mode classic. Mettre DEBUG_MAX_CREDITS a true pour tester tous les vehicules.'
   },
+  {
+    id: 'splitstorm',
+    title: 'SPLITSTORM',
+    description: 'Pilote 4 traînées néon dans une tempête de murs : écarte-les pour passer les portes roses, resserre-les pour les murs verts.',
+    thumbnail: '/thumbnails/splitstorm.jpg',
+    category: 'arcade',
+    orientation: 'portrait',
+    file: '/games/splitstorm.html',
+    notes: 'Score SPLITSTORM_SCORE, modes classic / hard / daily, label en pts. Pub revive une fois par partie. Défi ami via ?ss_seed=&ss_beat=&ss_mode='
+  },
 ]

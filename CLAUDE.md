@@ -35,7 +35,7 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
    - Mettre à jour le texte de la catégorie concernée dans `categories` si le jeu y devient marquant.
    - Image de blog `public/blog/<id>-tips.jpg` (16:9), capture Playwright.
    - Retirer l'entrée du jeu de `src/data/testGames.js`.
-10. Lancer `npm ci && npm run build` pour vérifier que le site compile (avant chaque PR, test ou publication).
+10. Lancer `npm install && npm run build` pour vérifier que le site compile (avant chaque PR, test ou publication). Ne jamais committer `package-lock.json` (annuler avec `git checkout package-lock.json`).
 11. Mettre à jour `backlog.md` : passer le jeu en `publié (PR #n)`, puis ajouter 2 ou 3 nouveaux candidats vérifiés (licence + intérêt) en fin de liste.
 12. Description de chaque PR en français : nom du jeu, ce qui a été transformé, résultats des tests, identifiant choisi, prompt d'image.
 
@@ -55,6 +55,7 @@ Réécrire le code (plutôt que retoucher celui de l'auteur) garantit que le fic
 
 1. FORMAT DE SORTIE
 - Un seul fichier .html autonome : tout le CSS dans une balise `<style>`, tout le JavaScript dans une balise `<script>`. Aucune dépendance externe, aucun build, aucun import de fichier local.
+- Exception autorisée : les jeux 3D peuvent charger Three.js (et ses addons) via une importmap depuis unpkg ou jsDelivr, version figée (ex. `three@0.160.0`), comme `city-runner`. Aucune autre bibliothèque externe.
 
 2. SUPPRESSION DES CRÉDITS
 - Aucune référence à un auteur, un pseudo, un créateur, une entreprise, un studio ou une source (CodePen, GitHub, etc.) : ni commentaire de crédit, ni `<meta author>`, ni texte visible, ni lien, ni watermark. Le fichier ne contient aucune attribution.
