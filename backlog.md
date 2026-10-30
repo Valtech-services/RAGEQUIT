@@ -6,7 +6,7 @@ Rappel : la source sert de référence de gameplay, le jeu est entièrement ré�
 
 | # | Source (référence gameplay) | Licence | Catégorie visée | Piste de transformation | Statut |
 |---|---|---|---|---|---|
-| 1 | Zolmeister/avabranch | MIT | arcade | Ligne néon qui se divise en branches à piloter en même temps, murs qui se resserrent, mode Hard | à faire |
+| 1 | Zolmeister/avabranch | MIT | arcade | Jeu 2D : ligne néon qui se divise en branches à piloter en même temps, murs qui se resserrent, mode Hard | à faire |
 | 2 | leereilly/Coil (Hakim El Hattab) | MIT | arcade | Encercler les ennemis avec sa traînée lumineuse, combos d'encerclement, boss toutes les 5 vagues | à faire |
 | 3 | wwwtyro/Astray | Domaine public | challenge | Labyrinthe 3D à incliner (gyroscope sur mobile), chrono, labyrinthe du jour identique pour tous, score speedrun | à faire |
 | 4 | Zolmeister/zop | MIT | puzzle | Relier les couleurs identiques en un tracé, chaînes longues = bonus, mode contre la montre | à faire |
