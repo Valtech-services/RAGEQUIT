@@ -28,7 +28,7 @@ export default function MobileGamePage() {
   const [reportComment, setReportComment] = useState('')
   const [reportSent, setReportSent] = useState(false)
   const [reportBusy, setReportBusy] = useState(false)
-  usePageTitle(game?.title, game?.seo?.metaDescription)
+  usePageTitle(game?.seo?.title || game?.title, game?.seo?.metaDescription)
 
   const handlePlay = () => {
     setPlaying(true)

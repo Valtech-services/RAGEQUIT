@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import Home from './pages/Home/Home'
 import CategoryPage from './pages/CategoryPage/CategoryPage'
@@ -17,9 +17,14 @@ function ScrollToTop() {
   return null
 }
 
+/*
+  Le routeur (BrowserRouter dans le navigateur, StaticRouter au prérendu)
+  est fourni par main.jsx et entry-server.jsx, pour que la même App serve
+  aux deux.
+*/
 export default function App() {
   return (
-    <BrowserRouter>
+    <>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -32,6 +37,6 @@ export default function App() {
         <Route path="/blog/:slug" element={<ArticlePage />} />
       </Routes>
       <CookieBanner />
-    </BrowserRouter>
+    </>
   )
 }

@@ -8,7 +8,7 @@ import { posts } from '../../data/blog'
 import './BlogPage.css'
 
 export default function BlogPage() {
-  usePageTitle('Blog', 'Guides, tips and stories from Ragequit Arcade. Learn how to master our free browser games and get the highest scores.')
+  usePageTitle('Blog | Ragequit Arcade', 'Guides, tips and stories from Ragequit Arcade. Learn how to master our free browser games and get the highest scores.')
   useEffect(() => { trackPageView() }, [])
 
   // Articles triés du plus récent au plus ancien.
