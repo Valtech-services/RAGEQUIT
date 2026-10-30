@@ -12,7 +12,7 @@ export default function ArticlePage() {
   const post = getPost(slug)
 
   usePageTitle(
-    post ? post.title : 'Article not found',
+    post ? (post.seo?.title || post.title) : 'Article not found',
     post?.seo?.metaDescription
   )
   useEffect(() => { trackPageView() }, [slug])

@@ -15,7 +15,7 @@ export default function CategoryPage() {
   const { id } = useParams()
   const category = categories.find(c => c.id === id)
   usePageTitle(
-    category ? t(`categoryTitles.${category.id}`) : t('common.notFound'),
+    category ? (category.seo?.title || t(`categoryTitles.${category.id}`)) : t('common.notFound'),
     category?.seo?.metaDescription
   )
 

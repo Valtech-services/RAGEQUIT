@@ -38,6 +38,9 @@ const COUNTRIES = [
 
 export default function Navbar({ title, inGrid = false }) {
   const { t } = useTranslation()
+  // Les tiroirs (portails) ne sont rendus que dans le navigateur, pas au prérendu.
+  const [mounted, setMounted]         = useState(false)
+  useEffect(() => { setMounted(true) }, [])
   const [searchOpen, setSearchOpen]   = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
   const [query, setQuery]             = useState('')
@@ -165,7 +168,7 @@ export default function Navbar({ title, inGrid = false }) {
         </div>
       </div>
 
-      {createPortal(
+      {mounted && createPortal(
         <>
         {/* DRAWER RECHERCHE */}
         {searchOpen && (

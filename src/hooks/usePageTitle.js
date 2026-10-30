@@ -11,7 +11,7 @@
 import { useEffect } from 'react'
 
 const SITE    = 'RAGEQUIT'
-const DEFAULT = 'RAGEQUIT — Jeux Gratuits en Ligne'
+const DEFAULT = 'Ragequit Arcade — Free Online Games'
 const DEFAULT_DESC = "Play the most addictive free online games on Ragequit Arcade. No download, no signup — instant browser games on mobile and desktop. A new game every week."
 
 // Met à jour (ou crée) la balise <meta name="description">.
@@ -27,7 +27,9 @@ function setMetaDescription(desc) {
 
 export default function usePageTitle(pageTitle, metaDescription) {
   useEffect(() => {
-    document.title = pageTitle ? `${SITE} — ${pageTitle}` : DEFAULT
+    // Un titre SEO complet (« ... | Ragequit Arcade ») est utilisé tel quel,
+    // identique à celui du HTML prérendu.
+    document.title = !pageTitle ? DEFAULT : pageTitle.includes('| Ragequit Arcade') ? pageTitle : `${SITE} — ${pageTitle}`
     setMetaDescription(metaDescription)
     return () => {
       document.title = DEFAULT
