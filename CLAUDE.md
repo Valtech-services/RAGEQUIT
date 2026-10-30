@@ -52,7 +52,9 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
 11. Mettre à jour `backlog.md` : passer le jeu en `publié (PR #n)`, puis ajouter 2 ou 3 nouveaux candidats vérifiés (licence + intérêt) en fin de liste.
 12. Description de chaque PR en français : nom du jeu, ce qui a été transformé, résultats des tests, identifiant choisi, prompt d'image.
 
-La tâche quotidienne ne produit que des PR de test. Si un jeu est encore en test sans validation, elle prépare quand même le suivant : plusieurs jeux peuvent attendre dans l'admin.
+La tâche quotidienne ne produit que des PR de test. Si un jeu est encore en test sans validation, elle prépare quand même le suivant, dans la limite de 3 jeux en attente.
+
+**Limite d'attente :** compter les jeux au statut `en test` dans `backlog.md`. S'il y en a 3 ou plus, la tâche ne crée aucun jeu : elle termine par un message court à Laurent listant les jeux qui attendent son test dans l'admin. La production reprend automatiquement dès qu'un jeu est validé (ou abandonné) et que le compteur repasse sous 3. Rien n'est jamais perdu : le backlog garde l'ordre et l'état de chaque jeu.
 
 ## Transformation obligatoire
 

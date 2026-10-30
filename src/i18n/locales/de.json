@@ -15,7 +15,11 @@
     "puzzle": "Puzzle",
     "clicker": "Clicker",
     "runner": "Runner",
-    "gamesSuffix": "Spiele"
+    "gamesSuffix": "Spiele",
+    "idle": "Idle / Clicker",
+    "shooting": "Shooter",
+    "brain": "Denken",
+    "challenge": "Challenge"
   },
   "game": {
     "play": "Spielen",
@@ -109,7 +113,9 @@
     "cookies": "Cookie-Richtlinie",
     "language": "Sprache",
     "selectLanguage": "Wähle deine Sprache",
-    "copyright": "© {{year}} Ragequit Arcade. Alle Rechte vorbehalten."
+    "copyright": "© {{year}} Ragequit Arcade. Alle Rechte vorbehalten.",
+    "manageCookies": "Cookies verwalten",
+    "blog": "Blog"
   },
   "home": {
     "newGames": "Neue Spiele",
@@ -130,7 +136,7 @@
     "freeOnlineGames": "Kostenlose Online-Spiele",
     "intro": "Ragequit Arcade bietet dir die süchtig machendsten kostenlosen Online-Spiele, für Solo-Runs oder schnelle Matches mit Freunden. Jedes Spiel läuft sofort im Browser — keine Downloads, keine Anmeldung, keine Pop-ups, kein Unsinn. Unsere Spiele laufen auf Desktop, Tablet und Handy. Wir bauen einen Ort, an dem ein gutes Spiel immer nur einen Klick entfernt ist.",
     "selectionTitle": "Unsere Spieleauswahl",
-    "selectionText": "Wir fügen jede Woche neue Spiele hinzu. Aktuelle Titel sind Rage Hockey und STAQ. Jedes Spiel ist für immer kostenlos.",
+    "selectionText": "Wir fügen regelmäßig neue Spiele hinzu. Unsere aktuellen Titel: LINESTORM, City Runner, Fox Runner, VOIDFALL, Dead Zone, Crush Depth, Rooftop Rush, FLASHOUT, Bird Blitz, OCTAFLUX, Stellar Forge, Virus Lab, Neon Rush, Snake Candy Arena, STAQ, Rage Hockey. Jedes Spiel ist für immer kostenlos.",
     "startTitle": "Jetzt spielen",
     "startText": "Unsicher, was du spielen sollst? Erkunde die Startseite oder wähle ein Spiel aus einer beliebten Kategorie:",
     "aboutUsTitle": "Über uns",
@@ -165,7 +171,11 @@
     "arcade": "Arcade-Spiele",
     "puzzle": "Puzzlespiele",
     "clicker": "Clicker-Spiele",
-    "runner": "Runner-Spiele"
+    "runner": "Runner-Spiele",
+    "idle": "Idle- & Clicker-Spiele",
+    "shooting": "Shooter-Spiele",
+    "brain": "Denkspiele",
+    "challenge": "Challenge-Spiele"
   },
   "siteFaq": [
     {
@@ -188,5 +198,13 @@
       "q": "Mobil?",
       "a": "Ja, alle Spiele funktionieren auf Handy, Tablet und Desktop."
     }
-  ]
+  ],
+  "cookies": {
+    "aria": "Cookie-Einwilligung",
+    "title": "Wir verwenden Cookies",
+    "body": "Wir verwenden Cookies, damit unsere Spiele kostenlos bleiben, um den Traffic zu analysieren und relevante Werbung anzuzeigen. Du kannst alle Cookies akzeptieren oder nur die notwendigen.",
+    "learnMore": "Mehr erfahren",
+    "essential": "Nur notwendige",
+    "acceptAll": "Alle akzeptieren"
+  }
 }

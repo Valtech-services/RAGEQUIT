@@ -15,7 +15,11 @@
     "puzzle": "Logiczne",
     "clicker": "Klikacze",
     "runner": "Runner",
-    "gamesSuffix": "Gry"
+    "gamesSuffix": "Gry",
+    "idle": "Idle / Clicker",
+    "shooting": "Strzelanki",
+    "brain": "Logiczne",
+    "challenge": "Wyzwania"
   },
   "game": {
     "play": "Graj",
@@ -109,7 +113,9 @@
     "cookies": "Polityka cookies",
     "language": "Język",
     "selectLanguage": "Wybierz język",
-    "copyright": "© {{year}} Ragequit Arcade. Wszelkie prawa zastrzeżone."
+    "copyright": "© {{year}} Ragequit Arcade. Wszelkie prawa zastrzeżone.",
+    "manageCookies": "Zarządzaj cookies",
+    "blog": "Blog"
   },
   "home": {
     "newGames": "Nowe gry",
@@ -130,7 +136,7 @@
     "freeOnlineGames": "Darmowe gry online",
     "intro": "Ragequit Arcade oferuje najbardziej wciągające darmowe gry online, do gry solo lub szybkich meczów ze znajomymi. Każda gra uruchamia się natychmiast w przeglądarce — bez pobierania, bez rejestracji, bez wyskakujących okienek. Nasze gry działają na komputerze, tablecie i telefonie. Budujemy miejsce, gdzie dobra gra jest zawsze o jedno kliknięcie.",
     "selectionTitle": "Nasz wybór gier",
-    "selectionText": "Dodajemy nowe gry co tydzień. Obecne tytuły to Rage Hockey i STAQ. Każda gra jest darmowa, na zawsze.",
+    "selectionText": "Regularnie dodajemy nowe gry. Nasze obecne tytuły: LINESTORM, City Runner, Fox Runner, VOIDFALL, Dead Zone, Crush Depth, Rooftop Rush, FLASHOUT, Bird Blitz, OCTAFLUX, Stellar Forge, Virus Lab, Neon Rush, Snake Candy Arena, STAQ, Rage Hockey. Każda gra jest darmowa, na zawsze.",
     "startTitle": "Zacznij grać",
     "startText": "Nie wiesz, w co zagrać? Przeglądaj od strony głównej lub wybierz grę z jednej z popularnych kategorii:",
     "aboutUsTitle": "O nas",
@@ -165,7 +171,11 @@
     "arcade": "Gry zręcznościowe",
     "puzzle": "Gry logiczne",
     "clicker": "Gry typu clicker",
-    "runner": "Gry typu runner"
+    "runner": "Gry typu runner",
+    "idle": "Gry Idle / Clicker",
+    "shooting": "Strzelanki",
+    "brain": "Gry logiczne",
+    "challenge": "Gry z wyzwaniami"
   },
   "siteFaq": [
     {
@@ -188,5 +198,13 @@
       "q": "Mobilnie?",
       "a": "Tak, wszystkie gry działają na telefonie, tablecie i komputerze."
     }
-  ]
+  ],
+  "cookies": {
+    "aria": "Zgoda na pliki cookie",
+    "title": "Używamy plików cookie",
+    "body": "Używamy plików cookie, aby nasze gry były darmowe, analizować ruch i wyświetlać trafne reklamy. Możesz zaakceptować wszystkie pliki cookie lub tylko niezbędne.",
+    "learnMore": "Dowiedz się więcej",
+    "essential": "Tylko niezbędne",
+    "acceptAll": "Akceptuj wszystkie"
+  }
 }

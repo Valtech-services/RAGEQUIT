@@ -15,7 +15,11 @@
     "puzzle": "Puzzle",
     "idle": "Idle / Clicker",
     "runner": "Runner",
-    "gamesSuffix": "Jeux"
+    "gamesSuffix": "Jeux",
+    "clicker": "Clicker",
+    "shooting": "Tir",
+    "brain": "Réflexion",
+    "challenge": "Défi"
   },
   "game": {
     "play": "Jouer",
@@ -110,7 +114,8 @@
     "language": "Langue",
     "selectLanguage": "Choisis ta langue",
     "copyright": "© {{year}} Ragequit Arcade. Tous droits réservés.",
-    "manageCookies": "Gérer les cookies"
+    "manageCookies": "Gérer les cookies",
+    "blog": "Blog"
   },
   "home": {
     "newGames": "Nouveaux jeux",
@@ -131,7 +136,7 @@
     "freeOnlineGames": "Jeux gratuits en ligne",
     "intro": "Ragequit Arcade te propose les jeux gratuits en ligne les plus addictifs, conçus pour jouer en solo ou pour des parties rapides entre amis. Chaque jeu se lance instantanément dans ton navigateur — aucun téléchargement, aucune inscription, aucune pop-up, aucune complication. Nos jeux fonctionnent sur ordinateur, tablette et mobile, pour jouer à la maison ou en déplacement. Nous construisons un endroit où un bon jeu est toujours à un clic.",
     "selectionTitle": "Notre sélection de jeux",
-    "selectionText": "Nous ajoutons de nouveaux jeux chaque semaine. Nos titres actuels incluent Rage Hockey et STAQ. Chaque jeu est gratuit, pour toujours.",
+    "selectionText": "Nous ajoutons régulièrement de nouveaux jeux. Nos titres actuels : LINESTORM, City Runner, Fox Runner, VOIDFALL, Dead Zone, Crush Depth, Rooftop Rush, FLASHOUT, Bird Blitz, OCTAFLUX, Stellar Forge, Virus Lab, Neon Rush, Snake Candy Arena, STAQ, Rage Hockey. Chaque jeu est gratuit, pour toujours.",
     "startTitle": "Commence à jouer",
     "startText": "Tu ne sais pas à quoi jouer ? Explore depuis la page d'accueil ou choisis un jeu dans l'une de nos catégories populaires :",
     "aboutUsTitle": "À propos de nous",
@@ -166,7 +171,10 @@
     "arcade": "Jeux d'arcade",
     "puzzle": "Jeux de réflexion",
     "idle": "Jeux Idle / Clicker",
-    "runner": "Jeux de course"
+    "runner": "Jeux de course",
+    "shooting": "Jeux de tir",
+    "brain": "Jeux de réflexion",
+    "challenge": "Jeux de défi"
   },
   "siteFaq": [
     {

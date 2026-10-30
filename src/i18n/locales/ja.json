@@ -15,7 +15,11 @@
     "puzzle": "パズル",
     "clicker": "クリッカー",
     "runner": "ランナー",
-    "gamesSuffix": "ゲーム"
+    "gamesSuffix": "ゲーム",
+    "idle": "放置 / クリッカー",
+    "shooting": "シューティング",
+    "brain": "脳トレ",
+    "challenge": "チャレンジ"
   },
   "game": {
     "play": "プレイ",
@@ -109,7 +113,9 @@
     "cookies": "クッキーポリシー",
     "language": "言語",
     "selectLanguage": "言語を選ぶ",
-    "copyright": "© {{year}} Ragequit Arcade. 無断転載禁止。"
+    "copyright": "© {{year}} Ragequit Arcade. 無断転載禁止。",
+    "manageCookies": "Cookie設定",
+    "blog": "ブログ"
   },
   "home": {
     "newGames": "新着ゲーム",
@@ -130,7 +136,7 @@
     "freeOnlineGames": "無料オンラインゲーム",
     "intro": "Ragequit Arcade は、ソロプレイや友達との手軽な対戦のための、最も中毒性の高い無料オンラインゲームをお届けします。すべてのゲームはブラウザで即座に起動 — ダウンロード不要、登録不要、ポップアップなし。PC、タブレット、スマホで動作します。素晴らしいゲームが常にワンクリックで楽しめる場所を作っています。",
     "selectionTitle": "ゲームの選択",
-    "selectionText": "毎週新しいゲームを追加しています。現在のタイトルは Rage Hockey と STAQ。すべてのゲームは永久に無料です。",
+    "selectionText": "新しいゲームを定期的に追加しています。現在のタイトル：LINESTORM, City Runner, Fox Runner, VOIDFALL, Dead Zone, Crush Depth, Rooftop Rush, FLASHOUT, Bird Blitz, OCTAFLUX, Stellar Forge, Virus Lab, Neon Rush, Snake Candy Arena, STAQ, Rage Hockey。すべてのゲームは永久に無料です。",
     "startTitle": "プレイを始める",
     "startText": "何で遊ぶか迷ったら、ホームページから探すか、人気カテゴリーからゲームを選ぼう：",
     "aboutUsTitle": "私たちについて",
@@ -165,7 +171,11 @@
     "arcade": "アーケードゲーム",
     "puzzle": "パズルゲーム",
     "clicker": "クリッカーゲーム",
-    "runner": "ランナーゲーム"
+    "runner": "ランナーゲーム",
+    "idle": "放置・クリッカーゲーム",
+    "shooting": "シューティングゲーム",
+    "brain": "脳トレゲーム",
+    "challenge": "チャレンジゲーム"
   },
   "siteFaq": [
     {
@@ -188,5 +198,13 @@
       "q": "モバイル？",
       "a": "はい、すべてのゲームはスマホ、タブレット、PCで動作します。"
     }
-  ]
+  ],
+  "cookies": {
+    "aria": "Cookieの同意",
+    "title": "Cookieを使用しています",
+    "body": "ゲームを無料で提供し、トラフィックを分析し、関連性の高い広告を表示するためにCookieを使用しています。すべてのCookieを許可するか、必須のCookieのみを許可するかを選べます。",
+    "learnMore": "詳しく見る",
+    "essential": "必須のみ",
+    "acceptAll": "すべて許可"
+  }
 }
