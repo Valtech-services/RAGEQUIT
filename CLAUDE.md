@@ -14,7 +14,7 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
 - Ne jamais pousser directement sur `main`.
 - Une branche par jeu : `claude/jeu-<id>`, puis une Pull Request vers `main`.
 - Chaque jeu passe par deux Pull Requests :
-  1. **PR de test** : le jeu va uniquement dans `src/data/testGames.js` (page admin, onglet « Test des jeux »). Invisible sur le site public. Laurent fusionne, teste dans l'admin et donne ses retours.
+  1. **PR de test** : le jeu va uniquement dans `src/data/testGames.js` (page admin, onglet « Test des jeux »). Invisible sur le site public. Claude fusionne ; Laurent teste dans l'admin et donne ses retours.
   2. **PR de publication** : seulement quand Laurent écrit que le jeu est validé. Le jeu passe de `testGames.js` à `games.js`, avec blog et sitemap.
 - Les retours de Laurent sur un jeu en test se corrigent par de nouvelles PR de test, jusqu'à validation.
 
