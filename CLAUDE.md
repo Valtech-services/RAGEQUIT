@@ -62,10 +62,16 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
    - `public/sitemap.xml` : ajouter aussi `/<lang>/game/<id>` et `/<lang>/blog/<id>-tips` pour chaque langue.
    - Retirer l'entrée du jeu de `src/data/testGames.js`.
 10. Lancer `npm install && npm run build` pour vérifier que le site compile (avant chaque PR, test ou publication). Ne jamais committer `package-lock.json` (annuler avec `git checkout package-lock.json`).
-11. Mettre à jour `backlog.md` : passer le jeu en `publié (PR #n)`, puis ajouter 2 ou 3 nouveaux candidats vérifiés (licence + intérêt) en fin de liste.
-12. Description de chaque PR en français : nom du jeu, ce qui a été transformé, résultats des tests, identifiant choisi, prompt d'image.
+11. Mettre à jour `backlog.md` : passer le jeu en `publié (PR #n)`, puis ajouter 2 ou 3 nouveaux candidats vérifiés (licence + intérêt) en fin de liste, avec la description du jeu d'origine, en gardant l'alternance 2D / 3D.
+12. Description de chaque PR en français : nom du jeu, ce qui a été transformé, résultats des tests, identifiant choisi, prompts d'image (Gemini, sans texte dans l'image : miniature 1:1 1024x1024 et image de blog 16:9 1376x768).
 
-La tâche quotidienne ne produit que des PR de test. Si un jeu est encore en test sans validation, elle prépare quand même le suivant, dans la limite de 3 jeux en attente.
+La tâche quotidienne ne produit que des PR de test.
+
+**Notification obligatoire** : chaque exécution de la tâche quotidienne se termine par une notification à Laurent (outil `PushNotification`, qui part sur son téléphone et par e-mail), qu'elle ait réussi, qu'elle soit bloquée par la limite d'attente ou qu'elle ait échoué : nom du jeu, ce qu'il fait, lien de la PR et état du déploiement, ou bien la raison de l'arrêt. Laurent ne doit jamais se demander si la tâche a tourné.
+
+**Réserve visible dans l'admin** : l'onglet « Réserve » de la page admin lit directement `backlog.md`. Chaque ligne du tableau principal doit donc garder ses 7 colonnes (`#`, source, licence, catégorie, le jeu d'origine en bref, piste de transformation, statut), avec une description courte en français du jeu d'origine.
+
+**Jeux 3D** : la réserve intercale des jeux 3D avec personnage (Three.js, comme `city-runner`) entre les jeux 2D, environ un sur deux. Personnages et décors sont modélisés dans le code (formes Three.js, matériaux, animations procédurales) : aucun modèle, texture ou son de la source. Pour ces jeux, tester aussi la fluidité sur iPhone (pas de chute sous 30 images par seconde) et garder les contrôles tactiles simples (stick virtuel et un ou deux boutons au maximum). Si un jeu est encore en test sans validation, elle prépare quand même le suivant, dans la limite de 3 jeux en attente.
 
 **Limite d'attente :** compter les jeux au statut `en test` dans `backlog.md`. S'il y en a 3 ou plus, la tâche ne crée aucun jeu : elle termine par un message court à Laurent listant les jeux qui attendent son test dans l'admin. La production reprend automatiquement dès qu'un jeu est validé (ou abandonné) et que le compteur repasse sous 3. Rien n'est jamais perdu : le backlog garde l'ordre et l'état de chaque jeu.
 
@@ -93,6 +99,7 @@ Réécrire le code (plutôt que retoucher celui de l'auteur) garantit que le fic
 - Dans `:root` : `--safe-top: env(safe-area-inset-top, 0px); --safe-bottom: env(safe-area-inset-bottom, 0px); --safe-left: env(safe-area-inset-left, 0px); --safe-right: env(safe-area-inset-right, 0px);`
 - Hauteur plein écran : `100vh` puis `100dvh` juste après. Jamais `100vh` seul.
 - Aucun décalage en pixels codé en dur pour la barre d'URL ou la barre home : `bottom: calc(VALEUR + var(--safe-bottom))`, idem pour les autres bords.
+- **Coin haut-gauche réservé** : sur mobile, le site superpose au jeu un bouton retour (carré de 32 px, flèche discrète) en haut à gauche, à 10 px des bords + safe area. Ne jamais y placer de score, de bouton ou d'info utile. Dans toute la bande haute (environ 56 px), le HUD commence au minimum à `left: calc(56px + var(--safe-left))`. Placer le score de préférence **au centre en haut**, les infos secondaires et boutons (son, pause) à droite. Vérifier sur la capture iPhone que rien d'important n'est dans le carré haut-gauche de 56 x 56 px.
 - Overlays et modales : padding incluant `var(--safe-top)` et `var(--safe-bottom)`, panneau interne `max-height: 100%` (jamais `90vh` ni `100vh`) et `overflow-y: auto`. Boutons de fermeture toujours visibles sur iPhone 15/16/17 Pro, Safari et Chrome.
 - `html, body { overflow: hidden; overscroll-behavior: none; }` et, pour les jeux canvas, `touch-action: none` sur le canvas et le body.
 

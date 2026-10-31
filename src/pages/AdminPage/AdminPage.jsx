@@ -8,6 +8,7 @@ import { useAuth } from '../../context/AuthContext'
 import { supabase } from '../../lib/supabase'
 import usePageTitle from '../../hooks/usePageTitle'
 import { testGames } from '../../data/testGames'
+import backlogMd from '../../../backlog.md?raw'
 import './AdminPage.css'
 
 const ADMIN_ID = '4340752c-bfae-492c-a61b-a9552ac8c908'
@@ -591,20 +592,79 @@ newUsers, sVisitors, sPlays, sAds, sHome, sSignups, votesByGame,
   )
 }
 
-// ── PAGE (onglets Dashboard / Test des jeux) ───────────────────────────────
+// ── RÉSERVE (lit backlog.md, rien à maintenir à la main) ───────────────────
+function parseBacklog(md){
+  const rows = []
+  for (const line of md.split('\n')) {
+    if (!/^\|\s*\d+\s*\|/.test(line)) continue
+    const c = line.split('|').slice(1, -1).map(x => x.trim())
+    if (c.length < 7) continue
+    const [num, source, licence, category, about, plan, status] = c
+    const is3d = /3D Three\.js/i.test(about)
+    rows.push({ num, source, licence, category, about: about.replace(/\*\*3D Three\.js\*\*\s*:\s*/i, ''), plan: plan.replace(/`/g, ''), status, is3d })
+  }
+  return rows
+}
+const STATUS_ORDER = [['à faire', 'En réserve'], ['en test', 'En test'], ['publié', 'Publiés']]
+function Reserve(){
+  const rows = useMemo(() => parseBacklog(backlogMd), [])
+  const [filter, setFilter] = useState('all')
+  return (
+    <div className="gt">
+      <p className="gt-intro">
+        La réserve vient directement de <code>backlog.md</code> : la tâche quotidienne prend le premier jeu « à faire » dans cet ordre.
+        Les jeux 3D (personnage, Three.js) sont intercalés avec les jeux 2D.
+      </p>
+      <div className="rs-filters">
+        {[['all','Tous'],['3d','3D'],['2d','2D']].map(([k,l]) => (
+          <button key={k} className={`adm-tab ${filter===k?'is-active':''}`} onClick={() => setFilter(k)}>{l}</button>
+        ))}
+      </div>
+      {STATUS_ORDER.map(([key, label]) => {
+        const list = rows.filter(r => r.status.toLowerCase().startsWith(key))
+          .filter(r => filter === 'all' || (filter === '3d' ? r.is3d : !r.is3d))
+        if (!list.length) return null
+        return (
+          <section key={key} className="rs-section">
+            <h3 className="rs-title">{label} <span>{list.length}</span></h3>
+            <div className="rs-list">
+              {list.map((r, i) => (
+                <article key={r.num} className="rs-card">
+                  <div className="rs-card__head">
+                    {key === 'à faire' && <span className="rs-rank">{i + 1}</span>}
+                    <span className={`rs-badge ${r.is3d ? 'is-3d' : ''}`}>{r.is3d ? '3D' : '2D'}</span>
+                    <span className="rs-cat">{r.category}</span>
+                    <a className="rs-src" href={`https://github.com/${r.source.split(' ')[0]}`} target="_blank" rel="noreferrer">{r.source}</a>
+                    <span className="rs-lic">{r.licence}</span>
+                  </div>
+                  <p className="rs-about"><strong>Le jeu d'origine :</strong> {r.about}</p>
+                  <p className="rs-plan"><strong>Version RageQuit :</strong> {r.plan}</p>
+                  {key !== 'à faire' && <p className="rs-status">{r.status}</p>}
+                </article>
+              ))}
+            </div>
+          </section>
+        )
+      })}
+    </div>
+  )
+}
+
+// ── PAGE (onglets Dashboard / Test des jeux / Réserve) ─────────────────────
 function AdminShell(){
   const [tab, setTab] = useState('dashboard')
   return (
     <div className="adm">
       <header className="adm-header">
         <img src="/ragequit-logo-white.png" alt="Ragequit" className="adm-header__logo" />
-        <h1 className="adm-header__title">{tab === 'dashboard' ? 'Dashboard' : 'Test des jeux'}</h1>
+        <h1 className="adm-header__title">{tab === 'dashboard' ? 'Dashboard' : tab === 'games' ? 'Test des jeux' : 'Réserve'}</h1>
         <nav className="adm-tabs">
           <button className={`adm-tab ${tab==='dashboard'?'is-active':''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
           <button className={`adm-tab ${tab==='games'?'is-active':''}`} onClick={() => setTab('games')}>Test des jeux</button>
+          <button className={`adm-tab ${tab==='reserve'?'is-active':''}`} onClick={() => setTab('reserve')}>Réserve</button>
         </nav>
       </header>
-      {tab === 'dashboard' ? <Dashboard /> : <div className="adm-body"><GameTester /></div>}
+      {tab === 'dashboard' ? <Dashboard /> : <div className="adm-body">{tab === 'games' ? <GameTester /> : <Reserve />}</div>}
     </div>
   )
 }
