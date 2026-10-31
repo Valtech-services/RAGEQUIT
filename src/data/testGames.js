@@ -34,4 +34,14 @@ export const testGames = [
     file: '/games/city-runner.html',
     notes: 'Three.js. Score CITY_RUNNER_SCORE, mode classic. Mettre DEBUG_MAX_CREDITS a true pour tester tous les vehicules.'
   },
+  {
+    id: 'loopstrike',
+    title: 'LOOPSTRIKE',
+    description: 'Dessine des boucles néon avec la traînée de ta comète pour piéger les cores, évite les mines, bats le boss toutes les 5 vagues.',
+    thumbnail: '/thumbnails/loopstrike.jpg',
+    category: 'arcade',
+    orientation: 'portrait',
+    file: '/games/loopstrike.html',
+    notes: 'Score LOOPSTRIKE_SCORE, modes classic / hard / daily. Pub revive une fois par partie. Tactile : glisser relatif ; souris : la comète suit le curseur ; clavier : flèches/WASD/ZQSD, P pause.'
+  },
 ]
