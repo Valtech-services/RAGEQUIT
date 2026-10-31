@@ -207,5 +207,59 @@
     "learnMore": "Daha fazla bilgi",
     "essential": "Yalnızca zorunlu",
     "acceptAll": "Tümünü kabul et"
+  },
+  "ui": {
+    "home": {
+      "title": "Ragequit Arcade'de ücretsiz çevrimiçi oyunlar",
+      "p1": "Ragequit Arcade, zahmetsiz eğlence isteyen oyuncular için ücretsiz bir çevrimiçi oyun platformudur. Her oyun tarayıcında anında açılır: indirme yok, kurulum yok, zorunlu kayıt yok, rahatsız edici açılır pencere yok. Telefonunda beş dakikan da olsa, masanda uzun bir oturum da açsan, oyunlarımız tek tıkla yüklenir ve mobilde, tablette ve bilgisayarda sorunsuz çalışır. Her oyunu kendimiz tasarlıyor, geliştiriyor ve yönetiyoruz; burada oynadıklarını başka hiçbir yerde bulamazsın.",
+      "gamesTitle": "Güncel oyunlarımız",
+      "gamesIntro": "Düzenli olarak yeni oyunlar ekliyoruz. Şu anda oynayabileceklerin, hepsi ücretsiz ve sınırsız:",
+      "catsTitle": "Kategoriye göre göz at",
+      "catsIntro": "Ne oynayacağından emin değil misin? Oyunlarımızı kategorilere göre keşfet ve ruh haline uyan tarzı bul:",
+      "whyTitle": "Neden Ragequit Arcade'de oynamalısın",
+      "whyText": "Her oyun tamamen ücretsizdir; kazanmak için ödeme yok, gizli ücret yok. Hesap açmadan hemen başlayabilir ya da skorlarını kaydetmek ve dünya sıralamalarında yükselmek için ücretsiz bir profil oluşturabilirsin. Oyunlarımızı klon yayınlamak yerine kendimiz geliştirdiğimiz için her oyunun kendi kimliği, kendi kontrolleri ve geri dönmek için kendi nedeni var. Kaybetmenin bile eğlenceli olduğu tarayıcı oyunlarına kafayı takmış küçük, bağımsız bir stüdyoyuz; adımız da buradan geliyor.",
+      "aboutTitle": "Hakkımızda",
+      "aboutText": "Ragequit Arcade bağımsız bir oyun platformudur. Her oyunu kendimiz tasarlıyor, geliştiriyor ve yönetiyoruz: başkalarının klonları yok, kazanmak için ödeme yok, saçmalık yok. Hedefimiz basit: internetteki en eğlenceli ve en dürüst tarayıcı arcade'ini yaratmak. Yeni oyunlar düzenli olarak geliyor; sırada ne olduğunu görmek için bizi TikTok ve Instagram'da takip et.",
+      "blurbs": {
+        "sports": "rekabetçi, fiziksel ve sinir bozucu.",
+        "arcade": "refleks, hayatta kalma ve saf skor avı.",
+        "idle": "dokun, otomatikleştir ve sen yokken bile sayılarının büyümesini izle.",
+        "puzzle": "eşleştir, döndür ve baskı altında hızlı düşün.",
+        "shooting": "nişan al, ateş et ve dalga dalga hayatta kal.",
+        "brain": "zihnini keskinleştiren hafıza, odak ve mantık bulmacaları.",
+        "challenge": "tek bir zor hedef, sonsuz deneme ve kırılacak rekorlar."
+      }
+    },
+    "category": {
+      "gamesIn": "Bu kategorideki oyunlar"
+    },
+    "blog": {
+      "intro": "Ragequit Arcade ekibinden rehberler, ipuçları ve hikâyeler. Ücretsiz tarayıcı oyunlarımızda ustalaşmayı, sıralamalarda yükselmeyi öğren ve sırada ne üzerinde çalıştığımızı keşfet.",
+      "metaDesc": "Ragequit Arcade'den rehberler, ipuçları ve hikâyeler. Ücretsiz tarayıcı oyunlarımızda ustalaşmayı ve en yüksek skorları almayı öğren.",
+      "empty": "Henüz yazı yok. Yakında tekrar uğra.",
+      "readMore": "Devamını oku →",
+      "sectionAbout": "Ragequit Arcade hakkında",
+      "sectionGuides": "Oyun rehberleri",
+      "back": "← Bloga dön",
+      "readNext": "Sıradaki yazı",
+      "notFound": "Bulunamadı",
+      "notFoundText": "Bu yazı mevcut değil."
+    },
+    "game": {
+      "notFound": "Oyun bulunamadı.",
+      "backHome": "Ana sayfaya dön",
+      "reportTitle": "Sorun bildir",
+      "reportSignin": "Sorun bildirmek veya yorum bırakmak için giriş yapmalısın.",
+      "signIn": "Giriş yap",
+      "cancel": "İptal",
+      "thanks": "Teşekkürler! Bildirimin gönderildi.",
+      "close": "Kapat",
+      "subject": "Konu",
+      "describe": "Sorunu açıkla veya bir yorum bırak…",
+      "like": "Beğen",
+      "dislike": "Beğenme",
+      "report": "Bildir",
+      "fullscreen": "Tam ekran"
+    }
   }
 }
