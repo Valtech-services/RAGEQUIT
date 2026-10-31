@@ -207,5 +207,59 @@
     "learnMore": "Meer informatie",
     "essential": "Alleen noodzakelijke",
     "acceptAll": "Alles accepteren"
+  },
+  "ui": {
+    "home": {
+      "title": "Gratis online games bij Ragequit Arcade",
+      "p1": "Ragequit Arcade is een platform met gratis online games voor spelers die plezier willen zonder gedoe. Elke game start meteen in je browser: geen downloads, geen installaties, geen verplichte aanmelding en geen opdringerige pop-ups. Of je nu vijf minuten op je telefoon hebt of een lange sessie aan je bureau, onze games laden met één klik en draaien soepel op mobiel, tablet en computer. We ontwerpen, bouwen en beheren elke game zelf, dus wat je hier speelt, vind je nergens anders.",
+      "gamesTitle": "Onze huidige games",
+      "gamesIntro": "We voegen regelmatig nieuwe games toe. Dit kun je nu spelen, allemaal gratis en onbeperkt:",
+      "catsTitle": "Bladeren per categorie",
+      "catsIntro": "Weet je niet wat je wilt spelen? Ontdek onze games per categorie en vind de stijl die bij je stemming past:",
+      "whyTitle": "Waarom spelen bij Ragequit Arcade",
+      "whyText": "Elke game is helemaal gratis, zonder pay-to-win en zonder verborgen kosten. Je kunt meteen beginnen zonder account, of een gratis profiel maken om je scores op te slaan en in onze wereldwijde klassementen te stijgen. Omdat we onze games zelf bouwen in plaats van klonen opnieuw te publiceren, heeft elke titel een eigen identiteit, eigen besturing en een eigen reden om terug te komen. We zijn een kleine onafhankelijke studio die geobsedeerd is door browsergames waarbij zelfs verliezen leuk is, vandaar de naam.",
+      "aboutTitle": "Over ons",
+      "aboutText": "Ragequit Arcade is een onafhankelijk gameplatform. We ontwerpen, bouwen en beheren elke game zelf: geen klonen van anderen, geen pay-to-win, geen gedoe. Ons doel is simpel: de leukste en eerlijkste browser-arcade van het web. Er komen regelmatig nieuwe games bij, volg ons op TikTok en Instagram om te zien wat er aankomt.",
+      "blurbs": {
+        "sports": "competitief, fysiek en om gek van te worden.",
+        "arcade": "reflexen, overleven en puur op jacht naar highscores.",
+        "idle": "tikken, automatiseren en je getallen zien groeien, zelfs als je weg bent.",
+        "puzzle": "combineren, draaien en snel denken onder druk.",
+        "shooting": "richten, schieten en golf na golf overleven.",
+        "brain": "geheugen-, concentratie- en logicapuzzels om je hoofd scherp te houden.",
+        "challenge": "één moeilijk doel, eindeloze pogingen en records om te breken."
+      }
+    },
+    "category": {
+      "gamesIn": "Games in deze categorie"
+    },
+    "blog": {
+      "intro": "Gidsen, tips en verhalen van het team achter Ragequit Arcade. Leer onze gratis browsergames beheersen, stijg in de klassementen en ontdek waar we aan werken.",
+      "metaDesc": "Gidsen, tips en verhalen van Ragequit Arcade. Leer onze gratis browsergames beheersen en haal de hoogste scores.",
+      "empty": "Nog geen artikelen. Kom snel terug.",
+      "readMore": "Lees meer →",
+      "sectionAbout": "Over Ragequit Arcade",
+      "sectionGuides": "Gamegidsen",
+      "back": "← Terug naar de blog",
+      "readNext": "Lees ook",
+      "notFound": "Niet gevonden",
+      "notFoundText": "Dit artikel bestaat niet."
+    },
+    "game": {
+      "notFound": "Game niet gevonden.",
+      "backHome": "Terug naar home",
+      "reportTitle": "Probleem melden",
+      "reportSignin": "Je moet ingelogd zijn om een probleem te melden of een reactie achter te laten.",
+      "signIn": "Inloggen",
+      "cancel": "Annuleren",
+      "thanks": "Bedankt! Je melding is verstuurd.",
+      "close": "Sluiten",
+      "subject": "Onderwerp",
+      "describe": "Beschrijf het probleem of laat een reactie achter…",
+      "like": "Leuk",
+      "dislike": "Niet leuk",
+      "report": "Melden",
+      "fullscreen": "Volledig scherm"
+    }
   }
 }
