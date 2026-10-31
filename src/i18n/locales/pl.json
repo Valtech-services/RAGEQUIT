@@ -207,5 +207,59 @@
     "learnMore": "Dowiedz się więcej",
     "essential": "Tylko niezbędne",
     "acceptAll": "Akceptuj wszystkie"
+  },
+  "ui": {
+    "home": {
+      "title": "Darmowe gry online w Ragequit Arcade",
+      "p1": "Ragequit Arcade to platforma z darmowymi grami online dla graczy, którzy chcą zabawy bez przeszkód. Każda gra uruchamia się od razu w przeglądarce: bez pobierania, bez instalacji, bez obowiązkowej rejestracji i bez natrętnych wyskakujących okienek. Niezależnie od tego, czy masz pięć minut na telefonie, czy długą sesję przy biurku, nasze gry ładują się jednym kliknięciem i działają płynnie na telefonie, tablecie i komputerze. Każdą grę projektujemy, tworzymy i prowadzimy sami, więc to, w co tu zagrasz, nie znajdziesz nigdzie indziej.",
+      "gamesTitle": "Nasze aktualne gry",
+      "gamesIntro": "Regularnie dodajemy nowe gry. Oto w co możesz zagrać teraz, każda gra za darmo i bez limitów:",
+      "catsTitle": "Przeglądaj według kategorii",
+      "catsIntro": "Nie wiesz, w co zagrać? Przeglądaj nasze gry według kategorii i znajdź styl pasujący do twojego nastroju:",
+      "whyTitle": "Dlaczego warto grać w Ragequit Arcade",
+      "whyText": "Każda gra jest całkowicie darmowa, bez mechanik pay-to-win i bez ukrytych kosztów. Możesz zacząć od razu bez konta albo założyć darmowy profil, żeby zapisywać wyniki i piąć się w naszych światowych rankingach. Ponieważ tworzymy gry sami, zamiast publikować klony, każdy tytuł ma własną tożsamość, własne sterowanie i własny powód, by do niego wracać. Jesteśmy małym niezależnym studiem z obsesją na punkcie gier przeglądarkowych, w których nawet przegrywanie jest zabawne, stąd nazwa.",
+      "aboutTitle": "O nas",
+      "aboutText": "Ragequit Arcade to niezależna platforma z grami. Każdą grę projektujemy, tworzymy i prowadzimy sami: żadnych cudzych klonów, żadnego pay-to-win, żadnych zbędnych dodatków. Nasz cel jest prosty: najzabawniejszy i najuczciwszy przeglądarkowy salon gier w sieci. Nowe gry pojawiają się regularnie, obserwuj nas na TikToku i Instagramie, żeby zobaczyć, co nadchodzi.",
+      "blurbs": {
+        "sports": "rywalizacja, fizyka i nerwy na krawędzi.",
+        "arcade": "refleks, przetrwanie i czysta pogoń za wynikiem.",
+        "idle": "klikaj, automatyzuj i patrz, jak liczby rosną, nawet gdy cię nie ma.",
+        "puzzle": "dopasowuj, obracaj i myśl szybko pod presją.",
+        "shooting": "celuj, strzelaj i przetrwaj fala za falą.",
+        "brain": "wyzwania na pamięć, skupienie i logikę, które wyostrzą umysł.",
+        "challenge": "jeden trudny cel, nieskończone próby i rekordy do pobicia."
+      }
+    },
+    "category": {
+      "gamesIn": "Gry w tej kategorii"
+    },
+    "blog": {
+      "intro": "Poradniki, wskazówki i historie od zespołu Ragequit Arcade. Naucz się opanować nasze darmowe gry przeglądarkowe, wspinaj się w rankingach i zobacz, nad czym pracujemy.",
+      "metaDesc": "Poradniki, wskazówki i historie od Ragequit Arcade. Naucz się opanować nasze darmowe gry przeglądarkowe i zdobywaj najwyższe wyniki.",
+      "empty": "Jeszcze nie ma artykułów. Zajrzyj wkrótce.",
+      "readMore": "Czytaj dalej →",
+      "sectionAbout": "O Ragequit Arcade",
+      "sectionGuides": "Poradniki do gier",
+      "back": "← Wróć do bloga",
+      "readNext": "Czytaj także",
+      "notFound": "Nie znaleziono",
+      "notFoundText": "Ten artykuł nie istnieje."
+    },
+    "game": {
+      "notFound": "Nie znaleziono gry.",
+      "backHome": "Wróć na stronę główną",
+      "reportTitle": "Zgłoś problem",
+      "reportSignin": "Musisz być zalogowany, żeby zgłosić problem lub zostawić komentarz.",
+      "signIn": "Zaloguj się",
+      "cancel": "Anuluj",
+      "thanks": "Dzięki! Twoje zgłoszenie zostało wysłane.",
+      "close": "Zamknij",
+      "subject": "Temat",
+      "describe": "Opisz problem lub zostaw komentarz…",
+      "like": "Lubię",
+      "dislike": "Nie lubię",
+      "report": "Zgłoś",
+      "fullscreen": "Pełny ekran"
+    }
   }
 }

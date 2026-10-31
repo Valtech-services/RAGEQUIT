@@ -1,0 +1,61 @@
+export default {
+  "flashout-memory-tips": {
+    "title": "Jak zdobyć wysoki wynik w FLASHOUT",
+    "excerpt": "FLASHOUT wygląda na prostą grę pamięciową, ale gracze na szczycie rankingu używają prawdziwych technik. Oto jak zapamiętywać szybciej i zdobywać więcej punktów.",
+    "seo": { "title": "Jak zdobyć wysoki wynik w FLASHOUT: porady pamięciowe | Ragequit Arcade", "metaDescription": "Porady pamięciowe i strategia do FLASHOUT, neonowej gry w pary: jak działają combo, dlaczego liczy się szybkość i jak zdobywać więcej w trybach Normal i Hard." },
+    "content": [
+      { "type": "p", "text": "FLASHOUT to neonowa gra pamięciowa z prostym pomysłem: na początku każdego poziomu plansza na ułamek sekundy pokazuje wszystkie świecące symbole, a potem je odwraca. Następnie ścigasz się z uciekającym czasem, by z pamięci znaleźć każdą parę. Brzmi łatwo. Nie jest, zwłaszcza gdy siatka rośnie. Ale gracze na szczycie rankingu nie mają po prostu szczęścia ani idealnej pamięci. Używają technik, których możesz się nauczyć. Oto one." },
+      { "type": "h2", "text": "Zrozum, za co naprawdę dostajesz punkty" },
+      { "type": "p", "text": "Pierwsza rzecz: o miejscu w rankingu decyduje wynik, a nie poziom, do którego dojdziesz. Dwóch graczy może dojść do poziomu 8, ale ten, kto zrobił to szybciej, z mniejszą liczbą błędów i większymi combo, zdobędzie dużo więcej. Twoim celem nigdy nie jest więc samo przetrwanie poziomu. Chodzi o to, by przejść go czysto i szybko. Graj z tą myślą od pierwszego poziomu." },
+      { "type": "h2", "text": "Goń combo, bo mnoży wszystko" },
+      { "type": "p", "text": "Znajdowanie par jedna po drugiej bez błędu buduje serię combo, a ta seria mnoży zdobywane punkty. To najważniejsza mechanika punktacji w grze. Czysty bieg, w którym nigdy nie przerywasz combo, zdeklasuje niechlujny bieg na tym samym poziomie. Jedna zła karta zeruje mnożnik, więc precyzja liczy się bardziej niż sama szybkość. Lepiej poświęcić pół sekundy więcej, by mieć pewność, niż zgadywać, chybić i stracić całe combo." },
+      { "type": "h2", "text": "Zapamiętuj grupami, nie kartę po karcie" },
+      { "type": "p", "text": "Gdy plansza błyska, nie próbuj zapamiętać każdej karty osobno: mózg nie utrzyma tylu oddzielnych elementów w ułamku sekundy. Grupuj je. Zauważaj pary pozycji albo zapamiętuj symbole według stref: „dwie gwiazdy po lewej, serce w prawym górnym rogu”. Grupowanie informacji w bloki to sposób, w jaki mistrzowie pamięci zapamiętują znacznie więcej niż przeciętna osoba, i tutaj działa idealnie. Gdy siatki rosną, grupowanie to różnica między paniką a kontrolą." },
+      { "type": "h2", "text": "Najpierw zbierz pary, których jesteś pewien" },
+      { "type": "p", "text": "Gdy karty się odwracają i rusza zegar, oprzyj się pokusie szukania najtrudniejszej pary. Od razu zbierz pary, których jesteś całkowicie pewien. Daje to trzy rzeczy: gwarantowane punkty, utrzymanie combo dzięki bezpiecznym trafieniom i usunięcie kart z planszy, przez co te niepewne łatwiej znaleźć metodą eliminacji. Zacznij od pewników, a trudne pary rozwiążą się same." },
+      { "type": "h2", "text": "Normal na rozgrzewkę, Hard do rankingu" },
+      { "type": "p", "text": "FLASHOUT ma dwa tryby z osobnymi rankingami. W trybie Normal błędne dopasowanie kosztuje tylko czas, więc to miejsce do ćwiczenia grupowania i budowania pewności siebie. W trybie Hard każda zła karta od razu odejmuje dwie sekundy z zegara, co mocno karze zgadywanie. To w Hard padają poważne wyniki, ale nie wchodź tam, dopóki twoja technika pamięciowa nie będzie solidna w Normal. Najpierw opanuj grupowanie, potem zabierz je do Hard." },
+      { "type": "h2", "text": "Podsumowanie" },
+      { "type": "p", "text": "Liczy się wynik, nie poziom. Chroń combo za wszelką cenę. Zapamiętuj grupami, nie kartę po karcie. Najpierw zbieraj pewne pary, by zgarnąć punkty i przerzedzić planszę. A do trybu Hard przejdź dopiero wtedy, gdy twoja technika wytrzyma presję. Zrób to wszystko, a wspinasz się w rankingu FLASHOUT szybciej, niż myślałeś. Do dzieła." }
+    ]
+  },
+  "the-goal-of-ragequit-arcade": {
+    "title": "Prawdziwy cel Ragequit Arcade",
+    "excerpt": "Ragequit Arcade to nie tylko strona z grami. To pierwszy krok znacznie większego planu: sfinansowania niezależnego francuskiego studia gier, jedną darmową grą przeglądarkową naraz.",
+    "seo": { "title": "Prawdziwy cel Ragequit Arcade | Ragequit Arcade", "metaDescription": "Wizja stojąca za Ragequit Arcade: tworzenie darmowych gier przeglądarkowych, by sfinansować niezależne francuskie studio gier i uczynić tworzenie gier pracą na pełen etat." },
+    "content": [
+      { "type": "p", "text": "Większość osób, które trafiają na Ragequit Arcade, widzi zbiór darmowych gier przeglądarkowych i myśli, że to cała historia. Tak nie jest. Za każdą grą na tej stronie stoi jedna osoba, niezależny twórca budujący każdy tytuł od zera, i plan dużo większy niż portal z grami. W tym artykule wyjaśniam, czym jest ten plan, bo uważam, że zasługujesz na to, by wiedzieć, w czym naprawdę uczestniczysz, grając tutaj." },
+      { "type": "h2", "text": "Zaczęło się od zwykłej frustracji" },
+      { "type": "p", "text": "Jak wielu ludzi, dorastałem, kochając gry i marząc o ich tworzeniu. I jak wielu, zakładałem, że to marzenie jest poza zasięgiem, chyba że dołączysz do dużego studia albo zdobędziesz fortunę. Zacząłem więc od małych rzeczy, w jedyny możliwy sposób: sam, wieczorami, ucząc się tworzyć gry przeglądarkowe, w które każdy mógł zagrać od razu i za darmo. Ragequit Arcade jest tego efektem. Każda gra tutaj, od strategii Virus Lab po chaos Bird Blitz, została zrobiona przez kogoś, kto nie chciał czekać na pozwolenie." },
+      { "type": "h2", "text": "Cel: strona, która sama się finansuje" },
+      { "type": "p", "text": "Pierwszy kamień milowy jest prosty i uczciwy: chcę, by Ragequit Arcade stało się samowystarczalne. Strona musi generować dość przychodu, dzięki lekkim reklamom i rosnącej publiczności, by utrzymać pracę, którą w nią wkładam. Nie po to, by się wzbogacić, ale by to stało się realne. Marzeniem jest dojść do momentu, w którym będę mógł poświęcić się temu na pełen etat, zamiast wciskać to w godziny wokół codziennej pracy. Każdy gracz, który odwiedza stronę, gra i udostępnia grę, przybliża ten moment." },
+      { "type": "h2", "text": "Większe marzenie: prawdziwe studio gier" },
+      { "type": "p", "text": "Ale samofinansująca się strona to nie cel ostateczny. To fundament czegoś znacznie ambitniejszego: zbudowania prawdziwego niezależnego francuskiego studia gier. Chodzi o to, by Ragequit Arcade, strona, na której właśnie grasz, stało się silnikiem finansującym to studio, bez zewnętrznych kredytów i inwestorów dyktujących warunki. Gry przeglądarkowe finansują zespół. Zespół tworzy większe, bardziej dopracowane gry, robione dla graczy, a nie dla akcjonariuszy. Gry z prawdziwą głębią i warsztatem, tworzone przez ludzi, którym zależy na tym medium." },
+      { "type": "p", "text": "Taka jest wizja: zacząć od darmowych gier przeglądarkowych, które może zbudować jedna osoba, wykorzystać je do sfinansowania studia, a to studio do tworzenia gier, o jakich zawsze marzyłem. To długa droga i jestem na samym jej początku." },
+      { "type": "h2", "text": "Dlaczego ci to mówię" },
+      { "type": "p", "text": "Mówię ci to, bo Ragequit Arcade nie jest bezimienną farmą treści i chcę, żeby to było oczywiste. To prawdziwy projekt z prawdziwą osobą za nim i jasnym powodem istnienia. Gdy tu grasz, zostawiasz wynik, zgłaszasz błąd albo dzielisz się biegiem ze znajomym, nie tylko zabijasz czas. Pomagasz udowodnić, że niezależny twórca może zbudować coś prawdziwego z niczego. To nie marketing. Tak to naprawdę działa." },
+      { "type": "h2", "text": "Jak możesz w tym uczestniczyć" },
+      { "type": "p", "text": "Najlepsze, co możesz zrobić, to po prostu grać, a jeśli gra ci się spodoba, udostępnić ją. Załóż darmowe konto, by zapisywać wyniki i wspinać się w rankingach. Obserwuj nas w mediach społecznościowych, by widzieć nowe gry w dniu premiery. Wszystko to pomaga stronie rosnąć, co pomaga finansować studio, co przybliża większe gry do rzeczywistości. Dzięki, że jesteś tu od początku. Najlepsze naprawdę dopiero przed nami." }
+    ]
+  },
+  "rooftop-rush-tips": {
+    "title": "Rooftop Rush: jak zbudować combo GODLIKE",
+    "excerpt": "Jedna deska, jedno dotknięcie, jeden bardzo długi upadek. Oto jak opanować timing w Rooftop Rush i wywindować combo aż do trzęsącej ekranem serii GODLIKE.",
+    "seo": { "title": "Rooftop Rush: jak zbudować combo GODLIKE | Ragequit Arcade", "metaDescription": "Poradnik do Rooftop Rush: jak wyczuć deskę, trafiać w czerwoną strefę dla idealnych zrzutów, budować combo aż do GODLIKE i pobić swój rekord." },
+    "content": [
+      { "type": "p", "text": "Rooftop Rush wygląda na prostą grę. Rozciągasz deskę między dwoma dachami, upuszczasz ją i przebiegasz. Ale każdy, kto grał, zna prawdę: to jedna z tych gier, w których jedno źle wymierzone dotknięcie zamienia piękny bieg w bardzo długi upadek, i właśnie to sprawia, że tak wciąga. Jeśli ciągle wpadasz w szczelinę albo schodzisz z końca deski, ten poradnik jest dla ciebie. Oto jak opanować timing i zacząć budować prawdziwe combo." },
+      { "type": "h2", "text": "Najpierw zrozum deskę" },
+      { "type": "p", "text": "Cała gra sprowadza się do jednego: długości deski. Przytrzymujesz, by rosła, i puszczasz, by ją upuścić. Jeśli jest za krótka, nie sięga następnego dachu i twój bohater spada w szczelinę. Jeśli jest za długa, wystaje i bohater schodzi prosto z drugiej krawędzi. Idealna deska jest dokładnie tak długa, jak szeroka jest szczelina. Zanim pomyślisz o combo czy szybkości, wytrenuj oko w ocenie tej odległości. Wszystko inne na tym się opiera." },
+      { "type": "h2", "text": "Gra wygrywa się w czerwonej strefie" },
+      { "type": "p", "text": "Każdy dach ma pośrodku małą czerwoną strefę. Jeśli koniec deski wyląduje w tej strefie, zdobywasz Perfect. Perfecty nie są tylko na pokaz: budują mnożnik combo. Lądowanie gdziekolwiek bezpiecznie utrzymuje cię przy życiu, ale lądowanie w czerwonej strefie sprawia, że wynik eksploduje. Nie celuj więc tylko w przetrwanie każdej szczeliny. Celuj w to, by za każdym razem wbić koniec deski w sam środek następnego dachu." },
+      { "type": "h2", "text": "Wspinaj się po poziomach combo" },
+      { "type": "p", "text": "Łączenie Perfectów bez błędu wypycha mnożnik przez kolejne, coraz wyższe poziomy, aż do trzęsącej ekranem serii GODLIKE na samej górze. Im wyżej jesteś, tym mocniejsze efekty: silniejsze wstrząsy kamery, jaśniejsze błyski, większy mnożnik na ekranie. Stąd biorą się ogromne wyniki. Dziesięć dachów z mnożnikiem GODLIKE jest wartych dużo więcej niż dziesięć pokonanych byle jak. Combo to nie dodatek, to cały silnik punktacji." },
+      { "type": "h2", "text": "Moment szału i jak go uniknąć" },
+      { "type": "p", "text": "Haczyk: jeden zły zrzut przerywa całą serię, a gra dba, żebyś to poczuł, brutalnym momentem COMBO LOST. Im wyżej byłeś, tym bardziej boli. Kluczem jest dyscyplina. Gdy combo jest już wysokie, nie bądź chciwy i się nie spiesz. Bezpieczny, staranny Perfect, który utrzymuje serię, jest zawsze wart więcej niż szybki, ryzykowny zrzut, który ją kończy. Znajdź równy rytm i się go trzymaj. Combo zabija panika, a nie gra." },
+      { "type": "h2", "text": "Normal do nauki, Hard dla chwały" },
+      { "type": "p", "text": "Rooftop Rush ma dwa tryby z osobnymi rankingami. Tryb Normal daje trochę więcej marginesu, więc tam ucz się rytmu i oswajaj z trafianiem w czerwone strefy. Tryb Hard zaostrza timing i wymaga dużo precyzyjniejszych desek, a jego ranking to miejsce, gdzie naprawdę zdolni gracze się wykazują. Najpierw opanuj timing w Normal, a potem przenieś tę pamięć mięśniową do Hard, gdy będziesz gotów walczyć o czołowy wynik." },
+      { "type": "h2", "text": "Wniosek" },
+      { "type": "p", "text": "Oceń szczelinę, celuj w czerwoną strefę i chroń combo, jakby od tego zależało twoje życie, bo na tych dachach praktycznie tak jest. Zachowaj spokój przy wysokim mnożniku i pamiętaj, że regularność zawsze wygrywa z szybkością. Zrób to, a przejdziesz od spadania z drugiego budynku do serii GODLIKE. A teraz wejdź na górę i postaraj się nie zrobić ragequit." }
+    ]
+  }
+}
