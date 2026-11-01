@@ -69,4 +69,20 @@ export const testGames = [
       { label: 'Prompt logo du jeu (Gemini, 1:1, palette propre au jeu)', text: 'Game logo wordmark reading exactly "TILTSHOCK" in heavy, blocky, tilted capital letters as if the word is sliding on a slanted plate, an electric lightning crack splitting the letters between TILT and SHOCK, color palette acid lime green and hot orange with a dark graphite outline, glossy 3D extrusion and soft glow, centered on a plain pure black background, crisp vector style, high contrast, no other text, no mascot, square 1:1 1024x1024.' },
     ],
   },
+  {
+    id: 'shovedown',
+    title: 'SHOVEDOWN',
+    description: 'Sumo néon en 3D : sur ta boule, pousse les bots hors d\'une arène qui rétrécit, vagues de plus en plus dures et boss TITAN toutes les 5 vagues.',
+    thumbnail: '/thumbnails/shovedown.jpg',
+    category: 'arcade',
+    orientation: 'portrait',
+    file: '/games/shovedown.html',
+    notes: 'Three.js. Score SHOVEDOWN_SCORE, modes classic / hard / daily. Pub revive (retour au centre avec bouclier) une fois par partie. Tactile : stick flottant (glisser n\'importe où) + bouton DASH ; clavier : flèches/WASD/ZQSD, Espace dash, P pause. Défi ami par lien (sd_seed).',
+    pr: 21,
+    extras: [
+      { label: 'Prompt miniature 1:1 (Gemini, 1024x1024)', text: 'Neon sumo arena floating over a dark violet void, seen from a high three-quarter angle, a small cute cyan chibi robot riding a glowing striped ball inside a lime green energy shield, ramming into a giant purple crowned titan robot on a huge ball, orange bots tumbling off the glowing orange and red rim into the abyss, sparks and shockwave rings, magenta concentric circles on the arena floor, synthwave arcade style, dramatic bloom, high contrast, no text, no letters, no logo.' },
+      { label: 'Prompt image de blog 16:9 (Gemini, 1376x768)', text: 'Wide cinematic shot of a circular neon arena hovering above an endless purple grid void, a cyan chibi robot on a ball dashing with a pink speed trail, several orange and red robot riders being knocked over the shrinking red-hot edge, a towering purple titan robot with golden spikes in the background, floating power-up crystals in orange, cyan and lime, sparks, fog and strong bloom, synthwave arcade atmosphere, no text, no letters, no logo.' },
+      { label: 'Prompt logo du jeu (Gemini, 1:1, palette propre au jeu)', text: 'Game logo wordmark reading exactly "SHOVEDOWN" in massive, heavy, wide capital letters leaning forward as if charging, the letters slightly squashed and cracked like a sumo impact, a round shockwave burst behind the O, color palette molten gold and crimson red with a black chrome outline, metallic bevel and hot glow, centered on a plain pure black background, crisp vector style, high contrast, no other text, no mascot, square 1:1 1024x1024.' },
+    ],
+  },
 ]
