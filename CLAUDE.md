@@ -51,7 +51,7 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
 5. Réécrire le jeu en un seul fichier `public/games/<id>.html` en appliquant les règles du prompt ci-dessous.
 6. Tester avec Playwright : desktop 1280x800, iPhone portrait 390x844 (et paysage si le jeu l'exige). Vérifier : démarrage, contrôles tactiles et clavier, game over, pub revive, envoi `_SCORE` et `RH_TRACK` (écouter `message` sur la page parente), aucune erreur console, aucun bouton coupé.
 7. Miniature `public/thumbnails/<id>.jpg` (carré, 1:1) : capture Playwright d'un moment de jeu spectaculaire. Ajouter dans la PR un prompt d'image pour que Laurent puisse générer une version plus belle s'il le souhaite.
-8. PR de test : ajouter l'entrée dans `src/data/testGames.js` (format existant : `id`, `title`, `description` courte en français, `thumbnail`, `category`, `orientation`, `file`, `notes` avec le type du message score et le mode). Mettre à jour `backlog.md` (statut `en test (PR #n)`), ouvrir la PR et la fusionner. S'arrêter là : la publication attend la validation de Laurent.
+8. PR de test : ajouter l'entrée dans `src/data/testGames.js` (format existant : `id`, `title`, `description` courte en français, `thumbnail`, `category`, `orientation`, `file`, `notes` avec le type du message score et le mode, plus `pr` (numéro de la PR de test) et `extras`, voir « Onglet À côté »). Mettre à jour `backlog.md` (statut `en test (PR #n)`), ouvrir la PR et la fusionner. S'arrêter là : la publication attend la validation de Laurent.
 9. PR de publication (après validation), intégration site :
    - `src/data/games.js` : nouvelle entrée à la fin du tableau `games`, même format que `city-runner` (description de 400 mots minimum, `tags`, `controls`, `author: 'Ragequit Arcade'`, `isNew: true`, `modes`, `defaultMode`, `seo` avec `title`, `metaDescription` et 8 questions de FAQ minimum).
    - `src/data/blog.js` : article guide `<id>-tips` (même format que `city-runner-tips`).
@@ -60,10 +60,14 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
    - Image de blog `public/blog/<id>-tips.jpg` (16:9), capture Playwright.
    - **Traductions obligatoires** (voir « Site multilingue ») : pour chaque langue de `CONTENT_LANGS` (`src/i18n/locale.jsx`), ajouter la traduction complète du jeu dans `src/data/i18n/<lang>/games-*.js` (dernier fichier, ou nouveau fichier `games-N.js` importé dans `games.js`) et de l'article dans `src/data/i18n/<lang>/posts-*.js` (idem avec `posts.js`). Mettre à jour aussi `siteSeo.gameSelection` dans `src/data/i18n/<lang>/site.js` et la catégorie dans `categories.js` si on les modifie en anglais.
    - `public/sitemap.xml` : ajouter aussi `/<lang>/game/<id>` et `/<lang>/blog/<id>-tips` pour chaque langue.
-   - Retirer l'entrée du jeu de `src/data/testGames.js`.
+   - Retirer l'entrée du jeu de `src/data/testGames.js` (ses `extras` disparaissent avec elle de l'onglet « À côté »).
 10. Lancer `npm install && npm run build` pour vérifier que le site compile (avant chaque PR, test ou publication). Ne jamais committer `package-lock.json` (annuler avec `git checkout package-lock.json`).
 11. Mettre à jour `backlog.md` : passer le jeu en `publié (PR #n)`, puis ajouter 2 ou 3 nouveaux candidats vérifiés (licence + intérêt) en fin de liste, avec la description du jeu d'origine, en gardant l'alternance 2D / 3D.
-12. Description de chaque PR en français : nom du jeu, ce qui a été transformé, résultats des tests, identifiant choisi, prompts d'image (Gemini, sans texte dans l'image : miniature 1:1 1024x1024 et image de blog 16:9 1376x768).
+12. Description de chaque PR en français : nom du jeu, ce qui a été transformé, résultats des tests, identifiant choisi, prompts d'image (Gemini, sans texte dans l'image : miniature 1:1 1024x1024 et image de blog 16:9 1376x768) et prompt de logo du jeu (voir ci-dessous).
+
+**Onglet « À côté » (admin)** : il affiche, pour les seuls jeux en test, le lien de la PR et les à-côtés du jeu, avec un bouton « Copier ». Ils sont stockés dans l'entrée du jeu dans `src/data/testGames.js` : `pr: <n>` et `extras: [{ label, text }]`, dans cet ordre : prompt miniature 1:1, prompt image de blog 16:9, prompt logo du jeu. Tout nouvel à-côté demandé par Laurent s'ajoute au même tableau. À la publication, l'entrée est retirée de `testGames.js` : rien d'autre à nettoyer.
+
+**Prompt de logo** : un logo-titre (wordmark) par jeu, en anglais pour Gemini, carré 1:1 1024x1024, fond noir uni, nom du jeu écrit exactement (seul texte autorisé), lettrage lié à la mécanique du jeu. **Palette propre au jeu**, différente des logos des autres jeux en test et des derniers jeux publiés (pas systématiquement cyan et magenta) : la nommer explicitement dans le prompt (ex. « acid lime green and hot orange »).
 
 La tâche quotidienne ne produit que des PR de test.
 

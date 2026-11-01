@@ -9,8 +9,11 @@
 //   3) ajoute une entrée ci-dessous
 //   4) ouvre la page admin → onglet "Test des jeux" → Lancer
 //
+//  Champs optionnels pour l'onglet admin « À côté » : `pr` (numéro de la PR de
+//  test) et `extras` ([{ label, text }] : prompts d'images, logo, etc.).
+//
 //  Quand le jeu est validé : copie l'entrée (au bon format) dans games.js
-//  et retire-la d'ici.
+//  et retire-la d'ici (ses extras disparaissent avec elle).
 // ─────────────────────────────────────────────────────────────────────────
 
 export const testGames = [
@@ -42,7 +45,13 @@ export const testGames = [
     category: 'arcade',
     orientation: 'portrait',
     file: '/games/loopstrike.html',
-    notes: 'Score LOOPSTRIKE_SCORE, modes classic / hard / daily. Pub revive une fois par partie. Tactile : glisser relatif ; souris : la comète suit le curseur ; clavier : flèches/WASD/ZQSD, P pause.'
+    notes: 'Score LOOPSTRIKE_SCORE, modes classic / hard / daily. Pub revive une fois par partie. Tactile : glisser relatif ; souris : la comète suit le curseur ; clavier : flèches/WASD/ZQSD, P pause.',
+    pr: 17,
+    extras: [
+      { label: 'Prompt miniature 1:1 (Gemini, 1024x1024)', text: 'Dark arcade scene viewed from above, a glowing white comet trailing a thick electric-cyan neon light ribbon that loops around and closes into a bright glowing ring, inside the ring several cyan hexagonal energy cores shattering into sparks, magenta spiked mines and an orange arrow-shaped hunter drone just outside the loop, deep purple-black background with faint neon grid, intense bloom, high contrast, sharp vector style, no text, no letters, no logos.' },
+      { label: 'Prompt image de blog 16:9 (Gemini, 1376x768)', text: 'Wide cinematic neon arcade battlefield seen from above, a white comet drawing a long cyan light trail that spirals into a closed loop around a cluster of glowing cyan hexagon cores exploding in sparks, a huge acid-yellow octagonal boss on the right dropping pink spiked mines, orange triangular drones closing in, dark violet background with subtle glowing grid, strong bloom and motion energy, clean vector look, no text, no letters, no logos.' },
+      { label: 'Prompt logo du jeu (Gemini, 1:1, palette propre au jeu)', text: 'Game logo wordmark reading exactly "LOOPSTRIKE" in bold, sharp, slightly italic futuristic capital letters, the letter O drawn as a glowing comet loop closing on itself, color palette ice white and deep electric violet with a single thin cyan light streak, chrome bevel and subtle outer glow, centered on a plain pure black background, crisp vector style, high contrast, no other text, no mascot, square 1:1 1024x1024.' },
+    ],
   },
   {
     id: 'tiltshock',
@@ -52,6 +61,12 @@ export const testGames = [
     category: 'challenge',
     orientation: 'portrait',
     file: '/games/tiltshock.html',
-    notes: 'Three.js. Score TILTSHOCK_SCORE, modes classic / hard / daily. Pub revive (+20 s) une fois par partie. Tactile : stick flottant (glisser n\'importe où), gyroscope optionnel au menu ; clavier : flèches/WASD/ZQSD, P pause. Défi ami par lien (ts_seed).'
+    notes: 'Three.js. Score TILTSHOCK_SCORE, modes classic / hard / daily. Pub revive (+20 s) une fois par partie. Tactile : stick flottant (glisser n\'importe où), gyroscope optionnel au menu ; clavier : flèches/WASD/ZQSD, P pause. Défi ami par lien (ts_seed).',
+    pr: 19,
+    extras: [
+      { label: 'Prompt miniature 1:1 (Gemini, 1024x1024)', text: 'A glowing neon 3D maze seen from a high three-quarter angle, walls topped with bright cyan and magenta light strips on a dark violet grid floor, a tiny cute pink robot with big white eyes rolling inside a transparent glass sphere, a red laser beam crossing a corridor, a black pit with a glowing red rim, golden diamond shards floating, a green light portal in the distance, synthwave arcade style, high contrast, dramatic glow, no text, no letters, no logo.' },
+      { label: 'Prompt image de blog 16:9 (Gemini, 1376x768)', text: 'Wide cinematic view over a huge neon labyrinth tilting slightly, glowing cyan and orange wall caps on a dark purple grid, a small pink robot inside a glass ball speeding toward a green beam of light at the exit, red lasers and glowing pits along the path, floating golden crystals, deep fog and bloom, synthwave arcade atmosphere, no text, no letters, no logo.' },
+      { label: 'Prompt logo du jeu (Gemini, 1:1, palette propre au jeu)', text: 'Game logo wordmark reading exactly "TILTSHOCK" in heavy, blocky, tilted capital letters as if the word is sliding on a slanted plate, an electric lightning crack splitting the letters between TILT and SHOCK, color palette acid lime green and hot orange with a dark graphite outline, glossy 3D extrusion and soft glow, centered on a plain pure black background, crisp vector style, high contrast, no other text, no mascot, square 1:1 1024x1024.' },
+    ],
   },
 ]
