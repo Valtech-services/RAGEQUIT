@@ -650,21 +650,75 @@ function Reserve(){
   )
 }
 
-// ── PAGE (onglets Dashboard / Test des jeux / Réserve) ─────────────────────
+// ── À CÔTÉ (prompts, liens… des jeux en test uniquement) ─────────────────
+// Lit le champ `extras` de chaque entrée de testGames.js : quand un jeu est
+// publié, son entrée est retirée de testGames.js, donc tout disparaît d'ici.
+function CopyButton({ text }){
+  const [done, setDone] = useState(false)
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(text) } catch {
+      const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select()
+      try { document.execCommand('copy') } catch { /* ignoré */ }
+      ta.remove()
+    }
+    setDone(true); setTimeout(() => setDone(false), 1500)
+  }
+  return <button className={`ac-copy ${done ? 'is-done' : ''}`} onClick={copy}>{done ? 'Copié' : 'Copier'}</button>
+}
+function Extras(){
+  const list = testGames.filter(g => g.pr || (g.extras && g.extras.length))
+  return (
+    <div className="gt">
+      <p className="gt-intro">
+        Tout ce qui accompagne les jeux <strong>en test</strong> : lien de la PR, prompts d'images (miniature, blog, logo)…
+        Ces éléments sont rangés dans <code>src/data/testGames.js</code> (champ <code>extras</code>) et disparaissent
+        automatiquement quand le jeu est publié.
+      </p>
+      {list.length === 0 ? (
+        <p className="adm-empty">Rien pour le moment.</p>
+      ) : (
+        <div className="ac-list">
+          {list.map(g => (
+            <section key={g.id} className="ac-game">
+              <div className="ac-game__head">
+                {g.thumbnail && <img className="ac-game__thumb" src={g.thumbnail} alt="" onError={e => { e.currentTarget.style.display='none' }} />}
+                <h3 className="ac-game__title">{g.title}</h3>
+                {g.pr && <a className="ac-game__pr" href={`https://github.com/Valtech-services/ragequit/pull/${g.pr}`} target="_blank" rel="noreferrer">PR #{g.pr}</a>}
+              </div>
+              {(g.extras || []).map((x, i) => (
+                <div key={i} className="ac-item">
+                  <div className="ac-item__head">
+                    <span className="ac-item__label">{x.label}</span>
+                    <CopyButton text={x.text} />
+                  </div>
+                  <p className="ac-item__text">{x.text}</p>
+                </div>
+              ))}
+            </section>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── PAGE (onglets Dashboard / Test des jeux / À côté / Réserve) ────────────
+const TAB_TITLES = { dashboard: 'Dashboard', games: 'Test des jeux', extras: 'À côté', reserve: 'Réserve' }
 function AdminShell(){
   const [tab, setTab] = useState('dashboard')
   return (
     <div className="adm">
       <header className="adm-header">
         <img src="/ragequit-logo-white.png" alt="Ragequit" className="adm-header__logo" />
-        <h1 className="adm-header__title">{tab === 'dashboard' ? 'Dashboard' : tab === 'games' ? 'Test des jeux' : 'Réserve'}</h1>
+        <h1 className="adm-header__title">{TAB_TITLES[tab]}</h1>
         <nav className="adm-tabs">
           <button className={`adm-tab ${tab==='dashboard'?'is-active':''}`} onClick={() => setTab('dashboard')}>Dashboard</button>
           <button className={`adm-tab ${tab==='games'?'is-active':''}`} onClick={() => setTab('games')}>Test des jeux</button>
+          <button className={`adm-tab ${tab==='extras'?'is-active':''}`} onClick={() => setTab('extras')}>À côté</button>
           <button className={`adm-tab ${tab==='reserve'?'is-active':''}`} onClick={() => setTab('reserve')}>Réserve</button>
         </nav>
       </header>
-      {tab === 'dashboard' ? <Dashboard /> : <div className="adm-body">{tab === 'games' ? <GameTester /> : <Reserve />}</div>}
+      {tab === 'dashboard' ? <Dashboard /> : <div className="adm-body">{tab === 'games' ? <GameTester /> : tab === 'extras' ? <Extras /> : <Reserve />}</div>}
     </div>
   )
 }
