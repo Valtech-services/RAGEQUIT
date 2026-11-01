@@ -44,4 +44,14 @@ export const testGames = [
     file: '/games/loopstrike.html',
     notes: 'Score LOOPSTRIKE_SCORE, modes classic / hard / daily. Pub revive une fois par partie. Tactile : glisser relatif ; souris : la comète suit le curseur ; clavier : flèches/WASD/ZQSD, P pause.'
   },
+  {
+    id: 'tiltshock',
+    title: 'TILTSHOCK',
+    description: 'Labyrinthe néon 3D à incliner : roule le noyau jusqu\'à la sortie avant la fin du chrono, évite trous et lasers, labyrinthes de plus en plus grands.',
+    thumbnail: '/thumbnails/tiltshock.jpg',
+    category: 'challenge',
+    orientation: 'portrait',
+    file: '/games/tiltshock.html',
+    notes: 'Three.js. Score TILTSHOCK_SCORE, modes classic / hard / daily. Pub revive (+20 s) une fois par partie. Tactile : stick flottant (glisser n\'importe où), gyroscope optionnel au menu ; clavier : flèches/WASD/ZQSD, P pause. Défi ami par lien (ts_seed).'
+  },
 ]
