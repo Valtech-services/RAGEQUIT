@@ -69,7 +69,7 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
 
 **Prompt de logo** : un logo-titre (wordmark) par jeu, en anglais pour Gemini, carré 1:1 1024x1024, fond noir uni, nom du jeu écrit exactement (seul texte autorisé), lettrage lié à la mécanique du jeu. **Palette propre au jeu**, différente des logos des autres jeux en test et des derniers jeux publiés (pas systématiquement cyan et magenta) : la nommer explicitement dans le prompt (ex. « acid lime green and hot orange »).
 
-La tâche quotidienne ne produit que des PR de test. À chaque exécution, elle fait deux choses indépendantes : (a) un nouveau jeu, si la limite d'attente des nouveaux jeux le permet ; (b) une refonte visuelle d'un jeu en ligne (voir « Refonte visuelle des jeux en ligne »), si sa propre limite le permet. Si l'une est bloquée, l'autre se fait quand même.
+La tâche quotidienne ne produit que des PR de test.
 
 **Notification obligatoire** : chaque exécution de la tâche quotidienne se termine par une notification à Laurent (outil `PushNotification`, qui part sur son téléphone et par e-mail), qu'elle ait réussi, qu'elle soit bloquée par la limite d'attente ou qu'elle ait échoué : nom du jeu, ce qu'il fait, lien de la PR et état du déploiement, ou bien la raison de l'arrêt. Laurent ne doit jamais se demander si la tâche a tourné.
 
@@ -91,7 +91,7 @@ Réécrire le code (plutôt que retoucher celui de l'auteur) garantit que le fic
 
 ## Finition visuelle (obligatoire)
 
-Priorité de Laurent : des jeux beaux, au niveau de ce qui tourne sur les réseaux. Un jeu qui marche mais qui a l'air d'un prototype n'est pas terminé. Chaque nouveau jeu et chaque refonte applique **toute** cette liste, et la PR coche chaque point.
+Priorité de Laurent : des jeux beaux, au niveau de ce qui tourne sur les réseaux. Un jeu qui marche mais qui a l'air d'un prototype n'est pas terminé. Chaque nouveau jeu applique **toute** cette liste, et la PR coche chaque point.
 
 **1. Effets visuels**
 - Jeux Three.js : post-traitement via les addons de la même version figée que `three` (`EffectComposer`, `RenderPass`, `UnrealBloomPass`, `OutputPass`), bloom réglé pour que seuls les néons brillent (seuil élevé), tone mapping ACES, `outputColorSpace` sRGB, brouillard coloré, lumière principale + lumière d'ambiance teintée + au moins une lumière d'accent colorée, ombres douces sur les éléments proches.
@@ -117,21 +117,8 @@ Priorité de Laurent : des jeux beaux, au niveau de ce qui tourne sur les résea
 - Respecter `prefers-reduced-motion` : tremblements et flashs atténués.
 
 **5. Contrôle qualité**
-- Captures Playwright iPhone 390x844 de 3 moments (titre, action intense, game over) jointes à la PR. Pour une refonte, captures **avant / après** des mêmes moments côte à côte.
+- Captures Playwright iPhone 390x844 de 3 moments (titre, action intense, game over) jointes à la PR.
 - Vérifier sur les captures : rien de terne ou d'uni, rien de coupé, le coin haut-gauche libre.
-
-## Refonte visuelle des jeux en ligne
-
-Les jeux déjà publiés sont repris un par un selon `visual-backlog.md` pour atteindre le niveau « Finition visuelle ». Le gameplay, l'`id`, le type du message `_SCORE`, les modes et le leaderboard ne changent pas (les scores existants restent valables). Le code peut être réécrit librement. Les jeux qui ont déjà un dossier d'images à eux (`public/games/bird-blitz/`, `crush-depth/`, `dead-zone/`, `stellar-forge/`) peuvent continuer à l'utiliser : la règle « tout généré » s'applique aux jeux issus d'une source externe.
-
-1. Prendre le premier jeu au statut `à faire` de `visual-backlog.md`.
-2. Captures « avant » du jeu en ligne (`public/games/<id>.html`).
-3. Écrire la nouvelle version dans `public/games/<id>-v2.html` en appliquant « Finition visuelle » et tout le « Prompt de retravail » (même protocole score et pub, même `game` = `<id>`).
-4. Tests Playwright habituels + captures « après ».
-5. PR de test (branche `claude/visuel-<id>`) : entrée dans `src/data/testGames.js` avec `id: '<id>-v2'`, `title: '<Titre> (refonte visuelle)'`, `file: '/games/<id>-v2.html'`, la miniature actuelle, `notes` (ce qui a changé, type du message score), `pr` et `extras` (prompt miniature 1:1 et image de blog 16:9 mis à jour). Statut `en test (PR #n)` dans `visual-backlog.md`. Fusion immédiate.
-6. Après « validé » de Laurent, PR de publication : remplacer `public/games/<id>.html` par le contenu de `<id>-v2.html`, supprimer `<id>-v2.html`, nouvelle miniature si elle est meilleure, retirer l'entrée de `testGames.js`, statut `publié (PR #n)`. Aucun changement de textes ni de traductions n'est nécessaire.
-
-**Limite d'attente des refontes** : 2 refontes `en test` au maximum, comptées séparément des nouveaux jeux.
 
 ## Prompt de retravail d'un jeu (référence)
 
