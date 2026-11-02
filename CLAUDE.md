@@ -48,7 +48,7 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
 2. Cloner la source dans un dossier temporaire hors du repo. Ne jamais exécuter son code (pas de `npm install` ni de script) : on la lit uniquement.
 3. Audit sécurité de la source : appels réseau, scripts externes, code obfusqué, `eval`, trackers, iframes. Le noter dans la PR.
 4. Concevoir la transformation (voir « Transformation obligatoire ») et l'écrire dans la PR avant le code.
-5. Réécrire le jeu en un seul fichier `public/games/<id>.html` en appliquant les règles du prompt ci-dessous.
+5. Réécrire le jeu en un seul fichier `public/games/<id>.html` en appliquant les règles du prompt ci-dessous et toute la section « Finition visuelle ».
 6. Tester avec Playwright : desktop 1280x800, iPhone portrait 390x844 (et paysage si le jeu l'exige). Vérifier : démarrage, contrôles tactiles et clavier, game over, pub revive, envoi `_SCORE` et `RH_TRACK` (écouter `message` sur la page parente), aucune erreur console, aucun bouton coupé.
 7. Miniature `public/thumbnails/<id>.jpg` (carré, 1:1) : capture Playwright d'un moment de jeu spectaculaire. Ajouter dans la PR un prompt d'image pour que Laurent puisse générer une version plus belle s'il le souhaite.
 8. PR de test : ajouter l'entrée dans `src/data/testGames.js` (format existant : `id`, `title`, `description` courte en français, `thumbnail`, `category`, `orientation`, `file`, `notes` avec le type du message score et le mode, plus `pr` (numéro de la PR de test) et `extras`, voir « Onglet À côté »). Mettre à jour `backlog.md` (statut `en test (PR #n)`), ouvrir la PR et la fusionner. S'arrêter là : la publication attend la validation de Laurent.
@@ -69,7 +69,7 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
 
 **Prompt de logo** : un logo-titre (wordmark) par jeu, en anglais pour Gemini, carré 1:1 1024x1024, fond noir uni, nom du jeu écrit exactement (seul texte autorisé), lettrage lié à la mécanique du jeu. **Palette propre au jeu**, différente des logos des autres jeux en test et des derniers jeux publiés (pas systématiquement cyan et magenta) : la nommer explicitement dans le prompt (ex. « acid lime green and hot orange »).
 
-La tâche quotidienne ne produit que des PR de test.
+La tâche quotidienne ne produit que des PR de test. À chaque exécution, elle fait deux choses indépendantes : (a) un nouveau jeu, si la limite d'attente des nouveaux jeux le permet ; (b) une refonte visuelle d'un jeu en ligne (voir « Refonte visuelle des jeux en ligne »), si sa propre limite le permet. Si l'une est bloquée, l'autre se fait quand même.
 
 **Notification obligatoire** : chaque exécution de la tâche quotidienne se termine par une notification à Laurent (outil `PushNotification`, qui part sur son téléphone et par e-mail), qu'elle ait réussi, qu'elle soit bloquée par la limite d'attente ou qu'elle ait échoué : nom du jeu, ce qu'il fait, lien de la PR et état du déploiement, ou bien la raison de l'arrêt. Laurent ne doit jamais se demander si la tâche a tourné.
 
@@ -88,6 +88,50 @@ On ne republie jamais un jeu tel quel. La source sert de référence de gameplay
 - le leaderboard et la pub revive selon le protocole ci-dessous.
 
 Réécrire le code (plutôt que retoucher celui de l'auteur) garantit que le fichier final ne contient aucune portion du code d'origine. C'est ce qui permet d'appliquer la règle 2 (aucun crédit) sans enfreindre la licence de la source, et de rester cohérent avec le blog du site qui affirme que les jeux sont créés par RageQuit. Les images, sons et polices d'origine ne sont jamais réutilisés : tout est généré (canvas, formes, Web Audio).
+
+## Finition visuelle (obligatoire)
+
+Priorité de Laurent : des jeux beaux, au niveau de ce qui tourne sur les réseaux. Un jeu qui marche mais qui a l'air d'un prototype n'est pas terminé. Chaque nouveau jeu et chaque refonte applique **toute** cette liste, et la PR coche chaque point.
+
+**1. Effets visuels**
+- Jeux Three.js : post-traitement via les addons de la même version figée que `three` (`EffectComposer`, `RenderPass`, `UnrealBloomPass`, `OutputPass`), bloom réglé pour que seuls les néons brillent (seuil élevé), tone mapping ACES, `outputColorSpace` sRGB, brouillard coloré, lumière principale + lumière d'ambiance teintée + au moins une lumière d'accent colorée, ombres douces sur les éléments proches.
+- Jeux 2D (canvas) : halo néon (`shadowBlur` ou rendu sur un canvas hors écran puis composition `lighter`), fond animé jamais uni (dégradé qui respire, grille ou parallaxe sur 2 à 3 plans, étoiles ou poussières), vignettage léger, scanlines ou grain très discrets si cela sert l'identité.
+- Shaders bienvenus pour les fonds (WebGL ou Three.js) tant que la fluidité tient.
+
+**2. Sensations de jeu (game feel)**
+- Particules sur chaque événement important : impact, destruction, ramassage, combo, mort (pool d'objets réutilisés, pas de création à chaque image).
+- Tremblement d'écran court et proportionné, ralenti (hit-stop de 40 à 120 ms) sur les gros impacts, flash bref à l'écran.
+- Retour visuel sur chaque action du joueur : écrasement/étirement (squash and stretch), rebond des boutons, traînées derrière les objets rapides, chiffres de score flottants.
+- Animation d'entrée et de sortie des éléments (easing, jamais d'apparition sèche), compteur de score qui défile au lieu de sauter.
+
+**3. Finitions**
+- Palette propre au jeu (3 à 5 couleurs nommées en variables CSS/JS), dégradés et éclairage soignés, contraste lisible au soleil sur mobile.
+- Transitions entre écrans (titre, jeu, game over, pub) : fondu, glissement ou balayage de 200 à 400 ms.
+- HUD : typographie système soignée (pile `system-ui`, graisses 800/900, chiffres `font-variant-numeric: tabular-nums`, léger halo), hiérarchie claire, icônes dessinées en SVG ou canvas.
+- Écran titre qui donne envie : logo-titre animé, fond vivant, bouton jouer qui pulse.
+- Écran de game over avec résumé animé (score, record, meilleur combo) et rejouer en un tap.
+
+**4. Performance (non négociable)**
+- 60 images par seconde visées, jamais sous 30 sur iPhone (mesurer avec Playwright en profil mobile).
+- `devicePixelRatio` plafonné à 2, qualité réduite automatiquement (bloom en demi-résolution, moins de particules) si la fréquence chute.
+- Respecter `prefers-reduced-motion` : tremblements et flashs atténués.
+
+**5. Contrôle qualité**
+- Captures Playwright iPhone 390x844 de 3 moments (titre, action intense, game over) jointes à la PR. Pour une refonte, captures **avant / après** des mêmes moments côte à côte.
+- Vérifier sur les captures : rien de terne ou d'uni, rien de coupé, le coin haut-gauche libre.
+
+## Refonte visuelle des jeux en ligne
+
+Les jeux déjà publiés sont repris un par un selon `visual-backlog.md` pour atteindre le niveau « Finition visuelle ». Le gameplay, l'`id`, le type du message `_SCORE`, les modes et le leaderboard ne changent pas (les scores existants restent valables). Le code peut être réécrit librement. Les jeux qui ont déjà un dossier d'images à eux (`public/games/bird-blitz/`, `crush-depth/`, `dead-zone/`, `stellar-forge/`) peuvent continuer à l'utiliser : la règle « tout généré » s'applique aux jeux issus d'une source externe.
+
+1. Prendre le premier jeu au statut `à faire` de `visual-backlog.md`.
+2. Captures « avant » du jeu en ligne (`public/games/<id>.html`).
+3. Écrire la nouvelle version dans `public/games/<id>-v2.html` en appliquant « Finition visuelle » et tout le « Prompt de retravail » (même protocole score et pub, même `game` = `<id>`).
+4. Tests Playwright habituels + captures « après ».
+5. PR de test (branche `claude/visuel-<id>`) : entrée dans `src/data/testGames.js` avec `id: '<id>-v2'`, `title: '<Titre> (refonte visuelle)'`, `file: '/games/<id>-v2.html'`, la miniature actuelle, `notes` (ce qui a changé, type du message score), `pr` et `extras` (prompt miniature 1:1 et image de blog 16:9 mis à jour). Statut `en test (PR #n)` dans `visual-backlog.md`. Fusion immédiate.
+6. Après « validé » de Laurent, PR de publication : remplacer `public/games/<id>.html` par le contenu de `<id>-v2.html`, supprimer `<id>-v2.html`, nouvelle miniature si elle est meilleure, retirer l'entrée de `testGames.js`, statut `publié (PR #n)`. Aucun changement de textes ni de traductions n'est nécessaire.
+
+**Limite d'attente des refontes** : 2 refontes `en test` au maximum, comptées séparément des nouveaux jeux.
 
 ## Prompt de retravail d'un jeu (référence)
 
