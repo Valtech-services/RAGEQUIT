@@ -75,7 +75,7 @@ La tâche quotidienne ne produit que des PR de test.
 
 **Réserve visible dans l'admin** : l'onglet « Réserve » de la page admin lit directement `backlog.md`. Chaque ligne du tableau principal doit donc garder ses 7 colonnes (`#`, source, licence, catégorie, le jeu d'origine en bref, piste de transformation, statut), avec une description courte en français du jeu d'origine.
 
-**Jeux 3D** : la réserve intercale des jeux 3D avec personnage (Three.js, comme `city-runner`) entre les jeux 2D, environ un sur deux. Personnages et décors sont modélisés dans le code (formes Three.js, matériaux, animations procédurales) : aucun modèle, texture ou son de la source. Pour ces jeux, tester aussi la fluidité sur iPhone (pas de chute sous 30 images par seconde) et garder les contrôles tactiles simples (stick virtuel et un ou deux boutons au maximum). Si un jeu est encore en test sans validation, elle prépare quand même le suivant, dans la limite de 3 jeux en attente.
+**Jeux 3D** : la réserve intercale des jeux 3D avec personnage (Three.js, comme `city-runner`) entre les jeux 2D, environ un sur deux. Personnages, ennemis et décors viennent en priorité des bibliothèques libres (voir « Assets libres »), sinon sont modélisés dans le code (formes Three.js, matériaux, animations procédurales) ; jamais de modèle, texture ou son du jeu source. Pour ces jeux, tester aussi la fluidité sur iPhone (pas de chute sous 30 images par seconde) et garder les contrôles tactiles simples (stick virtuel et un ou deux boutons au maximum). Si un jeu est encore en test sans validation, elle prépare quand même le suivant, dans la limite de 3 jeux en attente.
 
 **Limite d'attente :** compter les jeux au statut `en test` dans `backlog.md`. S'il y en a 3 ou plus, la tâche ne crée aucun jeu : elle termine par un message court à Laurent listant les jeux qui attendent son test dans l'admin. La production reprend automatiquement dès qu'un jeu est validé (ou abandonné) et que le compteur repasse sous 3. Rien n'est jamais perdu : le backlog garde l'ordre et l'état de chaque jeu.
 
@@ -87,7 +87,28 @@ On ne republie jamais un jeu tel quel. La source sert de référence de gameplay
 - des contrôles pensés mobile d'abord (plus de 85 % du trafic) ;
 - le leaderboard et la pub revive selon le protocole ci-dessous.
 
-Réécrire le code (plutôt que retoucher celui de l'auteur) garantit que le fichier final ne contient aucune portion du code d'origine. C'est ce qui permet d'appliquer la règle 2 (aucun crédit) sans enfreindre la licence de la source, et de rester cohérent avec le blog du site qui affirme que les jeux sont créés par RageQuit. Les images, sons et polices d'origine ne sont jamais réutilisés : tout est généré (canvas, formes, Web Audio).
+Réécrire le code (plutôt que retoucher celui de l'auteur) garantit que le fichier final ne contient aucune portion du code d'origine. C'est ce qui permet d'appliquer la règle 2 (aucun crédit) sans enfreindre la licence de la source, et de rester cohérent avec le blog du site qui affirme que les jeux sont créés par RageQuit. Les images, sons et polices du jeu d'origine ne sont jamais réutilisés. À la place : assets libres (voir « Assets libres ») et éléments générés en code (canvas, formes, Web Audio).
+
+## Assets libres (bibliothèques gratuites)
+
+Laurent veut des jeux beaux, et l'automatisation avant tout. Utiliser des assets gratuits est encouragé, à chaque jeu, dès qu'ils rendent le jeu plus beau qu'un rendu en code : en général un personnage principal animé, 4 à 5 ennemis, un boss, quelques objets (projectiles, power-ups, pièces) et les sons.
+
+**Licence : CC0 ou domaine public uniquement** (usage commercial libre, aucune attribution exigée, compatible avec la règle « aucun crédit »). Refuser CC-BY, CC-BY-SA, toute licence « non commercial », les assets sans licence claire et les « free » de stores dont les conditions interdisent la redistribution web. Vérifier la licence dans le fichier `LICENSE`/`README` du pack lui-même, pas seulement sur une page tierce.
+
+**Sources joignables par la tâche automatique** (dépôts GitHub, clonés hors du repo) :
+- Kenney : dépôts `KenneyNL/*` (starter kits avec modèles `.glb`, sprites et sons, assets déclarés CC0 dans le README).
+- Quaternius : ports sous licence CC0-1.0 (ex. `Malcolmnixon/Quaternius-*`), personnages et monstres animés.
+- Tout autre dépôt GitHub dont le pack est explicitement CC0 / domaine public (chercher avec `gh api search/repositories`).
+Les sites kenney.nl, quaternius.com, poly.pizza, opengameart.org et itch.io ne sont pas joignables depuis le bac à sable : ne pas insister, passer par GitHub.
+
+**Intégration**
+- Fichiers dans `public/games/<id>/` (sous-dossiers `models/`, `sprites/`, `audio/`), chargés en relatif depuis `public/games/<id>.html`.
+- Optimisation obligatoire avant commit : modèles avec `npx @gltf-transform/cli` (textures WebP 512 px max, `simplify` vers 3 000 à 10 000 triangles par personnage, `prune`, `dedup`), sprites en WebP ou PNG compressé, sons en `.ogg` ou `.mp3` courts. **Budget : 5 Mo maximum par jeu**, 8 Mo pour un jeu 3D riche.
+- Recolorer, re-teinter ou retexturer pour l'identité néon du jeu (matériaux émissifs, palette du jeu) : les assets ne doivent pas avoir l'air d'un pack générique.
+- Écran de chargement soigné avec barre de progression ; le jeu reste jouable si un asset ne charge pas (repli sur une forme générée en code).
+- Aucun nom d'auteur ni de pack dans le jeu ni sur le site (CC0 ne l'exige pas).
+
+**Traçabilité (preuve de licence)** : chaque asset utilisé est noté dans `ASSETS-LICENCES.md` à la racine du dépôt (jamais dans `public/`) : jeu, fichier, pack d'origine, URL du dépôt, licence, date. La PR liste aussi ces assets.
 
 ## Finition visuelle (obligatoire)
 
@@ -123,7 +144,7 @@ Priorité de Laurent : des jeux beaux, au niveau de ce qui tourne sur les résea
 ## Prompt de retravail d'un jeu (référence)
 
 1. FORMAT DE SORTIE
-- Un seul fichier .html autonome : tout le CSS dans une balise `<style>`, tout le JavaScript dans une balise `<script>`. Aucune dépendance externe, aucun build, aucun import de fichier local.
+- Un seul fichier .html autonome : tout le CSS dans une balise `<style>`, tout le JavaScript dans une balise `<script>`. Aucune dépendance externe, aucun build. Seul import de fichiers locaux autorisé : les assets libres du jeu dans `public/games/<id>/` (chemins relatifs `./<id>/...`).
 - Exception autorisée : les jeux 3D peuvent charger Three.js (et ses addons) via une importmap depuis unpkg ou jsDelivr, version figée (ex. `three@0.160.0`), comme `city-runner`. Aucune autre bibliothèque externe.
 
 2. SUPPRESSION DES CRÉDITS
