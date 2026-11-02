@@ -100,5 +100,55 @@ export default {
         { "q": "LINESTORM ücretsiz mi ve mobilde oynanabiliyor mu?", "a": "LINESTORM tamamen ücretsizdir, indirme ve hesap gerektirmez ve telefonda, tablette ve bilgisayarda tarayıcında çalışır. Mobilde tek başparmak için yapıldı. Adını sıralamada görmek istiyorsan ücretsiz bir Ragequit Arcade hesabı oluştur." }
       ]
     }
+  },
+  "loopstrike": {
+    "description": "LOOPSTRIKE, silahın arkanda bıraktığın iz olduğu ücretsiz bir neon arcade oyunudur. Karanlık bir ızgara üzerinde parlayan bir kuyruklu yıldızı yönetirsin ve kuyruğu arkasında camgöbeği ve pembe ışıktan bir kurdele gibi uzanır. Bu kuyruğa herhangi bir yerinden, hatta parlayan ucundan dokun ya da onu kes, döngü kapanır: içinde kalan her şey bir kıvılcım yağmuruyla yok olur. İndirme yok, kayıt yok. Oyun telefon, tablet ve bilgisayarda tarayıcında anında açılır ve bir tur tek dokunuşla başlar. Telefonda ekranın herhangi bir yerinde parmağını kaydırırsın, kuyruklu yıldız başparmağını takip eder. Fareyle kuyruklu yıldız imleci kovalar, klavyede ise ok tuşları, WASD veya ZQSD ile yönlendirirsin. Arena, her birinin etrafında yavaşça boşalan bir halka bulunan camgöbeği çekirdeklerle dolar. Halkası bitmeden bir çekirdeği döngüye al, yoksa patlar ve enerji çubuğunu boşaltır. İkinci dalgadan itibaren dikenli macenta mayınlar belirir: onları asla döngüye alma ve asla dokunma, kendiliğinden kaybolmalarına izin ver. Üçüncü dalgadan itibaren turuncu avcılar kuyruklu yıldızına kilitlenir ve onu tüm ızgarada kovalar, bu yüzden sana ulaşmadan onları yakalaman gerekir. Her beş dalgada bir, dönen kalkan plakalarıyla korunan devasa asit sarısı bir sekizgen olan Warden gelir. Arenada dolaşıp mayın bırakır ve yalnızca çekirdeğinin etrafına çizilen bir döngü ondan her seferinde bir kalkan koparabilir. Puanlama cesareti ve isabeti ödüllendirir. Her çekirdek ne kadar erken yakalanırsa o kadar değerlidir ve aynı döngüde birden fazla hedef yakalamak puanları katlar. Döngüleri art arda kapat, kombon yükselsin, sekiz katına kadar. Bir dalgayı bitirmek bonus, Warden'ı devirmek ise devasa bir bonus kazandırır. Parlayan güçlendirmeler dayanmana yardım eder: SLOW-MO tüm arenayı yavaşlatır, LONG TAIL daha büyük döngüler çizebilmen için izini uzatır, NOVA ekrandaki tüm düşmanları siler ve SHIELD enerjini doldurur. Her büyük vuruş aksiyonu saniyenin bir kesri kadar dondurur, ekranı sarsar ve onu kıymıklar, şok dalgaları ve kırılan cam sesleriyle doldurur. Üç oyun biçimi var. Classic standart turdur. Hard modunda çekirdekler daha hızlı patlar ve daha sert vurur, kendi sıralamasıyla. Daily run tüm oyunculara gün boyunca tam olarak aynı doğma noktalarını verir. Her turdan sonra bir meydan okuma bağlantısı gönderebilirsin, böylece bir arkadaşın tam olarak aynı oyunu oynar ve skorunu geçmeye çalışır. Her turda bir kez kısa bir reklam izleyerek enerjini doldurabilir, mayınları temizleyebilir ve devam edebilirsin. LOOPSTRIKE'ı aç, ilk döngünü çiz ve tek seferde kaç hedef yakalayabileceğini gör.",
+    "controls": "Kuyruklu yıldızını yönlendirmek için herhangi bir yerde kaydır. Kendi kuyruğuna, hatta parlayan ucuna dokunarak ya da onu keserek bir döngüyü kapat. Fareyle kuyruklu yıldız imleci izler; klavyede ok tuşlarını, WASD veya ZQSD'yi, duraklatmak için P'yi kullan. Halkaları bitmeden çekirdekleri döngüye al, avcıları yakala, mayınları asla döngüye alma ve onlara dokunma.",
+    "seo": {
+      "title": "LOOPSTRIKE - Ücretsiz Neon Döngü Arcade Oyunu | Ragequit Arcade",
+      "metaDescription": "LOOPSTRIKE'ı ücretsiz oyna. Kuyruklu yıldızının kuyruğuyla neon döngüler çizip çekirdekleri yakala, mayınlardan ve avcılardan kaç, x8'e kadar kombo yap ve boss Warden'ı yen. İndirme yok.",
+      "faq": [
+        {
+          "q": "LOOPSTRIKE nasıl oynanır?",
+          "a": "Arkasında neon bir kuyruk bırakan parlayan bir kuyruklu yıldızı yönetirsin. Ekranın herhangi bir yerinde parmağını kaydır ya da fareyi oynat, kuyruklu yıldız seni takip eder. Kuyruklu yıldız kendi kuyruğuna, hatta parlayan ucuna dokunduğunda ya da onu kestiğinde döngü kapanır ve içindeki her şey yok olur. Halkaları bitmeden çekirdekleri yakala ve olabildiğince çok dalga hayatta kal."
+        },
+        {
+          "q": "Bir döngüyü nasıl kapatırım?",
+          "a": "Kuyruklu yıldızının başını kuyruğunun herhangi bir yerine geri getir. Kuyruğu kesebilir, ortasından dokunabilir ya da en ucundaki parlayan noktaya dokunabilirsin. Bir döngünün sayılması için en küçük bir boyutu olmalıdır, bu yüzden minicik daireler işe yaramaz. Kuyruk ne kadar uzunsa o kadar büyük döngüler çizebilirsin."
+        },
+        {
+          "q": "Çekirdekler, mayınlar ve avcılar nedir?",
+          "a": "Camgöbeği çekirdekler hedeflerindir: her birinin zamanla boşalan bir halkası vardır ve halka biterse çekirdek patlar, enerjini götürür. Macenta mayınlar 2. dalgadan itibaren belirir: onları döngüye almak ya da onlara dokunmak sana zarar verir, bu yüzden kaybolmalarını bekle. Turuncu avcılar 3. dalgadan itibaren çıkar ve kuyruklu yıldızını kovalar: sana çarpmadan onları yakala."
+        },
+        {
+          "q": "Kombo nasıl işler?",
+          "a": "Bir öncekinden yaklaşık iki saniye içinde bir şey yok eden her döngü kombonu artırır, sekiz katına kadar. Aynı döngüde birden fazla hedef yakalamak puanları yeniden katlar. Hasar almak komboyu sıfırlar, bu yüzden hızlı ve temiz döngüler büyük bir skorun anahtarıdır."
+        },
+        {
+          "q": "Warden kimdir?",
+          "a": "Warden her beş dalgada bir gelen bosstur: etrafında dönen kalkan plakaları olan dev sarı bir sekizgen, hâlâ dayanabileceği her vuruş için bir plaka. Arenada dolaşır ve mayın bırakır, her bırakıştan hemen önce pembe bir uyarı halkası yanıp söner. Bir kalkanı koparmak için çekirdeğinin etrafına döngü çiz ve düşene kadar tekrarla, devasa bir bonus kazan."
+        },
+        {
+          "q": "Güçlendirmeler ne işe yarar?",
+          "a": "SLOW-MO tüm arenayı birkaç saniye yavaşlatır, LONG TAIL çok daha büyük döngüler çizebilmen için izini uzatır, NOVA ekrandaki tüm düşmanları bir anda yok eder ve SHIELD enerji çubuğunun büyük bir kısmını doldurur. Üzerlerinden geçerek ya da bir döngünün içine hapsederek topla."
+        },
+        {
+          "q": "Classic, Hard ve Daily arasındaki fark nedir?",
+          "a": "Classic standart turdur. Hard modunda çekirdekler daha hızlı patlar ve her vuruş daha fazla enerji götürür, kendi sıralamasıyla. Daily run tüm oyunculara gün boyu aynı doğma noktalarını verir, böylece skorlar adil şekilde karşılaştırılır."
+        },
+        {
+          "q": "Bir arkadaşıma meydan okuyabilir miyim?",
+          "a": "Evet. Bir turdan sonra Challenge a friend düğmesine basarak skorunla birlikte bir bağlantı paylaş. Arkadaşın aynı doğma noktalarıyla tam olarak aynı oyunu oynar ve seni geçip geçmediğini görür."
+        },
+        {
+          "q": "Kaybettikten sonra devam edebilir miyim?",
+          "a": "Her turda bir kez kısa bir reklam izleyerek enerjini doldurabilir, ekrandaki tüm mayınları temizleyebilir ve mevcut skorunla oynamaya devam edebilirsin. Bunu rekoruna yakın bir tur için sakla."
+        },
+        {
+          "q": "LOOPSTRIKE ücretsiz mi ve telefonda oynanabilir mi?",
+          "a": "LOOPSTRIKE tamamen ücretsizdir, indirme ya da hesap gerektirmez ve telefon, tablet ve bilgisayarlarda tarayıcıda çalışır. Öncelikle dokunmatik ekranlar için tasarlandı: tek bir parmak yeterli. Adının sıralamada görünmesini istiyorsan ücretsiz bir Ragequit Arcade hesabı oluştur."
+        }
+      ]
+    }
   }
 }

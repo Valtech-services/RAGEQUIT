@@ -100,5 +100,55 @@ export default {
         { "q": "LINESTORM é grátis e dá para jogar no celular?", "a": "LINESTORM é totalmente grátis, sem download e sem conta, e roda no seu navegador no celular, tablet e computador. Ele foi feito para um polegar só no celular. Crie uma conta grátis no Ragequit Arcade se quiser seu nome no ranking." }
       ]
     }
+  },
+  "loopstrike": {
+    "description": "LOOPSTRIKE é um jogo arcade neon grátis em que a sua arma é o rastro que você deixa para trás. Você pilota um cometa brilhante sobre uma grade escura, e a cauda dele se estica como uma fita de luz ciano e rosa. Toque essa cauda em qualquer ponto, até na ponta brilhante, ou cruze-a, e o laço se fecha: tudo o que fica preso dentro é destruído numa chuva de faíscas. Sem download e sem cadastro. O jogo abre na hora no seu navegador, no celular, tablet ou computador, e uma partida começa com um único toque. No celular, você desliza o dedo em qualquer lugar da tela e o cometa segue o seu polegar. Com o mouse, o cometa persegue o cursor, e no teclado você pode guiá-lo com as setas, WASD ou ZQSD. A arena se enche de núcleos ciano, cada um cercado por um anel que vai se esvaziando. Prenda um núcleo antes que o anel acabe, senão ele explode e drena a sua barra de energia. A partir da segunda onda aparecem minas magenta cheias de espinhos: nunca as prenda e nunca encoste nelas, deixe que sumam sozinhas. A partir da terceira onda, caçadores laranja travam no seu cometa e o perseguem pela grade inteira, então você precisa prendê-los antes que o alcancem. A cada cinco ondas chega o Warden, um octógono enorme amarelo-ácido protegido por placas de escudo em órbita. Ele vaga pela arena soltando minas, e só um laço desenhado em volta do seu núcleo consegue arrancar um escudo por vez. A pontuação recompensa ousadia e precisão. Cada núcleo vale mais quanto antes você o pega, e prender vários alvos no mesmo laço multiplica os pontos. Feche laços em sequência e o seu combo sobe, até vezes oito. Terminar uma onda dá um bônus, e derrubar o Warden dá um bônus enorme. Power-ups brilhantes ajudam você a resistir: SLOW-MO deixa toda a arena mais lenta, LONG TAIL alonga o rastro para desenhar laços maiores, NOVA apaga todos os inimigos da tela e SHIELD recarrega a sua energia. Cada grande impacto congela a ação por uma fração de segundo, sacode a tela e a enche de estilhaços, ondas de choque e sons de vidro quebrando. Há três modos de jogo. Classic é a partida padrão. O modo Hard faz os núcleos explodirem mais rápido e baterem mais forte, com um ranking próprio. O Daily run dá a todos os jogadores exatamente as mesmas aparições durante o dia. Depois de cada partida, você pode enviar um link de desafio para um amigo jogar exatamente a mesma partida e tentar bater a sua pontuação. Uma vez por partida, você pode assistir a um anúncio curto para recarregar a energia, limpar as minas e continuar. Abra o LOOPSTRIKE, desenhe o seu primeiro laço e veja quantos alvos consegue prender de uma vez.",
+    "controls": "Deslize em qualquer lugar para guiar o seu cometa. Feche um laço tocando a própria cauda, até a ponta brilhante, ou cruzando-a. Com o mouse, o cometa segue o cursor; no teclado, use as setas, WASD ou ZQSD, e P para pausar. Prenda os núcleos antes que o anel se esvazie, prenda os caçadores e nunca prenda nem toque as minas.",
+    "seo": {
+      "title": "LOOPSTRIKE - Jogo arcade neon grátis de laços | Ragequit Arcade",
+      "metaDescription": "Jogue LOOPSTRIKE grátis. Desenhe laços neon com a cauda do seu cometa para prender núcleos, desvie de minas e caçadores, faça combos até x8 e derrote o chefe Warden. Sem download.",
+      "faq": [
+        {
+          "q": "Como se joga LOOPSTRIKE?",
+          "a": "Você guia um cometa brilhante que deixa uma cauda neon para trás. Deslize em qualquer lugar da tela, ou mova o mouse, e o cometa segue. Quando o cometa toca a própria cauda, até a ponta brilhante, ou a cruza, o laço se fecha e tudo o que está dentro é destruído. Prenda os núcleos antes que o anel acabe e sobreviva ao maior número de ondas possível."
+        },
+        {
+          "q": "Como fechar um laço?",
+          "a": "Leve a cabeça do cometa até qualquer parte da cauda. Você pode cruzar a cauda, tocá-la no meio ou tocar o ponto brilhante bem na ponta. O laço precisa de um tamanho mínimo para contar, então círculos minúsculos não fazem nada. Quanto mais longa a cauda, maiores os laços que você pode desenhar."
+        },
+        {
+          "q": "O que são núcleos, minas e caçadores?",
+          "a": "Os núcleos ciano são os seus alvos: cada um tem um anel que esvazia com o tempo, e se ele acabar, o núcleo explode e drena a sua energia. As minas magenta aparecem a partir da onda 2: prendê-las ou tocá-las machuca você, então deixe que sumam. Os caçadores laranja aparecem a partir da onda 3 e perseguem o seu cometa: prenda-os antes que eles acertem você."
+        },
+        {
+          "q": "Como funciona o combo?",
+          "a": "Cada laço que destrói algo uns dois segundos depois do anterior aumenta o seu combo, até vezes oito. Prender vários alvos no mesmo laço multiplica os pontos de novo. Tomar dano zera o combo, então laços rápidos e limpos são o segredo de uma grande pontuação."
+        },
+        {
+          "q": "Quem é o Warden?",
+          "a": "O Warden é o chefe que chega a cada cinco ondas: um octógono amarelo gigante com placas de escudo em órbita, uma para cada golpe que ainda aguenta. Ele anda pela arena e solta minas, com um anel de alerta rosa logo antes de cada uma. Desenhe um laço em volta do núcleo dele para arrancar um escudo e repita até ele cair, com um bônus enorme."
+        },
+        {
+          "q": "Para que servem os power-ups?",
+          "a": "SLOW-MO deixa toda a arena mais lenta por alguns segundos, LONG TAIL alonga o rastro para desenhar laços muito maiores, NOVA destrói todos os inimigos da tela de uma vez e SHIELD recarrega boa parte da barra de energia. Pegue-os passando por cima ou prendendo-os dentro de um laço."
+        },
+        {
+          "q": "Qual a diferença entre Classic, Hard e Daily?",
+          "a": "Classic é a partida padrão. O modo Hard faz os núcleos explodirem mais rápido e cada golpe custar mais energia, com ranking próprio. O Daily run dá a todos os jogadores as mesmas aparições o dia inteiro, para comparar pontuações de forma justa."
+        },
+        {
+          "q": "Posso desafiar um amigo?",
+          "a": "Sim. Depois de uma partida, toque em Challenge a friend para compartilhar um link com a sua pontuação. O seu amigo joga exatamente a mesma partida, com as mesmas aparições, e vê se bateu você."
+        },
+        {
+          "q": "Posso continuar depois de perder?",
+          "a": "Uma vez por partida, você pode assistir a um anúncio curto para recarregar a energia, limpar todas as minas da tela e continuar com a pontuação atual. Guarde para uma partida perto do seu recorde."
+        },
+        {
+          "q": "LOOPSTRIKE é grátis e dá para jogar no celular?",
+          "a": "LOOPSTRIKE é totalmente grátis, não precisa de download nem de conta e roda no navegador de celulares, tablets e computadores. Foi pensado primeiro para telas sensíveis ao toque: um dedo basta. Crie uma conta grátis na Ragequit Arcade se quiser o seu nome no ranking."
+        }
+      ]
+    }
   }
 }

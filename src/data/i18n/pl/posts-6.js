@@ -82,5 +82,87 @@ export default {
       { "type": "p", "text": "Raz na bieg możesz obejrzeć krótką reklamę, by odzyskać wszystkie linie i kontynuować z tym samym dystansem i prędkością. Nie wydawaj jej na wczesny błąd. Zachowaj ją na bieg, w którym jesteś głęboko w nowej strefie i blisko najlepszego wyniku." },
       { "type": "p", "text": "Czytaj kolory wcześnie, zmieniaj formację na czas, trzymaj się środka i chroń swój Overdrive. Otwórz LINESTORM, rzuć znajomemu wyzwanie na tej samej burzy i sprawdź, jak daleko zajdziesz." }
     ]
+  },
+  "loopstrike-tips": {
+    "title": "LOOPSTRIKE: jak złapać więcej rdzeni w jedną pętlę",
+    "excerpt": "LOOPSTRIKE wygląda prosto: narysuj pętlę ogonem komety, a wszystko w środku wybucha. Oto jak łapać kilka rdzeni naraz, utrzymać combo, unikać min i pokonać Wardena.",
+    "seo": {
+      "title": "Porady do LOOPSTRIKE: większe pętle, combo, miny i boss Warden | Ragequit Arcade",
+      "metaDescription": "Porady do LOOPSTRIKE, darmowej neonowej gry z pętlami: jak zamykać pętle, łapać kilka rdzeni naraz, budować combo x8, unikać min i łowców i pokonać Wardena."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "LOOPSTRIKE daje ci jedno narzędzie: neonowy ogon twojej komety. Zamknij go w pętlę, a wszystko w środku zostanie zmiecione. Zasady poznasz w trzy sekundy, ale gracze na szczycie rankingu nie rysują przypadkowych kółek. Planują pętle, chronią combo i wiedzą dokładnie, kiedy trzymać się z daleka. Oto jak grają."
+      },
+      {
+        "type": "h2",
+        "text": "Zrozum, jak zamyka się pętla"
+      },
+      {
+        "type": "p",
+        "text": "Pętla zamyka się w chwili, gdy kometa dotknie własnego ogona. Możesz go przeciąć, musnąć w środku albo dotknąć świecącej kropki na samym końcu, co często jest najszybszym sposobem na domknięcie koła. Ogon ma ograniczoną długość, więc zbyt szeroka pętla nigdy się nie zamknie. Celuj w okrągłe, zwarte kształty: zamykają się szybciej i zostawiają cię wolnym na kolejną."
+      },
+      {
+        "type": "h2",
+        "text": "Łap kilka rdzeni naraz"
+      },
+      {
+        "type": "p",
+        "text": "Jeden rdzeń na pętlę utrzyma cię przy życiu, ale nigdy nie wyniesie na szczyt. Punkty mnożą się przez liczbę celów złapanych w tej samej pętli, a każdy rdzeń jest wart więcej, im wcześniej go złapiesz. Zanim zaczniesz rysować, wypatrz dwa lub trzy rdzenie blisko siebie i obejmij je jednym ruchem. Pętla z czterema celami jest warta znacznie więcej niż cztery osobne pętle."
+      },
+      {
+        "type": "h2",
+        "text": "Utrzymaj combo"
+      },
+      {
+        "type": "p",
+        "text": "Każda pętla, która coś niszczy w ciągu około dwóch sekund od poprzedniej, podnosi combo, aż do razy osiem. Sekretem jest rytm: zamknij pętlę, spójrz na następną grupę i od razu zacznij rysować. Obrażenia zerują combo, więc spokojne, równe tempo jest lepsze niż ryzykowne szarże przez arenę."
+      },
+      {
+        "type": "h2",
+        "text": "Szanuj miny i łowców"
+      },
+      {
+        "type": "p",
+        "text": "Magentowe miny to pułapka tej gry. Nigdy nie rysuj wokół nich pętli i nigdy w nie nie wlatuj: daj im miejsce, bo same znikają po kilku sekundach. Pomarańczowi łowcy to przeciwieństwo. Ścigają twoją kometę, więc zrób z nich cele: krąż wokół nich, gdy za tobą lecą, i złap ich w tę samą pętlę co pobliskie rdzenie."
+      },
+      {
+        "type": "h2",
+        "text": "Używaj wzmocnień we właściwym momencie"
+      },
+      {
+        "type": "p",
+        "text": "LONG TAIL to najlepszy przyjaciel wysokich wyników: z dłuższym śladem obejmiesz całe grupy jednym przejściem. SLOW-MO daje czas na zaplanowanie idealnej pętli podczas zatłoczonej fali. NOVA czyści cały ekran, więc zachowaj ją na chwilę, gdy arena pęka w szwach. SHIELD uzupełnia energię, przez co jest bezcenny tuż przed bossem."
+      },
+      {
+        "type": "h2",
+        "text": "Pokonaj Wardena"
+      },
+      {
+        "type": "p",
+        "text": "Co pięć fal pojawia się Warden, z jedną krążącą płytą tarczy na każde uderzenie, które jeszcze wytrzyma. Tylko pętla wokół jego rdzenia rozbija tarczę. Trzymaj się z dala od jego ciała, obserwuj różowy pierścień, który miga tuż przed zrzutem miny, i rysuj pętlę zaraz po zrzucie, gdy wokół niego jest pusto. Trzy czyste pętle i pada, z ogromną premią."
+      },
+      {
+        "type": "h2",
+        "text": "Wybierz właściwy tryb"
+      },
+      {
+        "type": "p",
+        "text": "Classic to miejsce do nauki. Tryb Hard sprawia, że rdzenie pękają szybciej, a każde uderzenie kosztuje więcej, z osobnym rankingiem dla tych, którzy chcą prawdziwego wyzwania. Daily run daje wszystkim te same pojawienia przez cały dzień, co czyni go najuczciwszym sposobem porównywania wyników ze znajomymi. Po każdej rozgrywce wyślij link z wyzwaniem i pozwól im spróbować dokładnie tej samej gry."
+      },
+      {
+        "type": "h2",
+        "text": "Zachowaj drugą szansę"
+      },
+      {
+        "type": "p",
+        "text": "Raz na rozgrywkę możesz obejrzeć krótką reklamę, aby uzupełnić energię i usunąć miny. Nie marnuj jej na wczesny błąd: nowa gra nic nie kosztuje. Zachowaj ją na rozgrywkę, w której jesteś już blisko rekordu."
+      },
+      {
+        "type": "p",
+        "text": "Rysuj zwarte pętle, łap kilka celów naraz, trzymaj rytm i nigdy nie dotykaj miny. Otwórz LOOPSTRIKE, złap swój pierwszy rdzeń i sprawdź, ile zdołasz złapać w jedną pętlę."
+      }
+    ]
   }
 }

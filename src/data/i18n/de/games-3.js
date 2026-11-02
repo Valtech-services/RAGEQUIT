@@ -100,5 +100,55 @@ export default {
         { "q": "Ist LINESTORM kostenlos und auf dem Handy spielbar?", "a": "LINESTORM ist komplett kostenlos, ohne Download und ohne Konto, und läuft in deinem Browser auf Handy, Tablet und Computer. Es ist für einen Daumen am Handy gemacht. Erstelle ein kostenloses Konto bei Ragequit Arcade, wenn du deinen Namen in der Rangliste sehen willst." }
       ]
     }
+  },
+  "loopstrike": {
+    "description": "LOOPSTRIKE ist ein kostenloses Neon-Arcade-Spiel, in dem deine Waffe die Spur ist, die du hinterlässt. Du steuerst einen leuchtenden Kometen über ein dunkles Raster, und sein Schweif zieht sich hinter ihm her wie ein Band aus cyanfarbenem und pinkem Licht. Berühre diesen Schweif an einer beliebigen Stelle, sogar sein leuchtendes Ende, oder kreuze ihn, und die Schleife schnappt zu: Alles, was darin gefangen ist, wird in einem Funkenregen zerstört. Kein Download, keine Anmeldung. Das Spiel startet sofort im Browser auf Handy, Tablet und Computer, und eine Runde beginnt mit einem einzigen Tippen. Auf dem Handy wischst du irgendwo über den Bildschirm, und der Komet folgt deinem Daumen. Mit der Maus jagt der Komet dem Cursor hinterher, und auf der Tastatur steuerst du mit den Pfeiltasten, WASD oder ZQSD. Die Arena füllt sich mit cyanfarbenen Kernen, jeder umgeben von einem Ring, der langsam abläuft. Fange einen Kern ein, bevor sein Ring leer ist, sonst bricht er durch und leert deine Energieleiste. Ab der zweiten Welle tauchen stachelige magentafarbene Minen auf: Kreise sie niemals ein und berühre sie nie, lass sie einfach verblassen. Ab der dritten Welle nehmen orange Jäger deinen Kometen ins Visier und verfolgen ihn über das ganze Raster, also musst du sie einkreisen, bevor sie dich erreichen. Alle fünf Wellen erscheint der Warden, ein riesiges säuregelbes Achteck, geschützt von kreisenden Schildplatten. Er treibt durch die Arena und wirft Minen ab, und nur eine Schleife um seinen Kern kann ihm jeweils einen Schild abreißen. Die Wertung belohnt Mut und Präzision. Jeder Kern bringt mehr, je früher du ihn fängst, und mehrere Ziele in einer Schleife multiplizieren die Punkte. Schließe Schleifen kurz hintereinander, und deine Kombo steigt, bis zu mal acht. Eine geschaffte Welle bringt einen Bonus, der Sieg über den Warden einen riesigen. Leuchtende Power-ups helfen dir durchzuhalten: SLOW-MO verlangsamt die ganze Arena, LONG TAIL verlängert deine Spur für größere Schleifen, NOVA fegt alle Gegner vom Bildschirm und SHIELD lädt deine Energie auf. Jeder große Treffer friert das Geschehen für einen Sekundenbruchteil ein, lässt den Bildschirm beben und füllt ihn mit Splittern, Schockwellen und dem Klang von splitterndem Glas. Drei Spielweisen stehen zur Wahl. Classic ist die Standardrunde. Im Hard-Modus brechen die Kerne schneller durch und treffen härter, mit eigener Bestenliste. Der Daily run gibt allen Spielern für den ganzen Tag genau dieselben Spawns. Nach jeder Runde kannst du einen Challenge-Link schicken, damit ein Freund exakt dasselbe Spiel spielt und versucht, deinen Punktestand zu schlagen. Einmal pro Runde kannst du eine kurze Werbung ansehen, um deine Energie aufzufüllen, die Minen zu entfernen und weiterzuspielen. Öffne LOOPSTRIKE, zieh deine erste Schleife und finde heraus, wie viele Ziele du auf einmal fangen kannst.",
+    "controls": "Wische irgendwo, um deinen Kometen zu steuern. Schließe eine Schleife, indem du deinen eigenen Schweif berührst, sogar sein leuchtendes Ende, oder ihn kreuzt. Mit der Maus folgt der Komet dem Cursor; auf der Tastatur nutzt du die Pfeiltasten, WASD oder ZQSD und P für Pause. Kreise die Kerne ein, bevor ihr Ring abläuft, kreise die Jäger ein und kreise oder berühre niemals die Minen.",
+    "seo": {
+      "title": "LOOPSTRIKE - Kostenloses Neon-Arcade-Spiel mit Schleifen | Ragequit Arcade",
+      "metaDescription": "Spiele LOOPSTRIKE kostenlos. Zieh Neon-Schleifen mit dem Schweif deines Kometen, fange Kerne, weiche Minen und Jägern aus, baue Kombos bis x8 und besiege den Boss Warden. Ohne Download.",
+      "faq": [
+        {
+          "q": "Wie spielt man LOOPSTRIKE?",
+          "a": "Du steuerst einen leuchtenden Kometen, der einen Neon-Schweif hinterlässt. Wische irgendwo über den Bildschirm oder bewege die Maus, und der Komet folgt. Wenn der Komet seinen eigenen Schweif berührt, auch das leuchtende Ende, oder ihn kreuzt, schließt sich die Schleife und alles darin wird zerstört. Fange die Kerne, bevor ihr Ring abläuft, und überlebe so viele Wellen wie möglich."
+        },
+        {
+          "q": "Wie schließe ich eine Schleife?",
+          "a": "Führe den Kopf deines Kometen auf einen beliebigen Teil seines Schweifs zurück. Du kannst den Schweif kreuzen, ihn in der Mitte berühren oder den leuchtenden Punkt ganz am Ende antippen. Die Schleife braucht eine Mindestgröße, winzige Kreise bewirken also nichts. Je länger der Schweif, desto größere Schleifen kannst du ziehen."
+        },
+        {
+          "q": "Was sind Kerne, Minen und Jäger?",
+          "a": "Cyanfarbene Kerne sind deine Ziele: Jeder hat einen Ring, der mit der Zeit abläuft, und wenn er leer ist, bricht der Kern durch und kostet dich Energie. Magentafarbene Minen erscheinen ab Welle 2: Sie einzukreisen oder zu berühren schadet dir, also lass sie verblassen. Orange Jäger erscheinen ab Welle 3 und verfolgen deinen Kometen: Kreise sie ein, bevor sie dich treffen."
+        },
+        {
+          "q": "Wie funktioniert die Kombo?",
+          "a": "Jede Schleife, die etwa zwei Sekunden nach der vorherigen etwas zerstört, erhöht deine Kombo, bis zu mal acht. Mehrere Ziele in derselben Schleife multiplizieren die Punkte zusätzlich. Schaden setzt die Kombo zurück, schnelle und saubere Schleifen sind also der Schlüssel zu einem hohen Punktestand."
+        },
+        {
+          "q": "Wer ist der Warden?",
+          "a": "Der Warden ist der Boss, der alle fünf Wellen erscheint: ein riesiges gelbes Achteck mit kreisenden Schildplatten, eine für jeden Treffer, den er noch einstecken kann. Er wandert durch die Arena und wirft Minen ab, kurz davor blinkt jeweils ein pinker Warnring. Zieh eine Schleife um seinen Kern, um einen Schild abzureißen, und wiederhole das, bis er fällt, für einen riesigen Bonus."
+        },
+        {
+          "q": "Was bewirken die Power-ups?",
+          "a": "SLOW-MO verlangsamt die ganze Arena für ein paar Sekunden, LONG TAIL verlängert deine Spur für viel größere Schleifen, NOVA zerstört alle Gegner auf dem Bildschirm auf einmal und SHIELD füllt einen großen Teil deiner Energieleiste auf. Sammle sie ein, indem du darüberfliegst oder sie in einer Schleife fängst."
+        },
+        {
+          "q": "Was ist der Unterschied zwischen Classic, Hard und Daily?",
+          "a": "Classic ist die Standardrunde. Im Hard-Modus brechen die Kerne schneller durch und jeder Treffer kostet mehr Energie, mit eigener Bestenliste. Der Daily run gibt allen Spielern den ganzen Tag dieselben Spawns, damit sich Punktestände fair vergleichen lassen."
+        },
+        {
+          "q": "Kann ich einen Freund herausfordern?",
+          "a": "Ja. Tippe nach einer Runde auf Challenge a friend, um einen Link mit deinem Punktestand zu teilen. Dein Freund spielt exakt dasselbe Spiel mit denselben Spawns und sieht, ob er dich geschlagen hat."
+        },
+        {
+          "q": "Kann ich nach einer Niederlage weiterspielen?",
+          "a": "Einmal pro Runde kannst du eine kurze Werbung ansehen, um deine Energie aufzufüllen, alle Minen vom Bildschirm zu entfernen und mit deinem aktuellen Punktestand weiterzuspielen. Heb sie dir für eine Runde nahe an deinem Rekord auf."
+        },
+        {
+          "q": "Ist LOOPSTRIKE kostenlos und auf dem Handy spielbar?",
+          "a": "LOOPSTRIKE ist komplett kostenlos, braucht weder Download noch Konto und läuft im Browser auf Handys, Tablets und Computern. Es wurde zuerst für Touchscreens entwickelt: Ein Finger genügt. Erstelle ein kostenloses Ragequit-Arcade-Konto, wenn dein Name in der Bestenliste stehen soll."
+        }
+      ]
+    }
   }
 }

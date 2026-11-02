@@ -2,7 +2,7 @@ export default {
   "title": "Ragequit Arcade — ألعاب مجانية على الإنترنت",
   "description": "أكثر الألعاب المجانية على الإنترنت إدمانًا. سهلة التعلّم، مستحيلة الإتقان. لعبة جديدة كل أسبوع.",
   "about": "يقدّم لك Ragequit Arcade أكثر الألعاب المجانية على الإنترنت إدمانًا، مصممة للعب الفردي أو للمباريات السريعة مع الأصدقاء. تعمل كل لعبة فورًا في متصفحك: بلا تنزيل، بلا تسجيل، بلا نوافذ منبثقة، بلا تعقيد. تعمل ألعابنا على الكمبيوتر والجهاز اللوحي والهاتف، لتلعب في البيت أو أثناء التنقل. نحن نبني مكانًا تكون فيه اللعبة الرائعة دائمًا على بعد نقرة واحدة.",
-  "gameSelection": "نضيف ألعابًا جديدة بانتظام. من بين ألعابنا: LINESTORM وCity Runner وFox Runner وVOIDFALL وDead Zone وCrush Depth وRooftop Rush وFLASHOUT وBird Blitz وOCTAFLUX وStellar Forge وVirus Lab وNeon Rush وSnake Candy Arena وSTAQ وRage Hockey. كل الألعاب مجانية إلى الأبد.",
+  "gameSelection": "نضيف ألعابًا جديدة بانتظام. من بين ألعابنا: LOOPSTRIKE وLINESTORM وCity Runner وFox Runner وVOIDFALL وDead Zone وCrush Depth وRooftop Rush وFLASHOUT وBird Blitz وOCTAFLUX وStellar Forge وVirus Lab وNeon Rush وSnake Candy Arena وSTAQ وRage Hockey. كل الألعاب مجانية إلى الأبد.",
   "aboutUs": "Ragequit Arcade منصة ألعاب مستقلة. هدفنا بسيط: أن نصنع أمتع وأصدق صالة ألعاب في المتصفح على الإنترنت. تصدر ألعاب جديدة بانتظام: تابعنا على TikTok وInstagram لترى ما هو قادم.",
   "faq": [
     { "q": "ما هو Ragequit Arcade؟", "a": "منصة ألعاب مجانية على الإنترنت. بلا تنزيل ولا تسجيل إلزامي." },

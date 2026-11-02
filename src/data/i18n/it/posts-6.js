@@ -82,5 +82,87 @@ export default {
       { "type": "p", "text": "Una volta per partita puoi guardare una breve pubblicità per recuperare tutte le linee e continuare alla stessa distanza e velocità. Non sprecarla per un errore iniziale. Tienila per la partita in cui sei già dentro una nuova zona e vicino al tuo miglior punteggio." },
       { "type": "p", "text": "Leggi i colori in anticipo, cambia formazione in tempo, resta centrato e proteggi il tuo Overdrive. Apri LINESTORM, sfida un amico sulla stessa tempesta e scopri fin dove riesci ad arrivare." }
     ]
+  },
+  "loopstrike-tips": {
+    "title": "LOOPSTRIKE: come intrappolare più nuclei in un solo cerchio",
+    "excerpt": "LOOPSTRIKE sembra semplice: disegna un cerchio con la coda della cometa e tutto ciò che c'è dentro esplode. Ecco come intrappolare più nuclei insieme, tenere viva la combo, evitare le mine e abbattere il Warden.",
+    "seo": {
+      "title": "Consigli per LOOPSTRIKE: cerchi grandi, combo, mine e il boss Warden | Ragequit Arcade",
+      "metaDescription": "Guida con consigli per LOOPSTRIKE, il gioco arcade al neon gratuito con cerchi: chiudere i cerchi, intrappolare più nuclei insieme, combo x8, evitare mine e cacciatori e battere il Warden."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "LOOPSTRIKE ti dà un solo strumento: la coda al neon della tua cometa. Chiudila in un cerchio e tutto ciò che c'è dentro viene spazzato via. La regola si impara in tre secondi, ma i giocatori in cima alla classifica non disegnano cerchi a caso. Pianificano i loro cerchi, proteggono la combo e sanno esattamente quando restare a distanza. Ecco come giocano."
+      },
+      {
+        "type": "h2",
+        "text": "Capire come si chiude un cerchio"
+      },
+      {
+        "type": "p",
+        "text": "Un cerchio si chiude nell'istante in cui la cometa tocca la propria coda. Puoi attraversare la coda, sfiorarla nel mezzo o toccare il punto luminoso all'estremità, spesso il modo più rapido per finire un giro. La coda ha una lunghezza limitata, quindi un cerchio troppo largo non si chiude mai. Punta a forme rotonde e compatte: si chiudono prima e ti lasciano libero per il cerchio successivo."
+      },
+      {
+        "type": "h2",
+        "text": "Intrappolare più nuclei insieme"
+      },
+      {
+        "type": "p",
+        "text": "Un nucleo per cerchio ti tiene in vita, ma non ti porterà mai in cima alla classifica. I punti si moltiplicano per il numero di bersagli presi nello stesso cerchio, e ogni nucleo vale di più quanto prima lo catturi. Prima di disegnare, cerca due o tre nuclei vicini e avvolgili in un solo movimento. Un cerchio con quattro bersagli vale molto più di quattro cerchi separati."
+      },
+      {
+        "type": "h2",
+        "text": "Tenere viva la combo"
+      },
+      {
+        "type": "p",
+        "text": "Ogni cerchio che distrugge qualcosa circa due secondi dopo il precedente fa salire la combo, fino a per otto. Il segreto è il ritmo: chiudi un cerchio, guarda il gruppo successivo e inizia subito a disegnare. Subire danni azzera la combo, quindi un ritmo calmo e regolare batte gli scatti rischiosi attraverso l'arena."
+      },
+      {
+        "type": "h2",
+        "text": "Rispettare mine e cacciatori"
+      },
+      {
+        "type": "p",
+        "text": "Le mine magenta sono la trappola del gioco. Non disegnare mai un cerchio intorno a loro e non volarci mai contro: lascia loro spazio, perché spariscono da sole dopo qualche secondo. I cacciatori arancioni sono l'opposto. Inseguono la tua cometa, quindi trasformali in bersagli: giragli intorno mentre ti seguono e catturali nello stesso cerchio dei nuclei vicini."
+      },
+      {
+        "type": "h2",
+        "text": "Usare i potenziamenti al momento giusto"
+      },
+      {
+        "type": "p",
+        "text": "LONG TAIL è il miglior amico dei grandi punteggi: con una scia più lunga puoi avvolgere interi gruppi in una sola passata. SLOW-MO ti dà il tempo di preparare un cerchio perfetto durante un'ondata affollata. NOVA ripulisce tutto lo schermo, quindi tienila per quando l'arena trabocca. SHIELD ricarica l'energia, il che la rende preziosa subito prima di un boss."
+      },
+      {
+        "type": "h2",
+        "text": "Abbattere il Warden"
+      },
+      {
+        "type": "p",
+        "text": "Ogni cinque ondate compare il Warden, con una piastra di scudo in orbita per ogni colpo che può ancora incassare. Solo un cerchio tracciato attorno al suo nucleo rompe uno scudo. Stai lontano dal suo corpo, osserva l'anello rosa che lampeggia appena prima di ogni mina e traccia il cerchio subito dopo lo sgancio, quando la zona attorno è libera. Tre cerchi puliti e cade, con un bonus enorme."
+      },
+      {
+        "type": "h2",
+        "text": "Scegliere la modalità giusta"
+      },
+      {
+        "type": "p",
+        "text": "Classic è il posto dove imparare. La modalità Hard fa cedere i nuclei più in fretta e rende ogni colpo più costoso, con una classifica dedicata per chi vuole una vera sfida. Il Daily run dà a tutti le stesse apparizioni per la giornata, il modo più equo per confrontare i punteggi con gli amici. Dopo ogni partita invia un link di sfida e lascia che provino esattamente la stessa partita."
+      },
+      {
+        "type": "h2",
+        "text": "Tenere da parte la seconda possibilità"
+      },
+      {
+        "type": "p",
+        "text": "Una volta per partita puoi guardare una breve pubblicità per ricaricare l'energia ed eliminare le mine. Non sprecarla per un errore iniziale: ricominciare non costa nulla. Tienila per la partita in cui sei già vicino al tuo record."
+      },
+      {
+        "type": "p",
+        "text": "Disegna cerchi compatti, cattura più bersagli insieme, mantieni il ritmo e non toccare mai una mina. Apri LOOPSTRIKE, intrappola il tuo primo nucleo e scopri quanti riesci a prenderne in un solo cerchio."
+      }
+    ]
   }
 }

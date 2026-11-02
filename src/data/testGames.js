@@ -38,22 +38,6 @@ export const testGames = [
     notes: 'Three.js. Score CITY_RUNNER_SCORE, mode classic. Mettre DEBUG_MAX_CREDITS a true pour tester tous les vehicules.'
   },
   {
-    id: 'loopstrike',
-    title: 'LOOPSTRIKE',
-    description: 'Dessine des boucles néon avec la traînée de ta comète pour piéger les cores, évite les mines, bats le boss toutes les 5 vagues.',
-    thumbnail: '/thumbnails/loopstrike.jpg',
-    category: 'arcade',
-    orientation: 'portrait',
-    file: '/games/loopstrike.html',
-    notes: 'Score LOOPSTRIKE_SCORE, modes classic / hard / daily. Pub revive une fois par partie. Tactile : glisser relatif ; souris : la comète suit le curseur ; clavier : flèches/WASD/ZQSD, P pause. V2 finition : sons Kenney CC0, éclats et ondes de choc, freeze-frame sur les gros impacts, boss avec boucliers et œil, écran de fin animé.',
-    pr: 17,
-    extras: [
-      { label: 'Prompt miniature 1:1 (Gemini, 1024x1024)', text: 'Dark arcade scene viewed from above, a glowing white comet trailing a thick electric-cyan neon light ribbon that loops around and closes into a bright glowing ring, inside the ring several cyan hexagonal energy cores shattering into sparks, magenta spiked mines and an orange arrow-shaped hunter drone just outside the loop, deep purple-black background with faint neon grid, intense bloom, high contrast, sharp vector style, no text, no letters, no logos.' },
-      { label: 'Prompt image de blog 16:9 (Gemini, 1376x768)', text: 'Wide cinematic neon arcade battlefield seen from above, a white comet drawing a long cyan light trail that spirals into a closed loop around a cluster of glowing cyan hexagon cores exploding in sparks, a huge acid-yellow octagonal boss on the right dropping pink spiked mines, orange triangular drones closing in, dark violet background with subtle glowing grid, strong bloom and motion energy, clean vector look, no text, no letters, no logos.' },
-      { label: 'Prompt logo du jeu (Gemini, 1:1, palette propre au jeu)', text: 'Game logo wordmark reading exactly "LOOPSTRIKE" in bold, sharp, slightly italic futuristic capital letters, the letter O drawn as a glowing comet loop closing on itself, color palette ice white and deep electric violet with a single thin cyan light streak, chrome bevel and subtle outer glow, centered on a plain pure black background, crisp vector style, high contrast, no other text, no mascot, square 1:1 1024x1024.' },
-    ],
-  },
-  {
     id: 'tiltshock',
     title: 'TILTSHOCK',
     description: 'Labyrinthe néon 3D à incliner : roule le noyau jusqu\'à la sortie avant la fin du chrono, évite trous et lasers, labyrinthes de plus en plus grands.',

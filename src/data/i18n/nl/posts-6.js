@@ -82,5 +82,87 @@ export default {
       { "type": "p", "text": "Eén keer per run kun je een korte advertentie bekijken om al je lijnen terug te krijgen en verder te gaan op dezelfde afstand en snelheid. Verspil hem niet aan een vroege fout. Bewaar hem voor de run waarin je diep in een nieuwe zone zit en dicht bij je beste score." },
       { "type": "p", "text": "Lees de kleuren vroeg, wissel op tijd van formatie, blijf gecentreerd en bescherm je Overdrive. Open LINESTORM, daag een vriend uit op dezelfde storm en kijk hoe ver je komt." }
     ]
+  },
+  "loopstrike-tips": {
+    "title": "LOOPSTRIKE: zo vang je meer kernen in één lus",
+    "excerpt": "LOOPSTRIKE lijkt simpel: trek een lus met de staart van je komeet en alles erin ontploft. Zo vang je meerdere kernen tegelijk, houd je je combo vast, ontwijk je de mijnen en haal je de Warden neer.",
+    "seo": {
+      "title": "LOOPSTRIKE tips: grotere lussen, combo's, mijnen en de baas Warden | Ragequit Arcade",
+      "metaDescription": "Tips voor LOOPSTRIKE, de gratis neon-arcadegame met lussen: lussen sluiten, meerdere kernen tegelijk vangen, combo's tot x8, mijnen en jagers ontwijken en de Warden verslaan."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "LOOPSTRIKE geeft je één enkel gereedschap: de neonstaart van je komeet. Sluit hem tot een lus en alles erin wordt weggevaagd. De regel leer je in drie seconden, maar de spelers bovenaan de ranglijst trekken geen willekeurige cirkels. Ze plannen hun lussen, beschermen hun combo en weten precies wanneer ze afstand moeten houden. Zo spelen zij."
+      },
+      {
+        "type": "h2",
+        "text": "Begrijp hoe een lus sluit"
+      },
+      {
+        "type": "p",
+        "text": "Een lus sluit op het moment dat je komeet zijn eigen staart raakt. Je kunt de staart kruisen, hem in het midden aantikken of het gloeiende puntje aan het eind raken, vaak de snelste manier om een cirkel af te maken. Je staart heeft een beperkte lengte, dus een te brede lus sluit nooit. Mik op ronde, compacte vormen: ze sluiten sneller en laten je vrij voor de volgende."
+      },
+      {
+        "type": "h2",
+        "text": "Vang meerdere kernen tegelijk"
+      },
+      {
+        "type": "p",
+        "text": "Eén kern per lus houdt je in leven, maar brengt je nooit naar de top. Punten worden vermenigvuldigd met het aantal doelen in dezelfde lus, en elke kern is meer waard hoe eerder je hem vangt. Zoek voor je begint twee of drie kernen dicht bij elkaar en omsluit ze in één beweging. Een lus met vier doelen is veel meer waard dan vier losse lussen."
+      },
+      {
+        "type": "h2",
+        "text": "Houd de combo levend"
+      },
+      {
+        "type": "p",
+        "text": "Elke lus die ongeveer twee seconden na de vorige iets vernietigt, verhoogt je combo, tot keer acht. Het geheim is ritme: rond een lus af, kijk naar de volgende groep en begin meteen te tekenen. Schade zet de combo terug, dus een rustig, gelijkmatig tempo werkt beter dan riskante uitvallen door de arena."
+      },
+      {
+        "type": "h2",
+        "text": "Respecteer mijnen en jagers"
+      },
+      {
+        "type": "p",
+        "text": "De magenta mijnen zijn de valkuil van het spel. Trek nooit een lus om ze heen en vlieg er nooit in: geef ze ruimte, want ze verdwijnen na een paar seconden vanzelf. De oranje jagers zijn het tegenovergestelde. Ze achtervolgen je komeet, dus maak er doelen van: draai om ze heen terwijl ze je volgen en vang ze in dezelfde lus als de kernen in de buurt."
+      },
+      {
+        "type": "h2",
+        "text": "Gebruik power-ups op het juiste moment"
+      },
+      {
+        "type": "p",
+        "text": "LONG TAIL is de beste vriend van hoge scores: met een langer spoor omsluit je hele groepen in één keer. SLOW-MO geeft je tijd om een perfecte lus te plannen tijdens een drukke golf. NOVA veegt het hele scherm schoon, dus bewaar hem voor als de arena overloopt. SHIELD vult je energie aan en is daardoor kostbaar vlak voor een baas."
+      },
+      {
+        "type": "h2",
+        "text": "Haal de Warden neer"
+      },
+      {
+        "type": "p",
+        "text": "Elke vijf golven verschijnt de Warden, met één ronddraaiende schildplaat voor elke treffer die hij nog kan incasseren. Alleen een lus rond zijn kern breekt een schild. Blijf weg van zijn lichaam, let op de roze ring die vlak voor elke mijn oplicht en trek je lus direct na de drop, als het gebied rond hem vrij is. Drie strakke lussen en hij valt, met een gigantische bonus."
+      },
+      {
+        "type": "h2",
+        "text": "Kies de juiste modus"
+      },
+      {
+        "type": "p",
+        "text": "Classic is de plek om te leren. In de Hard-modus breken kernen sneller door en kost elke treffer meer, met een eigen ranglijst voor wie een echte uitdaging wil. De Daily run geeft iedereen die dag dezelfde spawns en is daarmee de eerlijkste manier om scores met vrienden te vergelijken. Stuur na elk potje een uitdagingslink en laat ze precies hetzelfde spel proberen."
+      },
+      {
+        "type": "h2",
+        "text": "Bewaar je tweede kans"
+      },
+      {
+        "type": "p",
+        "text": "Eén keer per potje kun je een korte advertentie bekijken om je energie aan te vullen en de mijnen op te ruimen. Verspil hem niet aan een vroege fout: opnieuw beginnen kost niets. Bewaar hem voor het potje waarin je al dicht bij je record zit."
+      },
+      {
+        "type": "p",
+        "text": "Trek compacte lussen, vang meerdere doelen tegelijk, houd je ritme vast en raak nooit een mijn. Open LOOPSTRIKE, vang je eerste kern en ontdek hoeveel je er in één lus kunt pakken."
+      }
+    ]
   }
 }
