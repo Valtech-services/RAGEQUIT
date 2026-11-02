@@ -131,11 +131,14 @@
    ===================================================================== */
 .mgp--playing {
   position: fixed;
-  inset: 0;
+  left: 0;
+  right: 0;
+  top: var(--mgp-top, 0px);
   z-index: 9999;
-  width: 100vw;
-  height: 100vh;          /* fallback navigateurs anciens */
-  height: 100dvh;         /* hauteur dynamique : exclut les barres mobiles */
+  width: 100%;
+  height: 100vh;                     /* fallback navigateurs anciens */
+  height: 100dvh;                    /* hauteur dynamique : exclut les barres mobiles */
+  height: var(--mgp-h, 100dvh);      /* hauteur réellement visible, suivie en JS (visualViewport) */
   background: #0a0e27;
   overflow: hidden;
 }

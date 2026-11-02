@@ -366,8 +366,10 @@
     var v = getComputedStyle(document.documentElement).getPropertyValue('--safe-top');
     return parseFloat(v) || 0;
   }
+  var renderErr = false;
   function resize() {
-    W = window.innerWidth; H = window.innerHeight;
+    W = window.innerWidth || document.documentElement.clientWidth; H = window.innerHeight || document.documentElement.clientHeight;
+    if (!W || !H) return;
     DPR = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = Math.round(W * DPR); canvas.height = Math.round(H * DPR);
     U = Math.max(0.7, Math.min(W, H) / 400);
@@ -866,8 +868,14 @@
 
   function render(dt) {
     fxT += dt;
+    // Full reset every frame: a frame can never inherit the previous one's state
+    // (additive blending, alpha, shadow, transform), whatever the browser.
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+    ctx.fillStyle = '#05020c'; ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    ctx.drawImage(grid, 0, 0, W, H);
+    if (!grid || grid.width !== canvas.width || grid.height !== canvas.height) buildGrid();
+    if (grid && grid.width && grid.height) { try { ctx.drawImage(grid, 0, 0, W, H); } catch (e) {} }
     if (!G || state === 'menu') { renderStars(dt, 10); renderAttract(dt); return; }
     renderStars(dt, G.slow > 0 ? 4 : 14);
 
@@ -1298,6 +1306,8 @@
   document.addEventListener('visibilitychange', function () { if (document.hidden && state === 'play') pause(); });
   window.addEventListener('pagehide', function () { if (G && (state === 'over' || state === 'ad')) finalize(); });
   window.addEventListener('resize', resize);
+  window.addEventListener('orientationchange', function () { setTimeout(resize, 250); });
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', resize);
 
   /* ================= BUTTONS ================= */
   Array.prototype.forEach.call(document.querySelectorAll('[data-mode]'), function (b) {
@@ -1333,7 +1343,12 @@
       else update(dt);
       if (state === 'play' || state === 'over') updateHud();
     } else if (state === 'over' && G) { fxOnly(dt); rdt = dt * 0.3; }
-    render(rdt);
+    try { render(rdt); }
+    catch (e) {
+      // Never let one bad frame leave the canvas in a broken state.
+      if (!renderErr) { renderErr = true; try { console.warn('LOOPSTRIKE render', e); } catch (_) {} }
+      try { ctx.restore(); } catch (_) {}   // close the save() left open by the failed frame
+    }
     requestAnimationFrame(loop);
   }
 
