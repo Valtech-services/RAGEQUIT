@@ -45,7 +45,7 @@ export const testGames = [
     category: 'arcade',
     orientation: 'portrait',
     file: '/games/loopstrike.html',
-    notes: 'Score LOOPSTRIKE_SCORE, modes classic / hard / daily. Pub revive une fois par partie. Tactile : glisser relatif ; souris : la comète suit le curseur ; clavier : flèches/WASD/ZQSD, P pause.',
+    notes: 'Score LOOPSTRIKE_SCORE, modes classic / hard / daily. Pub revive une fois par partie. Tactile : glisser relatif ; souris : la comète suit le curseur ; clavier : flèches/WASD/ZQSD, P pause. V2 finition : sons Kenney CC0, éclats et ondes de choc, freeze-frame sur les gros impacts, boss avec boucliers et œil, écran de fin animé.',
     pr: 17,
     extras: [
       { label: 'Prompt miniature 1:1 (Gemini, 1024x1024)', text: 'Dark arcade scene viewed from above, a glowing white comet trailing a thick electric-cyan neon light ribbon that loops around and closes into a bright glowing ring, inside the ring several cyan hexagonal energy cores shattering into sparks, magenta spiked mines and an orange arrow-shaped hunter drone just outside the loop, deep purple-black background with faint neon grid, intense bloom, high contrast, sharp vector style, no text, no letters, no logos.' },
