@@ -49,6 +49,37 @@ export default function MobileGamePage() {
     return () => { document.body.style.overflow = '' }
   }, [playing])
 
+  // Hauteur réellement visible (hors barres du navigateur mobile, en haut comme en bas).
+  // 100dvh ne suffit pas partout (iOS Safari, Chrome Android selon l'état des barres) :
+  // on suit window.visualViewport en direct.
+  useEffect(() => {
+    if (!playing) return
+    const root = document.documentElement
+    const vv = window.visualViewport
+    const apply = () => {
+      const h = vv ? vv.height : window.innerHeight
+      const top = vv ? vv.offsetTop : 0
+      root.style.setProperty('--mgp-h', `${Math.round(h)}px`)
+      root.style.setProperty('--mgp-top', `${Math.round(top)}px`)
+    }
+    try { window.scrollTo(0, 0) } catch (e) {}
+    apply()
+    const late = [setTimeout(apply, 150), setTimeout(apply, 500)]
+    vv?.addEventListener('resize', apply)
+    vv?.addEventListener('scroll', apply)
+    window.addEventListener('resize', apply)
+    window.addEventListener('orientationchange', apply)
+    return () => {
+      late.forEach(clearTimeout)
+      vv?.removeEventListener('resize', apply)
+      vv?.removeEventListener('scroll', apply)
+      window.removeEventListener('resize', apply)
+      window.removeEventListener('orientationchange', apply)
+      root.style.removeProperty('--mgp-h')
+      root.style.removeProperty('--mgp-top')
+    }
+  }, [playing])
+
   useEffect(() => {
     return () => {
       try { if (document.fullscreenElement) document.exitFullscreen() } catch (e) {}
