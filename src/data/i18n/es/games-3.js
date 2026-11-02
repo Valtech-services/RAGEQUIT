@@ -100,5 +100,55 @@ export default {
         { "q": "¿LINESTORM es gratis y se puede jugar en el móvil?", "a": "LINESTORM es completamente gratis, sin descarga ni cuenta, y funciona en tu navegador en móvil, tableta y ordenador. Está pensado para un solo pulgar en el móvil. Crea una cuenta gratis de Ragequit Arcade si quieres ver tu nombre en la clasificación." }
       ]
     }
+  },
+  "loopstrike": {
+    "description": "LOOPSTRIKE es un juego arcade de neón gratis en el que tu arma es la estela que dejas atrás. Pilotas un cometa brillante sobre una cuadrícula oscura, y su cola se estira detrás como una cinta de luz cian y rosa. Toca esa cola en cualquier punto, incluso su extremo brillante, o crúzala, y el bucle se cierra: todo lo que queda atrapado dentro se destruye en una lluvia de chispas. Sin descargas ni registro. El juego se abre al instante en tu navegador en móvil, tableta y ordenador, y una partida empieza con un solo toque. En el móvil deslizas el dedo por cualquier parte de la pantalla y el cometa sigue tu pulgar. Con ratón, el cometa persigue el cursor, y con teclado puedes dirigirlo con las flechas, WASD o ZQSD. La arena se llena de núcleos cian, cada uno rodeado por un anillo que se vacía poco a poco. Encierra un núcleo antes de que su anillo se agote, o estallará y vaciará tu barra de energía. Desde la segunda oleada aparecen minas magenta llenas de pinchos: nunca las encierres ni las toques, deja que se desvanezcan solas. Desde la tercera oleada, cazadores naranjas fijan tu cometa y lo persiguen por toda la cuadrícula, así que tendrás que encerrarlos antes de que te alcancen. Cada cinco oleadas llega el Warden, un enorme octógono amarillo ácido protegido por placas de escudo en órbita. Vaga por la arena soltando minas, y solo un bucle trazado alrededor de su núcleo puede quitarle un escudo cada vez. La puntuación premia la ambición y la precisión. Cada núcleo vale más cuanto antes lo atrapes, y encerrar varios objetivos en un mismo bucle multiplica los puntos. Cierra bucles seguidos y tu combo sube, hasta por ocho. Completar una oleada da un bonus, y derribar al Warden uno enorme. Los potenciadores brillantes te ayudan a aguantar: SLOW-MO ralentiza toda la arena, LONG TAIL alarga tu estela para dibujar bucles más grandes, NOVA borra a todos los enemigos de la pantalla y SHIELD recarga tu energía. Cada gran golpe congela la acción una fracción de segundo, sacude la pantalla y la llena de fragmentos, ondas expansivas y sonidos de cristal roto. Hay tres formas de jugar. Classic es la partida estándar. El modo Hard hace que los núcleos estallen antes y golpeen más fuerte, con su propia clasificación. El Daily run da a todos los jugadores exactamente las mismas apariciones durante el día. Después de cada partida puedes enviar un enlace de desafío para que un amigo juegue exactamente la misma partida e intente superar tu puntuación. Una vez por partida puedes ver un anuncio corto para recargar tu energía, borrar las minas y seguir jugando. Abre LOOPSTRIKE, dibuja tu primer bucle y descubre cuántos objetivos puedes atrapar de una vez.",
+    "controls": "Desliza en cualquier parte para dirigir tu cometa. Cierra un bucle tocando tu propia cola, incluso su extremo brillante, o cruzándola. Con ratón, el cometa sigue el cursor; con teclado, usa las flechas, WASD o ZQSD, y P para pausar. Encierra los núcleos antes de que su anillo se vacíe, encierra a los cazadores y nunca encierres ni toques las minas.",
+    "seo": {
+      "title": "LOOPSTRIKE - Juego arcade de neón gratis con bucles | Ragequit Arcade",
+      "metaDescription": "Juega gratis a LOOPSTRIKE. Dibuja bucles de neón con la cola de tu cometa para atrapar núcleos, esquiva minas y cazadores, encadena combos hasta x8 y derrota al jefe Warden. Sin descargas.",
+      "faq": [
+        {
+          "q": "¿Cómo se juega a LOOPSTRIKE?",
+          "a": "Diriges un cometa brillante que deja una cola de neón detrás. Desliza el dedo por cualquier parte de la pantalla, o mueve el ratón, y el cometa te sigue. Cuando el cometa toca su propia cola, incluso el extremo brillante, o la cruza, el bucle se cierra y todo lo que hay dentro se destruye. Atrapa los núcleos antes de que su anillo se agote y sobrevive a tantas oleadas como puedas."
+        },
+        {
+          "q": "¿Cómo se cierra un bucle?",
+          "a": "Lleva la cabeza del cometa a cualquier parte de su cola. Puedes cruzar la cola, tocarla por el medio o tocar el punto brillante de su extremo. El bucle necesita un tamaño mínimo para contar, así que los círculos diminutos no hacen nada. Cuanto más larga es la cola, más grandes son los bucles que puedes dibujar."
+        },
+        {
+          "q": "¿Qué son los núcleos, las minas y los cazadores?",
+          "a": "Los núcleos cian son tus objetivos: cada uno tiene un anillo que se vacía con el tiempo, y si se agota, el núcleo estalla y te quita energía. Las minas magenta aparecen desde la oleada 2: encerrarlas o tocarlas te hace daño, así que déjalas desaparecer. Los cazadores naranjas aparecen desde la oleada 3 y persiguen tu cometa: enciérralos antes de que te alcancen."
+        },
+        {
+          "q": "¿Cómo funciona el combo?",
+          "a": "Cada bucle que destruye algo unos dos segundos después del anterior sube tu combo, hasta por ocho. Atrapar varios objetivos en el mismo bucle multiplica los puntos otra vez. Recibir daño reinicia el combo, así que los bucles rápidos y limpios son la clave de una gran puntuación."
+        },
+        {
+          "q": "¿Quién es el Warden?",
+          "a": "El Warden es el jefe que llega cada cinco oleadas: un octógono amarillo gigante con placas de escudo en órbita, una por cada golpe que aún puede aguantar. Se mueve por la arena y suelta minas, con un anillo de aviso rosa justo antes de cada una. Dibuja un bucle alrededor de su núcleo para quitarle un escudo y repite hasta que caiga, con un bonus enorme."
+        },
+        {
+          "q": "¿Para qué sirven los potenciadores?",
+          "a": "SLOW-MO ralentiza toda la arena unos segundos, LONG TAIL alarga tu estela para dibujar bucles mucho más grandes, NOVA destruye a todos los enemigos de la pantalla a la vez y SHIELD recarga gran parte de tu barra de energía. Cógelos pasando por encima o atrapándolos dentro de un bucle."
+        },
+        {
+          "q": "¿Qué diferencia hay entre Classic, Hard y Daily?",
+          "a": "Classic es la partida estándar. El modo Hard hace que los núcleos estallen antes y que cada golpe cueste más energía, con su propia clasificación. El Daily run da a todos los jugadores las mismas apariciones durante todo el día, para comparar puntuaciones de forma justa."
+        },
+        {
+          "q": "¿Puedo desafiar a un amigo?",
+          "a": "Sí. Después de una partida, pulsa Challenge a friend para compartir un enlace con tu puntuación. Tu amigo juega exactamente la misma partida, con las mismas apariciones, y ve si te ha superado."
+        },
+        {
+          "q": "¿Puedo continuar después de perder?",
+          "a": "Una vez por partida puedes ver un anuncio corto para recargar tu energía, borrar todas las minas de la pantalla y seguir jugando con tu puntuación actual. Guárdalo para una partida cercana a tu récord."
+        },
+        {
+          "q": "¿LOOPSTRIKE es gratis y se puede jugar en el móvil?",
+          "a": "LOOPSTRIKE es totalmente gratis, no necesita descarga ni cuenta y funciona en tu navegador en móviles, tabletas y ordenadores. Se diseñó primero para pantallas táctiles: basta con un dedo. Crea una cuenta gratuita de Ragequit Arcade si quieres ver tu nombre en la clasificación."
+        }
+      ]
+    }
   }
 }

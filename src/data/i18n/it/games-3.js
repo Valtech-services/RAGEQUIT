@@ -100,5 +100,55 @@ export default {
         { "q": "LINESTORM è gratis e si gioca sullo smartphone?", "a": "LINESTORM è completamente gratis, senza download e senza account, e gira nel browser su smartphone, tablet e computer. È pensato per un solo pollice sullo smartphone. Crea un account gratuito su Ragequit Arcade se vuoi vedere il tuo nome in classifica." }
       ]
     }
+  },
+  "loopstrike": {
+    "description": "LOOPSTRIKE è un gioco arcade al neon gratuito in cui la tua arma è la scia che ti lasci dietro. Guidi una cometa luminosa su una griglia scura, e la sua coda si allunga alle sue spalle come un nastro di luce ciano e rosa. Tocca quella coda in qualsiasi punto, anche la sua estremità luminosa, oppure attraversala, e il cerchio si chiude: tutto ciò che resta intrappolato dentro viene distrutto in una pioggia di scintille. Niente download, niente registrazione. Il gioco si avvia subito nel browser su smartphone, tablet e computer, e una partita parte con un solo tocco. Sul telefono trascini il dito in qualsiasi punto dello schermo e la cometa segue il pollice. Con il mouse la cometa insegue il cursore, e con la tastiera puoi guidarla con le frecce, WASD o ZQSD. L'arena si riempie di nuclei ciano, ognuno circondato da un anello che si svuota lentamente. Chiudi un nucleo in un cerchio prima che l'anello si esaurisca, altrimenti cede e prosciuga la tua barra di energia. Dalla seconda ondata compaiono mine magenta piene di punte: non chiuderle mai in un cerchio e non toccarle mai, lasciale svanire da sole. Dalla terza ondata, cacciatori arancioni puntano la tua cometa e la inseguono per tutta la griglia, quindi devi intrappolarli prima che ti raggiungano. Ogni cinque ondate arriva il Warden, un enorme ottagono giallo acido protetto da piastre di scudo in orbita. Vaga per l'arena sganciando mine, e solo un cerchio tracciato attorno al suo nucleo può strappargli uno scudo alla volta. Il punteggio premia audacia e precisione. Ogni nucleo vale di più quanto prima lo catturi, e intrappolare più bersagli nello stesso cerchio moltiplica i punti. Chiudi cerchi uno dopo l'altro e la tua combo sale, fino a per otto. Completare un'ondata dà un bonus, abbattere il Warden uno enorme. Potenziamenti luminosi ti aiutano a resistere: SLOW-MO rallenta tutta l'arena, LONG TAIL allunga la scia per disegnare cerchi più grandi, NOVA spazza via tutti i nemici dallo schermo e SHIELD ricarica l'energia. Ogni colpo potente congela l'azione per una frazione di secondo, fa tremare lo schermo e lo riempie di schegge, onde d'urto e suoni di vetro infranto. Ci sono tre modi di giocare. Classic è la partita standard. La modalità Hard fa cedere i nuclei più in fretta e colpire più forte, con una classifica dedicata. Il Daily run dà a tutti i giocatori esattamente le stesse apparizioni per tutta la giornata. Dopo ogni partita puoi inviare un link di sfida perché un amico giochi esattamente la stessa partita e provi a battere il tuo punteggio. Una volta per partita puoi guardare una breve pubblicità per ricaricare l'energia, eliminare le mine e continuare. Apri LOOPSTRIKE, traccia il tuo primo cerchio e scopri quanti bersagli riesci a intrappolare in un colpo solo.",
+    "controls": "Trascina in qualsiasi punto per guidare la cometa. Chiudi un cerchio toccando la tua coda, anche la sua estremità luminosa, oppure attraversandola. Con il mouse la cometa segue il cursore; da tastiera usa le frecce, WASD o ZQSD, e P per la pausa. Intrappola i nuclei prima che il loro anello si svuoti, intrappola i cacciatori e non chiudere né toccare mai le mine.",
+    "seo": {
+      "title": "LOOPSTRIKE - Gioco arcade al neon gratuito con cerchi | Ragequit Arcade",
+      "metaDescription": "Gioca gratis a LOOPSTRIKE. Traccia cerchi al neon con la coda della tua cometa per intrappolare i nuclei, evita mine e cacciatori, concatena combo fino a x8 e sconfiggi il boss Warden. Senza download.",
+      "faq": [
+        {
+          "q": "Come si gioca a LOOPSTRIKE?",
+          "a": "Guidi una cometa luminosa che lascia una coda al neon dietro di sé. Trascina il dito in qualsiasi punto dello schermo, o muovi il mouse, e la cometa ti segue. Quando la cometa tocca la propria coda, anche l'estremità luminosa, o la attraversa, il cerchio si chiude e tutto ciò che c'è dentro viene distrutto. Intrappola i nuclei prima che il loro anello si esaurisca e sopravvivi a più ondate possibile."
+        },
+        {
+          "q": "Come si chiude un cerchio?",
+          "a": "Riporta la testa della cometa su qualsiasi parte della coda. Puoi attraversare la coda, toccarla nel mezzo o toccare il punto luminoso alla sua estremità. Il cerchio deve avere una dimensione minima per contare, quindi i cerchietti minuscoli non fanno nulla. Più la coda è lunga, più grandi sono i cerchi che puoi disegnare."
+        },
+        {
+          "q": "Cosa sono nuclei, mine e cacciatori?",
+          "a": "I nuclei ciano sono i tuoi bersagli: ognuno ha un anello che si svuota col tempo, e se si esaurisce il nucleo cede e ti toglie energia. Le mine magenta compaiono dall'ondata 2: chiuderle in un cerchio o toccarle ti danneggia, quindi lasciale svanire. I cacciatori arancioni compaiono dall'ondata 3 e inseguono la tua cometa: intrappolali prima che ti colpiscano."
+        },
+        {
+          "q": "Come funziona la combo?",
+          "a": "Ogni cerchio che distrugge qualcosa circa due secondi dopo il precedente fa salire la combo, fino a per otto. Intrappolare più bersagli nello stesso cerchio moltiplica ancora i punti. Subire danni azzera la combo, quindi cerchi rapidi e puliti sono la chiave di un grande punteggio."
+        },
+        {
+          "q": "Chi è il Warden?",
+          "a": "Il Warden è il boss che arriva ogni cinque ondate: un ottagono giallo gigante con piastre di scudo in orbita, una per ogni colpo che può ancora incassare. Si muove nell'arena e sgancia mine, con un anello di avviso rosa appena prima di ogni sgancio. Traccia un cerchio attorno al suo nucleo per strappargli uno scudo e ripeti finché non cade, con un bonus enorme."
+        },
+        {
+          "q": "A cosa servono i potenziamenti?",
+          "a": "SLOW-MO rallenta tutta l'arena per qualche secondo, LONG TAIL allunga la scia per disegnare cerchi molto più grandi, NOVA distrugge in un colpo tutti i nemici sullo schermo e SHIELD ricarica gran parte della barra di energia. Raccoglili passandoci sopra o intrappolandoli in un cerchio."
+        },
+        {
+          "q": "Che differenza c'è tra Classic, Hard e Daily?",
+          "a": "Classic è la partita standard. La modalità Hard fa cedere i nuclei più in fretta e rende ogni colpo più costoso in energia, con una classifica dedicata. Il Daily run dà a tutti i giocatori le stesse apparizioni per l'intera giornata, per confrontare i punteggi in modo equo."
+        },
+        {
+          "q": "Posso sfidare un amico?",
+          "a": "Sì. Dopo una partita tocca Challenge a friend per condividere un link con il tuo punteggio. Il tuo amico gioca esattamente la stessa partita, con le stesse apparizioni, e vede se ti ha battuto."
+        },
+        {
+          "q": "Posso continuare dopo aver perso?",
+          "a": "Una volta per partita puoi guardare una breve pubblicità per ricaricare l'energia, eliminare tutte le mine dallo schermo e continuare con il punteggio attuale. Tienila per una partita vicina al tuo record."
+        },
+        {
+          "q": "LOOPSTRIKE è gratuito e si gioca su smartphone?",
+          "a": "LOOPSTRIKE è completamente gratuito, non richiede download né account e funziona nel browser di smartphone, tablet e computer. È stato pensato prima di tutto per i touchscreen: basta un dito. Crea un account Ragequit Arcade gratuito se vuoi il tuo nome in classifica."
+        }
+      ]
+    }
   }
 }

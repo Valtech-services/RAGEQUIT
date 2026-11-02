@@ -82,5 +82,87 @@ export default {
       { "type": "p", "text": "Una vez por partida puedes ver un anuncio corto para recuperar todas tus líneas y continuar a la misma distancia y velocidad. No la gastes en un error temprano. Guárdala para la partida en la que estés muy dentro de una zona nueva y cerca de tu mejor puntuación." },
       { "type": "p", "text": "Lee los colores pronto, cambia de formación a tiempo, mantente centrado y protege tu Overdrive. Abre LINESTORM, desafía a un amigo en la misma tormenta y mira hasta dónde puedes llegar." }
     ]
+  },
+  "loopstrike-tips": {
+    "title": "LOOPSTRIKE: cómo atrapar más núcleos en un solo bucle",
+    "excerpt": "LOOPSTRIKE parece sencillo: dibuja un bucle con la cola de tu cometa y todo lo que haya dentro explota. Así se atrapan varios núcleos a la vez, se mantiene el combo, se evitan las minas y se derriba al Warden.",
+    "seo": {
+      "title": "Trucos de LOOPSTRIKE: bucles grandes, combos, minas y el jefe Warden | Ragequit Arcade",
+      "metaDescription": "Guía de trucos de LOOPSTRIKE, el juego arcade de neón gratis con bucles: cerrar bucles, atrapar varios núcleos a la vez, combos x8, esquivar minas y cazadores y vencer al Warden."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "LOOPSTRIKE te da una sola herramienta: la cola de neón de tu cometa. Ciérrala en un bucle y todo lo que haya dentro desaparece. La regla se aprende en tres segundos, pero los jugadores de lo alto de la clasificación no dibujan círculos al azar. Planean sus bucles, protegen su combo y saben exactamente cuándo mantenerse lejos. Así juegan."
+      },
+      {
+        "type": "h2",
+        "text": "Entiende cómo se cierra un bucle"
+      },
+      {
+        "type": "p",
+        "text": "Un bucle se cierra en cuanto tu cometa toca su propia cola. Puedes cruzar la cola, rozarla por el medio o tocar el punto brillante de su extremo, que suele ser la forma más rápida de terminar un círculo. Tu cola tiene una longitud limitada, así que un bucle demasiado amplio nunca se cierra. Busca formas redondas y compactas: se cierran antes y te dejan libre para empezar el siguiente."
+      },
+      {
+        "type": "h2",
+        "text": "Atrapa varios núcleos a la vez"
+      },
+      {
+        "type": "p",
+        "text": "Un núcleo por bucle te mantiene con vida, pero nunca te llevará a lo más alto. Los puntos se multiplican por el número de objetivos atrapados en el mismo bucle, y cada núcleo vale más cuanto antes lo atrapes. Antes de dibujar, busca dos o tres núcleos cercanos y envuélvelos en un solo movimiento. Un bucle con cuatro objetivos vale mucho más que cuatro bucles separados."
+      },
+      {
+        "type": "h2",
+        "text": "Mantén vivo el combo"
+      },
+      {
+        "type": "p",
+        "text": "Cada bucle que destruye algo unos dos segundos después del anterior sube tu combo, hasta por ocho. El secreto es el ritmo: termina un bucle, mira el siguiente grupo y empieza a dibujar enseguida. Recibir daño reinicia el combo, así que un ritmo tranquilo y constante es mejor que lanzarse a lo loco por la arena."
+      },
+      {
+        "type": "h2",
+        "text": "Respeta las minas y los cazadores"
+      },
+      {
+        "type": "p",
+        "text": "Las minas magenta son la trampa del juego. Nunca dibujes un bucle a su alrededor ni vueles hacia ellas: dales espacio, porque desaparecen solas al cabo de unos segundos. Los cazadores naranjas son lo contrario. Persiguen tu cometa, así que conviértelos en objetivos: gira a su alrededor mientras te siguen y atrápalos en el mismo bucle que los núcleos cercanos."
+      },
+      {
+        "type": "h2",
+        "text": "Usa los potenciadores en el momento justo"
+      },
+      {
+        "type": "p",
+        "text": "LONG TAIL es el mejor amigo de las grandes puntuaciones: con una estela más larga puedes envolver grupos enteros de una pasada. SLOW-MO te da tiempo para planear un bucle perfecto en una oleada llena. NOVA limpia toda la pantalla, así que guárdala para cuando la arena esté desbordada. SHIELD recarga tu energía, lo que la hace valiosísima justo antes de un jefe."
+      },
+      {
+        "type": "h2",
+        "text": "Derriba al Warden"
+      },
+      {
+        "type": "p",
+        "text": "Cada cinco oleadas aparece el Warden, con una placa de escudo en órbita por cada golpe que aún puede aguantar. Solo un bucle dibujado alrededor de su núcleo rompe un escudo. Aléjate de su cuerpo, vigila el anillo rosa que parpadea justo antes de que suelte una mina y dibuja tu bucle justo después, cuando la zona a su alrededor está despejada. Tres bucles limpios y cae, con un bonus enorme."
+      },
+      {
+        "type": "h2",
+        "text": "Elige el modo adecuado"
+      },
+      {
+        "type": "p",
+        "text": "Classic es el lugar para aprender. El modo Hard hace que los núcleos estallen antes y que cada golpe cueste más, con su propia clasificación para quien busque un reto de verdad. El Daily run da a todos las mismas apariciones durante el día, la forma más justa de comparar puntuaciones con amigos. Tras cada partida, envía un enlace de desafío y deja que prueben exactamente la misma partida."
+      },
+      {
+        "type": "h2",
+        "text": "Guarda tu segunda oportunidad"
+      },
+      {
+        "type": "p",
+        "text": "Una vez por partida puedes ver un anuncio corto para recargar tu energía y borrar las minas. No lo gastes en un error temprano: empezar de nuevo no cuesta nada. Guárdalo para la partida en la que ya estés cerca de tu récord."
+      },
+      {
+        "type": "p",
+        "text": "Dibuja bucles compactos, atrapa varios objetivos a la vez, mantén el ritmo y no toques nunca una mina. Abre LOOPSTRIKE, atrapa tu primer núcleo y descubre cuántos puedes cazar en un solo bucle."
+      }
+    ]
   }
 }

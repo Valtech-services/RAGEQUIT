@@ -100,5 +100,55 @@ export default {
         { "q": "LINESTORM est-il gratuit et jouable sur mobile ?", "a": "LINESTORM est entièrement gratuit, sans téléchargement ni compte, et tourne dans votre navigateur sur téléphone, tablette et ordinateur. Il est pensé pour un seul pouce sur mobile. Créez un compte Ragequit Arcade gratuit pour voir votre nom dans le classement." }
       ]
     }
+  },
+  "loopstrike": {
+    "description": "LOOPSTRIKE est un jeu d'arcade néon gratuit dont l'arme est la traînée que vous laissez derrière vous. Vous pilotez une comète lumineuse sur une grille sombre, et sa queue s'étire derrière elle en un ruban de lumière cyan et rose. Touchez cette queue n'importe où, même son extrémité lumineuse, ou croisez-la, et la boucle se referme : tout ce qui est piégé à l'intérieur est détruit dans une gerbe d'étincelles. Aucun téléchargement, aucune inscription. Le jeu se lance instantanément dans votre navigateur sur mobile, tablette et ordinateur, et une partie démarre en un seul tap. Sur téléphone, vous glissez le doigt n'importe où sur l'écran et la comète suit votre pouce. À la souris, la comète poursuit le curseur, et au clavier vous pouvez la diriger avec les flèches, WASD ou ZQSD. L'arène se remplit de cores cyan, chacun entouré d'un anneau qui se vide lentement. Encerclez un core avant que son anneau ne soit vide, sinon il explose et vide votre barre d'énergie. Dès la deuxième vague apparaissent des mines magenta hérissées de pointes : ne les encerclez jamais et ne les touchez jamais, laissez-les simplement disparaître. Dès la troisième vague, des chasseurs orange verrouillent votre comète et la poursuivent sur toute la grille : il faut les encercler avant qu'ils ne vous atteignent. Toutes les cinq vagues arrive le Warden, un immense octogone jaune acide protégé par des plaques de bouclier en orbite. Il dérive dans l'arène en larguant des mines, et seule une boucle tracée autour de son noyau peut lui arracher un bouclier à la fois. Le score récompense l'audace et la précision. Chaque core rapporte davantage si vous l'attrapez tôt, et piéger plusieurs cibles dans une même boucle multiplie les points. Enchaînez les boucles rapidement et votre combo grimpe, jusqu'à fois huit. Terminer une vague rapporte un bonus, et abattre le Warden un bonus énorme. Des bonus lumineux vous aident à tenir : SLOW-MO ralentit toute l'arène, LONG TAIL allonge votre traînée pour tracer des boucles plus grandes, NOVA efface tous les ennemis de l'écran et SHIELD recharge votre énergie. Chaque gros impact fige l'action une fraction de seconde, fait trembler l'écran et le remplit d'éclats, d'ondes de choc et de bruits de verre brisé. Trois façons de jouer sont proposées. Classic est la partie standard. Le mode Hard fait exploser les cores plus vite et frapper plus fort, avec son propre classement. Le Daily run donne à tous les joueurs exactement les mêmes apparitions pour la journée. Après chaque partie, vous pouvez envoyer un lien de défi pour qu'un ami joue exactement la même partie et tente de battre votre score. Une fois par partie, vous pouvez regarder une courte publicité pour recharger votre énergie, effacer les mines et continuer. Ouvrez LOOPSTRIKE, tracez votre première boucle et voyez combien de cibles vous pouvez piéger d'un coup.",
+    "controls": "Glissez n'importe où pour diriger votre comète. Fermez une boucle en touchant votre propre queue, même son extrémité lumineuse, ou en la croisant. À la souris, la comète suit le curseur ; au clavier, utilisez les flèches, WASD ou ZQSD, et P pour la pause. Encerclez les cores avant que leur anneau ne se vide, encerclez les chasseurs, n'encerclez et ne touchez jamais les mines.",
+    "seo": {
+      "title": "LOOPSTRIKE - Jeu d'arcade néon gratuit à boucles | Ragequit Arcade",
+      "metaDescription": "Jouez gratuitement à LOOPSTRIKE. Tracez des boucles néon avec la queue de votre comète pour piéger les cores, évitez mines et chasseurs, enchaînez des combos jusqu'à x8 et battez le boss Warden. Sans téléchargement.",
+      "faq": [
+        {
+          "q": "Comment jouer à LOOPSTRIKE ?",
+          "a": "Vous dirigez une comète lumineuse qui laisse une queue néon derrière elle. Glissez n'importe où sur l'écran, ou bougez la souris, et la comète suit. Quand la comète touche sa propre queue, même l'extrémité lumineuse, ou la croise, la boucle se ferme et tout ce qui est à l'intérieur est détruit. Piégez les cores avant que leur anneau ne se vide et survivez au plus grand nombre de vagues possible."
+        },
+        {
+          "q": "Comment fermer une boucle ?",
+          "a": "Ramenez la tête de votre comète sur n'importe quelle partie de sa queue. Vous pouvez croiser la queue, la toucher au milieu ou toucher le point lumineux tout au bout. La boucle doit avoir une taille minimale pour compter : les tout petits cercles ne font rien. Plus la queue est longue, plus vous pouvez tracer de grandes boucles."
+        },
+        {
+          "q": "Que sont les cores, les mines et les chasseurs ?",
+          "a": "Les cores cyan sont vos cibles : chacun a un anneau qui se vide avec le temps, et s'il s'épuise, le core explose et vide votre énergie. Les mines magenta apparaissent dès la vague 2 : les encercler ou les toucher vous blesse, laissez-les donc disparaître. Les chasseurs orange apparaissent dès la vague 3 et poursuivent votre comète : encerclez-les avant qu'ils ne vous touchent."
+        },
+        {
+          "q": "Comment fonctionne le combo ?",
+          "a": "Chaque boucle qui détruit quelque chose environ deux secondes après la précédente fait monter votre combo, jusqu'à fois huit. Piéger plusieurs cibles dans la même boucle multiplie encore les points. Subir des dégâts remet le combo à zéro : des boucles rapides et propres sont la clé d'un gros score."
+        },
+        {
+          "q": "Qui est le Warden ?",
+          "a": "Le Warden est le boss qui arrive toutes les cinq vagues : un octogone jaune géant entouré de plaques de bouclier en orbite, une par coup qu'il peut encore encaisser. Il se déplace dans l'arène et largue des mines, avec un anneau d'alerte rose juste avant chaque largage. Tracez une boucle autour de son noyau pour lui arracher un bouclier, et recommencez jusqu'à ce qu'il tombe, pour un bonus énorme."
+        },
+        {
+          "q": "À quoi servent les bonus ?",
+          "a": "SLOW-MO ralentit toute l'arène quelques secondes, LONG TAIL allonge votre traînée pour tracer des boucles beaucoup plus grandes, NOVA détruit tous les ennemis à l'écran d'un coup et SHIELD recharge une grande partie de votre barre d'énergie. Attrapez-les en passant dessus ou en les piégeant dans une boucle."
+        },
+        {
+          "q": "Quelle différence entre Classic, Hard et Daily ?",
+          "a": "Classic est la partie standard. Le mode Hard fait exploser les cores plus vite et rend chaque coup plus coûteux en énergie, avec son propre classement. Le Daily run donne à tous les joueurs les mêmes apparitions toute la journée, pour comparer les scores équitablement."
+        },
+        {
+          "q": "Puis-je défier un ami ?",
+          "a": "Oui. Après une partie, appuyez sur Challenge a friend pour partager un lien avec votre score. Votre ami joue exactement la même partie, avec les mêmes apparitions, et voit s'il vous a battu."
+        },
+        {
+          "q": "Puis-je continuer après avoir perdu ?",
+          "a": "Une fois par partie, vous pouvez regarder une courte publicité pour recharger votre énergie, effacer toutes les mines à l'écran et continuer avec votre score actuel. Gardez-la pour une partie proche de votre record."
+        },
+        {
+          "q": "LOOPSTRIKE est-il gratuit et jouable sur mobile ?",
+          "a": "LOOPSTRIKE est entièrement gratuit, sans téléchargement ni compte, et fonctionne dans votre navigateur sur téléphone, tablette et ordinateur. Il a été conçu d'abord pour les écrans tactiles : un seul doigt suffit. Créez un compte Ragequit Arcade gratuit si vous voulez voir votre nom au classement."
+        }
+      ]
+    }
   }
 }

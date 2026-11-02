@@ -100,5 +100,55 @@ export default {
         { "q": "Czy LINESTORM jest darmowy i działa na telefonie?", "a": "LINESTORM jest całkowicie darmowy, bez pobierania i bez konta, i działa w przeglądarce na telefonie, tablecie i komputerze. Powstał z myślą o grze jednym kciukiem na telefonie. Załóż darmowe konto Ragequit Arcade, jeśli chcesz widzieć swoją nazwę w rankingu." }
       ]
     }
+  },
+  "loopstrike": {
+    "description": "LOOPSTRIKE to darmowa neonowa gra zręcznościowa, w której twoją bronią jest ślad, jaki zostawiasz za sobą. Sterujesz świecącą kometą na ciemnej siatce, a jej ogon ciągnie się za nią jak wstęga cyjanowego i różowego światła. Dotknij tego ogona w dowolnym miejscu, nawet jego świecącego końca, albo go przetnij, a pętla się zamknie: wszystko, co zostało w środku, zostaje zniszczone w deszczu iskier. Bez pobierania i bez rejestracji. Gra uruchamia się od razu w przeglądarce na telefonie, tablecie i komputerze, a rozgrywka zaczyna się jednym stuknięciem. Na telefonie przesuwasz palec w dowolnym miejscu ekranu, a kometa podąża za twoim kciukiem. Myszką kometa goni kursor, a na klawiaturze sterujesz strzałkami, WASD lub ZQSD. Arena wypełnia się cyjanowymi rdzeniami, z których każdy otacza powoli pustoszejący pierścień. Złap rdzeń w pętlę, zanim jego pierścień się wyczerpie, inaczej pęknie i wyssie twój pasek energii. Od drugiej fali pojawiają się kolczaste magentowe miny: nigdy nie zamykaj ich w pętli i nigdy ich nie dotykaj, po prostu pozwól im zniknąć. Od trzeciej fali pomarańczowi łowcy namierzają twoją kometę i ścigają ją po całej siatce, więc musisz ich złapać, zanim cię dopadną. Co pięć fal pojawia się Warden, ogromny kwasowożółty ośmiokąt chroniony krążącymi płytami tarczy. Dryfuje po arenie, zrzucając miny, a tylko pętla narysowana wokół jego rdzenia może zerwać mu jedną tarczę naraz. Punktacja nagradza śmiałość i precyzję. Każdy rdzeń jest wart więcej, im wcześniej go złapiesz, a kilka celów w jednej pętli mnoży punkty. Zamykaj pętle szybko jedna po drugiej, a twoje combo rośnie, aż do razy osiem. Ukończenie fali daje premię, a pokonanie Wardena ogromną premię. Świecące wzmocnienia pomagają przetrwać: SLOW-MO spowalnia całą arenę, LONG TAIL wydłuża ślad, żeby rysować większe pętle, NOVA zmiata wszystkich wrogów z ekranu, a SHIELD uzupełnia energię. Każde mocne uderzenie zatrzymuje akcję na ułamek sekundy, trzęsie ekranem i wypełnia go odłamkami, falami uderzeniowymi i dźwiękiem tłuczonego szkła. Do wyboru są trzy sposoby gry. Classic to standardowa rozgrywka. Tryb Hard sprawia, że rdzenie pękają szybciej i uderzają mocniej, z osobnym rankingiem. Daily run daje wszystkim graczom dokładnie te same pojawienia przez cały dzień. Po każdej rozgrywce możesz wysłać link z wyzwaniem, aby znajomy zagrał dokładnie w tę samą grę i spróbował pobić twój wynik. Raz na rozgrywkę możesz obejrzeć krótką reklamę, aby uzupełnić energię, usunąć miny i grać dalej. Otwórz LOOPSTRIKE, narysuj pierwszą pętlę i sprawdź, ile celów złapiesz naraz.",
+    "controls": "Przesuwaj palcem w dowolnym miejscu, aby sterować kometą. Zamknij pętlę, dotykając własnego ogona, nawet jego świecącego końca, albo go przecinając. Myszką kometa podąża za kursorem; na klawiaturze użyj strzałek, WASD lub ZQSD, a P to pauza. Łap rdzenie, zanim ich pierścień się opróżni, łap łowców i nigdy nie zamykaj w pętli ani nie dotykaj min.",
+    "seo": {
+      "title": "LOOPSTRIKE - Darmowa neonowa gra zręcznościowa z pętlami | Ragequit Arcade",
+      "metaDescription": "Zagraj za darmo w LOOPSTRIKE. Rysuj neonowe pętle ogonem komety, łap rdzenie, unikaj min i łowców, buduj combo do x8 i pokonaj bossa Wardena. Bez pobierania.",
+      "faq": [
+        {
+          "q": "Jak grać w LOOPSTRIKE?",
+          "a": "Sterujesz świecącą kometą, która zostawia za sobą neonowy ogon. Przesuń palec w dowolnym miejscu ekranu albo porusz myszką, a kometa podąży za tobą. Gdy kometa dotknie własnego ogona, nawet świecącego końca, albo go przetnie, pętla się zamyka i wszystko w środku zostaje zniszczone. Łap rdzenie, zanim ich pierścień się wyczerpie, i przetrwaj jak najwięcej fal."
+        },
+        {
+          "q": "Jak zamknąć pętlę?",
+          "a": "Doprowadź głowę komety do dowolnej części jej ogona. Możesz przeciąć ogon, dotknąć go w środku albo dotknąć świecącej kropki na samym końcu. Pętla musi mieć minimalny rozmiar, żeby się liczyła, więc malutkie kółka nic nie dają. Im dłuższy ogon, tym większe pętle możesz rysować."
+        },
+        {
+          "q": "Czym są rdzenie, miny i łowcy?",
+          "a": "Cyjanowe rdzenie to twoje cele: każdy ma pierścień, który z czasem pustoszeje, a gdy się wyczerpie, rdzeń pęka i zabiera ci energię. Magentowe miny pojawiają się od 2. fali: zamknięcie ich w pętli lub dotknięcie rani cię, więc pozwól im zniknąć. Pomarańczowi łowcy pojawiają się od 3. fali i ścigają twoją kometę: złap ich, zanim cię trafią."
+        },
+        {
+          "q": "Jak działa combo?",
+          "a": "Każda pętla, która coś niszczy w ciągu około dwóch sekund od poprzedniej, podnosi twoje combo, aż do razy osiem. Złapanie kilku celów w tej samej pętli jeszcze bardziej mnoży punkty. Otrzymanie obrażeń zeruje combo, więc szybkie i czyste pętle są kluczem do wysokiego wyniku."
+        },
+        {
+          "q": "Kim jest Warden?",
+          "a": "Warden to boss, który pojawia się co pięć fal: gigantyczny żółty ośmiokąt z krążącymi płytami tarczy, po jednej na każde uderzenie, które jeszcze wytrzyma. Porusza się po arenie i zrzuca miny, a tuż przed każdym zrzutem miga różowy pierścień ostrzegawczy. Narysuj pętlę wokół jego rdzenia, aby zerwać tarczę, i powtarzaj, aż padnie, zdobywając ogromną premię."
+        },
+        {
+          "q": "Co dają wzmocnienia?",
+          "a": "SLOW-MO spowalnia całą arenę na kilka sekund, LONG TAIL wydłuża ślad, żeby rysować znacznie większe pętle, NOVA niszczy naraz wszystkich wrogów na ekranie, a SHIELD uzupełnia dużą część paska energii. Zbieraj je, przelatując nad nimi albo łapiąc je w pętlę."
+        },
+        {
+          "q": "Czym różnią się Classic, Hard i Daily?",
+          "a": "Classic to standardowa rozgrywka. Tryb Hard sprawia, że rdzenie pękają szybciej, a każde uderzenie kosztuje więcej energii, z osobnym rankingiem. Daily run daje wszystkim graczom te same pojawienia przez cały dzień, by uczciwie porównywać wyniki."
+        },
+        {
+          "q": "Czy mogę rzucić wyzwanie znajomemu?",
+          "a": "Tak. Po rozgrywce naciśnij Challenge a friend, aby udostępnić link ze swoim wynikiem. Znajomy zagra dokładnie w tę samą grę, z tymi samymi pojawieniami, i zobaczy, czy cię pokonał."
+        },
+        {
+          "q": "Czy mogę grać dalej po przegranej?",
+          "a": "Raz na rozgrywkę możesz obejrzeć krótką reklamę, aby uzupełnić energię, usunąć wszystkie miny z ekranu i grać dalej z obecnym wynikiem. Zachowaj ją na rozgrywkę bliską twojemu rekordowi."
+        },
+        {
+          "q": "Czy LOOPSTRIKE jest darmowy i działa na telefonie?",
+          "a": "LOOPSTRIKE jest całkowicie darmowy, nie wymaga pobierania ani konta i działa w przeglądarce na telefonach, tabletach i komputerach. Zaprojektowano go przede wszystkim z myślą o ekranach dotykowych: wystarczy jeden palec. Załóż darmowe konto Ragequit Arcade, jeśli chcesz zobaczyć swoje imię w rankingu."
+        }
+      ]
+    }
   }
 }

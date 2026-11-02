@@ -82,5 +82,87 @@ export default {
       { "type": "p", "text": "Her koşuda bir kez kısa bir reklam izleyerek tüm çizgilerini geri getirip aynı mesafe ve hızda devam edebilirsin. Onu erken bir hataya harcama. Yeni bir bölgenin derinlerinde ve en iyi skoruna yakın olduğun koşu için sakla." },
       { "type": "p", "text": "Renkleri erken oku, formasyonu zamanında değiştir, ortada kal ve Overdrive'ını koru. LINESTORM'u aç, aynı fırtınada bir arkadaşına meydan oku ve ne kadar ileri gidebileceğini gör." }
     ]
+  },
+  "loopstrike-tips": {
+    "title": "LOOPSTRIKE: Tek döngüde daha fazla çekirdek nasıl yakalanır",
+    "excerpt": "LOOPSTRIKE basit görünür: kuyruklu yıldızının kuyruğuyla bir döngü çiz, içindeki her şey patlasın. İşte aynı anda birden fazla çekirdek yakalamanın, komboyu korumanın, mayınlardan kaçmanın ve Warden'ı devirmenin yolları.",
+    "seo": {
+      "title": "LOOPSTRIKE İpuçları: Büyük Döngüler, Kombolar, Mayınlar ve Boss Warden | Ragequit Arcade",
+      "metaDescription": "Ücretsiz neon döngü oyunu LOOPSTRIKE için ipuçları: döngüleri kapatmak, aynı anda birden çok çekirdek yakalamak, x8 kombo, mayın ve avcılardan kaçmak ve Warden'ı yenmek."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "LOOPSTRIKE sana tek bir araç verir: kuyruklu yıldızının neon kuyruğu. Onu bir döngüye kapat, içindeki her şey silinsin. Kural üç saniyede öğrenilir ama sıralamanın tepesindeki oyuncular rastgele daireler çizmez. Döngülerini planlar, kombolarını korur ve ne zaman uzak durmaları gerektiğini tam olarak bilirler. İşte nasıl oynadıkları."
+      },
+      {
+        "type": "h2",
+        "text": "Bir döngünün nasıl kapandığını öğren"
+      },
+      {
+        "type": "p",
+        "text": "Kuyruklu yıldızın kendi kuyruğuna dokunduğu anda döngü kapanır. Kuyruğu kesebilir, ortasından sıyırabilir ya da en ucundaki parlayan noktaya dokunabilirsin; bu çoğu zaman bir daireyi bitirmenin en hızlı yoludur. Kuyruğunun uzunluğu sınırlıdır, bu yüzden çok geniş bir döngü asla kapanmaz. Yuvarlak ve toplu şekiller hedefle: daha hızlı kapanırlar ve bir sonrakine geçmen için seni serbest bırakırlar."
+      },
+      {
+        "type": "h2",
+        "text": "Aynı anda birden fazla çekirdek yakala"
+      },
+      {
+        "type": "p",
+        "text": "Döngü başına bir çekirdek seni hayatta tutar ama asla zirveye taşımaz. Puanlar aynı döngüde yakalanan hedef sayısıyla çarpılır ve her çekirdek ne kadar erken yakalanırsa o kadar değerlidir. Çizmeye başlamadan önce birbirine yakın iki üç çekirdek bul ve hepsini tek bir hareketle sar. Dört hedefli bir döngü, dört ayrı döngüden çok daha değerlidir."
+      },
+      {
+        "type": "h2",
+        "text": "Komboyu canlı tut"
+      },
+      {
+        "type": "p",
+        "text": "Bir öncekinden yaklaşık iki saniye içinde bir şey yok eden her döngü kombonu sekiz katına kadar artırır. Sır ritimde: bir döngüyü bitir, sonraki gruba bak ve hemen çizmeye başla. Hasar almak komboyu sıfırlar, bu yüzden sakin ve düzenli bir tempo, arenada riskli atılımlardan daha iyidir."
+      },
+      {
+        "type": "h2",
+        "text": "Mayınlara ve avcılara saygı göster"
+      },
+      {
+        "type": "p",
+        "text": "Macenta mayınlar oyunun tuzağıdır. Etraflarına asla döngü çizme ve asla üzerlerine uçma: onlara alan bırak, çünkü birkaç saniye sonra kendiliğinden kaybolurlar. Turuncu avcılar ise tam tersi. Kuyruklu yıldızını kovalarlar, o yüzden onları hedefe dönüştür: seni takip ederken etraflarında dön ve yakındaki çekirdeklerle aynı döngüde yakala."
+      },
+      {
+        "type": "h2",
+        "text": "Güçlendirmeleri doğru anda kullan"
+      },
+      {
+        "type": "p",
+        "text": "LONG TAIL büyük skorların en iyi dostudur: daha uzun bir izle bütün grupları tek geçişte sarabilirsin. SLOW-MO kalabalık bir dalgada kusursuz bir döngü planlaman için sana zaman verir. NOVA tüm ekranı temizler, bu yüzden arena taştığında kullan. SHIELD enerjini doldurur, bu da onu bir bosstan hemen önce çok değerli kılar."
+      },
+      {
+        "type": "h2",
+        "text": "Warden'ı devir"
+      },
+      {
+        "type": "p",
+        "text": "Her beş dalgada bir Warden belirir; hâlâ dayanabileceği her vuruş için etrafında dönen bir kalkan plakasıyla. Bir kalkanı yalnızca çekirdeğinin etrafına çizilen döngü kırar. Gövdesinden uzak dur, her mayından hemen önce yanıp sönen pembe halkayı izle ve döngünü bırakıştan hemen sonra, etrafı boşken çiz. Üç temiz döngü ve düşer, devasa bir bonusla."
+      },
+      {
+        "type": "h2",
+        "text": "Doğru modu seç"
+      },
+      {
+        "type": "p",
+        "text": "Classic öğrenme yeridir. Hard modunda çekirdekler daha hızlı patlar ve her vuruş daha pahalıdır; gerçek bir meydan okuma isteyenler için kendi sıralaması vardır. Daily run herkese gün boyu aynı doğma noktalarını verir, bu da skorları arkadaşlarla karşılaştırmanın en adil yoludur. Her turdan sonra bir meydan okuma bağlantısı gönder ve tam olarak aynı oyunu denemelerine izin ver."
+      },
+      {
+        "type": "h2",
+        "text": "İkinci şansını sakla"
+      },
+      {
+        "type": "p",
+        "text": "Her turda bir kez kısa bir reklam izleyerek enerjini doldurabilir ve mayınları temizleyebilirsin. Onu erken bir hataya harcama: yeniden başlamak bedavadır. Rekoruna zaten yakın olduğun tur için sakla."
+      },
+      {
+        "type": "p",
+        "text": "Toplu döngüler çiz, aynı anda birden fazla hedef yakala, ritmini koru ve asla bir mayına dokunma. LOOPSTRIKE'ı aç, ilk çekirdeğini yakala ve tek bir döngüde kaç tane yakalayabileceğini gör."
+      }
+    ]
   }
 }

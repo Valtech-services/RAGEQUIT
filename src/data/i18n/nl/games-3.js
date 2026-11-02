@@ -100,5 +100,55 @@ export default {
         { "q": "Is LINESTORM gratis en speelbaar op mobiel?", "a": "LINESTORM is volledig gratis, zonder download en zonder account, en draait in je browser op telefoon, tablet en computer. Het is gemaakt voor één duim op mobiel. Maak een gratis Ragequit Arcade-account aan als je je naam op de ranglijst wilt." }
       ]
     }
+  },
+  "loopstrike": {
+    "description": "LOOPSTRIKE is een gratis neon-arcadegame waarin je wapen het spoor is dat je achterlaat. Je bestuurt een gloeiende komeet over een donker raster, en zijn staart trekt zich achter hem aan als een lint van cyaan en roze licht. Raak die staart ergens aan, zelfs het gloeiende uiteinde, of kruis hem, en de lus klapt dicht: alles wat erin gevangen zit, wordt vernietigd in een regen van vonken. Geen download, geen account. De game start meteen in je browser op mobiel, tablet en computer, en een potje begint met één tik. Op je telefoon veeg je ergens over het scherm en de komeet volgt je duim. Met een muis jaagt de komeet de cursor na, en met het toetsenbord stuur je met de pijltjestoetsen, WASD of ZQSD. De arena vult zich met cyaan kernen, elk omringd door een ring die langzaam leegloopt. Vang een kern in een lus voordat zijn ring leeg is, anders breekt hij door en loopt je energiebalk leeg. Vanaf de tweede golf verschijnen stekelige magenta mijnen: vang ze nooit in een lus en raak ze nooit aan, laat ze gewoon vervagen. Vanaf de derde golf richten oranje jagers zich op je komeet en achtervolgen ze hem over het hele raster, dus je moet ze vangen voordat ze je bereiken. Elke vijf golven verschijnt de Warden, een enorme zuurgele achthoek beschermd door ronddraaiende schildplaten. Hij drijft door de arena en dropt mijnen, en alleen een lus rond zijn kern kan er telkens één schild af slaan. De score beloont lef en precisie. Elke kern levert meer op hoe eerder je hem vangt, en meerdere doelen in één lus vermenigvuldigen de punten. Sluit lussen snel na elkaar en je combo stijgt, tot keer acht. Een golf afronden levert een bonus op, de Warden neerhalen een gigantische. Gloeiende power-ups helpen je overleven: SLOW-MO vertraagt de hele arena, LONG TAIL verlengt je spoor voor grotere lussen, NOVA veegt alle vijanden van het scherm en SHIELD laadt je energie op. Elke grote klap bevriest de actie een fractie van een seconde, laat het scherm schudden en vult het met scherven, schokgolven en het geluid van brekend glas. Er zijn drie manieren om te spelen. Classic is het standaardpotje. In de Hard-modus breken kernen sneller door en slaan ze harder toe, met een eigen ranglijst. De Daily run geeft alle spelers de hele dag precies dezelfde spawns. Na elk potje kun je een uitdagingslink sturen, zodat een vriend precies hetzelfde spel speelt en je score probeert te verslaan. Eén keer per potje kun je een korte advertentie bekijken om je energie aan te vullen, de mijnen op te ruimen en door te spelen. Open LOOPSTRIKE, trek je eerste lus en ontdek hoeveel doelen je in één keer kunt vangen.",
+    "controls": "Veeg ergens om je komeet te sturen. Sluit een lus door je eigen staart aan te raken, zelfs het gloeiende uiteinde, of door hem te kruisen. Met een muis volgt de komeet de cursor; op het toetsenbord gebruik je de pijltjestoetsen, WASD of ZQSD, en P om te pauzeren. Vang de kernen voordat hun ring leeg is, vang de jagers en vang of raak de mijnen nooit.",
+    "seo": {
+      "title": "LOOPSTRIKE - Gratis neon-arcadegame met lussen | Ragequit Arcade",
+      "metaDescription": "Speel LOOPSTRIKE gratis. Trek neonlussen met de staart van je komeet om kernen te vangen, ontwijk mijnen en jagers, bouw combo's tot x8 en versla de baas Warden. Zonder download.",
+      "faq": [
+        {
+          "q": "Hoe speel je LOOPSTRIKE?",
+          "a": "Je bestuurt een gloeiende komeet die een neonstaart achterlaat. Veeg ergens over het scherm, of beweeg de muis, en de komeet volgt. Als de komeet zijn eigen staart raakt, ook het gloeiende uiteinde, of hem kruist, sluit de lus en wordt alles erin vernietigd. Vang de kernen voordat hun ring leeg is en overleef zoveel golven als je kunt."
+        },
+        {
+          "q": "Hoe sluit ik een lus?",
+          "a": "Breng de kop van je komeet terug op een willekeurig deel van zijn staart. Je kunt de staart kruisen, hem in het midden raken of het gloeiende puntje helemaal aan het eind aantikken. Een lus moet een minimale grootte hebben om mee te tellen, dus piepkleine cirkels doen niets. Hoe langer de staart, hoe grotere lussen je kunt trekken."
+        },
+        {
+          "q": "Wat zijn kernen, mijnen en jagers?",
+          "a": "Cyaan kernen zijn je doelen: elk heeft een ring die met de tijd leegloopt, en als die op is, breekt de kern door en kost hij je energie. Magenta mijnen verschijnen vanaf golf 2: ze in een lus vangen of aanraken doet je pijn, dus laat ze vervagen. Oranje jagers verschijnen vanaf golf 3 en achtervolgen je komeet: vang ze voordat ze je raken."
+        },
+        {
+          "q": "Hoe werkt de combo?",
+          "a": "Elke lus die ongeveer twee seconden na de vorige iets vernietigt, verhoogt je combo, tot keer acht. Meerdere doelen in dezelfde lus vermenigvuldigen de punten nog eens. Schade zet de combo terug op nul, dus snelle en strakke lussen zijn de sleutel tot een hoge score."
+        },
+        {
+          "q": "Wie is de Warden?",
+          "a": "De Warden is de baas die elke vijf golven verschijnt: een gigantische gele achthoek met ronddraaiende schildplaten, één voor elke treffer die hij nog kan incasseren. Hij beweegt door de arena en dropt mijnen, met vlak voor elke drop een roze waarschuwingsring. Trek een lus rond zijn kern om een schild eraf te slaan en herhaal tot hij valt, voor een gigantische bonus."
+        },
+        {
+          "q": "Wat doen de power-ups?",
+          "a": "SLOW-MO vertraagt de hele arena een paar seconden, LONG TAIL verlengt je spoor voor veel grotere lussen, NOVA vernietigt alle vijanden op het scherm in één keer en SHIELD vult een groot deel van je energiebalk aan. Pak ze door eroverheen te vliegen of door ze in een lus te vangen."
+        },
+        {
+          "q": "Wat is het verschil tussen Classic, Hard en Daily?",
+          "a": "Classic is het standaardpotje. In de Hard-modus breken kernen sneller door en kost elke treffer meer energie, met een eigen ranglijst. De Daily run geeft alle spelers de hele dag dezelfde spawns, zodat scores eerlijk te vergelijken zijn."
+        },
+        {
+          "q": "Kan ik een vriend uitdagen?",
+          "a": "Ja. Tik na een potje op Challenge a friend om een link met je score te delen. Je vriend speelt precies hetzelfde spel, met dezelfde spawns, en ziet of hij je verslagen heeft."
+        },
+        {
+          "q": "Kan ik doorspelen na een nederlaag?",
+          "a": "Eén keer per potje kun je een korte advertentie bekijken om je energie aan te vullen, alle mijnen van het scherm te halen en verder te spelen met je huidige score. Bewaar hem voor een potje dat dicht bij je record zit."
+        },
+        {
+          "q": "Is LOOPSTRIKE gratis en speelbaar op mobiel?",
+          "a": "LOOPSTRIKE is helemaal gratis, heeft geen download of account nodig en draait in je browser op telefoons, tablets en computers. Het is in de eerste plaats ontworpen voor touchscreens: één vinger is genoeg. Maak een gratis Ragequit Arcade-account aan als je je naam op de ranglijst wilt."
+        }
+      ]
+    }
   }
 }

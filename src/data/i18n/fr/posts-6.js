@@ -82,5 +82,87 @@ export default {
       { "type": "p", "text": "Une fois par partie, vous pouvez regarder une courte pub pour récupérer toutes vos lignes et continuer à la même distance et à la même vitesse. Ne la dépensez pas sur une erreur précoce. Gardez-la pour la partie où vous êtes loin dans une nouvelle zone et proche de votre record." },
       { "type": "p", "text": "Lisez les couleurs tôt, changez de formation à temps, restez centré et protégez votre Overdrive. Lancez LINESTORM, défiez un ami sur la même tempête et voyez jusqu'où vous pouvez aller." }
     ]
+  },
+  "loopstrike-tips": {
+    "title": "LOOPSTRIKE : comment piéger plus de cores en une seule boucle",
+    "excerpt": "LOOPSTRIKE a l'air simple : tracez une boucle avec la queue de votre comète et tout ce qui est dedans explose. Voici comment piéger plusieurs cores d'un coup, garder votre combo, éviter les mines et abattre le Warden.",
+    "seo": {
+      "title": "Astuces LOOPSTRIKE : grandes boucles, combos, mines et boss Warden | Ragequit Arcade",
+      "metaDescription": "Guide d'astuces pour LOOPSTRIKE, le jeu d'arcade néon gratuit à boucles : fermer une boucle, piéger plusieurs cores d'un coup, monter des combos x8, éviter mines et chasseurs, battre le Warden."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "LOOPSTRIKE ne vous donne qu'un seul outil : la queue néon de votre comète. Refermez-la en boucle et tout ce qui est à l'intérieur est balayé. La règle s'apprend en trois secondes, mais les joueurs en haut du classement ne tracent pas des cercles au hasard. Ils préparent leurs boucles, protègent leur combo et savent exactement quand rester à distance. Voici comment ils jouent."
+      },
+      {
+        "type": "h2",
+        "text": "Comprendre comment une boucle se ferme"
+      },
+      {
+        "type": "p",
+        "text": "Une boucle se ferme dès que votre comète touche sa propre queue. Vous pouvez croiser la queue, l'effleurer en son milieu ou toucher le point lumineux tout au bout, souvent la façon la plus rapide de finir un cercle. Votre queue a une longueur limitée, donc une boucle trop large ne se ferme jamais. Visez des formes rondes et compactes : elles se ferment plus vite et vous laissent libre d'enchaîner."
+      },
+      {
+        "type": "h2",
+        "text": "Piéger plusieurs cores d'un coup"
+      },
+      {
+        "type": "p",
+        "text": "Un core par boucle vous garde en vie, mais ne vous mènera jamais en tête du classement. Les points sont multipliés par le nombre de cibles prises dans la même boucle, et chaque core rapporte plus si vous l'attrapez tôt. Avant de tracer, repérez deux ou trois cores proches et enveloppez-les d'un seul geste. Une boucle avec quatre cibles vaut bien plus que quatre boucles séparées."
+      },
+      {
+        "type": "h2",
+        "text": "Garder le combo"
+      },
+      {
+        "type": "p",
+        "text": "Chaque boucle qui détruit quelque chose environ deux secondes après la précédente fait monter votre combo, jusqu'à fois huit. Le secret, c'est le rythme : terminez une boucle, regardez le groupe suivant et commencez à tracer aussitôt. Subir des dégâts remet le combo à zéro, donc un rythme calme et régulier vaut mieux que des plongeons risqués à travers l'arène."
+      },
+      {
+        "type": "h2",
+        "text": "Respecter les mines et les chasseurs"
+      },
+      {
+        "type": "p",
+        "text": "Les mines magenta sont le piège du jeu. Ne tracez jamais de boucle autour d'elles et ne foncez jamais dedans : laissez-leur de l'espace, elles disparaissent d'elles-mêmes au bout de quelques secondes. Les chasseurs orange, c'est l'inverse. Ils poursuivent votre comète, alors transformez-les en cibles : tournez autour d'eux pendant qu'ils vous suivent et attrapez-les dans la même boucle que les cores voisins."
+      },
+      {
+        "type": "h2",
+        "text": "Utiliser les bonus au bon moment"
+      },
+      {
+        "type": "p",
+        "text": "LONG TAIL est le meilleur ami des gros scores : avec une traînée plus longue, vous pouvez envelopper des groupes entiers d'un seul passage. SLOW-MO vous laisse le temps de préparer une boucle parfaite pendant une vague chargée. NOVA vide tout l'écran : gardez-la pour quand l'arène déborde. SHIELD recharge votre énergie, ce qui la rend précieuse juste avant un boss."
+      },
+      {
+        "type": "h2",
+        "text": "Abattre le Warden"
+      },
+      {
+        "type": "p",
+        "text": "Toutes les cinq vagues, le Warden apparaît, avec une plaque de bouclier en orbite par coup qu'il peut encore encaisser. Seule une boucle tracée autour de son noyau brise un bouclier. Restez loin de son corps, surveillez l'anneau rose qui clignote juste avant qu'il largue une mine, et tracez votre boucle juste après le largage, quand la zone autour de lui est dégagée. Trois boucles propres et il tombe, avec un bonus énorme."
+      },
+      {
+        "type": "h2",
+        "text": "Choisir le bon mode"
+      },
+      {
+        "type": "p",
+        "text": "Classic est l'endroit où apprendre. Le mode Hard fait exploser les cores plus vite et rend chaque coup plus coûteux, avec son propre classement pour ceux qui veulent un vrai défi. Le Daily run donne à tous les mêmes apparitions pour la journée : c'est la façon la plus équitable de comparer les scores entre amis. Après chaque partie, envoyez un lien de défi et laissez-les essayer exactement la même partie."
+      },
+      {
+        "type": "h2",
+        "text": "Garder sa deuxième chance"
+      },
+      {
+        "type": "p",
+        "text": "Une fois par partie, vous pouvez regarder une courte publicité pour recharger votre énergie et effacer les mines. Ne la gaspillez pas sur une erreur en début de partie : recommencer ne coûte rien. Gardez-la pour la partie où vous êtes déjà proche de votre record."
+      },
+      {
+        "type": "p",
+        "text": "Tracez des boucles compactes, attrapez plusieurs cibles à la fois, gardez votre rythme et ne touchez jamais une mine. Ouvrez LOOPSTRIKE, piégez votre premier core et voyez combien vous pouvez en attraper en une seule boucle."
+      }
+    ]
   }
 }

@@ -72,6 +72,9 @@
   .logo { font-family: var(--display); font-size: 52px; line-height: .95; letter-spacing: 2px; margin: 4px 0 8px;
     background: linear-gradient(180deg, #fff 0%, var(--cyan) 45%, var(--magenta) 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
     filter: drop-shadow(0 0 12px rgba(25,240,255,.55)); }
+  .logo-wrap { margin: 0 0 6px; line-height: 0; }
+  .logo-img { display: block; width: 100%; max-width: 340px; height: auto; margin: 0 auto; filter: drop-shadow(0 0 14px rgba(25,240,255,.45)); animation: logoFloat 3.2s ease-in-out infinite; }
+  @keyframes logoFloat { 50% { transform: translateY(-4px) scale(1.02); filter: drop-shadow(0 0 22px rgba(160,90,255,.7)); } }
   .tagline { color: var(--muted); font-size: 14px; margin: 0 0 14px; line-height: 1.4; }
   .title2 { font-family: var(--display); font-size: 36px; letter-spacing: 1px; margin: 0 0 4px; color: var(--blood); text-shadow: 0 0 16px rgba(255,51,85,.6); }
   .big { font-family: var(--display); font-size: 46px; margin: 6px 0 2px; color: var(--ink); }
@@ -126,7 +129,7 @@
   .newbest.on { animation: nb 1s ease-in-out infinite; }
   @keyframes nb { 50% { text-shadow: 0 0 16px var(--acid); transform: scale(1.08); } }
   @media (prefers-reduced-motion: reduce) {
-    .ov.on, .ov.on .panel, .logo, #ovMenu .btn:first-of-type, .tile, .newbest.on { animation: none; opacity: 1; }
+    .ov.on, .ov.on .panel, .logo, .logo-img, #ovMenu .btn:first-of-type, .tile, .newbest.on { animation: none; opacity: 1; }
   }
 </style>
 </head>
@@ -155,7 +158,7 @@
 <!-- Menu -->
 <div class="ov on" id="ovMenu">
   <div class="panel">
-    <div class="logo">LOOP<br>STRIKE</div>
+    <h1 class="logo-wrap"><img class="logo-img" src="./loopstrike/logo.webp" alt="LOOPSTRIKE" width="760" height="256" onerror="this.parentNode.innerHTML='<span class=&quot;logo&quot;>LOOP<br>STRIKE</span>'"></h1>
     <p class="tagline">Your comet leaves a neon tail. Touch it anywhere, even its glowing end, to close a loop and wipe out every core inside.</p>
     <div class="challenge" id="challengeBox"></div>
     <div class="bests">

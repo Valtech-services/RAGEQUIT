@@ -131,7 +131,7 @@ export const siteSeo = {
   title: 'Ragequit Arcade — Free Online Games',
   description: 'The most addictive free online games. Simple to learn, impossible to master. A new game every week.',
   about: 'Ragequit Arcade brings you the most addictive free online games, built for solo runs or quick matches with friends. Every game runs instantly in your browser — no downloads, no sign-up, no pop-ups, no nonsense. Our games work on desktop, tablet and mobile, so you can play at home or on the move. We are building a place where a great game is always one click away.',
-  gameSelection: 'We add new games every single week. Our current titles include Rage Hockey, STAQ, Stellar Forge, Neon Rush, Virus Lab, OCTAFLUX, Bird Blitz and Snake Candy Arena. Every game is free to play, forever.',
+  gameSelection: 'We add new games regularly. Our titles include LOOPSTRIKE, LINESTORM, City Runner, Fox Runner, VOIDFALL, Dead Zone, Crush Depth, Rooftop Rush, FLASHOUT, Bird Blitz, OCTAFLUX, Stellar Forge, Virus Lab, Neon Rush, Snake Candy Arena, STAQ and Rage Hockey. Every game is free to play, forever.',
   aboutUs: 'Ragequit Arcade is an independent gaming platform. Our goal is simple: create the most fun, most honest browser arcade on the web. New games drop every week — follow us on TikTok and Instagram to see what is coming next.',
   faq: [
     { q: 'What is Ragequit Arcade?', a: 'A free online gaming platform. No download, no registration required.' },
@@ -727,6 +727,40 @@ export const games = [
         { q: 'Can I challenge a friend?', a: 'Yes. After a run, press Challenge a friend to share a link with your score. Your friend plays exactly the same storm and sees whether they beat you, then can send a challenge back.' },
         { q: 'Can I continue after losing all my lines?', a: 'Once per run you can watch a short ad to bring all your lines back and continue from the same distance and speed. Keep it for a run that is close to your best score.' },
         { q: 'Is LINESTORM free and playable on mobile?', a: 'LINESTORM is completely free, needs no download and no account, and runs in your browser on phones, tablets and computers. It is built for one thumb on mobile. Create a free Ragequit Arcade account if you want your name on the leaderboard.' }
+      ]
+    }
+  },
+  {
+    id: 'loopstrike',
+    title: 'LOOPSTRIKE',
+    description: "LOOPSTRIKE is a free neon arcade game where your weapon is the trail you leave behind. You steer a glowing comet across a dark grid, and its tail stretches behind it as a ribbon of cyan and pink light. Touch that tail anywhere, even its glowing end, or cross over it, and the loop snaps shut: everything trapped inside is destroyed in a burst of sparks. There is no download and no signup. The game runs instantly in your browser on mobile, tablet and desktop, and a run starts in one tap. On a phone you drag anywhere on the screen and the comet follows your thumb. With a mouse the comet chases the cursor, and on a keyboard you can steer with the arrow keys, WASD or ZQSD. The arena fills with cyan cores, each surrounded by a ring that slowly runs out. Loop a core before its ring empties, or it breaches and drains your energy bar. From the second wave, magenta spiked mines appear: never loop them and never touch them, just let them fade away. From the third wave, orange hunters lock onto your comet and chase it across the grid, so you have to loop them before they reach you. Every five waves the Warden arrives, a huge acid-yellow octagon protected by orbiting shield plates. It drifts around the arena dropping mines, and only a loop drawn around its core can knock off one shield at a time. The scoring rewards greed and precision. Each core is worth more the sooner you catch it, and trapping several targets in a single loop multiplies the points. Close loops in quick succession and your combo climbs, up to times eight. Clearing a wave pays a bonus, and taking down the Warden pays a huge one. Glowing power-ups help you survive: SLOW-MO slows the whole arena, LONG TAIL stretches your trail so you can draw bigger loops, NOVA wipes every enemy off the screen and SHIELD refills your energy. Every big hit freezes the action for a split second, shakes the screen and fills it with shards, shockwaves and glass-shatter sounds. Three ways to play are available. Classic is the standard run. Hard mode makes cores breach faster and hit harder, with its own leaderboard. The Daily run gives every player exactly the same spawns for the day. After any run you can send a challenge link so a friend plays the very same game and tries to beat your score. Once per run you can watch a short ad to refill your energy, clear the mines and keep going. Open LOOPSTRIKE, draw your first loop and see how many you can trap at once.",
+    thumbnail: '/thumbnails/loopstrike.jpg',
+    category: 'arcade',
+    tags: ['arcade', 'neon', 'loop', 'draw', 'comet', 'reflex', 'combo', 'boss', 'one finger', 'daily run', 'hard mode', 'synthwave'],
+    size: 'medium',
+    shimmer: true,
+    isNew: true,
+    hot: true,
+    landscape: false,
+    plays: 0,
+    modes: ['classic', 'hard'],
+    defaultMode: 'classic',
+    controls: "Drag anywhere to steer your comet. Close a loop by touching your own tail, even its glowing end, or by crossing it. With a mouse the comet follows the cursor; on a keyboard use the arrow keys, WASD or ZQSD, and P to pause. Loop the cores before their ring runs out, loop the hunters, never loop or touch the mines.",
+    author: 'Ragequit Arcade',
+    seo: {
+      title: "LOOPSTRIKE - Free Neon Loop Arcade Game | Ragequit Arcade",
+      metaDescription: "Play LOOPSTRIKE free online. Draw neon loops with your comet's tail to trap cores, dodge mines and hunters, chain combos up to x8 and beat the Warden boss. No download.",
+      faq: [
+        { q: "How do you play LOOPSTRIKE?", a: "You steer a glowing comet that leaves a neon tail behind it. Drag anywhere on the screen, or move the mouse, and the comet follows. When the comet touches its own tail, even the glowing end, or crosses it, the loop closes and everything inside is destroyed. Trap the cores before their ring runs out and survive as many waves as you can." },
+        { q: "How do I close a loop?", a: "Bring the head of your comet back onto any part of its tail. You can cross the tail, touch it in the middle or touch the glowing dot at its very end. The loop needs a minimum size to count, so tiny circles do nothing. The longer the tail, the bigger the loops you can draw." },
+        { q: "What are cores, mines and hunters?", a: "Cyan cores are your targets: each has a ring that empties over time, and if it runs out the core breaches and drains your energy. Magenta mines appear from wave 2: looping or touching one hurts you, so let them fade. Orange hunters appear from wave 3 and chase your comet, so loop them before they hit you." },
+        { q: "How does the combo work?", a: "Every loop that destroys something within about two seconds of the previous one raises your combo, up to times eight. Trapping several targets in the same loop multiplies the points again. Taking damage resets the combo, so fast and clean loops are the key to a big score." },
+        { q: "Who is the Warden?", a: "The Warden is the boss that arrives every five waves: a giant yellow octagon with shield plates orbiting around it, one per remaining hit. It wanders around the arena and drops mines, with a pink warning ring just before each drop. Draw a loop around its core to knock off a shield, and repeat until it falls for a huge bonus." },
+        { q: "What do the power-ups do?", a: "SLOW-MO slows down the whole arena for a few seconds, LONG TAIL stretches your trail so you can draw much bigger loops, NOVA destroys every enemy on screen at once and SHIELD refills a large part of your energy bar. Grab them by flying over them or by trapping them inside a loop." },
+        { q: "What is the difference between Classic, Hard and Daily?", a: "Classic is the standard run. Hard mode makes cores breach faster and every hit cost more energy, with its own leaderboard. The Daily run gives every player the same spawns for the whole day, so scores can be compared fairly." },
+        { q: "Can I challenge a friend?", a: "Yes. After a run, press Challenge a friend to share a link with your score. Your friend plays exactly the same game, with the same spawns, and sees whether they beat you." },
+        { q: "Can I continue after losing?", a: "Once per run you can watch a short ad to refill your energy, clear every mine on screen and keep playing with your current score. Keep it for a run that is close to your record." },
+        { q: "Is LOOPSTRIKE free and playable on mobile?", a: "LOOPSTRIKE is completely free, needs no download and no account, and runs in your browser on phones, tablets and computers. It was designed for touch screens first: one finger is all you need. Create a free Ragequit Arcade account if you want your name on the leaderboard." }
       ]
     }
   },

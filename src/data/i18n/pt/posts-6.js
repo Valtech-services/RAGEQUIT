@@ -82,5 +82,87 @@ export default {
       { "type": "p", "text": "Uma vez por partida você pode assistir a um anúncio curto para trazer todas as suas linhas de volta e continuar na mesma distância e velocidade. Não gaste num erro cedo. Guarde para a partida em que você está bem dentro de uma nova zona e perto da sua melhor pontuação." },
       { "type": "p", "text": "Leia as cores cedo, troque de formação a tempo, fique centralizado e proteja seu Overdrive. Abra LINESTORM, desafie um amigo na mesma tempestade e veja até onde você consegue ir." }
     ]
+  },
+  "loopstrike-tips": {
+    "title": "LOOPSTRIKE: como prender mais núcleos num só laço",
+    "excerpt": "LOOPSTRIKE parece simples: desenhe um laço com a cauda do cometa e tudo o que estiver dentro explode. Veja como prender vários núcleos de uma vez, manter o combo, evitar as minas e derrubar o Warden.",
+    "seo": {
+      "title": "Dicas de LOOPSTRIKE: laços maiores, combos, minas e o chefe Warden | Ragequit Arcade",
+      "metaDescription": "Guia de dicas do LOOPSTRIKE, o jogo arcade neon grátis de laços: fechar laços, prender vários núcleos de uma vez, combos x8, desviar de minas e caçadores e vencer o Warden."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "O LOOPSTRIKE dá a você uma única ferramenta: a cauda neon do seu cometa. Feche-a num laço e tudo o que estiver dentro é varrido. A regra se aprende em três segundos, mas os jogadores do topo do ranking não desenham círculos ao acaso. Eles planejam os laços, protegem o combo e sabem exatamente quando ficar longe. Veja como eles jogam."
+      },
+      {
+        "type": "h2",
+        "text": "Entenda como um laço se fecha"
+      },
+      {
+        "type": "p",
+        "text": "Um laço se fecha no instante em que o cometa toca a própria cauda. Você pode cruzar a cauda, roçá-la no meio ou tocar o ponto brilhante bem na ponta, muitas vezes o jeito mais rápido de terminar um círculo. A cauda tem comprimento limitado, então um laço largo demais nunca fecha. Prefira formas redondas e compactas: elas fecham mais rápido e deixam você livre para o próximo."
+      },
+      {
+        "type": "h2",
+        "text": "Prenda vários núcleos de uma vez"
+      },
+      {
+        "type": "p",
+        "text": "Um núcleo por laço mantém você vivo, mas nunca vai levar ao topo do ranking. Os pontos são multiplicados pelo número de alvos presos no mesmo laço, e cada núcleo vale mais quanto antes você o pega. Antes de desenhar, procure dois ou três núcleos próximos e envolva-os num só movimento. Um laço com quatro alvos vale muito mais do que quatro laços separados."
+      },
+      {
+        "type": "h2",
+        "text": "Mantenha o combo vivo"
+      },
+      {
+        "type": "p",
+        "text": "Cada laço que destrói algo uns dois segundos depois do anterior aumenta o combo, até vezes oito. O segredo é o ritmo: termine um laço, olhe para o próximo grupo e comece a desenhar logo. Tomar dano zera o combo, então um ritmo calmo e constante vale mais do que investidas arriscadas pela arena."
+      },
+      {
+        "type": "h2",
+        "text": "Respeite as minas e os caçadores"
+      },
+      {
+        "type": "p",
+        "text": "As minas magenta são a armadilha do jogo. Nunca desenhe um laço em volta delas nem voe para cima delas: dê espaço, porque elas somem sozinhas depois de alguns segundos. Os caçadores laranja são o contrário. Eles perseguem o seu cometa, então transforme-os em alvos: gire em volta deles enquanto seguem você e prenda-os no mesmo laço dos núcleos próximos."
+      },
+      {
+        "type": "h2",
+        "text": "Use os power-ups na hora certa"
+      },
+      {
+        "type": "p",
+        "text": "LONG TAIL é o melhor amigo das grandes pontuações: com um rastro mais longo, você envolve grupos inteiros de uma só passada. SLOW-MO dá tempo para planejar um laço perfeito numa onda cheia. NOVA limpa a tela inteira, então guarde-a para quando a arena estiver lotada. SHIELD recarrega a energia, o que a torna preciosa logo antes de um chefe."
+      },
+      {
+        "type": "h2",
+        "text": "Derrube o Warden"
+      },
+      {
+        "type": "p",
+        "text": "A cada cinco ondas aparece o Warden, com uma placa de escudo em órbita para cada golpe que ainda aguenta. Só um laço desenhado em volta do núcleo dele quebra um escudo. Fique longe do corpo dele, observe o anel rosa que pisca logo antes de cada mina e desenhe o laço logo depois, quando a área em volta está livre. Três laços limpos e ele cai, com um bônus enorme."
+      },
+      {
+        "type": "h2",
+        "text": "Escolha o modo certo"
+      },
+      {
+        "type": "p",
+        "text": "Classic é o lugar para aprender. O modo Hard faz os núcleos explodirem mais rápido e cada golpe custar mais, com ranking próprio para quem quer um desafio de verdade. O Daily run dá a todos as mesmas aparições durante o dia, o jeito mais justo de comparar pontuações com os amigos. Depois de cada partida, envie um link de desafio e deixe que eles tentem exatamente a mesma partida."
+      },
+      {
+        "type": "h2",
+        "text": "Guarde a sua segunda chance"
+      },
+      {
+        "type": "p",
+        "text": "Uma vez por partida, você pode assistir a um anúncio curto para recarregar a energia e limpar as minas. Não gaste num erro no começo: recomeçar não custa nada. Guarde para a partida em que você já estiver perto do recorde."
+      },
+      {
+        "type": "p",
+        "text": "Desenhe laços compactos, pegue vários alvos de uma vez, mantenha o ritmo e nunca toque numa mina. Abra o LOOPSTRIKE, prenda o seu primeiro núcleo e veja quantos consegue pegar num só laço."
+      }
+    ]
   }
 }

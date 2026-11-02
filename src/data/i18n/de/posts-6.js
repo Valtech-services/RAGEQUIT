@@ -82,5 +82,87 @@ export default {
       { "type": "p", "text": "Einmal pro Runde kannst du eine kurze Werbung ansehen, um alle deine Linien zurückzuholen und bei derselben Distanz und demselben Tempo weiterzumachen. Verschwende sie nicht für einen frühen Fehler. Heb sie dir für die Runde auf, in der du tief in einer neuen Zone bist und nah an deiner Bestleistung." },
       { "type": "p", "text": "Lies die Farben früh, wechsle rechtzeitig die Formation, bleib zentriert und schütze deinen Overdrive. Starte LINESTORM, fordere einen Freund im selben Sturm heraus und sieh, wie weit du kommst." }
     ]
+  },
+  "loopstrike-tips": {
+    "title": "LOOPSTRIKE: So fängst du mehr Kerne mit einer Schleife",
+    "excerpt": "LOOPSTRIKE wirkt einfach: Zieh eine Schleife mit dem Schweif deines Kometen, und alles darin explodiert. So fängst du mehrere Kerne auf einmal, hältst deine Kombo, meidest die Minen und bringst den Warden zu Fall.",
+    "seo": {
+      "title": "LOOPSTRIKE Tipps: große Schleifen, Kombos, Minen und der Boss Warden | Ragequit Arcade",
+      "metaDescription": "Tipps für LOOPSTRIKE, das kostenlose Neon-Arcade-Spiel mit Schleifen: Schleifen schließen, mehrere Kerne auf einmal fangen, x8-Kombos, Minen und Jäger meiden und den Warden besiegen."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "LOOPSTRIKE gibt dir ein einziges Werkzeug: den Neon-Schweif deines Kometen. Schließe ihn zu einer Schleife, und alles darin wird ausgelöscht. Die Regel lernst du in drei Sekunden, aber die Spieler an der Spitze der Bestenliste ziehen keine zufälligen Kreise. Sie planen ihre Schleifen, schützen ihre Kombo und wissen genau, wann sie Abstand halten müssen. So spielen sie."
+      },
+      {
+        "type": "h2",
+        "text": "Verstehe, wie sich eine Schleife schließt"
+      },
+      {
+        "type": "p",
+        "text": "Eine Schleife schließt sich in dem Moment, in dem dein Komet seinen eigenen Schweif berührt. Du kannst den Schweif kreuzen, ihn in der Mitte streifen oder den leuchtenden Punkt ganz am Ende berühren, oft der schnellste Weg, einen Kreis zu vollenden. Dein Schweif hat eine begrenzte Länge, eine zu weite Schleife schließt sich also nie. Ziele auf runde, kompakte Formen: Sie schließen sich schneller und lassen dich frei für die nächste."
+      },
+      {
+        "type": "h2",
+        "text": "Fange mehrere Kerne auf einmal"
+      },
+      {
+        "type": "p",
+        "text": "Ein Kern pro Schleife hält dich am Leben, bringt dich aber nie an die Spitze. Die Punkte werden mit der Zahl der Ziele in derselben Schleife multipliziert, und jeder Kern ist mehr wert, je früher du ihn fängst. Suche dir vor dem Zeichnen zwei oder drei nahe Kerne und umschließe sie in einer Bewegung. Eine Schleife mit vier Zielen ist weit mehr wert als vier einzelne Schleifen."
+      },
+      {
+        "type": "h2",
+        "text": "Halte die Kombo am Leben"
+      },
+      {
+        "type": "p",
+        "text": "Jede Schleife, die etwa zwei Sekunden nach der vorherigen etwas zerstört, erhöht deine Kombo, bis zu mal acht. Das Geheimnis ist der Rhythmus: Schließe eine Schleife, schau zur nächsten Gruppe und fang sofort an zu zeichnen. Schaden setzt die Kombo zurück, ein ruhiges, gleichmäßiges Tempo ist also besser als riskante Sprints quer durch die Arena."
+      },
+      {
+        "type": "h2",
+        "text": "Respektiere Minen und Jäger"
+      },
+      {
+        "type": "p",
+        "text": "Die magentafarbenen Minen sind die Falle des Spiels. Zieh nie eine Schleife um sie und flieg nie in sie hinein: Gib ihnen Raum, denn sie verschwinden nach ein paar Sekunden von selbst. Die orangen Jäger sind das Gegenteil. Sie verfolgen deinen Kometen, also mach sie zu Zielen: Kreise um sie, während sie dir folgen, und fange sie in derselben Schleife wie die Kerne in der Nähe."
+      },
+      {
+        "type": "h2",
+        "text": "Setze die Power-ups im richtigen Moment ein"
+      },
+      {
+        "type": "p",
+        "text": "LONG TAIL ist der beste Freund hoher Punktzahlen: Mit einer längeren Spur umschließt du ganze Gruppen in einem Zug. SLOW-MO gibt dir Zeit, in einer vollen Welle die perfekte Schleife zu planen. NOVA räumt den ganzen Bildschirm, heb sie also für eine überquellende Arena auf. SHIELD füllt deine Energie auf und ist deshalb kurz vor einem Boss besonders wertvoll."
+      },
+      {
+        "type": "h2",
+        "text": "Bring den Warden zu Fall"
+      },
+      {
+        "type": "p",
+        "text": "Alle fünf Wellen erscheint der Warden, mit einer kreisenden Schildplatte für jeden Treffer, den er noch einstecken kann. Nur eine Schleife um seinen Kern bricht einen Schild. Halte Abstand zu seinem Körper, achte auf den pinken Ring, der kurz vor jeder Mine aufblinkt, und zieh deine Schleife direkt nach dem Abwurf, wenn die Umgebung frei ist. Drei saubere Schleifen und er fällt, mit einem riesigen Bonus."
+      },
+      {
+        "type": "h2",
+        "text": "Wähle den richtigen Modus"
+      },
+      {
+        "type": "p",
+        "text": "Classic ist der Ort zum Lernen. Im Hard-Modus brechen die Kerne schneller durch und jeder Treffer kostet mehr, mit eigener Bestenliste für alle, die eine echte Herausforderung wollen. Der Daily run gibt allen für den Tag dieselben Spawns und ist damit die fairste Art, Punktestände mit Freunden zu vergleichen. Schick nach jeder Runde einen Challenge-Link und lass sie exakt dasselbe Spiel versuchen."
+      },
+      {
+        "type": "h2",
+        "text": "Spar dir die zweite Chance auf"
+      },
+      {
+        "type": "p",
+        "text": "Einmal pro Runde kannst du eine kurze Werbung ansehen, um deine Energie aufzufüllen und die Minen zu entfernen. Verschwende sie nicht für einen frühen Fehler: Ein Neustart kostet nichts. Heb sie dir für die Runde auf, in der du schon nah an deinem Rekord bist."
+      },
+      {
+        "type": "p",
+        "text": "Zieh kompakte Schleifen, fange mehrere Ziele auf einmal, halte deinen Rhythmus und berühre nie eine Mine. Öffne LOOPSTRIKE, fange deinen ersten Kern und finde heraus, wie viele du mit einer einzigen Schleife erwischst."
+      }
+    ]
   }
 }
