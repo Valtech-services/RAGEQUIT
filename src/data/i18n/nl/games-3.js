@@ -150,5 +150,55 @@ export default {
         }
       ]
     }
+  },
+  "mazequake": {
+    "description": "MAZEQUAKE is een gratis 3D-kanteldoolhof waarin de klok je echte vijand is. Een kleine robot zit in een glazen bol bij de ingang van een gloeiend neondoolhof, en jij kantelt het hele speelbord om hem naar het uitgangsportaal te laten rollen. Je begint met 45 seconden. Elk doolhof dat je haalt geeft je tijd terug en stuurt je meteen naar het volgende, dat altijd iets groter is dan het vorige. Geen download en geen account: het spel start direct in je browser, op telefoon, tablet en computer. Op je telefoon veeg je gewoon ergens over het scherm: onder je duim verschijnt een zwevende virtuele stick en je kantelt het doolhof met één vinger in elke richting. In het menu kun je ook gyrobesturing aanzetten en sturen door je telefoon echt te kantelen, zoals bij een klassiek knikkerdoolhof. Op de computer gebruik je de pijltjestoetsen, WASD of ZQSD, en P om te pauzeren. De bol heeft gewicht en vaart, dus alles draait om gevoel: kleine, precieze kantelingen brengen je door smalle gangen, terwijl grote bewegingen je tegen de muren laten stuiteren en kostbare seconden kosten. Elk doolhof zit vol dingen om te pakken en gevaren om te ontwijken. Cyaan tijdkristallen geven vier seconden extra en gouden munten leveren punten op. Vanaf doolhof 3 openen zich zwarte gaten met een rood gloeiende rand in de vloer: val je erin, dan verlies je zes seconden en ga je terug naar de start. Vanaf doolhof 5 gaan rode laserpoorten aan en uit dwars over de gangen, en een actieve straal raken kost vier seconden. Vanaf doolhof 2 verschijnen power-ups die een lastige run redden. RADAR toont de kortste weg naar de uitgang, MAGNET trekt kristallen en munten in de buurt naar je toe, met PHASE rol je veilig over gaten en door lasers, en FREEZE zet de klok een paar seconden stil. Je score groeit met elk gehaald doolhof, en hoe sneller je de uitgang bereikt, hoe groter de snelheidsbonus. Er zijn drie manieren om te spelen. Classic is de standaardrun met tijdkristallen en power-ups. De Hard-modus begint met maar 35 seconden, zet je op een gladde ijsvloer, opent gaten en lasers vanaf het eerste doolhof en schrapt alle kristallen, maar vermenigvuldigt je score met 1,5, met een eigen ranglijst. De Daily run geeft alle spelers de hele dag precies dezelfde doolhoven. Na een run kun je een uitdaginglink sturen zodat een vriend dezelfde doolhoven speelt en probeert je score te verslaan. Eén keer per run kun je een korte advertentie bekijken om twintig seconden te krijgen en door te spelen. Elke beweging voelt levendig: de neonmuren gloeien, bij elke botsing vliegen vonken, het scherm trilt als je in een gat valt en elk doolhof heeft zijn eigen neonkleur. Open MAZEQUAKE, kantel het bord en ontdek hoeveel doolhoven je haalt voordat de tijd op is.",
+    "controls": "Veeg ergens over het scherm om het doolhof te kantelen met de zwevende virtuele stick, of zet gyrobesturing aan in het menu en kantel je telefoon. Op het toetsenbord gebruik je de pijltjestoetsen, WASD of ZQSD, en P om te pauzeren. Rol de robotbol naar het uitgangsportaal voordat de klok op nul staat, pak cyaan kristallen voor extra tijd en ontwijk de gaten en de rode lasers.",
+    "seo": {
+      "title": "MAZEQUAKE - Gratis 3D-kanteldoolhof online | Ragequit Arcade",
+      "metaDescription": "Speel MAZEQUAKE gratis: kantel een 3D-neondoolhof, rol de robotbol naar de uitgang voordat de tijd op is en ontwijk gaten en lasers. Mobiel en gyro.",
+      "faq": [
+        {
+          "q": "Hoe speel je MAZEQUAKE?",
+          "a": "Je kantelt een 3D-neondoolhof om een kleine robot in een glazen bol naar het uitgangsportaal te laten rollen. Veeg ergens over het scherm, gebruik de pijltjestoetsen of kantel je telefoon met de gyro-optie. Bereik de uitgang voordat de klok op nul staat: elk gehaald doolhof geeft je tijd terug en opent een groter doolhof."
+        },
+        {
+          "q": "Hoeveel tijd heb ik?",
+          "a": "Een Classic-run begint met 45 seconden. Een doolhof halen geeft tijd erbij, en hoe groter het doolhof, hoe meer je terugkrijgt. Elk cyaan kristal geeft vier extra seconden, en de power-up FREEZE zet de klok een paar seconden stil. In de Hard-modus begin je met maar 35 seconden."
+        },
+        {
+          "q": "Kan ik het doolhof besturen met de gyroscoop van mijn telefoon?",
+          "a": "Ja. Zet Gyro tilt aan in het menu en het doolhof volgt de kanteling van je telefoon, zoals een echt knikkerdoolhof. Liever niet? Laat het uit en veeg ergens over het scherm: onder je duim verschijnt een zwevende virtuele stick."
+        },
+        {
+          "q": "Wat zijn de gaten en de lasers?",
+          "a": "Gaten zijn zwarte putten met een rood gloeiende rand die vanaf doolhof 3 verschijnen. Erin vallen kost zes seconden en stuurt je terug naar de start. Rode laserpoorten verschijnen vanaf doolhof 5 en gaan aan en uit dwars over de gangen: een actieve straal raken kost vier seconden, dus wacht tot hij uitgaat."
+        },
+        {
+          "q": "Wat doen de power-ups?",
+          "a": "Power-ups verschijnen vanaf doolhof 2. RADAR toont de kortste weg naar de uitgang, MAGNET trekt kristallen en munten in de buurt naar je toe, met PHASE rol je veilig over gaten en door lasers, en FREEZE zet de klok een paar seconden stil. Rol over een power-up om hem te activeren."
+        },
+        {
+          "q": "Hoe wordt de score berekend?",
+          "a": "Elk gehaald doolhof levert punten op die stijgen met het nummer van het doolhof, plus een snelheidsbonus als je de uitgang snel bereikt. Gouden munten geven extra punten. In de Hard-modus wordt elke score met 1,5 vermenigvuldigd."
+        },
+        {
+          "q": "Wat is het verschil tussen Classic, Hard en Daily?",
+          "a": "Classic is de standaardrun met kristallen en power-ups. De Hard-modus zet je op een gladde ijsvloer met maar 35 seconden, gaten en lasers vanaf het eerste doolhof en geen kristallen, in ruil voor een score maal 1,5 en een eigen ranglijst. De Daily run geeft alle spelers de hele dag dezelfde doolhoven."
+        },
+        {
+          "q": "Kan ik een vriend uitdagen?",
+          "a": "Ja. Tik na een run op Challenge a friend om een link met je score te delen. Je vriend speelt precies dezelfde doolhoven en ziet of hij je verslaat."
+        },
+        {
+          "q": "Kan ik doorspelen als de tijd op is?",
+          "a": "Eén keer per run kun je een korte advertentie bekijken om twintig seconden aan de klok toe te voegen en door te spelen met je huidige score en doolhof. Bewaar hem voor een run dicht bij je record."
+        },
+        {
+          "q": "Is MAZEQUAKE gratis en speelbaar op mobiel?",
+          "a": "MAZEQUAKE is helemaal gratis, heeft geen download of account nodig en werkt in je browser op telefoons, tablets en computers. Het is in de eerste plaats gemaakt voor touchscreens, met besturing met één vinger en een optionele gyromodus. Maak een gratis Ragequit Arcade-account aan als je je naam op de ranglijst wilt zien."
+        }
+      ]
+    }
   }
 }

@@ -150,5 +150,55 @@ export default {
         }
       ]
     }
+  },
+  "mazequake": {
+    "description": "MAZEQUAKE est un jeu de labyrinthe 3D à incliner, gratuit, où le vrai ennemi est le chrono. Un petit robot est enfermé dans une bille de verre à l'entrée d'un labyrinthe néon, et vous inclinez tout le plateau pour le faire rouler jusqu'au portail de sortie. Vous commencez avec 45 secondes. Chaque labyrinthe terminé vous rend du temps, puis vous envoie directement dans le suivant, toujours un peu plus grand que le précédent. Aucun téléchargement, aucune inscription : le jeu se lance instantanément dans votre navigateur, sur mobile, tablette et ordinateur. Sur téléphone, il suffit de glisser le doigt n'importe où sur l'écran : un stick virtuel flottant apparaît sous votre pouce et vous inclinez le labyrinthe dans toutes les directions d'un seul doigt. Vous pouvez aussi activer l'inclinaison par gyroscope dans le menu et piloter en penchant réellement votre téléphone, comme un vrai labyrinthe à bille. Sur ordinateur, utilisez les flèches, WASD ou ZQSD, et P pour la pause. La bille a du poids et de l'élan : tout est dans le toucher. De petites inclinaisons précises vous font passer dans les couloirs étroits, alors que les gestes trop amples vous font rebondir contre les murs et perdre de précieuses secondes. Chaque labyrinthe est rempli de choses à attraper et de pièges à éviter. Les cristaux de temps cyan ajoutent quatre secondes au chrono et les pièces dorées rapportent des points. Dès le labyrinthe 3, des trous noirs cerclés de rouge s'ouvrent dans le sol : tomber dedans coûte six secondes et vous renvoie au départ. Dès le labyrinthe 5, des barrières laser rouges s'allument et s'éteignent en travers des couloirs, et toucher un rayon actif coûte quatre secondes. Des power-ups apparaissent dès le labyrinthe 2 pour sauver une partie mal engagée. RADAR trace le chemin le plus court vers la sortie, MAGNET attire vers vous les cristaux et les pièces proches, PHASE vous fait passer sans danger au-dessus des trous et à travers les lasers, et FREEZE arrête le chrono quelques secondes. Votre score augmente à chaque labyrinthe terminé, et plus vous atteignez la sortie vite, plus le bonus de vitesse est gros. Trois façons de jouer sont proposées. Classic est la partie standard, avec cristaux de temps et power-ups. Le mode Hard démarre avec seulement 35 secondes, vous place sur un sol de glace glissant, ouvre trous et lasers dès le premier labyrinthe et supprime tous les cristaux, mais multiplie votre score par 1,5, avec son propre classement. Le Daily run donne à tous les joueurs exactement les mêmes labyrinthes pendant toute la journée. Après une partie, vous pouvez envoyer un lien de défi pour qu'un ami joue les mêmes labyrinthes et tente de battre votre score. Une fois par partie, vous pouvez regarder une courte publicité pour gagner vingt secondes et continuer. Chaque mouvement est vivant : les murs néon brillent, des étincelles jaillissent à chaque choc, l'écran tremble quand vous tombez dans un trou et chaque labyrinthe a sa propre couleur néon. Lancez MAZEQUAKE, inclinez le plateau et voyez combien de labyrinthes vous pouvez traverser avant la fin du chrono.",
+    "controls": "Glissez le doigt n'importe où sur l'écran pour incliner le labyrinthe avec le stick virtuel flottant, ou activez l'inclinaison par gyroscope dans le menu et penchez votre téléphone. Au clavier, utilisez les flèches, WASD ou ZQSD, et P pour la pause. Faites rouler la bille-robot jusqu'au portail de sortie avant que le chrono n'atteigne zéro, attrapez les cristaux cyan pour gagner du temps et évitez les trous et les lasers rouges.",
+    "seo": {
+      "title": "MAZEQUAKE - Jeu de labyrinthe 3D à incliner gratuit | Ragequit Arcade",
+      "metaDescription": "Jouez gratuitement à MAZEQUAKE : inclinez un labyrinthe néon 3D, menez la bille-robot à la sortie avant la fin du chrono, évitez trous et lasers. Mobile, gyroscope.",
+      "faq": [
+        {
+          "q": "Comment jouer à MAZEQUAKE ?",
+          "a": "Vous inclinez un labyrinthe néon en 3D pour faire rouler un petit robot enfermé dans une bille de verre jusqu'au portail de sortie. Glissez le doigt n'importe où sur l'écran, utilisez les flèches ou penchez votre téléphone avec l'option gyroscope. Atteignez la sortie avant que le chrono n'arrive à zéro : chaque labyrinthe terminé vous rend du temps et en ouvre un plus grand."
+        },
+        {
+          "q": "De combien de temps est-ce que je dispose ?",
+          "a": "Une partie Classic commence avec 45 secondes. Terminer un labyrinthe ajoute du temps, et plus le labyrinthe est grand, plus vous en récupérez. Chaque cristal cyan ajoute quatre secondes, et le power-up FREEZE arrête le chrono quelques secondes. En mode Hard, vous ne commencez qu'avec 35 secondes."
+        },
+        {
+          "q": "Puis-je contrôler le labyrinthe avec le gyroscope de mon téléphone ?",
+          "a": "Oui. Activez Gyro tilt dans le menu et le labyrinthe suit l'inclinaison de votre téléphone, comme un vrai labyrinthe à bille. Si vous préférez, laissez l'option désactivée et glissez le doigt n'importe où sur l'écran : un stick virtuel flottant apparaît sous votre pouce."
+        },
+        {
+          "q": "Que sont les trous et les lasers ?",
+          "a": "Les trous sont des puits noirs cerclés de rouge qui apparaissent dès le labyrinthe 3. Tomber dedans coûte six secondes et vous renvoie au départ. Les barrières laser rouges apparaissent dès le labyrinthe 5 et s'allument puis s'éteignent en travers des couloirs : toucher un rayon actif coûte quatre secondes, attendez donc qu'il s'éteigne."
+        },
+        {
+          "q": "À quoi servent les power-ups ?",
+          "a": "Les power-ups apparaissent dès le labyrinthe 2. RADAR affiche le chemin le plus court vers la sortie, MAGNET attire vers vous les cristaux et pièces proches, PHASE vous permet de passer sans danger au-dessus des trous et à travers les lasers, et FREEZE arrête le chrono quelques secondes. Roulez sur un power-up pour l'activer."
+        },
+        {
+          "q": "Comment le score est-il calculé ?",
+          "a": "Chaque labyrinthe terminé rapporte des points qui augmentent avec son numéro, plus un bonus de vitesse si vous atteignez vite la sortie. Les pièces dorées ajoutent des points. En mode Hard, chaque score est multiplié par 1,5."
+        },
+        {
+          "q": "Quelle différence entre Classic, Hard et Daily ?",
+          "a": "Classic est la partie standard, avec cristaux et power-ups. Le mode Hard vous place sur un sol de glace glissant avec seulement 35 secondes, des trous et des lasers dès le premier labyrinthe et aucun cristal, en échange d'un score multiplié par 1,5 et d'un classement dédié. Le Daily run donne à tous les joueurs les mêmes labyrinthes pendant toute la journée."
+        },
+        {
+          "q": "Puis-je défier un ami ?",
+          "a": "Oui. Après une partie, appuyez sur Challenge a friend pour partager un lien avec votre score. Votre ami joue exactement les mêmes labyrinthes et voit s'il vous a battu."
+        },
+        {
+          "q": "Puis-je continuer quand le temps est écoulé ?",
+          "a": "Une fois par partie, vous pouvez regarder une courte publicité pour ajouter vingt secondes au chrono et continuer avec votre score et votre labyrinthe actuels. Gardez-la pour une partie proche de votre record."
+        },
+        {
+          "q": "MAZEQUAKE est-il gratuit et jouable sur mobile ?",
+          "a": "MAZEQUAKE est entièrement gratuit, sans téléchargement ni compte, et fonctionne dans votre navigateur sur téléphone, tablette et ordinateur. Il a été conçu d'abord pour les écrans tactiles, avec des contrôles à un doigt et un mode gyroscope optionnel. Créez un compte Ragequit Arcade gratuit si vous voulez voir votre nom au classement."
+        }
+      ]
+    }
   }
 }

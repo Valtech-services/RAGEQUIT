@@ -38,22 +38,6 @@ export const testGames = [
     notes: 'Three.js. Score CITY_RUNNER_SCORE, mode classic. Mettre DEBUG_MAX_CREDITS a true pour tester tous les vehicules.'
   },
   {
-    id: 'mazequake',
-    title: 'MAZEQUAKE',
-    description: 'Labyrinthe néon 3D à incliner : roule le petit robot dans sa bulle jusqu\'à la sortie avant la fin du chrono, évite trous et lasers, labyrinthes de plus en plus grands.',
-    thumbnail: '/thumbnails/mazequake.jpg',
-    category: 'challenge',
-    orientation: 'portrait',
-    file: '/games/mazequake.html',
-    notes: 'Three.js + bloom. Ex-TILTSHOCK, refonte visuelle (PR #30). Score MAZEQUAKE_SCORE, modes classic / hard / daily. Pub revive (+20 s) une fois par partie. Tactile : stick flottant (glisser n\'importe où), gyroscope optionnel au menu ; clavier : flèches/WASD/ZQSD, P pause. Défi ami par lien (mq_seed).',
-    pr: 30,
-    extras: [
-      { label: 'Prompt miniature 1:1 (Gemini, 1024x1024)', text: 'A glowing neon 3D maze seen from a high three-quarter angle, glossy dark walls outlined with bright acid lime neon strips on a dark violet grid floor, a tiny cute purple and white cube-headed robot with an orange face screen rolling inside a transparent glass sphere, a red laser beam crossing a corridor, a black pit with a glowing red rim, golden diamond shards floating, a green light portal in the distance, synthwave arcade style, high contrast, dramatic glow, no text, no letters, no logo.' },
-      { label: 'Prompt image de blog 16:9 (Gemini, 1376x768)', text: 'Wide cinematic view over a huge neon labyrinth tilting slightly, glossy dark walls outlined in acid lime and hot orange neon on a dark purple grid, a small purple cube-headed robot inside a glass ball speeding toward a green beam of light at the exit, red lasers and glowing pits along the path, floating golden crystals, deep fog and bloom, synthwave arcade atmosphere, no text, no letters, no logo.' },
-      { label: 'Prompt logo du jeu (Gemini, 1:1, palette propre au jeu)', text: 'Game logo wordmark reading exactly "MAZEQUAKE" in heavy, blocky capital letters built like thick neon maze walls seen from above, the letters slightly cracked and offset as if shaken by an earthquake, small debris and a shockwave line under the word, color palette acid lime green and hot orange with a dark graphite outline, glossy 3D extrusion and soft glow, centered on a plain pure black background, crisp vector style, high contrast, no other text, no mascot, square 1:1 1024x1024.' },
-    ],
-  },
-  {
     id: 'shovedown',
     title: 'SHOVEDOWN',
     description: 'Sumo néon en 3D : sur ta boule, pousse les bots hors d\'une arène qui rétrécit, vagues de plus en plus dures et boss TITAN toutes les 5 vagues.',

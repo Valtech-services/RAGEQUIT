@@ -2,7 +2,7 @@ export default {
   "title": "Ragequit Arcade — Бесплатные онлайн-игры",
   "description": "Самые затягивающие бесплатные онлайн-игры. Легко начать, невозможно освоить до конца. Новая игра каждую неделю.",
   "about": "Ragequit Arcade — это самые затягивающие бесплатные онлайн-игры для одиночной игры или быстрых матчей с друзьями. Каждая игра мгновенно запускается в браузере: без загрузок, без регистрации, без всплывающих окон и без ерунды. Наши игры работают на компьютере, планшете и смартфоне, так что играть можно дома или в дороге. Мы создаём место, где хорошая игра всегда в одном клике.",
-  "gameSelection": "Мы регулярно добавляем новые игры. Среди них: LOOPSTRIKE, LINESTORM, City Runner, Fox Runner, VOIDFALL, Dead Zone, Crush Depth, Rooftop Rush, FLASHOUT, Bird Blitz, OCTAFLUX, Stellar Forge, Virus Lab, Neon Rush, Snake Candy Arena, STAQ и Rage Hockey. Все игры бесплатны навсегда.",
+  "gameSelection": "Мы регулярно добавляем новые игры. Среди них: MAZEQUAKE, LOOPSTRIKE, LINESTORM, City Runner, Fox Runner, VOIDFALL, Dead Zone, Crush Depth, Rooftop Rush, FLASHOUT, Bird Blitz, OCTAFLUX, Stellar Forge, Virus Lab, Neon Rush, Snake Candy Arena, STAQ и Rage Hockey. Все игры бесплатны навсегда.",
   "aboutUs": "Ragequit Arcade — независимая игровая платформа. Наша цель проста: сделать самую весёлую и честную браузерную аркаду в сети. Новые игры выходят регулярно: следи за нами в TikTok и Instagram, чтобы узнать, что будет дальше.",
   "faq": [
     { "q": "Что такое Ragequit Arcade?", "a": "Платформа бесплатных онлайн-игр. Без загрузки и без обязательной регистрации." },

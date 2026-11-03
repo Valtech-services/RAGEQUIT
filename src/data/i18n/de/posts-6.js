@@ -164,5 +164,87 @@ export default {
         "text": "Zieh kompakte Schleifen, fange mehrere Ziele auf einmal, halte deinen Rhythmus und berühre nie eine Mine. Öffne LOOPSTRIKE, fange deinen ersten Kern und finde heraus, wie viele du mit einer einzigen Schleife erwischst."
       }
     ]
+  },
+  "mazequake-tips": {
+    "title": "MAZEQUAKE: So entkommst du immer größeren Labyrinthen, bevor die Zeit abläuft",
+    "excerpt": "MAZEQUAKE gibt dir 45 Sekunden, um eine Roboterkugel aus einem Neon-Labyrinth zu rollen, und danach ein größeres. So neigst du präzise, füllst die Uhr auf, meidest Löcher und Laser und erreichst Labyrinth 12 und mehr.",
+    "seo": {
+      "title": "MAZEQUAKE-Tipps: Neigesteuerung, Zeitkristalle, Löcher, Laser und Power-ups | Ragequit Arcade",
+      "metaDescription": "Tipps für MAZEQUAKE, das kostenlose 3D-Neigelabyrinth: Kugel kontrollieren, Zeit gewinnen, Löchern und Lasern ausweichen und RADAR, PHASE und FREEZE nutzen."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "MAZEQUAKE sieht aus wie ein klassisches Kugellabyrinth: Brett neigen, Kugel rollen lassen, Ausgang finden. Aber die Uhr bleibt nie stehen, und jeder Ausgang öffnet ein größeres Labyrinth mit weniger Spielraum. Die Spieler, die Labyrinth 12 und mehr erreichen, sind nicht die schnellsten, sondern die präzisesten. So spielen sie."
+      },
+      {
+        "type": "h2",
+        "text": "Neige mit kleinen Bewegungen"
+      },
+      {
+        "type": "p",
+        "text": "Die Roboterkugel hat echtes Gewicht und Schwung. Eine starke Neigung schleudert sie gegen eine Wand, wo sie abprallt und Zeit kostet. Mach kurze, leichte Daumenbewegungen und bremse vor jeder Kurve, nicht mittendrin. Wenn du mit dem Gyroskop spielst, halte das Handy flach und bewege das Handgelenk nur leicht: Das Labyrinth reagiert auf jedes Grad."
+      },
+      {
+        "type": "h2",
+        "text": "Lies das Labyrinth, bevor du rollst"
+      },
+      {
+        "type": "p",
+        "text": "Jedes Labyrinth gibt dir einen kurzen Moment, bevor sich die Kugel bewegt. Nutze ihn, um das Ausgangsportal zu finden und den Weg im Kopf nachzuzeichnen. Sackgassen sind der größte Zeitfresser im Spiel, vor allem in den großen Labyrinthen. Eine Sekunde Überblick am Start spart oft fünf Sekunden Umherirren."
+      },
+      {
+        "type": "h2",
+        "text": "Füll die Uhr auf"
+      },
+      {
+        "type": "p",
+        "text": "Zeit ist dein wahrer Punktestand. Jedes geschaffte Labyrinth gibt dir Sekunden zurück, und je größer es ist, desto mehr. In Classic enthält jedes Labyrinth außerdem cyanfarbene Kristalle, die je vier Sekunden wert sind. Nimm die, die auf deinem Weg oder in der Nähe liegen, aber mach keinen großen Umweg für einen einzigen Kristall: Ein Kristall, der sechs Sekunden Weg kostet, lässt dich Zeit verlieren."
+      },
+      {
+        "type": "h2",
+        "text": "Respektiere Löcher und Laser"
+      },
+      {
+        "type": "p",
+        "text": "Ab Labyrinth 3 öffnen sich Löcher mit rot leuchtendem Rand im Boden. Ein Sturz kostet sechs Sekunden und schickt dich zurück zum Start, also bremse in ihrer Nähe und fahre auf der gegenüberliegenden Seite des Gangs vorbei. Ab Labyrinth 5 blinken rote Lasersperren. Stürze dich nie in einen Strahl: Beobachte seinen Rhythmus, halte kurz davor an und rolle durch, sobald er erlischt."
+      },
+      {
+        "type": "h2",
+        "text": "Setz die Power-ups im richtigen Moment ein"
+      },
+      {
+        "type": "p",
+        "text": "RADAR zeigt den kürzesten Weg zum Ausgang und ist in den großen Labyrinthen Gold wert. Mit PHASE rollst du ohne Schaden über Löcher und durch Laser und kannst die direkte Linie nehmen. MAGNET zieht Kristalle und Münzen in der Nähe ohne Umweg zu dir. FREEZE hält die Uhr an: Fahr mit vollem Tempo weiter, solange es wirkt."
+      },
+      {
+        "type": "h2",
+        "text": "Hol dir den Tempobonus"
+      },
+      {
+        "type": "p",
+        "text": "Jedes Labyrinth bringt mehr Punkte, je weiter du kommst, und ein schneller Ausgang gibt obendrauf einen Tempobonus. Goldene Münzen bringen noch etwas mehr. Für einen hohen Punktestand musst du nicht alles einsammeln, sondern so viele Labyrinthe wie möglich schaffen: Ein Lauf bis Labyrinth 12 ist viel mehr wert als ein langsamer, perfekter Lauf, der bei Labyrinth 6 endet."
+      },
+      {
+        "type": "h2",
+        "text": "Wähle den richtigen Modus"
+      },
+      {
+        "type": "p",
+        "text": "Classic ist der Ort, um Steuerung und Gefahren zu lernen. Der Hard-Modus ist ein anderes Spiel: Eisboden, auf dem die Kugel rutscht, nur 35 Sekunden, Löcher und Laser ab dem ersten Labyrinth und keine Kristalle, dafür 1,5-fache Punkte und eine eigene Bestenliste. Der Daily Run gibt allen dieselben Labyrinthe des Tages und ist damit der fairste Weg, Punkte zu vergleichen. Schick nach jedem Lauf einen Herausforderungslink, damit ein Freund genau dieselben Labyrinthe spielt."
+      },
+      {
+        "type": "h2",
+        "text": "Heb dir deine zweite Chance auf"
+      },
+      {
+        "type": "p",
+        "text": "Einmal pro Lauf kannst du eine kurze Werbung ansehen, um zwanzig Sekunden auf die Uhr zu bekommen. Verschwende sie nicht in den ersten Labyrinthen, wo ein Neustart nichts kostet. Heb sie dir für den Lauf auf, in dem du schon tief in den Labyrinthen und nah an deinem Rekord bist."
+      },
+      {
+        "type": "p",
+        "text": "Neige sanft, plane deinen Weg, füll die Uhr auf und stürze dich nie in einen Laser. Starte MAZEQUAKE, entkomme deinem ersten Labyrinth und finde heraus, wie weit du kommst, bevor die Zeit abläuft."
+      }
+    ]
   }
 }

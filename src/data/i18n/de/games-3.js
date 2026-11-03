@@ -150,5 +150,55 @@ export default {
         }
       ]
     }
+  },
+  "mazequake": {
+    "description": "MAZEQUAKE ist ein kostenloses 3D-Neigelabyrinth, in dem die Uhr dein wahrer Gegner ist. Ein kleiner Roboter sitzt in einer Glaskugel am Eingang eines leuchtenden Neon-Labyrinths, und du neigst das ganze Spielbrett, um ihn bis zum Ausgangsportal rollen zu lassen. Du startest mit 45 Sekunden. Jedes geschaffte Labyrinth gibt dir Zeit zurück und schickt dich direkt ins nächste, das immer etwas größer ist als das vorige. Kein Download, keine Anmeldung: Das Spiel startet sofort in deinem Browser, auf Handy, Tablet und Computer. Auf dem Handy wischst du einfach irgendwo über den Bildschirm: Unter deinem Daumen erscheint ein schwebender virtueller Stick, und du neigst das Labyrinth mit einem Finger in jede Richtung. Im Menü kannst du auch die Gyro-Steuerung einschalten und lenken, indem du dein Handy wirklich kippst, wie bei einem klassischen Kugellabyrinth. Am Computer nutzt du die Pfeiltasten, WASD oder ZQSD, und P für Pause. Die Kugel hat Gewicht und Schwung, also kommt es auf Gefühl an: Kleine, präzise Neigungen bringen dich durch enge Gänge, während große Bewegungen dich gegen die Wände prallen lassen und wertvolle Sekunden kosten. Jedes Labyrinth steckt voller Dinge zum Einsammeln und Gefahren zum Ausweichen. Cyanfarbene Zeitkristalle bringen vier Sekunden auf die Uhr, goldene Münzen bringen Punkte. Ab Labyrinth 3 öffnen sich schwarze Löcher mit rot leuchtendem Rand im Boden: Fällst du hinein, verlierst du sechs Sekunden und musst zurück zum Start. Ab Labyrinth 5 schalten sich rote Lasersperren quer über den Gängen ein und aus, und ein aktiver Strahl kostet dich vier Sekunden. Ab Labyrinth 2 tauchen Power-ups auf, die einen schwierigen Lauf retten. RADAR zeigt den kürzesten Weg zum Ausgang, MAGNET zieht Kristalle und Münzen in der Nähe zu dir, mit PHASE rollst du gefahrlos über Löcher und durch Laser, und FREEZE hält die Uhr ein paar Sekunden an. Dein Punktestand wächst mit jedem geschafften Labyrinth, und je schneller du den Ausgang erreichst, desto größer ist der Tempobonus. Es gibt drei Spielweisen. Classic ist der Standardlauf mit Zeitkristallen und Power-ups. Der Hard-Modus startet mit nur 35 Sekunden, stellt dich auf rutschigen Eisboden, öffnet Löcher und Laser ab dem ersten Labyrinth und streicht alle Kristalle, multipliziert deine Punkte aber mit 1,5 und hat eine eigene Bestenliste. Der Daily Run gibt allen Spielern den ganzen Tag über genau dieselben Labyrinthe. Nach einem Lauf kannst du einen Herausforderungslink schicken, damit ein Freund dieselben Labyrinthe spielt und versucht, deinen Punktestand zu schlagen. Einmal pro Lauf kannst du eine kurze Werbung ansehen, um zwanzig Sekunden zu bekommen und weiterzuspielen. Jede Bewegung fühlt sich lebendig an: Die Neonwände leuchten, bei jedem Aufprall fliegen Funken, der Bildschirm bebt, wenn du in ein Loch fällst, und jedes Labyrinth hat seine eigene Neonfarbe. Starte MAZEQUAKE, neige das Brett und finde heraus, wie viele Labyrinthe du schaffst, bevor die Zeit abläuft.",
+    "controls": "Wische irgendwo über den Bildschirm, um das Labyrinth mit dem schwebenden virtuellen Stick zu neigen, oder schalte im Menü die Gyro-Steuerung ein und kippe dein Handy. Auf der Tastatur nutzt du die Pfeiltasten, WASD oder ZQSD, und P für Pause. Rolle die Roboterkugel zum Ausgangsportal, bevor die Uhr null erreicht, sammle cyanfarbene Kristalle für Extrazeit und weiche den Löchern und roten Lasern aus.",
+    "seo": {
+      "title": "MAZEQUAKE - Kostenloses 3D-Neigelabyrinth online | Ragequit Arcade",
+      "metaDescription": "Spiele MAZEQUAKE kostenlos: Neige ein 3D-Neon-Labyrinth, rolle die Roboterkugel zum Ausgang, bevor die Zeit abläuft, und weiche Löchern und Lasern aus. Handy und Gyro.",
+      "faq": [
+        {
+          "q": "Wie spielt man MAZEQUAKE?",
+          "a": "Du neigst ein 3D-Neon-Labyrinth, um einen kleinen Roboter in einer Glaskugel zum Ausgangsportal rollen zu lassen. Wische irgendwo über den Bildschirm, nutze die Pfeiltasten oder kippe dein Handy mit der Gyro-Option. Erreiche den Ausgang, bevor die Uhr null zeigt: Jedes geschaffte Labyrinth gibt dir Zeit zurück und öffnet ein größeres."
+        },
+        {
+          "q": "Wie viel Zeit habe ich?",
+          "a": "Ein Classic-Lauf startet mit 45 Sekunden. Ein geschafftes Labyrinth bringt Zeit, und je größer es ist, desto mehr bekommst du zurück. Jeder cyanfarbene Kristall bringt vier weitere Sekunden, und das Power-up FREEZE hält die Uhr ein paar Sekunden an. Im Hard-Modus startest du mit nur 35 Sekunden."
+        },
+        {
+          "q": "Kann ich das Labyrinth mit dem Gyroskop meines Handys steuern?",
+          "a": "Ja. Schalte im Menü Gyro tilt ein, und das Labyrinth folgt der Neigung deines Handys wie ein echtes Kugellabyrinth. Wenn du willst, lässt du es aus und wischst irgendwo über den Bildschirm: Unter deinem Daumen erscheint ein schwebender virtueller Stick."
+        },
+        {
+          "q": "Was sind die Löcher und die Laser?",
+          "a": "Löcher sind schwarze Schächte mit rot leuchtendem Rand, die ab Labyrinth 3 auftauchen. Ein Sturz kostet sechs Sekunden und schickt dich zurück zum Start. Rote Lasersperren tauchen ab Labyrinth 5 auf und schalten sich quer über den Gängen ein und aus: Ein aktiver Strahl kostet vier Sekunden, also warte, bis er erlischt."
+        },
+        {
+          "q": "Was bewirken die Power-ups?",
+          "a": "Power-ups tauchen ab Labyrinth 2 auf. RADAR zeigt den kürzesten Weg zum Ausgang, MAGNET zieht Kristalle und Münzen in der Nähe zu dir, mit PHASE rollst du gefahrlos über Löcher und durch Laser, und FREEZE hält die Uhr ein paar Sekunden an. Rolle über ein Power-up, um es zu aktivieren."
+        },
+        {
+          "q": "Wie wird der Punktestand berechnet?",
+          "a": "Jedes geschaffte Labyrinth bringt Punkte, die mit seiner Nummer steigen, plus einen Tempobonus, wenn du den Ausgang schnell erreichst. Goldene Münzen bringen Extrapunkte. Im Hard-Modus wird jeder Punktestand mit 1,5 multipliziert."
+        },
+        {
+          "q": "Was ist der Unterschied zwischen Classic, Hard und Daily?",
+          "a": "Classic ist der Standardlauf mit Kristallen und Power-ups. Der Hard-Modus stellt dich mit nur 35 Sekunden auf rutschigen Eisboden, mit Löchern und Lasern ab dem ersten Labyrinth und ohne Kristalle, dafür mit 1,5-fachen Punkten und eigener Bestenliste. Der Daily Run gibt allen Spielern den ganzen Tag dieselben Labyrinthe."
+        },
+        {
+          "q": "Kann ich einen Freund herausfordern?",
+          "a": "Ja. Tippe nach einem Lauf auf Challenge a friend, um einen Link mit deinem Punktestand zu teilen. Dein Freund spielt genau dieselben Labyrinthe und sieht, ob er dich geschlagen hat."
+        },
+        {
+          "q": "Kann ich weiterspielen, wenn die Zeit abgelaufen ist?",
+          "a": "Einmal pro Lauf kannst du eine kurze Werbung ansehen, um zwanzig Sekunden auf die Uhr zu bekommen und mit deinem aktuellen Punktestand und Labyrinth weiterzuspielen. Heb sie dir für einen Lauf nahe an deinem Rekord auf."
+        },
+        {
+          "q": "Ist MAZEQUAKE kostenlos und auf dem Handy spielbar?",
+          "a": "MAZEQUAKE ist komplett kostenlos, braucht keinen Download und kein Konto und läuft im Browser auf Handys, Tablets und Computern. Es wurde zuerst für Touchscreens entwickelt, mit Ein-Finger-Steuerung und optionalem Gyro-Modus. Erstelle ein kostenloses Ragequit-Arcade-Konto, wenn du deinen Namen in der Bestenliste sehen willst."
+        }
+      ]
+    }
   }
 }

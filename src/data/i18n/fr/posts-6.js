@@ -164,5 +164,87 @@ export default {
         "text": "Tracez des boucles compactes, attrapez plusieurs cibles à la fois, gardez votre rythme et ne touchez jamais une mine. Ouvrez LOOPSTRIKE, piégez votre premier core et voyez combien vous pouvez en attraper en une seule boucle."
       }
     ]
+  },
+  "mazequake-tips": {
+    "title": "MAZEQUAKE : comment sortir de labyrinthes toujours plus grands avant la fin du chrono",
+    "excerpt": "MAZEQUAKE vous donne 45 secondes pour sortir une bille-robot d'un labyrinthe néon, puis vous en donne un plus grand. Voici comment incliner avec précision, recharger le chrono, éviter trous et lasers et atteindre le labyrinthe 12 et au-delà.",
+    "seo": {
+      "title": "Astuces MAZEQUAKE : contrôle de l'inclinaison, cristaux de temps, trous, lasers et power-ups | Ragequit Arcade",
+      "metaDescription": "Guide d'astuces pour MAZEQUAKE, le jeu de labyrinthe 3D à incliner gratuit : contrôler la bille, gagner du temps, éviter trous et lasers, utiliser RADAR, PHASE et FREEZE."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "MAZEQUAKE ressemble à un labyrinthe à bille classique : on incline le plateau, la bille roule, on cherche la sortie. Mais le chrono ne s'arrête jamais, et chaque sortie ouvre un labyrinthe plus grand avec moins de marge. Les joueurs qui atteignent le labyrinthe 12 et au-delà ne sont pas les plus rapides, ce sont les plus précis. Voici comment ils jouent."
+      },
+      {
+        "type": "h2",
+        "text": "Inclinez par petits gestes"
+      },
+      {
+        "type": "p",
+        "text": "La bille-robot a un vrai poids et de l'élan. Une forte inclinaison l'envoie dans un mur, où elle rebondit et vous fait perdre du temps. Faites des mouvements de pouce courts et légers, et commencez à ralentir avant chaque virage, pas pendant. Si vous jouez au gyroscope, tenez le téléphone à plat et faites de petits mouvements de poignet : le labyrinthe réagit au moindre degré."
+      },
+      {
+        "type": "h2",
+        "text": "Lisez le labyrinthe avant de rouler"
+      },
+      {
+        "type": "p",
+        "text": "Chaque labyrinthe vous laisse un court instant avant que la bille ne parte. Profitez-en pour repérer le portail de sortie et tracer l'itinéraire dans votre tête. Les culs-de-sac sont la plus grosse perte de temps du jeu, surtout dans les grands labyrinthes. Une seconde d'observation au départ vous évite souvent cinq secondes d'errance."
+      },
+      {
+        "type": "h2",
+        "text": "Rechargez le chrono"
+      },
+      {
+        "type": "p",
+        "text": "Le temps est votre vrai score. Chaque labyrinthe terminé vous rend des secondes, et plus il est grand, plus vous en récupérez. En Classic, chaque labyrinthe contient aussi des cristaux cyan qui valent quatre secondes chacun. Prenez ceux qui sont sur votre route ou tout près, mais ne faites pas un long détour pour un seul cristal : un cristal qui coûte six secondes à atteindre vous fait perdre du temps."
+      },
+      {
+        "type": "h2",
+        "text": "Respectez les trous et les lasers"
+      },
+      {
+        "type": "p",
+        "text": "Dès le labyrinthe 3, des trous cerclés de rouge s'ouvrent dans le sol. Tomber dedans coûte six secondes et vous renvoie au départ : ralentissez à leur approche et passez du côté opposé du couloir. Dès le labyrinthe 5, des barrières laser rouges clignotent. Ne foncez jamais dans un rayon : observez son rythme, arrêtez-vous juste avant et passez dès qu'il s'éteint."
+      },
+      {
+        "type": "h2",
+        "text": "Utilisez les power-ups au bon moment"
+      },
+      {
+        "type": "p",
+        "text": "RADAR trace le chemin le plus court vers la sortie, ce qui le rend précieux dans les grands labyrinthes. PHASE vous permet de rouler sur les trous et à travers les lasers sans dégâts, pour prendre la ligne directe. MAGNET attire vers vous les cristaux et pièces proches sans aucun détour. FREEZE arrête le chrono : continuez à pleine vitesse tant qu'il dure."
+      },
+      {
+        "type": "h2",
+        "text": "Visez le bonus de vitesse"
+      },
+      {
+        "type": "p",
+        "text": "Chaque labyrinthe rapporte plus de points à mesure que vous avancez, et atteindre vite la sortie ajoute un bonus de vitesse. Les pièces dorées en ajoutent un peu plus. Pour faire un gros score, il ne faut pas tout ramasser, mais terminer le plus de labyrinthes possible : une partie qui atteint le labyrinthe 12 vaut bien plus qu'une partie lente et parfaite qui s'arrête au labyrinthe 6."
+      },
+      {
+        "type": "h2",
+        "text": "Choisissez le bon mode"
+      },
+      {
+        "type": "p",
+        "text": "Classic est l'endroit idéal pour apprendre les contrôles et les dangers. Le mode Hard est un autre jeu : un sol de glace qui fait glisser la bille, seulement 35 secondes, des trous et des lasers dès le premier labyrinthe et aucun cristal, mais un score multiplié par 1,5 et son propre classement. Le Daily run donne à tous les mêmes labyrinthes pour la journée : c'est la façon la plus équitable de comparer les scores. Après chaque partie, envoyez un lien de défi pour qu'un ami joue exactement les mêmes labyrinthes."
+      },
+      {
+        "type": "h2",
+        "text": "Gardez votre deuxième chance"
+      },
+      {
+        "type": "p",
+        "text": "Une fois par partie, vous pouvez regarder une courte publicité pour ajouter vingt secondes au chrono. Ne la dépensez pas dans les premiers labyrinthes, où recommencer ne coûte rien. Gardez-la pour la partie où vous êtes déjà loin dans les labyrinthes et proche de votre record."
+      },
+      {
+        "type": "p",
+        "text": "Inclinez en douceur, préparez votre itinéraire, rechargez le chrono et ne foncez jamais dans un laser. Lancez MAZEQUAKE, sortez de votre premier labyrinthe et voyez jusqu'où vous pouvez aller avant la fin du temps."
+      }
+    ]
   }
 }

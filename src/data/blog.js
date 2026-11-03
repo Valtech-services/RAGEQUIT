@@ -688,6 +688,39 @@ export const posts = [
       { type: 'p', text: "Draw compact loops, catch several targets at once, keep your rhythm and never touch a mine. Open LOOPSTRIKE, trap your first core and see how many you can catch in a single loop." },
     ],
   },
+  {
+    slug: 'mazequake-tips',
+    category: 'guides',
+    title: "MAZEQUAKE: How to Escape Bigger Mazes Before the Clock Runs Out",
+    date: '2026-11-03',
+    author: 'Ragequit Arcade',
+    excerpt: "MAZEQUAKE gives you 45 seconds to roll a robot ball out of a neon labyrinth, then hands you a bigger one. Here is how to tilt with precision, feed the clock, avoid pits and lasers and reach maze 12 and beyond.",
+    image: '/blog/mazequake-tips.jpg',
+    seo: {
+      title: "MAZEQUAKE Tips: Tilt Control, Time Crystals, Pits, Lasers and Power-ups | Ragequit Arcade",
+      metaDescription: "A tips guide for MAZEQUAKE, the free 3D tilt maze game: how to control the ball, save time, avoid pits and lasers, use RADAR, PHASE and FREEZE and score higher.",
+    },
+    content: [
+      { type: 'p', text: "MAZEQUAKE looks like a classic marble maze: tilt the board, roll the ball, find the exit. But the clock never stops, and every exit opens a bigger labyrinth with fewer seconds to spare. The players who reach maze 12 and beyond are not the fastest, they are the most precise. Here is how they play." },
+      { type: 'h2', text: "Tilt with small moves" },
+      { type: 'p', text: "The robot ball has real weight and momentum. A big tilt sends it flying into a wall, where it bounces and wastes time. Use short, light movements of your thumb, and start slowing down before each turn rather than in it. If you play with the gyroscope, hold the phone flat and make small wrist movements: the maze reacts to every degree." },
+      { type: 'h2', text: "Read the maze before you roll" },
+      { type: 'p', text: "Each maze gives you a short moment before the ball starts moving. Use it to look at where the exit portal is and trace the route in your head. Dead ends are the biggest time sink in the game, especially in the larger labyrinths. A one-second look at the start often saves five seconds of wandering." },
+      { type: 'h2', text: "Feed the clock" },
+      { type: 'p', text: "Time is your real score. Every cleared maze adds seconds back, and the bigger the maze, the more you get. In Classic, each maze also holds cyan crystals worth four seconds each. Grab the ones that are on or near your route, but do not take a long detour for a single crystal: a crystal that costs six seconds to reach makes you lose time." },
+      { type: 'h2', text: "Respect the pits and the lasers" },
+      { type: 'p', text: "From maze 3, pits with a glowing red rim open in the floor. Falling in costs six seconds and sends you back to the start, so slow down near them and pass on the far side of the corridor. From maze 5, red laser gates blink on and off. Never rush into a beam: watch its rhythm, stop just before it and roll through right after it switches off." },
+      { type: 'h2', text: "Use the power-ups at the right moment" },
+      { type: 'p', text: "RADAR draws the shortest path to the exit, which makes it priceless in the big mazes. PHASE lets you roll over pits and through lasers without damage, so you can take the direct line. MAGNET pulls nearby crystals and coins toward you without any detour. FREEZE stops the clock: keep moving at full speed while it lasts." },
+      { type: 'h2', text: "Go for the speed bonus" },
+      { type: 'p', text: "Each maze pays more points the further you go, and reaching the exit quickly adds a speed bonus on top. Golden coins add a little more. The best way to score high is not to collect everything, but to clear as many mazes as possible: a run that reaches maze 12 is worth far more than a slow, perfect run that stops at maze 6." },
+      { type: 'h2', text: "Pick the right mode" },
+      { type: 'p', text: "Classic is the place to learn the controls and the dangers. Hard mode is a different game: an ice floor that keeps the ball sliding, only 35 seconds, pits and lasers from the first maze and no crystals at all, but a times 1.5 score and its own leaderboard. The Daily run gives everyone the same mazes for the day, which makes it the fairest way to compare scores. After any run, send a challenge link so a friend plays the very same labyrinths." },
+      { type: 'h2', text: "Save your second chance" },
+      { type: 'p', text: "Once per run you can watch a short ad to add twenty seconds to the clock. Do not spend it in the first mazes, where a restart costs nothing. Keep it for the run where you are already deep in the labyrinths and close to your record." },
+      { type: 'p', text: "Tilt gently, plan your route, feed the clock and never rush a laser. Open MAZEQUAKE, escape your first maze and see how far you can go before the time runs out." }
+    ],
+  },
 ]
 
 // Trouve un article par son slug.

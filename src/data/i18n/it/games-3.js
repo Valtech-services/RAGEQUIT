@@ -150,5 +150,55 @@ export default {
         }
       ]
     }
+  },
+  "mazequake": {
+    "description": "MAZEQUAKE è un gioco gratuito di labirinto 3D da inclinare, in cui il vero nemico è il cronometro. Un piccolo robot è chiuso in una sfera di vetro all'ingresso di un labirinto al neon, e tu inclini l'intero piano per farlo rotolare fino al portale d'uscita. Parti con 45 secondi. Ogni labirinto completato ti restituisce tempo e ti porta subito nel successivo, sempre un po' più grande del precedente. Nessun download e nessuna registrazione: il gioco parte subito nel browser, su smartphone, tablet e computer. Sul telefono basta trascinare il dito in qualsiasi punto dello schermo: sotto il pollice compare uno stick virtuale fluttuante e inclini il labirinto in ogni direzione con un solo dito. Nel menu puoi anche attivare l'inclinazione con giroscopio e guidare inclinando davvero il telefono, come in un classico labirinto con la pallina. Sul computer usa le frecce, WASD o ZQSD, e P per la pausa. La sfera ha peso e slancio, quindi conta tutto il tocco: piccole inclinazioni precise ti fanno passare nei corridoi stretti, mentre i movimenti ampi ti fanno rimbalzare contro i muri e perdere secondi preziosi. Ogni labirinto è pieno di cose da raccogliere e di pericoli da evitare. I cristalli del tempo ciano aggiungono quattro secondi al cronometro e le monete d'oro danno punti. Dal labirinto 3 si aprono nel pavimento buchi neri dal bordo rosso luminoso: se ci cadi perdi sei secondi e torni alla partenza. Dal labirinto 5, barriere laser rosse si accendono e si spengono attraverso i corridoi, e toccare un raggio attivo costa quattro secondi. I power-up compaiono dal labirinto 2 per salvare una partita difficile. RADAR traccia il percorso più breve verso l'uscita, MAGNET attira verso di te cristalli e monete vicini, PHASE ti fa rotolare in sicurezza sopra i buchi e attraverso i laser, e FREEZE ferma il cronometro per qualche secondo. Il tuo punteggio cresce a ogni labirinto completato, e più arrivi in fretta all'uscita, più grande è il bonus velocità. Ci sono tre modi di giocare. Classic è la partita standard, con cristalli del tempo e power-up. La modalità Hard parte con soli 35 secondi, ti mette su un pavimento di ghiaccio scivoloso, apre buchi e laser fin dal primo labirinto ed elimina tutti i cristalli, ma moltiplica il punteggio per 1,5, con una classifica dedicata. Il Daily run dà a tutti i giocatori esattamente gli stessi labirinti per l'intera giornata. Dopo una partita puoi inviare un link di sfida perché un amico giochi gli stessi labirinti e provi a battere il tuo punteggio. Una volta per partita puoi guardare una breve pubblicità per ottenere venti secondi e continuare. Ogni movimento è vivo: i muri al neon brillano, a ogni urto volano scintille, lo schermo trema quando cadi in un buco e ogni labirinto ha il suo colore al neon. Apri MAZEQUAKE, inclina il piano e scopri quanti labirinti riesci a superare prima che il tempo finisca.",
+    "controls": "Trascina il dito in qualsiasi punto dello schermo per inclinare il labirinto con lo stick virtuale fluttuante, oppure attiva l'inclinazione con giroscopio nel menu e inclina il telefono. Da tastiera usa le frecce, WASD o ZQSD, e P per la pausa. Fai rotolare la sfera-robot fino al portale d'uscita prima che il cronometro arrivi a zero, raccogli i cristalli ciano per avere più tempo ed evita i buchi e i laser rossi.",
+    "seo": {
+      "title": "MAZEQUAKE - Gioco di labirinto 3D da inclinare gratis | Ragequit Arcade",
+      "metaDescription": "Gioca gratis a MAZEQUAKE: inclina un labirinto al neon 3D, porta la sfera-robot all'uscita prima che scada il tempo ed evita buchi e laser. Mobile e giroscopio.",
+      "faq": [
+        {
+          "q": "Come si gioca a MAZEQUAKE?",
+          "a": "Inclini un labirinto al neon in 3D per far rotolare un piccolo robot chiuso in una sfera di vetro fino al portale d'uscita. Trascina il dito in qualsiasi punto dello schermo, usa le frecce o inclina il telefono con l'opzione giroscopio. Raggiungi l'uscita prima che il cronometro arrivi a zero: ogni labirinto completato ti restituisce tempo e ne apre uno più grande."
+        },
+        {
+          "q": "Quanto tempo ho?",
+          "a": "Una partita Classic parte con 45 secondi. Completare un labirinto aggiunge tempo, e più è grande, più ne recuperi. Ogni cristallo ciano aggiunge altri quattro secondi, e il power-up FREEZE ferma il cronometro per qualche secondo. In modalità Hard parti con soli 35 secondi."
+        },
+        {
+          "q": "Posso controllare il labirinto con il giroscopio del telefono?",
+          "a": "Sì. Attiva Gyro tilt nel menu e il labirinto segue l'inclinazione del telefono, come un vero labirinto con la pallina. Se preferisci, lascialo disattivato e trascina il dito in qualsiasi punto dello schermo: sotto il pollice compare uno stick virtuale fluttuante."
+        },
+        {
+          "q": "Cosa sono i buchi e i laser?",
+          "a": "I buchi sono pozzi neri dal bordo rosso luminoso che compaiono dal labirinto 3. Cadere in uno costa sei secondi e ti riporta alla partenza. Le barriere laser rosse compaiono dal labirinto 5 e si accendono e si spengono attraverso i corridoi: toccare un raggio attivo costa quattro secondi, quindi aspetta che si spenga."
+        },
+        {
+          "q": "A cosa servono i power-up?",
+          "a": "I power-up compaiono dal labirinto 2. RADAR mostra il percorso più breve verso l'uscita, MAGNET attira verso di te cristalli e monete vicini, PHASE ti permette di rotolare in sicurezza sopra i buchi e attraverso i laser, e FREEZE ferma il cronometro per qualche secondo. Rotola su un power-up per attivarlo."
+        },
+        {
+          "q": "Come si calcola il punteggio?",
+          "a": "Ogni labirinto completato dà punti che crescono con il suo numero, più un bonus velocità se raggiungi l'uscita in fretta. Le monete d'oro aggiungono punti extra. In modalità Hard ogni punteggio è moltiplicato per 1,5."
+        },
+        {
+          "q": "Che differenza c'è tra Classic, Hard e Daily?",
+          "a": "Classic è la partita standard, con cristalli e power-up. La modalità Hard ti mette su un pavimento di ghiaccio scivoloso con soli 35 secondi, buchi e laser fin dal primo labirinto e nessun cristallo, in cambio di un punteggio per 1,5 e di una classifica dedicata. Il Daily run dà a tutti i giocatori gli stessi labirinti per l'intera giornata."
+        },
+        {
+          "q": "Posso sfidare un amico?",
+          "a": "Sì. Dopo una partita, premi Challenge a friend per condividere un link con il tuo punteggio. Il tuo amico gioca esattamente gli stessi labirinti e vede se ti ha battuto."
+        },
+        {
+          "q": "Posso continuare quando il tempo finisce?",
+          "a": "Una volta per partita puoi guardare una breve pubblicità per aggiungere venti secondi al cronometro e continuare con il punteggio e il labirinto attuali. Tienila per una partita vicina al tuo record."
+        },
+        {
+          "q": "MAZEQUAKE è gratis e si può giocare da mobile?",
+          "a": "MAZEQUAKE è completamente gratuito, non richiede download né account e funziona nel browser su smartphone, tablet e computer. È stato pensato prima di tutto per i touch screen, con controlli a un dito e una modalità giroscopio opzionale. Crea un account Ragequit Arcade gratuito se vuoi vedere il tuo nome in classifica."
+        }
+      ]
+    }
   }
 }

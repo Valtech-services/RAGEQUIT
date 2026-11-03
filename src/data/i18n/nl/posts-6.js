@@ -164,5 +164,87 @@ export default {
         "text": "Trek compacte lussen, vang meerdere doelen tegelijk, houd je ritme vast en raak nooit een mijn. Open LOOPSTRIKE, vang je eerste kern en ontdek hoeveel je er in één lus kunt pakken."
       }
     ]
+  },
+  "mazequake-tips": {
+    "title": "MAZEQUAKE: zo ontsnap je uit steeds grotere doolhoven voordat de tijd op is",
+    "excerpt": "MAZEQUAKE geeft je 45 seconden om een robotbol uit een neondoolhof te rollen en daarna een groter doolhof. Zo kantel je precies, vul je de klok aan, ontwijk je gaten en lasers en haal je doolhof 12 en verder.",
+    "seo": {
+      "title": "MAZEQUAKE-tips: kantelbesturing, tijdkristallen, gaten, lasers en power-ups | Ragequit Arcade",
+      "metaDescription": "Tips voor MAZEQUAKE, het gratis 3D-kanteldoolhof: bestuur de bol, win tijd, ontwijk gaten en lasers en gebruik RADAR, PHASE en FREEZE voor een hogere score."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "MAZEQUAKE lijkt op een klassiek knikkerdoolhof: bord kantelen, bol laten rollen, uitgang zoeken. Maar de klok stopt nooit, en elke uitgang opent een groter doolhof met minder marge. De spelers die doolhof 12 en verder halen zijn niet de snelsten, maar de preciezesten. Zo spelen ze."
+      },
+      {
+        "type": "h2",
+        "text": "Kantel met kleine bewegingen"
+      },
+      {
+        "type": "p",
+        "text": "De robotbol heeft echt gewicht en vaart. Een flinke kanteling smijt hem tegen een muur, waar hij terugstuitert en je tijd kost. Maak korte, lichte duimbewegingen en rem af vóór elke bocht, niet erin. Speel je met de gyroscoop, houd je telefoon dan plat en beweeg je pols maar een beetje: het doolhof reageert op elke graad."
+      },
+      {
+        "type": "h2",
+        "text": "Lees het doolhof voordat je rolt"
+      },
+      {
+        "type": "p",
+        "text": "Elk doolhof geeft je een kort moment voordat de bol gaat rollen. Gebruik het om het uitgangsportaal te vinden en de route in je hoofd uit te stippelen. Doodlopende gangen zijn de grootste tijdverspilling in het spel, vooral in de grote doolhoven. Eén seconde kijken bij de start bespaart vaak vijf seconden ronddwalen."
+      },
+      {
+        "type": "h2",
+        "text": "Vul de klok aan"
+      },
+      {
+        "type": "p",
+        "text": "Tijd is je echte score. Elk gehaald doolhof geeft je seconden terug, en hoe groter het is, hoe meer. In Classic bevat elk doolhof ook cyaan kristallen van vier seconden per stuk. Pak de kristallen op of vlak bij je route, maar maak geen grote omweg voor één kristal: een kristal dat zes seconden kost om te halen, laat je tijd verliezen."
+      },
+      {
+        "type": "h2",
+        "text": "Respecteer de gaten en de lasers"
+      },
+      {
+        "type": "p",
+        "text": "Vanaf doolhof 3 openen zich gaten met een rood gloeiende rand in de vloer. Erin vallen kost zes seconden en stuurt je terug naar de start, dus rem af in hun buurt en rol langs de andere kant van de gang. Vanaf doolhof 5 knipperen rode laserpoorten. Stort je nooit in een straal: kijk naar het ritme, stop er vlak voor en rol erdoor zodra hij uitgaat."
+      },
+      {
+        "type": "h2",
+        "text": "Gebruik de power-ups op het juiste moment"
+      },
+      {
+        "type": "p",
+        "text": "RADAR toont de kortste weg naar de uitgang, en dat is goud waard in de grote doolhoven. Met PHASE rol je zonder schade over gaten en door lasers, zodat je de directe lijn kunt nemen. MAGNET trekt kristallen en munten in de buurt zonder omweg naar je toe. FREEZE zet de klok stil: blijf op volle snelheid rollen zolang het duurt."
+      },
+      {
+        "type": "h2",
+        "text": "Ga voor de snelheidsbonus"
+      },
+      {
+        "type": "p",
+        "text": "Elk doolhof levert meer punten op naarmate je verder komt, en een snelle uitgang geeft er een snelheidsbonus bovenop. Gouden munten voegen nog wat toe. De beste manier om hoog te scoren is niet alles verzamelen, maar zoveel mogelijk doolhoven halen: een run tot doolhof 12 is veel meer waard dan een trage, perfecte run die bij doolhof 6 eindigt."
+      },
+      {
+        "type": "h2",
+        "text": "Kies de juiste modus"
+      },
+      {
+        "type": "p",
+        "text": "Classic is de plek om de besturing en de gevaren te leren. De Hard-modus is een ander spel: een ijsvloer waarop de bol blijft glijden, maar 35 seconden, gaten en lasers vanaf het eerste doolhof en geen kristallen, maar een score maal 1,5 en een eigen ranglijst. De Daily run geeft iedereen dezelfde doolhoven van de dag, de eerlijkste manier om scores te vergelijken. Stuur na elke run een uitdaginglink zodat een vriend precies dezelfde doolhoven speelt."
+      },
+      {
+        "type": "h2",
+        "text": "Bewaar je tweede kans"
+      },
+      {
+        "type": "p",
+        "text": "Eén keer per run kun je een korte advertentie bekijken om twintig seconden aan de klok toe te voegen. Verspil hem niet in de eerste doolhoven, waar opnieuw beginnen niets kost. Bewaar hem voor de run waarin je al diep in de doolhoven zit en dicht bij je record bent."
+      },
+      {
+        "type": "p",
+        "text": "Kantel zacht, plan je route, vul de klok aan en stort je nooit in een laser. Open MAZEQUAKE, ontsnap uit je eerste doolhof en ontdek hoe ver je komt voordat de tijd op is."
+      }
+    ]
   }
 }

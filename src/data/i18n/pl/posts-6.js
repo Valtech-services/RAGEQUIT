@@ -164,5 +164,87 @@ export default {
         "text": "Rysuj zwarte pętle, łap kilka celów naraz, trzymaj rytm i nigdy nie dotykaj miny. Otwórz LOOPSTRIKE, złap swój pierwszy rdzeń i sprawdź, ile zdołasz złapać w jedną pętlę."
       }
     ]
+  },
+  "mazequake-tips": {
+    "title": "MAZEQUAKE: jak uciec z coraz większych labiryntów, zanim skończy się czas",
+    "excerpt": "MAZEQUAKE daje ci 45 sekund, by wyturlać kulę z robotem z neonowego labiryntu, a potem daje większy. Oto jak precyzyjnie przechylać, doładowywać zegar, omijać dziury i lasery i dojść do labiryntu 12 i dalej.",
+    "seo": {
+      "title": "Porady do MAZEQUAKE: sterowanie przechyłem, kryształy czasu, dziury, lasery i power-upy | Ragequit Arcade",
+      "metaDescription": "Poradnik do MAZEQUAKE, darmowej gry w przechylany labirynt 3D: jak kontrolować kulę, zyskiwać czas, omijać dziury i lasery i używać RADAR, PHASE i FREEZE."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "MAZEQUAKE wygląda jak klasyczny labirynt z kulką: przechylasz planszę, kula się toczy, szukasz wyjścia. Ale zegar nigdy się nie zatrzymuje, a każde wyjście otwiera większy labirynt z mniejszym zapasem. Gracze, którzy docierają do labiryntu 12 i dalej, nie są najszybsi, tylko najbardziej precyzyjni. Oto jak grają."
+      },
+      {
+        "type": "h2",
+        "text": "Przechylaj małymi ruchami"
+      },
+      {
+        "type": "p",
+        "text": "Kula z robotem ma prawdziwy ciężar i bezwładność. Mocny przechył rzuca ją na ścianę, od której się odbija, a ty tracisz czas. Rób krótkie, lekkie ruchy kciukiem i zaczynaj hamować przed każdym zakrętem, a nie w nim. Jeśli grasz żyroskopem, trzymaj telefon płasko i poruszaj nadgarstkiem tylko odrobinę: labirynt reaguje na każdy stopień."
+      },
+      {
+        "type": "h2",
+        "text": "Przeczytaj labirynt, zanim ruszysz"
+      },
+      {
+        "type": "p",
+        "text": "Każdy labirynt daje ci krótką chwilę, zanim kula ruszy. Wykorzystaj ją, żeby znaleźć portal wyjścia i wyznaczyć trasę w głowie. Ślepe zaułki to największa strata czasu w grze, zwłaszcza w dużych labiryntach. Sekunda obserwacji na starcie często oszczędza pięć sekund błądzenia."
+      },
+      {
+        "type": "h2",
+        "text": "Doładowuj zegar"
+      },
+      {
+        "type": "p",
+        "text": "Czas to twój prawdziwy wynik. Każdy ukończony labirynt oddaje ci sekundy, a im jest większy, tym więcej. W Classic każdy labirynt zawiera też cyjanowe kryształy warte po cztery sekundy. Zbieraj te, które leżą na twojej trasie lub blisko niej, ale nie rób dużego objazdu dla jednego kryształu: kryształ, do którego droga kosztuje sześć sekund, sprawia, że tracisz czas."
+      },
+      {
+        "type": "h2",
+        "text": "Szanuj dziury i lasery"
+      },
+      {
+        "type": "p",
+        "text": "Od labiryntu 3 w podłodze otwierają się dziury z czerwono świecącą krawędzią. Wpadnięcie kosztuje sześć sekund i odsyła na start, więc zwalniaj przy nich i przejeżdżaj drugą stroną korytarza. Od labiryntu 5 migają czerwone bramki laserowe. Nigdy nie wpadaj w wiązkę: obserwuj jej rytm, zatrzymaj się tuż przed nią i przejedź, gdy tylko zgaśnie."
+      },
+      {
+        "type": "h2",
+        "text": "Używaj power-upów we właściwym momencie"
+      },
+      {
+        "type": "p",
+        "text": "RADAR rysuje najkrótszą drogę do wyjścia, co jest bezcenne w dużych labiryntach. PHASE pozwala toczyć się nad dziurami i przez lasery bez obrażeń, więc możesz jechać na wprost. MAGNET przyciąga pobliskie kryształy i monety bez żadnego objazdu. FREEZE zatrzymuje zegar: jedź na pełnej prędkości, dopóki działa."
+      },
+      {
+        "type": "h2",
+        "text": "Celuj w bonus za szybkość"
+      },
+      {
+        "type": "p",
+        "text": "Każdy labirynt daje więcej punktów, im dalej jesteś, a szybkie dotarcie do wyjścia dodaje bonus za szybkość. Złote monety dorzucają jeszcze trochę. Najlepszy sposób na wysoki wynik to nie zbieranie wszystkiego, ale ukończenie jak największej liczby labiryntów: bieg do labiryntu 12 jest wart dużo więcej niż powolny, perfekcyjny bieg, który kończy się na labiryncie 6."
+      },
+      {
+        "type": "h2",
+        "text": "Wybierz właściwy tryb"
+      },
+      {
+        "type": "p",
+        "text": "Classic to miejsce do nauki sterowania i zagrożeń. Tryb Hard to inna gra: lód, po którym kula ślizga się bez końca, tylko 35 sekund, dziury i lasery od pierwszego labiryntu i żadnych kryształów, ale wynik razy 1,5 i własny ranking. Daily run daje wszystkim te same labirynty dnia, to najuczciwszy sposób porównywania wyników. Po każdym biegu wyślij link z wyzwaniem, żeby znajomy zagrał w dokładnie te same labirynty."
+      },
+      {
+        "type": "h2",
+        "text": "Zachowaj drugą szansę"
+      },
+      {
+        "type": "p",
+        "text": "Raz na bieg możesz obejrzeć krótką reklamę, aby dodać dwadzieścia sekund do zegara. Nie wydawaj jej w pierwszych labiryntach, gdzie restart nic nie kosztuje. Zachowaj ją na bieg, w którym jesteś już głęboko w labiryntach i blisko swojego rekordu."
+      },
+      {
+        "type": "p",
+        "text": "Przechylaj delikatnie, planuj trasę, doładowuj zegar i nigdy nie wpadaj w laser. Uruchom MAZEQUAKE, ucieknij z pierwszego labiryntu i sprawdź, jak daleko zajdziesz, zanim skończy się czas."
+      }
+    ]
   }
 }

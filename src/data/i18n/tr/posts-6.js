@@ -164,5 +164,87 @@ export default {
         "text": "Toplu döngüler çiz, aynı anda birden fazla hedef yakala, ritmini koru ve asla bir mayına dokunma. LOOPSTRIKE'ı aç, ilk çekirdeğini yakala ve tek bir döngüde kaç tane yakalayabileceğini gör."
       }
     ]
+  },
+  "mazequake-tips": {
+    "title": "MAZEQUAKE: Süre Bitmeden Giderek Büyüyen Labirentlerden Nasıl Kaçılır",
+    "excerpt": "MAZEQUAKE, bir robot topu neon bir labirentten çıkarman için sana 45 saniye verir, sonra daha büyüğünü verir. Hassas eğmenin, saati doldurmanın, çukurlardan ve lazerlerden kaçmanın ve labirent 12'ye ve ötesine ulaşmanın yolları burada.",
+    "seo": {
+      "title": "MAZEQUAKE İpuçları: Eğme Kontrolü, Zaman Kristalleri, Çukurlar, Lazerler ve Güçlendirmeler | Ragequit Arcade",
+      "metaDescription": "Ücretsiz 3D eğme labirent oyunu MAZEQUAKE için ipuçları: topu kontrol et, süre kazan, çukur ve lazerlerden kaç, RADAR, PHASE ve FREEZE'i doğru kullan."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "MAZEQUAKE klasik bir bilyeli labirente benzer: tahtayı eğersin, top yuvarlanır, çıkışı ararsın. Ama saat hiç durmaz ve her çıkış daha az payla daha büyük bir labirent açar. Labirent 12'ye ve ötesine ulaşan oyuncular en hızlılar değil, en hassas olanlardır. İşte nasıl oynadıkları."
+      },
+      {
+        "type": "h2",
+        "text": "Küçük hareketlerle eğ"
+      },
+      {
+        "type": "p",
+        "text": "Robot topun gerçek bir ağırlığı ve ataleti var. Sert bir eğim onu bir duvara fırlatır, top seker ve zaman kaybedersin. Başparmağınla kısa ve hafif hareketler yap, her virajdan önce yavaşlamaya başla, virajın içinde değil. Jiroskopla oynuyorsan telefonu düz tut ve bileğini çok az hareket ettir: labirent her dereceye tepki verir."
+      },
+      {
+        "type": "h2",
+        "text": "Yuvarlanmadan önce labirenti oku"
+      },
+      {
+        "type": "p",
+        "text": "Her labirent, top hareket etmeden önce sana kısa bir an tanır. Bunu çıkış portalının yerini bulmak ve rotayı kafanda çizmek için kullan. Çıkmaz sokaklar, özellikle büyük labirentlerde, oyundaki en büyük zaman kaybıdır. Başlangıçta bir saniyelik bakış genellikle beş saniyelik dolaşmadan kurtarır."
+      },
+      {
+        "type": "h2",
+        "text": "Saati doldur"
+      },
+      {
+        "type": "p",
+        "text": "Süre senin gerçek puanındır. Bitirdiğin her labirent sana saniye kazandırır ve labirent ne kadar büyükse o kadar fazla. Classic'te her labirentte ayrıca her biri dört saniye değerinde camgöbeği kristaller bulunur. Rotanın üstündeki ya da yakınındakileri al, ama tek bir kristal için uzun bir sapma yapma: ulaşması altı saniye süren bir kristal sana zaman kaybettirir."
+      },
+      {
+        "type": "h2",
+        "text": "Çukurlara ve lazerlere saygı göster"
+      },
+      {
+        "type": "p",
+        "text": "Labirent 3'ten itibaren zeminde kırmızı parlayan kenarlı çukurlar açılır. Düşmek altı saniyeye mal olur ve seni başa gönderir, bu yüzden yanlarında yavaşla ve koridorun karşı tarafından geç. Labirent 5'ten itibaren kırmızı lazer kapıları yanıp söner. Asla bir ışına dalma: ritmini izle, hemen önünde dur ve söndüğü anda geç."
+      },
+      {
+        "type": "h2",
+        "text": "Güçlendirmeleri doğru anda kullan"
+      },
+      {
+        "type": "p",
+        "text": "RADAR çıkışa giden en kısa yolu çizer ve büyük labirentlerde paha biçilmezdir. PHASE çukurların üzerinden ve lazerlerin içinden hasar almadan geçmeni sağlar, böylece düz hattı kullanabilirsin. MAGNET yakındaki kristalleri ve paraları hiç sapmadan sana çeker. FREEZE saati durdurur: sürdüğü sürece tam hızla devam et."
+      },
+      {
+        "type": "h2",
+        "text": "Hız bonusunun peşine düş"
+      },
+      {
+        "type": "p",
+        "text": "İlerledikçe her labirent daha fazla puan verir ve çıkışa hızlı ulaşmak üstüne bir hız bonusu ekler. Altın paralar biraz daha ekler. Yüksek puan yapmanın en iyi yolu her şeyi toplamak değil, olabildiğince çok labirent bitirmektir: labirent 12'ye ulaşan bir koşu, labirent 6'da biten yavaş ve kusursuz bir koşudan çok daha değerlidir."
+      },
+      {
+        "type": "h2",
+        "text": "Doğru modu seç"
+      },
+      {
+        "type": "p",
+        "text": "Classic, kontrolleri ve tehlikeleri öğrenmenin yeridir. Hard modu bambaşka bir oyundur: topu sürekli kaydıran bir buz zemin, sadece 35 saniye, ilk labirentten itibaren çukurlar ve lazerler ve hiç kristal yok; ama puan 1,5 ile çarpılır ve kendi sıralaması vardır. Daily run herkese günün aynı labirentlerini verir, puanları karşılaştırmanın en adil yoludur. Her koşudan sonra bir meydan okuma bağlantısı gönder, böylece bir arkadaşın tamamen aynı labirentleri oynasın."
+      },
+      {
+        "type": "h2",
+        "text": "İkinci şansını sakla"
+      },
+      {
+        "type": "p",
+        "text": "Her koşuda bir kez kısa bir reklam izleyerek saate yirmi saniye ekleyebilirsin. Bunu yeniden başlamanın hiçbir şeye mal olmadığı ilk labirentlerde harcama. Labirentlerin derinliklerinde olduğun ve rekoruna yaklaştığın koşu için sakla."
+      },
+      {
+        "type": "p",
+        "text": "Yumuşak eğ, rotanı planla, saati doldur ve asla bir lazere dalma. MAZEQUAKE'i aç, ilk labirentinden kaç ve süre bitmeden ne kadar ileri gidebileceğini gör."
+      }
+    ]
   }
 }

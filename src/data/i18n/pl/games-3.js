@@ -150,5 +150,55 @@ export default {
         }
       ]
     }
+  },
+  "mazequake": {
+    "description": "MAZEQUAKE to darmowa gra w przechylany labirynt 3D, w której prawdziwym wrogiem jest zegar. Mały robot siedzi w szklanej kuli przy wejściu do świecącego neonowego labiryntu, a ty przechylasz całą planszę, żeby doturlać go do portalu wyjścia. Zaczynasz z 45 sekundami. Każdy ukończony labirynt oddaje ci trochę czasu i od razu przenosi cię do następnego, zawsze nieco większego od poprzedniego. Bez pobierania i bez rejestracji: gra uruchamia się od razu w przeglądarce, na telefonie, tablecie i komputerze. Na telefonie wystarczy przesunąć palcem w dowolnym miejscu ekranu: pod kciukiem pojawia się pływająca wirtualna gałka i przechylasz labirynt w każdą stronę jednym palcem. W menu możesz też włączyć sterowanie żyroskopem i kierować, naprawdę przechylając telefon, jak w klasycznym labiryncie z kulką. Na komputerze używaj strzałek, WASD lub ZQSD, a P to pauza. Kula ma ciężar i bezwładność, więc liczy się wyczucie: małe, precyzyjne przechyły prowadzą przez wąskie korytarze, a duże ruchy odbijają cię od ścian i kosztują cenne sekundy. Każdy labirynt jest pełen rzeczy do zebrania i pułapek do ominięcia. Cyjanowe kryształy czasu dodają cztery sekundy, a złote monety dają punkty. Od labiryntu 3 w podłodze otwierają się czarne dziury z czerwono świecącą krawędzią: wpadnięcie kosztuje sześć sekund i odsyła cię na start. Od labiryntu 5 czerwone bramki laserowe włączają się i wyłączają w poprzek korytarzy, a dotknięcie aktywnej wiązki kosztuje cztery sekundy. Od labiryntu 2 pojawiają się power-upy, które ratują trudny bieg. RADAR pokazuje najkrótszą drogę do wyjścia, MAGNET przyciąga pobliskie kryształy i monety, PHASE pozwala bezpiecznie toczyć się nad dziurami i przez lasery, a FREEZE zatrzymuje zegar na kilka sekund. Twój wynik rośnie z każdym ukończonym labiryntem, a im szybciej dotrzesz do wyjścia, tym większy bonus za szybkość. Są trzy sposoby gry. Classic to standardowy bieg z kryształami czasu i power-upami. Tryb Hard zaczyna się z zaledwie 35 sekundami, stawia cię na śliskim lodzie, otwiera dziury i lasery od pierwszego labiryntu i usuwa wszystkie kryształy, ale mnoży wynik przez 1,5 i ma własny ranking. Daily run daje wszystkim graczom dokładnie te same labirynty przez cały dzień. Po biegu możesz wysłać link z wyzwaniem, żeby znajomy zagrał w te same labirynty i spróbował pobić twój wynik. Raz na bieg możesz obejrzeć krótką reklamę, żeby dostać dwadzieścia sekund i grać dalej. Każdy ruch jest pełen życia: neonowe ściany świecą, przy każdym uderzeniu lecą iskry, ekran drży, gdy wpadasz do dziury, a każdy labirynt ma własny kolor neonu. Uruchom MAZEQUAKE, przechyl planszę i sprawdź, ile labiryntów przejdziesz, zanim skończy się czas.",
+    "controls": "Przesuwaj palcem w dowolnym miejscu ekranu, aby przechylać labirynt pływającą wirtualną gałką, albo włącz w menu sterowanie żyroskopem i przechylaj telefon. Na klawiaturze używaj strzałek, WASD lub ZQSD, a P to pauza. Doturlaj kulę z robotem do portalu wyjścia, zanim zegar dojdzie do zera, zbieraj cyjanowe kryształy, by zyskać czas, i omijaj dziury oraz czerwone lasery.",
+    "seo": {
+      "title": "MAZEQUAKE - Darmowa gra w przechylany labirynt 3D | Ragequit Arcade",
+      "metaDescription": "Zagraj za darmo w MAZEQUAKE: przechylaj neonowy labirynt 3D, doprowadź kulę z robotem do wyjścia przed końcem czasu i omijaj dziury i lasery. Telefon i żyroskop.",
+      "faq": [
+        {
+          "q": "Jak grać w MAZEQUAKE?",
+          "a": "Przechylasz neonowy labirynt 3D, aby doturlać małego robota w szklanej kuli do portalu wyjścia. Przesuń palcem w dowolnym miejscu ekranu, użyj strzałek albo przechylaj telefon z opcją żyroskopu. Dotrzyj do wyjścia, zanim zegar wskaże zero: każdy ukończony labirynt oddaje ci czas i otwiera większy."
+        },
+        {
+          "q": "Ile mam czasu?",
+          "a": "Bieg Classic zaczyna się z 45 sekundami. Ukończenie labiryntu dodaje czas, a im większy labirynt, tym więcej odzyskujesz. Każdy cyjanowy kryształ dodaje kolejne cztery sekundy, a power-up FREEZE zatrzymuje zegar na kilka sekund. W trybie Hard zaczynasz z zaledwie 35 sekundami."
+        },
+        {
+          "q": "Czy mogę sterować labiryntem żyroskopem telefonu?",
+          "a": "Tak. Włącz Gyro tilt w menu, a labirynt będzie podążał za przechyłem telefonu, jak prawdziwy labirynt z kulką. Jeśli wolisz, zostaw to wyłączone i przesuwaj palcem w dowolnym miejscu ekranu: pod kciukiem pojawi się pływająca wirtualna gałka."
+        },
+        {
+          "q": "Czym są dziury i lasery?",
+          "a": "Dziury to czarne studnie z czerwono świecącą krawędzią, które pojawiają się od labiryntu 3. Wpadnięcie do jednej kosztuje sześć sekund i odsyła cię na start. Czerwone bramki laserowe pojawiają się od labiryntu 5 i włączają się i wyłączają w poprzek korytarzy: dotknięcie aktywnej wiązki kosztuje cztery sekundy, więc poczekaj, aż zgaśnie."
+        },
+        {
+          "q": "Co robią power-upy?",
+          "a": "Power-upy pojawiają się od labiryntu 2. RADAR pokazuje najkrótszą drogę do wyjścia, MAGNET przyciąga pobliskie kryształy i monety, PHASE pozwala bezpiecznie toczyć się nad dziurami i przez lasery, a FREEZE zatrzymuje zegar na kilka sekund. Przetocz się po power-upie, aby go aktywować."
+        },
+        {
+          "q": "Jak liczony jest wynik?",
+          "a": "Każdy ukończony labirynt daje punkty, które rosną z jego numerem, plus bonus za szybkość, jeśli szybko dotrzesz do wyjścia. Złote monety dodają dodatkowe punkty. W trybie Hard każdy wynik jest mnożony przez 1,5."
+        },
+        {
+          "q": "Czym różnią się Classic, Hard i Daily?",
+          "a": "Classic to standardowy bieg z kryształami i power-upami. Tryb Hard stawia cię na śliskim lodzie z zaledwie 35 sekundami, dziurami i laserami od pierwszego labiryntu i bez kryształów, w zamian za wynik razy 1,5 i własny ranking. Daily run daje wszystkim graczom te same labirynty przez cały dzień."
+        },
+        {
+          "q": "Czy mogę wyzwać znajomego?",
+          "a": "Tak. Po biegu naciśnij Challenge a friend, aby udostępnić link ze swoim wynikiem. Znajomy zagra dokładnie w te same labirynty i zobaczy, czy cię pokonał."
+        },
+        {
+          "q": "Czy mogę grać dalej, gdy skończy się czas?",
+          "a": "Raz na bieg możesz obejrzeć krótką reklamę, aby dodać dwadzieścia sekund do zegara i grać dalej z obecnym wynikiem i labiryntem. Zachowaj ją na bieg bliski twojemu rekordowi."
+        },
+        {
+          "q": "Czy MAZEQUAKE jest darmowy i działa na telefonie?",
+          "a": "MAZEQUAKE jest całkowicie darmowy, nie wymaga pobierania ani konta i działa w przeglądarce na telefonach, tabletach i komputerach. Został zaprojektowany przede wszystkim z myślą o ekranach dotykowych, ze sterowaniem jednym palcem i opcjonalnym trybem żyroskopu. Załóż darmowe konto Ragequit Arcade, jeśli chcesz zobaczyć swoje imię w rankingu."
+        }
+      ]
+    }
   }
 }
