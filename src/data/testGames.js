@@ -78,7 +78,7 @@ export const testGames = [
     orientation: 'portrait',
     file: '/games/voltlink.html',
     notes: 'Canvas 2D. Score VOLTLINK_SCORE, modes classic / hard / daily. Pub revive (+15 s, +12 s en Hard, glitches effacés) une fois par partie. Tactile/souris : glisser d\'un nœud à l\'autre (orthogonal), revenir en arrière pour annuler ; clavier : flèches/WASD/ZQSD + Espace ou Entrée pour commencer/valider un lien, P pause. Défi ami par lien (vl_seed).',
-    pr: 0,
+    pr: 29,
     extras: [
       { label: 'Prompt miniature 1:1 (Gemini, 1024x1024)', text: 'Close-up of a glowing neon puzzle board seen slightly from above, rows of luminous gem-like nodes in electric yellow circles, ultraviolet diamonds, mint green triangles, coral red squares and sky blue hexagons, a thick crackling lightning chain linking a closed loop of yellow nodes, white sparks and electric arcs bursting out, a menacing red cyclops core block with a glowing eye embedded in the grid, a rainbow prism gem spinning, dark indigo background with soft violet haze and a faint grid, synthwave arcade style, high contrast, dramatic bloom, no text, no letters, no logo.' },
       { label: 'Prompt image de blog 16:9 (Gemini, 1376x768)', text: 'Wide cinematic view of a floating neon puzzle grid hovering in a dark indigo void, glowing nodes in electric yellow, ultraviolet purple, mint green, coral red and sky blue, a huge electric surge shockwave expanding from a closed loop of linked nodes, lightning bolts arcing between them, glitchy magenta static blocks breaking apart into pixels, a red cyclops overload core block cracking under the blast, sparkles and light streaks everywhere, deep violet fog and strong bloom, synthwave arcade atmosphere, no text, no letters, no logo.' },
