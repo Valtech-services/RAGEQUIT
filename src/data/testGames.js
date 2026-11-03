@@ -69,4 +69,20 @@ export const testGames = [
       { label: 'Prompt logo du jeu (Gemini, 1:1, palette propre au jeu)', text: 'Game logo wordmark reading exactly "SHOVEDOWN" in massive, heavy, wide capital letters leaning forward as if charging, the letters slightly squashed and cracked like a sumo impact, a round shockwave burst behind the O, color palette molten gold and crimson red with a black chrome outline, metallic bevel and hot glow, centered on a plain pure black background, crisp vector style, high contrast, no other text, no mascot, square 1:1 1024x1024.' },
     ],
   },
+  {
+    id: 'voltlink',
+    title: 'VOLTLINK',
+    description: 'Puzzle néon contre la montre : relie au doigt les nœuds de même couleur, ferme une boucle pour faire exploser toute la couleur, et abats l\'Overload Core qui vide ton chrono.',
+    thumbnail: '/thumbnails/voltlink.jpg',
+    category: 'puzzle',
+    orientation: 'portrait',
+    file: '/games/voltlink.html',
+    notes: 'Canvas 2D. Score VOLTLINK_SCORE, modes classic / hard / daily. Pub revive (+15 s, +12 s en Hard, glitches effacés) une fois par partie. Tactile/souris : glisser d\'un nœud à l\'autre (orthogonal), revenir en arrière pour annuler ; clavier : flèches/WASD/ZQSD + Espace ou Entrée pour commencer/valider un lien, P pause. Défi ami par lien (vl_seed).',
+    pr: 29,
+    extras: [
+      { label: 'Prompt miniature 1:1 (Gemini, 1024x1024)', text: 'Close-up of a glowing neon puzzle board seen slightly from above, rows of luminous gem-like nodes in electric yellow circles, ultraviolet diamonds, mint green triangles, coral red squares and sky blue hexagons, a thick crackling lightning chain linking a closed loop of yellow nodes, white sparks and electric arcs bursting out, a menacing red cyclops core block with a glowing eye embedded in the grid, a rainbow prism gem spinning, dark indigo background with soft violet haze and a faint grid, synthwave arcade style, high contrast, dramatic bloom, no text, no letters, no logo.' },
+      { label: 'Prompt image de blog 16:9 (Gemini, 1376x768)', text: 'Wide cinematic view of a floating neon puzzle grid hovering in a dark indigo void, glowing nodes in electric yellow, ultraviolet purple, mint green, coral red and sky blue, a huge electric surge shockwave expanding from a closed loop of linked nodes, lightning bolts arcing between them, glitchy magenta static blocks breaking apart into pixels, a red cyclops overload core block cracking under the blast, sparkles and light streaks everywhere, deep violet fog and strong bloom, synthwave arcade atmosphere, no text, no letters, no logo.' },
+      { label: 'Prompt logo du jeu (Gemini, 1:1, palette propre au jeu)', text: 'Game logo wordmark reading exactly "VOLTLINK" in bold, rounded, heavy capital letters where each letter is a glowing node connected to the next by a crackling lightning wire, the O drawn as a closed electric loop, color palette electric yellow and ultraviolet purple with a deep navy outline, glossy neon tubes with a soft electric glow, centered on a plain pure black background, crisp vector style, high contrast, no other text, no mascot, square 1:1 1024x1024.' },
+    ],
+  },
 ]
