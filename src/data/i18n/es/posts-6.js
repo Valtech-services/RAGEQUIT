@@ -164,5 +164,87 @@ export default {
         "text": "Dibuja bucles compactos, atrapa varios objetivos a la vez, mantén el ritmo y no toques nunca una mina. Abre LOOPSTRIKE, atrapa tu primer núcleo y descubre cuántos puedes cazar en un solo bucle."
       }
     ]
+  },
+  "mazequake-tips": {
+    "title": "MAZEQUAKE: cómo salir de laberintos cada vez más grandes antes de que se acabe el tiempo",
+    "excerpt": "MAZEQUAKE te da 45 segundos para sacar una bola robot de un laberinto de neón y luego te da uno más grande. Así se inclina con precisión, se recarga el reloj, se evitan agujeros y láseres y se llega al laberinto 12 y más allá.",
+    "seo": {
+      "title": "Trucos de MAZEQUAKE: control de inclinación, cristales de tiempo, agujeros, láseres y power-ups | Ragequit Arcade",
+      "metaDescription": "Guía de trucos de MAZEQUAKE, el juego gratis de laberinto 3D para inclinar: controla la bola, gana tiempo, evita agujeros y láseres y usa RADAR, PHASE y FREEZE."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "MAZEQUAKE parece un laberinto de bola clásico: inclinas el tablero, la bola rueda, buscas la salida. Pero el reloj nunca se detiene, y cada salida abre un laberinto más grande con menos margen. Los jugadores que llegan al laberinto 12 y más allá no son los más rápidos, son los más precisos. Así juegan."
+      },
+      {
+        "type": "h2",
+        "text": "Inclina con movimientos pequeños"
+      },
+      {
+        "type": "p",
+        "text": "La bola robot tiene peso e inercia de verdad. Una inclinación fuerte la lanza contra una pared, donde rebota y pierdes tiempo. Usa movimientos de pulgar cortos y suaves, y empieza a frenar antes de cada curva, no en ella. Si juegas con el giroscopio, sujeta el teléfono plano y haz pequeños movimientos de muñeca: el laberinto reacciona a cada grado."
+      },
+      {
+        "type": "h2",
+        "text": "Lee el laberinto antes de rodar"
+      },
+      {
+        "type": "p",
+        "text": "Cada laberinto te da un breve momento antes de que la bola se mueva. Aprovéchalo para ver dónde está el portal de salida y trazar la ruta mentalmente. Los callejones sin salida son la mayor pérdida de tiempo del juego, sobre todo en los laberintos grandes. Un segundo de observación al inicio suele ahorrarte cinco segundos de vagar."
+      },
+      {
+        "type": "h2",
+        "text": "Recarga el reloj"
+      },
+      {
+        "type": "p",
+        "text": "El tiempo es tu verdadera puntuación. Cada laberinto superado te devuelve segundos, y cuanto más grande es, más recuperas. En Classic, cada laberinto tiene además cristales cian que valen cuatro segundos cada uno. Recoge los que están en tu ruta o cerca, pero no hagas un gran desvío por un solo cristal: un cristal que cuesta seis segundos alcanzar te hace perder tiempo."
+      },
+      {
+        "type": "h2",
+        "text": "Respeta los agujeros y los láseres"
+      },
+      {
+        "type": "p",
+        "text": "Desde el laberinto 3 se abren en el suelo agujeros con un borde rojo brillante. Caer cuesta seis segundos y te devuelve al inicio, así que frena cerca de ellos y pasa por el lado opuesto del pasillo. Desde el laberinto 5, barreras láser rojas parpadean. Nunca te lances contra un rayo: observa su ritmo, detente justo antes y pasa en cuanto se apague."
+      },
+      {
+        "type": "h2",
+        "text": "Usa los power-ups en el momento justo"
+      },
+      {
+        "type": "p",
+        "text": "RADAR dibuja el camino más corto hasta la salida, lo que lo hace valiosísimo en los laberintos grandes. PHASE te deja rodar sobre los agujeros y a través de los láseres sin daño, para tomar la línea directa. MAGNET atrae hacia ti los cristales y monedas cercanos sin ningún desvío. FREEZE detiene el reloj: sigue a toda velocidad mientras dure."
+      },
+      {
+        "type": "h2",
+        "text": "Busca el bonus de velocidad"
+      },
+      {
+        "type": "p",
+        "text": "Cada laberinto da más puntos cuanto más avanzas, y llegar rápido a la salida suma un bonus de velocidad. Las monedas doradas añaden un poco más. La mejor forma de puntuar alto no es recogerlo todo, sino superar el máximo de laberintos: una partida que llega al laberinto 12 vale mucho más que una partida lenta y perfecta que se queda en el laberinto 6."
+      },
+      {
+        "type": "h2",
+        "text": "Elige el modo adecuado"
+      },
+      {
+        "type": "p",
+        "text": "Classic es el lugar para aprender los controles y los peligros. El modo Hard es otro juego: un suelo de hielo que hace deslizar la bola, solo 35 segundos, agujeros y láseres desde el primer laberinto y ningún cristal, pero una puntuación multiplicada por 1,5 y su propia clasificación. El Daily run da a todos los mismos laberintos del día, la forma más justa de comparar puntuaciones. Después de cada partida, envía un enlace de desafío para que un amigo juegue exactamente los mismos laberintos."
+      },
+      {
+        "type": "h2",
+        "text": "Guarda tu segunda oportunidad"
+      },
+      {
+        "type": "p",
+        "text": "Una vez por partida puedes ver un anuncio corto para sumar veinte segundos al reloj. No lo gastes en los primeros laberintos, donde reiniciar no cuesta nada. Guárdalo para la partida en la que ya estás muy dentro de los laberintos y cerca de tu récord."
+      },
+      {
+        "type": "p",
+        "text": "Inclina con suavidad, planifica tu ruta, recarga el reloj y nunca te lances contra un láser. Abre MAZEQUAKE, sal de tu primer laberinto y descubre hasta dónde llegas antes de que se acabe el tiempo."
+      }
+    ]
   }
 }

@@ -150,5 +150,55 @@ export default {
         }
       ]
     }
+  },
+  "mazequake": {
+    "description": "MAZEQUAKE es un juego gratuito de laberinto 3D que se inclina, donde tu verdadero enemigo es el reloj. Un pequeño robot está dentro de una bola de cristal a la entrada de un laberinto de neón, y tú inclinas todo el tablero para hacerla rodar hasta el portal de salida. Empiezas con 45 segundos. Cada laberinto que superas te devuelve tiempo y te lleva directamente al siguiente, que siempre es un poco más grande que el anterior. Sin descargas y sin registro: el juego se abre al instante en tu navegador, en móvil, tableta y ordenador. En el móvil basta con deslizar el dedo en cualquier parte de la pantalla: aparece un joystick virtual flotante bajo tu pulgar y puedes inclinar el laberinto en cualquier dirección con un solo dedo. También puedes activar la inclinación por giroscopio en el menú y dirigir inclinando de verdad el teléfono, como un laberinto de bola clásico. En el ordenador, usa las flechas, WASD o ZQSD, y P para pausar. La bola tiene peso e inercia, así que todo está en el tacto: pequeñas inclinaciones precisas te llevan por los pasillos estrechos, mientras que los movimientos bruscos te hacen rebotar contra las paredes y perder segundos valiosos. Cada laberinto está lleno de cosas que recoger y peligros que evitar. Los cristales de tiempo cian suman cuatro segundos al reloj y las monedas doradas dan puntos. Desde el laberinto 3 se abren en el suelo agujeros negros con un borde rojo brillante: si caes, pierdes seis segundos y vuelves al inicio. Desde el laberinto 5, barreras láser rojas se encienden y se apagan a lo ancho de los pasillos, y tocar un rayo activo te cuesta cuatro segundos. Los power-ups aparecen desde el laberinto 2 para salvar una partida difícil. RADAR dibuja el camino más corto hasta la salida, MAGNET atrae hacia ti los cristales y monedas cercanos, PHASE te deja rodar sin peligro sobre los agujeros y a través de los láseres, y FREEZE detiene el reloj unos segundos. Tu puntuación crece con cada laberinto superado, y cuanto antes llegues a la salida, mayor es el bonus de velocidad. Hay tres formas de jugar. Classic es la partida estándar, con cristales de tiempo y power-ups. El modo Hard empieza con solo 35 segundos, te pone sobre un suelo de hielo resbaladizo, abre agujeros y láseres desde el primer laberinto y elimina todos los cristales, pero multiplica tu puntuación por 1,5 y tiene su propia clasificación. El Daily run da a todos los jugadores exactamente los mismos laberintos durante todo el día. Después de una partida puedes enviar un enlace de desafío para que un amigo juegue los mismos laberintos e intente superar tu puntuación. Una vez por partida puedes ver un anuncio corto para ganar veinte segundos y seguir jugando. Cada movimiento se siente vivo: las paredes de neón brillan, saltan chispas en cada golpe, la pantalla tiembla cuando caes en un agujero y cada laberinto tiene su propio color de neón. Abre MAZEQUAKE, inclina el tablero y descubre cuántos laberintos puedes superar antes de que se acabe el tiempo.",
+    "controls": "Desliza el dedo en cualquier parte de la pantalla para inclinar el laberinto con el joystick virtual flotante, o activa la inclinación por giroscopio en el menú e inclina tu teléfono. Con teclado, usa las flechas, WASD o ZQSD, y P para pausar. Haz rodar la bola robot hasta el portal de salida antes de que el reloj llegue a cero, recoge los cristales cian para ganar tiempo y evita los agujeros y los láseres rojos.",
+    "seo": {
+      "title": "MAZEQUAKE - Juego de laberinto 3D para inclinar gratis | Ragequit Arcade",
+      "metaDescription": "Juega gratis a MAZEQUAKE: inclina un laberinto de neón 3D, lleva la bola robot a la salida antes de que acabe el tiempo y esquiva agujeros y láseres. Móvil y giroscopio.",
+      "faq": [
+        {
+          "q": "¿Cómo se juega a MAZEQUAKE?",
+          "a": "Inclinas un laberinto de neón en 3D para hacer rodar un pequeño robot dentro de una bola de cristal hasta el portal de salida. Desliza el dedo en cualquier parte de la pantalla, usa las flechas o inclina el teléfono con la opción de giroscopio. Llega a la salida antes de que el reloj marque cero: cada laberinto superado te devuelve tiempo y abre uno más grande."
+        },
+        {
+          "q": "¿Cuánto tiempo tengo?",
+          "a": "Una partida Classic empieza con 45 segundos. Superar un laberinto suma tiempo, y cuanto más grande es, más recuperas. Cada cristal cian suma cuatro segundos más, y el power-up FREEZE detiene el reloj unos segundos. En el modo Hard empiezas con solo 35 segundos."
+        },
+        {
+          "q": "¿Puedo controlar el laberinto con el giroscopio del móvil?",
+          "a": "Sí. Activa Gyro tilt en el menú y el laberinto seguirá la inclinación de tu teléfono, como un laberinto de bola de verdad. Si lo prefieres, déjalo desactivado y desliza el dedo en cualquier parte de la pantalla: aparece un joystick virtual flotante bajo tu pulgar."
+        },
+        {
+          "q": "¿Qué son los agujeros y los láseres?",
+          "a": "Los agujeros son pozos negros con un borde rojo brillante que aparecen desde el laberinto 3. Caer en uno cuesta seis segundos y te devuelve al inicio. Las barreras láser rojas aparecen desde el laberinto 5 y se encienden y apagan a lo ancho de los pasillos: tocar un rayo activo cuesta cuatro segundos, así que espera a que se apague."
+        },
+        {
+          "q": "¿Qué hacen los power-ups?",
+          "a": "Los power-ups aparecen desde el laberinto 2. RADAR muestra el camino más corto hasta la salida, MAGNET atrae hacia ti los cristales y monedas cercanos, PHASE te permite rodar sin peligro sobre los agujeros y a través de los láseres, y FREEZE detiene el reloj unos segundos. Rueda sobre un power-up para activarlo."
+        },
+        {
+          "q": "¿Cómo se calcula la puntuación?",
+          "a": "Cada laberinto superado da puntos que aumentan con su número, más un bonus de velocidad si llegas rápido a la salida. Las monedas doradas suman puntos extra. En el modo Hard, cada puntuación se multiplica por 1,5."
+        },
+        {
+          "q": "¿Qué diferencia hay entre Classic, Hard y Daily?",
+          "a": "Classic es la partida estándar, con cristales y power-ups. El modo Hard te pone sobre un suelo de hielo resbaladizo con solo 35 segundos, agujeros y láseres desde el primer laberinto y ningún cristal, a cambio de una puntuación multiplicada por 1,5 y su propia clasificación. El Daily run da a todos los jugadores los mismos laberintos durante todo el día."
+        },
+        {
+          "q": "¿Puedo desafiar a un amigo?",
+          "a": "Sí. Después de una partida, pulsa Challenge a friend para compartir un enlace con tu puntuación. Tu amigo juega exactamente los mismos laberintos y ve si te ha superado."
+        },
+        {
+          "q": "¿Puedo continuar cuando se acaba el tiempo?",
+          "a": "Una vez por partida puedes ver un anuncio corto para sumar veinte segundos al reloj y seguir jugando con tu puntuación y tu laberinto actuales. Guárdalo para una partida cercana a tu récord."
+        },
+        {
+          "q": "¿MAZEQUAKE es gratis y se puede jugar en el móvil?",
+          "a": "MAZEQUAKE es totalmente gratis, no necesita descarga ni cuenta y funciona en tu navegador en móviles, tabletas y ordenadores. Está pensado primero para pantallas táctiles, con controles de un solo dedo y un modo giroscopio opcional. Crea una cuenta gratuita de Ragequit Arcade si quieres ver tu nombre en la clasificación."
+        }
+      ]
+    }
   }
 }

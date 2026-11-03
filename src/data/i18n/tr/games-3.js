@@ -150,5 +150,55 @@ export default {
         }
       ]
     }
+  },
+  "mazequake": {
+    "description": "MAZEQUAKE, asıl düşmanın saat olduğu ücretsiz bir 3D eğme labirent oyunudur. Küçük bir robot, parlayan neon bir labirentin girişinde cam bir topun içinde durur ve sen onu çıkış portalına kadar yuvarlamak için bütün tahtayı eğersin. 45 saniyeyle başlarsın. Bitirdiğin her labirent sana süre kazandırır ve seni hemen bir sonrakine götürür; bir sonraki her zaman öncekinden biraz daha büyüktür. İndirme yok, kayıt yok: oyun telefonda, tablette ve bilgisayarda tarayıcında anında açılır. Telefonda ekranın herhangi bir yerinde parmağını kaydırman yeterli: başparmağının altında yüzen bir sanal çubuk belirir ve labirenti tek parmakla her yöne eğersin. Menüden jiroskopla eğmeyi de açabilir ve klasik bir bilyeli labirent gibi telefonunu gerçekten eğerek yönlendirebilirsin. Bilgisayarda ok tuşlarını, WASD veya ZQSD'yi, duraklatmak için P'yi kullan. Topun ağırlığı ve ataleti var, bu yüzden her şey hissiyatta: küçük ve hassas eğimler seni dar koridorlardan geçirir, büyük hareketler ise duvarlara çarpıp sekmene ve değerli saniyeler kaybetmene yol açar. Her labirent toplanacak şeylerle ve kaçınılacak tehlikelerle doludur. Camgöbeği zaman kristalleri saate dört saniye ekler, altın paralar puan kazandırır. Labirent 3'ten itibaren zeminde kırmızı parlayan kenarlı siyah çukurlar açılır: düşersen altı saniye kaybeder ve başa dönersin. Labirent 5'ten itibaren kırmızı lazer kapıları koridorların ortasında yanıp söner ve aktif bir ışına dokunmak dört saniyeye mal olur. Zor bir koşuyu kurtarmak için labirent 2'den itibaren güçlendirmeler çıkar. RADAR çıkışa giden en kısa yolu çizer, MAGNET yakındaki kristalleri ve paraları sana çeker, PHASE çukurların üzerinden ve lazerlerin içinden güvenle geçmeni sağlar, FREEZE ise saati birkaç saniye durdurur. Puanın bitirdiğin her labirentle artar ve çıkışa ne kadar hızlı ulaşırsan hız bonusu o kadar büyük olur. Üç oyun biçimi var. Classic, zaman kristalleri ve güçlendirmelerle standart koşudur. Hard modu sadece 35 saniyeyle başlar, seni kaygan bir buz zemine koyar, çukurları ve lazerleri ilk labirentten açar ve tüm kristalleri kaldırır, ama puanını 1,5 ile çarpar ve kendi sıralaması vardır. Daily run, tüm oyunculara gün boyunca tamamen aynı labirentleri verir. Bir koşudan sonra bir meydan okuma bağlantısı gönderebilirsin; böylece bir arkadaşın aynı labirentleri oynar ve puanını geçmeye çalışır. Her koşuda bir kez kısa bir reklam izleyerek yirmi saniye kazanıp devam edebilirsin. Her hareket canlı hissettirir: neon duvarlar parlar, her çarpışmada kıvılcımlar saçılır, bir çukura düştüğünde ekran sarsılır ve her labirentin kendi neon rengi vardır. MAZEQUAKE'i aç, tahtayı eğ ve süre bitmeden kaç labirentten kaçabileceğini gör.",
+    "controls": "Yüzen sanal çubukla labirenti eğmek için ekranın herhangi bir yerinde parmağını kaydır ya da menüden jiroskopla eğmeyi açıp telefonunu eğ. Klavyede ok tuşlarını, WASD veya ZQSD'yi, duraklatmak için P'yi kullan. Saat sıfıra inmeden robot topu çıkış portalına yuvarla, ek süre için camgöbeği kristalleri topla, çukurlardan ve kırmızı lazerlerden kaçın.",
+    "seo": {
+      "title": "MAZEQUAKE - Ücretsiz 3D Eğme Labirent Oyunu | Ragequit Arcade",
+      "metaDescription": "MAZEQUAKE'i ücretsiz oyna: neon 3D labirenti eğ, süre bitmeden robot topu çıkışa ulaştır, çukurlardan ve lazerlerden kaç. Mobil ve jiroskop desteği, indirme yok.",
+      "faq": [
+        {
+          "q": "MAZEQUAKE nasıl oynanır?",
+          "a": "Cam bir topun içindeki küçük bir robotu çıkış portalına yuvarlamak için neon bir 3D labirenti eğersin. Ekranın herhangi bir yerinde parmağını kaydır, ok tuşlarını kullan ya da jiroskop seçeneğiyle telefonunu eğ. Saat sıfıra inmeden çıkışa ulaş: bitirdiğin her labirent sana süre kazandırır ve daha büyük bir labirent açar."
+        },
+        {
+          "q": "Ne kadar sürem var?",
+          "a": "Bir Classic koşusu 45 saniyeyle başlar. Bir labirenti bitirmek süre ekler ve labirent ne kadar büyükse o kadar çok geri kazanırsın. Her camgöbeği kristal dört saniye daha ekler, FREEZE güçlendirmesi de saati birkaç saniye durdurur. Hard modunda sadece 35 saniyeyle başlarsın."
+        },
+        {
+          "q": "Labirenti telefonumun jiroskopuyla kontrol edebilir miyim?",
+          "a": "Evet. Menüden Gyro tilt'i aç; labirent, gerçek bir bilyeli labirent gibi telefonunun eğimini takip eder. İstersen kapalı bırak ve ekranın herhangi bir yerinde parmağını kaydır: başparmağının altında yüzen bir sanal çubuk belirir."
+        },
+        {
+          "q": "Çukurlar ve lazerler nedir?",
+          "a": "Çukurlar, labirent 3'ten itibaren çıkan, kırmızı parlayan kenarlı siyah kuyulardır. Birine düşmek altı saniyeye mal olur ve seni başa gönderir. Kırmızı lazer kapıları labirent 5'ten itibaren çıkar ve koridorların ortasında yanıp söner: aktif bir ışına dokunmak dört saniyeye mal olur, bu yüzden sönmesini bekle."
+        },
+        {
+          "q": "Güçlendirmeler ne işe yarar?",
+          "a": "Güçlendirmeler labirent 2'den itibaren çıkar. RADAR çıkışa giden en kısa yolu gösterir, MAGNET yakındaki kristalleri ve paraları sana çeker, PHASE çukurların üzerinden ve lazerlerin içinden güvenle geçmeni sağlar, FREEZE de saati birkaç saniye durdurur. Etkinleştirmek için bir güçlendirmenin üzerinden yuvarlan."
+        },
+        {
+          "q": "Puan nasıl hesaplanır?",
+          "a": "Bitirdiğin her labirent, labirent numarasıyla artan puanlar verir; çıkışa hızlı ulaşırsan bir de hız bonusu eklenir. Altın paralar ek puan kazandırır. Hard modunda her puan 1,5 ile çarpılır."
+        },
+        {
+          "q": "Classic, Hard ve Daily arasındaki fark nedir?",
+          "a": "Classic, kristaller ve güçlendirmelerle standart koşudur. Hard modu seni sadece 35 saniyeyle kaygan bir buz zemine koyar, ilk labirentten itibaren çukurlar ve lazerler vardır ve hiç kristal yoktur; karşılığında puanın 1,5 ile çarpılır ve kendi sıralaması vardır. Daily run tüm oyunculara gün boyunca aynı labirentleri verir."
+        },
+        {
+          "q": "Bir arkadaşıma meydan okuyabilir miyim?",
+          "a": "Evet. Bir koşudan sonra puanını içeren bir bağlantı paylaşmak için Challenge a friend'e bas. Arkadaşın tamamen aynı labirentleri oynar ve seni geçip geçmediğini görür."
+        },
+        {
+          "q": "Süre bitince devam edebilir miyim?",
+          "a": "Her koşuda bir kez kısa bir reklam izleyerek saate yirmi saniye ekleyebilir ve mevcut puanın ve labirentinle oynamaya devam edebilirsin. Bunu rekoruna yakın bir koşu için sakla."
+        },
+        {
+          "q": "MAZEQUAKE ücretsiz mi, mobilde oynanabilir mi?",
+          "a": "MAZEQUAKE tamamen ücretsizdir, indirme ya da hesap gerektirmez ve telefon, tablet ve bilgisayarda tarayıcıda çalışır. Öncelikle dokunmatik ekranlar için tasarlandı; tek parmakla kontrol ve isteğe bağlı jiroskop modu sunar. Adını sıralamada görmek istersen ücretsiz bir Ragequit Arcade hesabı oluştur."
+        }
+      ]
+    }
   }
 }

@@ -164,5 +164,87 @@ export default {
         "text": "Desenhe laços compactos, pegue vários alvos de uma vez, mantenha o ritmo e nunca toque numa mina. Abra o LOOPSTRIKE, prenda o seu primeiro núcleo e veja quantos consegue pegar num só laço."
       }
     ]
+  },
+  "mazequake-tips": {
+    "title": "MAZEQUAKE: como escapar de labirintos cada vez maiores antes de o tempo acabar",
+    "excerpt": "MAZEQUAKE dá 45 segundos para tirar uma bola-robô de um labirinto neon e depois entrega um maior. Veja como inclinar com precisão, recarregar o relógio, evitar buracos e lasers e chegar ao labirinto 12 e além.",
+    "seo": {
+      "title": "Dicas de MAZEQUAKE: controle da inclinação, cristais de tempo, buracos, lasers e power-ups | Ragequit Arcade",
+      "metaDescription": "Guia de dicas de MAZEQUAKE, o jogo grátis de labirinto 3D para inclinar: controle a bola, ganhe tempo, evite buracos e lasers e use RADAR, PHASE e FREEZE."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "MAZEQUAKE parece um labirinto de bolinha clássico: inclina o tabuleiro, a bola rola, você procura a saída. Mas o relógio nunca para, e cada saída abre um labirinto maior com menos margem. Os jogadores que chegam ao labirinto 12 e além não são os mais rápidos, são os mais precisos. Veja como eles jogam."
+      },
+      {
+        "type": "h2",
+        "text": "Incline com movimentos pequenos"
+      },
+      {
+        "type": "p",
+        "text": "A bola-robô tem peso e impulso de verdade. Uma inclinação forte joga a bola contra uma parede, onde ela quica e você perde tempo. Use movimentos curtos e leves do polegar e comece a frear antes de cada curva, não durante. Se jogar com o giroscópio, segure o celular na horizontal e faça pequenos movimentos de pulso: o labirinto reage a cada grau."
+      },
+      {
+        "type": "h2",
+        "text": "Leia o labirinto antes de rolar"
+      },
+      {
+        "type": "p",
+        "text": "Cada labirinto dá um breve momento antes de a bola começar a se mover. Aproveite para ver onde está o portal de saída e traçar o caminho na cabeça. Os becos sem saída são a maior perda de tempo do jogo, principalmente nos labirintos grandes. Um segundo de observação no início costuma economizar cinco segundos de vagar."
+      },
+      {
+        "type": "h2",
+        "text": "Recarregue o relógio"
+      },
+      {
+        "type": "p",
+        "text": "O tempo é a sua verdadeira pontuação. Cada labirinto concluído devolve segundos, e quanto maior ele for, mais você recupera. No Classic, cada labirinto também tem cristais ciano que valem quatro segundos cada. Pegue os que estão no seu caminho ou perto dele, mas não faça um grande desvio por um único cristal: um cristal que custa seis segundos para alcançar faz você perder tempo."
+      },
+      {
+        "type": "h2",
+        "text": "Respeite os buracos e os lasers"
+      },
+      {
+        "type": "p",
+        "text": "A partir do labirinto 3, buracos com borda vermelha brilhante se abrem no chão. Cair custa seis segundos e manda você de volta ao início, então desacelere perto deles e passe pelo lado oposto do corredor. A partir do labirinto 5, barreiras de laser vermelhas piscam. Nunca se jogue contra um raio: observe o ritmo, pare logo antes e passe assim que ele apagar."
+      },
+      {
+        "type": "h2",
+        "text": "Use os power-ups na hora certa"
+      },
+      {
+        "type": "p",
+        "text": "RADAR desenha o caminho mais curto até a saída, o que o torna valiosíssimo nos labirintos grandes. PHASE permite rolar sobre buracos e através de lasers sem dano, para pegar a linha reta. MAGNET puxa para você os cristais e moedas próximos sem nenhum desvio. FREEZE para o relógio: continue em velocidade máxima enquanto ele durar."
+      },
+      {
+        "type": "h2",
+        "text": "Busque o bônus de velocidade"
+      },
+      {
+        "type": "p",
+        "text": "Cada labirinto dá mais pontos conforme você avança, e chegar rápido à saída soma um bônus de velocidade. As moedas douradas acrescentam um pouco mais. A melhor forma de pontuar alto não é pegar tudo, mas concluir o máximo de labirintos: uma partida que chega ao labirinto 12 vale muito mais do que uma partida lenta e perfeita que para no labirinto 6."
+      },
+      {
+        "type": "h2",
+        "text": "Escolha o modo certo"
+      },
+      {
+        "type": "p",
+        "text": "Classic é o lugar para aprender os controles e os perigos. O modo Hard é outro jogo: um chão de gelo que faz a bola deslizar, apenas 35 segundos, buracos e lasers desde o primeiro labirinto e nenhum cristal, mas uma pontuação multiplicada por 1,5 e ranking próprio. O Daily run dá a todos os mesmos labirintos do dia, a forma mais justa de comparar pontuações. Depois de cada partida, envie um link de desafio para que um amigo jogue exatamente os mesmos labirintos."
+      },
+      {
+        "type": "h2",
+        "text": "Guarde sua segunda chance"
+      },
+      {
+        "type": "p",
+        "text": "Uma vez por partida, você pode assistir a um anúncio curto para somar vinte segundos ao relógio. Não gaste isso nos primeiros labirintos, onde recomeçar não custa nada. Guarde para a partida em que você já está longe nos labirintos e perto do seu recorde."
+      },
+      {
+        "type": "p",
+        "text": "Incline com suavidade, planeje o caminho, recarregue o relógio e nunca se jogue contra um laser. Abra o MAZEQUAKE, escape do seu primeiro labirinto e veja até onde você chega antes de o tempo acabar."
+      }
+    ]
   }
 }
