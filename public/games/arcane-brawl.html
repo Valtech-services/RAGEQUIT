@@ -22,6 +22,16 @@
     --text: #fff3e6;
     --dim: #b9a3b8;
     --panel: rgba(14,3,22,.97);
+    /* arcane palette (Tailwind indigo / violet / amber / rose / cyan scales) */
+    --a-night: #0f0a2e;
+    --a-indigo: #1e1b4b;
+    --a-royal: #4c1d95;
+    --a-violet: #7c3aed;
+    --a-lilac: #c4b5fd;
+    --a-gold: #fbbf24;
+    --a-gold-l: #fde68a;
+    --a-rose: #f43f5e;
+    --a-teal: #22d3ee;
     --dash: 92px;
     --pw: 60px;
     --arc: 84px;
@@ -103,15 +113,18 @@
   .overlay { position: fixed; inset: 0; z-index: 10; display: none; align-items: center; justify-content: center; padding: calc(14px + var(--safe-top)) calc(14px + var(--safe-right)) calc(14px + var(--safe-bottom)) calc(14px + var(--safe-left)); background: radial-gradient(ellipse at center, rgba(60,10,40,.4), rgba(10,2,20,.84)); }
   #menu { background: linear-gradient(180deg, rgba(10,2,20,0) 0%, rgba(10,2,20,.15) 35%, rgba(10,2,20,.85) 100%); align-items: flex-end; }
   .overlay.on { display: flex; animation: ovIn .3s ease-out both; }
-  .overlay.on > .panel { animation: panelIn .38s cubic-bezier(.2,1.4,.4,1) both; }
+  .overlay.on > .panel { animation: panelIn .35s cubic-bezier(.2,.8,.2,1) both; }
   @keyframes ovIn { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes panelIn { from { opacity: 0; transform: translateY(18px) scale(.95); } to { opacity: 1; transform: none; } }
-  .panel { position: relative; width: 100%; max-width: 400px; max-height: 100%; overflow-y: auto; text-align: center; padding: 20px 16px; border-radius: 20px; background: linear-gradient(160deg, rgba(50,10,40,.93), var(--panel)); border: 1px solid rgba(255,194,58,.4); box-shadow: 0 0 44px rgba(255,42,74,.22), inset 0 0 30px rgba(255,194,58,.05); overscroll-behavior: contain; touch-action: pan-y; }
+  @keyframes panelIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .panel { position: relative; width: 100%; max-width: 400px; max-height: 100%; overflow-y: auto; text-align: center; padding: 20px 16px; border-radius: 20px; background: radial-gradient(120% 70% at 50% 0%, rgba(124,58,237,.38), rgba(124,58,237,0) 60%), radial-gradient(90% 60% at 100% 100%, rgba(34,211,238,.14), rgba(34,211,238,0) 60%), linear-gradient(170deg, rgba(30,27,75,.95), rgba(15,10,46,.97)); border: 1px solid rgba(196,181,253,.38); box-shadow: 0 0 50px rgba(124,58,237,.35), inset 0 0 40px rgba(196,181,253,.06); overscroll-behavior: contain; touch-action: pan-y; }
   #menu .panel { margin: 0 auto; }
   .logo { font-size: 44px; font-weight: 900; letter-spacing: 1px; line-height: .95; display: inline-block; font-style: italic;
-    background: linear-gradient(180deg, #ffffff 0%, var(--cyan) 30%, var(--violet) 62%, var(--crimson) 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
-    filter: drop-shadow(0 0 14px rgba(164,92,255,.6)); animation: slam 2.6s ease-in-out infinite; }
-  @keyframes slam { 0%, 70%, 100% { transform: none; } 74% { transform: translateX(-10px) skewX(8deg); } 78% { transform: translateX(8px) skewX(-6deg) scale(1.04); } 82% { transform: translateX(-3px); } 86% { transform: none; } }
+    background: linear-gradient(100deg, #ffffff 0%, var(--a-lilac) 18%, var(--a-teal) 34%, #ffffff 46%, var(--a-violet) 60%, var(--a-gold) 82%, #ffffff 100%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 0 14px rgba(124,58,237,.75)) drop-shadow(0 2px 0 rgba(15,10,46,.9)); animation: shimmer 6s linear infinite; }
+  @keyframes shimmer { from { background-position: 0% 0; } to { background-position: 220% 0; } }
+  .crest { position: relative; display: inline-block; padding: 14px 18px 6px; }
+  .crest svg.runes { position: absolute; left: 50%; top: 50%; width: 220px; height: 220px; margin: -110px 0 0 -110px; opacity: .35; animation: spin 80s linear infinite; pointer-events: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
   .tag { font-size: 13px; color: var(--dim); margin: 8px 0 12px; line-height: 1.4; }
   .profile { display: flex; align-items: center; gap: 10px; margin: 6px 0 10px; padding: 8px 10px; border-radius: 14px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); text-align: left; }
   .lvl { flex: none; width: 46px; height: 46px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(160deg, var(--violet), #4a1a8a); box-shadow: 0 0 14px rgba(164,92,255,.6); font-weight: 900; line-height: 1; }
@@ -134,17 +147,19 @@
   .research-mini b { color: #fff; }
   .rbar { height: 5px; border-radius: 9px; background: rgba(255,255,255,.1); overflow: hidden; margin-top: 5px; }
   .rbar i { display: block; height: 100%; background: linear-gradient(90deg, var(--violet), var(--cyan)); }
-  .btn { display: block; width: 100%; margin: 7px 0; padding: 13px 12px; border-radius: 14px; border: 0; font-size: 17px; font-weight: 900; letter-spacing: 1px; cursor: pointer; color: #2a0800; background: linear-gradient(90deg, var(--gold), #ffe7a0); box-shadow: 0 0 18px rgba(255,194,58,.45); transition: transform .12s, filter .2s; }
+  .btn { position: relative; overflow: hidden; display: block; width: 100%; margin: 7px 0; padding: 13px 12px; border-radius: 14px; border: 0; font-size: 17px; font-weight: 900; letter-spacing: 1px; cursor: pointer; color: #3a1500; background: linear-gradient(180deg, var(--a-gold-l), var(--a-gold) 55%, #f59e0b); box-shadow: 0 0 20px rgba(251,191,36,.45), inset 0 1px 0 rgba(255,255,255,.6); transition: transform .12s, filter .2s; }
+  .btn::after { content: ''; position: absolute; top: 0; bottom: 0; width: 40%; left: -60%; background: linear-gradient(100deg, rgba(255,255,255,0), rgba(255,255,255,.35), rgba(255,255,255,0)); transform: skewX(-20deg); animation: sweep 3.6s ease-in-out infinite; pointer-events: none; }
+  @keyframes sweep { 0%, 60% { left: -60%; } 100% { left: 130%; } }
   .btn small { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0; opacity: .78; margin-top: 2px; }
-  .btn.hard { background: linear-gradient(90deg, var(--crimson), #ff7a5a); color: #fff; box-shadow: 0 0 18px rgba(255,42,74,.45); }
-  .btn.arcane { background: linear-gradient(90deg, var(--violet), #ff5adc); color: #fff; box-shadow: 0 0 18px rgba(164,92,255,.5); }
+  .btn.hard { background: linear-gradient(180deg, #fb7185, var(--a-rose) 55%, #be123c); color: #fff; box-shadow: 0 0 18px rgba(244,63,94,.45), inset 0 1px 0 rgba(255,255,255,.35); }
+  .btn.arcane { background: linear-gradient(180deg, #a78bfa, var(--a-violet) 55%, #5b21b6); color: #fff; box-shadow: 0 0 20px rgba(124,58,237,.55), inset 0 1px 0 rgba(255,255,255,.35); }
   .btn.cyan { background: linear-gradient(90deg, var(--cyan), #a6fbff); color: #002a30; box-shadow: 0 0 18px rgba(42,240,255,.45); }
   .btn.ghost { background: transparent; color: var(--text); border: 1px solid rgba(255,243,230,.3); box-shadow: none; }
   .btn.small { padding: 9px 10px; font-size: 13px; margin: 0; width: auto; }
   .btn:active { transform: scale(.95); }
   .btn:disabled { filter: grayscale(.8) brightness(.6); cursor: default; }
   #btnPlay { animation: playPulse 1.6s ease-in-out infinite; }
-  @keyframes playPulse { 50% { box-shadow: 0 0 36px rgba(255,194,58,.95); transform: scale(1.015); } }
+  @keyframes playPulse { 50% { box-shadow: 0 0 34px rgba(251,191,36,.95), inset 0 1px 0 rgba(255,255,255,.6); } }
   .row { display: flex; gap: 8px; }
   .row .btn { flex: 1; }
   .dot { display: none; width: 9px; height: 9px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 8px var(--lime); vertical-align: middle; margin-left: 6px; }
@@ -234,7 +249,7 @@
     #menu .panel { max-width: 560px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .overlay.on, .overlay.on > .panel, .logo, #btnPlay, .tile, .newbest.on, .hud.on, #hint.on, #wipe.go, .bump, .act.ready, #levelUp.on { animation: none; opacity: 1; }
+    .overlay.on, .overlay.on > .panel, .logo, #btnPlay, .btn::after, .crest svg.runes, .tile, .newbest.on, .hud.on, #hint.on, #wipe.go, .bump, .act.ready, #levelUp.on { animation: none; opacity: 1; }
   }
 </style>
 </head>
@@ -277,8 +292,8 @@
 
 <div class="overlay" id="menu">
   <div class="panel">
-    <div class="logo">ARCANE BRAWL</div>
-    <div class="tag">Magic arena brawl on a floating ring. Shove skeletons, golems and the Dark Mage into the void. Earn coins, level up, unlock arcane powers.</div>
+    <div class="crest"><svg class="runes" viewBox="0 0 200 200"><g fill="none" stroke="#c4b5fd" stroke-width="1.2"><circle cx="100" cy="100" r="96"/><circle cx="100" cy="100" r="84" stroke-dasharray="3 6"/><circle cx="100" cy="100" r="70"/><path d="M100 4 L183 148 L17 148 Z M100 196 L17 52 L183 52 Z" opacity=".6"/></g><g fill="#fbbf24" stroke="#fbbf24" stroke-width=".8"><path transform="translate(100.0 10.0) rotate(0)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(163.6 36.4) rotate(45)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(190.0 100.0) rotate(90)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(163.6 163.6) rotate(135)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(100.0 190.0) rotate(180)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(36.4 163.6) rotate(225)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(10.0 100.0) rotate(270)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(36.4 36.4) rotate(315)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/></g></svg><div class="logo">ARCANE BRAWL</div></div>
+    <div class="tag">Magic arena brawl. You are the Paladin: shove skeletons, golems and the Dark Mage off the floating ring, earn coins, level up, master holy powers.</div>
     <div class="profile">
       <div class="lvl"><small>LV</small><b id="mLvl">1</b></div>
       <div class="xpwrap"><div class="row2"><span>XP</span><span id="mXp">0 / 60</span></div><div class="xpbar"><i id="mXpBar"></i></div></div>
@@ -399,7 +414,7 @@ const ENEMY = {
   rogue:    { model: 'rogue', tint: PAL.crimson, mass: 0.8, accel: 15, maxV: 7.0, dashEvery: 2.0, coins: 8, xp: 8, pts: 120, name: 'ROGUE' },
   warrior:  { model: 'warrior', tint: PAL.violet, mass: 2, accel: 11, maxV: 5.0, dashEvery: 4.5, coins: 12, xp: 12, pts: 200, name: 'WARRIOR' },
   mage:     { model: 'mage', tint: PAL.lime, mass: 0.9, accel: 11, maxV: 5.2, dashEvery: 99, coins: 8, xp: 10, pts: 150, name: 'MAGE' },
-  darkmage: { model: 'mage', tint: 0x8a3cff, mass: 3, accel: 12, maxV: 6.0, dashEvery: 99, coins: 150, xp: 120, pts: 1500, boss: true, name: 'DARK MAGE', color: 0xb46cff },
+  darkmage: { custom: 'darkmage', tint: 0x8a3cff, mass: 4, accel: 12, maxV: 6.0, dashEvery: 99, coins: 150, xp: 120, pts: 1500, boss: true, name: 'DARK MAGE', color: 0xb46cff },
   forest:   { golem: 'forest', mass: 5, accel: 8, maxV: 3.8, coins: 100, xp: 100, pts: 1200, boss: true, name: 'FOREST GOLEM', color: 0x7dff3a },
   fire:     { golem: 'fire',   mass: 5, accel: 8, maxV: 3.8, coins: 100, xp: 100, pts: 1200, boss: true, name: 'FIRE GOLEM', color: 0xff6a1a },
   ice:      { golem: 'ice',    mass: 5, accel: 8, maxV: 3.8, coins: 100, xp: 100, pts: 1200, boss: true, name: 'ICE GOLEM', color: 0x6ad8ff },
@@ -424,12 +439,15 @@ const POWERS = {
     desc: (l) => 'Leap forward and crash down. Impact radius ' + (1.8 + 0.3 * l).toFixed(1) + ', recharge ' + Math.round(12 - 1.2 * l) + ' s' }
 };
 const POWER_KEYS = ['shock', 'shield', 'slam'];
+// Paladin outfits: armor tint, cape colour, aura glow
 const OUTFITS = [
-  { id: 'cyan', name: 'ARCANE CYAN', lvl: 1, color: PAL.cyan },
-  { id: 'gold', name: 'GOLDEN CHAMP', lvl: 3, color: PAL.gold },
-  { id: 'crimson', name: 'BLOOD MOON', lvl: 6, color: PAL.crimson },
-  { id: 'violet', name: 'VOID KNIGHT', lvl: 9, color: PAL.violet },
-  { id: 'lime', name: 'TOXIC STORM', lvl: 12, color: PAL.lime }
+  { id: 'cyan', name: 'SILVER PALADIN', lvl: 1, color: PAL.cyan, armor: 0xdfe8ff, cape: 0x2456ff, metal: 0.85 },
+  { id: 'white', name: 'WHITE TEMPLAR', lvl: 2, color: 0xfff6e0, armor: 0xffffff, cape: 0xf4f0ff, metal: 0.55, bright: 1.5 },
+  { id: 'gold', name: 'GOLDEN CHAMPION', lvl: 3, color: PAL.gold, armor: 0xffd27a, cape: 0xc8102e, metal: 0.95 },
+  { id: 'crimson', name: 'BLOOD MOON', lvl: 6, color: PAL.crimson, armor: 0xff7a86, cape: 0x6a0010, metal: 0.8 },
+  { id: 'black', name: 'BLACK KNIGHT', lvl: 8, color: 0xff3a3a, armor: 0x2c2c38, cape: 0x0c0c12, metal: 0.95 },
+  { id: 'violet', name: 'VOID PALADIN', lvl: 10, color: PAL.violet, armor: 0xc8a8ff, cape: 0x4a14a0, metal: 0.85 },
+  { id: 'lime', name: 'EMERALD WARDEN', lvl: 12, color: PAL.lime, armor: 0xb8ffb0, cape: 0x0e6a3a, metal: 0.85 }
 ];
 const BONUS = {
   freeze: { name: 'FREEZE', color: PAL.ice, css: '#8fe3ff', dur: 3 },
@@ -537,7 +555,9 @@ function pStats() {
 }
 
 /* ================= LOADING ================= */
-const MODEL_NAMES = ['knight', 'minion', 'rogue', 'warrior', 'mage'];
+const MODEL_NAMES = ['knight', 'minion', 'rogue', 'warrior', 'mage', 'blade', 'shield', 'staff'];
+// measured standing height of each character model (posed), used to give every fighter its exact size
+const MODEL_H = { knight: 2.45, minion: 2.15, rogue: 2.29, warrior: 2.57, mage: 2.61 };
 const SOUND_NAMES = ['bump', 'smash', 'dash', 'fall', 'land', 'ko', 'titan', 'power', 'shield', 'shock', 'combo', 'wave', 'boss', 'cast', 'over',
   'coin', 'levelup', 'research', 'freeze', 'stomp', 'teleport', 'orb', 'buy', 'vine', 'lava'];
 const RAW = {};
@@ -825,7 +845,9 @@ const rockGeo = new THREE.ConeGeometry(R0 * 0.98, 9, 14, 4);
 const rock = new THREE.Mesh(rockGeo, rockMat);
 rock.rotation.x = Math.PI; rock.position.y = -0.55 - 4.5;
 scene.add(rock);
-const underGlow = makeGlow(0xff2a4a, 22, 0.35); underGlow.position.y = -4;
+// glow under the floating rock: a flat disc (a camera-facing sprite would cut through the ring top)
+const underGlow = new THREE.Mesh(new THREE.PlaneGeometry(26, 26), new THREE.MeshBasicMaterial({ map: GLOW, color: 0xff2a4a, transparent: true, opacity: 0.45, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }));
+underGlow.rotation.x = -Math.PI / 2; underGlow.position.y = -9.5;
 scene.add(underGlow);
 // four corner pillars with lanterns and neon tassels (cyan, crimson, white, violet)
 const pillars = [];
@@ -914,25 +936,46 @@ const auraGeo = new THREE.RingGeometry(0.78, 1, 40);
 const discGeo = new THREE.CircleGeometry(1, 32);
 const SHADOW = canvasTex(64, (g) => { const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(0,0,0,.65)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, 64, 64); });
 const shadowMat = new THREE.MeshBasicMaterial({ map: SHADOW, transparent: true, depthWrite: false });
-const VARIANTS = {};   // tinted material sets shared by every instance of a variant
-function prepVariant(key, model, tint, emissiveK, colorMul) {
+const VARIANTS = {};   // per-mesh material sets shared by every instance of a variant
+// Paladin: metallic armor tinted by the outfit, solid-colour cape, glowing blade, natural face
+function paladinMat(base, o, meshName, outfit) {
+  const m = base.clone();
+  if (/Cape/.test(meshName)) { m.map = null; m.color = new THREE.Color(outfit.cape); m.roughness = 0.75; m.metalness = 0; m.emissive = new THREE.Color(outfit.cape); m.emissiveIntensity = outfit.id === 'black' ? 0 : 0.12; }
+  else if (/Head$/.test(meshName)) { m.roughness = 0.7; }
+  else if (/Sword/.test(meshName)) { m.color = new THREE.Color(0xf4f8ff); m.metalness = 1; m.roughness = 0.12; m.emissive = new THREE.Color(outfit.color); m.emissiveMap = m.map; m.emissiveIntensity = 0.35; m.envMapIntensity = 2; }
+  else if (/Shield/.test(meshName)) { m.color = new THREE.Color(outfit.armor).multiplyScalar(outfit.bright || 1.15); m.metalness = outfit.metal; m.roughness = 0.28; m.emissive = new THREE.Color(outfit.color); m.emissiveMap = m.map; m.emissiveIntensity = 0.25; m.envMapIntensity = 1.5; }
+  else { m.color = new THREE.Color(outfit.armor).multiplyScalar(outfit.bright || 1.25); m.metalness = outfit.metal; m.roughness = 0.3; m.envMapIntensity = 1.6; m.emissive = new THREE.Color(outfit.color); m.emissiveMap = m.map; m.emissiveIntensity = 0.06; }
+  return m;
+}
+function prepVariant(key, model, matFor) {
   const g = MODELS[model];
   if (!g || VARIANTS[key]) return;
-  const map = new Map();
-  g.scene.traverse((o) => {
-    if (!o.isMesh || map.has(o.material)) return;
-    const m = o.material.clone();
-    if (m.name === 'Glow' || /eye/i.test(o.name)) { m.emissive = new THREE.Color(tint).multiplyScalar(3); m.color = new THREE.Color(tint); }
-    else { m.color = new THREE.Color(colorMul || 0xc8c0c8); m.emissive = new THREE.Color(tint); m.emissiveMap = m.map; m.emissiveIntensity = emissiveK; m.roughness = 0.6; }
-    map.set(o.material, m);
-  });
-  const box = new THREE.Box3().setFromObject(g.scene);
-  VARIANTS[key] = { model, map, h: (box.max.y - box.min.y) || 2, minY: box.min.y };
+  const mats = new Map();
+  g.scene.traverse((o) => { if (o.isMesh && !mats.has(o.name)) mats.set(o.name, matFor(o.material, o, o.name)); });
+  VARIANTS[key] = { model, mats, h: MODEL_H[model] || 2.4, minY: 0 };
 }
+function skeletonMat(tint, cape) {
+  return (base, o, name) => {
+    const m = base.clone();
+    if (m.name === 'Glow' || /Eyes/.test(name)) { m.emissive = new THREE.Color(tint).multiplyScalar(3); m.color = new THREE.Color(tint); return m; }
+    if (cape && /Cloak|Cape|Hood/.test(name)) { m.map = null; m.color = new THREE.Color(cape); m.roughness = 0.8; m.metalness = 0; m.emissive = new THREE.Color(cape); m.emissiveIntensity = 0.15; return m; }
+    m.color = new THREE.Color(0xc8c0c8); m.emissive = new THREE.Color(tint); m.emissiveMap = m.map; m.emissiveIntensity = 0.08; m.roughness = 0.6;
+    return m;
+  };
+}
+const SKELETON_KIT = {
+  minion:  { cape: 0xc8102e, right: 'blade' },
+  rogue:   { cape: 0x3a0a14, right: 'blade' },
+  warrior: { cape: 0x4a148c, right: 'blade', left: 'shield' },
+  mage:    { cape: 0x1e5a14, right: 'staff' }
+};
 function prepAll() {
-  for (const o of OUTFITS) prepVariant('knight_' + o.id, 'knight', o.color, 0.07);
-  for (const k of ['minion', 'rogue', 'warrior', 'mage']) prepVariant(k, ENEMY[k].model, ENEMY[k].tint, 0.08);
-  prepVariant('darkmage', 'mage', 0xa45cff, 0.55, 0x5a3a7a);
+  for (const o of OUTFITS) prepVariant('knight_' + o.id, 'knight', (base, mesh, name) => paladinMat(base, mesh, name, o));
+  for (const k of Object.keys(SKELETON_KIT)) prepVariant(k, k, skeletonMat(ENEMY[k].tint, SKELETON_KIT[k].cape));
+  for (const w of ['blade', 'shield', 'staff']) if (MODELS[w] && !VARIANTS['w_' + w]) {
+    MODELS[w].scene.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.material = o.material.clone(); o.material.metalness = 0.6; o.material.roughness = 0.35; } });
+    VARIANTS['w_' + w] = true;
+  }
 }
 function buildFallbackFigure(color, r) {
   const g = new THREE.Group();
@@ -943,19 +986,100 @@ function buildFallbackFigure(color, r) {
   g.add(body, visor);
   return g;
 }
-function makeSkinned(variantKey, color, height) {
+function findBone(root, name) { let b = null; root.traverse((o) => { if (!b && o.isBone && o.name === name) b = o; }); return b; }
+function makeSkinned(variantKey, color, height, kit, outfit) {
   const V = VARIANTS[variantKey];
   const out = { node: null, mixer: null, actions: {} };
   if (!V) return out;
   const g = MODELS[V.model];
   const m = SkeletonUtils.clone(g.scene);
-  m.traverse((o) => { if (o.isMesh) { o.material = V.map.get(o.material) || o.material; o.castShadow = true; o.frustumCulled = false; } });
+  m.traverse((o) => { if (o.isMesh) { o.material = V.mats.get(o.name) || o.material; o.castShadow = true; o.frustumCulled = false; } });
   const sc = height / V.h;
-  m.scale.setScalar(sc); m.position.y = -V.minY * sc;
+  m.scale.setScalar(sc);
+  // weapons in the hands (KayKit hand slots)
+  if (kit) {
+    for (const [side, w] of [['handslotr', kit.right], ['handslotl', kit.left]]) {
+      if (!w || !MODELS[w]) continue;
+      const bone = findBone(m, side); if (!bone) continue;
+      const wm = MODELS[w].scene.clone(); bone.add(wm);
+    }
+  }
+  // paladin: holy halo above the helmet and a radiant crest on the chest
+  if (outfit) {
+    const head = findBone(m, 'head');
+    if (head) {
+      const halo = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.035, 8, 40), new THREE.MeshBasicMaterial({ color: hdr(outfit.color, 2.4) }));
+      halo.rotation.x = Math.PI / 2; halo.position.y = 1.15; head.add(halo); out.halo = halo;
+      const hg = makeGlow(outfit.color, 1.6, 0.35); hg.position.y = 1.15; head.add(hg);
+    }
+  }
   out.node = m;
   out.mixer = new THREE.AnimationMixer(m);
   for (const clip of g.animations) out.actions[clip.name] = out.mixer.clipAction(clip);
   return out;
+}
+
+/* ---- Dark Mage: hooded sorcerer modelled in code (void face, red eyes, rune robe, crystal staff) ---- */
+const RUNES = canvasTex(256, (g, s) => {
+  g.fillStyle = '#000'; g.fillRect(0, 0, s, s);
+  const r = mulberry32(5);
+  g.strokeStyle = '#fff'; g.lineWidth = 3; g.lineCap = 'round';
+  const band = (y0, y1) => { g.fillStyle = 'rgba(255,255,255,.25)'; g.fillRect(0, y0, s, 2); g.fillRect(0, y1, s, 2); for (let x = 6; x < s; x += 22) { g.beginPath(); const h = y1 - y0 - 8; g.moveTo(x, y0 + 4 + r() * 4); g.lineTo(x + 6 + r() * 6, y0 + 4 + r() * h); g.lineTo(x + r() * 10, y1 - 4); if (r() < 0.5) { g.moveTo(x, y0 + h / 2 + 4); g.lineTo(x + 10, y0 + h / 2 + 4); } g.stroke(); } };
+  band(4, 40); band(200, 250);
+  for (const x of [s * 0.48, s * 0.52]) { g.fillStyle = 'rgba(255,255,255,.9)'; g.fillRect(x - 1, 40, 3, 160); }
+  for (let y = 50; y < 190; y += 22) { g.beginPath(); g.moveTo(s * 0.5 - 8, y); g.lineTo(s * 0.5 + 8, y + 8); g.lineTo(s * 0.5 - 6, y + 16); g.stroke(); }
+});
+function makeDarkMage() {
+  const purple = new THREE.MeshStandardMaterial({ color: 0x3c1c5c, roughness: 0.85, metalness: 0.05, emissive: 0xff2a3a, emissiveMap: RUNES, emissiveIntensity: 1.6 });
+  const dark = new THREE.MeshStandardMaterial({ color: 0x24102e, roughness: 0.9, emissive: 0x2a0838, emissiveIntensity: 0.4 });
+  const trim = new THREE.MeshBasicMaterial({ color: hdr(0xff2a4a, 2.2) });
+  const voidM = new THREE.MeshBasicMaterial({ color: 0x000000 });
+  const eyeM = new THREE.MeshBasicMaterial({ color: hdr(0xff2030, 1.9) });
+  const wood = new THREE.MeshStandardMaterial({ color: 0x5a3424, roughness: 0.8 });
+  const gem = new THREE.MeshStandardMaterial({ color: 0x8a2aff, roughness: 0.1, metalness: 0.3, emissive: hdr(0xd02aff, 1.4), flatShading: true });
+  const wispM = new THREE.MeshBasicMaterial({ color: hdr(0x9a2aff, 1.0), transparent: true, opacity: 0.22, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide });
+  const mats = [purple, dark, trim, voidM, eyeM, wood, gem, wispM];
+  const g = new THREE.Group();
+  const body = new THREE.Group(); g.add(body);
+  // robe: lathe profile with a torn hem
+  const prof = [[0.78, 0], [0.7, 0.25], [0.55, 0.7], [0.42, 1.1], [0.46, 1.4], [0.52, 1.62], [0.3, 1.8], [0.12, 1.86]].map(([x, y]) => new THREE.Vector2(x, y));
+  const robeGeo = new THREE.LatheGeometry(prof, 28);
+  { const p = robeGeo.attributes.position, rr = mulberry32(9); for (let i = 0; i < p.count; i++) if (p.getY(i) < 0.01) p.setY(i, (i % 2 ? 0.12 : 0) + rr() * 0.1); robeGeo.computeVertexNormals(); }
+  const robe = new THREE.Mesh(robeGeo, purple); robe.castShadow = true; body.add(robe);
+  const belt = new THREE.Mesh(new THREE.TorusGeometry(0.43, 0.04, 6, 32), trim); belt.rotation.x = Math.PI / 2; belt.position.y = 1.1; body.add(belt);
+  const buckle = new THREE.Mesh(new THREE.OctahedronGeometry(0.08), gem); buckle.position.set(0, 1.1, 0.44); body.add(buckle);
+  // jagged mantle on the shoulders
+  for (let i = 0; i < 9; i++) { const a = (i / 9) * Math.PI * 2, c = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.42, 4), dark); c.position.set(Math.sin(a) * 0.5, 1.6, Math.cos(a) * 0.46); c.rotation.set(Math.cos(a) * 2.4, 0, -Math.sin(a) * 2.4); body.add(c); }
+  // hood with a void face and two burning eyes
+  const head = new THREE.Group(); head.position.y = 2.02; body.add(head);
+  const hoodM = new THREE.MeshStandardMaterial({ color: 0x3c1c5c, roughness: 0.85, emissive: 0x4a1a7a, emissiveIntensity: 0.25, side: THREE.DoubleSide }); mats.push(hoodM);
+  // hood open at the front (+z) so the black void face shows
+  const hood = new THREE.Mesh(new THREE.SphereGeometry(0.42, 20, 14, Math.PI * 0.72, Math.PI * 1.56, 0, Math.PI * 0.7), hoodM); hood.scale.set(1, 1.15, 1.05); head.add(hood);
+  const hoodBack = new THREE.Mesh(new THREE.ConeGeometry(0.3, 0.75, 12), hoodM); hoodBack.position.set(0, 0.26, -0.28); hoodBack.rotation.x = -1.1; head.add(hoodBack);
+  const face = new THREE.Mesh(new THREE.SphereGeometry(0.34, 16, 12), voidM); face.position.set(0, -0.04, 0.12); face.scale.set(1, 1.1, 0.8); head.add(face);
+  const rim = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.03, 6, 28, Math.PI * 1.4), trim); rim.position.set(0, -0.02, 0.3); rim.rotation.z = -Math.PI * 0.2 - Math.PI / 2 + Math.PI; rim.rotation.set(0.15, 0, Math.PI * 1.2); head.add(rim);
+  const eyes = [];
+  for (const sx of [-1, 1]) { const e = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.05, 0.02), eyeM); e.position.set(sx * 0.11, 0.0, 0.42); e.rotation.z = sx * 0.35; head.add(e); const gl = makeGlow(0xff2030, 0.2, 0.7); gl.position.copy(e.position); gl.position.z += 0.02; head.add(gl); eyes.push(gl); }
+  // arms: wide sleeves; the right hand holds the twisted crystal staff
+  const arms = [];
+  for (const sx of [-1, 1]) {
+    const sh = new THREE.Group(); sh.position.set(sx * 0.48, 1.55, 0); body.add(sh);
+    const sleeve = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.75, 10, 1, true), purple); sleeve.position.y = -0.32; sleeve.rotation.x = Math.PI; sh.add(sleeve);
+    const hand = new THREE.Mesh(new THREE.SphereGeometry(0.1, 10, 8), dark); hand.position.y = -0.72; sh.add(hand);
+    sh.rotation.z = sx * 0.25;
+    arms.push(sh);
+  }
+  const staff = new THREE.Group(); staff.position.set(0, -0.72, 0.06); arms[0].add(staff);
+  const curvePts = []; for (let i = 0; i <= 10; i++) { const t = i / 10; curvePts.push(new THREE.Vector3(Math.sin(t * 9) * 0.04, -0.9 + t * 2.4, Math.cos(t * 9) * 0.04)); }
+  const shaft = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(curvePts), 40, 0.045, 6), wood); shaft.castShadow = true; staff.add(shaft);
+  for (let i = 0; i < 4; i++) { const cl = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.32, 5), wood); const a = i / 4 * Math.PI * 2; cl.position.set(Math.cos(a) * 0.08, 1.58, Math.sin(a) * 0.08); cl.rotation.set(Math.sin(a) * 0.5, 0, -Math.cos(a) * 0.5); staff.add(cl); }
+  const crystal = new THREE.Mesh(new THREE.OctahedronGeometry(0.16, 0), gem); crystal.scale.set(0.8, 1.6, 0.8); crystal.position.y = 1.72; staff.add(crystal);
+  const cGlow = makeGlow(0x7dff3a, 1.2, 0.75); cGlow.position.y = 1.72; staff.add(cGlow);
+  const cGlow2 = makeGlow(0xd02aff, 0.8, 0.9); cGlow2.position.y = 1.72; staff.add(cGlow2);
+  // dark wisps orbiting the robe
+  const wisps = [];
+  for (let i = 0; i < 3; i++) { const w = new THREE.Mesh(new THREE.TorusGeometry(0.8 + i * 0.14, 0.02, 4, 32, Math.PI * 0.6), wispM); w.rotation.x = Math.PI / 2 + (i - 1.5) * 0.25; w.position.y = 0.5 + i * 0.4; g.add(w); wisps.push(w); }
+  return { node: g, parts: { body, head, arms, staff, crystal, cGlow, eyes, wisps }, mats, h: 2.45 };
 }
 
 /* ---- Golems: modelled in code, one skeleton, four elements ---- */
@@ -1073,9 +1197,14 @@ function makeFigure(spec) {
     gm.node.scale.setScalar(height / gm.h);
     holder.add(gm.node);
     v.golem = gm;
+  } else if (spec.custom === 'darkmage') {
+    const dm = makeDarkMage();
+    dm.node.scale.setScalar(height / dm.h);
+    holder.add(dm.node);
+    v.dmage = dm;
   } else {
-    const sk = makeSkinned(spec.variant, spec.color, height);
-    if (sk.node) { holder.add(sk.node); v.mixer = sk.mixer; v.actions = sk.actions; }
+    const sk = makeSkinned(spec.variant, spec.color, height, spec.kit, spec.outfit);
+    if (sk.node) { holder.add(sk.node); v.mixer = sk.mixer; v.actions = sk.actions; v.halo = sk.halo; }
     else holder.add(buildFallbackFigure(spec.color, spec.r));
   }
   if (spec.crown) {
@@ -1113,7 +1242,7 @@ function disposeFigure(v) {
   v.root.traverse((o) => {
     if (o.isSprite || o === v.aura || o === v.disc || o === v.ice) { o.material.dispose(); if (o === v.ice) o.geometry.dispose(); }
   });
-  if (v.golem) { v.golem.node.traverse((o) => { if (o.geometry) o.geometry.dispose(); }); v.golem.mats.forEach((m) => m.dispose()); }
+  for (const c of [v.golem, v.dmage]) if (c) { c.node.traverse((o) => { if (o.geometry) o.geometry.dispose(); }); c.mats.forEach((m) => m.dispose()); }
   if (v.mixer) v.mixer.stopAllAction();
 }
 
@@ -1171,14 +1300,15 @@ function makeEntity(kind, type, x, z) {
     const ps = pStats();
     const outfit = OUTFITS.find((o) => o.id === S.outfit) || OUTFITS[0];
     T = { mass: ps.mass, accel: ps.accel, maxV: ps.maxV };
-    spec = { variant: 'knight_' + outfit.id, color: outfit.color, r: radiusFor(ps.mass), hk: 3.2 };
+    spec = { variant: 'knight_' + outfit.id, color: outfit.color, r: radiusFor(ps.mass), hk: 3.2, outfit };
   } else {
     const E = ENEMY[type];
     const cyc = G ? G.cycle : 0;
     T = { mass: E.mass * (E.boss ? 1 + 0.15 * cyc : 1), accel: E.accel, maxV: E.maxV, dashEvery: E.dashEvery };
     const color = E.color || E.tint;
     spec = E.golem ? { golem: E.golem, color, r: radiusFor(E.mass), hk: 3.0 }
-      : { variant: type === 'darkmage' ? 'darkmage' : type, color, r: radiusFor(E.mass), hk: type === 'darkmage' ? 3.3 : 3.2, crown: type === 'darkmage', crownColor: 0xb46cff };
+      : E.custom ? { custom: E.custom, color, r: radiusFor(E.mass), hk: 3.9 }
+      : { variant: type, color, r: radiusFor(E.mass), hk: 3.2, kit: SKELETON_KIT[type] };
   }
   const vis = makeFigure(spec);
   scene.add(vis.root);
@@ -1499,7 +1629,7 @@ function tryDash() {
   player.dashT = 0.28; player.dashCd = ps.dashCd;
   player.yaw = Math.atan2(dx, dz);
   Snd.play('dash', 0.55, 1.1);
-  playAnim(player.vis, 'Unarmed_Melee_Attack_Punch_A', { once: true, speed: 1.6, lock: 0.35, restart: true });
+  playAnim(player.vis, '1H_Melee_Attack_Slice_Diagonal', { once: true, speed: 1.7, lock: 0.38, restart: true });
   if (sparks) sparks.emit(player.x, 0.5, player.z, player.color, 14, 3, 1.5, 0.4);
   spawnRing(player.x, player.z, player.color, 1.4, 0.3);
 }
@@ -1515,10 +1645,11 @@ function usePower(k) {
     Snd.play('shock', 0.9); flash('#2af0ff', 0.25); impact(0.06, 0.3);
     if (sparks) sparks.emit(player.x, 0.6, player.z, PAL.cyan, 40, 6, 2, 0.6);
     blast(player.x, player.z, R, F, player, 0.22 + 0.05 * L, true);
-    playAnim(player.vis, 'Spellcast_Shoot', { once: true, lock: 0.5, restart: true, speed: 1.4 });
+    playAnim(player.vis, 'Spellcast_Raise', { once: true, lock: 0.55, restart: true, speed: 1.5 });
   } else if (k === 'shield') {
     G.shieldT = 2.5 + 0.6 * L;
     Snd.play('shield', 0.8);
+    playAnim(player.vis, 'Block', { once: true, lock: 0.7, restart: true, speed: 1.3 });
     spawnRing(player.x, player.z, PAL.lime, 2.5, 0.5);
   } else {
     // SLAM: leap forward and crash down
@@ -1529,7 +1660,7 @@ function usePower(k) {
     player.air = 0.55; player.vx = player.vz = 0;
     player.yaw = Math.atan2(dx, dz);
     Snd.play('dash', 0.7, 0.8);
-    playAnim(player.vis, 'Jump_Idle', { lock: 0.6 });
+    playAnim(player.vis, 'Jump_Full_Short', { once: true, lock: 0.6, restart: true, speed: 1.7 });
   }
 }
 // radial push used by shockwave, slam, golem leap, mage blast
@@ -1710,7 +1841,7 @@ function botAI(e, dt) {
     if (align > 0.8) {
       e.vx += dpx / dp * 9.5; e.vz += dpz / dp * 9.5; e.dashT = 0.3;
       e.aiT = e.dashEvery * (0.7 + G.rng() * 0.6);
-      playAnim(e.vis, 'Unarmed_Melee_Attack_Punch_A', { once: true, speed: 1.5, lock: 0.35, restart: true });
+      playAnim(e.vis, '1H_Melee_Attack_Chop', { once: true, speed: 1.6, lock: 0.35, restart: true });
     } else e.aiT = 0.25;
   }
   return [dx, dz];
@@ -1765,7 +1896,7 @@ function darkMageAI(e, dt, dpx, dpz, dp) {
     e.x = tx; e.z = tz; e.vx = e.vz = 0;
     spawnRing(e.x, e.z, 0xb46cff, 2.4, 0.5);
     if (sparks) sparks.emit(e.x, 1, e.z, 0xb46cff, 30, 3, 2, 0.6);
-    Snd.play('teleport', 0.8);
+    Snd.play('teleport', 0.8); e.castFx = 0.5;
   } else if (e.orbT <= 0) {
     e.orbT = (2.5 + G.rng()) * fast;
     const n = e.phase2 ? 5 : 3, base = Math.atan2(dpx, dpz);
@@ -1775,7 +1906,7 @@ function darkMageAI(e, dt, dpx, dpz, dp) {
       o.mesh.position.set(o.x, 1, o.z);
     }
     e.yaw = base;
-    playAnim(e.vis, 'Spellcast_Shoot', { once: true, lock: 0.6, restart: true });
+    e.castFx = 0.7;
     Snd.play('orb', 0.7);
   } else if (e.sumT <= 0) {
     e.sumT = (9 + G.rng() * 3) * fast;
@@ -1785,7 +1916,7 @@ function darkMageAI(e, dt, dpx, dpz, dp) {
         m.dropT = 0.5; m.y = 4; spawnRing(m.x, m.z, 0x8a3cff, 1.6, 0.5);
       }
       toast('SUMMON', '#d08aff', 700);
-      playAnim(e.vis, 'Cheer', { once: true, lock: 0.8, restart: true });
+      e.castFx = 0.9;
       Snd.play('cast', 0.8, 0.7);
     }
   }
@@ -2089,6 +2220,24 @@ function animateGolem(e, dt, sp) {
   if (e.hitT > 0 && debris && Math.random() < 0.25) debris.emit(e.x, e.vis.height * 0.6, e.z, e.vis.golem.style.stone, 2, 2, 2, 0.8, 10);
 }
 
+// Dark Mage: hovers, robe sways, raises the crystal staff when casting, eyes flare
+function animateDarkMage(e, dt) {
+  const P = e.vis.dmage.parts;
+  e.castFx = Math.max(0, (e.castFx || 0) - dt);
+  const k = Math.min(1, e.castFx / 0.35);
+  P.body.position.y = 0.12 + Math.sin(animT * 2.2) * 0.08;
+  P.body.rotation.z = Math.sin(animT * 1.3) * 0.03;
+  P.arms[0].rotation.x = -0.3 - 2.2 * k; P.arms[0].rotation.z = -0.25 - 0.3 * k;
+  P.arms[1].rotation.x = -0.2 - 0.8 * k + Math.sin(animT * 1.7) * 0.1;
+  P.crystal.rotation.y += dt * 2;
+  const glow = 0.7 + 0.3 * Math.sin(animT * 5) + k * 0.8;
+  P.cGlow.material.opacity = Math.min(1, 0.55 * glow);
+  P.cGlow.scale.setScalar(1.2 + k * 1.4);
+  for (const ey of P.eyes) { ey.material.opacity = Math.min(1, 0.55 + 0.25 * Math.sin(animT * 7) + k * 0.4); ey.scale.setScalar(0.2 + k * 0.12 + (e.phase2 ? 0.08 : 0)); }
+  P.wisps.forEach((w, i) => { w.rotation.z += dt * (0.8 + i * 0.3) * (i % 2 ? -1 : 1); });
+  P.head.rotation.y = Math.sin(animT * 0.8) * 0.25;
+}
+
 function animate(dt, realDt) {
   skyMat.uniforms.uT.value = animT; cloudMat.uniforms.uT.value = animT; bubbleMat.uniforms.uT.value = animT;
   const lp = lantGeo.attributes.position.array;
@@ -2138,6 +2287,8 @@ function animate(dt, realDt) {
       v.mixer.update(e.frozen > 0 ? 0 : dt);
     }
     if (v.golem) animateGolem(e, e.frozen > 0 ? 0 : dt, sp);
+    if (v.dmage) animateDarkMage(e, e.frozen > 0 ? 0 : dt);
+    if (v.halo) v.halo.rotation.z += dt * 1.5;
     e.squash = Math.max(0, e.squash - dt * 5);
     const sq = e.squash * Math.cos((1 - e.squash) * 12);
     const sc = e.r / e.baseR;
@@ -2447,7 +2598,7 @@ function renderShop() {
   } else {
     for (const o of OUTFITS) {
       const ok = S.level >= o.lvl, sel = S.outfit === o.id;
-      html += '<div class="card' + (sel ? ' sel' : '') + (ok ? '' : ' locked') + '" style="color:' + css(o.color) + '"><h3>' + o.name + '</h3><div class="swatch" style="background:radial-gradient(circle at 35% 35%, #fff, ' + css(o.color) + ' 45%, #10031c)"></div>' +
+      html += '<div class="card' + (sel ? ' sel' : '') + (ok ? '' : ' locked') + '" style="color:' + css(o.color) + '"><h3>' + o.name + '</h3><div class="swatch" style="background:linear-gradient(120deg, ' + css(o.armor) + ' 0 48%, ' + css(o.color) + ' 48% 54%, ' + css(o.cape) + ' 54% 100%)"></div>' +
         (ok ? '<button class="btn' + (sel ? '' : ' cyan') + '" data-outfit="' + o.id + '"' + (sel ? ' disabled' : '') + '>' + (sel ? 'EQUIPPED' : 'EQUIP') + '</button>' : '<button class="btn" disabled>LEVEL ' + o.lvl + '</button>') + '</div>';
     }
   }

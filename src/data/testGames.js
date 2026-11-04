@@ -40,7 +40,7 @@ export const testGames = [
   {
     id: 'arcane-brawl',
     title: 'ARCANE BRAWL',
-    description: 'Baston magique en arène 3D (ex-SHOVEDOWN) : éjecte squelettes, golems et Magicien noir du ring, gagne des pièces et de l\'XP, débloque et améliore 3 pouvoirs et ta masse, recherches accélérables par pub. Progression sauvegardée sur le compte.',
+    description: 'Baston magique en arène 3D (ex-SHOVEDOWN) : ton paladin (épée, bouclier, armure et cape aux couleurs choisies) éjecte squelettes armés, golems et Magicien noir du ring, gagne des pièces et de l\'XP, débloque et améliore 3 pouvoirs et ta masse, recherches accélérables par pub. Progression sauvegardée sur le compte.',
     thumbnail: '/thumbnails/arcane-brawl.jpg',
     category: 'arcade',
     orientation: 'portrait',
