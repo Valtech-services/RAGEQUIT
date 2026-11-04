@@ -69,4 +69,20 @@ export const testGames = [
       { label: 'Prompt logo du jeu (Gemini, 1:1, palette propre au jeu)', text: 'Game logo wordmark reading exactly "VOLTLINK" in bold, rounded, heavy capital letters where each letter is a glowing node connected to the next by a crackling lightning wire, the O drawn as a closed electric loop, color palette electric yellow and ultraviolet purple with a deep navy outline, glossy neon tubes with a soft electric glow, centered on a plain pure black background, crisp vector style, high contrast, no other text, no mascot, square 1:1 1024x1024.' },
     ],
   },
+  {
+    id: 'hyperhop',
+    title: 'HYPERHOP',
+    description: 'Saut de tour en tour en 3D néon : maintiens pour charger, relâche pour bondir, vise le centre pour enchaîner les PERFECT, esquive les drones et abats le boss WARDEN.',
+    thumbnail: '/thumbnails/hyperhop.jpg',
+    category: 'challenge',
+    orientation: 'portrait',
+    file: '/games/hyperhop.html',
+    notes: 'Three.js. Score HYPERHOP_SCORE, modes classic / time (Time Attack 60 s) / hard / daily. Pub revive une fois par partie (retour sur la dernière tour avec bouclier 2 s ; +15 s en Time Attack). Tactile/souris : maintenir n\'importe où puis relâcher ; clavier : maintenir Espace (ou Entrée / flèche haut), P pause. Défi ami par lien (hh_seed).',
+    pr: 32,
+    extras: [
+      { label: 'Prompt miniature 1:1 (Gemini, 1024x1024)', text: 'A small cute white and teal robot in mid-air doing a front flip between two tall glowing neon towers that rise out of a dark violet void, the target tower top glowing with a bright teal bullseye ring, a light trail curving behind the robot, a menacing red flying drone hovering above another tower and firing a crackling red lightning beam down onto it, spinning golden coins, a giant striped synthwave sun on the horizon, pink and indigo sky with stars, an endless magenta grid far below, sparks and particles, dramatic low angle, strong bloom, high contrast, no text, no letters, no logo.' },
+      { label: 'Prompt image de blog 16:9 (Gemini, 1376x768)', text: 'Wide cinematic view of a chain of floating neon towers of different heights and shapes, square and round, each with glowing rims in teal, coral, violet, sky blue and amber, stretching toward a giant striped synthwave sun on the horizon, a small white and teal robot leaping from one tower to the next with a glowing arc trail, a cracked amber tower crumbling into pieces, a huge crimson boss drone with a golden crown ring hovering over a large round tower in the distance, an endless magenta grid below fading into violet fog, sparkles and light streaks, strong bloom, synthwave arcade atmosphere, no text, no letters, no logo.' },
+      { label: 'Prompt logo du jeu (Gemini, 1:1, palette propre au jeu)', text: 'Game logo wordmark reading exactly "HYPERHOP" in bold, chunky, italic capital letters that bounce along an invisible arc as if each letter is mid-jump, the two O-shaped and P letters slightly squashed on landing, a dotted jump trajectory arching over the word, color palette mint teal and tangerine orange with a deep indigo outline, glossy beveled neon tubes with a soft glow, centered on a plain pure black background, crisp vector style, high contrast, no other text, no mascot, square 1:1 1024x1024.' },
+    ],
+  },
 ]
