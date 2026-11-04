@@ -40,12 +40,12 @@ export const testGames = [
   {
     id: 'shovedown',
     title: 'SHOVEDOWN',
-    description: 'Sumo néon en 3D : sur ta boule, pousse les bots hors d\'une arène qui rétrécit, vagues de plus en plus dures et boss TITAN toutes les 5 vagues.',
+    description: 'Sumo néon en 3D sur un ring flottant au crépuscule : ton chevalier pousse la horde de squelettes hors d\'un ring qui rétrécit, mages qui repoussent tout, et boss TITAN toutes les 5 vagues.',
     thumbnail: '/thumbnails/shovedown.jpg',
     category: 'arcade',
     orientation: 'portrait',
     file: '/games/shovedown.html',
-    notes: 'Three.js. Score SHOVEDOWN_SCORE, modes classic / hard / daily. Pub revive (retour au centre avec bouclier) une fois par partie. Tactile : stick flottant (glisser n\'importe où) + bouton DASH ; clavier : flèches/WASD/ZQSD, Espace dash, P pause. Défi ami par lien (sd_seed).',
+    notes: 'Three.js, refonte graphique (personnages CC0 animés, bloom, ring néon). Score SHOVEDOWN_SCORE, modes classic / hard / daily. Pub revive (retour au centre avec bouclier) une fois par partie. Tactile : stick flottant (glisser n\'importe où) + bouton DASH ; clavier : flèches/WASD/ZQSD, Espace dash, P pause. Défi ami par lien (sd_seed).',
     pr: 21,
     extras: [
       { label: 'Prompt miniature 1:1 (Gemini, 1024x1024)', text: 'Neon sumo arena floating over a dark violet void, seen from a high three-quarter angle, a small cute cyan chibi robot riding a glowing striped ball inside a lime green energy shield, ramming into a giant purple crowned titan robot on a huge ball, orange bots tumbling off the glowing orange and red rim into the abyss, sparks and shockwave rings, magenta concentric circles on the arena floor, synthwave arcade style, dramatic bloom, high contrast, no text, no letters, no logo.' },
