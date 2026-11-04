@@ -46,10 +46,12 @@ export function AuthProvider({ children }) {
     return { data, error }
   }
 
-  async function signInGoogle() {
+  // redirectTo optionnel : un jeu peut demander à revenir sur sa page après la connexion
+  async function signInGoogle(redirectTo) {
+    const back = typeof redirectTo === 'string' && redirectTo.startsWith(window.location.origin) ? redirectTo : window.location.origin
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: window.location.origin },
+      options: { redirectTo: back },
     })
     return { data, error }
   }

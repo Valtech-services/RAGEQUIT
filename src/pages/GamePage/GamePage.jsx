@@ -14,6 +14,7 @@ import { submitVote, submitReport } from '../../data/feedbackStore'
 import usePageTitle from '../../hooks/usePageTitle'
 import { useTranslation } from 'react-i18next'
 import { track } from '../../lib/analytics'
+import { useGameBridge } from '../../lib/gameBridge'
 import './GamePage.css'
 
 export default function GamePage() {
@@ -37,6 +38,8 @@ function GamePageDesktop() {
   const [reportSent, setReportSent] = useState(false)
   const [reportBusy, setReportBusy] = useState(false)
   const [sessionStart]              = useState(Date.now())
+  // Connexion et sauvegarde en ligne pour les jeux qui utilisent le pont générique
+  useGameBridge(iframeRef, { user, profile, signInGoogle }, playing)
   usePageTitle(game?.seo?.title || game?.title, game?.seo?.metaDescription)
 
   // Track page vue jeu

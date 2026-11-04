@@ -9,6 +9,10 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
 - Laurent ne travaille pas en terminal et ne clique pas sur « Merge » : Claude fusionne lui-même ses Pull Requests (voir « Fusion automatique »).
 - Contenu du site (descriptions, FAQ, blog) : en anglais.
 
+## Bon sens avant les règles
+
+Les règles de ce fichier sont des repères, pas des carcans. Pour chaque jeu, choisir distinctement la meilleure solution pour ce jeu-là, avec bon sens : nombre de boutons à l'écran, placements de pub, modes, progression, contrôles. Un jeu à progression peut avoir plusieurs pouvoirs visibles, des pubs qui accélèrent des recherches, une sauvegarde en ligne ; un jeu d'arcade pur garde une seule touche et une pub revive. Ce qui reste non négociable : licences et absence de crédits, protocole de score et d'analytics, aucun appel réseau ni tracker tiers, affichage mobile propre, performance.
+
 ## Règle de travail Git
 
 - Ne jamais pousser directement sur `main`.
@@ -75,7 +79,7 @@ La tâche quotidienne ne produit que des PR de test.
 
 **Réserve visible dans l'admin** : l'onglet « Réserve » de la page admin lit directement `backlog.md`. Chaque ligne du tableau principal doit donc garder ses 7 colonnes (`#`, source, licence, catégorie, le jeu d'origine en bref, piste de transformation, statut), avec une description courte en français du jeu d'origine.
 
-**Jeux 3D** : la réserve intercale des jeux 3D avec personnage (Three.js, comme `city-runner`) entre les jeux 2D, environ un sur deux. Personnages, ennemis et décors viennent en priorité des bibliothèques libres (voir « Assets libres »), sinon sont modélisés dans le code (formes Three.js, matériaux, animations procédurales) ; jamais de modèle, texture ou son du jeu source. Pour ces jeux, tester aussi la fluidité sur iPhone (pas de chute sous 30 images par seconde) et garder les contrôles tactiles simples (stick virtuel et un ou deux boutons au maximum). Si un jeu est encore en test sans validation, elle prépare quand même le suivant, dans la limite de 3 jeux en attente.
+**Jeux 3D** : la réserve intercale des jeux 3D avec personnage (Three.js, comme `city-runner`) entre les jeux 2D, environ un sur deux. Personnages, ennemis et décors viennent en priorité des bibliothèques libres (voir « Assets libres »), sinon sont modélisés dans le code (formes Three.js, matériaux, animations procédurales) ; jamais de modèle, texture ou son du jeu source. Pour ces jeux, tester aussi la fluidité sur iPhone (pas de chute sous 30 images par seconde) et garder les contrôles tactiles lisibles et confortables pour le pouce (stick virtuel et autant de boutons que le jeu le justifie, disposés en arc autour du bouton principal, avec recharge visible). Si un jeu est encore en test sans validation, elle prépare quand même le suivant, dans la limite de 3 jeux en attente.
 
 **Limite d'attente :** compter les jeux au statut `en test` dans `backlog.md`. S'il y en a 3 ou plus, la tâche ne crée aucun jeu : elle termine par un message court à Laurent listant les jeux qui attendent son test dans l'admin. La production reprend automatiquement dès qu'un jeu est validé (ou abandonné) et que le compteur repasse sous 3. Rien n'est jamais perdu : le backlog garde l'ordre et l'état de chaque jeu.
 
@@ -182,19 +186,32 @@ try { window.parent && window.parent.postMessage({
 }, '*'); } catch (e) {}
 ```
   Classement où le plus petit gagne (speedrun) : `score = -tempsEnSecondes`, vrai temps dans `scoreLabel`.
-- Pub récompensée : une seule fois par partie, au game over, bouton « regarder une pub pour continuer ». Overlay simulé de 5 s (label « Advertisement », compte à rebours), puis récompense. Au moment exact où elle est accordée :
+- Pubs récompensées : toujours au choix du joueur, jamais imposées. Placements à adapter à chaque jeu (voir « Bon sens avant les règles ») :
+  - **revive** (standard de tous les jeux) : au game over, une fois par partie, bouton « regarder une pub pour continuer » ; la récompense est adaptée au jeu (reprendre sur place, recommencer la vague en cours, temps en plus...) ;
+  - **accélération** (jeux à progression) : réduire ou terminer un minuteur de recherche ou d'amélioration, avec un plafond quotidien raisonnable ; `context: 'research'` ;
+  - tout autre placement logique pour le jeu (doubler un gain de fin de partie, coffre...) avec son propre `context` explicite.
+  Overlay simulé de 5 s (label « Advertisement », compte à rebours), puis récompense. Au moment exact où elle est accordée :
 ```js
 try { window.parent && window.parent.postMessage({
   type: 'RH_TRACK',
   event: 'ad_rewarded_complete',
   game_id: 'nom-du-jeu',       // ici game_id (pas game)
-  props: { context: 'revive' }
+  props: { context: 'revive' }  // ou 'research', etc.
 }, '*'); } catch (e) {}
 ```
 - Stub SDK optionnel, désactivé par défaut, sans chargement de script externe.
 
-8. NE RIEN INVENTER D'AUTRE
-- Aucun autre type de message, aucun autre appel réseau, aucun tracker tiers.
+8. CONNEXION ET SAUVEGARDE EN LIGNE (jeux à progression)
+Le site fournit un pont générique (`src/lib/gameBridge.js`, branché sur la page de jeu desktop et mobile et sur l'onglet admin « Test des jeux »). Un jeu à progression l'utilise au lieu de messages spécifiques :
+- `RH_AUTH_REQUEST { game }` → le site répond `RH_AUTH { signedIn, username }` (et le renvoie à chaque connexion ou déconnexion).
+- `RH_LOGIN_REQUEST { game }` → le site ouvre la connexion Google et revient sur la page du jeu.
+- `RH_SAVE_LOAD { game }` → `RH_SAVE_STATE { game, state, progress, updatedAt }` (`state: null` si rien en ligne ou joueur non connecté).
+- `RH_SAVE { game, state, progress }` → `RH_SAVE_ACK { game, ok, reason }`. `progress` est un entier qui ne fait que croître (XP totale par exemple) : le site n'écrase jamais une sauvegarde en ligne plus avancée et renvoie alors `RH_SAVE_STATE`.
+- Stockage : table `game_saves` (une ligne par joueur et par jeu, `total_ore` = progress). Le jeu garde toujours une copie locale (`localStorage`) et adopte la plus avancée des deux.
+- Le jeu n'accepte ces réponses que si `event.source === window.parent`. Un joueur non connecté peut jouer, mais le jeu lui dit clairement qu'il doit se connecter pour retrouver sa progression sur tous ses appareils (bandeau + bouton qui envoie `RH_LOGIN_REQUEST`).
+
+9. NE RIEN INVENTER D'AUTRE
+- Aucun autre type de message que ceux décrits ici, aucun autre appel réseau, aucun tracker tiers.
 
 ## Choix des sources (backlog)
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, useId } from 'react'
+import { useState, useEffect, useCallback, useMemo, useId, useRef } from 'react'
 import {
   ResponsiveContainer, AreaChart, Area, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip, Cell,
@@ -7,6 +7,7 @@ import * as XLSX from 'xlsx'
 import { useAuth } from '../../context/AuthContext'
 import { supabase } from '../../lib/supabase'
 import usePageTitle from '../../hooks/usePageTitle'
+import { useGameBridge } from '../../lib/gameBridge'
 import { testGames } from '../../data/testGames'
 import backlogMd from '../../../backlog.md?raw'
 import './AdminPage.css'
@@ -230,6 +231,10 @@ function AdminPinGate({ onUnlock }){
 // ── TEST DES JEUX (staging, admin only) ────────────────────────────────────
 function GameTester(){
   const [active, setActive] = useState(null)
+  const testFrame = useRef(null)
+  const { user, profile, signInGoogle } = useAuth()
+  // même pont connexion / sauvegarde que sur le site, pour tester la progression en ligne
+  useGameBridge(testFrame, { user, profile, signInGoogle }, !!active)
   useEffect(() => {
     document.body.style.overflow = active ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
@@ -244,6 +249,7 @@ function GameTester(){
         </div>
         <div className="gt-player__stage gt-player__stage--real">
           <iframe
+            ref={testFrame}
             title={active.title}
             src={active.file}
             className="gt-iframe gt-iframe--real"

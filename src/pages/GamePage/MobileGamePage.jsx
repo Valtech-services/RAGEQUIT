@@ -8,6 +8,7 @@ import { supabase } from '../../lib/supabase'
 import { submitScore } from '../../data/leaderboardStore'
 import { submitVote, submitReport } from '../../data/feedbackStore'
 import { track } from '../../lib/analytics'
+import { useGameBridge } from '../../lib/gameBridge'
 import Navbar from '../../components/Navbar/Navbar'
 import GameCard from '../../components/GameCard/GameCard'
 import SeoBlock from '../../components/SeoBlock/SeoBlock'
@@ -24,6 +25,8 @@ export default function MobileGamePage() {
   const iframeRef = useRef(null)
   const [playing, setPlaying] = useState(false)
   const [sessionStart] = useState(Date.now())
+  // Connexion et sauvegarde en ligne pour les jeux qui utilisent le pont générique
+  useGameBridge(iframeRef, { user, profile, signInGoogle }, playing)
   const [vote, setVote] = useState(null)
   const [reportOpen, setReportOpen] = useState(false)
   const [reportSubject, setReportSubject] = useState('')
