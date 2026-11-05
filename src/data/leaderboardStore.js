@@ -52,6 +52,14 @@ export async function submitScore({ game, mode, score, scoreLabel, difficulty = 
   const { data: { user } } = await supabase.auth.getUser()
 
   if (user) {
+    // Voie principale : fonction SQL atomique `submit_score` (insère ou garde le
+    // meilleur, une seule ligne par joueur et combinaison, jamais de baisse).
+    const { error: rpcError } = await supabase.rpc('submit_score', {
+      p_game: game, p_mode: mode, p_score: score, p_label: scoreLabel,
+      p_difficulty: difficulty, p_arena: arena,
+    })
+    if (!rpcError) return
+    // Repli si la fonction n'existe pas encore en base : ancienne méthode.
     // Cherche le meilleur score existant de ce joueur pour cette combinaison exacte
     let q = supabase
       .from('scores')
@@ -78,7 +86,8 @@ export async function submitScore({ game, mode, score, scoreLabel, difficulty = 
         .eq('id', existing.id)
     }
   } else {
-    // Anonyme : localStorage (clé séparée par combinaison)
+    // Anonyme : record personnel gardé dans le navigateur uniquement.
+    // Il n'apparaît JAMAIS dans le classement public (réservé aux joueurs connectés).
     const key  = LS_KEY(game, mode, difficulty, arena)
     const name = getPlayerName() || 'Anonymous'
     const list = JSON.parse(localStorage.getItem(key) || '[]')
@@ -95,50 +104,42 @@ export async function submitScore({ game, mode, score, scoreLabel, difficulty = 
 
 /* =====================================================================
    getLeaderboard — top N pour une combinaison jeu/mode(/difficulté/arène)
+   Classement public = joueurs connectés uniquement (scores stockés en base,
+   conservés pour toujours). Aucun repli sur les scores anonymes du navigateur.
    ===================================================================== */
 export async function getLeaderboard(game, mode, limit = 20, difficulty = null, arena = null) {
   try {
     let q = supabase
       .from('scores_with_names')
-      .select('score, score_label, username, difficulty, arena')
+      .select('user_id, score, score_label, username, difficulty, arena')
       .eq('game_id', game)
       .eq('mode', mode)
+      .not('user_id', 'is', null)
     q = applyVariantFilters(q, difficulty, arena)
+    // On lit plus large que `limit` pour que la déduplication ne raccourcisse
+    // pas le top si d'anciennes lignes en double existent encore.
     const { data, error } = await q
       .order('score', { ascending: false })
-      .limit(limit)
+      .limit(limit * 3)
 
-    if (!error && data && data.length > 0) {
-      // Sécurité : ne garder que le meilleur score par joueur (évite tout doublon
-      // d'affichage même si la table contient d'anciennes lignes en double).
-      // data est déjà trié par score décroissant, donc la première occurrence
-      // d'un nom est son meilleur score.
-      const seen = new Set()
-      const deduped = []
-      for (const row of data) {
-        const key = row.username || 'Anonymous'
-        if (seen.has(key)) continue
-        seen.add(key)
-        deduped.push(row)
-      }
-      return deduped.map((row, i) => ({
-        rank:       i + 1,
-        name:       row.username || 'Anonymous',
-        score:      row.score,
-        scoreLabel: row.score_label || String(row.score),
-      }))
+    if (error || !data) return []
+    // Un seul score par joueur (identifié par son compte, pas par son pseudo :
+    // deux joueurs au même pseudo restent tous les deux visibles).
+    const seen = new Set()
+    const deduped = []
+    for (const row of data) {
+      if (seen.has(row.user_id)) continue
+      seen.add(row.user_id)
+      deduped.push(row)
+      if (deduped.length >= limit) break
     }
-  } catch (e) { /* Supabase indisponible, fallback */ }
-
-  // Fallback localStorage
-  const key  = LS_KEY(game, mode, difficulty, arena)
-  const list = JSON.parse(localStorage.getItem(key) || '[]')
-  return list.slice(0, limit).map((e, i) => ({
-    rank:       i + 1,
-    name:       e.name || 'Anonymous',
-    score:      e.score,
-    scoreLabel: e.scoreLabel || String(e.score),
-  }))
+    return deduped.map((row, i) => ({
+      rank:       i + 1,
+      name:       row.username || 'Player',
+      score:      row.score,
+      scoreLabel: row.score_label || String(row.score),
+    }))
+  } catch (e) { return [] }
 }
 
 /* =====================================================================
@@ -181,16 +182,6 @@ export async function getPlayerBest(game, mode, difficulty = null, arena = null)
     } catch (e) { return null }
   }
 
-  // Anonyme : localStorage
-  const name = getPlayerName()
-  if (!name) return null
-  const key  = LS_KEY(game, mode, difficulty, arena)
-  const list = JSON.parse(localStorage.getItem(key) || '[]')
-  const idx  = list.findIndex(e => e.name === name)
-  if (idx < 0) return null
-  return {
-    score:      list[idx].score,
-    scoreLabel: list[idx].scoreLabel,
-    rank:       idx + 1,
-  }
+  // Anonyme : pas de rang au classement public (il faut se connecter)
+  return null
 }
