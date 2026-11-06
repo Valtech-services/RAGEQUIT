@@ -7,7 +7,12 @@
 <title>NEON RUSH — Infinite Tunnel</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body {llll;                                                                                                                                                                
+  :root {
+    --safe-top: env(safe-area-inset-top, 0px); --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px); --safe-right: env(safe-area-inset-right, 0px);
+    --cyan: #00D9FF; --purple: #8B5CF6; --magenta: #FF2D78; --gold: #C9A84C; --bg: #0A1628;
+  }
+  html, body {
     width: 100%; height: 100%; overflow: hidden;
     background: #0A1628; color: #ffffff;
     font-family: 'Orbitron', ui-monospace, 'Courier New', monospace;
@@ -94,37 +99,54 @@
     text-transform: uppercase;
   }
   .instructions .accent { color: #00D9FF; }
+  /* HUD : score au centre en haut, vitesse / record / pause à droite.
+     Le coin haut-gauche (56 px + safe area) reste libre pour le bouton retour du site. */
   .hud {
-    position: fixed; top: max(1rem, env(safe-area-inset-top, 0px)); left: 0; right: 0;
-    display: flex; justify-content: space-between; align-items: flex-start;
-    padding: 0.4rem clamp(0.8rem, 3.5vw, 1.6rem); z-index: 5;
-    pointer-events: none;
+    position: fixed; top: calc(0.55rem + var(--safe-top));
+    left: calc(56px + var(--safe-left)); right: calc(0.7rem + var(--safe-right));
+    height: 0; z-index: 5; pointer-events: none;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     font-variant-numeric: tabular-nums;
-    gap: 0.5rem;
   }
   .hud.hidden { display: none !important; }
-  .hud-stats { display: flex; flex-direction: column; gap: 4px; }
-  .stat-row { display: flex; align-items: baseline; gap: 0.5em; }
-  .stat-row .label { width: 3.4em; }
-  .speed-value { color: #FF2D78; text-shadow: 0 0 18px rgba(255, 45, 120, 0.75); }
-  .best-value { color: #8B5CF6; text-shadow: 0 0 18px rgba(139, 92, 246, 0.7); }
-  .speed-unit { font-size: 0.5em; letter-spacing: 0.05em; margin-left: 0.15em; opacity: 0.7; }
+  .hud-center {
+    position: fixed; left: 0; right: 0; top: calc(0.45rem + var(--safe-top));
+    display: flex; justify-content: center; pointer-events: none;
+  }
+  .score-wrap { position: relative; display: flex; flex-direction: column; align-items: center; }
+  .score-value {
+    font-size: clamp(1.6rem, 7vw, 2.1rem); font-weight: 900; line-height: 1;
+    color: #fff; letter-spacing: 0.02em;
+    text-shadow: 0 0 14px rgba(0, 217, 255, 0.8), 0 0 2px rgba(0, 217, 255, 1);
+  }
+  .score-label {
+    font-size: 0.5rem; font-weight: 800; letter-spacing: 0.4em; margin-top: 2px;
+    color: rgba(0, 217, 255, 0.65); text-transform: uppercase;
+  }
+  .hud-right {
+    position: absolute; right: 0; top: 0;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
+  }
+  .hud-mini {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 1px;
+    font-size: 0.72rem; font-weight: 800; line-height: 1.15; white-space: nowrap;
+  }
+  .hud-mini .mini-lbl {
+    font-size: 0.5rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45); margin-right: 0.35em;
+  }
+  .speed-value { color: var(--magenta); text-shadow: 0 0 10px rgba(255, 45, 120, 0.7); }
+  .best-value { color: #b9a2ff; text-shadow: 0 0 10px rgba(139, 92, 246, 0.7); }
+  .speed-unit { font-size: 0.75em; margin-left: 0.2em; opacity: 0.7; }
   .label {
     font-size: clamp(0.5rem, 2vw, 0.6rem); letter-spacing: 0.24em;
     color: rgba(0, 217, 255, 0.7);
     text-transform: uppercase;
     white-space: nowrap;
   }
-  .value {
-    font-size: clamp(1.05rem, 5vw, 1.7rem); font-weight: 900;
-    color: #ffffff;
-    text-shadow: 0 0 18px rgba(0, 217, 255, 0.75);
-    line-height: 1;
-    white-space: nowrap;
-  }
   .pause-btn {
     pointer-events: auto;
-    width: 42px; height: 42px;
+    width: 40px; height: 40px;
     flex-shrink: 0;
     background: rgba(10, 22, 40, 0.5);
     border: 2px solid rgba(0, 217, 255, 0.6);
@@ -149,8 +171,8 @@
   }
   .wave-timer {
     position: fixed; left: 50%; transform: translateX(-50%);
-    top: max(4.6rem, calc(env(safe-area-inset-top, 0px) + 3.6rem));
-    width: min(60%, 260px); height: 5px;
+    top: calc(3.35rem + var(--safe-top));
+    width: min(42%, 180px); height: 3px;
     background: rgba(255,255,255,0.12);
     border-radius: 3px; overflow: hidden; z-index: 5;
     pointer-events: none;
@@ -251,80 +273,77 @@
     font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase;
     color: rgba(255,255,255,0.5);
   }
+  /* Annonce de vague : une seule ligne compacte sous le score, jamais au centre
+     de l'écran (le point de fuite du tunnel doit rester dégagé). */
   .wave-banner {
-    position: fixed; left: 0; right: 0; top: 38%;
-    text-align: center; z-index: 6;
-    pointer-events: none;
-    opacity: 0;
+    position: fixed; left: 0; right: 0; top: calc(3.75rem + var(--safe-top));
+    display: flex; justify-content: center; align-items: baseline; gap: 0.6em;
+    z-index: 6; pointer-events: none; opacity: 0;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   }
-  .wave-banner.show { animation: waveIn 1.9s ease-out; }
+  .wave-banner.show { animation: waveIn 1.15s ease-out; }
   .wave-banner .wb-main {
-    font-size: clamp(1.8rem, 8vw, 2.8rem);
-    font-weight: 900; letter-spacing: 0.3em;
-    color: #FF2D78;
-    text-shadow: 0 0 30px rgba(255, 45, 120, 0.8);
+    font-size: 0.8rem; font-weight: 900; letter-spacing: 0.3em;
+    color: var(--magenta); text-shadow: 0 0 10px rgba(255, 45, 120, 0.85);
     text-transform: uppercase;
   }
   .wave-banner .wb-sub {
-    font-size: 0.7rem; letter-spacing: 0.45em;
-    color: rgba(255,255,255,0.65);
-    text-transform: uppercase; margin-top: 0.5rem;
+    font-size: 0.6rem; font-weight: 800; letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.6); text-transform: uppercase;
   }
   @keyframes waveIn {
-    0%   { opacity: 0; transform: translateY(14px) scale(0.92); }
-    15%  { opacity: 1; transform: translateY(0) scale(1); }
-    80%  { opacity: 1; transform: translateY(0) scale(1); }
-    100% { opacity: 0; transform: translateY(-10px) scale(1); }
+    0%   { opacity: 0; transform: translateY(-6px); }
+    15%  { opacity: 1; transform: translateY(0); }
+    75%  { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-4px); }
   }
+  /* Combo : petite pastille dorée accrochée à droite du score. */
   .combo-wrap {
-    position: fixed; top: 4.6rem; left: 0; right: 0;
-    display: flex; flex-direction: column; align-items: center;
-    z-index: 5; pointer-events: none;
-    opacity: 0; transition: opacity 0.2s ease;
+    position: absolute; left: 100%; top: 0.1rem; margin-left: 0.55rem;
+    display: flex; flex-direction: column; align-items: flex-start;
+    pointer-events: none;
+    opacity: 0; transform: scale(0.8); transition: opacity 0.2s ease, transform 0.2s ease;
   }
-  .combo-wrap.show { opacity: 1; }
+  .combo-wrap.show { opacity: 1; transform: scale(1); }
   .combo-mult {
-    font-size: 2.6rem; font-weight: 900;
+    font-size: 1.05rem; font-weight: 900; line-height: 1;
     font-variant-numeric: tabular-nums;
-    color: #C9A84C;
-    text-shadow: 0 0 22px rgba(201, 168, 76, 0.8);
-    line-height: 1;
-    transition: transform 0.12s ease;
+    color: var(--gold); text-shadow: 0 0 10px rgba(201, 168, 76, 0.85);
+    transform-origin: left center; transition: transform 0.12s ease;
   }
-  .combo-mult.bump { transform: scale(1.35); }
-  .combo-label {
-    font-size: 0.55rem; letter-spacing: 0.4em;
-    color: rgba(201, 168, 76, 0.7);
-    text-transform: uppercase; margin-top: 3px;
-  }
+  .combo-mult.bump { transform: scale(1.3); }
+  .combo-label { display: none; }
   .combo-bar {
-    width: 76px; height: 3px; margin-top: 6px;
-    background: rgba(255,255,255,0.12); border-radius: 2px;
-    overflow: hidden;
+    width: 30px; height: 2px; margin-top: 4px;
+    background: rgba(255,255,255,0.14); border-radius: 2px; overflow: hidden;
   }
   .combo-bar-fill {
     height: 100%; width: 100%;
-    background: linear-gradient(90deg, #C9A84C, #FF2D78);
+    background: linear-gradient(90deg, var(--gold), var(--magenta));
     transform-origin: left; transform: scaleX(1);
   }
   .toast-layer {
     position: fixed; inset: 0; z-index: 6;
     pointer-events: none; overflow: hidden;
   }
+  /* Textes de points : petits, à côté du vaisseau (position calculée en JS),
+     un seul à la fois, durée courte. */
   .toast {
-    position: absolute; left: 50%; top: 58%;
+    position: absolute; left: 50%; top: 70%;
     transform: translate(-50%, 0);
-    font-size: 0.85rem; font-weight: 700;
-    letter-spacing: 0.25em; text-transform: uppercase;
-    color: #00D9FF; text-shadow: 0 0 16px rgba(0,217,255,0.9);
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.68rem; font-weight: 900;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--cyan); text-shadow: 0 0 10px rgba(0,217,255,0.9);
     white-space: nowrap;
-    animation: toastRise 0.75s ease-out forwards;
+    animation: toastRise 0.6s ease-out forwards;
   }
-  .toast.gold { color: #C9A84C; text-shadow: 0 0 16px rgba(201,168,76,0.9); }
+  .toast.gold { color: var(--gold); text-shadow: 0 0 10px rgba(201,168,76,0.9); }
+  .toast.dim { color: rgba(255,255,255,0.55); text-shadow: none; }
   @keyframes toastRise {
-    0%   { opacity: 0; transform: translate(-50%, 10px) scale(0.9); }
+    0%   { opacity: 0; transform: translate(-50%, 6px) scale(0.85); }
     20%  { opacity: 1; transform: translate(-50%, 0) scale(1); }
-    100% { opacity: 0; transform: translate(-50%, -34px) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -22px) scale(1); }
   }
   .flash {
     position: fixed; inset: 0; z-index: 4;
@@ -351,38 +370,42 @@
     background: linear-gradient(270deg, rgba(0,217,255,0.14), transparent);
   }
   .tap-zone.lit { opacity: 1; }
-  .credit {
-    position: fixed; bottom: 0.8rem; left: 0; right: 0;
-    text-align: center;
-    font-size: 0.6rem;
-    letter-spacing: 0.35em;
-    color: rgba(255,255,255,0.22);
-    z-index: 11;
-    pointer-events: none;
-    text-transform: uppercase;
+  .tap-zones.desk { display: block; }
+  .tap-zones.desk .tap-zone.lit { opacity: 0.6; }
+  @media (prefers-reduced-motion: reduce) {
+    .flash.fire { animation-duration: 0.12s; opacity: 0; }
+    .wave-banner.show { animation-name: fadeIn; }
+    .toast { animation-name: fadeIn; }
   }
 </style>
 </head>
 <body>
 <div id="game"></div>
 <div class="hud hidden" id="hud">
-  <div class="hud-stats">
-    <div class="stat-row"><span class="label">Score</span><span class="value" id="scoreVal" data-testid="score-value">0</span></div>
-    <div class="stat-row"><span class="label">Speed</span><span class="value speed-value" id="speedVal">0<span class="speed-unit">km/h</span></span></div>
-    <div class="stat-row"><span class="label">Best</span><span class="value best-value" id="bestVal" data-testid="best-value">0</span></div>
+  <div class="hud-center">
+    <div class="score-wrap">
+      <span class="score-value" id="scoreVal" data-testid="score-value">0</span>
+      <span class="score-label">Score</span>
+      <div class="combo-wrap" id="comboWrap">
+        <div class="combo-mult" id="comboMult">x2</div>
+        <div class="combo-label">Combo</div>
+        <div class="combo-bar"><div class="combo-bar-fill" id="comboBarFill"></div></div>
+      </div>
+    </div>
   </div>
-  <button class="pause-btn" id="pauseBtn" data-testid="pause-btn" aria-label="Pause">
-    <span class="pause-bar"></span>
-    <span class="pause-bar"></span>
-  </button>
+  <div class="hud-right">
+    <button class="pause-btn" id="pauseBtn" data-testid="pause-btn" aria-label="Pause">
+      <span class="pause-bar"></span>
+      <span class="pause-bar"></span>
+    </button>
+    <div class="hud-mini">
+      <span class="speed-value" id="speedVal">0<span class="speed-unit">km/h</span></span>
+      <span><span class="mini-lbl">Best</span><span class="best-value" id="bestVal" data-testid="best-value">0</span></span>
+    </div>
+  </div>
 </div>
 <div class="wave-timer hidden" id="waveTimer">
   <div class="wave-timer-fill" id="waveTimerFill"></div>
-</div>
-<div class="combo-wrap" id="comboWrap">
-  <div class="combo-mult" id="comboMult">x2</div>
-  <div class="combo-label">Combo</div>
-  <div class="combo-bar"><div class="combo-bar-fill" id="comboBarFill"></div></div>
 </div>
 <div class="flash" id="flash"></div>
 <div class="tap-zones" id="tapZones">
@@ -658,7 +681,7 @@
     lightning.geometry.attributes.position.needsUpdate = true;
     lightningLife = 0.22 + Math.random() * 0.12;
     // léger flash cyan global via le flash overlay existant, discret
-    if (state === 'playing') { flashEl.classList.remove('fire'); void flashEl.offsetWidth; flashEl.classList.add('fire'); }
+    if (state === 'playing' && !REDUCED_MOTION) { flashEl.classList.remove('fire'); void flashEl.offsetWidth; flashEl.classList.add('fire'); }
   }
   function updateLightning(dt) {
     lightningTimer -= dt;
@@ -700,32 +723,24 @@
     }
   }
   buildFloorLines();
-  // Nacelle wireframe basse et large, dans le style vectoriel du tunnel.
-  // Silhouette d'intercepteur qui pointe vers l'avant (-Z), corps ouvert
-  // (pas de bloc plein), arêtes fines cyan avec accents magenta.
+  // Intercepteur bas et effilé, dans le style vectoriel du tunnel : coque
+  // sombre pleine, arêtes cyan, ailerons magenta translucides, verrière en
+  // goutte et deux réacteurs avec traînées lumineuses (aucune allocation en jeu).
   const shipGroup = new THREE.Group();
-  // Coque : profil affûté défini à la main (fin, plat, tourné vers l'avant).
+  const shipBody = new THREE.Group();   // reçoit l'écrasement (squash) sans toucher au placement
+  shipGroup.add(shipBody);
   // Points en X (largeur), Y (épaisseur), Z (longueur, -Z = avant).
   const hullV = [
-    // nez (avant, pointe)
-    new THREE.Vector3( 0.0,  0.0, -1.15),
-    // épaulements avant
-    new THREE.Vector3(-0.28, 0.06, -0.35),
-    new THREE.Vector3( 0.28, 0.06, -0.35),
-    new THREE.Vector3(-0.28,-0.06, -0.35),
-    new THREE.Vector3( 0.28,-0.06, -0.35),
-    // arrière (large)
-    new THREE.Vector3(-0.5,  0.05,  0.5),
-    new THREE.Vector3( 0.5,  0.05,  0.5),
-    new THREE.Vector3(-0.5, -0.05,  0.5),
-    new THREE.Vector3( 0.5, -0.05,  0.5),
+    new THREE.Vector3( 0.0,  0.0, -1.35),   // nez
+    new THREE.Vector3(-0.24, 0.06, -0.4),
+    new THREE.Vector3( 0.24, 0.06, -0.4),
+    new THREE.Vector3(-0.24,-0.05, -0.4),
+    new THREE.Vector3( 0.24,-0.05, -0.4),
+    new THREE.Vector3(-0.46, 0.05,  0.5),
+    new THREE.Vector3( 0.46, 0.05,  0.5),
+    new THREE.Vector3(-0.46,-0.05,  0.5),
+    new THREE.Vector3( 0.46,-0.05,  0.5),
   ];
-  function hullLine(a, b, color, opacity) {
-    const g = new THREE.BufferGeometry().setFromPoints([hullV[a], hullV[b]]);
-    return new THREE.Line(g, new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: opacity == null ? 1.0 : opacity }));
-  }
-  // Filled faces: translucent glowing panels inside the wireframe so the ship
-  // has body (not just edges). Triangles reference the hullV vertices.
   function hullFaces(tris, color) {
     const positions = [];
     tris.forEach(([a, b, c]) => {
@@ -735,93 +750,122 @@
     });
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), 3));
-    g.computeVertexNormals();
-    // Solid, fully opaque panels: gives the ship real body. Neon edges are drawn
-    // on top and stand out against these dark solid faces.
-    const m = new THREE.MeshBasicMaterial({
-      color: color, side: THREE.DoubleSide
-    });
-    return new THREE.Mesh(g, m);
+    return new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color: color, side: THREE.DoubleSide }));
   }
-  // Solid two-tone body: dark navy panels so the neon edges pop on top.
   const HULL_DARK = 0x0d1b2e;
-  const HULL_DARK2 = 0x14243b;
-  const topFaces = [
-    [0,1,2],        // nose top
-    [1,2,6],[1,6,5],// top deck
-  ];
-  const botFaces = [
-    [0,3,4],        // nose bottom
-    [3,4,8],[3,8,7],// bottom deck
-  ];
-  const sideFaces = [
-    [1,5,7],[1,7,3], // left flank
-    [2,6,8],[2,8,4], // right flank
-  ];
-  shipGroup.add(hullFaces(topFaces, HULL_DARK2));
-  shipGroup.add(hullFaces(botFaces, HULL_DARK));
-  shipGroup.add(hullFaces(sideFaces, HULL_DARK));
-  // Arêtes principales de la coque (cyan)
+  const HULL_DARK2 = 0x172a45;
+  shipBody.add(hullFaces([[0,1,2],[1,2,6],[1,6,5]], HULL_DARK2));                // dessus
+  shipBody.add(hullFaces([[0,3,4],[3,4,8],[3,8,7]], HULL_DARK));                 // dessous
+  shipBody.add(hullFaces([[1,5,7],[1,7,3],[2,6,8],[2,8,4],[5,6,8],[5,8,7]], HULL_DARK)); // flancs + arrière
+  // Arêtes de coque en un seul LineSegments (1 draw call).
+  function segLines(pairs, color, opacity) {
+    const pts = [];
+    pairs.forEach(([a, b]) => pts.push(a, b));
+    return new THREE.LineSegments(
+      new THREE.BufferGeometry().setFromPoints(pts),
+      new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: opacity == null ? 1 : opacity })
+    );
+  }
   const hullEdges = [
-    [0,1],[0,2],[0,3],[0,4],      // nez vers épaulements
-    [1,2],[3,4],[1,3],[2,4],      // section avant
-    [1,5],[2,6],[3,7],[4,8],      // flancs vers l'arrière
-    [5,6],[7,8],[5,7],[6,8],      // section arrière
-  ];
-  hullEdges.forEach(([a,b]) => shipGroup.add(hullLine(a, b, CYAN, 1.0)));
-  // Ailerons magenta (deux triangles latéraux fins, purement wireframe)
-  const finL = [
-    new THREE.Vector3(-0.5, 0, 0.2),
-    new THREE.Vector3(-0.95, 0, 0.5),
-    new THREE.Vector3(-0.5, 0, 0.5),
-  ];
-  const finR = finL.map(p => new THREE.Vector3(-p.x, p.y, p.z));
-  function finLines(pts) {
+    [0,1],[0,2],[0,3],[0,4],
+    [1,2],[3,4],[1,3],[2,4],
+    [1,5],[2,6],[3,7],[4,8],
+    [5,6],[7,8],[5,7],[6,8],
+  ].map(([a, b]) => [hullV[a], hullV[b]]);
+  shipBody.add(segLines(hullEdges, CYAN, 1));
+  // Ligne dorsale magenta, du nez vers l'arrière : donne le sens de la vitesse.
+  shipBody.add(segLines([[new THREE.Vector3(0, 0.035, -1.2), new THREE.Vector3(0, 0.06, -0.45)]], MAGENTA, 0.9));
+  // Ailerons balayés : face translucide + contour.
+  function makeFin(sign) {
+    const p = [
+      new THREE.Vector3(0.42 * sign, 0, 0.0),
+      new THREE.Vector3(0.95 * sign, -0.03, 0.52),
+      new THREE.Vector3(0.44 * sign, 0, 0.5),
+    ];
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array([p[0].x,p[0].y,p[0].z,p[1].x,p[1].y,p[1].z,p[2].x,p[2].y,p[2].z]), 3));
     const grp = new THREE.Group();
-    for (let i = 0; i < pts.length; i++) {
-      const g = new THREE.BufferGeometry().setFromPoints([pts[i], pts[(i+1)%pts.length]]);
-      grp.add(new THREE.Line(g, new THREE.LineBasicMaterial({ color: MAGENTA, transparent: true, opacity: 1.0 })));
-    }
+    grp.add(new THREE.Mesh(g, new THREE.MeshBasicMaterial({
+      color: MAGENTA, transparent: true, opacity: 0.28, side: THREE.DoubleSide,
+      blending: THREE.AdditiveBlending, depthWrite: false
+    })));
+    grp.add(segLines([[p[0], p[1]], [p[1], p[2]], [p[2], p[0]]], MAGENTA, 1));
     return grp;
   }
-  shipGroup.add(finLines(finL));
-  shipGroup.add(finLines(finR));
-  // Cockpit : petit accent violet (losange fin) au centre
-  const cockpitPts = [
-    new THREE.Vector3(0, 0.08, -0.35),
-    new THREE.Vector3(-0.12, 0, -0.1),
-    new THREE.Vector3(0, -0.02, 0.05),
-    new THREE.Vector3(0.12, 0, -0.1),
-  ];
-  const cockpit = new THREE.Group();
-  for (let i = 0; i < cockpitPts.length; i++) {
-    const g = new THREE.BufferGeometry().setFromPoints([cockpitPts[i], cockpitPts[(i+1)%cockpitPts.length]]);
-    cockpit.add(new THREE.Line(g, new THREE.LineBasicMaterial({ color: PURPLE, transparent: true, opacity: 1.0 })));
-  }
-  shipGroup.add(cockpit);
-  // Engine glow (à l'arrière, +Z)
-  const glowGeo = new THREE.SphereGeometry(0.16, 16, 16);
-  const engineGlow = new THREE.Mesh(glowGeo, new THREE.MeshBasicMaterial({ color: MAGENTA, transparent: true, opacity: 0.9 }));
-  engineGlow.position.set(0, 0, 0.55);
-  shipGroup.add(engineGlow);
-  // Deuxième glow cyan plus petit pour la profondeur
-  const engineGlow2 = new THREE.Mesh(new THREE.SphereGeometry(0.09, 12, 12), new THREE.MeshBasicMaterial({ color: CYAN, transparent: true, opacity: 0.8 }));
-  engineGlow2.position.set(0, 0, 0.6);
-  shipGroup.add(engineGlow2);
+  shipBody.add(makeFin(-1));
+  shipBody.add(makeFin(1));
+  // Verrière en goutte : octaèdre étiré, à moitié noyé dans la coque.
+  const canopyGeo = new THREE.OctahedronGeometry(1, 0);
+  const canopy = new THREE.Mesh(canopyGeo, new THREE.MeshBasicMaterial({
+    color: 0x3fd0ff, transparent: true, opacity: 0.4,
+    blending: THREE.AdditiveBlending, depthWrite: false
+  }));
+  canopy.scale.set(0.13, 0.11, 0.36);
+  canopy.position.set(0, 0.05, -0.28);
+  shipBody.add(canopy);
+  const canopyEdges = new THREE.LineSegments(new THREE.EdgesGeometry(canopyGeo),
+    new THREE.LineBasicMaterial({ color: 0xbfefff, transparent: true, opacity: 0.85 }));
+  canopyEdges.scale.copy(canopy.scale);
+  canopyEdges.position.copy(canopy.position);
+  shipBody.add(canopyEdges);
+  // Réacteurs : deux petits disques (coeur clair + halo magenta) au lieu d'une grosse sphère.
+  const engineCoreMat = new THREE.MeshBasicMaterial({ color: 0xffd6e6, transparent: true, opacity: 1, depthWrite: false });
+  const engineHaloMat = new THREE.MeshBasicMaterial({ color: MAGENTA, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false });
+  const engineCoreGeo = new THREE.CircleGeometry(0.04, 14);
+  const engineHaloGeo = new THREE.CircleGeometry(0.095, 18);
+  const engineHalos = [];
+  [-0.25, 0.25].forEach(x => {
+    const core = new THREE.Mesh(engineCoreGeo, engineCoreMat);
+    core.position.set(x, 0, 0.515);
+    const halo = new THREE.Mesh(engineHaloGeo, engineHaloMat);
+    halo.position.set(x, 0, 0.52);
+    shipBody.add(halo); shipBody.add(core);
+    engineHalos.push(halo);
+  });
   shipGroup.position.set(0, FLOOR_Y + 0.55, SHIP_Z);
   scene.add(shipGroup);
-  // ============ Trail ============
-  const TRAIL_MAX = 24;
-  const trailNodes = [];
-  const trailGeoM = new THREE.PlaneGeometry(0.28, 0.28);
-  function spawnTrailNode() {
-    const m = new THREE.Mesh(trailGeoM, new THREE.MeshBasicMaterial({ color: CYAN, transparent: true, opacity: 0.75 }));
-    m.position.set(shipGroup.position.x, shipGroup.position.y - 0.05, shipGroup.position.z + 0.55);
-    scene.add(m);
-    trailNodes.push({ mesh: m, life: 1 });
-    if (trailNodes.length > TRAIL_MAX) {
-      const old = trailNodes.shift();
-      scene.remove(old.mesh);
+  // ============ Traînées de réacteur ============
+  // Deux rubans horizontaux par réacteur (halo magenta + coeur clair), texture
+  // en dégradé générée une fois. Longueur liée à la vitesse, scintillement léger.
+  function makeStreakTexture() {
+    const c = document.createElement('canvas');
+    c.width = 32; c.height = 128;
+    const x = c.getContext('2d');
+    const gl = x.createLinearGradient(0, 0, 0, 128);
+    gl.addColorStop(0, 'rgba(255,255,255,1)');
+    gl.addColorStop(0.25, 'rgba(255,255,255,0.55)');
+    gl.addColorStop(1, 'rgba(255,255,255,0)');
+    x.fillStyle = gl; x.fillRect(0, 0, 32, 128);
+    x.globalCompositeOperation = 'destination-in';
+    const gw = x.createLinearGradient(0, 0, 32, 0);
+    gw.addColorStop(0, 'rgba(0,0,0,0)');
+    gw.addColorStop(0.5, 'rgba(0,0,0,1)');
+    gw.addColorStop(1, 'rgba(0,0,0,0)');
+    x.fillStyle = gw; x.fillRect(0, 0, 32, 128);
+    const t = new THREE.CanvasTexture(c);
+    return t;
+  }
+  const streakTex = makeStreakTexture();
+  const streakGeo = new THREE.PlaneGeometry(1, 1);
+  streakGeo.rotateX(-Math.PI / 2);   // à plat, face vers le haut
+  streakGeo.translate(0, 0, 0.5);    // part du réacteur vers l'arrière (+Z)
+  const streakHaloMat = new THREE.MeshBasicMaterial({ map: streakTex, color: MAGENTA, transparent: true, opacity: 0.85, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide });
+  const streakCoreMat = new THREE.MeshBasicMaterial({ map: streakTex, color: 0x9feeff, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide });
+  const streaks = [];
+  [-0.25, 0.25].forEach(x => {
+    const halo = new THREE.Mesh(streakGeo, streakHaloMat);
+    halo.position.set(x, -0.01, 0.52);
+    const core = new THREE.Mesh(streakGeo, streakCoreMat);
+    core.position.set(x, 0.0, 0.52);
+    shipBody.add(halo); shipBody.add(core);
+    streaks.push({ halo, core });
+  });
+  function updateStreaks(dt, spd) {
+    const len = 0.5 + Math.min(1.1, spd * 0.85);
+    const flick = 0.92 + Math.random() * 0.16;
+    for (let i = 0; i < streaks.length; i++) {
+      streaks[i].halo.scale.set(0.2, 1, len * flick);
+      streaks[i].core.scale.set(0.07, 1, len * 0.75 * flick);
     }
   }
   // ============ Speed line particles ============
@@ -838,7 +882,22 @@
   }
   seedParticles();
   pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-  const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({ color: CYAN, size: 0.09, transparent: true, opacity: 0.75 }));
+  // Poussières rondes et douces (texture radiale générée une fois) au lieu de carrés.
+  function makeDotTexture() {
+    const c = document.createElement('canvas');
+    c.width = c.height = 32;
+    const x = c.getContext('2d');
+    const g = x.createRadialGradient(16, 16, 0, 16, 16, 16);
+    g.addColorStop(0, 'rgba(255,255,255,1)');
+    g.addColorStop(0.35, 'rgba(255,255,255,0.6)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    x.fillStyle = g; x.fillRect(0, 0, 32, 32);
+    return new THREE.CanvasTexture(c);
+  }
+  const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({
+    color: CYAN, size: 0.11, map: makeDotTexture(), transparent: true, opacity: 0.85,
+    blending: THREE.AdditiveBlending, depthWrite: false
+  }));
   scene.add(particles);
   // ============ Responsive layout ============
   // Core of the responsive fix: recompute tunnel width, lane positions, FOV and
@@ -906,6 +965,8 @@
   let obsCooldown = 12;
   let orbCooldown = 18;
   let pulseT      = 0;
+  let squashT     = 0;          // écrasement du vaisseau au changement de voie
+  const REDUCED_MOTION = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   let colorPhase  = 0;
   // Combo / near-miss state
   let combo       = 1;          // multiplier applied to all points
@@ -970,20 +1031,45 @@
     obsEdgeGeo = new THREE.EdgesGeometry(obsBoxGeo);
   }
   buildObstacleGeo();
+  // Obstacle : remplissage translucide + arêtes vives + halo d'arêtes. Les
+  // arêtes ignorent le brouillard pour être lisibles plus tôt ; tout apparaît
+  // en fondu sur les premiers mètres (pas d'apparition sèche au fond).
+  const OBS_SPAWN_Z = -85;
+  const OBS_FADE_LEN = 28;
   function createObstacle(mask) {
     const g = new THREE.Group();
+    const fillMat = new THREE.MeshBasicMaterial({ color: MAGENTA, transparent: true, opacity: 0, depthWrite: false });
+    const edgeMat = new THREE.LineBasicMaterial({ color: 0xff5c98, transparent: true, opacity: 0, fog: false });
+    const haloMat = new THREE.LineBasicMaterial({ color: MAGENTA, transparent: true, opacity: 0, fog: false, blending: THREE.AdditiveBlending, depthWrite: false });
     mask.forEach((blocked, i) => {
       if (!blocked) return;
-      const fill = new THREE.Mesh(obsBoxGeo, new THREE.MeshBasicMaterial({ color: MAGENTA, transparent: true, opacity: 0.32 }));
+      const fill = new THREE.Mesh(obsBoxGeo, fillMat);
       fill.position.x = LANES[i];
       g.add(fill);
-      const edg = new THREE.LineSegments(obsEdgeGeo, new THREE.LineBasicMaterial({ color: MAGENTA }));
+      const edg = new THREE.LineSegments(obsEdgeGeo, edgeMat);
       edg.position.x = LANES[i];
       g.add(edg);
+      const halo = new THREE.LineSegments(obsEdgeGeo, haloMat);
+      halo.position.x = LANES[i];
+      halo.scale.set(1.05, 1.07, 1.1);
+      g.add(halo);
     });
-    g.position.set(0, FLOOR_Y + 0.75, -85);
+    g.position.set(0, FLOOR_Y + 0.75, OBS_SPAWN_Z);
     scene.add(g);
-    return { group: g, lanes: mask, scored: false };
+    return { group: g, lanes: mask, scored: false, mats: [fillMat, edgeMat, haloMat] };
+  }
+  function fadeObstacle(o) {
+    const t = Math.min(1, (o.group.position.z - OBS_SPAWN_Z) / OBS_FADE_LEN);
+    if (t >= 1 && o.faded) return;
+    const e = t * t * (3 - 2 * t);
+    o.mats[0].opacity = 0.34 * e;
+    o.mats[1].opacity = e;
+    o.mats[2].opacity = 0.4 * e;
+    if (t >= 1) o.faded = true;
+  }
+  function disposeObstacle(o) {
+    scene.remove(o.group);
+    if (o.mats) o.mats.forEach(m => m.dispose());
   }
   function spawnObstacle(intense) {
     const speedT = (baseSpeed - START_SPEED) / (MAX_SPEED - START_SPEED);
@@ -1190,13 +1276,29 @@
     explosion = { mesh: p, vels, life: 1.0 };
   }
   // ============ Combo / feedback helpers ============
-  function showToast(text, gold) {
+  // Texte de points placé à côté du vaisseau (projection écran), jamais au
+  // centre de l'écran. Un seul texte à la fois : le précédent est remplacé.
+  const toastVec = new THREE.Vector3();
+  let lastToast = null;
+  function showToast(text, kind, side) {
+    if (lastToast && lastToast.parentNode) lastToast.parentNode.removeChild(lastToast);
     const el = document.createElement('div');
-    el.className = 'toast' + (gold ? ' gold' : '');
+    el.className = 'toast' + (kind ? ' ' + kind : '');
     el.textContent = text;
-    el.style.left = (46 + Math.random() * 8) + '%';
+    const W = window.innerWidth, H = window.innerHeight;
+    toastVec.copy(shipGroup.position).project(camera);
+    let x = (toastVec.x + 1) / 2 * W;
+    let y = (1 - toastVec.y) / 2 * H;
+    const off = Math.min(120, W * 0.24);
+    x += (side || 0) * off;
+    y -= side ? 34 : 58;
+    x = Math.max(70, Math.min(W - 70, x));
+    y = Math.max(H * 0.45, Math.min(H - 40, y));
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
     toastLayer.appendChild(el);
-    setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 800);
+    lastToast = el;
+    setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 650);
   }
   function fireFlash() {
     flashEl.classList.remove('fire');
@@ -1206,7 +1308,7 @@
   }
   // Affiche les zones de tap uniquement sur appareil tactile.
   const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
-  if (isTouch) tapZonesEl.classList.add('mobile');
+  tapZonesEl.classList.add(isTouch ? 'mobile' : 'desk');
   let tapZoneTimer = null;
   function flashTapZone(side) {
     const el = side === 'left' ? tapLeftEl : tapRightEl;
@@ -1236,16 +1338,16 @@
   }
   function breakCombo() {
     if (combo > 1) {
-      showToast('Combo lost', false);
+      showToast('Combo lost', 'dim', 0);
     }
     combo = 1;
     comboTimer = 0;
     refreshComboHUD();
   }
-  function scorePoints(base, gold, label) {
+  function scorePoints(base, gold, label, side) {
     const pts = base * combo;
     orbBonus += pts;
-    showToast((label ? label + ' ' : '') + '+' + pts + (combo > 1 ? ' (x' + combo + ')' : ''), gold);
+    showToast((label ? label + ' ' : '') + '+' + pts, gold ? 'gold' : '', side || 0);
   }
   // ============ Waves ============
   function pickWaveType() {
@@ -1267,7 +1369,7 @@
     waveBanner.classList.remove('show');
     void waveBanner.offsetWidth;
     waveBanner.classList.add('show');
-    bannerT = 1.9;
+    bannerT = 1.15;
     waveTimerFill.style.transform = 'scaleX(1)';
     waveTimerEl.classList.remove('hidden');
     playWaveHorn();
@@ -1283,6 +1385,8 @@
     if (next !== currentLane) {
       currentLane = next;
       targetX = LANES[currentLane];
+      squashT = 1;
+      flashTapZone(dir < 0 ? 'left' : 'right');
       playSwoosh();
     }
   }
@@ -1313,12 +1417,10 @@
   }, { passive: true });
   // ============ Game flow ============
   function clearRunEntities() {
-    obstacles.forEach(o => scene.remove(o.group));
+    obstacles.forEach(disposeObstacle);
     obstacles = [];
     orbs.forEach(o => scene.remove(o.mesh));
     orbs = [];
-    trailNodes.forEach(t => scene.remove(t.mesh));
-    trailNodes.length = 0;
     if (explosion) { scene.remove(explosion.mesh); explosion = null; }
   }
   function startGame() {
@@ -1361,6 +1463,10 @@
     shipGroup.visible = true;
     shipGroup.position.x = 0;
     shipGroup.rotation.z = 0;
+    shipGroup.rotation.y = 0;
+    squashT = 0;
+    shipBody.scale.set(1, 1, 1);
+    lastToast = null;
     scoreEl.textContent = '0';
     startScreen.classList.add('hidden');
     endScreen.classList.add('hidden');
@@ -1375,7 +1481,7 @@
     if (state !== 'playing') return;
     triggerExplosion(shipGroup.position);
     shipGroup.visible = false;
-    shake = 1.6;
+    shake = REDUCED_MOTION ? 0.4 : 1.6;
     playCrash();
     stopDrone();
     if (revivesUsed < MAX_REVIVES) {
@@ -1442,7 +1548,7 @@
     // player isn't instantly hit, grant blinking invincibility.
     obstacles.forEach(o => {
       // remove obstacles currently close to the ship to avoid instant re-death
-      if (o.group.position.z > -30) { scene.remove(o.group); o.group.__dead = true; }
+      if (o.group.position.z > -30) { disposeObstacle(o); o.group.__dead = true; }
     });
     obstacles = obstacles.filter(o => !o.group.__dead);
     invincible = INVINCIBLE_TIME;
@@ -1516,7 +1622,7 @@ reviveBtn.addEventListener('click', () => {
           type: 'RH_TRACK',
           event: 'ad_rewarded_complete',
           game_id: 'neon-rush',
-          props: { reward: 'revive' }
+          props: { context: 'revive' }
         }, '*');
       } catch (e) {}
     });
@@ -1573,9 +1679,15 @@ reviveBtn.addEventListener('click', () => {
   function update(dt) {
     if (paused) return;   // frozen while paused
     pulseT += dt;
-    engineGlow.material.opacity = 0.6 + Math.sin(pulseT * 12) * 0.25;
-    engineGlow.scale.setScalar(1 + Math.sin(pulseT * 14) * 0.25);
-    engineGlow2.material.opacity = 0.5 + Math.sin(pulseT * 12 + 1) * 0.3;
+    engineHaloMat.opacity = 0.42 + Math.sin(pulseT * 12) * 0.14;
+    const eh = 1 + Math.sin(pulseT * 14) * 0.12;
+    engineHalos[0].scale.setScalar(eh); engineHalos[1].scale.setScalar(eh);
+    updateStreaks(dt, state === 'playing' ? speed : 0.3);
+    if (squashT > 0) {
+      squashT = Math.max(0, squashT - dt * 7);
+      const k = squashT * squashT;
+      shipBody.scale.set(1 + 0.16 * k, 1 - 0.14 * k, 1 + 0.05 * k);
+    }
     updateLightning(dt);
     if (state === 'playing' && !paused) {
       // Cruise target creeps up by CRUISE_STEP every CRUISE_STEP_SEC seconds.
@@ -1641,8 +1753,9 @@ reviveBtn.addEventListener('click', () => {
       colorPhase += dt * 0.08 + speed * 0.008;
       const lerpF = Math.min(1, dt * 14);
       shipGroup.position.x += (targetX - shipGroup.position.x) * lerpF;
-      const bank = (targetX - shipGroup.position.x) * 0.55;
+      const bank = (targetX - shipGroup.position.x) * 0.7;
       shipGroup.rotation.z = -bank;
+      shipGroup.rotation.y = -bank * 0.18;
       shipGroup.position.y = FLOOR_Y + 0.55 + Math.sin(pulseT * 4) * 0.04;
       for (let i = 0; i < rings.length; i++) {
         const r = rings[i];
@@ -1688,10 +1801,10 @@ reviveBtn.addEventListener('click', () => {
         if (!inWave) spawnOrb();       // no orbs during a wave
         orbCooldown = 12 + Math.random() * 18;
       }
-      if ((distance % 0.7) < speed) spawnTrailNode();
       for (let i = obstacles.length - 1; i >= 0; i--) {
         const o = obstacles[i];
         o.group.position.z += speed;
+        fadeObstacle(o);
         if (invincible <= 0 && o.group.position.z > SHIP_Z - 0.6 && o.group.position.z < SHIP_Z + 0.6 && o.lanes[currentLane]) {
           die();
           break;
@@ -1704,13 +1817,13 @@ reviveBtn.addEventListener('click', () => {
           const right = currentLane < 2 && o.lanes[currentLane + 1];
           if (left || right) {
             addCombo();
-            scorePoints(NEARMISS_BASE, false, 'Near miss');
+            scorePoints(NEARMISS_BASE, false, 'Near miss', left ? -1 : 1);
             fireFlash();
             playNearMiss();
           }
         }
         if (o.group.position.z > 10) {
-          scene.remove(o.group);
+          disposeObstacle(o);
           obstacles.splice(i, 1);
         }
       }
@@ -1770,18 +1883,6 @@ reviveBtn.addEventListener('click', () => {
         const fl = floorLines[i];
         fl.position.z += 0.08;
         if (fl.position.z > 8) fl.position.z -= TUNNEL_LEN;
-      }
-    }
-    for (let i = trailNodes.length - 1; i >= 0; i--) {
-      const n = trailNodes[i];
-      n.mesh.position.z += speed * 1.1;
-      n.life -= dt * 2.5;
-      n.mesh.material.opacity = Math.max(0, n.life * 0.7);
-      n.mesh.scale.setScalar(1 + (1 - n.life) * 0.8);
-      n.mesh.lookAt(camera.position);
-      if (n.life <= 0 || n.mesh.position.z > 12) {
-        scene.remove(n.mesh);
-        trailNodes.splice(i, 1);
       }
     }
     if (explosion) {
