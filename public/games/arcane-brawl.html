@@ -87,7 +87,7 @@
   #stick.on { display: block; }
   #knob { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ffffff, var(--cyan) 45%, #0a5d70); box-shadow: 0 0 18px rgba(42,240,255,.8); }
 
-  /* Action buttons: DASH + unlocked powers in an arc around it */
+  /* Action buttons: STRIKE + unlocked powers in an arc around it */
   #actions { position: fixed; right: calc(22px + var(--safe-right)); bottom: calc(30px + var(--safe-bottom)); width: var(--dash); height: var(--dash); z-index: 6; display: none; }
   #actions.on { display: block; }
   .act { position: absolute; border-radius: 50%; color: #fff; font-weight: 900; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; flex-direction: column; touch-action: none; cursor: pointer; overflow: visible; transition: transform .1s, filter .2s; padding: 0; }
@@ -99,6 +99,12 @@
   .act.ready { animation: ready .38s ease-out; }
   @keyframes ready { 0% { transform: scale(1.18); } 100% { transform: scale(1); } }
   #dash { left: 0; top: 0; width: var(--dash); height: var(--dash); border: 3px solid var(--gold); background: radial-gradient(circle at 40% 35%, rgba(255,194,58,.65), rgba(90,20,10,.92)); box-shadow: 0 0 24px rgba(255,194,58,.55); font-size: 16px; }
+  #dash .sword { width: 30px; height: 30px; fill: #fff; margin-bottom: -2px; filter: drop-shadow(0 0 6px rgba(255,194,58,.9)); }
+  #dash b { font-size: 12px; }
+  #dash .chg { position: absolute; inset: -7px; border-radius: 50%; pointer-events: none; opacity: 0; background: conic-gradient(var(--gold) var(--c, 0%), rgba(255,194,58,.12) 0); -webkit-mask: radial-gradient(circle, transparent 62%, #000 63%); mask: radial-gradient(circle, transparent 62%, #000 63%); transition: opacity .12s; }
+  #dash.charging { transform: scale(.93); }
+  #dash.charging .chg { opacity: 1; }
+  #dash.full { box-shadow: 0 0 34px rgba(255,255,255,.9), 0 0 60px rgba(255,194,58,.8); border-color: #fff; }
   .pw { width: var(--pw); height: var(--pw); border: 2px solid currentColor; background: radial-gradient(circle at 40% 35%, rgba(255,255,255,.25), rgba(14,4,24,.92)); box-shadow: 0 0 16px currentColor; display: none; }
   .pw.on { display: flex; }
   .pw svg { width: 26px; height: 26px; fill: #fff; }
@@ -283,12 +289,12 @@
 <div id="ftxts"></div>
 <div id="stick"><div id="knob"></div></div>
 <div id="actions">
-  <button class="act" id="dash" aria-label="Dash"><span class="cd"></span><b>DASH</b><span class="key">SPACE</span></button>
+  <button class="act" id="dash" aria-label="Strike"><span class="cd"></span><span class="chg"></span><svg class="sword" viewBox="0 0 24 24"><path d="M19.5 2.5L21.5 4.5 11 15l-1.5-1.5zM8 13.5l2.5 2.5-1.6 1.6 1.6 1.6-1.4 1.4-1.6-1.6-2.3 2.3-1.4-1.4 2.3-2.3-1.6-1.6 1.4-1.4 1.6 1.6z"/></svg><b>STRIKE</b><span class="key">SPACE</span></button>
   <button class="act pw" id="pw-shock" aria-label="Shockwave" style="color:#2af0ff"><span class="cd"></span><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 3a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm0 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/></svg><span class="key">1</span></button>
   <button class="act pw" id="pw-shield" aria-label="Shield" style="color:#b6ff3a"><span class="cd"></span><svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.4 9.4-8 11-4.6-1.6-8-6-8-11V5l8-3z"/></svg><span class="key">2</span></button>
   <button class="act pw" id="pw-slam" aria-label="Slam" style="color:#ff7a1a"><span class="cd"></span><svg viewBox="0 0 24 24"><path d="M12 2l3 7h-2v5h-2V9H9l3-7zM3 18h18v3H3z"/></svg><span class="key">3</span></button>
 </div>
-<div id="hint"><span>Drag to move &middot; shove them off the ring</span></div>
+<div id="hint"><span>Drag to move &middot; STRIKE to knock them off &middot; hold to charge</span></div>
 
 <div class="overlay" id="menu">
   <div class="panel">
@@ -309,7 +315,7 @@
       <button class="btn hard" id="btnHard">HARD<small>Ice ring, bigger horde</small></button>
     </div>
     <div class="best" id="bestBox"></div>
-    <div class="controls">Touch: drag to move, DASH and power buttons &middot; Keyboard: WASD / ZQSD / arrows, Space dash, 1 2 3 powers, P pause</div>
+    <div class="controls">Touch: drag to move, tap STRIKE, hold it to charge &middot; Keyboard: WASD / ZQSD / arrows, Space strike (hold to charge), 1 2 3 powers, P pause</div>
   </div>
 </div>
 
@@ -404,8 +410,8 @@ const R0 = 8;            // full ring radius
 const R_MIN = 4;         // the ring never shrinks below this
 const BASE_R = 0.58;     // body radius at mass x1 (size grows with sqrt(mass))
 const MODES = {
-  classic: { damp: 1.7, shrink: 0.05, botAccel: 1, botDash: 1, scoreMul: 1, coinMul: 1, regrow: 1.6, extra: 0 },
-  hard:    { damp: 0.6, shrink: 0.08, botAccel: 1.2, botDash: 1.4, scoreMul: 1.5, coinMul: 1.3, regrow: 1.1, extra: 1 }
+  classic: { fr: 4.6, shrink: 0.05, botAccel: 1, botDash: 1, botF: 1, botWind: 1, scoreMul: 1, coinMul: 1, regrow: 1.6, extra: 0 },
+  hard:    { fr: 3.6, shrink: 0.08, botAccel: 1.2, botDash: 1.3, botF: 1.15, botWind: 0.85, scoreMul: 1.5, coinMul: 1.3, regrow: 1.1, extra: 1 }
 };
 const PAL = { gold: 0xffc23a, crimson: 0xff2a4a, cyan: 0x2af0ff, violet: 0xa45cff, lime: 0xb6ff3a, orange: 0xff7a1a, white: 0xfff3e6, ice: 0x8fe3ff };
 // Enemies: mass drives size, weight and rewards
@@ -421,12 +427,18 @@ const ENEMY = {
   rock:     { golem: 'rock',   mass: 5, accel: 8, maxV: 3.8, coins: 100, xp: 100, pts: 1200, boss: true, name: 'ROCK GOLEM', color: 0xffb03a }
 };
 const GOLEMS = ['forest', 'fire', 'ice', 'rock'];
+// Skeleton sword strikes: visible wind-up (red arc on the floor), then a frontal hit that throws the target
+const MELEE = {
+  minion:  { wind: 0.45, F: 7,  reach: 1.35, arc: 0.45, cd: 2.0 },
+  rogue:   { wind: 0.3,  F: 7,  reach: 1.15, arc: 0.4,  cd: 1.4 },
+  warrior: { wind: 0.75, F: 13, reach: 1.75, arc: 0.3,  cd: 3.0 }
+};
 // Permanent upgrades (armory). time[] = research time in seconds for each level reached
 const STATS = {
   mass:  { name: 'MASS', desc: (l) => 'You are always heavier and bigger. Now x' + MASS_STEPS[l] + (l < 4 ? ', next x' + MASS_STEPS[l + 1] : ''), max: 4, base: 150, time: [0, 60, 300, 1800, 7200], color: '#ff7a1a' },
   push:  { name: 'PUSH FORCE', desc: (l) => 'Your hits throw enemies further (+' + (l * 18) + '%)', max: 5, base: 60, time: [0, 0, 60, 300, 1200, 3600], color: '#ffc23a' },
   speed: { name: 'SPEED', desc: (l) => 'Run faster (+' + (l * 6) + '%)', max: 5, base: 50, time: [0, 0, 60, 300, 1200, 3600], color: '#2af0ff' },
-  dash:  { name: 'DASH', desc: (l) => 'Stronger dash, faster recharge (' + dashCd(l).toFixed(1) + ' s)', max: 5, base: 60, time: [0, 0, 60, 300, 1200, 3600], color: '#ff5adc' },
+  dash:  { name: 'STRIKE', desc: (l) => 'Harder sword strike (+' + (l * 10) + '%), faster recharge (' + strikeCd(l).toFixed(2) + ' s)', max: 5, base: 60, time: [0, 0, 60, 300, 1200, 3600], color: '#ff5adc' },
   greed: { name: 'GREED', desc: (l) => 'More coins from every ring out (+' + (l * 10) + '%)', max: 5, base: 80, time: [0, 30, 120, 600, 1800, 3600], color: '#ffe36b' }
 };
 const MASS_STEPS = [1, 1.5, 2, 2.5, 3];
@@ -479,7 +491,7 @@ const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 function hdr(hex, k) { return new THREE.Color(hex).multiplyScalar(k); }   // > 1 = picked up by the bloom
 const css = (hex) => '#' + new THREE.Color(hex).getHexString();
 const radiusFor = (mass) => BASE_R * Math.sqrt(mass);
-function dashCd(l) { return 1.3 - 0.1 * l; }
+function strikeCd(l) { return 0.5 - 0.04 * l; }
 function fmtTime(s) {
   s = Math.max(0, Math.ceil(s));
   if (s >= 3600) return Math.floor(s / 3600) + 'h ' + String(Math.floor((s % 3600) / 60)).padStart(2, '0') + 'm';
@@ -550,7 +562,7 @@ function pStats() {
   const s = S.stats;
   return {
     mass: MASS_STEPS[s.mass], push: 1 + 0.18 * s.push, accel: 21 * (1 + 0.06 * s.speed), maxV: 7.4 * (1 + 0.05 * s.speed),
-    dashCd: dashCd(s.dash), dashK: 11 + 0.8 * s.dash, greed: 1 + 0.1 * s.greed
+    strikeCd: strikeCd(s.dash), strikeK: 12.5 * (1 + 0.1 * s.dash), greed: 1 + 0.1 * s.greed
   };
 }
 
@@ -1316,7 +1328,7 @@ function makeEntity(kind, type, x, z) {
   const e = {
     kind, type, x, z, vx: 0, vz: 0, y: 0, vy: 0, r: spec.r, baseR: spec.r, mass: T.mass, baseMass: T.mass, accel: T.accel, maxV: T.maxV,
     color: spec.color, dashEvery: T.dashEvery || 0, falling: false, dead: false, dropT: kind === 'player' ? 0 : 0.9,
-    dashT: 0, dashCd: 0, aiT: Math.random() * 2, lastPlayerHit: -99, yaw: Math.random() * 6, squash: 0, hitT: 0, spin: 0,
+    dashT: 0, strikeCd: 0, mvx: 0, mvz: 0, stun: 0, sw: null, chg: null, queued: null, aiT: 0.6 + Math.random() * 1.2, lastPlayerHit: -99, yaw: Math.random() * 6, squash: 0, hitT: 0, spin: 0,
     castT: 2 + Math.random() * 1.5, casting: 0, castDecal: null, dustT: 0, frozen: 0, slow: 0, ice: 0, air: 0,
     boss: !!(E && E.boss), anchor: 1, atkT: 3 + Math.random() * 2, atk: null, walk: 0, orbT: 2, tpT: 4, sumT: 8, phase2: false, fxT: 0, vis
   };
@@ -1330,6 +1342,7 @@ function removeEntity(e) {
   disposeFigure(e.vis);
   freeDecal(e.castDecal);
   if (e.atk) endAttack(e);
+  if (e.chgDecal) { freeDecal(e.chgDecal); e.chgDecal = null; }
   ents = ents.filter((x) => x !== e);
 }
 function effMass(e) { return e.boss ? e.mass * (0.3 + 0.7 * e.anchor) : e.mass; }
@@ -1346,14 +1359,14 @@ window.addEventListener('keydown', (e) => {
   keys[k] = true;
   if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' '].includes(k)) e.preventDefault();
   if (e.repeat) return;
-  if (k === ' ' || k === 'shift') tryDash();
+  if (k === ' ' || k === 'shift') pressStrike();
   if (k === '1' || k === '&') usePower('shock');
   if (k === '2' || k === 'é') usePower('shield');
   if (k === '3' || k === '"') usePower('slam');
   if (k === 'p' || k === 'escape') { if (state === 'play') pauseGame(); else if (state === 'paused') resumeGame(); }
 });
-window.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
-window.addEventListener('blur', () => { for (const k in keys) keys[k] = false; stickRelease(); if (state === 'play') pauseGame(); });
+window.addEventListener('keyup', (e) => { const k = e.key.toLowerCase(); keys[k] = false; if ((k === ' ' || k === 'shift') && !keys[' '] && !keys.shift) releaseStrike(); });
+window.addEventListener('blur', () => { for (const k in keys) keys[k] = false; stickRelease(); cancelCharge(); if (state === 'play') pauseGame(); });
 
 const canvasEl = renderer.domElement;
 canvasEl.addEventListener('pointerdown', (e) => {
@@ -1382,7 +1395,9 @@ canvasEl.addEventListener('pointermove', (e) => {
 function stickRelease() { stickId = null; stickX = stickY = 0; show(stickEl, false); }
 canvasEl.addEventListener('pointerup', (e) => { if (e.pointerId === stickId) stickRelease(); });
 canvasEl.addEventListener('pointercancel', (e) => { if (e.pointerId === stickId) stickRelease(); });
-dashEl.addEventListener('pointerdown', (e) => { e.preventDefault(); e.stopPropagation(); Snd.init(); tryDash(); });
+let strikePtr = null;
+dashEl.addEventListener('pointerdown', (e) => { e.preventDefault(); e.stopPropagation(); Snd.init(); strikePtr = e.pointerId; try { dashEl.setPointerCapture(e.pointerId); } catch (er) {} pressStrike(); });
+for (const ev of ['pointerup', 'pointercancel', 'lostpointercapture']) dashEl.addEventListener(ev, (e) => { if (e.pointerId !== strikePtr) return; strikePtr = null; releaseStrike(); });
 for (const k of POWER_KEYS) PW_EL[k].addEventListener('pointerdown', (e) => { e.preventDefault(); e.stopPropagation(); Snd.init(); usePower(k); });
 
 function readInput() {
@@ -1495,6 +1510,7 @@ function spawnBot(type) {
   if (player && Math.hypot(x - player.x, z - player.z) < 2.6) { x = -x; z = -z; }
   const e = makeEntity('bot', type, x, z);
   e.accel *= G.cfg.botAccel * (1 + Math.min(0.3, G.wave * 0.012));
+  e.maxV *= 1 + (G.cfg.botAccel - 1) * 0.4 + Math.min(0.12, G.wave * 0.005);
   e.dashEvery /= G.cfg.botDash;
   spawnRing(x, z, e.color, e.r * 3, 0.9);
   return e;
@@ -1595,7 +1611,10 @@ function updateHud(force) {
   // action buttons
   if (player) {
     const ps = pStats();
-    setCd(dashEl, player.dashCd / ps.dashCd);
+    setCd(dashEl, player.chg ? 0 : player.strikeCd / (ps.strikeCd * (player.lastPow ? 1 + 0.8 * player.lastPow : 1)));
+    const cp = player.chg ? chargePow(player.chg.t) : 0;
+    dashEl.classList.toggle('charging', !!player.chg); dashEl.classList.toggle('full', cp >= 1);
+    dashEl.style.setProperty('--c', Math.round(cp * 100) + '%');
     for (const k of POWER_KEYS) if (S.powers[k] > 0) setCd(PW_EL[k], G.cd[k] / powerCd(k));
   }
 }
@@ -1608,7 +1627,7 @@ function setCd(el, frac) {
 }
 function refreshPowerButtons() {
   for (const k of POWER_KEYS) show(PW_EL[k], S.powers[k] > 0);
-  // arc around the DASH button: left, up-left, up
+  // arc around the STRIKE button: left, up-left, up
   const ang = [180, 135, 90], visible = POWER_KEYS.filter((k) => S.powers[k] > 0);
   visible.forEach((k, i) => {
     const a = ang[i] * Math.PI / 180, el = PW_EL[k];
@@ -1618,20 +1637,177 @@ function refreshPowerButtons() {
 }
 function impact(stop, sh) { if (!G) return; G.hitstop = Math.max(G.hitstop, stop); shake = Math.max(shake, RM ? sh * 0.25 : sh); }
 
-/* ================= ACTIONS: DASH + POWERS ================= */
-function tryDash() {
-  if (state !== 'play' || !player || player.falling || player.dashCd > 0 || player.dropT > 0 || player.air > 0) return;
+/* ================= ACTIONS: SWORD STRIKE + POWERS ================= */
+// Tap = quick strike, hold = charged strike (full power after ~0.6 s). A short wind-up, then a frontal arc
+// that throws whatever it touches; the knight steps forward a little with each swing.
+const CHARGE_MIN = 0.16, CHARGE_FULL = 0.62;
+function chargePow(t) { return clamp((t - CHARGE_MIN) / (CHARGE_FULL - CHARGE_MIN), 0, 1); }
+function canAct() { return state === 'play' && player && !player.falling && player.dropT <= 0 && player.air <= 0 && !player.dead; }
+function pressStrike() {
+  if (!canAct() || player.chg) return;
+  player.chg = { t: 0, full: false };
+  player.chgDecal = decal(player.x, player.z, 0.3, PAL.gold, 0.0);
+}
+function cancelCharge() {
+  if (!player) return;
+  player.chg = null;
+  if (player.chgDecal) { freeDecal(player.chgDecal); player.chgDecal = null; }
+}
+function releaseStrike() {
+  if (!player || !player.chg) return;
+  const pw = chargePow(player.chg.t);
+  cancelCharge();
+  if (!canAct()) return;
+  player.queued = { pw, t: 0.35 };   // fires as soon as the previous swing / recharge allows
+}
+// soft auto-aim: nearest enemy in front of where the player is pushing (or anywhere close if idle)
+function aimDir(e, reach) {
+  let fx = Math.sin(e.yaw), fz = Math.cos(e.yaw);
+  const il = Math.hypot(input.x, input.z);
+  if (il > 0.2) { fx = input.x / il; fz = input.z / il; }
+  let best = null, bs = 1e9;
+  for (const q of ents) {
+    if (q === e || q.kind !== 'bot' || q.dead || q.falling || q.dropT > 0 || q.air > 0) continue;
+    const dx = q.x - e.x, dz = q.z - e.z, d = Math.hypot(dx, dz) || 0.01;
+    const lim = reach + q.r + 1.3;
+    if (d > lim) continue;
+    const dot = (dx * fx + dz * fz) / d;
+    if (dot < (il > 0.2 ? 0.35 : -1)) continue;
+    const sc = d * (1.6 - dot);
+    if (sc < bs) { bs = sc; best = [dx / d, dz / d]; }
+  }
+  return best || [fx, fz];
+}
+function startSwing(pw) {
   const ps = pStats();
-  let dx = input.x, dz = input.z;
-  if (!dx && !dz) { const sp = Math.hypot(player.vx, player.vz); if (sp > 0.3) { dx = player.vx / sp; dz = player.vz / sp; } else { dx = Math.sin(player.yaw); dz = Math.cos(player.yaw); } }
-  const l = Math.hypot(dx, dz) || 1;
-  player.vx += dx / l * ps.dashK; player.vz += dz / l * ps.dashK;
-  player.dashT = 0.28; player.dashCd = ps.dashCd;
-  player.yaw = Math.atan2(dx, dz);
-  Snd.play('dash', 0.55, 1.1);
-  playAnim(player.vis, '1H_Melee_Attack_Slice_Diagonal', { once: true, speed: 1.7, lock: 0.38, restart: true });
-  if (sparks) sparks.emit(player.x, 0.5, player.z, player.color, 14, 3, 1.5, 0.4);
-  spawnRing(player.x, player.z, player.color, 1.4, 0.3);
+  const reach = 1.25 + 0.55 * pw;
+  const [fx, fz] = aimDir(player, reach + player.r);
+  player.yaw = Math.atan2(fx, fz);
+  player.sw = { t: 0, wind: 0.1 + 0.08 * pw, pw, done: false, fx, fz, reach };
+  player.lastPow = pw;
+  player.strikeCd = ps.strikeCd * (1 + 0.8 * pw) + player.sw.wind;
+  Snd.play('dash', 0.45 + 0.25 * pw, 1.25 - 0.3 * pw);
+  playAnim(player.vis, '1H_Melee_Attack_Slice_Diagonal', { once: true, speed: 2.3 - 0.5 * pw, lock: 0.34 + 0.08 * pw, restart: true, fade: 0.05 });
+}
+function tickPlayerStrike(dt) {
+  const p = player;
+  if (!p) return;
+  if (p.strikeCd > 0) p.strikeCd -= dt;
+  if (p.chg) {
+    if (!canAct()) { cancelCharge(); }
+    else {
+      p.chg.t += dt;
+      const pw = chargePow(p.chg.t);
+      if (p.chgDecal) { p.chgDecal.mesh.position.set(p.x, 0.05, p.z); p.chgDecal.mesh.scale.setScalar(p.r * (1.1 + 1.4 * pw)); p.chgDecal.mesh.material.opacity = 0.08 + 0.3 * pw + (pw >= 1 ? 0.12 * Math.sin(animT * 30) : 0); }
+      if (pw >= 1 && !p.chg.full) {
+        p.chg.full = true; Snd.play('power', 0.6, 1.3);
+        spawnRing(p.x, p.z, 0xffffff, p.r * 3.2, 0.3);
+        if (sparks) sparks.emit(p.x, 1, p.z, PAL.gold, 16, 2.5, 2, 0.4);
+      }
+      if (pw > 0 && sparks && Math.random() < dt * (10 + 30 * pw)) sparks.emit(p.x + Math.sin(p.yaw) * 0.6, 1 + Math.random() * 0.5, p.z + Math.cos(p.yaw) * 0.6, pw >= 1 ? 0xffffff : PAL.gold, 1, 0.6, 1, 0.3, 0.5);
+      if (p.chg.t > 2.2) releaseStrike();   // never hold forever
+    }
+  }
+  if (p.queued) {
+    p.queued.t -= dt;
+    if (!p.sw && p.strikeCd <= 0 && canAct()) { startSwing(p.queued.pw); p.queued = null; }
+    else if (p.queued.t <= 0) p.queued = null;
+  }
+  if (p.sw) {
+    const w = p.sw; w.t += dt;
+    if (!w.done && w.t >= w.wind) {
+      w.done = true;
+      const ps = pStats();
+      const F = ps.strikeK * ps.push * (1 + 1.4 * w.pw);
+      const n = swingHit(p, w.fx, w.fz, w.reach, 0.3, F, w.pw, true);
+      // lunge: a short step into the swing
+      const lunge = 3.2 + 3.4 * w.pw;
+      p.vx += w.fx * lunge; p.vz += w.fz * lunge; p.dashT = 0.16 + 0.1 * w.pw;
+      spawnSlash(p, w.reach + p.r, w.pw >= 1 ? 0xffffff : PAL.gold, 0.2 + 0.08 * w.pw, 1.15 - 0.15 * w.pw, w.pw);
+      if (n) { impact(0.045 + 0.06 * w.pw, 0.18 + 0.32 * w.pw); if (w.pw >= 1) flash('#ffe08a', 0.18); }
+      else Snd.play('dash', 0.3, 1.6);
+    }
+    if (w.t >= w.wind + 0.14) p.sw = null;
+  }
+}
+// frontal arc hit, shared by the player and the sword skeletons. Returns how many bodies were struck.
+function swingHit(src, fx, fz, reach, cosArc, F, pw, byPlayer) {
+  let n = 0;
+  for (const q of ents) {
+    if (q === src || q.dead || q.falling || q.dropT > 0 || q.air > 0) continue;
+    if (!byPlayer && q.kind === 'bot' && q.boss) continue;
+    const dx = q.x - src.x, dz = q.z - src.z, d = Math.hypot(dx, dz) || 0.01;
+    if (d > reach + src.r + q.r) continue;
+    const dot = (dx * fx + dz * fz) / d;
+    if (d > (src.r + q.r) * 1.05 && dot < cosArc) continue;
+    const cx = src.x + dx * 0.6, cz = src.z + dz * 0.6;
+    if (q === player && G.shieldT > 0) {   // shield parries the blade
+      Snd.play('shield', 0.7, 1.3); spawnRing(q.x, q.z, PAL.lime, 1.8, 0.25);
+      if (sparks) sparks.emit(cx, 1, cz, PAL.lime, 16, 3, 1.5, 0.35);
+      if (S.powers.shield >= 5) { const k = F * 0.9 / Math.sqrt(effMass(src)); src.vx -= dx / d * k; src.vz -= dz / d * k; src.stun = 0.4; src.lastPlayerHit = G.time; }
+      src.sw = null; n++; continue;
+    }
+    let nx = dx / d * 0.55 + fx * 0.45, nz = dz / d * 0.55 + fz * 0.45;
+    const nl = Math.hypot(nx, nz) || 1; nx /= nl; nz /= nl;
+    const k = F * (q.kind === 'bot' && !byPlayer ? 0.5 : 1) / Math.sqrt(effMass(q));
+    q.vx += nx * k; q.vz += nz * k;
+    q.hitT = 0.35; q.squash = 1; q.dashT = Math.max(q.dashT, 0.2 + 0.15 * pw);
+    q.stun = q === player ? 0.14 : 0.28 + 0.25 * pw;
+    if (q.sw && !q.boss) { q.sw = null; q.aiT = Math.max(q.aiT, 0.8); }   // a hit interrupts their wind-up
+    if (byPlayer) { q.lastPlayerHit = G.time; if (q.boss) q.anchor = Math.max(0, q.anchor - (0.08 + 0.14 * pw) * pStats().push); }
+    if (!q.vis.golem) playAnim(q.vis, 'Hit_A', { once: true, lock: 0.3 + 0.15 * pw, restart: true, speed: 1.4 });
+    if (sparks) sparks.emit(cx, 1, cz, pw >= 1 ? 0xffffff : byPlayer ? PAL.gold : PAL.crimson, 12 + 14 * pw | 0, 3 + 3 * pw, 2, 0.45);
+    if (pw >= 0.6) spawnRing(q.x, q.z, 0xffffff, 1.4 + pw, 0.3);
+    Snd.bump(6 + 6 * pw);
+    if (q === player) { impact(0.05, 0.25); flash('#ff2a4a', 0.12); }
+    n++;
+  }
+  return n;
+}
+/* sword arcs: pooled flat ring sectors (slash trails and enemy telegraphs) */
+const SLASH_HALF = 1.15;
+const slashGeo = new THREE.RingGeometry(0.35, 1, 24, 1, -Math.PI / 2 - SLASH_HALF, SLASH_HALF * 2);
+const SLASHES = [];
+function getSlash() {
+  let o = SLASHES.find((q) => !q.used);
+  if (!o) {
+    const g = new THREE.Group(), m = new THREE.Mesh(slashGeo, new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, fog: false }));
+    m.rotation.x = -Math.PI / 2; g.add(m); scene.add(g);
+    o = { g, m, used: false }; SLASHES.push(o);
+  }
+  o.used = true; o.g.visible = true; return o;
+}
+function spawnSlash(e, R, color, dur, y, pw) {
+  const o = getSlash();
+  o.kind = 'slash'; o.t = 0; o.dur = dur; o.R = R; o.owner = e; o.pw = pw || 0;
+  o.m.material.color.copy(hdr(color, 2.4)); o.m.material.opacity = 0.95;
+  o.g.position.set(e.x, y || 1, e.z); o.g.rotation.y = e.yaw; o.g.scale.setScalar(R * 0.7);
+  return o;
+}
+function spawnTele(e, R, dur) {
+  const o = getSlash();
+  o.kind = 'tele'; o.t = 0; o.dur = dur; o.R = R; o.owner = e;
+  o.m.material.color.copy(hdr(PAL.crimson, 1.6)); o.m.material.opacity = 0.2;
+  o.g.position.set(e.x, 0.06, e.z); o.g.rotation.y = e.yaw; o.g.scale.setScalar(R);
+  return o;
+}
+function updateSlashes(dt) {
+  for (const o of SLASHES) {
+    if (!o.used) continue;
+    o.t += dt;
+    const u = o.t / o.dur, e = o.owner;
+    if (o.kind === 'slash') {
+      o.g.scale.setScalar(o.R * (0.7 + 0.35 * Math.min(1, u * 2)));
+      o.m.material.opacity = 0.95 * (1 - u);
+      if (e && !e.dead) o.g.position.set(e.x, o.g.position.y, e.z);
+    } else {
+      if (!e || e.dead || e.falling || !e.sw || e.sw.tele !== o) { o.used = false; o.g.visible = false; continue; }
+      o.g.position.set(e.x, 0.06, e.z); o.g.rotation.y = e.yaw;
+      o.m.material.opacity = 0.18 + 0.45 * Math.min(1, u) + 0.12 * Math.sin(animT * 34);
+      o.g.scale.setScalar(o.R * (0.85 + 0.15 * Math.min(1, u)));
+    }
+    if (u >= 1 && o.kind === 'slash') { o.used = false; o.g.visible = false; }
+  }
 }
 function powerCd(k) { const l = S.powers[k]; return k === 'shock' ? 15 - 1.6 * l : k === 'shield' ? 16 - 1.6 * l : 12 - 1.2 * l; }
 function usePower(k) {
@@ -1657,7 +1833,7 @@ function usePower(k) {
     if (!dx && !dz) { dx = Math.sin(player.yaw); dz = Math.cos(player.yaw); }
     const l = Math.hypot(dx, dz) || 1;
     player.slam = { sx: player.x, sz: player.z, tx: player.x + dx / l * 2.6, tz: player.z + dz / l * 2.6, t: 0, dur: 0.55, L };
-    player.air = 0.55; player.vx = player.vz = 0;
+    player.air = 0.55; player.vx = player.vz = player.mvx = player.mvz = 0; cancelCharge();
     player.yaw = Math.atan2(dx, dz);
     Snd.play('dash', 0.7, 0.8);
     playAnim(player.vis, 'Jump_Full_Short', { once: true, lock: 0.6, restart: true, speed: 1.7 });
@@ -1708,7 +1884,7 @@ function collectBonus(p) {
     G.bonusOn.freeze = B.dur; Snd.play('freeze', 0.9); flash('#8fe3ff', 0.3);
     for (const e of ents) if (e.kind === 'bot' && !e.falling) { e.frozen = B.dur; if (sparks) sparks.emit(e.x, 1, e.z, PAL.ice, 10, 1.5, 1, 0.5); }
   } else if (p.type === 'coins2') { G.bonusOn.coins2 = B.dur; }
-  else { for (const k of POWER_KEYS) G.cd[k] = 0; if (player) player.dashCd = 0; }
+  else { for (const k of POWER_KEYS) G.cd[k] = 0; if (player) player.strikeCd = 0; }
 }
 
 /* ================= PHYSICS ================= */
@@ -1721,32 +1897,34 @@ function collidePair(a, b) {
   const ma = effMass(a), mb = effMass(b);
   const ima = shieldA ? 0 : 1 / ma, imb = shieldB ? 0 : 1 / mb;
   const sum = ima + imb || 1;
+  // walking into someone shoves them (heavier wins), no bouncing
   const overlap = min - d;
   a.x += nx * overlap * (ima / sum); a.z += nz * overlap * (ima / sum);
   b.x -= nx * overlap * (imb / sum); b.z -= nz * overlap * (imb / sum);
-  const vrel = (a.vx - b.vx) * nx + (a.vz - b.vz) * nz;
-  if (vrel >= 0) return;
-  const e = 0.85;
-  const J = -(1 + e) * vrel / sum;
-  let kick = 2.6 + (a.dashT > 0 || b.dashT > 0 ? 3.5 : 0);   // every hit adds energy, dashes hit harder
+  if (a === player) b.lastPlayerHit = Math.max(b.lastPlayerHit, G.time - 2);
+  if (b === player) a.lastPlayerHit = Math.max(a.lastPlayerHit, G.time - 2);
+  // knockback part of the velocity (what was not chosen by the stick / AI)
+  const kva = (a.vx - a.mvx) * nx + (a.vz - a.mvz) * nz, kvb = (b.vx - b.mvx) * nx + (b.vz - b.mvz) * nz;
+  const vrel = kva - kvb;
+  if (vrel >= -3) return;   // only a thrown body bowls the others
+  const J = -(1 + 0.6) * vrel / sum;
+  let extra = 0;
   const pl = a === player ? a : b === player ? b : null;
-  if (pl) kick *= pStats().push;
-  if (pl && G.shieldT > 0 && S.powers.shield >= 5) kick += 6;   // reflecting shield
-  a.vx += nx * (J * ima + kick * ima / sum); a.vz += nz * (J * ima + kick * ima / sum);
-  b.vx -= nx * (J * imb + kick * imb / sum); b.vz -= nz * (J * imb + kick * imb / sum);
+  if (pl && G.shieldT > 0 && S.powers.shield >= 5) extra = 6;   // reflecting shield
+  a.vx += nx * (J * ima + extra * ima / sum); a.vz += nz * (J * ima + extra * ima / sum);
+  b.vx -= nx * (J * imb + extra * imb / sum); b.vz -= nz * (J * imb + extra * imb / sum);
   const hit = -vrel;
-  if (a === player) { b.lastPlayerHit = G.time; if (b.boss) b.anchor = Math.max(0, b.anchor - hit * 0.022 * pStats().push); }
-  if (b === player) { a.lastPlayerHit = G.time; if (a.boss) a.anchor = Math.max(0, a.anchor - hit * 0.022 * pStats().push); }
+  // a body the player threw carries the credit to whoever it bowls over
+  if (G.time - a.lastPlayerHit < 1.2) b.lastPlayerHit = G.time;
+  if (G.time - b.lastPlayerHit < 1.2) a.lastPlayerHit = G.time;
   a.squash = b.squash = 1;
-  if (hit > 2) {
+  if (hit > 4) {
     Snd.bump(hit);
     const mx = (a.x + b.x) / 2, mz = (a.z + b.z) / 2;
-    if (sparks) sparks.emit(mx, 0.8, mz, hit > 8 ? 0xffffff : PAL.gold, Math.min(22, 5 + hit | 0), 2 + hit * 0.35, 2.5, 0.45);
-    if (hit > 6) spawnRing(mx, mz, hit > 9 ? 0xffffff : PAL.gold, 1 + hit * 0.12, 0.3);
-    for (const q of [a, b]) if (q.dashT <= 0 && hit > 4 && !q.vis.golem) { q.hitT = 0.35; playAnim(q.vis, 'Hit_A', { once: true, lock: 0.35, restart: true, speed: 1.4 }); }
-    for (const q of [a, b]) if (q.vis.golem && hit > 4) q.hitT = 0.3;
+    if (sparks) sparks.emit(mx, 0.8, mz, hit > 10 ? 0xffffff : PAL.gold, Math.min(22, 5 + hit | 0), 2 + hit * 0.3, 2.5, 0.45);
+    if (hit > 8) spawnRing(mx, mz, hit > 12 ? 0xffffff : PAL.gold, 1 + hit * 0.1, 0.3);
+    for (const q of [a, b]) if (!q.vis.golem && q.hitT <= 0) { q.hitT = 0.3; playAnim(q.vis, 'Hit_A', { once: true, lock: 0.3, restart: true, speed: 1.4 }); }
   }
-  if (hit > 9 && pl) impact(0.06, Math.min(0.5, hit * 0.03));
 }
 
 function inHazard(e, kind) {
@@ -1792,21 +1970,30 @@ function stepEntity(e, dt, ax, az) {
     return;
   }
   if (e.frozen > 0) { e.frozen -= dt; ax = 0; az = 0; }
+  if (e.stun > 0) { e.stun -= dt; ax = 0; az = 0; }
   if (e.casting > 0 || (e.atk && e.atk.lock)) { ax *= 0.1; az *= 0.1; }
-  let accel = e.accel, maxV = e.maxV, damp = G.cfg.damp;
-  if (inHazard(e, 'lava') && e === player) { accel *= 0.45; maxV *= 0.5; e.slow = 0.3; }
-  if (inHazard(e, 'frost')) { damp *= 0.12; accel *= 0.6; e.ice = 0.2; }
+  let maxV = e.maxV, tau = e === player ? 0.045 : e.vis.golem ? 0.22 : 0.1, fr = G.cfg.fr;
+  if (e === player) {
+    if (e.chg) maxV *= 0.5;
+    if (e.sw && e.sw.t < e.sw.wind) maxV *= 0.35;
+  } else if (e.sw) maxV *= 0.15;
+  if (inHazard(e, 'lava') && e === player) { maxV *= 0.5; e.slow = 0.3; }
+  if (inHazard(e, 'frost')) { tau = 0.65; fr *= 0.15; e.ice = 0.2; }   // only ice makes you skate
+  if (e.ice > 0) e.ice -= dt;
   if (e === player && e.slow > 0) e.slow -= dt;
-  e.vx += ax * accel * dt; e.vz += az * accel * dt;
-  const dk = Math.exp(-damp * dt);
-  e.vx *= dk; e.vz *= dk;
-  const cap = e.dashT > 0 ? maxV * 2.6 : maxV * 1.9;
-  const sp = Math.hypot(e.vx, e.vz);
-  if (sp > cap) { e.vx *= cap / sp; e.vz *= cap / sp; }
-  if (sp > maxV && e.dashT <= 0) { const k = Math.exp(-3 * dt); e.vx *= k; e.vz *= k; }
+  // velocity = what the stick asks for (snappy, near-instant) + knockback (decays quickly)
+  let kx = e.vx - e.mvx, kz = e.vz - e.mvz;
+  const kd = Math.exp(-fr * dt); kx *= kd; kz *= kd;
+  const ks = Math.hypot(kx, kz);
+  if (ks > 34) { kx *= 34 / ks; kz *= 34 / ks; }
+  if (ks < 0.05) { kx = 0; kz = 0; }
+  const al = Math.hypot(ax, az);
+  if (al > 1) { ax /= al; az /= al; }
+  const u = 1 - Math.exp(-dt / tau);
+  e.mvx += (ax * maxV - e.mvx) * u; e.mvz += (az * maxV - e.mvz) * u;
+  e.vx = e.mvx + kx; e.vz = e.mvz + kz;
   e.x += e.vx * dt; e.z += e.vz * dt;
   if (e.dashT > 0) e.dashT -= dt;
-  if (e.dashCd > 0) e.dashCd -= dt;
   if (e.hitT > 0) e.hitT -= dt;
   if (e.boss) e.anchor = Math.min(1, e.anchor + dt * 0.05);
 }
@@ -1834,15 +2021,33 @@ function botAI(e, dt) {
   let dx = tx - e.x, dz = tz - e.z;
   const l = Math.hypot(dx, dz) || 1; dx /= l; dz /= l;
   [dx, dz] = avoidEdge(e, dx, dz);
-  e.aiT -= dt;
-  const dc = Math.hypot(e.x, e.z);
-  if (e.aiT <= 0 && dp < 4.5 && dc < G.R - 1.2) {
-    const align = (dpx * dx + dpz * dz) / dp;
-    if (align > 0.8) {
-      e.vx += dpx / dp * 9.5; e.vz += dpz / dp * 9.5; e.dashT = 0.3;
-      e.aiT = e.dashEvery * (0.7 + G.rng() * 0.6);
-      playAnim(e.vis, '1H_Melee_Attack_Chop', { once: true, speed: 1.6, lock: 0.35, restart: true });
-    } else e.aiT = 0.25;
+  const M = MELEE[e.type];
+  if (M) {
+    if (e.sw) {
+      const w = e.sw; w.t += dt;
+      if (w.t < w.wind * 0.55) e.yaw = Math.atan2(dpx, dpz);   // tracks you, then commits
+      if (w.t >= w.wind) {
+        const fx = Math.sin(e.yaw), fz = Math.cos(e.yaw);
+        swingHit(e, fx, fz, M.reach, M.arc, M.F * G.cfg.botF * (1 + Math.min(0.25, G.wave * 0.01)), 0, false);
+        e.vx += fx * 2.5; e.vz += fz * 2.5;
+        spawnSlash(e, M.reach + e.r, e.type === 'warrior' ? PAL.violet : PAL.crimson, 0.2, 1.05, 0);
+        e.sw = null;
+        e.aiT = M.cd * (0.75 + G.rng() * 0.5) / G.cfg.botDash;
+      }
+      return [0, 0];
+    }
+    e.aiT -= dt;
+    const dc = Math.hypot(e.x, e.z);
+    if (e.aiT <= 0 && dp < M.reach + e.r + player.r + 0.35 && dc < G.R - 0.6 && e.stun <= 0) {
+      const wind = M.wind * G.cfg.botWind;
+      e.yaw = Math.atan2(dpx, dpz);
+      e.sw = { t: 0, wind };
+      e.sw.tele = spawnTele(e, M.reach + e.r, wind);
+      playAnim(e.vis, '1H_Melee_Attack_Chop', { once: true, speed: clamp(1.1 / (wind + 0.25), 0.9, 2.6), lock: wind + 0.25, restart: true });
+      Snd.play('dash', 0.25, 0.7);
+    }
+    // in sword range: hold ground and fight instead of body-shoving
+    if (dp < M.reach + e.r + player.r) { dx *= 0.2; dz *= 0.2; }
   }
   return [dx, dz];
 }
@@ -1893,7 +2098,7 @@ function darkMageAI(e, dt, dpx, dpz, dp) {
     spawnRing(e.x, e.z, 0x8a3cff, 2, 0.4);
     let tx = 0, tz = 0;
     for (let i = 0; i < 8; i++) { const a = G.rng() * Math.PI * 2, d = G.rng() * (G.R - 2); tx = Math.cos(a) * d; tz = Math.sin(a) * d; if (Math.hypot(tx - player.x, tz - player.z) > 3) break; }
-    e.x = tx; e.z = tz; e.vx = e.vz = 0;
+    e.x = tx; e.z = tz; e.vx = e.vz = e.mvx = e.mvz = 0;
     spawnRing(e.x, e.z, 0xb46cff, 2.4, 0.5);
     if (sparks) sparks.emit(e.x, 1, e.z, 0xb46cff, 30, 3, 2, 0.6);
     Snd.play('teleport', 0.8); e.castFx = 0.5;
@@ -1954,7 +2159,7 @@ function startAttack(e) {
     const tx = d > lim ? px / d * lim : px, tz = d > lim ? pz / d * lim : pz;
     e.atk = { kind, t: 0, wind: 1.0, dur: 0.7, lock: true, sx: e.x, sz: e.z, tx, tz, tele: decal(tx, tz, 2.8, 0xff3a1a, 0.25) };
   }
-  e.vx *= 0.3; e.vz *= 0.3;
+  e.vx = e.mvx = e.vx * 0.3; e.vz = e.mvz = e.vz * 0.3;
 }
 function tickAttack(e, dt) {
   const a = e.atk; a.t += dt;
@@ -1977,7 +2182,7 @@ function tickAttack(e, dt) {
   } else if (a.kind === 'rock') {
     if (a.t < a.wind) { if (a.tele) a.tele.mesh.material.opacity = 0.2 + 0.25 * Math.abs(Math.sin(animT * 12)); return; }
     const u = Math.min(1, (a.t - a.wind) / a.dur);
-    e.x = a.sx + (a.tx - a.sx) * u; e.z = a.sz + (a.tz - a.sz) * u; e.y = Math.sin(u * Math.PI) * 3.2; e.vx = e.vz = 0;
+    e.x = a.sx + (a.tx - a.sx) * u; e.z = a.sz + (a.tz - a.sz) * u; e.y = Math.sin(u * Math.PI) * 3.2; e.vx = e.vz = e.mvx = e.mvz = 0;
     if (u >= 1) {
       e.y = 0; freeDecal(a.tele);
       spawnRing(e.x, e.z, 0xffa83a, 4.2, 0.6); spawnRing(e.x, e.z, 0xffffff, 2.6, 0.35);
@@ -2073,6 +2278,7 @@ function update(dt) {
   if (G.toSpawn.length) { G.spawnT -= dt; if (G.spawnT <= 0) { spawnBot(G.toSpawn.shift()); G.spawnT = 0.6; } }
   const anyBots = ents.some((e) => e.kind === 'bot' && !e.dead && !e.falling);
   if (anyBots) G.R = Math.max(R_MIN, G.R - G.cfg.shrink * dt);
+  tickPlayerStrike(dt);
   for (const k of POWER_KEYS) if (G.cd[k] > 0) G.cd[k] -= dt;
   if (G.shieldT > 0) G.shieldT -= dt;
   if (G.comboT > 0) { G.comboT -= dt; if (G.comboT <= 0) G.combo = 0; }
@@ -2098,7 +2304,7 @@ function update(dt) {
     if (e.dead) continue;
     if (!e.falling && e.dropT <= 0 && e.air <= 0 && e.y < 0.5 && Math.hypot(e.x, e.z) > G.R + e.r * 0.15) {
       e.falling = true; e.vy = 2;
-      freeDecal(e.castDecal); e.castDecal = null; endAttack(e);
+      freeDecal(e.castDecal); e.castDecal = null; endAttack(e); e.sw = null; if (e === player) cancelCharge();
       Snd.play('fall', 0.8);
       playAnim(e.vis, 'Jump_Idle', { fade: 0.1 });
       const d = Math.hypot(e.x, e.z) || 1;
@@ -2244,6 +2450,7 @@ function animate(dt, realDt) {
   for (let i = 0; i < LANT_N; i++) { lp[i * 3 + 1] += dt * 0.5; lp[i * 3] += Math.sin(animT * 0.3 + i) * dt * 0.1; if (lp[i * 3 + 1] > 14) lp[i * 3 + 1] = -14; }
   lantGeo.attributes.position.needsUpdate = true;
   if (sparks) { sparks.update(dt); trail.update(dt); dust.update(dt); debris.update(dt); }
+  updateSlashes(dt);
   for (const r of rings) {
     if (r.t <= 0) continue;
     r.t -= dt;
@@ -2269,13 +2476,15 @@ function animate(dt, realDt) {
   for (const e of ents) {
     const v = e.vis;
     v.root.position.set(e.x, e.y, e.z);
-    const sp = Math.hypot(e.vx, e.vz);
-    if (!e.falling && e.dropT <= 0 && e.casting <= 0 && e.frozen <= 0 && !(e.atk && e.atk.lock) && sp > 0.35) {
-      const ty = Math.atan2(e.vx, e.vz);
+    const sp = Math.hypot(e.mvx, e.mvz);
+    let ty = null;
+    if (e === player) { if (!e.sw && Math.hypot(input.x, input.z) > 0.15) ty = Math.atan2(input.x, input.z); }
+    else if (!e.sw && e.stun <= 0 && sp > 0.35) ty = Math.atan2(e.mvx, e.mvz);
+    if (ty !== null && !e.falling && e.dropT <= 0 && e.casting <= 0 && e.frozen <= 0 && !(e.atk && e.atk.lock)) {
       let dy = ty - e.yaw;
       while (dy > Math.PI) dy -= Math.PI * 2;
       while (dy < -Math.PI) dy += Math.PI * 2;
-      e.yaw += dy * Math.min(1, dt * (v.golem ? 4 : 10));
+      e.yaw += dy * Math.min(1, dt * (v.golem ? 5 : e === player ? 32 : 14));
     }
     v.holder.rotation.y = e.yaw;
     if (v.mixer) {
