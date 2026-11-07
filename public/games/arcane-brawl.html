@@ -299,7 +299,7 @@
 <div class="overlay" id="menu">
   <div class="panel">
     <div class="crest"><svg class="runes" viewBox="0 0 200 200"><g fill="none" stroke="#c4b5fd" stroke-width="1.2"><circle cx="100" cy="100" r="96"/><circle cx="100" cy="100" r="84" stroke-dasharray="3 6"/><circle cx="100" cy="100" r="70"/><path d="M100 4 L183 148 L17 148 Z M100 196 L17 52 L183 52 Z" opacity=".6"/></g><g fill="#fbbf24" stroke="#fbbf24" stroke-width=".8"><path transform="translate(100.0 10.0) rotate(0)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(163.6 36.4) rotate(45)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(190.0 100.0) rotate(90)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(163.6 163.6) rotate(135)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(100.0 190.0) rotate(180)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(36.4 163.6) rotate(225)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(10.0 100.0) rotate(270)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(36.4 36.4) rotate(315)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/></g></svg><div class="logo">ARCANE BRAWL</div></div>
-    <div class="tag">Magic arena brawl. You are the Paladin: shove skeletons, golems and the Dark Mage off the floating ring, earn coins, level up, master holy powers.</div>
+    <div class="tag">Magic arena brawl. You are the Paladin: strike skeletons, golems and the Dark Mage off the floating ring, earn coins, level up, master holy powers.</div>
     <div class="profile">
       <div class="lvl"><small>LV</small><b id="mLvl">1</b></div>
       <div class="xpwrap"><div class="row2"><span>XP</span><span id="mXp">0 / 60</span></div><div class="xpbar"><i id="mXpBar"></i></div></div>
@@ -312,7 +312,7 @@
     <button class="btn" id="btnPlay">PLAY<small>Waves, golems, a Dark Mage every 5 waves</small></button>
     <div class="row">
       <button class="btn arcane" id="btnArmory">ARMORY<span class="dot" id="armDot"></span><small>Powers and upgrades</small></button>
-      <button class="btn hard" id="btnHard">HARD<small>Ice ring, bigger horde</small></button>
+      <button class="btn hard" id="btnHard">HARD<small>Harder hits, bigger horde</small></button>
     </div>
     <div class="best" id="bestBox"></div>
     <div class="controls">Touch: drag to move, tap STRIKE, hold it to charge &middot; Keyboard: WASD / ZQSD / arrows, Space strike (hold to charge), 1 2 3 powers, P pause</div>
@@ -427,6 +427,7 @@ const ENEMY = {
   rock:     { golem: 'rock',   mass: 5, accel: 8, maxV: 3.8, coins: 100, xp: 100, pts: 1200, boss: true, name: 'ROCK GOLEM', color: 0xffb03a }
 };
 const GOLEMS = ['forest', 'fire', 'ice', 'rock'];
+const FOE_POWER = 1.2;   // every enemy attack (blades, spells, orbs, vines, golem leaps)
 // Skeleton sword strikes: visible wind-up (red arc on the floor), then a frontal hit that throws the target
 const MELEE = {
   minion:  { wind: 0.45, F: 7,  reach: 1.35, arc: 0.45, cd: 2.0 },
@@ -454,7 +455,7 @@ const POWER_KEYS = ['shock', 'shield', 'slam'];
 // Paladin outfits: armor tint, cape colour, aura glow
 const OUTFITS = [
   { id: 'cyan', name: 'SILVER PALADIN', lvl: 1, color: PAL.cyan, armor: 0xdfe8ff, cape: 0x2456ff, metal: 0.85 },
-  { id: 'white', name: 'WHITE TEMPLAR', lvl: 2, color: 0xfff6e0, armor: 0xffffff, cape: 0xf4f0ff, metal: 0.55, bright: 1.5 },
+  { id: 'white', name: 'WHITE TEMPLAR', lvl: 2, color: 0xfff6e0, armor: 0xf2f2f6, cape: 0xe8e4f0, metal: 0.5 },
   { id: 'gold', name: 'GOLDEN CHAMPION', lvl: 3, color: PAL.gold, armor: 0xffd27a, cape: 0xc8102e, metal: 0.95 },
   { id: 'crimson', name: 'BLOOD MOON', lvl: 6, color: PAL.crimson, armor: 0xff7a86, cape: 0x6a0010, metal: 0.8 },
   { id: 'black', name: 'BLACK KNIGHT', lvl: 8, color: 0xff3a3a, armor: 0x2c2c38, cape: 0x0c0c12, metal: 0.95 },
@@ -674,7 +675,8 @@ scene.add(sunLight);
 const rimLight = new THREE.DirectionalLight(0x6a5cff, 0.7);           // cool rim from the camera side
 rimLight.position.set(4, 6, 10);
 scene.add(rimLight);
-const playerLight = new THREE.PointLight(PAL.cyan, 3, 5, 1.6);        // accent carried by the player
+const WHITE_C = new THREE.Color(0xffffff);
+const playerLight = new THREE.PointLight(PAL.cyan, 1.4, 4.5, 1.8);        // accent carried by the player
 scene.add(playerLight);
 const ringLight = new THREE.PointLight(PAL.gold, 2.5, 12, 1.6);         // warm glow from the rope
 ringLight.position.set(0, 1.5, 0);
@@ -809,8 +811,12 @@ const ARENA_E = canvasTex(1024, (g, s) => {
   const c = s / 2;
   g.fillStyle = '#000'; g.fillRect(0, 0, s, s);
   // the two starting lines
-  g.fillStyle = '#ffffff';
-  g.fillRect(c - 70, c - 95, 140, 12); g.fillRect(c - 70, c + 83, 140, 12);
+  // arcane sigil in the middle: double circle, hexagram, small runes
+  g.strokeStyle = 'rgba(255,194,58,.42)'; g.lineWidth = 3;
+  g.beginPath(); g.arc(c, c, c * 0.22, 0, Math.PI * 2); g.stroke();
+  for (let t = 0; t < 2; t++) { g.beginPath(); for (let k = 0; k <= 3; k++) { const a = -Math.PI / 2 + t * Math.PI / 3 + k * Math.PI * 2 / 3, rr = c * 0.22; k ? g.lineTo(c + Math.cos(a) * rr, c + Math.sin(a) * rr) : g.moveTo(c + Math.cos(a) * rr, c + Math.sin(a) * rr); } g.stroke(); }
+  g.fillStyle = 'rgba(255,194,58,.55)';
+  for (let k = 0; k < 12; k++) { const a = k * Math.PI / 6, rr = c * 0.265; g.save(); g.translate(c + Math.cos(a) * rr, c + Math.sin(a) * rr); g.rotate(a); g.fillRect(-2, -7, 4, 14); g.fillRect(-6, -2, 12, 4); g.restore(); }
   g.strokeStyle = 'rgba(255,194,58,.9)'; g.lineWidth = 5; g.beginPath(); g.arc(c, c, c * 0.3, 0, Math.PI * 2); g.stroke();
   g.strokeStyle = 'rgba(255,90,90,.6)'; g.lineWidth = 3; g.beginPath(); g.arc(c, c, c * 0.955, 0, Math.PI * 2); g.stroke();
   for (let a = 0; a < 24; a++) { const an = a * Math.PI / 12; g.fillStyle = 'rgba(255,194,58,.7)'; g.beginPath(); g.arc(c + Math.cos(an) * c * 0.9, c + Math.sin(an) * c * 0.9, 5, 0, Math.PI * 2); g.fill(); }
@@ -951,12 +957,15 @@ const shadowMat = new THREE.MeshBasicMaterial({ map: SHADOW, transparent: true, 
 const VARIANTS = {};   // per-mesh material sets shared by every instance of a variant
 // Paladin: metallic armor tinted by the outfit, solid-colour cape, glowing blade, natural face
 function paladinMat(base, o, meshName, outfit) {
+  // the outfit only recolours the cape (solid, matte) and tints the steel a little; nothing glows but the blade edge
   const m = base.clone();
-  if (/Cape/.test(meshName)) { m.map = null; m.color = new THREE.Color(outfit.cape); m.roughness = 0.75; m.metalness = 0; m.emissive = new THREE.Color(outfit.cape); m.emissiveIntensity = outfit.id === 'black' ? 0 : 0.12; }
-  else if (/Head$/.test(meshName)) { m.roughness = 0.7; }
-  else if (/Sword/.test(meshName)) { m.color = new THREE.Color(0xf4f8ff); m.metalness = 1; m.roughness = 0.12; m.emissive = new THREE.Color(outfit.color); m.emissiveMap = m.map; m.emissiveIntensity = 0.35; m.envMapIntensity = 2; }
-  else if (/Shield/.test(meshName)) { m.color = new THREE.Color(outfit.armor).multiplyScalar(outfit.bright || 1.15); m.metalness = outfit.metal; m.roughness = 0.28; m.emissive = new THREE.Color(outfit.color); m.emissiveMap = m.map; m.emissiveIntensity = 0.25; m.envMapIntensity = 1.5; }
-  else { m.color = new THREE.Color(outfit.armor).multiplyScalar(outfit.bright || 1.25); m.metalness = outfit.metal; m.roughness = 0.3; m.envMapIntensity = 1.6; m.emissive = new THREE.Color(outfit.color); m.emissiveMap = m.map; m.emissiveIntensity = 0.06; }
+  const steel = new THREE.Color(0xb8bec8).lerp(new THREE.Color(outfit.armor), 0.35);
+  m.emissive = new THREE.Color(0x000000); m.emissiveMap = null; m.emissiveIntensity = 0;
+  if (/Cape/.test(meshName)) { m.map = null; m.color = new THREE.Color(outfit.cape); m.roughness = 0.9; m.metalness = 0; m.envMapIntensity = 0.4; }
+  else if (/Head$/.test(meshName)) { m.roughness = 0.75; m.envMapIntensity = 0.6; }
+  else if (/Sword/.test(meshName)) { m.color = new THREE.Color(0xdfe4ec); m.metalness = 1; m.roughness = 0.18; m.envMapIntensity = 1.3; m.emissive = new THREE.Color(outfit.color); m.emissiveMap = m.map; m.emissiveIntensity = 0.12; }
+  else if (/Shield/.test(meshName)) { m.color = steel.clone(); m.metalness = Math.min(0.8, outfit.metal); m.roughness = 0.38; m.envMapIntensity = 0.9; }
+  else { m.color = steel; m.metalness = Math.min(0.75, outfit.metal); m.roughness = 0.42; m.envMapIntensity = 0.85; }
   return m;
 }
 function prepVariant(key, model, matFor) {
@@ -1016,15 +1025,6 @@ function makeSkinned(variantKey, color, height, kit, outfit) {
       const wm = MODELS[w].scene.clone(); bone.add(wm);
     }
   }
-  // paladin: holy halo above the helmet and a radiant crest on the chest
-  if (outfit) {
-    const head = findBone(m, 'head');
-    if (head) {
-      const halo = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.035, 8, 40), new THREE.MeshBasicMaterial({ color: hdr(outfit.color, 2.4) }));
-      halo.rotation.x = Math.PI / 2; halo.position.y = 1.15; head.add(halo); out.halo = halo;
-      const hg = makeGlow(outfit.color, 1.6, 0.35); hg.position.y = 1.15; head.add(hg);
-    }
-  }
   out.node = m;
   out.mixer = new THREE.AnimationMixer(m);
   for (const clip of g.animations) out.actions[clip.name] = out.mixer.clipAction(clip);
@@ -1042,9 +1042,9 @@ const RUNES = canvasTex(256, (g, s) => {
   for (let y = 50; y < 190; y += 22) { g.beginPath(); g.moveTo(s * 0.5 - 8, y); g.lineTo(s * 0.5 + 8, y + 8); g.lineTo(s * 0.5 - 6, y + 16); g.stroke(); }
 });
 function makeDarkMage() {
-  const purple = new THREE.MeshStandardMaterial({ color: 0x3c1c5c, roughness: 0.85, metalness: 0.05, emissive: 0xff2a3a, emissiveMap: RUNES, emissiveIntensity: 1.6 });
+  const purple = new THREE.MeshStandardMaterial({ color: 0x3c1c5c, roughness: 0.85, metalness: 0.05, emissive: 0xd23aff, emissiveMap: RUNES, emissiveIntensity: 0.9 });
   const dark = new THREE.MeshStandardMaterial({ color: 0x24102e, roughness: 0.9, emissive: 0x2a0838, emissiveIntensity: 0.4 });
-  const trim = new THREE.MeshBasicMaterial({ color: hdr(0xff2a4a, 2.2) });
+  const trim = new THREE.MeshBasicMaterial({ color: hdr(0xc04aff, 1.5) });
   const voidM = new THREE.MeshBasicMaterial({ color: 0x000000 });
   const eyeM = new THREE.MeshBasicMaterial({ color: hdr(0xff2030, 1.9) });
   const wood = new THREE.MeshStandardMaterial({ color: 0x5a3424, roughness: 0.8 });
@@ -1069,9 +1069,24 @@ function makeDarkMage() {
   const hood = new THREE.Mesh(new THREE.SphereGeometry(0.42, 20, 14, Math.PI * 0.72, Math.PI * 1.56, 0, Math.PI * 0.7), hoodM); hood.scale.set(1, 1.15, 1.05); head.add(hood);
   const hoodBack = new THREE.Mesh(new THREE.ConeGeometry(0.3, 0.75, 12), hoodM); hoodBack.position.set(0, 0.26, -0.28); hoodBack.rotation.x = -1.1; head.add(hoodBack);
   const face = new THREE.Mesh(new THREE.SphereGeometry(0.34, 16, 12), voidM); face.position.set(0, -0.04, 0.12); face.scale.set(1, 1.1, 0.8); head.add(face);
-  const rim = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.03, 6, 28, Math.PI * 1.4), trim); rim.position.set(0, -0.02, 0.3); rim.rotation.z = -Math.PI * 0.2 - Math.PI / 2 + Math.PI; rim.rotation.set(0.15, 0, Math.PI * 1.2); head.add(rim);
+  // folded hood lip (same cloth, no glow) framing the void
+  const lipM = new THREE.MeshStandardMaterial({ color: 0x2a1240, roughness: 0.9, emissive: 0x3a0f5a, emissiveIntensity: 0.2 }); mats.push(lipM);
+  const lip = new THREE.Mesh(new THREE.TorusGeometry(0.33, 0.07, 8, 28, Math.PI * 1.5), lipM); lip.position.set(0, -0.03, 0.27); lip.rotation.set(0.2, 0, -Math.PI * 0.25); lip.scale.set(1, 1.15, 0.7); head.add(lip);
+  // obsidian horns curling back from the hood, faint violet tips
+  const hornM = new THREE.MeshStandardMaterial({ color: 0x14101c, roughness: 0.25, metalness: 0.6, emissive: 0x6a1aaa, emissiveIntensity: 0.12 }); mats.push(hornM);
+  for (const sx of [-1, 1]) {
+    const pts = []; for (let i = 0; i <= 8; i++) { const t = i / 8; pts.push(new THREE.Vector3(sx * (0.22 + t * 0.32), 0.18 + Math.sin(t * 2.2) * 0.34, -0.05 - t * t * 0.42)); }
+    const hc = new THREE.CatmullRomCurve3(pts), hg = new THREE.TubeGeometry(hc, 16, 0.06, 7);
+    const pa = hg.attributes.position;   // taper toward the tip
+    for (let i = 0; i < pa.count; i++) { const seg = Math.floor(i / 8) / 16, c = hc.getPointAt(seg); const k = 1 - seg * 0.85; pa.setXYZ(i, c.x + (pa.getX(i) - c.x) * k, c.y + (pa.getY(i) - c.y) * k, c.z + (pa.getZ(i) - c.z) * k); }
+    hg.computeVertexNormals();
+    const horn = new THREE.Mesh(hg, hornM); horn.castShadow = true; head.add(horn);
+  }
+  // amethyst sigil on the brow
+  const brow = new THREE.Mesh(new THREE.OctahedronGeometry(0.06), gem); brow.scale.set(0.8, 1.4, 0.5); brow.position.set(0, 0.24, 0.36); head.add(brow);
+  const smoke = makeGlow(0x6a1aff, 0.55, 0.35); smoke.position.set(0, -0.06, 0.25); head.add(smoke);
   const eyes = [];
-  for (const sx of [-1, 1]) { const e = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.05, 0.02), eyeM); e.position.set(sx * 0.11, 0.0, 0.42); e.rotation.z = sx * 0.35; head.add(e); const gl = makeGlow(0xff2030, 0.2, 0.7); gl.position.copy(e.position); gl.position.z += 0.02; head.add(gl); eyes.push(gl); }
+  for (const sx of [-1, 1]) { const e = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.03, 0.02), eyeM); e.position.set(sx * 0.1, 0.0, 0.4); e.rotation.z = sx * 0.4; head.add(e); const gl = makeGlow(0xff2030, 0.16, 0.6); gl.position.copy(e.position); gl.position.z += 0.02; head.add(gl); eyes.push(gl); }
   // arms: wide sleeves; the right hand holds the twisted crystal staff
   const arms = [];
   for (const sx of [-1, 1]) {
@@ -1723,7 +1738,7 @@ function tickPlayerStrike(dt) {
       // lunge: a short step into the swing
       const lunge = 3.2 + 3.4 * w.pw;
       p.vx += w.fx * lunge; p.vz += w.fz * lunge; p.dashT = 0.16 + 0.1 * w.pw;
-      spawnSlash(p, w.reach + p.r, w.pw >= 1 ? 0xffffff : PAL.gold, 0.2 + 0.08 * w.pw, 1.15 - 0.15 * w.pw, w.pw);
+      spawnSlash(p, w.reach + p.r, w.pw >= 1 ? 0xffe9a8 : PAL.gold, 0.26 + 0.1 * w.pw, 1.1 - 0.15 * w.pw, w.pw);
       if (n) { impact(0.045 + 0.06 * w.pw, 0.18 + 0.32 * w.pw); if (w.pw >= 1) flash('#ffe08a', 0.18); }
       else Snd.play('dash', 0.3, 1.6);
     }
@@ -1749,7 +1764,7 @@ function swingHit(src, fx, fz, reach, cosArc, F, pw, byPlayer) {
     }
     let nx = dx / d * 0.55 + fx * 0.45, nz = dz / d * 0.55 + fz * 0.45;
     const nl = Math.hypot(nx, nz) || 1; nx /= nl; nz /= nl;
-    const k = F * (q.kind === 'bot' && !byPlayer ? 0.5 : 1) / Math.sqrt(effMass(q));
+    const k = F * (byPlayer ? 1 : q.kind === 'bot' ? 0.5 : FOE_POWER) / Math.sqrt(effMass(q));
     q.vx += nx * k; q.vz += nz * k;
     q.hitT = 0.35; q.squash = 1; q.dashT = Math.max(q.dashT, 0.2 + 0.15 * pw);
     q.stun = q === player ? 0.14 : 0.28 + 0.25 * pw;
@@ -1764,49 +1779,99 @@ function swingHit(src, fx, fz, reach, cosArc, F, pw, byPlayer) {
   }
   return n;
 }
-/* sword arcs: pooled flat ring sectors (slash trails and enemy telegraphs) */
-const SLASH_HALF = 1.15;
-const slashGeo = new THREE.RingGeometry(0.35, 1, 24, 1, -Math.PI / 2 - SLASH_HALF, SLASH_HALF * 2);
+/* sword arcs: pooled crescent strips with their own shader (slash trails and enemy telegraphs) */
+const SLASH_HALF = 1.2;
+const slashGeo = (() => {   // x = along the arc (0..1), y = across (inner 0 .. outer 1); +z is forward
+  const A = 40, Rn = 0.32, pos = [], uv = [], idx = [];
+  for (let i = 0; i <= A; i++) for (let k = 0; k <= 1; k++) {
+    const u = i / A, th = -SLASH_HALF + u * SLASH_HALF * 2, r = k ? 1 : Rn;
+    pos.push(Math.sin(th) * r, 0, Math.cos(th) * r); uv.push(u, k);
+  }
+  for (let i = 0; i < A; i++) { const a = i * 2; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); g.setIndex(idx);
+  return g;
+})();
+const SLASH_VS = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }';
+// slash: a bright blade edge sweeps along the arc and leaves a fading trail; tapered tips, hot white rim
+const SLASH_FS = [
+  'uniform vec3 uC; uniform float uP; uniform float uA; uniform float uW; varying vec2 vUv;',
+  'void main(){',
+  '  float head = uP * 1.25;',
+  '  float d = head - vUv.x;',
+  '  if (d < 0.0) discard;',
+  '  float trail = exp(-d * (3.5 - uW * 1.5));',
+  '  float tip = smoothstep(0.0, 0.12, vUv.x) * smoothstep(1.0, 0.82, vUv.x);',
+  '  float inner = 1.0 - 0.55 * uW;',
+  '  float band = smoothstep(inner - 0.75, 1.0, vUv.y) * smoothstep(1.0, 0.9, vUv.y);',
+  '  float rim = smoothstep(0.8, 0.97, vUv.y) * smoothstep(1.0, 0.95, vUv.y);',
+  '  float streak = 0.75 + 0.25 * sin(vUv.y * 40.0 - d * 30.0);',
+  '  float a = (band * 0.75 * streak + rim * 1.2) * trail * tip * uA;',
+  '  vec3 col = mix(uC, vec3(1.0), clamp(rim * trail * 1.1 + smoothstep(0.08, 0.0, d) * 0.8, 0.0, 1.0));',
+  '  gl_FragColor = vec4(col * (1.2 + rim * 1.6), a);',
+  '}'].join('\n');
+// telegraph: dim zone, crisp outline, a fill that grows from the body outward until the blow lands
+const TELE_FS = [
+  'uniform vec3 uC; uniform float uP; uniform float uT; varying vec2 vUv;',
+  'void main(){',
+  '  float edgeX = min(vUv.x, 1.0 - vUv.x);',
+  '  float outline = max(smoothstep(0.93, 1.0, vUv.y), smoothstep(0.035, 0.0, edgeX));',
+  '  float fill = step(vUv.y, uP) * (0.28 + 0.35 * smoothstep(uP - 0.25, uP, vUv.y));',
+  '  float hatch = step(0.5, fract((vUv.x * 9.0 + vUv.y * 2.0) - uT * 1.5)) * 0.08;',
+  '  float pulse = 0.75 + 0.25 * sin(uT * (12.0 + uP * 26.0));',
+  '  float a = (0.1 + hatch + fill + outline * 0.85 * pulse) * smoothstep(0.0, 0.06, vUv.y);',
+  '  gl_FragColor = vec4(uC * (1.0 + outline * 0.8 + fill), a);',
+  '}'].join('\n');
 const SLASHES = [];
-function getSlash() {
-  let o = SLASHES.find((q) => !q.used);
+function getSlash(kind) {
+  let o = SLASHES.find((q) => !q.used && q.kind === kind);
   if (!o) {
-    const g = new THREE.Group(), m = new THREE.Mesh(slashGeo, new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, fog: false }));
-    m.rotation.x = -Math.PI / 2; g.add(m); scene.add(g);
-    o = { g, m, used: false }; SLASHES.push(o);
+    const g = new THREE.Group();
+    const mat = new THREE.ShaderMaterial({ vertexShader: SLASH_VS, fragmentShader: kind === 'tele' ? TELE_FS : SLASH_FS, transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending,
+      uniforms: { uC: { value: new THREE.Color() }, uP: { value: 0 }, uA: { value: 1 }, uW: { value: 0 }, uT: { value: 0 } } });
+    const m = new THREE.Mesh(slashGeo, mat); m.frustumCulled = false; g.add(m); scene.add(g);
+    o = { g, m, u: mat.uniforms, used: false, kind }; SLASHES.push(o);
   }
   o.used = true; o.g.visible = true; return o;
 }
-function spawnSlash(e, R, color, dur, y, pw) {
-  const o = getSlash();
-  o.kind = 'slash'; o.t = 0; o.dur = dur; o.R = R; o.owner = e; o.pw = pw || 0;
-  o.m.material.color.copy(hdr(color, 2.4)); o.m.material.opacity = 0.95;
-  o.g.position.set(e.x, y || 1, e.z); o.g.rotation.y = e.yaw; o.g.scale.setScalar(R * 0.7);
+// e: owner, R: reach, color, dur: life, y: height, pw: charge 0..1 (thicker, whiter, with an echo)
+function spawnSlash(e, R, color, dur, y, pw, echo) {
+  const o = getSlash('slash');
+  o.t = 0; o.dur = dur; o.R = R; o.owner = e; o.y = y || 1; o.delay = 0;
+  o.u.uC.value.copy(hdr(color, 1.6)); o.u.uP.value = 0; o.u.uA.value = 1; o.u.uW.value = pw || 0;
+  o.flip = Math.random() < 0.5 ? 1 : -1;   // alternate sweep direction
+  o.g.position.set(e.x, o.y, e.z); o.g.rotation.set(0, e.yaw, 0); o.m.scale.set(o.flip, 1, 1); o.g.scale.setScalar(R);
+  o.tilt = (Math.random() - 0.5) * 0.35;
+  if ((pw || 0) >= 0.6 && !echo) { const o2 = spawnSlash(e, R * 1.12, 0xffffff, dur * 1.25, o.y + 0.15, pw * 0.6, true); o2.delay = 0.04; o2.m.scale.x = -o.flip; }
   return o;
 }
 function spawnTele(e, R, dur) {
-  const o = getSlash();
-  o.kind = 'tele'; o.t = 0; o.dur = dur; o.R = R; o.owner = e;
-  o.m.material.color.copy(hdr(PAL.crimson, 1.6)); o.m.material.opacity = 0.2;
-  o.g.position.set(e.x, 0.06, e.z); o.g.rotation.y = e.yaw; o.g.scale.setScalar(R);
+  const o = getSlash('tele');
+  o.t = 0; o.dur = dur; o.R = R; o.owner = e;
+  o.u.uC.value.copy(hdr(e.type === 'warrior' ? 0xb44cff : PAL.crimson, 1.1)); o.u.uP.value = 0; o.u.uT.value = 0;
+  o.g.position.set(e.x, 0.06, e.z); o.g.rotation.set(0, e.yaw, 0); o.m.scale.set(1, 1, 1); o.g.scale.setScalar(R);
   return o;
 }
 function updateSlashes(dt) {
   for (const o of SLASHES) {
     if (!o.used) continue;
-    o.t += dt;
-    const u = o.t / o.dur, e = o.owner;
+    const e = o.owner;
     if (o.kind === 'slash') {
-      o.g.scale.setScalar(o.R * (0.7 + 0.35 * Math.min(1, u * 2)));
-      o.m.material.opacity = 0.95 * (1 - u);
-      if (e && !e.dead) o.g.position.set(e.x, o.g.position.y, e.z);
+      if (o.delay > 0) { o.delay -= dt; o.u.uA.value = 0; continue; }
+      o.t += dt;
+      const u = o.t / o.dur;
+      o.u.uP.value = Math.min(1, u * 2.2);                       // fast sweep, then the trail fades
+      o.u.uA.value = u < 0.45 ? 1 : Math.max(0, 1 - (u - 0.45) / 0.55);
+      o.g.scale.setScalar(o.R * (0.92 + 0.12 * Math.min(1, u * 2)));
+      o.g.rotation.x = o.tilt;
+      if (e && !e.dead) o.g.position.set(e.x, o.y, e.z);
+      if (u >= 1) { o.used = false; o.g.visible = false; o.delay = 0; }
     } else {
       if (!e || e.dead || e.falling || !e.sw || e.sw.tele !== o) { o.used = false; o.g.visible = false; continue; }
+      o.t += dt;
       o.g.position.set(e.x, 0.06, e.z); o.g.rotation.y = e.yaw;
-      o.m.material.opacity = 0.18 + 0.45 * Math.min(1, u) + 0.12 * Math.sin(animT * 34);
-      o.g.scale.setScalar(o.R * (0.85 + 0.15 * Math.min(1, u)));
+      o.u.uP.value = Math.min(1, o.t / o.dur); o.u.uT.value += dt;
     }
-    if (u >= 1 && o.kind === 'slash') { o.used = false; o.g.visible = false; }
   }
 }
 function powerCd(k) { const l = S.powers[k]; return k === 'shock' ? 15 - 1.6 * l : k === 'shield' ? 16 - 1.6 * l : 12 - 1.2 * l; }
@@ -1846,7 +1911,7 @@ function blast(x, z, R, F, source, anchorDmg, byPlayer) {
     if (q === player && G.shieldT > 0) continue;
     const dx = q.x - x, dz = q.z - z, d = Math.hypot(dx, dz) || 0.01;
     if (d > R + q.r * 0.5) continue;
-    const k = (F * (0.45 + 0.55 * (1 - Math.min(1, d / R)))) / Math.sqrt(effMass(q));
+    const k = (F * (byPlayer ? 1 : FOE_POWER) * (0.45 + 0.55 * (1 - Math.min(1, d / R)))) / Math.sqrt(effMass(q));
     q.vx += dx / d * k; q.vz += dz / d * k; q.hitT = 0.4;
     if (byPlayer) { q.lastPlayerHit = G.time; if (q.boss) q.anchor = Math.max(0, q.anchor - anchorDmg); }
     playAnim(q.vis, 'Hit_A', { once: true, lock: 0.4, restart: true });
@@ -2030,7 +2095,7 @@ function botAI(e, dt) {
         const fx = Math.sin(e.yaw), fz = Math.cos(e.yaw);
         swingHit(e, fx, fz, M.reach, M.arc, M.F * G.cfg.botF * (1 + Math.min(0.25, G.wave * 0.01)), 0, false);
         e.vx += fx * 2.5; e.vz += fz * 2.5;
-        spawnSlash(e, M.reach + e.r, e.type === 'warrior' ? PAL.violet : PAL.crimson, 0.2, 1.05, 0);
+        spawnSlash(e, M.reach + e.r, e.type === 'warrior' ? PAL.violet : PAL.crimson, 0.24, 1.05, e.type === 'warrior' ? 0.5 : 0.15);
         e.sw = null;
         e.aiT = M.cd * (0.75 + G.rng() * 0.5) / G.cfg.botDash;
       }
@@ -2175,7 +2240,7 @@ function tickAttack(e, dt) {
     beam.material.opacity = a.t < a.wind ? 0.35 + 0.3 * Math.sin(animT * 30) : 0.9;
     if (a.t >= a.wind && !a.hit) { a.hit = true; Snd.play('vine', 0.9); }
     if (a.t >= a.wind && player.air <= 0 && G.shieldT <= 0 && !player.falling) {
-      player.vx -= dx / d * 14 * dt; player.vz -= dz / d * 14 * dt;
+      player.vx -= dx / d * 14 * FOE_POWER * dt; player.vz -= dz / d * 14 * FOE_POWER * dt;
       if (sparks && Math.random() < 0.3) sparks.emit(px, 1, pz, 0x7dff3a, 2, 1, 1, 0.4);
     }
     if (a.t >= a.wind + a.dur) { beam.visible = false; e.atk = null; }
@@ -2235,7 +2300,7 @@ function updateHazards(dt) {
     if (trail && Math.random() < 0.6) trail.emit(o.x, 1, o.z, 0x8a3cff, 1, 0.1, 0, 0.3, 0);
     if (player && !player.falling && player.air <= 0 && Math.hypot(player.x - o.x, player.z - o.z) < player.r + 0.3) {
       o.alive = false; o.mesh.visible = false;
-      if (G.shieldT <= 0) { player.vx += o.vx * 1.5; player.vz += o.vz * 1.5; player.hitT = 0.3; impact(0.04, 0.2); playAnim(player.vis, 'Hit_A', { once: true, lock: 0.3, restart: true }); }
+      if (G.shieldT <= 0) { player.vx += o.vx * 1.5 * FOE_POWER; player.vz += o.vz * 1.5 * FOE_POWER; player.hitT = 0.3; impact(0.04, 0.2); playAnim(player.vis, 'Hit_A', { once: true, lock: 0.3, restart: true }); }
       spawnRing(o.x, o.z, 0xb46cff, 1.2, 0.3); if (sparks) sparks.emit(o.x, 1, o.z, 0xb46cff, 14, 2.5, 1.5, 0.4);
       Snd.play('bump', 0.6, 1.3);
     }
@@ -2522,8 +2587,8 @@ function animate(dt, realDt) {
       const warn = edge > 0.78 && !e.falling;
       v.aura.material.color.copy(hdr(warn && Math.floor(animT * 10) % 2 ? PAL.crimson : (e.slow > 0 ? 0xff7a1a : e.color), 2.2));
       playerLight.position.set(e.x, e.y + 2, e.z);
-      playerLight.intensity = e.dashT > 0 ? 7 : 3;
-      playerLight.color.setHex(G && G.shieldT > 0 ? PAL.lime : e.color);
+      playerLight.intensity = e.dashT > 0 ? 3.5 : 1.4;
+      playerLight.color.copy(new THREE.Color(G && G.shieldT > 0 ? PAL.lime : e.color).lerp(WHITE_C, 0.45));
       if (e.slow > 0 && sparks && Math.random() < dt * 20) sparks.emit(e.x, 0.3, e.z, 0xff7a1a, 1, 0.5, 2, 0.4, -1);
     }
   }
