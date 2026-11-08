@@ -44,6 +44,7 @@
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     touch-action: none; user-select: none; -webkit-user-select: none;
   }
+  * { -webkit-touch-callout: none; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; }
   button { font-family: inherit; }
   #stage { position: fixed; inset: 0; touch-action: none; }
   #stage canvas { display: block; width: 100%; height: 100%; touch-action: none; }
@@ -52,7 +53,7 @@
   .coin-ico { display: inline-block; width: 1em; height: 1em; border-radius: 50%; vertical-align: -0.14em; background: radial-gradient(circle at 35% 30%, #fff6c8, var(--gold) 45%, #b06a00 100%); box-shadow: 0 0 8px rgba(255,194,58,.7), inset 0 0 0 2px rgba(255,240,180,.5); }
 
   /* HUD: the top-left 56 px stay free for the site's back button */
-  .hud { position: fixed; top: calc(10px + var(--safe-top)); left: calc(56px + var(--safe-left)); right: calc(10px + var(--safe-right)); height: 94px; pointer-events: none; display: none; z-index: 5; }
+  .hud { position: fixed; top: calc(7px + var(--safe-top)); left: calc(56px + var(--safe-left)); right: calc(10px + var(--safe-right)); height: 94px; pointer-events: none; display: none; z-index: 5; }
   .hud.on { display: block; animation: hudIn .35s ease-out both; }
   @keyframes hudIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
   .hud-center { position: absolute; left: 50%; top: 0; transform: translateX(-50%); text-align: center; white-space: nowrap; }
@@ -115,7 +116,7 @@
   #knob { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ffffff, var(--cyan) 45%, #0a5d70); box-shadow: 0 0 18px rgba(42,240,255,.8); }
 
   /* Action buttons: STRIKE + unlocked powers in an arc around it */
-  #actions { position: fixed; right: calc(22px + var(--safe-right)); bottom: calc(40px + var(--safe-bottom)); width: var(--dash); height: var(--dash); z-index: 6; display: none; }
+  #actions { position: fixed; right: calc(22px + var(--safe-right)); bottom: calc(40px + 5vh + var(--safe-bottom)); width: var(--dash); height: var(--dash); z-index: 6; display: none; }
   #actions.on { display: block; }
   .act { position: absolute; border-radius: 50%; color: #fff; font-weight: 900; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; flex-direction: column; touch-action: none; cursor: pointer; overflow: visible; transition: transform .1s, filter .2s; padding: 0; }
   .act:active { transform: scale(.9); }
@@ -137,7 +138,7 @@
   .pw svg { width: 26px; height: 26px; fill: #fff; }
   .key { display: none; position: absolute; right: -4px; top: -4px; font-size: 10px; font-weight: 900; background: rgba(0,0,0,.7); border: 1px solid rgba(255,255,255,.4); border-radius: 6px; padding: 1px 4px; color: #fff; }
   @media (hover: hover) and (pointer: fine) { .key { display: block; } }
-  #hint { position: fixed; left: calc(16px + var(--safe-left)); right: calc(180px + var(--safe-right)); bottom: calc(60px + var(--safe-bottom)); text-align: center; font-size: 14px; font-weight: 800; color: var(--text); pointer-events: none; display: none; z-index: 4; }
+  #hint { position: fixed; left: calc(16px + var(--safe-left)); right: calc(180px + var(--safe-right)); bottom: calc(60px + 5vh + var(--safe-bottom)); text-align: center; font-size: 14px; font-weight: 800; color: var(--text); pointer-events: none; display: none; z-index: 4; }
   #hint span { display: inline-block; padding: 9px 14px; border-radius: 999px; background: rgba(14,4,24,.8); border: 1px solid rgba(255,194,58,.45); }
   #hint.on { display: block; animation: pulse 1.4s ease-in-out infinite; }
   @keyframes pulse { 50% { opacity: .5; } }
@@ -4221,6 +4222,10 @@ sndBtn.addEventListener('click', () => { Snd.init(); Snd.setMuted(!Snd.muted); r
 refreshSnd();
 window.addEventListener('pagehide', () => { if (G && state === 'play') bank(); if (G && (state === 'over' || state === 'ad')) finalize(); });
 document.addEventListener('visibilitychange', () => { if (document.hidden && state === 'play') pauseGame(); });
+
+// iOS: a long press (charging STRIKE) must never open the share / copy bubble
+for (const ev of ['contextmenu', 'selectstart', 'dragstart', 'gesturestart']) document.addEventListener(ev, (e) => e.preventDefault());
+document.addEventListener('touchstart', (e) => { if (e.target.closest && e.target.closest('.act, #stage')) e.preventDefault(); }, { passive: false });
 
 /* Test hook (automated checks) */
 let camTest = null;
