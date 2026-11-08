@@ -11,6 +11,7 @@ import { useGameBridge } from '../../lib/gameBridge'
 import { testGames } from '../../data/testGames'
 import backlogMd from '../../../backlog.md?raw'
 import './AdminPage.css'
+import { watchVisibleViewport } from '../../lib/visibleViewport'
 
 const ADMIN_ID = '4340752c-bfae-492c-a61b-a9552ac8c908'
 const ADMIN_PIN = import.meta.env.VITE_ADMIN_PIN || null
@@ -243,21 +244,12 @@ function GameTester(){
   useEffect(() => {
     if (!active) return
     const root = document.documentElement
-    const vv = window.visualViewport
-    const apply = () => {
-      root.style.setProperty('--gt-h', `${Math.round(vv ? vv.height : window.innerHeight)}px`)
-      root.style.setProperty('--gt-top', `${Math.round(vv ? vv.offsetTop : 0)}px`)
-    }
-    apply()
-    const late = [setTimeout(apply, 150), setTimeout(apply, 500)]
-    vv?.addEventListener('resize', apply)
-    vv?.addEventListener('scroll', apply)
-    window.addEventListener('resize', apply)
+    const stop = watchVisibleViewport(({ height, top }) => {
+      root.style.setProperty('--gt-h', `${height}px`)
+      root.style.setProperty('--gt-top', `${top}px`)
+    })
     return () => {
-      late.forEach(clearTimeout)
-      vv?.removeEventListener('resize', apply)
-      vv?.removeEventListener('scroll', apply)
-      window.removeEventListener('resize', apply)
+      stop()
       root.style.removeProperty('--gt-h')
       root.style.removeProperty('--gt-top')
     }

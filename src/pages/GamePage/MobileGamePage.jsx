@@ -15,6 +15,7 @@ import SeoBlock from '../../components/SeoBlock/SeoBlock'
 import Footer from '../../components/Footer/Footer'
 import usePageTitle from '../../hooks/usePageTitle'
 import './MobileGamePage.css'
+import { watchVisibleViewport } from '../../lib/visibleViewport'
 
 export default function MobileGamePage() {
   const games = useGames()
@@ -53,31 +54,18 @@ export default function MobileGamePage() {
   }, [playing])
 
   // Hauteur réellement visible (hors barres du navigateur mobile, en haut comme en bas).
-  // 100dvh ne suffit pas partout (iOS Safari, Chrome Android selon l'état des barres) :
-  // on suit window.visualViewport en direct.
+  // Voir src/lib/visibleViewport.js : Safari iOS ne signale pas toujours le retour
+  // de sa barre du bas, on borne donc par 100svh et on revérifie en continu.
   useEffect(() => {
     if (!playing) return
     const root = document.documentElement
-    const vv = window.visualViewport
-    const apply = () => {
-      const h = vv ? vv.height : window.innerHeight
-      const top = vv ? vv.offsetTop : 0
-      root.style.setProperty('--mgp-h', `${Math.round(h)}px`)
-      root.style.setProperty('--mgp-top', `${Math.round(top)}px`)
-    }
     try { window.scrollTo(0, 0) } catch (e) {}
-    apply()
-    const late = [setTimeout(apply, 150), setTimeout(apply, 500)]
-    vv?.addEventListener('resize', apply)
-    vv?.addEventListener('scroll', apply)
-    window.addEventListener('resize', apply)
-    window.addEventListener('orientationchange', apply)
+    const stop = watchVisibleViewport(({ height, top }) => {
+      root.style.setProperty('--mgp-h', `${height}px`)
+      root.style.setProperty('--mgp-top', `${top}px`)
+    })
     return () => {
-      late.forEach(clearTimeout)
-      vv?.removeEventListener('resize', apply)
-      vv?.removeEventListener('scroll', apply)
-      window.removeEventListener('resize', apply)
-      window.removeEventListener('orientationchange', apply)
+      stop()
       root.style.removeProperty('--mgp-h')
       root.style.removeProperty('--mgp-top')
     }
