@@ -2,7 +2,7 @@ export default {
   "title": "Ragequit Arcade — 無料オンラインゲーム",
   "description": "とことんハマる無料オンラインゲーム。覚えるのは簡単、極めるのは不可能。毎週新作が登場。",
   "about": "Ragequit Arcade は、ひとりでじっくり遊ぶのにも、友だちとサクッと対戦するのにもぴったりな、とことんハマる無料オンラインゲームをお届けします。どのゲームもブラウザですぐに起動。ダウンロードも登録もポップアップも、余計なものは一切ありません。PC、タブレット、スマホで動くので、家でも外出先でも遊べます。いつでもワンクリックで面白いゲームに出会える場所を作っています。",
-  "gameSelection": "新しいゲームを定期的に追加しています。現在のタイトルは MAZEQUAKE、LOOPSTRIKE、LINESTORM、City Runner、Fox Runner、VOIDFALL、Dead Zone、Crush Depth、Rooftop Rush、FLASHOUT、Bird Blitz、OCTAFLUX、Stellar Forge、Virus Lab、Neon Rush、Snake Candy Arena、STAQ、Rage Hockey など。すべてのゲームはずっと無料です。",
+  "gameSelection": "新しいゲームを定期的に追加しています。現在のタイトルは ARCANE BRAWL、MAZEQUAKE、LOOPSTRIKE、LINESTORM、City Runner、Fox Runner、VOIDFALL、Dead Zone、Crush Depth、Rooftop Rush、FLASHOUT、Bird Blitz、OCTAFLUX、Stellar Forge、Virus Lab、Neon Rush、Snake Candy Arena、STAQ、Rage Hockey など。すべてのゲームはずっと無料です。",
   "aboutUs": "Ragequit Arcade は独立系のゲームプラットフォームです。目標はシンプル。ウェブで一番楽しく、一番誠実なブラウザアーケードを作ることです。新作は定期的に登場します。次の作品は TikTok と Instagram でチェックしてください。",
   "faq": [
     { "q": "Ragequit Arcade とは？", "a": "無料のオンラインゲームプラットフォームです。ダウンロードも登録も不要です。" },
