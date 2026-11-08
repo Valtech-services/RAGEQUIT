@@ -1219,82 +1219,161 @@ const CRACKS = canvasTex(256, (g, s) => {
   for (let k = 0; k < 5; k++) { const x = 30 + r() * 190, y = 30 + r() * 190; g.beginPath(); g.moveTo(x, y); g.lineTo(x + 14, y); g.lineTo(x + 7, y + 14); g.closePath(); g.stroke(); g.beginPath(); g.arc(x + 7, y + 5, 3, 0, Math.PI * 2); g.stroke(); }
 });
 CRACKS.wrapS = CRACKS.wrapT = THREE.RepeatWrapping;
+// Golem skin: cracked stone plates split by a network of glowing veins (tileable, computed once)
+// VEINS = emissive mask (bright veins), STONE = colour map (grainy plates, darker toward the veins)
+const GOLEM_TEX = (() => {
+  const s = 256, r = mulberry32(77), pts = [];
+  for (let i = 0; i < 11; i++) pts.push([r() * s, r() * s]);
+  const vein = document.createElement('canvas'), stone = document.createElement('canvas');
+  vein.width = vein.height = stone.width = stone.height = s;
+  const gv = vein.getContext('2d'), gs = stone.getContext('2d');
+  const iv = gv.createImageData(s, s), is = gs.createImageData(s, s);
+  for (let y = 0; y < s; y++) for (let x = 0; x < s; x++) {
+    let d1 = 1e9, d2 = 1e9;
+    for (let k = 0; k < pts.length; k++) for (let ox = -s; ox <= s; ox += s) for (let oy = -s; oy <= s; oy += s) {
+      const dx = x - pts[k][0] - ox, dy = y - pts[k][1] - oy, d = dx * dx + dy * dy;
+      if (d < d1) { d2 = d1; d1 = d; } else if (d < d2) d2 = d;
+    }
+    const edge = Math.sqrt(d2) - Math.sqrt(d1);   // 0 on the border between two plates
+    const n = (Math.sin(x * 0.9 + y * 0.31) + Math.sin(x * 0.23 - y * 1.1) + Math.sin((x + y) * 0.57)) / 3;
+    const v = edge < 1.6 ? 1 : edge < 4.6 ? Math.pow(1 - (edge - 1.6) / 3, 2.5) * 0.55 : 0;
+    const i = (y * s + x) * 4;
+    const vv = Math.min(255, v * 255 * (0.85 + 0.15 * n));
+    iv.data[i] = iv.data[i + 1] = iv.data[i + 2] = vv; iv.data[i + 3] = 255;
+    const sh = Math.max(0.18, Math.min(1, 0.72 + n * 0.16 + (r() - 0.5) * 0.12 - (edge < 7 ? (7 - edge) * 0.07 : 0)));
+    is.data[i] = is.data[i + 1] = is.data[i + 2] = sh * 255; is.data[i + 3] = 255;
+  }
+  gv.putImageData(iv, 0, 0); gs.putImageData(is, 0, 0);
+  const tv = new THREE.CanvasTexture(vein), ts = new THREE.CanvasTexture(stone);
+  ts.colorSpace = THREE.SRGBColorSpace;
+  for (const t of [tv, ts]) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(0.8, 0.8); }
+  return { veins: tv, stone: ts };
+})();
+// stone colour, darker plates, vein glow, eyes, particles, how hot the veins burn
 const GOLEM_STYLE = {
-  forest: { stone: 0x4a5a34, dark: 0x2a3420, glow: 0x7dff3a, eye: 0xd8ff6a, particle: 0x8aff4a },
-  fire:   { stone: 0x3a1c14, dark: 0x1e0c08, glow: 0xff5a14, eye: 0xffd23a, particle: 0xff7a1a },
-  ice:    { stone: 0x9ec8e6, dark: 0x5a7a9a, glow: 0x5ad8ff, eye: 0xe8ffff, particle: 0xcff4ff },
-  rock:   { stone: 0x6a5a4c, dark: 0x3a3028, glow: 0xffa83a, eye: 0xffe08a, particle: 0xc8a888 }
+  forest: { stone: 0x55604a, dark: 0x2e3626, glow: 0x6aff2a, eye: 0xd8ff6a, particle: 0x8aff4a, heat: 0.55, rough: 0.95 },
+  fire:   { stone: 0x2a2624, dark: 0x161312, glow: 0xff5a0a, eye: 0xffd23a, particle: 0xff7a1a, heat: 1.7, rough: 0.9 },
+  ice:    { stone: 0x9cc8e4, dark: 0x5e86a8, glow: 0x3ad0ff, eye: 0xf0ffff, particle: 0xcff4ff, heat: 0.85, rough: 0.35 },
+  rock:   { stone: 0x7a6c5e, dark: 0x463a30, glow: 0xffb02a, eye: 0xffe08a, particle: 0xc8a888, heat: 1.0, rough: 0.95 }
 };
+// Hulking golem in the style of the key art: separated blocks held together by glowing magma,
+// massive shoulders and fists, small skull sunk between the shoulders, core blazing through the chest.
 function makeGolem(kind) {
   const st = GOLEM_STYLE[kind];
-  const stone = new THREE.MeshStandardMaterial({ color: st.stone, roughness: 0.92, metalness: 0.05, flatShading: true, emissive: st.glow, emissiveMap: CRACKS, emissiveIntensity: 1.1 });
-  const dark = new THREE.MeshStandardMaterial({ color: st.dark, roughness: 0.95, flatShading: true, emissive: st.glow, emissiveMap: CRACKS, emissiveIntensity: 0.5 });
+  const stone = new THREE.MeshStandardMaterial({ color: st.stone, map: GOLEM_TEX.stone, roughness: st.rough, metalness: 0.04, flatShading: true, emissive: st.glow, emissiveMap: GOLEM_TEX.veins, emissiveIntensity: st.heat });
+  const dark = new THREE.MeshStandardMaterial({ color: st.dark, map: GOLEM_TEX.stone, roughness: st.rough, metalness: 0.04, flatShading: true, emissive: st.glow, emissiveMap: GOLEM_TEX.veins, emissiveIntensity: st.heat * 0.7 });
   const glowMat = new THREE.MeshBasicMaterial({ color: hdr(st.glow, 2.6) });
-  const eyeMat = new THREE.MeshBasicMaterial({ color: hdr(st.eye, 3) });
-  const mats = [stone, dark, glowMat, eyeMat];
+  const magma = new THREE.MeshBasicMaterial({ color: hdr(st.glow, 1.6) });
+  const eyeMat = new THREE.MeshBasicMaterial({ color: hdr(st.eye, 3.2) });
+  const voidM = new THREE.MeshBasicMaterial({ color: 0x050302 });
+  const mats = [stone, dark, glowMat, magma, eyeMat, voidM];
   const g = new THREE.Group();
-  const box = (w, h, d, m) => { const me = new THREE.Mesh(new THREE.BoxGeometry(w, h, d, 2, 2, 2), m); me.castShadow = true; jitter(me.geometry, 0.05); return me; };
-  const rockM = (r, m, detail) => { const me = new THREE.Mesh(new THREE.DodecahedronGeometry(r, detail || 0), m); me.castShadow = true; jitter(me.geometry, r * 0.12); return me; };
-  // hips + torso
-  const hips = new THREE.Group(); hips.position.y = 0.78; g.add(hips);
-  const pelvis = box(0.8, 0.32, 0.55, dark); hips.add(pelvis);
-  const torso = new THREE.Group(); torso.position.y = 0.2; hips.add(torso);
-  const belly = box(0.82, 0.42, 0.62, stone); belly.position.y = 0.24; torso.add(belly);
-  const chest = box(1.2, 0.72, 0.82, stone); chest.position.y = 0.78; chest.rotation.x = -0.08; torso.add(chest);
-  const hump = rockM(0.42, dark); hump.position.set(0, 0.95, -0.36); torso.add(hump);
-  // glowing core + runes on the chest
-  const core = new THREE.Mesh(new THREE.IcosahedronGeometry(0.16, 1), glowMat); core.position.set(0, 0.8, 0.42); torso.add(core);
-  const coreGlow = makeGlow(st.glow, 1.4, 0.7); coreGlow.position.copy(core.position); torso.add(coreGlow);
-  const ringC = new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.025, 6, 24), glowMat); ringC.position.set(0, 0.8, 0.43); torso.add(ringC);
-  // head sunk between the shoulders
-  const head = new THREE.Group(); head.position.set(0, 1.3, 0.08); torso.add(head);
-  const skull = box(0.5, 0.38, 0.46, stone); head.add(skull);
-  const brow = box(0.56, 0.1, 0.12, dark); brow.position.set(0, 0.1, 0.22); head.add(brow);
-  const jaw = box(0.44, 0.12, 0.36, dark); jaw.position.set(0, -0.2, 0.04); head.add(jaw);
-  for (const s of [-1, 1]) { const eye = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.05, 0.04), eyeMat); eye.position.set(s * 0.12, 0.02, 0.24); head.add(eye); }
-  // shoulders, arms, fists (pivots at the shoulder and elbow)
+  const breathers = [], floaters = [];
+  // a chunky block: beveled by jitter, never a perfect cube
+  const block = (w, h, d, m, parent, x, y, z, rx, ry, rz) => {
+    const me = new THREE.Mesh(new THREE.BoxGeometry(w, h, d, 2, 2, 2), m);
+    jitter(me.geometry, Math.min(w, h, d) * 0.16);
+    me.position.set(x || 0, y || 0, z || 0); me.rotation.set(rx || 0, ry || 0, rz || 0);
+    me.castShadow = true; parent.add(me); return me;
+  };
+  const boulder = (rad, m, parent, x, y, z, detail) => {
+    const me = new THREE.Mesh(new THREE.DodecahedronGeometry(rad, detail || 0), m);
+    jitter(me.geometry, rad * 0.18); me.position.set(x || 0, y || 0, z || 0); me.castShadow = true; parent.add(me); return me;
+  };
+  // glowing magma joint: the light seen in the gap between two blocks
+  const joint = (rad, parent, x, y, z) => { const me = new THREE.Mesh(new THREE.IcosahedronGeometry(rad, 1), magma); me.position.set(x, y, z); parent.add(me); return me; };
+  // a block that drifts a little off its rest position (the magma "breathes")
+  const breathe = (me, ax, amp) => { breathers.push({ me, base: me.position.clone(), ax, amp, ph: Math.random() * 6 }); return me; };
+
+  // hips and torso (hunched forward)
+  const hips = new THREE.Group(); hips.position.y = 0.8; g.add(hips);
+  block(0.86, 0.3, 0.58, dark, hips, 0, 0, 0);
+  joint(0.2, hips, 0, 0.2, 0);
+  const torso = new THREE.Group(); torso.position.y = 0.24; torso.rotation.x = 0.12; hips.add(torso);
+  block(0.8, 0.36, 0.6, stone, torso, 0, 0.18, 0.02);
+  // chest: two great slabs with a vertical rift where the core blazes
+  const chestL = block(0.66, 0.78, 0.84, stone, torso, -0.37, 0.78, 0, 0, 0.04, 0.05);
+  const chestR = block(0.66, 0.78, 0.84, stone, torso, 0.37, 0.78, 0, 0, -0.04, -0.05);
+  breathe(chestL, 'x', -0.015); breathe(chestR, 'x', 0.015);
+  const core = new THREE.Mesh(new THREE.IcosahedronGeometry(0.2, 1), glowMat); core.position.set(0, 0.78, 0.2); torso.add(core);
+  const coreGlow = makeGlow(st.glow, 1.9, 0.85); coreGlow.position.set(0, 0.78, 0.46); torso.add(coreGlow);
+  const ringC = new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.03, 6, 20), glowMat); ringC.position.set(0, 0.78, 0.34); ringC.scale.set(0.6, 1.6, 1); torso.add(ringC);
+  block(0.5, 0.2, 0.5, dark, torso, 0, 1.22, -0.06);
+  // hunched back: a ridge of blocks
+  for (let i = 0; i < 3; i++) breathe(block(0.42 - i * 0.06, 0.3, 0.34, dark, torso, 0, 1.05 - i * 0.32, -0.5 + i * 0.04, -0.3, 0, 0), 'z', -0.02);
+  // small skull sunk low between the shoulders, ember eyes
+  const head = new THREE.Group(); head.position.set(0, 1.26, 0.3); torso.add(head);
+  block(0.42, 0.36, 0.4, stone, head, 0, 0.04, 0);
+  block(0.48, 0.1, 0.14, dark, head, 0, 0.15, 0.17, 0.2, 0, 0);
+  block(0.34, 0.12, 0.3, dark, head, 0, -0.18, 0.05);
+  for (const s of [-1, 1]) {
+    block(0.13, 0.1, 0.06, voidM, head, s * 0.1, 0.03, 0.2);
+    const eye = new THREE.Mesh(new THREE.IcosahedronGeometry(0.04, 1), eyeMat); eye.position.set(s * 0.1, 0.03, 0.23); head.add(eye);
+    const eg = makeGlow(st.eye, 0.35, 0.9); eg.position.set(s * 0.1, 0.03, 0.26); head.add(eg);
+  }
+  joint(0.13, torso, 0, 1.14, 0.18);
+  // massive shoulders, arms made of separated blocks, huge block fists
   const arms = [];
   for (const s of [-1, 1]) {
-    const sh = new THREE.Group(); sh.position.set(s * 0.78, 1.0, 0); torso.add(sh);
-    const pad = rockM(0.38, stone); pad.position.y = 0.06; sh.add(pad);
-    const upper = box(0.3, 0.55, 0.3, dark); upper.position.y = -0.34; sh.add(upper);
-    const elbow = new THREE.Group(); elbow.position.y = -0.62; sh.add(elbow);
-    const fore = box(0.36, 0.5, 0.36, stone); fore.position.y = -0.24; elbow.add(fore);
-    const fist = rockM(0.3, stone, 1); fist.position.y = -0.58; fist.scale.set(1, 0.9, 1.1); elbow.add(fist);
-    const knuck = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.02, 4, 18), glowMat); knuck.rotation.x = Math.PI / 2; knuck.position.y = -0.42; elbow.add(knuck);
+    const sh = new THREE.Group(); sh.position.set(s * 0.86, 1.06, 0); torso.add(sh);
+    boulder(0.46, stone, sh, s * 0.06, 0.14, 0, 0);
+    boulder(0.24, dark, sh, s * 0.3, 0.38, -0.08, 0);
+    joint(0.14, sh, 0, -0.16, 0);
+    breathe(block(0.3, 0.36, 0.3, dark, sh, 0, -0.42, 0), 'y', 0.02);
+    const elbow = new THREE.Group(); elbow.position.y = -0.7; sh.add(elbow);
+    joint(0.14, elbow, 0, 0, 0);
+    breathe(block(0.44, 0.34, 0.44, stone, elbow, 0, -0.24, 0.02), 'y', -0.02);
+    breathe(block(0.5, 0.3, 0.5, stone, elbow, 0, -0.56, 0.04), 'y', -0.03);
+    joint(0.12, elbow, 0, -0.41, 0.03);
+    // fist: one heavy block + knuckle row
+    const fist = new THREE.Group(); fist.position.y = -0.9; elbow.add(fist);
+    block(0.56, 0.42, 0.52, dark, fist, 0, 0, 0.04);
+    for (let k = 0; k < 4; k++) block(0.13, 0.13, 0.12, stone, fist, -0.2 + k * 0.135, -0.14, 0.3);
+    joint(0.1, fist, 0, 0.24, 0);
     arms.push({ sh, elbow, s });
   }
-  // legs
+  // short pillar legs
   const legs = [];
   for (const s of [-1, 1]) {
-    const hip = new THREE.Group(); hip.position.set(s * 0.3, 0.72, 0); g.add(hip);
-    const thigh = box(0.38, 0.42, 0.4, dark); thigh.position.y = -0.2; hip.add(thigh);
-    const shin = box(0.42, 0.32, 0.44, stone); shin.position.y = -0.5; hip.add(shin);
-    const foot = box(0.5, 0.16, 0.62, dark); foot.position.set(0, -0.66, 0.06); hip.add(foot);
+    const hip = new THREE.Group(); hip.position.set(s * 0.34, 0.74, 0); g.add(hip);
+    block(0.42, 0.36, 0.44, dark, hip, 0, -0.16, 0);
+    joint(0.12, hip, 0, -0.38, 0.02);
+    breathe(block(0.5, 0.3, 0.52, stone, hip, 0, -0.52, 0.02), 'y', 0.015);
+    block(0.6, 0.16, 0.7, dark, hip, 0, -0.7, 0.08);
     legs.push({ hip, s });
+  }
+  // rock chunks hovering around the body, kept aloft by the heat
+  for (let i = 0; i < 5; i++) {
+    const f = boulder(0.06 + Math.random() * 0.06, i % 2 ? stone : dark, torso, 0, 0, 0);
+    floaters.push({ me: f, a: i / 5 * Math.PI * 2, rad: 0.9 + Math.random() * 0.3, y: 0.5 + Math.random() * 0.9, sp: 0.5 + Math.random() * 0.5 });
   }
   // element dressing
   if (kind === 'forest') {
-    const moss = new THREE.MeshStandardMaterial({ color: 0x2f7a2a, roughness: 1, flatShading: true, emissive: 0x2aff3a, emissiveIntensity: 0.15 });
-    mats.push(moss);
-    for (const s of [-1, 1]) { const m = rockM(0.3, moss); m.scale.set(1.2, 0.5, 1.1); m.position.set(s * 0.78, 1.28, 0); torso.add(m); }
-    const crown = rockM(0.26, moss); crown.scale.set(1.4, 0.5, 1.2); crown.position.set(0, 0.24, -0.02); head.add(crown);
-    const vineM = new THREE.MeshBasicMaterial({ color: hdr(0x5aff3a, 1.4) }); mats.push(vineM);
-    for (const a of arms) { const v = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.025, 4, 16), vineM); v.rotation.set(Math.PI / 2, 0, 0.5); v.position.y = -0.2; a.elbow.add(v); }
-    for (let i = 0; i < 6; i++) { const leaf = new THREE.Mesh(new THREE.ConeGeometry(0.07, 0.24, 4), vineM); const an = i / 6 * Math.PI * 2; leaf.position.set(Math.cos(an) * 0.3, 0.38, Math.sin(an) * 0.24 - 0.02); leaf.rotation.z = Math.cos(an) * 0.5; head.add(leaf); }
+    const moss = new THREE.MeshStandardMaterial({ color: 0x3a8a2e, roughness: 1, flatShading: true, emissive: 0x2aff3a, emissiveIntensity: 0.12 });
+    const vineM = new THREE.MeshStandardMaterial({ color: 0x2a5a1a, roughness: 0.7, emissive: 0x5aff2a, emissiveIntensity: 0.5 });
+    const leafM = new THREE.MeshBasicMaterial({ color: hdr(0x7aff3a, 1.3) });
+    mats.push(moss, vineM, leafM);
+    for (const s of [-1, 1]) { const m = boulder(0.34, moss, torso, s * 0.92, 1.4, 0); m.scale.set(1.3, 0.42, 1.2); }
+    const cap = boulder(0.24, moss, head, 0, 0.26, -0.02); cap.scale.set(1.3, 0.4, 1.2);
+    for (const c of [chestL, chestR]) { const m = boulder(0.22, moss, torso, c.position.x, 1.18, 0.1); m.scale.set(1.4, 0.35, 1.3); }
+    for (const a of arms) for (let k = 0; k < 2; k++) { const v = new THREE.Mesh(new THREE.TorusGeometry(0.27 - k * 0.02, 0.03, 5, 18), vineM); v.rotation.set(Math.PI / 2 + 0.3, 0, 0.4 + k); v.position.y = -0.3 - k * 0.3; a.elbow.add(v); }
+    for (let i = 0; i < 7; i++) { const leaf = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.22, 4), leafM); const an = i / 7 * Math.PI * 2; leaf.position.set(Math.cos(an) * 0.26, 0.34, Math.sin(an) * 0.22); leaf.rotation.z = Math.cos(an) * 0.6; leaf.rotation.x = Math.sin(an) * 0.6; head.add(leaf); }
   } else if (kind === 'fire') {
-    const horn = new THREE.MeshStandardMaterial({ color: 0x1a0a06, roughness: 0.6, flatShading: true, emissive: 0xff3a0a, emissiveIntensity: 0.6 }); mats.push(horn);
-    for (const s of [-1, 1]) { const h = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.38, 6), horn); h.position.set(s * 0.22, 0.28, 0); h.rotation.z = -s * 0.5; head.add(h); }
-    for (let i = 0; i < 5; i++) { const sp = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.32, 5), glowMat); sp.position.set((i - 2) * 0.16, 1.24, -0.42); sp.rotation.x = -0.6; torso.add(sp); }
+    // molten drips under the chest rift and embers caught in the shoulders
+    for (let i = 0; i < 3; i++) { const d = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.18 + i * 0.05, 5), glowMat); d.rotation.x = Math.PI; d.position.set((i - 1) * 0.06, 0.32 - i * 0.03, 0.34); torso.add(d); }
+    for (const s of [-1, 1]) { const e = makeGlow(st.glow, 0.9, 0.55); e.position.set(s * 0.86, 1.2, 0.1); torso.add(e); }
   } else if (kind === 'ice') {
-    const crystal = new THREE.MeshStandardMaterial({ color: 0xbff4ff, roughness: 0.1, metalness: 0.2, transparent: true, opacity: 0.85, emissive: 0x5ad8ff, emissiveIntensity: 0.7, flatShading: true }); mats.push(crystal);
-    for (const s of [-1, 1]) for (let i = 0; i < 3; i++) { const c = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.42 + i * 0.12, 5), crystal); c.position.set(s * (0.72 + i * 0.1), 1.32 + i * 0.06, -0.05 + i * 0.08); c.rotation.z = -s * (0.3 + i * 0.25); torso.add(c); }
-    for (let i = 0; i < 4; i++) { const c = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.5, 5), crystal); c.position.set((i - 1.5) * 0.24, 1.1, -0.5); c.rotation.x = -0.7; torso.add(c); }
+    const crystal = new THREE.MeshStandardMaterial({ color: 0xd8f6ff, roughness: 0.05, metalness: 0.3, emissive: 0x3ad0ff, emissiveIntensity: 0.8, flatShading: true });
+    mats.push(crystal);
+    for (const s of [-1, 1]) for (let i = 0; i < 4; i++) { const c = new THREE.Mesh(new THREE.ConeGeometry(0.07 + i * 0.012, 0.36 + i * 0.14, 5), crystal); c.position.set(s * (0.72 + i * 0.09), 1.36 + i * 0.05, -0.12 + i * 0.07); c.rotation.z = -s * (0.25 + i * 0.22); torso.add(c); }
+    for (let i = 0; i < 5; i++) { const c = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.42 + (i % 2) * 0.2, 5), crystal); c.position.set((i - 2) * 0.17, 1.1 - Math.abs(i - 2) * 0.06, -0.62); c.rotation.x = -0.75; torso.add(c); }
+    for (const a of arms) { const c = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.3, 5), crystal); c.position.set(a.s * 0.2, -0.45, -0.2); c.rotation.set(-0.8, 0, a.s * 0.6); a.elbow.add(c); }
   } else {
-    for (const s of [-1, 1]) { const b = rockM(0.48, dark); b.position.set(s * 0.86, 1.18, -0.05); torso.add(b); }
-    const back = rockM(0.55, stone, 1); back.position.set(0, 1.05, -0.5); torso.add(back);
+    for (const s of [-1, 1]) boulder(0.36, dark, torso, s * 1.02, 1.32, -0.12, 0);
+    boulder(0.5, stone, torso, 0, 1.14, -0.66, 1);
+    for (const a of arms) block(0.24, 0.2, 0.2, dark, a.elbow, a.s * 0.26, -0.5, -0.06, 0, 0, a.s * 0.4);
   }
-  return { node: g, parts: { hips, torso, head, arms, legs, core, coreGlow, ringC }, mats, style: st, h: 2.3 };
+  return { node: g, parts: { hips, torso, head, arms, legs, core, coreGlow, ringC, breathers, floaters }, mats, style: st, h: 2.3 };
 }
 function jitter(geo, amt) {
   const p = geo.attributes.position, seen = new Map();
@@ -1606,7 +1685,7 @@ function makeEntity(kind, type, x, z) {
     const cyc = G ? G.cycle : 0;
     T = { mass: E.mass * (E.boss ? 1 + 0.15 * cyc : 1), accel: E.accel, maxV: E.maxV, dashEvery: E.dashEvery };
     const color = E.color || E.tint;
-    spec = E.golem ? { golem: E.golem, color, r: radiusFor(type), hk: 3.2 }
+    spec = E.golem ? { golem: E.golem, color, r: radiusFor(type), hk: 3.7 }
       : E.custom ? { custom: E.custom, color, r: radiusFor(type), hk: 3.35 }
       : { variant: type, color, r: radiusFor(type), hk: 3.2, kit: SKELETON_KIT[type] };
   }
@@ -3537,8 +3616,13 @@ function animateGolem(e, dt, sp) {
     if (e.atk.kind === 'forest') armX = -1.4 * k;
   }
   for (const a of P.arms) { a.sh.rotation.x = (e.atk && e.atk.lock ? armX : -w * 0.45 * swing * a.s); a.sh.rotation.z = a.s * armZ; a.elbow.rotation.x = e.atk && e.atk.lock ? -0.6 : -0.3 - Math.abs(w) * 0.2 * swing; }
-  P.hips.position.y = 0.78 + Math.abs(w) * 0.05 * swing + Math.sin(animT * 1.6) * 0.015;
-  P.torso.rotation.x = e.hitT > 0 ? -0.25 : 0.06 * swing + (e.atk && e.atk.lock ? -0.12 : 0);
+  P.hips.position.y = 0.8 + Math.abs(w) * 0.05 * swing + Math.sin(animT * 1.6) * 0.015;
+  P.hips.rotation.z = w * 0.05 * swing;   // heavy side-to-side sway
+  P.torso.rotation.x = e.hitT > 0 ? -0.15 : 0.12 + 0.06 * swing + (e.atk && e.atk.lock ? -0.12 : 0);
+  for (const b of P.breathers) b.me.position[b.ax] = b.base[b.ax] + b.amp * (1 + Math.sin(animT * 2.2 + b.ph));
+  for (const f of P.floaters) { f.a += dt * f.sp; f.me.position.set(Math.cos(f.a) * f.rad, f.y + Math.sin(animT * 1.8 + f.a * 2) * 0.08, Math.sin(f.a) * f.rad * 0.8); f.me.rotation.x += dt; f.me.rotation.y += dt * 0.7; }
+  const heat = e.vis.golem.style.heat * (0.85 + 0.2 * Math.sin(animT * 3 + e.x) + (e.phase2 ? 0.45 : 0));
+  e.vis.golem.mats[0].emissiveIntensity = heat; e.vis.golem.mats[1].emissiveIntensity = heat * 0.7;
   P.head.rotation.y = Math.sin(animT * 0.7) * 0.2;
   const pulse = 1 + 0.25 * Math.sin(animT * 4);
   P.core.scale.setScalar(pulse); P.coreGlow.material.opacity = 0.5 + 0.3 * Math.sin(animT * 4);
@@ -3548,12 +3632,14 @@ function animateGolem(e, dt, sp) {
   if (sp > 0.6 && step !== e.lastStep && e.dropT <= 0 && !e.falling) {
     e.lastStep = step;
     if (dust) dust.emit(e.x, 0.1, e.z, 0xc8a090, 6, 1.6, 0.4, 0.6, 1);
+    if (debris) debris.emit(e.x, 0.25, e.z, e.vis.golem.style.dark, 2, 1.6, 2.5, 0.7, 10);   // a chip of stone breaks off at each step
     if (player && Math.hypot(player.x - e.x, player.z - e.z) < 6) { shake = Math.max(shake, RM ? 0.02 : 0.08); Snd.play('stomp', 0.25, 0.7); }
   }
   // element particles
   e.fxT -= dt;
   if (e.fxT <= 0 && sparks) {
-    e.fxT = 0.12;
+    const fire = ENEMY[e.type].golem === 'fire';
+    e.fxT = fire ? 0.06 : 0.12;   // the fire golem sheds embers constantly
     const st = e.vis.golem.style, h = e.vis.height;
     sparks.emit(e.x + (Math.random() - 0.5) * e.r, h * (0.4 + Math.random() * 0.5), e.z + (Math.random() - 0.5) * e.r, st.particle, 1, 0.4, ENEMY[e.type].golem === 'fire' ? 2.5 : 0.6, 0.9, ENEMY[e.type].golem === 'fire' ? -1.5 : 1.2);
   }
@@ -3696,7 +3782,8 @@ function animate(dt, realDt) {
     const s = Math.min(1, p.grp.scale.x + dt * 4); p.grp.scale.setScalar(s * (p.t > 7.5 && Math.floor(animT * 8) % 2 ? 0.8 : 1));
   }
   setMenuView(state === 'menu' || state === 'loading' || state === 'shop');
-  if (G && G.intro && G.intro.boss) {
+  if (camTest) { camera.position.copy(camTest.p); camera.lookAt(camTest.l); }   // automated close-up checks only
+  else if (G && G.intro && G.intro.boss) {
     // boss intro: the camera swings around the boss as it lands
     const I = G.intro, b = I.boss, u = Math.min(1, I.t / I.dur), a = I.a0 + (u - 0.5) * 0.7;
     const dd = 6.5 + b.r * 2 - u * 0.8;
@@ -4136,11 +4223,13 @@ window.addEventListener('pagehide', () => { if (G && state === 'play') bank(); i
 document.addEventListener('visibilitychange', () => { if (document.hidden && state === 'play') pauseGame(); });
 
 /* Test hook (automated checks) */
+let camTest = null;
 window.__ab = {
   get state() { return state; }, get G() { return G; }, get S() { return S; }, get player() { return player; }, get ents() { return ents; }, get fps() { return fpsVal; },
   hq() { QUALITY.locked = true; },
   spawn(t) { if (G) return spawnBot(t); },
   ev(k) { if (G) startEvent(k); },
+  look(p, l) { camTest = p ? { p: new THREE.Vector3(p[0], p[1], p[2]), l: new THREE.Vector3(l[0], l[1], l[2]) } : null; },
   atk() { for (const e of ents) { if (e.atkT != null) e.atkT = 0; if (e.orbT != null) e.orbT = 0; if (e.castT != null) e.castT = 0; } },
   get music() { return Music.mode; }
 };
