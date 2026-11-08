@@ -721,6 +721,54 @@ export const posts = [
       { type: 'p', text: "Tilt gently, plan your route, feed the clock and never rush a laser. Open MAZEQUAKE, escape your first maze and see how far you can go before the time runs out." }
     ],
   },
+  {
+    slug: 'arcane-brawl-tips',
+    category: 'guides',
+    title: "ARCANE BRAWL: How to Stay on the Ring and Knock Out Every Golem",
+    date: '2026-11-08',
+    author: 'Ragequit Arcade',
+    excerpt: "ARCANE BRAWL puts a lone paladin on a floating ring against skeletons, four elemental golems and a Dark Mage. Learn when to charge your strike, how to use the edge, which powers to unlock first and how to beat every boss.",
+    image: '/blog/arcane-brawl-tips.jpg',
+    seo: {
+      title: "ARCANE BRAWL Tips: Charged Strikes, Golems, Dark Mage, Powers and Upgrades | Ragequit Arcade",
+      metaDescription: "A tips guide for ARCANE BRAWL, the free 3D arena brawler: charged strikes, ring position, combos and Fury, how to beat the four golems and the Dark Mage, and the best upgrades.",
+    },
+    content: [
+      { type: 'p', text: "ARCANE BRAWL looks like a simple brawl: one paladin, one ring, a horde of skeletons. Then the first golem lands and you realise the real fight is about position. Nobody loses health in this arena. The only thing that matters is who stays on the ring and who falls into the clouds. These tips will help you survive longer, score more and get through every boss wave." },
+      { type: 'h2', text: "Fight from the centre" },
+      { type: 'p', text: "The centre of the ring is the safest place on the map. Every hit you take pushes you back, so standing near the edge means one unlucky blow can end your run. Let the enemies come to you, strike them outward, and step back toward the middle after each exchange. Watch the golden rope: when an enemy is between you and the rope, one good strike is enough to send it over." },
+      { type: 'h2', text: "Tap or charge: pick the right strike" },
+      { type: 'p', text: "A quick tap is fast and safe, perfect for a single skeleton in front of you. Holding STRIKE charges a heavy blow that hits a wider arc and throws enemies much further, but you stand still while you charge. Charge when the horde is grouped in front of you and nobody is behind you, and tap when you are surrounded." },
+      { type: 'ul', items: [
+        "Minions are slow: a quick tap is enough.",
+        "Rogues dash at you: strike just before they arrive, or sidestep and hit them from behind.",
+        "Warriors are heavy and telegraph a big swing with a red arc on the floor: step out of the arc, then answer with a charged strike.",
+        "Skeleton mages charge an electric blast on the floor: leave the circle before it goes off."
+      ] },
+      { type: 'h2', text: "Build combos and use your Fury" },
+      { type: 'p', text: "Knocking enemies out one after another builds a combo, from BRUTAL at three to GODLIKE at eight, and the combo multiplies both your points and your coins. Each knockout also fills the Fury gauge. When Fury starts, every strike is a fully charged strike for a few seconds: dive into the biggest group you can find and clear it before the gauge runs out." },
+      { type: 'h2', text: "How to beat the four golems" },
+      { type: 'p', text: "Golems are heavy and hard to move, but they always announce their attack. Learn the four patterns and they become much less scary." },
+      { type: 'ul', items: [
+        "Forest Golem: it aims a thorny vine at you, then pulls. Move sideways out of the line before the vine lands, or raise your Shield to stay put.",
+        "Fire Golem: magma pools appear under your feet a moment before they burn. Keep moving and never fight on a glowing patch.",
+        "Ice Golem: it freezes a wide circle of floor and you slide on it. Leave the circle quickly and do not charge a strike on the ice.",
+        "Rock Golem: a red circle marks where it will land. Leave the circle, then punish it while it recovers from the impact."
+      ] },
+      { type: 'p', text: "When a golem is down to its last strength it enrages and attacks faster. That is the moment to use your strongest power, Slam or Judgement, and push it over the edge." },
+      { type: 'h2', text: "Handle the Dark Mage" },
+      { type: 'p', text: "The Dark Mage appears every fifth wave. It teleports across the ring, fires volleys of electric orbs and summons new skeletons. Do not chase it blindly: clear the summoned skeletons first, dodge the orbs sideways, then catch the mage right after a teleport, when it stops to cast. A charged strike or a Shockwave at that moment can send it flying." },
+      { type: 'h2', text: "Unlock and upgrade the right powers" },
+      { type: 'p', text: "Shockwave arrives at level 2 and is your emergency button when you are surrounded. Shield arrives at level 4 and makes you immovable, perfect against vines, wind and golem charges. Slam at level 7 lets you leap onto a group from a distance, and Judgement at level 14 is the ultimate, a giant blade of light that clears the front of the ring. Upgrade Shockwave and Shield first: they save runs." },
+      { type: 'h2', text: "Spend your coins in the Armory" },
+      { type: 'p', text: "Mass is the most important upgrade early on, because a heavier paladin gets pushed back less. Push Force and Strike make every hit count, Speed helps you return to the centre, and Greed brings more coins for everything else. Bigger upgrades take a research time, and you can shorten it by watching an optional ad when you want to keep playing." },
+      { type: 'h2', text: "Read the wave events" },
+      { type: 'p', text: "Some waves change the rules. On a frozen floor everyone slides, so short taps work better than long charges. During magma eruptions, watch the floor and keep moving. In an arcane gale the wind pushes everyone in the same direction: stand upwind and let the enemies drift toward the edge, then finish them off." },
+      { type: 'h2', text: "Pick the right mode and save your second chance" },
+      { type: 'p', text: "Classic is the place to learn every enemy and every boss. Hard mode hits harder, sends more enemies and makes the ring crumble faster, in exchange for one and a half times the points and its own leaderboard. In both modes you can watch a short ad once per run to restart the wave you fell on with your score intact. Keep it for a boss wave or a run that is close to your record." },
+      { type: 'p', text: "Stay central, charge with care, learn each golem's tell and keep your Shield ready. Open ARCANE BRAWL, step onto the ring and see how many waves you can survive." }
+    ],
+  },
 ]
 
 // Trouve un article par son slug.
