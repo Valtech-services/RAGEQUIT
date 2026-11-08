@@ -239,6 +239,29 @@ function GameTester(){
     document.body.style.overflow = active ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [active])
+  // hauteur réellement visible (barres Safari / Chrome mobile), comme sur la page de jeu publique
+  useEffect(() => {
+    if (!active) return
+    const root = document.documentElement
+    const vv = window.visualViewport
+    const apply = () => {
+      root.style.setProperty('--gt-h', `${Math.round(vv ? vv.height : window.innerHeight)}px`)
+      root.style.setProperty('--gt-top', `${Math.round(vv ? vv.offsetTop : 0)}px`)
+    }
+    apply()
+    const late = [setTimeout(apply, 150), setTimeout(apply, 500)]
+    vv?.addEventListener('resize', apply)
+    vv?.addEventListener('scroll', apply)
+    window.addEventListener('resize', apply)
+    return () => {
+      late.forEach(clearTimeout)
+      vv?.removeEventListener('resize', apply)
+      vv?.removeEventListener('scroll', apply)
+      window.removeEventListener('resize', apply)
+      root.style.removeProperty('--gt-h')
+      root.style.removeProperty('--gt-top')
+    }
+  }, [active])
   if(active){
     return (
       <div className="gt-player">
