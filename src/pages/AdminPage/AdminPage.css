@@ -149,7 +149,7 @@
 .gt-card__play:hover{opacity:.9;}
 
 /* Lecteur de test plein écran */
-.gt-player{position:fixed;inset:0;z-index:50;background:#0d0a16;display:flex;flex-direction:column;}
+.gt-player{position:fixed;left:0;right:0;top:var(--gt-top,0px);height:100vh;height:100dvh;height:var(--gt-h,100dvh);z-index:50;background:#0d0a16;display:flex;flex-direction:column;}
 .gt-player__bar{
   display:flex;align-items:center;gap:12px;padding:10px 14px;background:#15101f;
   box-shadow:0 2px 12px rgba(0,0,0,.4);flex-shrink:0;

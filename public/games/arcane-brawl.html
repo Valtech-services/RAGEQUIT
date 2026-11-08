@@ -115,7 +115,7 @@
   #knob { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ffffff, var(--cyan) 45%, #0a5d70); box-shadow: 0 0 18px rgba(42,240,255,.8); }
 
   /* Action buttons: STRIKE + unlocked powers in an arc around it */
-  #actions { position: fixed; right: calc(22px + var(--safe-right)); bottom: calc(30px + var(--safe-bottom)); width: var(--dash); height: var(--dash); z-index: 6; display: none; }
+  #actions { position: fixed; right: calc(22px + var(--safe-right)); bottom: calc(40px + var(--safe-bottom)); width: var(--dash); height: var(--dash); z-index: 6; display: none; }
   #actions.on { display: block; }
   .act { position: absolute; border-radius: 50%; color: #fff; font-weight: 900; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; flex-direction: column; touch-action: none; cursor: pointer; overflow: visible; transition: transform .1s, filter .2s; padding: 0; }
   .act:active { transform: scale(.9); }
@@ -341,7 +341,7 @@
 
 <div class="overlay" id="menu">
   <div class="panel">
-    <div class="crest"><svg class="runes" viewBox="0 0 200 200"><g fill="none" stroke="#c4b5fd" stroke-width="1.2"><circle cx="100" cy="100" r="96"/><circle cx="100" cy="100" r="84" stroke-dasharray="3 6"/><circle cx="100" cy="100" r="70"/><path d="M100 4 L183 148 L17 148 Z M100 196 L17 52 L183 52 Z" opacity=".6"/></g><g fill="#fbbf24" stroke="#fbbf24" stroke-width=".8"><path transform="translate(100.0 10.0) rotate(0)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(163.6 36.4) rotate(45)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(190.0 100.0) rotate(90)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(163.6 163.6) rotate(135)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(100.0 190.0) rotate(180)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(36.4 163.6) rotate(225)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(10.0 100.0) rotate(270)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(36.4 36.4) rotate(315)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/></g></svg><div class="logo">ARCANE BRAWL</div></div>
+    <div class="crest"><svg class="runes" viewBox="0 0 200 200"><g fill="none" stroke="#c4b5fd" stroke-width="1.2"><circle cx="100" cy="100" r="96"/><circle cx="100" cy="100" r="84" stroke-dasharray="3 6"/><circle cx="100" cy="100" r="70"/><path d="M100 4 L156.4 177.7 L8.7 70.3 L191.3 70.3 L43.6 177.7 Z" opacity=".6" stroke-linejoin="round"/></g><g fill="#fbbf24" stroke="#fbbf24" stroke-width=".8"><path transform="translate(100.0 10.0) rotate(0)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(163.6 36.4) rotate(45)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(190.0 100.0) rotate(90)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(163.6 163.6) rotate(135)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(100.0 190.0) rotate(180)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(36.4 163.6) rotate(225)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(10.0 100.0) rotate(270)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/><path transform="translate(36.4 36.4) rotate(315)" d="M0 -6 L3 0 L0 6 L-3 0 Z M-5 0 H5"/></g></svg><div class="logo">ARCANE BRAWL</div></div>
     <div class="divider"></div>
     <div class="tag">Magic arena brawl. You are the Paladin: strike skeletons, golems and the Dark Mage off the floating ring, earn coins, level up, master holy powers.</div>
     <div class="profile">
@@ -464,15 +464,15 @@ const MODES = {
 const PAL = { gold: 0xffc23a, crimson: 0xff2a4a, cyan: 0x2af0ff, violet: 0xa45cff, lime: 0xb6ff3a, orange: 0xff7a1a, white: 0xfff3e6, ice: 0x8fe3ff };
 // Enemies: mass drives size, weight and rewards
 const ENEMY = {
-  minion:   { model: 'minion', tint: 0xff8a1a, mass: 1,   accel: 13, maxV: 6.0, dashEvery: 3.4, coins: 5,   xp: 6,   pts: 100, name: 'MINION' },
-  rogue:    { model: 'rogue', tint: PAL.crimson, mass: 0.8, accel: 15, maxV: 7.0, dashEvery: 2.0, coins: 8, xp: 8, pts: 120, name: 'ROGUE' },
-  warrior:  { model: 'warrior', tint: PAL.violet, mass: 2, accel: 11, maxV: 5.0, dashEvery: 4.5, coins: 12, xp: 12, pts: 200, name: 'WARRIOR' },
-  mage:     { model: 'mage', tint: PAL.lime, mass: 0.9, accel: 11, maxV: 5.2, dashEvery: 99, coins: 8, xp: 10, pts: 150, name: 'MAGE' },
-  darkmage: { custom: 'darkmage', tint: 0x8a3cff, mass: 4, accel: 12, maxV: 6.0, dashEvery: 99, coins: 150, xp: 120, pts: 1500, boss: true, name: 'DARK MAGE', color: 0xb46cff },
-  forest:   { golem: 'forest', mass: 5, accel: 8, maxV: 3.8, coins: 100, xp: 100, pts: 1200, boss: true, name: 'FOREST GOLEM', color: 0x7dff3a },
-  fire:     { golem: 'fire',   mass: 5, accel: 8, maxV: 3.8, coins: 100, xp: 100, pts: 1200, boss: true, name: 'FIRE GOLEM', color: 0xff6a1a },
-  ice:      { golem: 'ice',    mass: 5, accel: 8, maxV: 3.8, coins: 100, xp: 100, pts: 1200, boss: true, name: 'ICE GOLEM', color: 0x6ad8ff },
-  rock:     { golem: 'rock',   mass: 5, accel: 8, maxV: 3.8, coins: 100, xp: 100, pts: 1200, boss: true, name: 'ROCK GOLEM', color: 0xffb03a }
+  minion:   { model: 'minion', tint: 0xff8a1a, mass: 1,   accel: 13, maxV: 6.0, dashEvery: 3.4, coins: 4,   xp: 6,   pts: 100, name: 'MINION' },
+  rogue:    { model: 'rogue', tint: PAL.crimson, mass: 0.8, accel: 15, maxV: 7.0, dashEvery: 2.0, coins: 6, xp: 8, pts: 120, name: 'ROGUE' },
+  warrior:  { model: 'warrior', tint: PAL.violet, mass: 2, accel: 11, maxV: 5.0, dashEvery: 4.5, coins: 9, xp: 12, pts: 200, name: 'WARRIOR' },
+  mage:     { model: 'mage', tint: PAL.lime, mass: 0.9, accel: 11, maxV: 5.2, dashEvery: 99, coins: 6, xp: 10, pts: 150, name: 'MAGE' },
+  darkmage: { custom: 'darkmage', tint: 0x8a3cff, mass: 4, accel: 12, maxV: 6.0, dashEvery: 99, coins: 110, xp: 120, pts: 1500, boss: true, name: 'DARK MAGE', color: 0xb46cff },
+  forest:   { golem: 'forest', mass: 5, accel: 8, maxV: 3.8, coins: 75, xp: 100, pts: 1200, boss: true, name: 'FOREST GOLEM', color: 0x7dff3a },
+  fire:     { golem: 'fire',   mass: 5, accel: 8, maxV: 3.8, coins: 75, xp: 100, pts: 1200, boss: true, name: 'FIRE GOLEM', color: 0xff6a1a },
+  ice:      { golem: 'ice',    mass: 5, accel: 8, maxV: 3.8, coins: 75, xp: 100, pts: 1200, boss: true, name: 'ICE GOLEM', color: 0x6ad8ff },
+  rock:     { golem: 'rock',   mass: 5, accel: 8, maxV: 3.8, coins: 75, xp: 100, pts: 1200, boss: true, name: 'ROCK GOLEM', color: 0xffb03a }
 };
 const GOLEMS = ['forest', 'fire', 'ice', 'rock'];
 const FOE_POWER = 2.4;   // every enemy attack (blades, spells, orbs, vines, golem leaps)
@@ -484,21 +484,21 @@ const MELEE = {
 };
 // Permanent upgrades (armory). time[] = research time in seconds for each level reached
 const STATS = {
-  mass:  { name: 'MASS', desc: (l) => 'Heavier: enemies push you less. Now x' + MASS_STEPS[l] + (l < 4 ? ', next x' + MASS_STEPS[l + 1] : ''), max: 4, base: 150, time: [0, 60, 300, 1800, 7200], color: '#ff7a1a' },
-  push:  { name: 'PUSH FORCE', desc: (l) => 'Your hits throw enemies further (+' + (l * 18) + '%)', max: 5, base: 60, time: [0, 0, 60, 300, 1200, 3600], color: '#ffc23a' },
-  speed: { name: 'SPEED', desc: (l) => 'Run faster (+' + (l * 6) + '%)', max: 5, base: 50, time: [0, 0, 60, 300, 1200, 3600], color: '#2af0ff' },
-  dash:  { name: 'STRIKE', desc: (l) => 'Harder sword strike (+' + (l * 10) + '%), faster recharge (' + strikeCd(l).toFixed(2) + ' s)', max: 5, base: 60, time: [0, 0, 60, 300, 1200, 3600], color: '#ff5adc' },
-  greed: { name: 'GREED', desc: (l) => 'More coins from every ring out (+' + (l * 10) + '%)', max: 5, base: 80, time: [0, 30, 120, 600, 1800, 3600], color: '#ffe36b' }
+  mass:  { name: 'MASS', desc: (l) => 'Heavier: enemies push you less. Now x' + MASS_STEPS[l] + (l < 4 ? ', next x' + MASS_STEPS[l + 1] : ''), max: 4, base: 300, time: [0, 60, 300, 1800, 7200], color: '#ff7a1a' },
+  push:  { name: 'PUSH FORCE', desc: (l) => 'Your hits throw enemies further (+' + (l * 18) + '%)', max: 5, base: 120, time: [0, 0, 60, 300, 1200, 3600], color: '#ffc23a' },
+  speed: { name: 'SPEED', desc: (l) => 'Run faster (+' + (l * 6) + '%)', max: 5, base: 100, time: [0, 0, 60, 300, 1200, 3600], color: '#2af0ff' },
+  dash:  { name: 'STRIKE', desc: (l) => 'Harder sword strike (+' + (l * 10) + '%), faster recharge (' + strikeCd(l).toFixed(2) + ' s)', max: 5, base: 120, time: [0, 0, 60, 300, 1200, 3600], color: '#ff5adc' },
+  greed: { name: 'GREED', desc: (l) => 'More coins from every ring out (+' + (l * 10) + '%)', max: 5, base: 160, time: [0, 30, 120, 600, 1800, 3600], color: '#ffe36b' }
 };
 const MASS_STEPS = [1, 1.5, 2, 2.5, 3];
 const POWERS = {
-  shock:  { name: 'SHOCKWAVE', unlock: 2, color: PAL.cyan, css: '#2af0ff', base: 120, time: [0, 0, 120, 600, 1800, 5400],
+  shock:  { name: 'SHOCKWAVE', unlock: 2, color: PAL.cyan, css: '#2af0ff', base: 240, time: [0, 0, 120, 600, 1800, 5400],
     desc: (l) => 'Blast everything around you. Radius ' + (3 + 0.5 * l).toFixed(1) + ', recharge ' + Math.round(15 - 1.6 * l) + ' s' + (l >= 5 ? ', double ring' : '') },
-  shield: { name: 'SHIELD', unlock: 4, color: PAL.lime, css: '#b6ff3a', base: 140, time: [0, 0, 120, 600, 1800, 5400],
+  shield: { name: 'SHIELD', unlock: 4, color: PAL.lime, css: '#b6ff3a', base: 280, time: [0, 0, 120, 600, 1800, 5400],
     desc: (l) => 'Become immovable for ' + (2.5 + 0.6 * l).toFixed(1) + ' s' + (l >= 5 ? ', golden: reflects every hit' : '') + ', recharge ' + Math.round(16 - 1.6 * l) + ' s' },
-  slam:   { name: 'SLAM', unlock: 7, color: PAL.orange, css: '#ff7a1a', base: 160, time: [0, 0, 180, 900, 2400, 7200],
+  slam:   { name: 'SLAM', unlock: 7, color: PAL.orange, css: '#ff7a1a', base: 320, time: [0, 0, 180, 900, 2400, 7200],
     desc: (l) => 'Leap forward and crash down. Impact radius ' + (1.8 + 0.3 * l).toFixed(1) + ', recharge ' + Math.round(12 - 1.2 * l) + ' s' + (l >= 5 ? ', molten crater' : '') },
-  judge:  { name: 'JUDGEMENT', unlock: 14, color: 0xffe08a, css: '#ffe08a', base: 400, time: [0, 0, 600, 1800, 5400, 14400],
+  judge:  { name: 'JUDGEMENT', unlock: 14, color: 0xffe08a, css: '#ffe08a', base: 800, time: [0, 0, 600, 1800, 5400, 14400],
     desc: (l) => 'A giant blade of light falls in front of you. Radius ' + (2.5 + 0.3 * l).toFixed(1) + ', recharge ' + Math.round(48 - 4 * l) + ' s' }
 };
 const POWER_KEYS = ['shock', 'shield', 'slam', 'judge'];
@@ -696,6 +696,49 @@ const Snd = {
     if (slide) o.frequency.exponentialRampToValueAtTime(Math.max(30, f * slide), t + dur);
     g.gain.setValueAtTime(vol || 0.2, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
     o.connect(g); g.connect(this.master); o.start(t); o.stop(t + dur + 0.02);
+  },
+  // synthesized elemental layers (frost, magma, zap, void, vine), played on top of the samples
+  last: {},
+  fx(kind, vol) {
+    if (!this.ctx || this.muted) return;
+    const c = this.ctx, t0 = c.currentTime;
+    if (this.last[kind] && t0 - this.last[kind] < 0.25) return;
+    this.last[kind] = t0;
+    if (!this.nb) { const n = Math.floor(c.sampleRate * 1.5); this.nb = c.createBuffer(1, n, c.sampleRate); const d = this.nb.getChannelData(0); for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1; }
+    const out = c.createGain(); out.gain.value = vol == null ? 1 : vol; out.connect(this.master);
+    const env = (g, t, a, dur, peak) => { g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + a); g.gain.exponentialRampToValueAtTime(0.0001, t + dur); };
+    const noise = (delay, dur, type, f0, f1, q, peak, a) => {
+      const t = t0 + delay, s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+      s.buffer = this.nb; s.loop = true; f.type = type; f.Q.value = q || 1;
+      f.frequency.setValueAtTime(f0, t); if (f1) f.frequency.exponentialRampToValueAtTime(f1, t + dur);
+      env(g, t, a || 0.01, dur, peak); s.connect(f); f.connect(g); g.connect(out); s.start(t, Math.random()); s.stop(t + dur + 0.05);
+    };
+    const osc = (delay, dur, type, f0, f1, peak, a) => {
+      const t = t0 + delay, o = c.createOscillator(), g = c.createGain();
+      o.type = type; o.frequency.setValueAtTime(f0, t); if (f1) o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+      env(g, t, a || 0.005, dur, peak); o.connect(g); g.connect(out); o.start(t); o.stop(t + dur + 0.05);
+    };
+    const R = Math.random;
+    if (kind === 'frost') {          // icy hiss, a crack, crystal tinkles
+      noise(0, 0.8, 'highpass', 4200, 9000, 0.7, 0.16, 0.03);
+      noise(0, 0.18, 'bandpass', 2600, 900, 5, 0.35);
+      for (let i = 0; i < 7; i++) osc(0.04 + i * 0.07 + R() * 0.04, 0.16, 'sine', 2200 + R() * 3200, null, 0.05);
+    } else if (kind === 'magma') {   // deep rumble and boiling blobs
+      noise(0, 1.3, 'lowpass', 380, 110, 1.2, 0.5, 0.08);
+      for (let i = 0; i < 6; i++) { const f = 140 + R() * 160; osc(0.05 + R() * 1.0, 0.1, 'sine', f, f * 2.4, 0.2); }
+    } else if (kind === 'zap') {     // crackling electric arcs + a short buzz
+      osc(0, 0.32, 'sawtooth', 110, 70, 0.07);
+      osc(0, 0.32, 'square', 55 * 3, 120, 0.03);
+      for (let i = 0; i < 9; i++) noise(R() * 0.3, 0.025 + R() * 0.03, 'bandpass', 1800 + R() * 3500, null, 2.5, 0.35);
+    } else if (kind === 'void') {    // reversed whoosh sucked into a low drop
+      noise(0, 0.55, 'bandpass', 300, 2600, 1.4, 0.35, 0.45);
+      osc(0.35, 0.6, 'sine', 320, 38, 0.3);
+      osc(0.35, 0.6, 'triangle', 160, 30, 0.12);
+    } else if (kind === 'vine') {    // creaking wood and rustling leaves
+      osc(0, 0.5, 'sawtooth', 70 + R() * 20, 120, 0.05, 0.05);
+      noise(0, 0.6, 'bandpass', 900, 1500, 6, 0.22, 0.05);
+      noise(0.05, 0.35, 'highpass', 3000, null, 0.8, 0.08, 0.04);
+    }
   },
   bump(v) { const k = Math.min(1, v / 10); if (k > 0.75) this.play('smash', 0.9); else this.play('bump', 0.35 + k * 0.5, 0.9 + k * 0.3) || this.tone(140, 0.1, 'square', 0.12, 0.5); },
   coin() { this.play('coin', 0.45, 1 + Math.random() * 0.25); }
@@ -1151,13 +1194,14 @@ function makeDarkMage() {
   const curvePts = []; for (let i = 0; i <= 10; i++) { const t = i / 10; curvePts.push(new THREE.Vector3(Math.sin(t * 9) * 0.04, -0.9 + t * 2.4, Math.cos(t * 9) * 0.04)); }
   const shaft = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(curvePts), 40, 0.045, 6), wood); shaft.castShadow = true; staff.add(shaft);
   for (let i = 0; i < 4; i++) { const cl = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.32, 5), wood); const a = i / 4 * Math.PI * 2; cl.position.set(Math.cos(a) * 0.08, 1.58, Math.sin(a) * 0.08); cl.rotation.set(Math.sin(a) * 0.5, 0, -Math.cos(a) * 0.5); staff.add(cl); }
-  const crystal = new THREE.Mesh(new THREE.OctahedronGeometry(0.16, 0), gem); crystal.scale.set(0.8, 1.6, 0.8); crystal.position.y = 1.72; staff.add(crystal);
-  const cGlow = makeGlow(0x7dff3a, 1.2, 0.75); cGlow.position.y = 1.72; staff.add(cGlow);
+  const crystal = new THREE.Mesh(new THREE.OctahedronGeometry(0.16, 0), gem); crystal.scale.set(1, 1.9, 1); crystal.position.y = 1.72; staff.add(crystal);
+  const cGlow = makeGlow(0xb04aff, 1.2, 0.75); cGlow.position.y = 1.72; staff.add(cGlow);
   const cGlow2 = makeGlow(0xd02aff, 0.8, 0.9); cGlow2.position.y = 1.72; staff.add(cGlow2);
   // dark wisps orbiting the robe
   const wisps = [];
   for (let i = 0; i < 3; i++) { const w = new THREE.Mesh(new THREE.TorusGeometry(0.8 + i * 0.14, 0.02, 4, 32, Math.PI * 0.6), wispM); w.rotation.x = Math.PI / 2 + (i - 1.5) * 0.25; w.position.y = 0.5 + i * 0.4; g.add(w); wisps.push(w); }
-  return { node: g, parts: { body, head, arms, staff, crystal, cGlow, eyes, wisps }, mats, h: 2.45 };
+  const cCore = makeGlow(0xffffff, 0.35, 0.9); cCore.position.y = 1.72; staff.add(cCore);
+  return { node: g, parts: { body, head, arms, staff, crystal, cGlow, cGlow2, cCore, gem, eyes, wisps }, mats, h: 2.45 };
 }
 
 /* ---- Golems: modelled in code, one skeleton, four elements ---- */
@@ -1388,18 +1432,160 @@ const beamGeo = new THREE.CylinderGeometry(1, 1, 1, 8, 1, true); beamGeo.rotateX
 const beam = new THREE.Mesh(beamGeo, new THREE.MeshBasicMaterial({ color: hdr(0x6aff3a, 2), transparent: true, opacity: 0.85, depthWrite: false, blending: THREE.AdditiveBlending }));
 beam.visible = false; scene.add(beam);
 // dark mage orbs (pooled)
-const orbGeo = new THREE.IcosahedronGeometry(0.26, 1);
+const orbGeo = new THREE.IcosahedronGeometry(0.26, 3);
 const ORBS = [];
 function getOrb() {
   let o = ORBS.find((q) => !q.alive);
   if (!o) {
-    const m = new THREE.Mesh(orbGeo, new THREE.MeshBasicMaterial({ color: hdr(0xb46cff, 2.6) }));
-    const gl = makeGlow(0xb46cff, 1.6, 0.8); m.add(gl);
+    const m = new THREE.Mesh(orbGeo, orbMat);
+    const gl = makeGlow(0xb46cff, 1.5, 0.75); m.add(gl);
     scene.add(m); o = { mesh: m, alive: false }; ORBS.push(o);
   }
   o.alive = true; o.mesh.visible = true;
   return o;
 }
+
+// electrified orb: solid violet core crossed by moving lightning veins + bright rim (opaque, not a bubble)
+const orbMat = new THREE.ShaderMaterial({
+  uniforms: { uT: { value: 0 } },
+  vertexShader: 'varying vec3 vN; varying vec3 vP; varying vec3 vV; void main(){ vP = position; vN = normalize(normalMatrix * normal); vec4 mv = modelViewMatrix * vec4(position, 1.0); vV = normalize(-mv.xyz); gl_Position = projectionMatrix * mv; }',
+  fragmentShader: [
+    'uniform float uT; varying vec3 vN; varying vec3 vP; varying vec3 vV;',
+    'float vein(vec3 p, vec3 d, float f, float s){ return abs(sin(dot(p, d) * f + uT * s) + 0.6 * sin(dot(p, d.zxy) * f * 1.7 - uT * s * 1.3)); }',
+    'void main(){',
+    '  vec3 p = vP * 4.0;',
+    '  float v1 = vein(p, vec3(0.8, 0.5, 0.3), 3.1, 9.0), v2 = vein(p, vec3(-0.3, 0.9, 0.4), 2.7, -12.0);',
+    '  float l = smoothstep(0.22, 0.0, v1) + smoothstep(0.18, 0.0, v2);',
+    '  float fr = pow(1.0 - max(dot(vN, vV), 0.0), 2.2);',
+    '  float flick = 0.8 + 0.2 * sin(uT * 47.0);',
+    '  vec3 base = vec3(0.32, 0.06, 0.62);',
+    '  vec3 col = base + vec3(2.4, 1.9, 3.2) * l * flick + vec3(1.6, 0.7, 3.0) * fr;',
+    '  gl_FragColor = vec4(col, 1.0);',
+    '}'].join('\n')
+});
+/* --- Elemental hazard props (pooled): ice spikes, basalt rocks and lava bubbles --- */
+const spikeGeo = new THREE.ConeGeometry(0.21, 1, 5); spikeGeo.translate(0, 0.5, 0);
+const basaltGeo = new THREE.DodecahedronGeometry(0.5, 0);
+const bubGeo = new THREE.SphereGeometry(0.5, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2);
+const iceMat = new THREE.MeshStandardMaterial({ color: 0xc8f2ff, roughness: 0.06, metalness: 0.2, emissive: hdr(0x46c8ff, 0.75), flatShading: true });
+const basaltMat = new THREE.MeshStandardMaterial({ color: 0x1c0e0a, roughness: 0.85, emissive: 0xff4a0a, emissiveMap: CRACKS, emissiveIntensity: 2.2, flatShading: true });
+const bubMat = new THREE.MeshBasicMaterial({ color: hdr(0xff9a1a, 2.4) });
+const PROP_DEF = { spike: [spikeGeo, iceMat], rock: [basaltGeo, basaltMat], bub: [bubGeo, bubMat] };
+const PROPS = { spike: [], rock: [], bub: [] };
+function getProp(kind) {
+  let p = PROPS[kind].find((q) => !q.used);
+  if (!p) { const m = new THREE.Mesh(PROP_DEF[kind][0], PROP_DEF[kind][1]); m.castShadow = kind !== 'bub'; scene.add(m); p = { m, used: false, kind }; PROPS[kind].push(p); }
+  p.used = true; p.m.visible = true; p.m.rotation.set(0, 0, 0);
+  return p;
+}
+function freeProps(h) { if (h.props) for (const p of h.props) { p.used = false; p.m.visible = false; } h.props = null; }
+const easeBack = (u) => { const c = 1.9; u = Math.min(1, u) - 1; return 1 + (c + 1) * u * u * u + c * u * u; };
+// molten pool: dark crust plates split by glowing veins (additive: the crust lets the floor show, the veins burn)
+const LAVA_TEX = canvasTex(256, (g, s) => {
+  const c = s / 2, r = mulberry32(77);
+  const gr = g.createRadialGradient(c, c, 0, c, c, c);
+  gr.addColorStop(0, 'rgba(255,190,60,.95)'); gr.addColorStop(0.5, 'rgba(255,110,20,.75)'); gr.addColorStop(0.86, 'rgba(255,60,10,.6)'); gr.addColorStop(1, 'rgba(255,40,0,0)');
+  g.fillStyle = gr; g.beginPath(); g.arc(c, c, c, 0, Math.PI * 2); g.fill();
+  // crust plates (darken)
+  g.globalCompositeOperation = 'destination-out';
+  for (let i = 0; i < 26; i++) {
+    const a = r() * 6.28, d = Math.sqrt(r()) * c * 0.82, x = c + Math.cos(a) * d, y = c + Math.sin(a) * d, rr = 10 + r() * 22;
+    g.fillStyle = 'rgba(0,0,0,' + (0.55 + r() * 0.35) + ')';
+    g.beginPath(); for (let k = 0; k < 6; k++) { const b = k / 6 * 6.28 + r() * 0.5, q = rr * (0.7 + r() * 0.4); g[k ? 'lineTo' : 'moveTo'](x + Math.cos(b) * q, y + Math.sin(b) * q); } g.closePath(); g.fill();
+  }
+  g.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < 40; i++) { const a = r() * 6.28, d = r() * c * 0.8; g.fillStyle = 'rgba(255,230,140,' + (0.4 + r() * 0.5) + ')'; g.beginPath(); g.arc(c + Math.cos(a) * d, c + Math.sin(a) * d, 1 + r() * 2.5, 0, 6.28); g.fill(); }
+}, true);
+// dress a hazard when it becomes active: a crown of ice spikes, or basalt rocks + boiling bubbles
+function dressHazard(h) {
+  const big = h.style === 'golem';
+  h.props = [];
+  if (h.kind === 'frost') {
+    const n = big ? 11 : 4;
+    for (let i = 0; i < n; i++) {
+      const p = getProp('spike'), centre = big && i < 3;
+      const a = (i / n) * Math.PI * 2 + Math.random() * 0.5, d = centre ? Math.random() * h.r * 0.25 : h.r * (0.55 + Math.random() * 0.4);
+      p.x = h.x + Math.cos(a) * d; p.z = h.z + Math.sin(a) * d;
+      p.hgt = (centre ? 1.2 + Math.random() * 0.5 : 0.6 + Math.random() * 0.6) * (big ? 1 : 0.6);
+      p.w = centre ? 1.4 : 0.8 + Math.random() * 0.5;
+      p.tilt = centre ? (Math.random() - 0.5) * 0.4 : 0.35 + Math.random() * 0.45; p.yaw = Math.PI / 2 - a; p.delay = (centre ? 0 : 0.05 + d / h.r * 0.14) + Math.random() * 0.04;
+      p.m.position.set(p.x, 0.02, p.z); p.m.scale.set(p.w, 0.01, p.w); p.m.rotation.set(0, p.yaw, 0); p.m.rotateX(p.tilt);
+      h.props.push(p);
+    }
+  } else {
+    const nr = big ? 6 : 4, nb = big ? 4 : 2;
+    for (let i = 0; i < nr; i++) {
+      const p = getProp('rock'), a = (i / nr) * Math.PI * 2 + Math.random() * 0.6, d = h.r * (0.86 + Math.random() * 0.18);
+      p.x = h.x + Math.cos(a) * d; p.z = h.z + Math.sin(a) * d; p.s = (0.32 + Math.random() * 0.3) * (big ? 1 : 0.75); p.delay = Math.random() * 0.12;
+      p.m.position.set(p.x, -0.1, p.z); p.m.rotation.set(Math.random() * 3, Math.random() * 3, Math.random() * 3); p.m.scale.setScalar(0.01);
+      h.props.push(p);
+    }
+    for (let i = 0; i < nb; i++) {
+      const p = getProp('bub'), a = Math.random() * 6.28, d = Math.random() * h.r * 0.6;
+      p.x = h.x + Math.cos(a) * d; p.z = h.z + Math.sin(a) * d; p.ph = Math.random(); p.sp = 0.7 + Math.random() * 0.6; p.s = 0.22 + Math.random() * 0.18; p.bub = true;
+      p.m.position.set(p.x, 0.04, p.z); p.m.scale.setScalar(0.01);
+      h.props.push(p);
+    }
+  }
+}
+function animProps(h, dt, fade) {
+  if (!h.props) return;
+  const age = h.t - h.warn;
+  for (const p of h.props) {
+    if (p.kind === 'spike') {
+      const g = easeBack(Math.max(0, age - p.delay) / 0.2) * fade;
+      p.m.scale.set(p.w, Math.max(0.01, p.hgt * g), p.w);
+      p.m.position.y = 0.02 - (1 - fade) * 0.3;
+    } else if (p.bub) {
+      p.ph += dt * p.sp;
+      if (p.ph >= 1) {
+        p.ph = 0;
+        if (sparks && fade > 0.3) sparks.emit(p.x, 0.25, p.z, 0xffb03a, 4, 1.2, 2.5, 0.45, 6);
+        const a = Math.random() * 6.28, d = Math.random() * h.r * 0.6; p.x = h.x + Math.cos(a) * d; p.z = h.z + Math.sin(a) * d; p.m.position.x = p.x; p.m.position.z = p.z;
+      }
+      const k = p.ph < 0.85 ? p.ph / 0.85 : 1 + (p.ph - 0.85) * 3;
+      p.m.scale.set(p.s * k, p.s * k * (p.ph < 0.85 ? 1 : 1.4), p.s * k).multiplyScalar(fade);
+    } else {
+      const g = easeBack(Math.max(0, age - p.delay) / 0.3);
+      p.m.scale.setScalar(Math.max(0.01, p.s * g));
+      p.m.position.y = -0.1 + 0.12 * g - (1 - fade) * 0.35;
+    }
+  }
+}
+// shatter the ice when the frost fades out
+function shatterProps(h) {
+  if (!h.props) return;
+  for (const p of h.props) if (p.kind === 'spike' && sparks) sparks.emit(p.x, 0.4, p.z, 0xd8f6ff, 5, 2.2, 2, 0.5, 9);
+}
+/* --- Thorny vine (forest golem): a chain of twisting segments with thorns, grown from the golem's hand --- */
+const VINE_N = 16;
+const vineMat = new THREE.MeshStandardMaterial({ color: 0x24581a, roughness: 0.6, emissive: hdr(0x58ff2a, 0.55), flatShading: true });
+const thornMat = new THREE.MeshStandardMaterial({ color: 0x9aff6a, roughness: 0.4, emissive: hdr(0xb6ff3a, 0.9), flatShading: true });
+const vineSegGeo = new THREE.CylinderGeometry(0.12, 0.15, 1, 6, 1); vineSegGeo.rotateX(Math.PI / 2);
+const thornGeo = new THREE.ConeGeometry(0.05, 0.28, 4);
+const VINE = [];
+for (let i = 0; i < VINE_N; i++) {
+  const m = new THREE.Mesh(vineSegGeo, vineMat); m.visible = false; m.castShadow = true;
+  for (let k = 0; k < 2; k++) { const t = new THREE.Mesh(thornGeo, thornMat); const a = (i * 2.4 + k * Math.PI); t.position.set(Math.cos(a) * 0.14, Math.sin(a) * 0.14, (k - 0.5) * 0.3); t.rotation.set(0, 0, a - Math.PI / 2); t.rotateX(-0.6); m.add(t); }
+  scene.add(m); VINE.push(m);
+}
+const _vA = new THREE.Vector3(), _vB = new THREE.Vector3(), _vS = new THREE.Vector3(), _vP = new THREE.Vector3();
+function vinePoint(out, ax, ay, az, bx, by, bz, u, wob) {
+  const dx = bx - ax, dz = bz - az, L = Math.hypot(dx, dz) || 1, nx = -dz / L, nz = dx / L;
+  const s = Math.sin(u * Math.PI), w = Math.sin(u * 9 + animT * 7) * 0.32 * s * wob;
+  return out.set(ax + dx * u + nx * w, ay + (by - ay) * u + Math.sin(u * 6 - animT * 5) * 0.2 * s * wob + s * 0.35, az + dz * u + nz * w);
+}
+function updateVine(ax, ay, az, bx, by, bz, grow, thick, wob) {
+  for (let i = 0; i < VINE_N; i++) {
+    const u0 = i / VINE_N, u1 = (i + 1) / VINE_N, m = VINE[i];
+    if (u0 >= grow) { m.visible = false; continue; }
+    vinePoint(_vA, ax, ay, az, bx, by, bz, u0, wob); vinePoint(_vB, ax, ay, az, bx, by, bz, Math.min(u1, grow), wob);
+    m.visible = true; m.position.copy(_vA).add(_vB).multiplyScalar(0.5); m.lookAt(_vB);
+    const len = _vA.distanceTo(_vB) * 1.15, th = thick * (1.15 - 0.45 * u0);
+    m.scale.set(th, th, len);
+  }
+}
+function hideVine() { for (const m of VINE) m.visible = false; }
 
 /* ================= ENTITIES ================= */
 let outfitOverride = null;   // armory preview
@@ -1544,7 +1730,7 @@ function clearWorld() {
   pickups = [];
   for (const h of hazards.slice()) endHazard(h);
   for (const o of ORBS) { o.alive = false; o.mesh.visible = false; }
-  beam.visible = false;
+  beam.visible = false; hideVine();
   player = null;
 }
 
@@ -2954,11 +3140,14 @@ function mageAI(e, dt, dpx, dpz, dp) {
     e.casting -= dt;
     const k = 1 - e.casting / 0.7;
     if (e.castDecal) { e.castDecal.mesh.position.set(e.x, 0.045, e.z); e.castDecal.mesh.scale.setScalar(0.3 + k * 3); e.castDecal.mesh.material.opacity = 0.15 + 0.35 * k + 0.1 * Math.sin(animT * 40); }
+    e.czT = (e.czT || 0) - dt;
+    if (e.czT <= 0) { e.czT = 0.08; const a = Math.random() * 6.28, R = 0.3 + k * 2.6; _a.set(e.x, 1.3, e.z); _b.set(e.x + Math.cos(a) * R, 0.1, e.z + Math.sin(a) * R); zap(_a, _b, 0xc8ff6a, 0.08, 0.4, 0.04); }
     if (e.casting <= 0) {
       freeDecal(e.castDecal); e.castDecal = null;
-      shockFx(e.x, e.z, 3.4, PAL.lime, 0.45, 0.9, 3);
+      shockFx(e.x, e.z, 3.4, PAL.lime, 0.45, 0.9, 7);
+      zapBurst(e.x, 1.2, e.z, 0xd8ff8a, 4, 1.4);
       if (sparks) sparks.emit(e.x, 0.6, e.z, PAL.lime, 30, 4, 2, 0.5);
-      Snd.play('shock', 0.7);
+      Snd.play('shock', 0.7); Snd.fx('zap', 0.8);
       blast(e.x, e.z, 3.3, 9, e, 0, false);
       if (player && Math.hypot(player.x - e.x, player.z - e.z) < 3.3 && G.shieldT <= 0) { impact(0.05, 0.25); flash('#b6ff3a', 0.2); }
     }
@@ -2991,10 +3180,11 @@ function darkMageAI(e, dt, dpx, dpz, dp) {
     spawnRing(e.x, e.z, 0x8a3cff, 2, 0.4);
     let tx = 0, tz = 0;
     for (let i = 0; i < 8; i++) { const a = G.rng() * Math.PI * 2, d = G.rng() * (G.R - 2); tx = Math.cos(a) * d; tz = Math.sin(a) * d; if (Math.hypot(tx - player.x, tz - player.z) > 3) break; }
+    zapBurst(e.x, 1.2, e.z, 0xb46cff, 4, 1.3);
     e.x = tx; e.z = tz; e.vx = e.vz = e.mvx = e.mvz = 0;
     spawnRing(e.x, e.z, 0xb46cff, 2.4, 0.5);
     if (sparks) sparks.emit(e.x, 1, e.z, 0xb46cff, 30, 3, 2, 0.6);
-    Snd.play('teleport', 0.8); e.castFx = 0.5;
+    Snd.play('teleport', 0.8); Snd.fx('void', 1); e.castFx = 0.5;
   } else if (e.orbT <= 0) {
     e.orbT = (2.5 + G.rng()) * fast;
     const n = e.phase2 ? 5 : 3, base = Math.atan2(dpx, dpz);
@@ -3005,7 +3195,7 @@ function darkMageAI(e, dt, dpx, dpz, dp) {
     }
     e.yaw = base;
     e.castFx = 0.7;
-    Snd.play('orb', 0.7);
+    Snd.play('orb', 0.7); Snd.fx('zap', 1);
   } else if (e.sumT <= 0) {
     e.sumT = (9 + G.rng() * 3) * fast;
     if (ents.filter((q) => q.kind === 'bot' && !q.dead).length < 8) {
@@ -3043,11 +3233,11 @@ function startAttack(e) {
     const pts = [[px, pz]];
     for (let i = 0; i < 2; i++) { const a = G.rng() * Math.PI * 2, d = 1.2 + G.rng() * 1.5; pts.push([px + Math.cos(a) * d, pz + Math.sin(a) * d]); }
     e.atk = { kind, t: 0, wind: 0.9, dur: 0.4, lock: true };
-    for (const [x, z] of pts) addHazard('lava', x, z, 1.15, 0.9, 6);
+    for (const [x, z] of pts) addHazard('lava', x, z, 1.15, 0.9, 6, 'golem');
     Snd.play('lava', 0.7);
   } else if (kind === 'ice') {
     e.atk = { kind, t: 0, wind: 0.9, dur: 0.4, lock: true };
-    addHazard('frost', px, pz, 3, 0.9, 6);
+    addHazard('frost', px, pz, 3, 0.9, 6, 'golem');
     Snd.play('freeze', 0.6);
   } else {
     const d = Math.hypot(px, pz), lim = G.R - 1.5;
@@ -3062,18 +3252,22 @@ function tickAttack(e, dt) {
     // vine: aim line during the wind-up, then pulls the player in
     const gx = e.x, gz = e.z + 0, px = player.x, pz = player.z;
     const dx = px - gx, dz = pz - gz, d = Math.hypot(dx, dz) || 1;
-    beam.visible = true;
-    beam.position.set((gx + px) / 2, 1.1, (gz + pz) / 2);
-    beam.lookAt(px, 1.1, pz);
-    const thick = a.t < a.wind ? 0.03 : 0.09 + 0.03 * Math.sin(animT * 30);
-    beam.scale.set(thick, thick, d);
-    beam.material.opacity = a.t < a.wind ? 0.35 + 0.3 * Math.sin(animT * 30) : 0.9;
-    if (a.t >= a.wind && !a.hit) { a.hit = true; Snd.play('vine', 0.9); }
+    // thorny vine lashing out of the golem's arm: it grows during the wind-up, then pulls taut
+    const sx = gx + dx / d * e.r * 0.7, sz = gz + dz / d * e.r * 0.7;
+    const grow = a.t < a.wind ? easeBack(a.t / a.wind) : 1, taut = a.t < a.wind ? 1 : 0.35;
+    updateVine(sx, 1.7, sz, px, 1.0, pz, Math.min(1, grow), a.t < a.wind ? 0.8 : 1 + 0.12 * Math.sin(animT * 30), taut);
+    beam.visible = a.t >= a.wind;
+    beam.position.set((sx + px) / 2, 1.2, (sz + pz) / 2);
+    beam.lookAt(px, 1.0, pz);
+    beam.scale.set(0.05, 0.05, d);
+    beam.material.opacity = 0.25 + 0.15 * Math.sin(animT * 30);
+    if (!a.creak) { a.creak = true; Snd.fx('vine', 0.6); }
+    if (a.t >= a.wind && !a.hit) { a.hit = true; Snd.play('vine', 0.9); Snd.fx('vine', 1); if (sparks) sparks.emit(px, 1, pz, 0x9aff6a, 14, 2, 1.5, 0.5); }
     if (a.t >= a.wind && player.air <= 0 && G.shieldT <= 0 && !player.falling) {
       const vk = 14 * FOE_POWER * (e.phase2 ? 1.6 : 1) * dt; player.vx -= dx / d * vk; player.vz -= dz / d * vk;
       if (sparks && Math.random() < 0.3) sparks.emit(px, 1, pz, 0x7dff3a, 2, 1, 1, 0.4);
     }
-    if (a.t >= a.wind + a.dur) { beam.visible = false; e.atk = null; }
+    if (a.t >= a.wind + a.dur) { beam.visible = false; hideVine(); e.atk = null; }
   } else if (a.kind === 'rock') {
     if (a.t < a.wind) { if (a.tele) a.tele.mesh.material.opacity = 0.2 + 0.25 * Math.abs(Math.sin(animT * 12)); return; }
     const u = Math.min(1, (a.t - a.wind) / a.dur);
@@ -3089,30 +3283,41 @@ function tickAttack(e, dt) {
     }
   } else if (a.t >= a.wind + a.dur) e.atk = null;
 }
-function endAttack(e) { if (e.atk) { if (e.atk.tele) freeDecal(e.atk.tele); if (e.atk.kind === 'forest') beam.visible = false; e.atk = null; } }
-function addHazard(kind, x, z, r, warn, life) {
+function endAttack(e) { if (e.atk) { if (e.atk.tele) freeDecal(e.atk.tele); if (e.atk.kind === 'forest') { beam.visible = false; hideVine(); } e.atk = null; } }
+function addHazard(kind, x, z, r, warn, life, style) {
   const col = kind === 'lava' ? 0xff5a14 : 0x8fe3ff;
-  const h = { kind, x, z, r, warn, life, t: 0, active: false, d: decal(x, z, r, col, 0.2), core: null };
+  const h = { kind, x, z, r, warn, life, style, t: 0, active: false, d: decal(x, z, r, col, 0.2), core: null, props: null };
   if (kind === 'lava') h.core = decal(x, z, r * 0.7, new THREE.Color(0xffd23a).multiplyScalar(1.6), 0);
   hazards.push(h);
   return h;
 }
-function endHazard(h) { freeDecal(h.d); freeDecal(h.core); hazards = hazards.filter((x) => x !== h); }
+function endHazard(h) { if (h.kind === 'frost') shatterProps(h); freeProps(h); freeDecal(h.d); freeDecal(h.core); hazards = hazards.filter((x) => x !== h); }
 function updateHazards(dt) {
+  orbMat.uniforms.uT.value = animT;
   for (const h of hazards.slice()) {
     h.t += dt;
     if (!h.active) {
       h.d.mesh.material.opacity = 0.12 + 0.25 * Math.abs(Math.sin(animT * 10));
       if (h.t >= h.warn) {
         h.active = true;
-        if (h.kind === 'lava') { h.d.mesh.material.color.copy(hdr(0xff3a0a, 1.5)); Snd.play('lava', 0.5); if (sparks) sparks.emit(h.x, 0.2, h.z, 0xff7a1a, 20, 2, 3, 0.7); }
-        else { h.d.mesh.material.color.copy(new THREE.Color(0xd8f6ff)); h.d.mesh.material.blending = THREE.NormalBlending; h.d.mesh.material.map = FROST_TEX; h.d.mesh.material.needsUpdate = true; h.d.mesh.rotation.z = Math.random() * 6; if (sparks) sparks.emit(h.x, 0.3, h.z, 0xffffff, 26, 3, 2, 0.6); }
+        dressHazard(h);
+        if (h.kind === 'lava') {
+          const M = h.d.mesh.material; M.color.copy(hdr(0xffffff, 1.25)); M.map = LAVA_TEX; M.needsUpdate = true; h.d.mesh.rotation.z = Math.random() * 6;
+          Snd.play('lava', 0.5); Snd.fx('magma', 0.9);
+          if (sparks) sparks.emit(h.x, 0.2, h.z, 0xff7a1a, 20, 2, 3, 0.7);
+          if (flames) for (let i = 0; i < 6; i++) flames.emit(h.x + (Math.random() - 0.5) * h.r, 0.15, h.z + (Math.random() - 0.5) * h.r, i % 2 ? 0xff7a1a : 0xffd23a, 1, 0.4, 4.5, 0.6, -1.5);
+        } else {
+          h.d.mesh.material.color.copy(new THREE.Color(0xd8f6ff)); h.d.mesh.material.blending = THREE.NormalBlending; h.d.mesh.material.map = FROST_TEX; h.d.mesh.material.needsUpdate = true; h.d.mesh.rotation.z = Math.random() * 6;
+          if (sparks) sparks.emit(h.x, 0.3, h.z, 0xffffff, 26, 3, 2, 0.6);
+          Snd.fx('frost', h.style === 'golem' ? 1 : 0.6);
+        }
       }
       continue;
     }
     const left = h.warn + h.life - h.t, fade = Math.min(1, left / 0.8);
+    animProps(h, dt, Math.max(0, fade));
     if (h.kind === 'lava') {
-      h.d.mesh.material.opacity = (0.55 + 0.15 * Math.sin(animT * 6 + h.x)) * fade;
+      h.d.mesh.material.opacity = (0.75 + 0.2 * Math.sin(animT * 6 + h.x)) * fade; h.d.mesh.rotation.z += dt * 0.15;
       if (h.core) { h.core.mesh.material.opacity = (0.35 + 0.2 * Math.sin(animT * 9 + h.z)) * fade; h.core.mesh.scale.setScalar(h.r * (0.55 + 0.1 * Math.sin(animT * 3))); }
       if (sparks && Math.random() < dt * 8) sparks.emit(h.x + (Math.random() - 0.5) * h.r, 0.1, h.z + (Math.random() - 0.5) * h.r, 0xff7a1a, 1, 0.4, 2.5, 0.8, -1);
     } else {
@@ -3127,6 +3332,13 @@ function updateHazards(dt) {
     o.t -= dt; o.x += o.vx * dt; o.z += o.vz * dt;
     o.mesh.position.set(o.x, 1 + Math.sin(animT * 10 + o.x) * 0.08, o.z);
     o.mesh.rotation.y += dt * 6;
+    o.zT = (o.zT || 0) - dt;
+    if (o.zT <= 0) {   // crackling arcs leaping off the orb, like the shield
+      o.zT = 0.06 + Math.random() * 0.08;
+      const a = Math.random() * 6.28, el = (Math.random() - 0.5) * 2, oy = o.mesh.position.y;
+      _a.set(o.x, oy, o.z); _b.set(o.x + Math.cos(a) * 0.6, oy + el * 0.35, o.z + Math.sin(a) * 0.6);
+      zap(_a, _b, 0xd8a8ff, 0.09, 0.28, 0.035);
+    }
     if (trail && Math.random() < 0.6) trail.emit(o.x, 1, o.z, 0x8a3cff, 1, 0.1, 0, 0.3, 0);
     if (player && !player.falling && player.air <= 0 && Math.hypot(player.x - o.x, player.z - o.z) < player.r + 0.3) {
       o.alive = false; o.mesh.visible = false;
@@ -3237,7 +3449,7 @@ function update(dt) {
   else if (G.toSpawn.length === 0 && !ents.some((e) => e.kind === 'bot' && !e.dead)) {
     const bonus = Math.round(250 * G.wave * G.cfg.scoreMul);
     G.score += bonus; bumpEl('hudScore');
-    const coins = Math.round((4 + 2 * G.wave) * G.cfg.coinMul * pStats().greed);
+    const coins = Math.round((3 + 1.5 * G.wave) * G.cfg.coinMul * pStats().greed);
     G.coins += coins; G.xp += 5 + G.wave * 2;
     G.R = Math.min(R0, G.R + G.cfg.regrow); G.lastChunkR = G.R;
     endEvent();
@@ -3357,10 +3569,27 @@ function animateDarkMage(e, dt) {
   P.body.rotation.z = Math.sin(animT * 1.3) * 0.03;
   P.arms[0].rotation.x = -0.3 - 2.2 * k; P.arms[0].rotation.z = -0.25 - 0.3 * k;
   P.arms[1].rotation.x = -0.2 - 0.8 * k + Math.sin(animT * 1.7) * 0.1;
-  P.crystal.rotation.y += dt * 2;
-  const glow = 0.7 + 0.3 * Math.sin(animT * 5) + k * 0.8;
-  P.cGlow.material.opacity = Math.min(1, 0.55 * glow);
-  P.cGlow.scale.setScalar(1.2 + k * 1.4);
+  // staff leans forward when he moves (top ahead of the hand), and is thrust at the player when he casts
+  const mv = clamp(Math.hypot(e.vx || 0, e.vz || 0) / 3, 0, 1);
+  e.lean = (e.lean || 0) + ((0.25 + 0.4 * mv) - (e.lean || 0)) * Math.min(1, dt * 6);
+  P.staff.rotation.x = e.lean * (1 - k) + 1.2 * k - P.arms[0].rotation.x;
+  P.crystal.rotation.y += dt * (2 + k * 6);
+  const flick = Math.random() < 0.12 ? 0.5 : 0;
+  const glow = 0.8 + 0.35 * Math.sin(animT * 5) + k * 0.9 + flick;
+  P.cGlow.material.opacity = Math.min(1, 0.6 * glow);
+  P.cGlow.scale.setScalar(1.25 + k * 1.5 + flick * 0.4);
+  P.cGlow2.scale.setScalar(0.8 + 0.25 * Math.sin(animT * 9) + k * 0.6);
+  P.cCore.material.opacity = Math.min(1, 0.6 + 0.3 * Math.sin(animT * 13) + flick);
+  P.gem.emissive.setRGB(0.82, 0.16, 1).multiplyScalar(1.4 + 0.8 * Math.sin(animT * 6) + k * 1.4 + flick * 2);
+  // electric arcs crackling around the crystal
+  e.szT = (e.szT || 0) - dt;
+  if (e.szT <= 0 && !e.falling) {
+    e.szT = k > 0 ? 0.05 : 0.14 + Math.random() * 0.16;
+    P.crystal.getWorldPosition(_a);
+    const a = Math.random() * 6.28, el = (Math.random() - 0.3) * 1.6, R = 0.45 + Math.random() * 0.35 + k * 0.4;
+    _b.set(_a.x + Math.cos(a) * R, _a.y + el * 0.4, _a.z + Math.sin(a) * R);
+    zap(_a, _b, 0xd88aff, 0.1, 0.25, 0.035);
+  }
   for (const ey of P.eyes) { ey.material.opacity = Math.min(1, 0.55 + 0.25 * Math.sin(animT * 7) + k * 0.4); ey.scale.setScalar(0.2 + k * 0.12 + (e.phase2 ? 0.08 : 0)); }
   P.wisps.forEach((w, i) => { w.rotation.z += dt * (0.8 + i * 0.3) * (i % 2 ? -1 : 1); });
   P.head.rotation.y = Math.sin(animT * 0.8) * 0.25;
@@ -3912,6 +4141,7 @@ window.__ab = {
   hq() { QUALITY.locked = true; },
   spawn(t) { if (G) return spawnBot(t); },
   ev(k) { if (G) startEvent(k); },
+  atk() { for (const e of ents) { if (e.atkT != null) e.atkT = 0; if (e.orbT != null) e.orbT = 0; if (e.castT != null) e.castT = 0; } },
   get music() { return Music.mode; }
 };
 
