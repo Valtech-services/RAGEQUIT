@@ -6,7 +6,7 @@
                      (flamme + NEW) qui restent IMMOBILES au hover.
    .gamecard       → la carte cliquable qui s'élève / zoome au hover.
 
-   >>> RÉGLAGE DE LA FLAMME BLEUE <<<
+   >>> RÉGLAGE DE LA FLAMME (jeux hot, calculés dans src/lib/hotGames.js) <<<
    Modifie les variables ci-dessous pour ajuster la pastille.
    --hot-size      : taille de la pastille blanche (carrée : largeur = hauteur)
    --hot-radius    : arrondi des coins de la pastille
@@ -17,7 +17,7 @@
   --hot-size: 28px;        /* << largeur ET hauteur de la pastille (carrée) */
   --hot-radius: 9px;       /* << arrondi de la pastille */
   --hot-offset: 8px;       /* << marge depuis le coin haut-gauche */
-  --hot-icon-scale: 0.62;  /* << proportion de la flamme dans la pastille */
+  --hot-icon-scale: 0.74;  /* << proportion de la flamme dans la pastille */
 
   position: relative;
   width: 100%;
@@ -111,7 +111,21 @@
   width: calc(var(--hot-size) * var(--hot-icon-scale));
   height: calc(var(--hot-size) * var(--hot-icon-scale));
   display: block;
-  filter: drop-shadow(0 1px 2px rgba(0, 140, 200, 0.35));
+  overflow: visible;
+  filter: drop-shadow(0 1px 2px rgba(255, 70, 0, 0.45));
+}
+.gamecard__flame-outer, .gamecard__flame-mid, .gamecard__flame-core {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+.gamecard__flame-outer { animation: gcFlameOuter 1.6s ease-in-out infinite; }
+.gamecard__flame-mid   { animation: gcFlameMid 1.1s ease-in-out infinite; }
+.gamecard__flame-core  { animation: gcFlameCore .8s ease-in-out infinite; }
+@keyframes gcFlameOuter { 0%, 100% { transform: scale(1, 1) skewX(0deg); } 50% { transform: scale(.97, 1.04) skewX(-2deg); } }
+@keyframes gcFlameMid   { 0%, 100% { transform: scale(1, 1); } 40% { transform: scale(1.04, .95) skewX(2deg); } 70% { transform: scale(.97, 1.05); } }
+@keyframes gcFlameCore  { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(.92, 1.08); } }
+@media (prefers-reduced-motion: reduce) {
+  .gamecard__flame-outer, .gamecard__flame-mid, .gamecard__flame-core { animation: none; }
 }
 
 /* ---- Badge NEW (statique aussi) ---- */

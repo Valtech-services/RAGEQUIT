@@ -8,11 +8,49 @@
 */
 import { Link } from '../../i18n/locale'
 import { track } from '../../lib/analytics'
+import { useId } from 'react'
+import { useIsHot } from '../../lib/hotGames'
 import './GameCard.css'
+
+// Flamme « hot » : trois couches (contour, cœur, noyau) qui vacillent doucement.
+function HotFlame() {
+  const uid = useId().replace(/:/g, '')
+  return (
+    <span className="gamecard__hot" aria-label="Hot">
+      <svg className="gamecard__hot-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id={`fo${uid}`} x1="16" y1="2" x2="16" y2="30" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#ff2d55"/>
+            <stop offset="55%" stopColor="#ff5a1f"/>
+            <stop offset="100%" stopColor="#ff8a00"/>
+          </linearGradient>
+          <linearGradient id={`fm${uid}`} x1="16" y1="11" x2="16" y2="28" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#ff9f1c"/>
+            <stop offset="100%" stopColor="#ffd23f"/>
+          </linearGradient>
+          <linearGradient id={`fc${uid}`} x1="16" y1="18" x2="16" y2="27" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#ffe680"/>
+            <stop offset="100%" stopColor="#fffbe8"/>
+          </linearGradient>
+        </defs>
+        <g className="gamecard__flame-outer">
+          <path fill={`url(#fo${uid})`} d="M16 2c1.5 4.5 6.5 7 8.5 12 2 5 .5 11.5-5 14.6-1.9 1.1-5.1 1.1-7 0C7 25.5 5.6 19.6 8 14.6c.9-1.9 2.4-3.4 3.2-5.3.5 1.8.3 3.6 1.4 4.9C12.9 9.6 14.2 5.6 16 2z"/>
+        </g>
+        <g className="gamecard__flame-mid">
+          <path fill={`url(#fm${uid})`} d="M16.5 11c1.1 3.2 4.5 5 5.1 9.2.6 4.1-2.2 7.2-5.6 7.2s-5.9-2.8-5.4-6.4c.3-2.2 1.8-3.6 2.7-5.3.5 1.3.5 2.6 1.3 3.5.2-3.2.8-5.8 1.9-8.2z"/>
+        </g>
+        <g className="gamecard__flame-core">
+          <path fill={`url(#fc${uid})`} d="M16.2 18.5c.8 1.8 2.6 2.9 2.6 5.1 0 1.8-1.2 3-2.8 3s-2.8-1.2-2.7-2.8c.1-1.6 1.4-2.5 1.9-3.9.3.9.4 1.5.8 2.1-.1-1.2-.1-2.4.2-3.5z"/>
+        </g>
+      </svg>
+    </span>
+  )
+}
 
 export default function GameCard({ game, size = 'medium', source = 'bento' }) {
   // Le shimmer est piloté par games.js (champ shimmer du jeu).
   const shimmer = !!game.shimmer
+  const hot = useIsHot(game)
 
   function handleClick(){
     track('game_click', {
@@ -39,25 +77,7 @@ export default function GameCard({ game, size = 'medium', source = 'bento' }) {
       </Link>
 
       {/* Badges statiques (immobiles au survol) */}
-      {game.hot && (
-        <span className="gamecard__hot">
-          <svg className="gamecard__hot-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="hotFlame" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#ffd23f"/>
-                <stop offset="45%" stopColor="#ff8a00"/>
-                <stop offset="100%" stopColor="#e02200"/>
-              </linearGradient>
-              <linearGradient id="hotFlameCore" x1="12" y1="9" x2="12" y2="21" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#fff3b0"/>
-                <stop offset="100%" stopColor="#ffb020"/>
-              </linearGradient>
-            </defs>
-            <path d="M12 2c.6 2.9-.7 4.6-2 6.2-1.4 1.7-2.8 3.4-2.8 6A4.8 4.8 0 0012 19c2.9 0 5.2-2.2 5.2-5 0-2.2-1-3.6-2-5 .1 1.1-.3 2-1.2 2.6.5-2.4-.3-4.3-1.6-5.8C12.9 4.6 12.6 3.2 12 2z" fill="url(#hotFlame)"/>
-            <path d="M12 11c-.9 1-1.5 2.1-1.5 3.4A2.7 2.7 0 0012 17c1.3 0 2.4-1 2.4-2.4 0-1.1-.5-1.8-1.1-2.6-.1.7-.4 1.2-1 1.6.3-1.2-.1-2-1.3-2.6z" fill="url(#hotFlameCore)"/>
-          </svg>
-        </span>
-      )}
+      {hot && <HotFlame />}
       {game.isNew && <span className="gamecard__badge-new">NEW</span>}
     </div>
   )
