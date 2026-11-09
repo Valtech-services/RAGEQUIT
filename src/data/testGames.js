@@ -56,13 +56,13 @@ export const testGames = [
   {
     id: 'hyperhop',
     title: 'HYPERHOP',
-    description: 'Saut de tour en tour en 3D néon : maintiens pour charger, relâche pour bondir, vise le centre pour enchaîner les PERFECT, esquive les drones et abats le boss WARDEN.',
+    description: 'Saut de tour en tour en 3D néon (v2) : maintiens pour charger, relâche pour bondir, vise le centre pour enchaîner les PERFECT jusqu\'au HYPER MODE. Tours spéciales, embranchements, power-ups, 5 mondes, boss WARDEN en 3 phases, missions du jour, boutique de robots et sauvegarde en ligne.',
     thumbnail: '/thumbnails/hyperhop.jpg',
     category: 'challenge',
     orientation: 'portrait',
     file: '/games/hyperhop.html',
-    notes: 'Three.js. Score HYPERHOP_SCORE, modes classic / time (Time Attack 60 s) / hard / daily. Pub revive une fois par partie (retour sur la dernière tour avec bouclier 2 s ; +15 s en Time Attack). Tactile/souris : maintenir n\'importe où puis relâcher ; clavier : maintenir Espace (ou Entrée / flèche haut), P pause. Défi ami par lien (hh_seed).',
-    pr: 32,
+    notes: 'Three.js, v2. Score HYPERHOP_SCORE, modes classic / time (Time Attack 60 s) / hard / daily (meilleur score d\'une partie). Pubs via RH_AD_REQUEST : revive (5 s pour choisir, une fois par partie), double_coins (x2 pièces en fin de partie), rocket_start (partie Classic qui démarre à la tour 25), daily_capsule (capsule gratuite par jour), skin_trial (robot verrouillé pour une partie). Sauvegarde en ligne RH_SAVE (pièces, niveau, robots, missions). Tactile/souris : maintenir puis relâcher, tap en l\'air = double saut (power-up), tap pendant la chute = rejouer ; clavier : Espace, P pause. Défi ami par lien (hh_seed, hh_beat, hh_hops).',
+    pr: 55,
     extras: [
       { label: 'Prompt miniature 1:1 (Gemini, 1024x1024)', text: 'A small cute white and teal robot in mid-air doing a front flip between two tall glowing neon towers that rise out of a dark violet void, the target tower top glowing with a bright teal bullseye ring, a light trail curving behind the robot, a menacing red flying drone hovering above another tower and firing a crackling red lightning beam down onto it, spinning golden coins, a giant striped synthwave sun on the horizon, pink and indigo sky with stars, an endless magenta grid far below, sparks and particles, dramatic low angle, strong bloom, high contrast, no text, no letters, no logo.' },
       { label: 'Prompt image de blog 16:9 (Gemini, 1376x768)', text: 'Wide cinematic view of a chain of floating neon towers of different heights and shapes, square and round, each with glowing rims in teal, coral, violet, sky blue and amber, stretching toward a giant striped synthwave sun on the horizon, a small white and teal robot leaping from one tower to the next with a glowing arc trail, a cracked amber tower crumbling into pieces, a huge crimson boss drone with a golden crown ring hovering over a large round tower in the distance, an endless magenta grid below fading into violet fog, sparkles and light streaks, strong bloom, synthwave arcade atmosphere, no text, no letters, no logo.' },
