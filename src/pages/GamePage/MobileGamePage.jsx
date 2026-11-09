@@ -9,6 +9,7 @@ import { submitScore } from '../../data/leaderboardStore'
 import { submitVote, submitReport } from '../../data/feedbackStore'
 import { track } from '../../lib/analytics'
 import { useGameBridge } from '../../lib/gameBridge'
+import AdSlot from '../../components/AdSlot'
 import Navbar from '../../components/Navbar/Navbar'
 import GameCard from '../../components/GameCard/GameCard'
 import SeoBlock from '../../components/SeoBlock/SeoBlock'
@@ -365,9 +366,7 @@ if (d.type.endsWith('_SCORE')) {
         <span className="mgp__hero-label">{t('game.play')}</span>
       </button>
       {/* Bannière publicitaire mobile — placeholder en attendant AdSense. */}
-      <div className="mgp__ad">
-        <span className="mgp__ad-label">{t('game.advertisement')}</span>
-      </div>
+      <AdSlot slot="mobile" className="mgp__ad" />
       <div className="mgp__related">
         {related.map(g => (
           <div key={g.id} className="mgp__related-cell">

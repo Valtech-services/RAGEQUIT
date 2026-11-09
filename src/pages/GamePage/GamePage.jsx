@@ -15,6 +15,7 @@ import usePageTitle from '../../hooks/usePageTitle'
 import { useTranslation } from 'react-i18next'
 import { track } from '../../lib/analytics'
 import { useGameBridge } from '../../lib/gameBridge'
+import AdSlot from '../../components/AdSlot'
 import './GamePage.css'
 
 export default function GamePage() {
@@ -283,9 +284,6 @@ async function saveVirusLabCloud(){
       <div className="gamepage__layout">
         <div className="gamepage__col-nav">
           <div className="gamepage__nav"><Navbar inGrid={true} /></div>
-          <div className="gamepage__ad gamepage__ad--left">
-            <span className="gamepage__ad-label">Advertisement</span>
-          </div>
         </div>
         <div className="gamepage__col-main">
           <div className="gamepage__block">
@@ -331,9 +329,7 @@ async function saveVirusLabCloud(){
               </div>
             </div>
           </div>
-          <div className="gamepage__ad gamepage__ad--below">
-            <span className="gamepage__ad-label">Advertisement</span>
-          </div>
+          <AdSlot slot="below" className="gamepage__ad gamepage__ad--below" />
           {related.length > 0 && (
             <div className="gamepage__related">
               <div className="gamepage__related-grid">
@@ -347,9 +343,7 @@ async function saveVirusLabCloud(){
           )}
         </div>
         <aside className="gamepage__col-side">
-          <div className="gamepage__ad gamepage__ad--right">
-            <span className="gamepage__ad-label">Advertisement</span>
-          </div>
+          <AdSlot slot="side" className="gamepage__ad gamepage__ad--right" />
           <div className="gamepage__side-games">
             {related.slice(0, 8).map(g => (
               <Link key={g.id} to={`/game/${g.id}`} className="gamepage__side-thumb"

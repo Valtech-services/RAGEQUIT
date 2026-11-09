@@ -206,19 +206,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(10,22,40,0.35);
-  border: 1.5px dashed rgba(255,255,255,0.35);
-  border-radius: var(--radius-md, 16px);
-  overflow: hidden;
-  backdrop-filter: blur(2px);
-}
-.mgp__ad-label {
-  font-family: var(--font-mono, monospace);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.7);
-  font-weight: 700;
 }
 /* Barre d'actions (like / dislike / report) sur l'écran d'accueil du jeu */
 /* Barre d'actions (like / dislike / report) sur l'écran d'accueil du jeu */
