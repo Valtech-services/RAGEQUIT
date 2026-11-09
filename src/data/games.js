@@ -2,7 +2,8 @@
    GAMES.JS — Ragequit Arcade
    Catalogue de jeux. Seuls les jeux vraiment en ligne sont listés.
    Ajouter un jeu = ajouter une entrée dans le tableau `games`.
-   Champ `hot: true`  → affiche la languette blanche avec la flamme bleue
+   Champ `hot: true`  → flamme de secours (les jeux hot sont calculés automatiquement
+                        par src/lib/hotGames.js ; ce champ ne sert que si le calcul échoue)
    Champ `modes`      → liste des modes de jeu (ex: ['survival', 'classic'])
    Champ `defaultMode`→ mode affiché par défaut dans le leaderboard
    ===================================================================== */
