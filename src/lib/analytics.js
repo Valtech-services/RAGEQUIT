@@ -12,6 +12,7 @@
    d'IP, et sert uniquement à compter les visiteurs uniques. Conforme RGPD.
    ===================================================================== */
 import { supabase } from './supabase'
+import { hasConsent } from './consent'
 
 function getDevice(){
   const w = window.innerWidth
@@ -36,10 +37,12 @@ function getVisitorId(){
   }
 }
 
-// Pays via l'API gratuite ip-api.com (appel unique par session, mis en cache)
+// Pays via ipwho.is (appel unique, mis en cache). Ce service reçoit l'adresse IP
+// du visiteur : on ne l'appelle QU'APRÈS acceptation des cookies (RGPD).
 let _country = null
 async function getCountry(){
   if(_country) return _country
+  if(!hasConsent()) return null
   try {
     // ipwho.is : HTTPS, gratuit, sans clé, fonctionne depuis le navigateur.
     const r = await fetch('https://ipwho.is/?fields=country_code', { cache: 'force-cache' })
