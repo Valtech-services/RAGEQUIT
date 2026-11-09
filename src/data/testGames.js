@@ -69,4 +69,20 @@ export const testGames = [
       { label: 'Prompt logo du jeu (Gemini, 1:1, palette propre au jeu)', text: 'Game logo wordmark reading exactly "HYPERHOP" in bold, chunky, italic capital letters that bounce along an invisible arc as if each letter is mid-jump, the O and the final P slightly squashed as if landing, a dotted jump trajectory arching over the word, color palette mint teal and tangerine orange with a deep indigo outline, glossy beveled neon tubes with a soft glow, centered on a plain pure black background, crisp vector style, high contrast, no other text, no mascot, square 1:1 1024x1024.' },
     ],
   },
+  {
+    id: 'brickfury',
+    title: 'BRICKFURY',
+    description: 'Casse-briques néon : glisse pour déplacer la raquette, enchaîne les briques pour monter le multiplicateur jusqu\'à x8, remplis la jauge FURY pour enflammer toutes les balles. Briques blindées, acier, TNT en chaîne et cristaux, 9 power-ups, 5 drones et le boss OVERLORD tous les 5 secteurs.',
+    thumbnail: '/thumbnails/brickfury.jpg',
+    category: 'arcade',
+    orientation: 'portrait',
+    file: '/games/brickfury.html',
+    notes: 'Canvas 2D. Score BRICKFURY_SCORE, modes classic / hard (1 vie, balle plus rapide) / daily (même mur pour tous). Pub revive une fois par partie (+1 vie, mur et score conservés, context revive). Tactile : glisser n\'importe où (déplacement relatif), taper pour lancer ; souris : la raquette suit le curseur, clic pour lancer ; clavier : flèches / A-D / Q-D, Espace pour lancer, P pause. Défi ami par lien (bf_seed, bf_beat, bf_mode). Pour tester : ajouter #bftest à l\'URL expose window.BF_TEST (startLevel(5) = boss).',
+    pr: 50,
+    extras: [
+      { label: 'Prompt miniature 1:1 (Gemini, 1024x1024)', text: 'Close-up action shot of a neon arcade brick breaker, a glowing wall of glossy candy-like bricks in molten crimson, tangerine, electric gold, acid lime, ice blue and violet shattering into hundreds of bright shards, two blazing fireballs with long orange comet trails smashing through the wall, a chain of orange hazard-striped TNT bricks exploding in a golden shockwave, a menacing crimson winged alien warship boss with a glowing amber eye hovering above the wall, small neon drones in lime and ice blue, a glowing golden paddle at the bottom firing twin red laser bolts, dark purple void with a faint synthwave grid floor and stars, strong bloom, high contrast, dynamic diagonal composition, no text, no letters, no numbers, no logo.' },
+      { label: 'Prompt image de blog 16:9 (Gemini, 1376x768)', text: 'Wide cinematic view of a towering neon brick wall floating in a dark purple synthwave void, rows of glossy bricks in crimson, orange, gold, lime, ice blue and violet with steel-plated and crystal bricks among them, a huge golden explosion bursting from a cluster of hazard-striped TNT bricks, shards and sparks flying toward the camera, several fiery balls with comet trails ricocheting, a giant crimson alien warship boss with spread angular wings looming above, a glowing golden paddle far below on a perspective grid floor, light streaks and bloom, deep violet fog, epic arcade atmosphere, no text, no letters, no numbers, no logo.' },
+      { label: 'Prompt logo du jeu (Gemini, 1:1, palette propre au jeu)', text: 'Game logo wordmark reading exactly "BRICKFURY" in massive, heavy, blocky capital letters built like stacked glossy bricks, the letters cracked and shattering at the edges with small brick fragments and sparks flying off, a blazing fireball bursting through the narrow gap between BRICK and FURY with a short comet trail, color palette molten crimson red and electric gold with a dark maroon outline, glossy beveled surfaces with a fiery inner glow, centered on a plain pure black background, crisp vector style, high contrast, no other text, no mascot, square 1:1 1024x1024.' },
+    ],
+  },
 ]
