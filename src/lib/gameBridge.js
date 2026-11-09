@@ -3,18 +3,22 @@
 //  Utilisé par la page de jeu (desktop et mobile) et par l'onglet admin
 //  « Test des jeux ». Messages (postMessage, voir CLAUDE.md) :
 //    jeu  -> site : RH_AUTH_REQUEST { game }
+//                   RH_AD_REQUEST { game, context, id }   (pub récompensée)
 //                   RH_LOGIN_REQUEST { game }
 //                   RH_SAVE_LOAD { game }
 //                   RH_SAVE { game, state, progress }
 //    site -> jeu  : RH_AUTH { signedIn, username }
 //                   RH_SAVE_STATE { game, state, progress, updatedAt }
 //                   RH_SAVE_ACK { game, ok, reason }
+//                   RH_AD_STATUS { game, id, status: 'received' }  (réponse immédiate)
+//                   RH_AD_RESULT { game, id, context, status }  (voir ads.js)
 //  La sauvegarde va dans la table `game_saves` (une ligne par joueur et par
 //  jeu). `progress` est un entier qui ne fait que croître : on n'écrase jamais
 //  une sauvegarde en ligne plus avancée que celle que le jeu envoie.
 // ─────────────────────────────────────────────────────────────────────────
 import { useEffect, useRef } from 'react'
 import { supabase } from './supabase'
+import { showRewarded } from './ads'
 
 const GAME_ID_RE = /^[a-z0-9-]{2,40}$/
 const MAX_STATE_CHARS = 200000
@@ -39,6 +43,15 @@ export function useGameBridge(iframeRef, { user, profile, signInGoogle }, active
       if (d.type === 'RH_AUTH_REQUEST') { reply(authMsg()); return }
       if (d.type === 'RH_LOGIN_REQUEST') { ctx.current.signInGoogle?.(window.location.href); return }
       if (!game) return
+
+      if (d.type === 'RH_AD_REQUEST') {
+        const id = typeof d.id === 'string' || typeof d.id === 'number' ? d.id : null
+        const context = typeof d.context === 'string' ? d.context.slice(0, 40) : 'revive'
+        reply({ type: 'RH_AD_STATUS', game, id, status: 'received' })
+        const status = await showRewarded(context)
+        reply({ type: 'RH_AD_RESULT', game, id, context, status })
+        return
+      }
 
       if (d.type === 'RH_SAVE_LOAD') {
         if (!u) { reply({ type: 'RH_SAVE_STATE', game, state: null, progress: 0, updatedAt: null }); return }

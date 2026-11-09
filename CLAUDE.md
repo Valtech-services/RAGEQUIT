@@ -11,7 +11,7 @@ Ce fichier est lu automatiquement par Claude à chaque session sur ce repo, y co
 
 ## Bon sens avant les règles
 
-Les règles de ce fichier sont des repères, pas des carcans. Pour chaque jeu, choisir distinctement la meilleure solution pour ce jeu-là, avec bon sens : nombre de boutons à l'écran, placements de pub, modes, progression, contrôles. Un jeu à progression peut avoir plusieurs pouvoirs visibles, des pubs qui accélèrent des recherches, une sauvegarde en ligne ; un jeu d'arcade pur garde une seule touche et une pub revive. Ce qui reste non négociable : licences et absence de crédits, protocole de score et d'analytics, aucun appel réseau ni tracker tiers, affichage mobile propre, performance.
+Les règles de ce fichier sont des repères, pas des carcans. Pour chaque jeu, choisir distinctement la meilleure solution pour ce jeu-là, avec bon sens : nombre de boutons à l'écran, placements de pub, modes, progression, contrôles. Un jeu à progression peut avoir plusieurs pouvoirs visibles, des pubs qui accélèrent des recherches, une sauvegarde en ligne ; un jeu d'arcade pur garde une seule touche et une pub revive. Ce qui reste non négociable : licences et absence de crédits, protocole de score et d'analytics, aucun appel réseau ni tracker tiers dans les jeux (la régie pub est chargée par le site, jamais par le jeu), affichage mobile propre, performance.
 
 ## Règle de travail Git
 
@@ -190,7 +190,13 @@ try { window.parent && window.parent.postMessage({
   - **revive** (standard de tous les jeux) : au game over, une fois par partie, bouton « regarder une pub pour continuer » ; la récompense est adaptée au jeu (reprendre sur place, recommencer la vague en cours, temps en plus...) ;
   - **accélération** (jeux à progression) : réduire ou terminer un minuteur de recherche ou d'amélioration, avec un plafond quotidien raisonnable ; `context: 'research'` ;
   - tout autre placement logique pour le jeu (doubler un gain de fin de partie, coffre...) avec son propre `context` explicite.
-  Overlay simulé de 5 s (label « Advertisement », compte à rebours), puis récompense. Au moment exact où elle est accordée :
+  La vraie pub est affichée par le site (régie AdinPlay, `src/lib/ads.js`), pas par le jeu. Le jeu la demande puis attend la réponse :
+  - jeu → site : `RH_AD_REQUEST { game, context, id }` (`id` unique par demande) ;
+  - site → jeu : `RH_AD_STATUS { game, id, status: 'received' }` tout de suite, puis `RH_AD_RESULT { game, id, context, status }` ;
+  - `status` : `completed` (récompense), `skipped` (pas de récompense, retour au choix), `unavailable` (aucune pub disponible : récompense quand même), `simulate` (régie pas encore active : le jeu joue son overlay simulé de 5 s, label « Advertisement » + compte à rebours, puis récompense) ;
+  - sans aucune réponse du site sous 1,5 s (jeu ouvert seul, hors iframe), le jeu joue lui-même l'overlay simulé. Après `received`, garde-fou de 120 s puis `unavailable`.
+  Le jeu n'accepte ces réponses que si `event.source === window.parent` et si `id` correspond. Implémentation de référence : fonctions `requestAd` / `simulateAd` de `public/games/brickfury.html`.
+  Au moment exact où la récompense est accordée (quel que soit le statut qui la donne) :
 ```js
 try { window.parent && window.parent.postMessage({
   type: 'RH_TRACK',
@@ -199,7 +205,7 @@ try { window.parent && window.parent.postMessage({
   props: { context: 'revive' }  // ou 'research', etc.
 }, '*'); } catch (e) {}
 ```
-- Stub SDK optionnel, désactivé par défaut, sans chargement de script externe.
+- Aucun SDK publicitaire dans le jeu : seul le site charge la régie, après le consentement cookies.
 
 8. CONNEXION ET SAUVEGARDE EN LIGNE (jeux à progression)
 Le site fournit un pont générique (`src/lib/gameBridge.js`, branché sur la page de jeu desktop et mobile et sur l'onglet admin « Test des jeux »). Un jeu à progression l'utilise au lieu de messages spécifiques :
@@ -211,7 +217,7 @@ Le site fournit un pont générique (`src/lib/gameBridge.js`, branché sur la pa
 - Le jeu n'accepte ces réponses que si `event.source === window.parent`. Un joueur non connecté peut jouer, mais le jeu lui dit clairement qu'il doit se connecter pour retrouver sa progression sur tous ses appareils (bandeau + bouton qui envoie `RH_LOGIN_REQUEST`).
 
 9. NE RIEN INVENTER D'AUTRE
-- Aucun autre type de message que ceux décrits ici, aucun autre appel réseau, aucun tracker tiers.
+- Aucun autre type de message que ceux décrits ici, aucun autre appel réseau depuis le jeu, aucun tracker tiers dans le jeu.
 
 ## Choix des sources (backlog)
 

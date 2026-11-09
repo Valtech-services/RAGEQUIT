@@ -1397,21 +1397,43 @@ function gameOver() {
   if (!G.revived) { setTimeout(() => { if (G && G.over && state === 'play') setState('revive'); }, 700); return; }
   setTimeout(() => finish(), 700);
 }
-function doRevive() {
-  setState('ad');
+/* Rewarded ads: the site shows the real ad (RH_AD_REQUEST / RH_AD_RESULT).
+   Without an answer from the site, the game plays its own 5 s simulation. */
+const AD = { pending: null, seq: 0 };
+window.addEventListener('message', (e) => {
+  if (window.parent === window || e.source !== window.parent) return;
+  const d = e.data, p = AD.pending;
+  if (!d || !p || d.game !== GAME_ID || d.id !== p.id) return;
+  if (d.type === 'RH_AD_STATUS') { clearTimeout(p.timer); p.timer = setTimeout(() => endAd(p, 'unavailable'), 120000); }
+  else if (d.type === 'RH_AD_RESULT') endAd(p, d.status);
+});
+function endAd(p, status) { if (AD.pending !== p) return; AD.pending = null; clearTimeout(p.timer); p.done(status); }
+function requestAd(context, done) {
+  if (window.parent === window) { done('simulate'); return; }
+  const p = { id: 'bf' + (++AD.seq), done, timer: 0 };
+  p.timer = setTimeout(() => endAd(p, 'simulate'), 1500);
+  AD.pending = p;
+  post({ type: 'RH_AD_REQUEST', game: GAME_ID, context, id: p.id });
+}
+function simulateAd(cb) {
   let n = 5; $('adCount').textContent = n;
-  const iv = setInterval(() => {
-    n--; $('adCount').textContent = Math.max(0, n);
-    if (n <= 0) {
-      clearInterval(iv);
-      post({ type: 'RH_TRACK', event: 'ad_rewarded_complete', game_id: GAME_ID, props: { context: 'revive' } });
-      G.revived = true; G.over = false; G.lives = 1;
-      G.shots.length = 0; G.enemies.forEach((e) => { e.dead = true; });
-      serveBall(); G.intro = 1;
-      banner('BACK IN THE FIGHT', '+1 LIFE', PAL.lime);
-      setState('play'); updateHud(true); SND.play('power', 0.8);
-    }
-  }, 1000);
+  const iv = setInterval(() => { n--; $('adCount').textContent = Math.max(0, n); if (n <= 0) { clearInterval(iv); cb(); } }, 1000);
+}
+function grantRevive() {
+  post({ type: 'RH_TRACK', event: 'ad_rewarded_complete', game_id: GAME_ID, props: { context: 'revive' } });
+  G.revived = true; G.over = false; G.lives = 1;
+  G.shots.length = 0; G.enemies.forEach((e) => { e.dead = true; });
+  serveBall(); G.intro = 1;
+  banner('BACK IN THE FIGHT', '+1 LIFE', PAL.lime);
+  setState('play'); updateHud(true); SND.play('power', 0.8);
+}
+function doRevive() {
+  setState('ad'); $('adCount').textContent = '...';
+  requestAd('revive', (status) => {
+    if (status === 'simulate') simulateAd(grantRevive);
+    else if (status === 'completed' || status === 'unavailable') grantRevive();
+    else setState('revive');
+  });
 }
 function finish() {
   if (!G || state === 'over') return;
