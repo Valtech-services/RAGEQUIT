@@ -769,6 +769,59 @@ export const posts = [
       { type: 'p', text: "Stay central, charge with care, learn each golem's tell and keep your Shield ready. Open ARCANE BRAWL, step onto the ring and see how many waves you can survive." }
     ],
   },
+  {
+    slug: 'voltlink-tips',
+    category: 'guides',
+    title: "VOLTLINK: How to Master Loops, Surges and Every Boss",
+    date: '2026-11-11',
+    author: 'Ragequit Arcade',
+    excerpt: "VOLTLINK turns connect the dots into a neon puzzle game with 60 levels, five sectors and five bosses. Learn how to build loops, when to save your power-ups, how to beat every obstacle and how to score big in Arcade.",
+    image: '/blog/voltlink-tips.jpg',
+    seo: {
+      title: "VOLTLINK Tips: Loops, Surges, Power-ups, Bosses and 3 Stars | Ragequit Arcade",
+      metaDescription: "A tips guide for VOLTLINK, the free connect the dots puzzle game: build loops, combine bombs and lasers, beat ice, chains, viruses, time bombs and all five bosses.",
+    },
+    content: [
+      { type: 'p', text: "VOLTLINK looks like the simplest puzzle game in the world: drag through dots of the same color and they vanish. Then you close your first loop, the whole grid lights up, and you understand that the real game is about shapes. This guide covers the habits that turn a casual link into a three star circuit and a big Arcade score." },
+      { type: 'h2', text: "Always look for squares first" },
+      { type: 'p', text: "A loop needs at least four nodes in a square. Closing it triggers a SURGE that clears every node of that color on the entire grid, which is worth far more than any straight line. Before each move, scan the board for a two by two block of one color. If you see three matching nodes in an L shape, a single move elsewhere can often drop the fourth one into place." },
+      { type: 'h2', text: "Know what each link creates" },
+      { type: 'p', text: "Long links do more than score points: the length and shape of your link decide which power-up you get." },
+      { type: 'ul', items: [
+        "Six nodes or more drop a BOMB that clears the area around it.",
+        "Five nodes in a straight row or column create a LASER that fires across the whole line.",
+        "Nine nodes or a closed loop create a PRISM, a rainbow wildcard that links with any color.",
+        "A PRISM inside a loop lets you surge a color even when the square is not complete."
+      ] },
+      { type: 'h2', text: "Chain power-ups together" },
+      { type: 'p', text: "Power-ups explode when they are cleared, so include them in your next link instead of leaving them on the board. A laser caught inside a surge fires on its own, and a bomb next to a laser can clear half the grid in one move. Build them near the obstacles you need to break, not in an empty corner." },
+      { type: 'h2', text: "Time your Overcharge" },
+      { type: 'p', text: "Every link and every surge fills the Overcharge meter. When it is full, your points are doubled for a few seconds in Arcade, or for a few moves in Circuits. If the meter is almost full, make a small safe link to trigger it, then spend the doubled moves on your biggest loop." },
+      { type: 'h2', text: "Beat the obstacles of each sector" },
+      { type: 'p', text: "Each of the five sectors adds one new rule. Learn how to handle it and the circuits become much easier." },
+      { type: 'ul', items: [
+        "Power Grid: glitch blocks break when you clear a node right next to them. Surges and bombs break several at once.",
+        "Frostline: link a frozen node or clear next to it to crack the ice, and clear the nodes under power cells so they reach the bottom row.",
+        "Chainworks: chained nodes cannot be linked. Clear right beside them to set them free before you need that color.",
+        "Virus Lab: a virus spreads after every move that does not destroy one. Deal with it immediately, even if the link is short.",
+        "The Core: time bombs link with any color. Defuse the one with the lowest counter first."
+      ] },
+      { type: 'h2', text: "How to beat the five bosses" },
+      { type: 'p', text: "Every sector ends with a boss that damages the grid on a timer. Long links and surges hit it hardest, so slow down and plan bigger moves during boss circuits." },
+      { type: 'ul', items: [
+        "Overload Core: it turns nearby nodes into glitches. Keep the area around it clear and surge often.",
+        "Firewall: it burns a column you cannot link through. Work on the other side and wait for the fire to move.",
+        "Swarm: it spawns glitches all over the grid. Use bombs and lasers to clean several at once.",
+        "Mirror: it swaps two colors on the whole grid. Do not plan too far ahead and check the board after each pulse.",
+        "Leech: it steals your time and moves. Strike fast with your strongest power-ups before it drains you."
+      ] },
+      { type: 'h2', text: "Earn three stars in every circuit" },
+      { type: 'p', text: "Stars depend on your score at the end of the circuit, so finishing the objective is only half the job. Keep a loop ready for your last moves, aim for long links rather than many short ones, and use boosters on the circuits where you are stuck. A PRISM at the start is the most flexible choice." },
+      { type: 'h2', text: "Score big in Arcade, Hard and Daily" },
+      { type: 'p', text: "Arcade lasts 60 seconds, but long links add time to the clock, so a steady rhythm of five or six node links is worth more than a frantic series of pairs. Hard mode adds a sixth color, so loops are rarer: build lasers and bombs instead. The Daily board is the same for everyone, which makes it the best place to compare skills with friends. Once per run you can watch a short ad to gain fifteen seconds and wipe the glitches, so keep it for a run that is going well." },
+      { type: 'p', text: "Look for squares, chain your power-ups, save Overcharge for a big loop and learn each boss pattern. Open VOLTLINK, link your first circuit and see how far your combos can go." }
+    ],
+  },
 ]
 
 // Trouve un article par son slug.

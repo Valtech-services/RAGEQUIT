@@ -84,6 +84,12 @@
   .logo span { display: block; background: linear-gradient(180deg, #fff 0%, var(--volt) 45%, #ffb84d 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .logo span + span { background: linear-gradient(180deg, #e9ddff 0%, var(--uv) 55%, var(--sky) 100%); -webkit-background-clip: text; background-clip: text; animation: zap 2.6s ease-in-out infinite; }
   .logo--one span { display: inline; }
+  .logo-h { margin: 0 0 12px; font-size: 40px; line-height: 1; }
+  .logo-img { display: block; width: min(320px, 82%); height: auto; margin: 0 auto; animation: logoFloat 3s ease-in-out infinite; }
+  .logo-img--load { width: min(260px, 70vw); }
+  @keyframes logoFloat { 50% { transform: translateY(-3px) scale(1.02); filter: drop-shadow(0 0 14px rgba(255,225,77,.45)); } }
+  /* iPhone: inside the site iframe env(safe-area-inset-bottom) is 0, keep the bottom clear of the home bar and Safari toolbar */
+  html.ios { --safe-bottom: max(env(safe-area-inset-bottom, 0px), 24px); }
   @keyframes logoGlow { 50% { filter: drop-shadow(0 0 24px rgba(155,107,255,.85)); transform: scale(1.02); } }
   @keyframes flicker { 0%, 100% { opacity: 1; } 61% { opacity: .55; } 62% { opacity: 1; } 64% { opacity: .7; } 65% { opacity: 1; } }
   @keyframes zap { 50% { transform: translateY(-3px) rotate(-4deg); } }
@@ -240,7 +246,7 @@
   .toast.on { opacity: 1; transform: translate(-50%, -50%) scale(1); }
   .zen-ico { font-size: 22px; line-height: 1; }
   @media (prefers-reduced-motion: reduce) {
-    .ov.on, .ov.on .panel, .logo, .logo span, #ovMenu .btn--circuits, .tile, .newbest.on, .hud.on, .lv.cur, .bigstars i.on, .ocbar.on .ocbar__fill { animation: none; opacity: 1; }
+    .ov.on, .ov.on .panel, .logo, .logo span, .logo-img, #ovMenu .btn--circuits, .tile, .newbest.on, .hud.on, .lv.cur, .bigstars i.on, .ocbar.on .ocbar__fill { animation: none; opacity: 1; }
   }
 </style>
 </head>
@@ -280,14 +286,14 @@
 <div class="toast" id="toast"></div>
 
 <div class="load" id="load">
-  <div class="logo logo--one"><span>VOLT</span><span>LINK</span></div>
+  <img class="logo-img logo-img--load" src="./voltlink/sprites/logo.webp" alt="VOLTLINK" width="418" height="91" />
   <div class="lbar"><div class="lbar__fill" id="loadFill"></div></div>
 </div>
 
 <!-- Menu -->
 <div class="ov on" id="ovMenu">
   <div class="panel">
-    <h1 class="logo"><span>VOLT</span><span>LINK</span></h1>
+    <h1 class="logo-h"><img class="logo-img" src="./voltlink/sprites/logo.webp" alt="VOLTLINK" width="418" height="91" /></h1>
     <div class="profile">
       <div class="pchip"><svg class="volt-ico"><use href="#i-volt"/></svg><span id="mVolts">0</span></div>
       <div class="pchip"><svg class="star-ico"><use href="#i-star"/></svg><span id="mStars">0</span></div>
@@ -441,6 +447,7 @@
 </div>
 
 <script>
+  try { if (/iP(hone|od|ad)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) document.documentElement.classList.add('ios'); } catch (e) {}
 (function () {
   'use strict';
 
@@ -778,7 +785,12 @@
   /* ================= LAYOUT ================= */
   var W = 0, H = 0, DPR = 1, S = 50, BX = 0, BY = 0, BW = 0, BH = 0;
   var bgCanvas = null, boardCanvas = null, nodeSpr = [];
-  function cssPx(name) { return parseFloat(getComputedStyle(document.documentElement).getPropertyValue(name)) || 0; }
+  // custom properties holding env()/max() are not numbers: measure them with a probe
+  function cssPx(name) {
+    var p = document.createElement('div');
+    p.style.cssText = 'position:fixed;left:0;top:0;width:0;visibility:hidden;pointer-events:none;height:var(' + name + ')';
+    document.body.appendChild(p); var h = p.offsetHeight || 0; p.remove(); return h;
+  }
   function theme() { return THEMES[SV.theme] || THEMES.neon; }
   function resize() {
     W = window.innerWidth || document.documentElement.clientWidth; H = window.innerHeight || document.documentElement.clientHeight;
