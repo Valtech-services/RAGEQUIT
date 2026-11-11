@@ -704,6 +704,7 @@ export const games = [
     size: 'medium',
     shimmer: false,
     isNew: true,
+    addedAt: '2026-10-30',
     hot: true,
     landscape: false,
     plays: 0,
@@ -741,6 +742,7 @@ export const games = [
     size: 'medium',
     shimmer: false,
     isNew: true,
+    addedAt: '2026-11-02',
     hot: true,
     landscape: false,
     plays: 0,
@@ -775,6 +777,7 @@ export const games = [
     size: 'medium',
     shimmer: true,
     isNew: true,
+    addedAt: '2026-11-03',
     hot: true,
     landscape: false,
     plays: 0,
@@ -809,6 +812,7 @@ export const games = [
     size: 'large',
     shimmer: true,
     isNew: true,
+    addedAt: '2026-11-08',
     hot: true,
     landscape: false,
     plays: 0,
@@ -843,6 +847,7 @@ export const games = [
     size: 'medium',
     shimmer: false,
     isNew: true,
+    addedAt: '2026-11-11',
     hot: false,
     landscape: false,
     plays: 0,
@@ -868,3 +873,13 @@ export const games = [
     }
   },
 ]
+
+/* Badge NEW : visible 7 jours après la date de mise en ligne (addedAt, AAAA-MM-JJ).
+   Un jeu sans addedAt garde la valeur isNew écrite à la main. */
+export const NEW_BADGE_DAYS = 7
+for (const g of games) {
+  if (g.isNew && g.addedAt) {
+    const age = Date.now() - Date.parse(g.addedAt + 'T00:00:00Z')
+    g.isNew = age >= 0 && age < NEW_BADGE_DAYS * 86400000
+  }
+}
