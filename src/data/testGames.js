@@ -62,7 +62,7 @@ export const testGames = [
     orientation: 'portrait',
     file: '/games/brickfury.html',
     notes: 'Canvas 2D. Score BRICKFURY_SCORE, modes classic / hard (1 vie, balle plus rapide) / daily (même mur pour tous). Pub revive une fois par partie (+1 vie, mur et score conservés, context revive). Tactile : glisser n\'importe où (déplacement relatif), taper pour lancer ; souris : la raquette suit le curseur, clic pour lancer ; clavier : flèches / A-D / Q-D, Espace pour lancer, P pause. Défi ami par lien (bf_seed, bf_beat, bf_mode). Pour tester : ajouter #bftest à l\'URL expose window.BF_TEST (startLevel(5) = boss).',
-    pr: 50,
+    pr: 63,
     extras: [
       { label: 'Prompt miniature 1:1 (Gemini, 1024x1024)', text: 'Close-up action shot of a neon arcade brick breaker inside a glowing golden arena frame, a wall of glossy candy-like bricks in molten red, tangerine, gold and coral shattering into bright shards, three blazing fireballs with long comet trails smashing through, orange hazard-striped TNT bricks exploding, round power-up capsules with simple white icons falling, dark volcanoes with glowing lava cracks behind a red neon grid floor, embers in the air, strong bloom, high contrast, no text, no letters, no numbers, no logo.' },
       { label: 'Prompt image de blog 16:9 (Gemini, 1376x768)', text: 'Wide cinematic panorama of four neon arcade arenas side by side, a synthwave city with a striped sun, an ice zone with aurora curtains and jagged glowing peaks, a magma zone with lava volcanoes, a deep space zone with a ringed purple planet, each arena holding a wall of glossy neon bricks smashed by fireballs, a glowing energy paddle at the bottom, sparks and shards everywhere, strong bloom, no text, no letters, no logo.' },
