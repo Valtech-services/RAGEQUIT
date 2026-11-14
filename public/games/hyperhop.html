@@ -676,7 +676,7 @@ if (params.hh_seed && /^\d+$/.test(params.hh_seed)) {
 const SOUND_NAMES = ['jump', 'land', 'coin', 'fall', 'crumble', 'zap', 'boom', 'perfect', 'combo', 'overdrive', 'over', 'tick'];
 const RAW = {};
 const ASSETS = { hero: null, drone: null, coin: null, sparkle: null, soft: null, spark: null };
-let loadTotal = SOUND_NAMES.length + 6, loadDone = 0, loaded = false;
+let loadTotal = SOUND_NAMES.length + 10, loadDone = 0, loaded = false;
 function loadStep() {
   loadDone++;
   $('loadFill').style.width = Math.round(loadDone / loadTotal * 100) + '%';
@@ -699,6 +699,10 @@ const texLoader = new THREE.TextureLoader();
 texLoader.load(ASSET + 'sprites/sparkle.webp', (t) => { ASSETS.sparkle = t; loadStep(); }, undefined, loadStep);
 texLoader.load(ASSET + 'sprites/soft.webp', (t) => { ASSETS.soft = t; loadStep(); }, undefined, loadStep);
 texLoader.load(ASSET + 'sprites/spark.webp', (t) => { ASSETS.spark = t; loadStep(); }, undefined, loadStep);
+// tower facade (PBR colour, normal, roughness) and a night-city light probe for the reflections
+for (const [k, file] of [['facadeDiff', 'facade_diff.webp'], ['facadeNor', 'facade_nor.webp'], ['facadeRough', 'facade_rough.webp'], ['env', 'env_night.jpg']]) {
+  texLoader.load(ASSET + 'textures/' + file, (t) => { ASSETS[k] = t; loadStep(); }, undefined, loadStep);
+}
 
 /* ================= AUDIO ================= */
 const Snd = {
@@ -1701,10 +1705,22 @@ function addHaze(m) {
   m.customProgramCacheKey = () => 'tower-haze';
 }
 
+const FACADE = { box: null, cyl: null };
+function facadeSet(rx, ry) {
+  const o = {};
+  for (const [k, src] of [['map', ASSETS.facadeDiff], ['normalMap', ASSETS.facadeNor], ['roughnessMap', ASSETS.facadeRough]]) {
+    if (!src) continue;
+    const t = src.clone(); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rx, ry); t.anisotropy = 4;
+    t.colorSpace = k === 'map' ? THREE.SRGBColorSpace : THREE.NoColorSpace; t.needsUpdate = true; o[k] = t;
+  }
+  return o;
+}
 function makeTower(p) {
   const grp = new THREE.Group();
   const s = p.size, color = p.color, sp = SPECIAL[p.type];
-  const bodyMat = new THREE.MeshStandardMaterial({ color: 0x120826, roughness: 0.32, metalness: 0.65, envMapIntensity: 0.7, emissive: color, emissiveMap: p.shape === 'cyl' ? SIDE_CYL : SIDE_BOX, emissiveIntensity: 0.7 });
+  const fac = p.shape === 'cyl' ? FACADE.cyl : FACADE.box;
+  const bodyMat = new THREE.MeshStandardMaterial(Object.assign({ color: fac ? 0x8a84b0 : 0x120826, roughness: fac ? 0.55 : 0.32, metalness: fac ? 0.7 : 0.65, envMapIntensity: fac ? 1.6 : 0.7, emissive: color, emissiveMap: p.shape === 'cyl' ? SIDE_CYL : SIDE_BOX, emissiveIntensity: fac ? 0.55 : 0.7 }, fac || {}));
+  if (fac && bodyMat.normalMap) bodyMat.normalScale.set(1.4, 1.4);
   addHaze(bodyMat);
   const topE = p.type === 'crumble' ? CRACK_E : p.type === 'boost' ? BOOST_E : sp ? sp.tex : TOP_E;
   const topMat = new THREE.MeshStandardMaterial({ color: 0x1a0d33, roughness: 0.4, metalness: 0.3, emissive: hdr(color, 1), emissiveMap: topE, emissiveIntensity: p.type === 'boost' || sp ? 1.0 : 0.55 });
@@ -3344,6 +3360,11 @@ function applyAssets() {
       m.emissive = new THREE.Color(0xffb020); m.emissiveMap = m.map; m.emissiveIntensity = 1.5; m.metalness = 0.6; m.roughness = 0.3;
       o.material = m;
     });
+  }
+  if (ASSETS.facadeDiff) { FACADE.box = facadeSet(1.5, 10); FACADE.cyl = facadeSet(4, 10); }
+  if (ASSETS.env) {
+    const e = ASSETS.env; e.mapping = THREE.EquirectangularReflectionMapping; e.colorSpace = THREE.SRGBColorSpace;
+    scene.environment = pmrem.fromEquirectangular(e).texture;
   }
   if (SV.set.hq) applyQuality();
   toMenu();
