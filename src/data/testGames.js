@@ -40,7 +40,7 @@ export const testGames = [
   {
     id: 'hyperhop',
     title: 'HYPERHOP',
-    description: 'Saut de tour en tour en 3D néon (v3 : 5 décors de monde, textes lisibles, robot plus grand, nouveau WARDEN) : maintiens pour charger, relâche pour bondir, vise le centre pour enchaîner les PERFECT jusqu\'au HYPER MODE. Tours spéciales, embranchements, power-ups, 5 mondes, boss WARDEN en 3 phases, missions du jour, boutique de robots et sauvegarde en ligne.',
+    description: 'Saut de tour en tour en 3D néon (v4 : façades texturées et reflets de ville nocturne, 5 décors de monde, textes lisibles, robot plus grand, nouveau WARDEN) : maintiens pour charger, relâche pour bondir, vise le centre pour enchaîner les PERFECT jusqu\'au HYPER MODE. Tours spéciales, embranchements, power-ups, 5 mondes, boss WARDEN en 3 phases, missions du jour, boutique de robots et sauvegarde en ligne.',
     thumbnail: '/thumbnails/hyperhop.jpg',
     category: 'challenge',
     orientation: 'portrait',
