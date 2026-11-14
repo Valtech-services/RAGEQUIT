@@ -818,7 +818,7 @@ export const games = [
     plays: 0,
     modes: ['classic', 'hard'],
     defaultMode: 'classic',
-    controls: "On mobile, drag anywhere on the screen to move with the floating joystick. Tap STRIKE for a quick sword slash or hold it to charge a heavy strike, then release. Your unlocked powers sit in an arc around the STRIKE button: Shockwave, Shield, Slam and Judgement. On desktop, move with WASD, ZQSD or the arrow keys, tap Space to strike or hold Space to charge, use 1, 2, 3 and 4 for the powers and P to pause.",
+    controls: "On mobile, drag anywhere on the screen to move with the floating joystick. Tap STRIKE for a quick sword slash or hold it to charge a heavy strike, then release. Your unlocked powers sit in an arc around the STRIKE button: Shockwave, Shield, Slam and Judgement. On desktop, move with WASD, ZQSD or the arrow keys, tap Space to strike or hold Space to charge, use C, V, B and N for the powers (same keys on QWERTY and AZERTY) and P to pause.",
     author: 'Ragequit Arcade',
     seo: {
       title: "ARCANE BRAWL - Free 3D Arena Brawler Game Online | Ragequit Arcade",
