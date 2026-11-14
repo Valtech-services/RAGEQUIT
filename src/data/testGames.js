@@ -38,22 +38,6 @@ export const testGames = [
     notes: 'Three.js. Score CITY_RUNNER_SCORE, mode classic. Mettre DEBUG_MAX_CREDITS a true pour tester tous les vehicules.'
   },
   {
-    id: 'hyperhop',
-    title: 'HYPERHOP',
-    description: 'Saut de tour en tour en 3D néon (v4 : façades texturées et reflets de ville nocturne, 5 décors de monde, textes lisibles, robot plus grand, nouveau WARDEN) : maintiens pour charger, relâche pour bondir, vise le centre pour enchaîner les PERFECT jusqu\'au HYPER MODE. Tours spéciales, embranchements, power-ups, 5 mondes, boss WARDEN en 3 phases, missions du jour, boutique de robots et sauvegarde en ligne.',
-    thumbnail: '/thumbnails/hyperhop.jpg',
-    category: 'challenge',
-    orientation: 'portrait',
-    file: '/games/hyperhop.html',
-    notes: 'Three.js, v3 (décors propres à chaque monde, un seul message par atterrissage, annonces en file d\'attente). Score HYPERHOP_SCORE, modes classic / time (Time Attack 60 s) / hard / daily (meilleur score d\'une partie). Pubs via RH_AD_REQUEST : revive (5 s pour choisir, une fois par partie), double_coins (x2 pièces en fin de partie), rocket_start (partie Classic qui démarre à la tour 25), daily_capsule (capsule gratuite par jour), skin_trial (robot verrouillé pour une partie). Sauvegarde en ligne RH_SAVE (pièces, niveau, robots, missions). Tactile/souris : maintenir puis relâcher, tap en l\'air = double saut (power-up), tap pendant la chute = rejouer ; clavier : Espace, P pause. Défi ami par lien (hh_seed, hh_beat, hh_hops).',
-    pr: 67,
-    extras: [
-      { label: 'Prompt miniature 1:1 (Gemini, 1024x1024)', text: 'A small cute white and teal robot in mid-air doing a front flip between two tall glowing neon towers that rise out of a violet mist, the target tower top glowing with a bright teal bullseye ring, a giant striped synthwave sun sinking behind a dark city skyline with red rooftop beacons, pink and indigo sky, an endless magenta grid far below, sparks and light trails, dramatic low angle, strong bloom, high contrast, no text, no letters, no logo.' },
-      { label: 'Prompt image de blog 16:9 (Gemini, 1376x768)', text: 'Wide cinematic panorama of five floating worlds of neon towers side by side, a synthwave city with a striped sun, a glacier of ice spires under green aurora curtains, a magma field of jagged lava-veined rocks, deep space with a ringed purple gas giant and asteroids, a golden temple of pyramids and floating gold rings, a small white robot leaping between towers with a glowing arc trail, strong bloom, no text, no letters, no logo.' },
-      { label: 'Prompt logo du jeu (Gemini, 1:1, palette propre au jeu)', text: 'Game logo wordmark reading exactly "HYPERHOP" in bold, chunky, italic capital letters that bounce along an invisible arc as if each letter is mid-jump, the O and the final P slightly squashed as if landing, a dotted jump trajectory arching over the word, color palette mint teal and tangerine orange with a deep indigo outline, glossy beveled neon tubes with a soft glow, centered on a plain pure black background, crisp vector style, high contrast, no other text, no mascot, square 1:1 1024x1024.' },
-    ],
-  },
-  {
     id: 'brickfury',
     title: 'BRICKFURY',
     description: 'Casse-briques néon (v2 : 4 zones avec décor animé, bonus en icônes, FURY qui embrase l\'arène) : glisse pour déplacer la raquette, enchaîne les briques pour monter le multiplicateur jusqu\'à x8, remplis la jauge FURY pour enflammer toutes les balles. Briques blindées, acier, TNT en chaîne et cristaux, 9 power-ups, 5 drones et le boss OVERLORD tous les 5 secteurs.',

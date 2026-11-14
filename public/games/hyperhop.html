@@ -144,6 +144,8 @@
     background: linear-gradient(180deg, #ffffff 0%, var(--teal) 40%, var(--amber) 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
     filter: drop-shadow(0 0 12px rgba(0,245,212,.55)); animation: hop 2.2s cubic-bezier(.3,0,.3,1) infinite; transform-origin: 50% 100%; }
   @keyframes hop { 0%, 55%, 100% { transform: none; } 30% { transform: scale(1.06, .86); } 40% { transform: translateY(-14px) scale(.96, 1.08); } 50% { transform: translateY(0) scale(1.08, .9); } }
+  .logo-img { display: block; margin: 0 auto; width: min(80vw, 360px); height: auto; pointer-events: none; user-select: none;
+    filter: drop-shadow(0 0 14px rgba(0,245,212,.45)) drop-shadow(0 4px 10px rgba(0,0,0,.55)); animation: hop 2.2s cubic-bezier(.3,0,.3,1) infinite; transform-origin: 50% 100%; }
   .tag { font-size: 13px; color: var(--dim); margin-top: 8px; line-height: 1.4; text-shadow: 0 1px 4px #000; }
   .prof { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
   .lvl { flex: 1; text-align: left; }
@@ -246,20 +248,22 @@
   @media (max-height: 640px) {
     #menu .top .tag { display: none; }
     .logo { font-size: 40px; }
+    .logo-img { width: min(64vw, 270px); }
     .btn { padding: 10px 10px; margin: 5px 0; }
     #btnPlay { padding: 12px 10px; }
   }
   @media (max-height: 470px) {
     .logo { font-size: 30px; }
+    .logo-img { width: 200px; }
     #menu .top { padding-top: 40px; }
     .tool { padding: 5px 4px; }
     .tool svg { width: 18px; height: 18px; }
     .best { display: none; }
   }
-  body.rm .overlay.on, body.rm .overlay.on .panel, body.rm .logo, body.rm #btnPlay, body.rm .tile, body.rm .newbest.on, body.rm .hud.on, body.rm #hint.on, body.rm #wipe.go, body.rm #hyperFx::before, body.rm #btnRevive.hot, body.rm #tutor .finger { animation: none; opacity: 1; }
+  body.rm .overlay.on, body.rm .overlay.on .panel, body.rm .logo, body.rm .logo-img, body.rm #btnPlay, body.rm .tile, body.rm .newbest.on, body.rm .hud.on, body.rm #hint.on, body.rm #wipe.go, body.rm #hyperFx::before, body.rm #btnRevive.hot, body.rm #tutor .finger { animation: none; opacity: 1; }
   body.rm #tunnel.go { animation-duration: .01s; }
   @media (prefers-reduced-motion: reduce) {
-    .overlay.on, .overlay.on .panel, .logo, #btnPlay, .tile, .newbest.on, .hud.on, #hint.on, #wipe.go, #hyperFx::before, #btnRevive.hot { animation: none; opacity: 1; }
+    .overlay.on, .overlay.on .panel, .logo, .logo-img, #btnPlay, .tile, .newbest.on, .hud.on, #hint.on, #wipe.go, #hyperFx::before, #btnRevive.hot { animation: none; opacity: 1; }
   }
 </style>
 </head>
@@ -305,7 +309,7 @@
 
 <div class="overlay" id="menu">
   <div class="top">
-    <div class="logo">HYPERHOP</div>
+    <img class="logo-img" id="menuLogo" src="./hyperhop/sprites/logo.webp" alt="HYPERHOP" width="449" height="234" draggable="false" onerror="this.outerHTML='&lt;div class=&quot;logo&quot;&gt;HYPERHOP&lt;/div&gt;'">
     <div class="tag">Hold, release, land dead centre.</div>
   </div>
   <div class="panel">

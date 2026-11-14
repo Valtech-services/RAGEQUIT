@@ -822,6 +822,59 @@ export const posts = [
       { type: 'p', text: "Look for squares, chain your power-ups, save Overcharge for a big loop and learn each boss pattern. Open VOLTLINK, link your first circuit and see how far your combos can go." }
     ],
   },
+  {
+    slug: 'hyperhop-tips',
+    category: 'guides',
+    title: "HYPERHOP: How to Land Every Perfect and Beat the WARDEN",
+    date: '2026-11-14',
+    author: 'Ragequit Arcade',
+    excerpt: "HYPERHOP is a one-touch 3D tower jumping game where the dead centre of every tower is worth chasing. Learn how to judge your charge, chain perfects into HYPER MODE, handle every trap tower and drone, and take down the WARDEN boss.",
+    image: '/blog/hyperhop-tips.jpg',
+    seo: {
+      title: "HYPERHOP Tips: Perfect Landings, HYPER MODE, Drones and the WARDEN | Ragequit Arcade",
+      metaDescription: "A tips guide for HYPERHOP, the free 3D tower jumping game: judge your charge, chain perfect landings, master trap towers and drones and beat the WARDEN boss.",
+    },
+    content: [
+      { type: 'p', text: "HYPERHOP asks for one gesture only: hold to charge, release to jump. That is why it is so easy to start and so hard to put down. The difference between a run that ends at tower twelve and a run that crosses all five worlds is not speed, it is precision. This guide covers the habits that turn random hops into long chains of perfect landings." },
+      { type: 'h2', text: "Read the distance, not the timer" },
+      { type: 'p', text: "Your jump length depends only on how long you hold. Before each hop, look at the gap between your robot and the centre of the next tower, not at the edge. Wide towers forgive mistakes, but aiming at the edge of a wide tower still breaks your combo. After a few runs you will feel that short gaps need a quick tap and long gaps need a full second. The charge ring under your finger changes color as it fills, from teal to amber to coral, which helps you calibrate." },
+      { type: 'h2', text: "Build your combo step by step" },
+      { type: 'p', text: "A perfect landing is worth two points per combo step, up to sixteen points per hop, while a normal landing is worth only one and resets the combo. Combos also unlock two powerful states." },
+      { type: 'ul', items: [
+        "Three perfects in a row start Overdrive: double points for five towers, and a marker shows where your jump will land.",
+        "Eight perfects in a row start HYPER MODE: every point counts triple until you miss the centre.",
+        "Use the Overdrive marker to lock in your timing, it is the best moment to push toward HYPER MODE.",
+        "When a gap looks risky during HYPER MODE, a safe normal landing is better than a fall."
+      ] },
+      { type: 'h2', text: "Jump on the beat" },
+      { type: 'p', text: "The synthwave soundtrack has a steady beat, shown by the small bar under the score. Releasing exactly on the beat adds two bonus points to the hop. Do not sacrifice precision for rhythm, but when the gap is easy, wait for the next beat before you release. Over a long run, those bonuses add up to hundreds of points." },
+      { type: 'h2', text: "Handle every special tower" },
+      { type: 'p', text: "Special towers appear more often as you climb. Each one has a label above it, so read it before you jump." },
+      { type: 'ul', items: [
+        "Crumbling towers fall a moment after you land: jump again quickly.",
+        "Sliding towers move left and right: release when the centre lines up with your robot.",
+        "Conveyors push you toward the edge and spinners rotate under your feet: do not wait on them.",
+        "Shrinking towers get smaller while you stand on them, so leave fast.",
+        "Trampolines bounce you forward, portals skip four towers and golden towers triple your points.",
+        "Forks offer a long shot to a farther tower for five bonus points, only take it when your timing feels sharp."
+      ] },
+      { type: 'h2', text: "Time your jumps between drone shots" },
+      { type: 'p', text: "Zappers and Hunters hover over a tower and strike it with lightning on a steady rhythm. A warning ring flashes on the tower before each shot. Land just after a strike and you have plenty of time. A perfect landing on a guarded tower destroys the drone and earns ten points. Patrol drones sweep across the gap instead, so watch their path and release when they move away from your arc." },
+      { type: 'h2', text: "How to beat the WARDEN" },
+      { type: 'p', text: "The WARDEN, a huge armored drone with a red eye and a golden crown, arrives every twenty towers and fights in three phases. You need three perfect landings during the fight to destroy it." },
+      { type: 'ul', items: [
+        "Phase one: it zaps the tower you are aiming for. Watch the warning ring and jump right after a shot.",
+        "Phase two: a laser sweeps up and down across the gap. Release when the laser is at the bottom so your arc passes above it.",
+        "Phase three: the towers behind you collapse. Do not hesitate, jump as soon as you land.",
+        "If you survive without three perfects, the WARDEN escapes and you still earn ten points."
+      ] },
+      { type: 'h2', text: "Use power-ups at the right moment" },
+      { type: 'p', text: "Power-ups float above the gaps, on the path of a good jump. The Shield saves you from one fall or one zap, so it is the perfect insurance for the WARDEN fight. The double jump lets you tap in mid-air to correct a jump that is too short. Slow-Mo makes the charge slower, which is ideal for tricky trap towers. The Magnet pulls coins in and the Rocket carries you over ten towers, which is a great way to reach the next world." },
+      { type: 'h2', text: "Pick the right mode and grow your robot" },
+      { type: 'p', text: "Classic is the endless climb and the best mode to learn every world. Time Attack starts with sixty seconds, every perfect adds one second and a fall costs five, so precision matters even more than speed. Hard mode uses smaller towers and brings traps and drones much earlier, with its own leaderboard. The Daily run gives everyone the same towers, which makes it the fairest way to compare scores with friends. Complete the three daily missions for extra coins, then spend them in the shop on new robots, light trails and landing effects." },
+      { type: 'p', text: "Aim for the centre, build your combo, jump on the beat and stay calm when the WARDEN arrives. Open HYPERHOP, hold your first jump and see how many worlds you can cross." }
+    ],
+  },
 ]
 
 // Trouve un article par son slug.

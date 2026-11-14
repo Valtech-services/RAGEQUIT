@@ -132,7 +132,7 @@ export const siteSeo = {
   title: 'Ragequit Arcade — Free Online Games',
   description: 'The most addictive free online games. Simple to learn, impossible to master. A new game every week.',
   about: 'Ragequit Arcade brings you the most addictive free online games, built for solo runs or quick matches with friends. Every game runs instantly in your browser — no downloads, no sign-up, no pop-ups, no nonsense. Our games work on desktop, tablet and mobile, so you can play at home or on the move. We are building a place where a great game is always one click away.',
-  gameSelection: 'We add new games regularly. Our titles include VOLTLINK, ARCANE BRAWL, MAZEQUAKE, LOOPSTRIKE, LINESTORM, City Runner, Fox Runner, VOIDFALL, Dead Zone, Crush Depth, Rooftop Rush, FLASHOUT, Bird Blitz, OCTAFLUX, Stellar Forge, Virus Lab, Neon Rush, Snake Candy Arena, STAQ and Rage Hockey. Every game is free to play, forever.',
+  gameSelection: 'We add new games regularly. Our titles include HYPERHOP, VOLTLINK, ARCANE BRAWL, MAZEQUAKE, LOOPSTRIKE, LINESTORM, City Runner, Fox Runner, VOIDFALL, Dead Zone, Crush Depth, Rooftop Rush, FLASHOUT, Bird Blitz, OCTAFLUX, Stellar Forge, Virus Lab, Neon Rush, Snake Candy Arena, STAQ and Rage Hockey. Every game is free to play, forever.',
   aboutUs: 'Ragequit Arcade is an independent gaming platform. Our goal is simple: create the most fun, most honest browser arcade on the web. New games drop every week — follow us on TikTok and Instagram to see what is coming next.',
   faq: [
     { q: 'What is Ragequit Arcade?', a: 'A free online gaming platform. No download, no registration required.' },
@@ -580,7 +580,7 @@ export const games = [
     thumbnail: '/thumbnails/voidfall.jpg',
     category: 'arcade',
     tags: ['runner', 'arcade', '3d', 'neon', 'endless', 'reflex', 'synthwave', 'slope', 'dodge', 'distance'],
-    size: 'large',
+    size: 'medium',
     shimmer: true,
     isNew: false,
     hot: true,
@@ -869,6 +869,43 @@ export const games = [
         { q: "What are volts, boosters and themes?", a: "You earn volts and stars as you play. Volts buy boosters before a circuit, such as PRISM to start with a wildcard, BOMBS to start with two bombs, or EXTRA for more moves or seconds, and unlock new color themes for the grid like Sunset, Toxic, Glacier and Gold Rush." },
         { q: "Can I challenge a friend?", a: "Yes. After an Arcade run, press Challenge a friend to share a link with your score. Your friend plays exactly the same board and sees whether they beat you. The Daily mode also gives you a card to share your result of the day." },
         { q: "Is VOLTLINK free and does my progress save?", a: "VOLTLINK is completely free, needs no download and runs in your browser on phones, tablets and computers. Your progress is always saved on your device, and if you sign in with a free account your circuits, stars and volts follow you on all your devices." },
+      ]
+    }
+  },
+  {
+    id: 'hyperhop',
+    title: 'HYPERHOP',
+    description: "HYPERHOP is a free 3D tower jumping game where a small robot leaps from neon tower to neon tower high above a glowing city, and every jump is decided by one simple gesture: hold to charge, release to fly. The longer you hold, the farther the robot jumps, so each hop is a quick judgement of distance that feels easy at first and becomes addictive the moment you start chasing the dead centre of every tower. Land right in the middle and you score a PERFECT. Chain perfects one after another to build a combo that multiplies your points, unlock Overdrive at three in a row for double points and reach HYPER MODE at eight, where every point counts triple, the towers pulse gold and the music kicks up a gear. Release your jump exactly on the beat of the synthwave soundtrack for an extra rhythm bonus. The run never repeats. Towers come square or round, wide or narrow, and the further you climb the more of them try to stop you: crumbling towers that collapse if you wait too long, sliding towers, conveyor belts that push you toward the edge, spinners, shrinking platforms, trampolines that bounce you forward, portals that skip four towers at once and golden towers that triple your points. Forks in the path offer a risky long shot for bonus points. Flying drones guard the way: Zappers and Hunters fire lightning onto the tower you are aiming for in a steady rhythm, so you have to time your jump between two shots, and Patrol drones sweep across the gap in the air. Land a perfect on a guarded tower to smash its drone. Every twenty towers the WARDEN arrives, a giant armored boss with a red eye and a golden crown that zaps your target, sweeps a laser across the gap and finally makes the towers behind you collapse. Land perfects to hit it three times and take it down. Every fifty towers you enter a new world with its own sky and scenery, from Neon City and its striped synthwave sun to the ice spires and aurora of Glacier, the lava rocks of Magma Core, the ringed planet of Deep Space and the pyramids of the Golden Temple. Power-ups float above the gaps: a magnet that pulls coins in, a shield that saves you once, slow motion, a double jump you trigger with a tap in mid-air and a rocket that carries you over ten towers. Choose your challenge with four modes: Classic for the endless climb, Time Attack where you race a 60 second clock and every perfect adds time, Hard with smaller towers and earlier traps, and the Daily run where everyone plays the same towers. Complete three daily missions, earn coins and experience, level up and spend your coins in the shop on seven robots, six light trails and five landing effects, or try your luck with the mystery capsule. Challenge a friend with a link to your exact run, beat your own record tower marked with a flag, and sign in with a free Ragequit Arcade account to keep your coins, level and robots on every device. HYPERHOP runs free in your browser on phone, tablet and desktop, with no download.",
+    thumbnail: '/thumbnails/hyperhop.jpg',
+    category: 'challenge',
+    tags: ['tower jump', 'jump game', 'one button', '3d', 'neon', 'synthwave', 'timing', 'precision', 'combo', 'boss', 'robot', 'endless', 'hard mode', 'daily challenge'],
+    size: 'large',
+    shimmer: true,
+    isNew: true,
+    addedAt: '2026-11-14',
+    hot: true,
+    landscape: false,
+    plays: 0,
+    modes: ['classic', 'time', 'hard', 'daily'],
+    defaultMode: 'classic',
+    controls: "Press and hold anywhere on the screen to charge your jump, then release to leap toward the next tower. The longer you hold, the farther you jump. With the double jump power-up, tap again in mid-air to jump a second time. On desktop, hold and release the Space bar or the mouse button, and press P to pause. Works on mobile, tablet and desktop.",
+    author: 'Ragequit Arcade',
+    seo: {
+      title: "HYPERHOP - Free 3D Tower Jumping Game Online | Ragequit Arcade",
+      metaDescription: "Play HYPERHOP free online: hold to charge, release to jump from neon tower to neon tower. Chain perfect landings, beat the WARDEN boss and explore 5 worlds.",
+      faq: [
+        { q: "How do you play HYPERHOP?", a: "Press and hold anywhere on the screen to charge your jump, then release. The longer you hold, the farther the robot jumps. Land on the next tower to keep going. If you jump too short or too far, the robot falls into the void and the run is over, unless you use your one continue." },
+        { q: "What is a PERFECT landing?", a: "A PERFECT is a landing in the dead centre of a tower, inside the small target ring. A normal landing gives one point, a perfect gives two points per combo step, up to sixteen. Perfect landings also destroy drones, hit the WARDEN boss and build your combo." },
+        { q: "What are Overdrive and HYPER MODE?", a: "Three perfect landings in a row start Overdrive, which doubles your points for the next five towers and shows where your jump will land. Eight perfects in a row start HYPER MODE: every point counts triple until you miss the centre. The towers glow gold and the music speeds up." },
+        { q: "What is the on-beat bonus?", a: "HYPERHOP has a synthwave soundtrack with a steady beat, shown by the small bar under your score. Release your jump exactly on the beat and you earn two bonus points. It is a small bonus on each hop, but over a long run it adds up quickly." },
+        { q: "What are the special towers?", a: "Crumbling towers collapse if you stay too long, sliding towers move left and right, conveyors push you toward the edge, spinners rotate under your feet and some towers shrink. Trampolines bounce you to the next tower, portals skip four towers at once, boost towers give bonus points and golden towers triple your points. Forks let you try a risky long shot for five bonus points." },
+        { q: "How do you beat the WARDEN boss?", a: "The WARDEN appears every twenty towers. In the first phase it zaps the tower you are aiming for on a rhythm, so jump between its shots. In the second phase a laser sweeps the gap between towers. In the last phase the towers behind you collapse. Land three perfect landings during the fight to destroy it and earn forty bonus points." },
+        { q: "What are the five worlds?", a: "Every fifty towers you enter a new world with its own sky, colours and scenery: Neon City with its striped synthwave sun, Glacier with ice spires and aurora, Magma Core with volcanoes and lava rocks, Deep Space with a ringed planet and asteroids, and the Golden Temple with pyramids and floating gold rings. Each new world also gives a bonus." },
+        { q: "What power-ups can I find?", a: "Power-ups float above the gaps between towers. Magnet pulls the coins in, Shield saves you from one fall or one zap, Slow-Mo slows down the charge for precise jumps, 2x Jump lets you tap in mid-air to jump again, and Rocket carries you over ten towers at once." },
+        { q: "What are the game modes?", a: "Classic is the endless climb. Time Attack gives you sixty seconds, every perfect adds a second and a fall costs five. Hard mode uses smaller towers and brings traps and drones much earlier. The Daily run gives every player the same towers for the day. Each mode has its own leaderboard." },
+        { q: "What can I buy in the shop?", a: "Every run earns coins and experience. In the shop you can buy seven robots, from Core to Aurum, six light trails and five landing effects, or open a mystery capsule for a random item. Three daily missions give extra coins, and your level rises with your experience." },
+        { q: "Can I continue after a fall?", a: "Yes. Once per run you can watch a short ad to land back on your last tower and keep your score. After a run you can also watch an ad to double the coins you earned, or start your next Classic run directly at tower 25 with the Rocket Start." },
+        { q: "Is HYPERHOP free and does my progress save?", a: "HYPERHOP is completely free, needs no download and runs in your browser on phones, tablets and computers. Your progress is always saved on your device, and if you sign in with a free Ragequit Arcade account your coins, level, missions and robots are saved online and follow you on every device." }
       ]
     }
   },
