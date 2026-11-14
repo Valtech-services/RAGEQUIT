@@ -118,6 +118,8 @@
   /* Action buttons: STRIKE + unlocked powers in an arc around it */
   #actions { position: fixed; right: calc(22px + var(--safe-right)); bottom: calc(40px + 5vh + var(--safe-bottom)); width: var(--dash); height: var(--dash); z-index: 6; display: none; }
   #actions.on { display: block; }
+  /* Touch screens: the whole action cluster (STRIKE + power arc) sits 5% higher, clear of the thumb rest */
+  @media (hover: none), (pointer: coarse) { #actions { bottom: calc(40px + 10vh + var(--safe-bottom)); bottom: calc(40px + 10dvh + var(--safe-bottom)); } }
   .act { position: absolute; border-radius: 50%; color: #fff; font-weight: 900; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; flex-direction: column; touch-action: none; cursor: pointer; overflow: visible; transition: transform .1s, filter .2s; padding: 0; }
   .act:active { transform: scale(.9); }
   .act .cd { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; background: conic-gradient(rgba(0,0,0,.62) var(--p, 0%), rgba(0,0,0,0) 0); }
@@ -141,6 +143,8 @@
   #hint { position: fixed; left: calc(16px + var(--safe-left)); right: calc(180px + var(--safe-right)); bottom: calc(60px + 5vh + var(--safe-bottom)); text-align: center; font-size: 14px; font-weight: 800; color: var(--text); pointer-events: none; display: none; z-index: 4; }
   #hint span { display: inline-block; padding: 9px 14px; border-radius: 999px; background: rgba(14,4,24,.8); border: 1px solid rgba(255,194,58,.45); }
   #hint.on { display: block; animation: pulse 1.4s ease-in-out infinite; }
+  /* Touch screens: the hint follows the raised action cluster and stays clear of the full power arc */
+  @media (hover: none), (pointer: coarse) { #hint { right: calc(222px + var(--safe-right)); bottom: calc(60px + 10vh + var(--safe-bottom)); bottom: calc(60px + 10dvh + var(--safe-bottom)); font-size: 13px; } }
   @keyframes pulse { 50% { opacity: .5; } }
 
   /* Overlays */
@@ -333,10 +337,10 @@
 <div id="stick"><div id="knob"></div></div>
 <div id="actions">
   <button class="act" id="dash" aria-label="Strike"><span class="cd"></span><span class="rage"></span><span class="chg"></span><svg class="sword" viewBox="0 0 24 24"><path d="M19.5 2.5L21.5 4.5 11 15l-1.5-1.5zM8 13.5l2.5 2.5-1.6 1.6 1.6 1.6-1.4 1.4-1.6-1.6-2.3 2.3-1.4-1.4 2.3-2.3-1.6-1.6 1.4-1.4 1.6 1.6z"/></svg><b>STRIKE</b><span class="key">SPACE</span></button>
-  <button class="act pw" id="pw-shock" aria-label="Shockwave" style="color:#2af0ff"><span class="cd"></span><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 3a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm0 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/></svg><span class="key">1</span></button>
-  <button class="act pw" id="pw-shield" aria-label="Shield" style="color:#b6ff3a"><span class="cd"></span><svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.4 9.4-8 11-4.6-1.6-8-6-8-11V5l8-3z"/></svg><span class="key">2</span></button>
-  <button class="act pw" id="pw-judge" aria-label="Judgement" style="color:#ffe08a"><span class="cd"></span><svg viewBox="0 0 24 24"><path d="M11 1h2v13h-2zM7 14h10v2h-3v3h-4v-3H7zM10.5 19h3l-1.5 4z"/></svg><span class="key">4</span></button>
-  <button class="act pw" id="pw-slam" aria-label="Slam" style="color:#ff7a1a"><span class="cd"></span><svg viewBox="0 0 24 24"><path d="M12 2l3 7h-2v5h-2V9H9l3-7zM3 18h18v3H3z"/></svg><span class="key">3</span></button>
+  <button class="act pw" id="pw-shock" aria-label="Shockwave" style="color:#2af0ff"><span class="cd"></span><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 3a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm0 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/></svg><span class="key">C</span></button>
+  <button class="act pw" id="pw-shield" aria-label="Shield" style="color:#b6ff3a"><span class="cd"></span><svg viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.4 9.4-8 11-4.6-1.6-8-6-8-11V5l8-3z"/></svg><span class="key">V</span></button>
+  <button class="act pw" id="pw-judge" aria-label="Judgement" style="color:#ffe08a"><span class="cd"></span><svg viewBox="0 0 24 24"><path d="M11 1h2v13h-2zM7 14h10v2h-3v3h-4v-3H7zM10.5 19h3l-1.5 4z"/></svg><span class="key">N</span></button>
+  <button class="act pw" id="pw-slam" aria-label="Slam" style="color:#ff7a1a"><span class="cd"></span><svg viewBox="0 0 24 24"><path d="M12 2l3 7h-2v5h-2V9H9l3-7zM3 18h18v3H3z"/></svg><span class="key">B</span></button>
 </div>
 <div id="hint"><span>Drag to move &middot; STRIKE to knock them off &middot; hold to charge</span></div>
 
@@ -361,7 +365,7 @@
     </div>
     <div class="divider" style="width:50%;margin:12px auto 4px"></div>
     <div class="best" id="bestBox"></div>
-    <div class="controls">Touch: drag to move, tap STRIKE, hold it to charge &middot; Keyboard: WASD / ZQSD / arrows, Space strike (hold to charge), 1 2 3 powers, P pause</div>
+    <div class="controls">Touch: drag to move, tap STRIKE, hold it to charge &middot; Keyboard: WASD / ZQSD / arrows, Space strike (hold to charge), C V B N powers, P pause</div>
   </div>
 </div>
 
@@ -1722,6 +1726,10 @@ const input = { x: 0, z: 0 };
 let stickId = null, stickOx = 0, stickOy = 0, stickX = 0, stickY = 0;
 const stickEl = $('stick'), knobEl = $('knob'), dashEl = $('dash');
 const PW_EL = { shock: $('pw-shock'), shield: $('pw-shield'), slam: $('pw-slam'), judge: $('pw-judge') };
+// Powers sit on the bottom-left row (C V B N): same physical keys on QWERTY and AZERTY,
+// left hand on the powers, right hand on the arrows.
+const POWER_CODES = { KeyC: 'shock', KeyV: 'shield', KeyB: 'slam', KeyN: 'judge' };
+const POWER_CHARS = { c: 'shock', v: 'shield', b: 'slam', n: 'judge' };
 
 window.addEventListener('keydown', (e) => {
   const k = e.key.toLowerCase();
@@ -1729,10 +1737,8 @@ window.addEventListener('keydown', (e) => {
   if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' '].includes(k)) e.preventDefault();
   if (e.repeat) return;
   if (k === ' ' || k === 'shift') pressStrike();
-  if (k === '1' || k === '&') usePower('shock');
-  if (k === '2' || k === 'é') usePower('shield');
-  if (k === '3' || k === '"') usePower('slam');
-  if (k === '4' || k === "'") usePower('judge');
+  const pw = POWER_CODES[e.code] || (!e.code && POWER_CHARS[k]);
+  if (pw) usePower(pw);
   if (k === 'p' || k === 'escape') { if (state === 'play') pauseGame(); else if (state === 'paused') resumeGame(); }
 });
 window.addEventListener('keyup', (e) => { const k = e.key.toLowerCase(); keys[k] = false; if ((k === ' ' || k === 'shift') && !keys[' '] && !keys.shift) releaseStrike(); });
