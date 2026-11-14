@@ -32,6 +32,16 @@
   button { font-family: inherit; cursor: pointer; }
   #stage { position: fixed; inset: 0; touch-action: none; }
   #stage canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+  /* Sky band behind the HUD: the camera looks down at the board, so the night sky and the moon live here */
+  #skyband { position: fixed; left: 0; right: 0; top: 0; height: calc(26vh + var(--safe-top)); pointer-events: none; z-index: 1;
+    background: radial-gradient(1px 1px at 12% 22%, rgba(255,255,255,.9), transparent), radial-gradient(1px 1px at 33% 12%, rgba(255,255,255,.7), transparent), radial-gradient(1.5px 1.5px at 58% 30%, rgba(255,255,255,.8), transparent), radial-gradient(1px 1px at 76% 16%, rgba(255,255,255,.7), transparent), radial-gradient(1px 1px at 89% 34%, rgba(255,255,255,.6), transparent), radial-gradient(1px 1px at 46% 8%, rgba(255,255,255,.8), transparent),
+      linear-gradient(to bottom, var(--skyTop, #05021a) 0%, var(--skyHor, #2a0f5a) 46%, rgba(0,0,0,0) 100%); }
+  #moon { position: absolute; left: calc(16px + var(--safe-left)); top: calc(104px + var(--safe-top)); width: 40px; height: 40px; border-radius: 50%; opacity: var(--moonA, 1);
+    background: radial-gradient(circle at 38% 36%, #fffaf0 0%, #e8e2ff 45%, #b9b0e8 72%, #8a7fc8 100%);
+    box-shadow: 0 0 22px 6px rgba(200,190,255,.55), 0 0 70px 24px rgba(140,110,255,.28); }
+  #moon::before, #moon::after { content: ""; position: absolute; border-radius: 50%; background: rgba(120,110,170,.35); }
+  #moon::before { width: 10px; height: 10px; left: 24px; top: 12px; } #moon::after { width: 6px; height: 6px; left: 12px; top: 26px; }
+  @media (min-aspect-ratio: 4/3) { #skyband { height: calc(20vh + var(--safe-top)); } #moon { left: 22%; top: calc(40px + var(--safe-top)); width: 52px; height: 52px; } }
   .vignette { position: fixed; inset: 0; pointer-events: none; z-index: 2; background: radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 50%, rgba(5,0,16,.72) 100%); }
   .scan { position: fixed; inset: 0; pointer-events: none; z-index: 2; opacity: .035; background: repeating-linear-gradient(0deg, #fff 0 1px, transparent 1px 4px); }
   #flash { position: fixed; inset: 0; pointer-events: none; z-index: 3; background: #fff; opacity: 0; }
@@ -54,8 +64,8 @@
   #combo { margin-top: 2px; font-size: 15px; font-weight: 900; color: var(--pumpkin); letter-spacing: 2px; height: 18px; opacity: 0; transition: opacity .2s, transform .2s;
     text-shadow: 0 0 10px rgba(255,138,31,.8); font-variant-numeric: tabular-nums; }
   #combo.on { opacity: 1; }
-  #nightBox { position: absolute; top: calc(68px + var(--safe-top)); left: 50%; transform: translateX(-50%); width: min(220px, 56vw); }
-  #nightLbl { display: flex; justify-content: space-between; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: var(--dim); }
+  #nightBox { position: absolute; top: calc(68px + var(--safe-top)); left: 50%; transform: translateX(-50%); width: min(236px, 60vw); }
+  #nightLbl { display: flex; justify-content: space-between; gap: 8px; white-space: nowrap; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: var(--dim); }
   #nightLbl b { color: var(--bone); }
   #nightBar { margin-top: 4px; height: 7px; border-radius: 6px; background: rgba(255,255,255,.1); overflow: hidden; box-shadow: 0 0 0 1px rgba(162,107,255,.35) inset; }
   #nightFill { height: 100%; width: 0%; border-radius: 6px; background: linear-gradient(90deg, #6a3bff, #ff6ad5 70%, #ffb36b); box-shadow: 0 0 10px rgba(255,106,213,.7); }
@@ -197,6 +207,7 @@
 <body>
 <div id="stage"></div>
 <div class="vignette"></div>
+<div id="skyband"><div id="moon"></div></div>
 <div class="scan"></div>
 <div id="frenzyFx"></div>
 <div id="freezeFx"></div>
@@ -316,7 +327,7 @@ const MODES = {
   daily:    { label: 'DAILY', hearts: 3, speed: 1.05, spawn: 1.1, night: 50, heal: 1, info: 'Same graveyard and same monsters for everyone today. One leaderboard, one shot at glory.' }
 };
 const ENEMY = {
-  zombie:   { file: 'zombie',   hp: 1, speed: 1.15, pts: 100, col: PAL.lime,    em: 0x2a6a00, ei: 0.35, size: 1.1, ring: PAL.lime },
+  zombie:   { file: 'zombie',   hp: 1, speed: 1.15, pts: 100, col: 0xb8d0a0,    em: 0x1a3010, ei: 0.22, size: 1.1, ring: 0x8aa04a },
   skeleton: { file: 'skeleton', hp: 1, speed: 1.85, pts: 120, col: 0xdfe8ff,    em: 0x5a7aff, ei: 0.3,  size: 1.05, ring: PAL.frost },
   ghost:    { file: 'ghost',    hp: 1, speed: 0.95, pts: 150, col: 0xbff6ff,    em: 0x3fd8ff, ei: 0.9,  size: 1.1, ring: 0x3fd8ff },
   vampire:  { file: 'vampire',  hp: 1, speed: 1.25, pts: 200, col: 0xff9bb0,    em: 0x9a0022, ei: 0.45, size: 1.1, ring: PAL.blood },
@@ -519,7 +530,7 @@ moonLight.shadow.mapSize.set(1024, 1024);
 Object.assign(moonLight.shadow.camera, { left: -7, right: 7, top: 8, bottom: -8, near: 1, far: 30 });
 moonLight.shadow.bias = -0.0012; moonLight.shadow.radius = 4;
 scene.add(moonLight, moonLight.target);
-const frogLight = new THREE.PointLight(PAL.lime, 1.2, 3, 1.6);             // accent carried by the frog
+const frogLight = new THREE.PointLight(PAL.lime, 0.55, 2.4, 1.6);             // accent carried by the frog
 scene.add(frogLight);
 const pumpLights = [];
 for (let i = 0; i < 2; i++) { const l = new THREE.PointLight(PAL.pumpkin, 6, 6, 1.5); scene.add(l); pumpLights.push(l); }
@@ -580,6 +591,38 @@ const edgeTex = canvasTex(128, (g, s) => {
   g.fillStyle = '#000'; g.fillRect(0, 0, s, s);
   g.strokeStyle = '#fff'; g.lineWidth = 3; g.strokeRect(5, 5, s - 10, s - 10);
   g.fillStyle = '#fff'; [[5, 5], [s - 5, 5], [5, s - 5], [s - 5, s - 5]].forEach(([x, y]) => { g.beginPath(); g.arc(x, y, 5, 0, 7); g.fill(); });
+});
+// worn stone slab: speckles, cracks and a bevelled rim
+const stoneTex = canvasTex(256, (g, s) => {
+  g.fillStyle = '#b6b2c4'; g.fillRect(0, 0, s, s);
+  for (let i = 0; i < 900; i++) { const v = Math.random(); g.fillStyle = v < 0.5 ? 'rgba(0,0,0,' + (Math.random() * 0.14) + ')' : 'rgba(255,255,255,' + (Math.random() * 0.1) + ')'; const r = 1 + Math.random() * 4; g.fillRect(Math.random() * s, Math.random() * s, r, r); }
+  g.strokeStyle = 'rgba(30,20,40,.45)'; g.lineWidth = 1.6;
+  for (let k = 0; k < 3; k++) { let x = Math.random() * s, y = Math.random() * s; g.beginPath(); g.moveTo(x, y); for (let j = 0; j < 6; j++) { x += (Math.random() - 0.5) * 50; y += (Math.random() - 0.5) * 50; g.lineTo(x, y); } g.stroke(); }
+  const e = g.createLinearGradient(0, 0, s, s); e.addColorStop(0, 'rgba(255,255,255,.22)'); e.addColorStop(1, 'rgba(0,0,0,.3)');
+  g.lineWidth = 10; g.strokeStyle = e; g.strokeRect(5, 5, s - 10, s - 10);
+});
+// faint rune edge: the neon is kept for the board border and for danger
+const edgeFaint = canvasTex(128, (g, s) => { g.fillStyle = '#000'; g.fillRect(0, 0, s, s); g.strokeStyle = 'rgba(255,255,255,.55)'; g.lineWidth = 1.5; g.strokeRect(4, 4, s - 8, s - 8); });
+// dark grass and earth around the graves
+const grassTex = canvasTex(256, (g, s) => {
+  g.fillStyle = '#1e2a26'; g.fillRect(0, 0, s, s);
+  for (let i = 0; i < 70; i++) { const x = Math.random() * s, y = Math.random() * s, r = 10 + Math.random() * 30; const gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, Math.random() < 0.5 ? 'rgba(40,28,24,.6)' : 'rgba(30,50,36,.6)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(x - r, y - r, r * 2, r * 2); }
+  for (let i = 0; i < 1400; i++) { const x = Math.random() * s, y = Math.random() * s, h = 3 + Math.random() * 7; g.strokeStyle = 'rgba(' + (60 + Math.random() * 40 | 0) + ',' + (90 + Math.random() * 60 | 0) + ',' + (70 + Math.random() * 40 | 0) + ',' + (0.25 + Math.random() * 0.4) + ')'; g.lineWidth = 1; g.beginPath(); g.moveTo(x, y); g.lineTo(x + (Math.random() - 0.5) * 3, y - h); g.stroke(); }
+});
+grassTex.wrapS = grassTex.wrapT = THREE.RepeatWrapping; grassTex.repeat.set(16, 16);
+// open grave: a dark pit with a dirt rim
+const pitTex = canvasTex(128, (g, s) => {
+  g.fillStyle = 'rgba(0,0,0,0)'; g.fillRect(0, 0, s, s);
+  g.fillStyle = '#5a4234'; g.beginPath(); g.ellipse(s / 2, s / 2, 46, 58, 0, 0, Math.PI * 2); g.fill();
+  for (let i = 0; i < 60; i++) { g.fillStyle = 'rgba(' + (90 + Math.random() * 40 | 0) + ',' + (60 + Math.random() * 30 | 0) + ',40,.8)'; g.beginPath(); g.arc(s / 2 + (Math.random() - 0.5) * 92, s / 2 + (Math.random() - 0.5) * 116, 2 + Math.random() * 4, 0, 7); g.fill(); }
+  const pit = g.createRadialGradient(s / 2, s / 2, 4, s / 2, s / 2, 40); pit.addColorStop(0, '#05020a'); pit.addColorStop(0.7, '#120818'); pit.addColorStop(1, 'rgba(40,24,30,1)');
+  g.fillStyle = pit; g.beginPath(); g.ellipse(s / 2, s / 2, 32, 44, 0, 0, Math.PI * 2); g.fill();
+});
+// cobweb for the fence corners
+const webTex = canvasTex(128, (g, s) => {
+  g.strokeStyle = 'rgba(230,230,255,.55)'; g.lineWidth = 1.2;
+  for (let k = 0; k <= 6; k++) { const a = k / 6 * Math.PI / 2; g.beginPath(); g.moveTo(0, 0); g.lineTo(Math.cos(a) * s, Math.sin(a) * s); g.stroke(); }
+  for (let r = 18; r < s; r += 18) { g.beginPath(); for (let k = 0; k <= 6; k++) { const a = k / 6 * Math.PI / 2, rr = r * (k % 2 ? 0.9 : 1); const x = Math.cos(a) * rr, y = Math.sin(a) * rr; if (k) g.quadraticCurveTo(Math.cos(a - 0.13) * rr * 0.92, Math.sin(a - 0.13) * rr * 0.92, x, y); else g.moveTo(x, y); } g.stroke(); }
 });
 
 /* ================= PARTICLES (pooled point sprites, one system per texture) ================= */
@@ -735,14 +778,42 @@ function decor(name, target, byWidth, col, em, ei) {
 
 /* ================= BOARD ================= */
 const boardGroup = new THREE.Group(); scene.add(boardGroup);
-const ground = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), new THREE.MeshStandardMaterial({ color: 0x150c28, roughness: 1 }));
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), new THREE.MeshStandardMaterial({ map: grassTex, color: 0xa8b4c8, roughness: 1 }));
 ground.rotation.x = -Math.PI / 2; ground.position.y = -0.02; ground.receiveShadow = true; scene.add(ground);
-const tileMat = new THREE.MeshStandardMaterial({ map: tileTex, emissiveMap: edgeTex, emissive: new THREE.Color(PAL.violet), emissiveIntensity: 0.9, roughness: 0.9 });
-const tiles = new THREE.InstancedMesh(new THREE.BoxGeometry(0.95, 0.16, 0.95), tileMat, COLS * ROWS);
+const tileMat = new THREE.MeshStandardMaterial({ map: stoneTex, emissiveMap: edgeFaint, emissive: new THREE.Color(PAL.violet), emissiveIntensity: 0.28, roughness: 0.92 });
+const tiles = new THREE.InstancedMesh(new THREE.BoxGeometry(0.93, 0.16, 0.93), tileMat, COLS * ROWS);
 tiles.receiveShadow = true; scene.add(tiles);
 // glow line around the board
 const border = new THREE.Mesh(new THREE.PlaneGeometry(COLS + 0.5, ROWS + 0.5), new THREE.MeshBasicMaterial({ map: canvasTex(256, (g, s) => { g.strokeStyle = '#fff'; g.lineWidth = 5; g.shadowColor = '#fff'; g.shadowBlur = 16; g.strokeRect(10, 10, s - 20, s - 20); }), color: new THREE.Color(PAL.violet).multiplyScalar(1.4), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
 border.rotation.x = -Math.PI / 2; border.position.y = 0.01; scene.add(border);
+// moonlight pooled on the graves, lantern light on the edges
+const moonPool = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: glowTex, color: new THREE.Color(0.32, 0.4, 0.75), transparent: true, opacity: 0.55, depthWrite: false, blending: THREE.AdditiveBlending }));
+moonPool.rotation.x = -Math.PI / 2; moonPool.position.set(-0.6, 0.095, -0.8); moonPool.scale.set(8.5, 9.5, 1); moonPool.renderOrder = 2; scene.add(moonPool);
+const lampPools = [];
+function lampPool(x, z, col, size) {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: glowTex, color: new THREE.Color(col).multiplyScalar(0.9), transparent: true, opacity: 0.6, depthWrite: false, blending: THREE.AdditiveBlending }));
+  m.rotation.x = -Math.PI / 2; m.position.set(x, 0.1, z); m.scale.set(size, size, 1); m.renderOrder = 2; boardGroup.add(m); lampPools.push(m); return m;
+}
+// ground mist creeping between the graves, thicker outside the board
+const mistMat = new THREE.ShaderMaterial({
+  transparent: true, depthWrite: false, fog: false,
+  uniforms: { uT: { value: 0 }, uCol: { value: new THREE.Color(0x6a5aa8) }, uHalf: { value: new THREE.Vector2(COLS / 2, ROWS / 2) } },
+  vertexShader: 'varying vec3 vW; void main(){ vec4 w = modelMatrix * vec4(position,1.0); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }',
+  fragmentShader: [
+    'uniform float uT; uniform vec3 uCol; uniform vec2 uHalf; varying vec3 vW;',
+    'float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }',
+    'float n(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f); return mix(mix(h(i), h(i + vec2(1.0, 0.0)), f.x), mix(h(i + vec2(0.0, 1.0)), h(i + vec2(1.0, 1.0)), f.x), f.y); }',
+    'void main(){',
+    '  vec2 p = vW.xz * 0.35 + vec2(uT * 0.05, uT * 0.02);',
+    '  float v = n(p) * 0.6 + n(p * 2.1 - uT * 0.04) * 0.4;',
+    '  vec2 q = abs(vW.xz) - uHalf; float out1 = smoothstep(-0.6, 1.5, max(q.x, q.y));',
+    '  float a = smoothstep(0.35, 0.85, v) * (0.12 + 0.4 * out1) * (1.0 - smoothstep(14.0, 24.0, length(vW.xz)));',
+    '  gl_FragColor = vec4(uCol, a);',
+    '}'
+  ].join('\n')
+});
+const mist = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), mistMat);
+mist.rotation.x = -Math.PI / 2; mist.position.y = 0.32; mist.renderOrder = 4; scene.add(mist);
 // telegraph tiles (vampire dash lines, keeper slams)
 const teleMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(PAL.blood).multiplyScalar(2.2), transparent: true, opacity: 0.6, depthWrite: false, blending: THREE.AdditiveBlending, map: edgeTex });
 const tele = new THREE.InstancedMesh(new THREE.PlaneGeometry(0.92, 0.92), teleMat, COLS * ROWS);
@@ -768,9 +839,9 @@ function buildBoard(seed) {
   const m4 = new THREE.Matrix4(), c = new THREE.Color();
   for (let z = 0; z < ROWS; z++) for (let x = 0; x < COLS; x++) {
     const i = key(x, z);
-    m4.makeTranslation(tileX(x), 0, tileZ(z)); tiles.setMatrixAt(i, m4);
-    const base = (x + z) % 2 ? 0x3a2d66 : 0x2e2454; c.set(base);
-    if (R() < 0.18) c.lerp(new THREE.Color(0x2c5a3a), 0.35);
+    m4.makeRotationY((R() - 0.5) * 0.06).setPosition(tileX(x), (R() - 0.5) * 0.03, tileZ(z)); tiles.setMatrixAt(i, m4);
+    const v = R(); c.set(v < 0.18 ? 0x3c5444 : v < 0.28 ? 0x56443c : [0x5a5470, 0x504a66, 0x48445c][Math.floor(R() * 3)]);
+    c.multiplyScalar((x + z) % 2 ? 1.06 : 0.94);
     tiles.setColorAt(i, c);
   }
   tiles.instanceMatrix.needsUpdate = true; if (tiles.instanceColor) tiles.instanceColor.needsUpdate = true;
@@ -800,30 +871,33 @@ function buildBoard(seed) {
     if (!BLOCK[i]) continue;
     const x = i % COLS, z = (i / COLS) | 0, r = R();
     let o;
-    if (r < 0.62) o = decor(stones[Math.floor(R() * stones.length)], 0.78 + R() * 0.25, false, 0xc8b8ff, 0x3a1a8a, 0.35);
-    else if (r < 0.78) o = decor('rocks', 0.82, true, 0x9a8ac8);
-    else if (r < 0.9) { o = decor('pumpkin-carved', 0.6, false, null, PAL.pumpkin, 1.1); }
-    else o = decor('trunk', 0.85, true, 0xb09ad0);
+    if (r < 0.62) o = decor(stones[Math.floor(R() * stones.length)], 0.98 + R() * 0.28, false, 0xb8b0d0, 0x2a1a5a, 0.22);
+    else if (r < 0.78) o = decor('rocks', 0.86, true, 0x9a94b0);
+    else if (r < 0.9) { o = decor('pumpkin-carved', 0.66, false, null, PAL.pumpkin, 0.7); }
+    else o = decor('trunk', 0.88, true, 0x9a8a8a);
     o.position.set(tileX(x) + (R() - 0.5) * 0.08, 0.08, tileZ(z) + (R() - 0.5) * 0.08);
     o.rotation.y = (R() - 0.5) * 0.6 + (R() < 0.5 ? 0 : Math.PI);
     boardGroup.add(o);
   }
   for (const g of GRAVES) {
-    const o = decor('grave', 0.92, true, 0x8a8ad8, 0x4a1a8a, 0.25);
+    const o = decor('grave', 0.92, true, 0x9a8070);
     o.position.set(tileX(g.x), 0.08, tileZ(g.z)); o.rotation.y = Math.floor(R() * 4) * Math.PI / 2;
     boardGroup.add(o);
+    const pit = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 0.8), new THREE.MeshBasicMaterial({ map: pitTex, transparent: true, depthWrite: false }));
+    pit.rotation.x = -Math.PI / 2; pit.rotation.z = o.rotation.y; pit.position.set(tileX(g.x), 0.13, tileZ(g.z)); pit.renderOrder = 1; boardGroup.add(pit);
     g.glow = new THREE.Mesh(new THREE.PlaneGeometry(1.1, 1.1), new THREE.MeshBasicMaterial({ map: glowTex, color: new THREE.Color(PAL.violet).multiplyScalar(1.2), transparent: true, opacity: 0.5, depthWrite: false, blending: THREE.AdditiveBlending }));
     g.glow.rotation.x = -Math.PI / 2; g.glow.position.set(tileX(g.x), 0.11, tileZ(g.z)); boardGroup.add(g.glow);
   }
   // surroundings: iron fence, pines, crypt, lights
   const hx = COLS / 2 + 0.25, hz = ROWS / 2 + 0.25;
   for (let x = -Math.floor(hx); x <= Math.floor(hx); x++) {
-    for (const zz of [-hz, hz]) { const f = decor('iron-fence', 1.0, true, 0x8a7ab8, 0x6a3bff, 0.4); f.position.set(x, 0, zz); boardGroup.add(f); }
+    for (const zz of [-hz, hz]) { const f = decor('iron-fence', 1.0, true, 0x6a6488, 0x3a2a8a, 0.25); f.position.set(x, 0, zz); boardGroup.add(f); }
   }
   for (let z = -Math.floor(hz); z <= Math.floor(hz); z++) {
-    for (const xx of [-hx, hx]) { const f = decor('iron-fence', 1.0, true, 0x8a7ab8, 0x6a3bff, 0.4); f.rotation.y = Math.PI / 2; f.position.set(xx, 0, z); boardGroup.add(f); }
+    for (const xx of [-hx, hx]) { const f = decor('iron-fence', 1.0, true, 0x6a6488, 0x3a2a8a, 0.25); f.rotation.y = Math.PI / 2; f.position.set(xx, 0, z); boardGroup.add(f); }
   }
   for (const [xx, zz] of [[-hx, -hz], [hx, -hz], [-hx, hz], [hx, hz]]) { const p = decor('iron-fence-border-column', 1.25, false, 0x8a7ab8, 0x6a3bff, 0.5); p.position.set(xx, 0, zz); boardGroup.add(p); }
+  lampPools.length = 0;
   const trees = [];
   for (let k = 0; k < 26; k++) {
     const side = k % 3, a = R();
@@ -832,16 +906,29 @@ function buildBoard(seed) {
     else if (side === 1) { x = hx + 1.2 + R() * 4; z = (a - 0.5) * (ROWS + 8); }
     else { x = (a - 0.5) * (COLS + 10); z = -hz - 1.4 - R() * 5; }
     trees.push([x, z]);
-    const t = decor(R() < 0.5 ? 'pine' : 'pine-crooked', 2.2 + R() * 1.6, false, 0x7a6ab8, 0x1a4a2a, 0.25);
+    const t = decor(R() < 0.5 ? 'pine' : 'pine-crooked', 2.2 + R() * 1.6, false, 0x58607a, 0x0a1a14, 0.15);
     t.position.set(x, 0, z); t.rotation.y = R() * 6.28; boardGroup.add(t);
   }
-  const crypt = decor('crypt-small', 2.4, false, 0xb8a8e8, 0x6a3bff, 0.45); crypt.position.set(-hx - 2.2, 0, -hz - 1.6); crypt.rotation.y = 0.5; boardGroup.add(crypt);
-  const crypt2 = decor('crypt-small', 2.0, false, 0xb8a8e8, 0x6a3bff, 0.45); crypt2.position.set(hx + 2.4, 0, -hz + 1.2); crypt2.rotation.y = -0.9; boardGroup.add(crypt2);
+  const crypt = decor('crypt-small', 1.9, false, 0x7a7090, 0x2a1a5a, 0.18); crypt.position.set(-hx - 2.4, 0, -hz - 1.4); crypt.rotation.y = 0.5; boardGroup.add(crypt);
+  const crypt2 = decor('crypt-small', 1.7, false, 0x7a7090, 0x2a1a5a, 0.18); crypt2.position.set(hx + 2.5, 0, -hz + 1.4); crypt2.rotation.y = -0.9; boardGroup.add(crypt2);
+  const flameSpr = (x, y, z, s) => { const fl = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color: new THREE.Color(2.4, 1.1, 0.3), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })); fl.position.set(x, y, z); fl.scale.set(s, s * 1.3, 1); fl.userData.flame = s; boardGroup.add(fl); return fl; };
   const fires = [[-hx - 0.9, hz - 2.5], [hx + 0.9, 0.5]];
-  fires.forEach(([x, z], i) => { const f = decor('fire-basket', 0.9, false, null, PAL.pumpkin, 1.4); f.position.set(x, 0, z); boardGroup.add(f); pumpLights[i].position.set(x, 1.3, z); pumpLights[i].userData.base = 6; });
-  for (let k = 0; k < 6; k++) { const p = decor(R() < 0.5 ? 'pumpkin-carved' : 'pumpkin-tall-carved', 0.55 + R() * 0.3, false, null, PAL.pumpkin, 1.2); p.position.set((R() < 0.5 ? -1 : 1) * (hx + 0.6 + R() * 1.4), 0, (R() - 0.5) * ROWS); p.rotation.y = R() * 6; boardGroup.add(p); }
-  for (const [x, z] of [[-hx - 0.7, -hz + 1], [hx + 0.7, hz - 1]]) { const l = decor('lightpost-single', 2.0, false, 0x9a8ac8, PAL.gold, 1.2); l.position.set(x, 0, z); boardGroup.add(l); }
-  for (const [x, z] of [[-hx - 0.6, -1.5], [hx + 0.6, 2.5]]) { const cnd = decor('candle-multiple', 0.4, false, null, PAL.gold, 1.2); cnd.position.set(x, 0, z); boardGroup.add(cnd); }
+  fires.forEach(([x, z], i) => { const f = decor('fire-basket', 0.8, false, 0x6a5a5a); f.position.set(x, 0, z); boardGroup.add(f); flameSpr(x, 0.95, z, 0.7); lampPool(x, z, PAL.pumpkin, 3.2); pumpLights[i].position.set(x, 1.3, z); pumpLights[i].userData.base = 6; });
+  for (let k = 0; k < 6; k++) { const p = decor(R() < 0.5 ? 'pumpkin-carved' : 'pumpkin-tall-carved', 0.5 + R() * 0.15, false, null, PAL.pumpkin, 0.6); p.position.set((R() < 0.5 ? -1 : 1) * (hx + 0.6 + R() * 1.4), 0, (R() - 0.5) * ROWS); p.rotation.y = R() * 6; boardGroup.add(p); }
+  for (const [x, z] of [[-hx - 0.7, -hz + 1], [hx + 0.7, hz - 1]]) { const l = decor('lightpost-single', 1.8, false, 0x5a5070); l.position.set(x, 0, z); boardGroup.add(l); flameSpr(x, 1.62, z, 0.55).material.color.setRGB(2.2, 1.7, 0.7); lampPool(x, z, 0xffc27a, 3.6); }
+  for (const [x, z] of [[-hx - 0.6, -1.5], [hx + 0.6, 2.5], [-hx - 0.5, hz - 0.6], [hx + 0.5, -hz + 0.5]]) { const cnd = decor('candle-multiple', 0.38, false, null, PAL.gold, 0.6); cnd.position.set(x, 0, z); boardGroup.add(cnd); flameSpr(x, 0.42, z, 0.3); lampPool(x, z, 0xffb04a, 1.8); }
+  // headstones and dead trunks outside the fence
+  const outStones = ['gravestone-round', 'gravestone-cross', 'gravestone-bevel', 'gravestone-broken', 'cross-column'];
+  for (let k = 0; k < 16; k++) {
+    const side = k % 3; let x, z;
+    if (side === 0) { x = -hx - 1 - R() * 2.6; z = (R() - 0.5) * (ROWS + 2); } else if (side === 1) { x = hx + 1 + R() * 2.6; z = (R() - 0.5) * (ROWS + 2); } else { x = (R() - 0.5) * (COLS + 4); z = -hz - 0.9 - R() * 2; }
+    const o = decor(R() < 0.8 ? outStones[Math.floor(R() * outStones.length)] : 'trunk', 0.7 + R() * 0.4, false, 0x8a84a0, 0x1a1040, 0.15); o.position.set(x, 0, z); o.rotation.y = (R() - 0.5) * 0.8; o.rotation.z = (R() - 0.5) * 0.15; boardGroup.add(o);
+  }
+  // cobwebs in the fence corners
+  for (const [xx, zz, r] of [[-hx, -hz, 0], [hx, -hz, Math.PI / 2], [hx, hz, Math.PI], [-hx, hz, -Math.PI / 2]]) {
+    const w = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 1.3), new THREE.MeshBasicMaterial({ map: webTex, transparent: true, depthWrite: false, side: THREE.DoubleSide, opacity: 0.8 }));
+    w.position.set(xx, 0.75, zz); w.rotation.set(0, Math.PI / 4 + r, 0); w.geometry.translate(0.65, 0, 0); boardGroup.add(w);
+  }
   boardGroup.traverse((m) => { if (m.isMesh) { m.castShadow = Math.abs(m.getWorldPosition(TMPV).x) < hx + 1; } });
 }
 const TMPV = new THREE.Vector3();
@@ -873,8 +960,8 @@ function buildFrog() {
     legs.push(back, foot);
   }
   // little knight cape, waving
-  const capeGeo = new THREE.PlaneGeometry(0.42, 0.34, 6, 4);
-  const cape = new THREE.Mesh(capeGeo, new THREE.MeshStandardMaterial({ color: 0x5a2cc8, emissive: new THREE.Color(PAL.violet), emissiveIntensity: 0.8, side: THREE.DoubleSide, roughness: 0.6 }));
+  const capeGeo = new THREE.PlaneGeometry(0.52, 0.42, 6, 4);
+  const cape = new THREE.Mesh(capeGeo, new THREE.MeshStandardMaterial({ color: 0x6a2cd8, emissive: new THREE.Color(PAL.violet), emissiveIntensity: 1.1, side: THREE.DoubleSide, roughness: 0.6 }));
   cape.position.set(0, 0.38, -0.3); cape.rotation.x = 0.5; cape.castShadow = true; body.add(cape);
   // tiny crown
   const crown = mk(new THREE.CylinderGeometry(0.08, 0.09, 0.07, 6, 1, true), PAL.gold, PAL.gold, 0.9); crown.material.side = THREE.DoubleSide; crown.position.set(0, 0.56, -0.02); body.add(crown);
@@ -892,7 +979,11 @@ function buildFrog() {
   g.userData = { body, eyes, legs, cape, capeGeo, capeBase: capeGeo.attributes.position.array.slice(), tongue, tTip, tRope, bubble, shadowBlob, torso };
   return g;
 }
-const frog = buildFrog(); scene.add(frog);
+const FROG_S = 1.25;
+const frog = buildFrog(); frog.scale.setScalar(FROG_S); scene.add(frog);
+frog.userData.shadowBlob.scale.setScalar(FROG_S);
+const frogRing = new THREE.Mesh(new THREE.RingGeometry(0.36, 0.45, 40), new THREE.MeshBasicMaterial({ color: new THREE.Color(PAL.gold).multiplyScalar(1.5), transparent: true, opacity: 0.85, depthWrite: false, side: THREE.DoubleSide }));
+frogRing.rotation.x = -Math.PI / 2; frogRing.renderOrder = 3; scene.add(frogRing);
 
 /* ================= ENEMIES ================= */
 const MATS = {};
@@ -920,7 +1011,9 @@ function enemyModel(type) {
   // colour-coded halo under each monster
   const halo = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: glowTex, color: new THREE.Color(d.ring).multiplyScalar(1.3), transparent: true, opacity: 0.55, depthWrite: false, blending: THREE.AdditiveBlending }));
   halo.rotation.x = -Math.PI / 2; halo.position.y = 0.1; const hs = type === 'keeper' ? 2.6 : 1.1; halo.scale.set(hs, hs, hs);
-  const root = new THREE.Group(); root.add(obj); root.add(halo);
+  const blob = new THREE.Mesh(new THREE.CircleGeometry(type === 'keeper' ? 0.9 : 0.34, 20), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: type === 'ghost' ? 0.2 : 0.42, depthWrite: false }));
+  blob.rotation.x = -Math.PI / 2; blob.position.y = 0.098;
+  const root = new THREE.Group(); root.add(blob); root.add(obj); root.add(halo);
   return { root, obj, mixer, acts, halo };
 }
 function playAct(e, name, fade) {
@@ -1075,7 +1168,7 @@ function addScore(base, x, z, col, label) {
   const mul = Math.max(1, G.combo) * (G.powers.frenzy > 0 ? 2 : 1);
   const pts = Math.round(base * mul);
   G.score += pts;
-  floatText(x, 1.0, z, (label ? label + ' ' : '') + '+' + fmt(pts), col || '#f4f0ff');
+  if (label !== 'KEEPER') floatText(x, 1.0, z, (label ? label + ' ' : '') + '+' + fmt(pts), col || '#f4f0ff');
   bumpScore();
   return pts;
 }
@@ -1315,10 +1408,10 @@ function startBoss() {
 }
 function bossDown(e) {
   G.bossAlive = false; G.boss = null;
-  addScore(e.def.pts * (1 + Math.floor(G.night / 3 - 1) * 0.5), e.pos.x, e.pos.z, '#ff6ad5', 'KEEPER');
+  const kp = addScore(e.def.pts * (1 + Math.floor(G.night / 3 - 1) * 0.5), e.pos.x, e.pos.z, '#ff6ad5', 'KEEPER');
   G.kills++;
   hitStop = 0.25; addShake(1); flash(0.6, '#ffd6f0');
-  banner('KEEPER DOWN', 'THE DAWN IS FREE', '#ff6ad5');
+  banner('KEEPER DOWN', '+' + fmt(kp) + '  ·  THE DAWN IS FREE', '#ff6ad5');
   show($('bossBar'), false); $('nightBox').classList.remove('boss');
   bossLight.intensity = 0;
   G.croak = 1;
@@ -1402,7 +1495,7 @@ function updateHud(dt) {
   $('nightNum').textContent = 'NIGHT ' + G.night;
   const left = Math.max(0, G.dur - G.nightT);
   const sec = Math.ceil(left);
-  const txt = state === 'dawn' ? 'DAWN' : (G.bossAlive && left <= 0 ? 'KEEPER BLOCKS THE DAWN' : 'DAWN IN ' + Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0'));
+  const txt = state === 'dawn' ? 'DAWN' : (G.bossAlive && left <= 0 ? 'KEEPER BLOCKS DAWN' : 'DAWN IN ' + Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0'));
   if (txt !== lastHud) { $('nightTime').textContent = txt; lastHud = txt; }
   $('nightFill').style.width = (state === 'dawn' ? 100 : clamp(G.nightT / G.dur, 0, 1) * 100) + '%';
   // action buttons: cooldown rings
@@ -1416,6 +1509,8 @@ function updateHud(dt) {
 const floats = [];
 for (let i = 0; i < 14; i++) { const d = document.createElement('div'); d.className = 'ft'; d.style.opacity = 0; $('floats').appendChild(d); floats.push({ d, t: 0, life: 0, p: new THREE.Vector3() }); }
 function floatText(x, y, z, txt, col, size) {
+  let busy = 0; for (const o of floats) if (o.life && o.t < 0.55 && Math.abs(o.p.x - x) < 1.2 && Math.abs(o.p.z - z) < 1.2) busy++;
+  y += busy * 0.5;
   const q = floats.find((o) => o.life === 0) || floats.slice().sort((a, b) => b.t - a.t)[0];
   q.d.textContent = txt; q.d.style.color = col || '#fff'; q.d.style.fontSize = (size || 18) + 'px';
   q.t = 0; q.life = 1.0; q.p.set(x, y, z);
@@ -1485,6 +1580,10 @@ function skyAt(k, dawn) {
   skyMat.uniforms.uTop.value.copy(SK.top); skyMat.uniforms.uHor.value.copy(SK.hor); skyMat.uniforms.uGlow.value.copy(SK.glow); skyMat.uniforms.uDawn.value = d;
   scene.fog.color.copy(SK.fog); renderer.setClearColor(SK.fog);
   hemi.intensity = hemiI;
+  mistMat.uniforms.uCol.value.copy(SK.fog).lerp(new THREE.Color(0xb0a0ff), 0.45);
+  moonPool.material.opacity = 0.4 * (1 - d) + 0.08;
+  const sb = $('skyband').style, key = SK.top.getHexString() + SK.hor.getHexString() + d.toFixed(2);
+  if (sb._k !== key) { sb._k = key; sb.setProperty('--skyTop', '#' + SK.top.getHexString()); sb.setProperty('--skyHor', '#' + SK.hor.getHexString()); sb.setProperty('--moonA', String(1 - d * 0.85)); }
   moonLight.color.setRGB(lerp(0.8, 1, d), lerp(0.85, 0.75, d), lerp(1, 0.7, d));
   moonLight.intensity = 1.5 + d * 0.6;
 }
@@ -1678,7 +1777,8 @@ function updateFrog(dt, t) {
   F.rot += dy * Math.min(1, dt * 22);
   frog.rotation.y = F.rot;
   frog.position.set(F.pos.x, 0.08 + F.y, F.pos.z);
-  u.shadowBlob.position.set(F.pos.x, 0.095, F.pos.z); const sb = 1 - Math.min(0.6, F.y * 0.4); u.shadowBlob.scale.set(sb, sb, sb);
+  u.shadowBlob.position.set(F.pos.x, 0.095, F.pos.z); const sb = (1 - Math.min(0.6, F.y * 0.4)) * FROG_S; u.shadowBlob.scale.set(sb, sb, sb);
+  frogRing.position.set(F.pos.x, 0.105, F.pos.z); frogRing.visible = frog.visible; frogRing.material.opacity = 0.55 + 0.3 * Math.sin(t * 5); frogRing.scale.setScalar(1 + 0.06 * Math.sin(t * 5));
   frogLight.position.set(F.pos.x, 0.9 + F.y, F.pos.z + 0.3);
   // eyes look around, blink
   const blink = (t % 3.7) < 0.12 ? 0.15 : 1;
@@ -1693,8 +1793,8 @@ function updateFrog(dt, t) {
     const out = 0.075, back = 0.11;
     let ext;
     if (T.t < out) ext = T.t / out; else { ext = Math.max(0, 1 - (T.t - out) / back); if (!T.hit) { T.hit = true; tongueHit(T); } }
-    u.tongue.visible = true; u.tongue.scale.set(1, 1, Math.max(0.001, ext * T.len));
-    u.tTip.scale.set(1, 1, 1 / Math.max(0.05, ext * T.len));
+    u.tongue.visible = true; u.tongue.scale.set(1, 1, Math.max(0.001, ext * T.len / FROG_S));
+    u.tTip.scale.set(1, 1, 1 / Math.max(0.05, ext * T.len / FROG_S));
     if (T.t > out + back) { F.tongue = null; u.tongue.visible = false; }
   }
   // invulnerability blink, shield bubble
@@ -1800,6 +1900,8 @@ function updateWorld(dt, t) {
     if (p.t > p.life) { m.visible = false; pickups = pickups.filter((q) => q !== p); }
   }
   for (const g of GRAVES) if (g.glow) { g.pulse = Math.max(0, (g.pulse || 0) - dt); g.glow.material.opacity = 0.35 + Math.sin(t * 2 + g.x) * 0.12 + (g.pulse || 0) * 0.6; }
+  boardGroup.children.forEach((o) => { if (o.userData.flame) { const k = 1 + Math.sin(t * 17 + o.position.x * 3) * 0.08 + Math.sin(t * 9.3 + o.position.z) * 0.06; o.scale.set(o.userData.flame * k, o.userData.flame * 1.3 * k, 1); } });
+  for (const p of lampPools) p.material.opacity = 0.5 + Math.sin(t * 11 + p.position.x) * 0.06;
   for (let i = 0; i < pumpLights.length; i++) pumpLights[i].intensity = (pumpLights[i].userData.base || 6) * (0.85 + Math.sin(t * 13 + i * 3) * 0.08 + Math.sin(t * 7.3 + i) * 0.07);
   if (G && G.boss) { bossLight.position.set(G.boss.pos.x, 2, G.boss.pos.z); }
   // ambient: drifting fog motes and fireflies around the graveyard
@@ -1823,7 +1925,7 @@ function simulate(rdt) {
   simT += rdt; const t = simT;
   if (hitStop > 0) { hitStop -= rdt; rdt *= 0.08; }
   const dt = rdt * timeScale;
-  skyMat.uniforms.uT.value = t;
+  skyMat.uniforms.uT.value = t; mistMat.uniforms.uT.value = t;
   if (state === 'play') updatePlay(dt);
   if (state === 'dawn') { G.interT -= dt; if (G.interT <= 0) nextNight(); }
   const running = state === 'play' || state === 'dawn' || state === 'menu' || state === 'dying';

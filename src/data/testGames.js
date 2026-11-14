@@ -72,7 +72,7 @@ export const testGames = [
   {
     id: 'croaknight',
     title: 'CROAKNIGHT',
-    description: 'Survie 3D néon : une grenouille saute de case en case dans un cimetière hanté et doit tenir chaque nuit jusqu\'à l\'aube. Langue pour fouetter zombies, squelettes, fantômes et vampires, LEAP pour sauter 2 cases, CROAK (chargé par les lucioles) pour tout balayer, boss Grave Keeper toutes les 3 nuits.',
+    description: 'Survie 3D néon (v2 : vrai cimetière de nuit, lune et brume, grenouille plus visible) : une grenouille saute de case en case dans un cimetière hanté et doit tenir chaque nuit jusqu\'à l\'aube. Langue pour fouetter zombies, squelettes, fantômes et vampires, LEAP pour sauter 2 cases, CROAK (chargé par les lucioles) pour tout balayer, boss Grave Keeper toutes les 3 nuits.',
     thumbnail: '/thumbnails/croaknight.jpg',
     category: 'adventure',
     orientation: 'portrait',
