@@ -57,9 +57,6 @@
   #lbTop { top: 0; } #lbBot { bottom: 0; }
   body.cine .lb { height: 11vh; }
   #flash { position: fixed; inset: 0; pointer-events: none; background: #fff; opacity: 0; z-index: 3; transition: opacity .35s; }
-  #crack { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 8; opacity: 0; transition: opacity .25s; }
-  #crack.on { opacity: .85; }
-  #crack path { fill: none; stroke: rgba(255,255,255,.85); stroke-width: 1.6; stroke-linejoin: round; filter: drop-shadow(0 0 3px rgba(255,61,127,.9)); }
 
   /* HUD: the top-left 56 px stay free for the site's back button */
   .hud { position: fixed; top: calc(8px + var(--safe-top)); left: calc(56px + var(--safe-left)); right: calc(10px + var(--safe-right)); height: 120px; pointer-events: none; display: none; z-index: 5; }
@@ -139,7 +136,7 @@
   #menu { background: linear-gradient(180deg, rgba(8,2,26,.0) 0%, rgba(8,2,26,0) 45%, rgba(8,2,26,.82) 100%); flex-direction: column; justify-content: space-between; align-items: stretch;
     padding-bottom: calc(10px + var(--lift) + var(--safe-bottom)); }
   #menu .top { text-align: center; padding-top: 46px; }
-  #menu .panel { margin: 0 auto; padding: 14px 14px 12px; background: linear-gradient(160deg, rgba(36,10,72,.86), rgba(11,3,30,.92)); }
+  #menu .panel { margin: 0 auto 10vh; margin-bottom: 10dvh; padding: 14px 14px 12px; background: linear-gradient(160deg, rgba(36,10,72,.86), rgba(11,3,30,.92)); }
   .logo { font-size: 50px; font-weight: 900; letter-spacing: 1px; line-height: 1; display: inline-block; font-style: italic;
     background: linear-gradient(180deg, #ffffff 0%, var(--teal) 40%, var(--amber) 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
     filter: drop-shadow(0 0 12px rgba(0,245,212,.55)); animation: hop 2.2s cubic-bezier(.3,0,.3,1) infinite; transform-origin: 50% 100%; }
@@ -275,10 +272,9 @@
 <div id="flash"></div>
 <div id="tunnel"></div>
 <div class="lb" id="lbTop"></div><div class="lb" id="lbBot"></div>
-<svg id="crack" viewBox="0 0 100 100" preserveAspectRatio="none"><path id="crackPath" d=""/></svg>
 
 <div id="loading">
-  <div class="logo">HYPERHOP</div>
+  <img class="logo-img load-logo" src="./hyperhop/sprites/logo.webp" alt="HYPERHOP" width="449" height="234" draggable="false" onerror="this.outerHTML='&lt;div class=&quot;logo&quot;&gt;HYPERHOP&lt;/div&gt;'">
   <div class="lbar"><div id="loadFill"></div></div>
 </div>
 
@@ -2166,7 +2162,7 @@ function startGame(mode, seed) {
   wipe(() => {
     buildRun(mode, seed);
     ['menu', 'over', 'pause', 'ad', 'shop', 'missions', 'settings'].forEach((id) => show($(id), false));
-    show($('crack'), false); show($('hyperFx'), false);
+    show($('hyperFx'), false);
     show($('hud'), true); document.body.classList.add('playing');
     $('hudMode').textContent = mode === 'classic' ? '' : G.cfg.label + ' \u00b7 ';
     $('hudTimeWrap').style.display = mode === 'time' ? '' : 'none';
@@ -3497,24 +3493,9 @@ function gameOver() {
   $('btnRocket').style.display = G.mode === 'classic' ? '' : 'none';
   $('btnCard').textContent = G.mode === 'daily' ? 'SHARE DAILY CARD' : 'SHARE CARD';
   $('shareMsg').textContent = '';
-  // cracked screen
-  $('crackPath').setAttribute('d', crackPath());
-  show($('crack'), !RMX());
-  setTimeout(() => { if (state === 'over') { show($('over'), true); show($('crack'), false); } }, 650);
+  setTimeout(() => { if (state === 'over') show($('over'), true); }, 650);
   if (G.revived) finalize();
 }
-function crackPath() {
-  const cx = 30 + Math.random() * 40, cy = 30 + Math.random() * 40;
-  let d = '';
-  for (let k = 0; k < 9; k++) {
-    let x = cx, y = cy; const a0 = k / 9 * Math.PI * 2 + Math.random() * 0.4;
-    d += 'M' + x.toFixed(1) + ' ' + y.toFixed(1);
-    for (let s = 0; s < 5; s++) { const a = a0 + (Math.random() - 0.5) * 0.7; x += Math.cos(a) * (6 + Math.random() * 9); y += Math.sin(a) * (6 + Math.random() * 9); d += 'L' + x.toFixed(1) + ' ' + y.toFixed(1); }
-  }
-  for (let r = 4; r < 14; r += 5) { d += 'M' + (cx + r) + ' ' + cy; for (let a = 0.6; a <= Math.PI * 2 + 0.1; a += 0.6) d += 'L' + (cx + Math.cos(a) * r * (0.8 + Math.random() * 0.4)).toFixed(1) + ' ' + (cy + Math.sin(a) * r * (0.8 + Math.random() * 0.4)).toFixed(1); }
-  return d;
-}
-
 // Definitive end of the run: the score is sent once.
 function finalize() {
   if (!G || G.posted || G.demo) return;
@@ -3543,7 +3524,7 @@ function watchRevive() {
 function grantRevive() {
   if (!G || G.revived) return;
   G.revived = true;
-  show($('over'), false); show($('crack'), false);
+  show($('over'), false);
   hero.visible = true;
   if (G.mode === 'time') G.time = Math.max(G.time, 0) + 15;
   G.lastTick = 99;
@@ -3583,7 +3564,7 @@ function resumeGame() { if (state !== 'paused') return; show($('pause'), false);
 function toMenu() {
   state = 'menu';
   ['over', 'pause', 'ad', 'shop', 'missions', 'settings'].forEach((id) => show($(id), false));
-  show($('hud'), false); show($('hint'), false); show(gauge, false); show($('crack'), false); show($('hyperFx'), false); setTutor(null);
+  show($('hud'), false); show($('hint'), false); show(gauge, false); show($('hyperFx'), false); setTutor(null);
   document.body.classList.remove('playing', 'cine');
   stopReviveTimer();
   pressing = false; pressId = null; Snd.charge(0); Music.stop();
