@@ -114,6 +114,16 @@ Les sites kenney.nl, quaternius.com, poly.pizza, opengameart.org et itch.io ne s
 
 **Traçabilité (preuve de licence)** : chaque asset utilisé est noté dans `ASSETS-LICENCES.md` à la racine du dépôt (jamais dans `public/`) : jeu, fichier, pack d'origine, URL du dépôt, licence, date. La PR liste aussi ces assets.
 
+## Ressources gratuites pour les graphismes (rotation)
+
+Laurent veut un meilleur rendu 3D et 2D **sans rien payer**. Pour chaque jeu (nouveau ou retravaillé), essayer les sources dans cet ordre et passer à la suivante dès qu'une source est injoignable, non connectée ou que son quota gratuit est épuisé, sans jamais bloquer la tâche :
+1. **Bibliothèques CC0 sur GitHub** (Kenney, Quaternius..., voir « Assets libres »).
+2. **Poly Haven** (textures PBR, HDRI, modèles) et **ambientCG** (matériaux PBR), tous deux CC0, si leurs domaines sont autorisés dans le bac à sable (`polyhaven.com`, `api.polyhaven.com`, `dl.polyhaven.org`, `ambientcg.com`). Textures ramenées à 512 ou 1024 px (WebP ou JPG), recolorées pour l'identité néon du jeu.
+3. **Connecteur Hugging Face** (compte gratuit, quota GPU quotidien gratuit), s'il est connecté : images avec FLUX.1-schnell (Apache-2.0 : textures, fonds, sprites, miniatures, images de blog), modèles 3D depuis une image avec TRELLIS (MIT). N'utiliser que des modèles dont la fiche indique une licence qui permet l'usage commercial sans attribution (Apache-2.0, MIT, CC0) ; écarter les licences « non commercial », CC-BY-NC, OpenRAIL restrictives et toute licence exigeant de citer l'auteur.
+4. **Rendu en code** (shaders, canvas, géométrie Three.js), toujours disponible.
+
+Interdits : payer, saisir un moyen de paiement, démarrer un essai qui se convertit en abonnement, créer plusieurs comptes pour cumuler des crédits gratuits. Chaque fichier obtenu ou généré est noté dans `ASSETS-LICENCES.md` (jeu, fichier, source ou modèle, licence, prompt s'il y en a un, date) et listé dans la PR, qui indique aussi quelles sources étaient indisponibles ou épuisées. Les règles « Assets libres » (budget de poids, optimisation, recoloration, aucun crédit visible) s'appliquent aussi aux fichiers générés.
+
 ## Finition visuelle (obligatoire)
 
 Priorité de Laurent : des jeux beaux, au niveau de ce qui tourne sur les réseaux. Un jeu qui marche mais qui a l'air d'un prototype n'est pas terminé. Chaque nouveau jeu applique **toute** cette liste, et la PR coche chaque point.
