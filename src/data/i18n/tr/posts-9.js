@@ -46,5 +46,101 @@ export default {
       { "type": "p", "text": "Classic bitmeyen tırmanıştır ve her dünyayı öğrenmek için en iyi moddur. Time Attack altmış saniyeyle başlar, her perfect bir saniye ekler ve bir düşüş beş saniyeye mal olur; yani burada hassasiyet hızdan bile önemlidir. Hard modu daha küçük kuleler kullanır, tuzakları ve dronları çok daha erken getirir ve kendi skor tablosuna sahiptir. Daily koşusu herkese aynı kuleleri verir; bu da onu arkadaşlarınla skor karşılaştırmanın en adil yolu yapar. Ekstra para için üç günlük görevi tamamla, sonra paralarını mağazada yeni robotlara, ışık izlerine ve iniş efektlerine harca." },
       { "type": "p", "text": "Ortaya nişan al, kombonu kur, ritimde zıpla ve WARDEN geldiğinde sakin kal. HYPERHOP'u aç, ilk zıplamanı basılı tut ve kaç dünyayı geçebileceğini gör." }
     ]
+  },
+  "brickfury-tips": {
+    "title": "BRICKFURY İpuçları: Kombo nasıl zincirlenir, FURY nasıl tetiklenir ve OVERLORD nasıl yenilir",
+    "excerpt": "BRICKFURY, en iyi skorların uzun kombolardan ve tam zamanında tetiklenen FURY'den geldiği ücretsiz, neon bir tuğla kırma oyunu. Raketle nasıl nişan alacağını, çarpanını nasıl canlı tutacağını, her tuğla ve dronla nasıl başa çıkacağını ve OVERLORD boss'unu nasıl yeneceğini öğren.",
+    "seo": {
+      "title": "BRICKFURY İpuçları: Tuğla Kırma Komboları, FURY, Güçlendiriciler ve OVERLORD | Ragequit Arcade",
+      "metaDescription": "Ücretsiz neon tuğla kırma oyunu BRICKFURY için ipuçları: sekmelerini nişanla, x8 kombo zincirle, FURY'yi tetikle, güçlendiricileri kullan, OVERLORD'u yen."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "BRICKFURY, zaten bildiğin klasik tuğla kırma oyununa benziyor: bir raket, bir top ve bir tuğla duvarı. Ama en iyi skorlar sadece duvarları temizlemekten gelmez. Uzun kombolardan, tam zamanında tetiklenen FURY'den ve her güçlendiricinin akıllıca kullanılmasından gelir. Bu rehber, kısa bir oyunu rekor bir koşuya dönüştüren alışkanlıkları anlatıyor."
+      },
+      {
+        "type": "h2",
+        "text": "Raketin kenarlarıyla nişan al"
+      },
+      {
+        "type": "p",
+        "text": "Sekme açısı, topun rakete nereden değdiğine bağlıdır. Ortasıyla vurursan top neredeyse dümdüz yukarı gider. Kenarıyla vurursan keskin bir açıyla çıkar. Topu duvarın arkasına göndermek için kenarları kullan; orada tavana çarpıp sekerek sana geri dönmeden bir sürü tuğla kırar."
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Topu tuğlaların arkasına sokmak için duvardaki boşlukları hedefle.",
+          "Mobilde ekranın herhangi bir yerinde parmağını kaydır: parmağın topu hiç kapatmaz.",
+          "Hızlı değil, erken hareket et: sakin bir raket rallileri uzatır.",
+          "Oyunda birden fazla top varken önce en alttakini takip et."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Komboyu kur ve canlı tut"
+      },
+      {
+        "type": "p",
+        "text": "Topu kaybetmeden kırdığın her tuğla komboya eklenir ve her beş tuğla çarpanını bir kademe, x8'e kadar yükseltir. Top kaybetmek her şeyi sıfırlar; bu yüzden uzun ve güvenli bir ralli riskli bir atıştan daha değerlidir. x4 ya da üstüne ulaştığında dikkatli oyna: artık her tuğla temel değerinin birkaç katı eder."
+      },
+      {
+        "type": "h2",
+        "text": "FURY'yi doğru anda tetikle"
+      },
+      {
+        "type": "p",
+        "text": "FURY göstergesi tuğla kırdıkça dolar. Patladığında her top bir ateş topuna dönüşür ve skorun birkaç saniye boyunca iki katına çıkar. Ateş topları, normal bir topun kıramadığı tek tuğlalar olan çelik tuğlaları eritir. Yüksek bir çarpanla birleşen FURY, devasa bir skora giden en hızlı yoldur; bu yüzden gösterge dolarken komboyu canlı tutmaya çalış."
+      },
+      {
+        "type": "h2",
+        "text": "Her tuğlayı tanı"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Zırhlı tuğlalar birkaç vuruş ister: topu arkalarına gönder ki onlara tekrar tekrar çarpsın.",
+          "Çelik tuğlalar yalnızca FURY'nin ya da Fireball güçlendiricisinin ateşiyle kırılır.",
+          "Kristal tuğlalar her zaman bir güçlendirici düşürür: onları erkenden kır.",
+          "TNT tuğlaları patlar ve komşularına hasar verir. Birkaç TNT tuğlasını sıraya diz, tek vuruş duvarın yarısını temizlesin."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Doğru güçlendiricileri yakala"
+      },
+      {
+        "type": "p",
+        "text": "Kırılan tuğlalardan kapsüller düşer. Çoğu birer hediyedir: Multiball, Laser, Wide, Fireball, Magnet, Slow-Mo, Shield ve nadir ekstra can. Kırmızı Shrink kapsülü raketini küçültür; onu gördüğünde kenara çekil. Shield bir boss'tan önceki en iyi sigortadır, Magnet ise her atışı sakin sakin nişanlamanı sağlar."
+      },
+      {
+        "type": "h2",
+        "text": "Dronlarla başa çık"
+      },
+      {
+        "type": "p",
+        "text": "İkinci sektörden itibaren dronlar savaşa katılır. Bombers raketine patlayıcı bırakır, bu yüzden altlarındayken hareket etmeye devam et. Builders kırdığın tuğlaları onarır, o yüzden önce onları indir. Splitters vurulduğunda iki küçük drona bölünür, Shielders ise birkaç vuruş ister. Dronları topla ya da lazerle vurmak büyük puan kazandırır."
+      },
+      {
+        "type": "h2",
+        "text": "OVERLORD nasıl yenilir"
+      },
+      {
+        "type": "p",
+        "text": "Her beş sektörde bir OVERLORD gelir. Üç aşamada savaşır: önce tekli atışlar, sonra dron takviyeleriyle üçlü atış yelpazeleri, en sonda da Bombers eşliğinde beşli geniş yelpazeler. Atışların arasında raketini hareket ettir, boss önüne geldiğinde onu topla vur ve Shield'ı son aşamaya sakla. Onu yenmek seni kendine has gökyüzü ve renkleri olan yeni bir bölgeye taşır."
+      },
+      {
+        "type": "h2",
+        "text": "Modunu seç"
+      },
+      {
+        "type": "p",
+        "text": "Üç canlı Classic, her bölgeyi öğrenmek için en iyi moddur. Hard, ayrı bir liderlik tablosu için tek can ve daha hızlı bir top verir. Daily gün boyunca her oyuncuya aynı duvarı sunar; bu da onu skorları karşılaştırmanın en adil yolu yapar. Bir koşu bittiğinde bir arkadaşına meydan okuma linki gönder: aynı duvarları oynar ve geçmesi gereken skoru görür."
+      },
+      {
+        "type": "p",
+        "text": "Kenarlarla nişan al, komboyu koru, FURY'yi büyük anlara sakla ve Shield'ı OVERLORD için tut. BRICKFURY'yi aç ve kaç sektör temizleyebileceğini gör."
+      }
+    ]
   }
 }

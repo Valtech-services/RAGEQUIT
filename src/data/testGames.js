@@ -38,22 +38,6 @@ export const testGames = [
     notes: 'Three.js. Score CITY_RUNNER_SCORE, mode classic. Mettre DEBUG_MAX_CREDITS a true pour tester tous les vehicules.'
   },
   {
-    id: 'brickfury',
-    title: 'BRICKFURY',
-    description: 'Casse-briques néon (v2 : 4 zones avec décor animé, bonus en icônes, FURY qui embrase l\'arène) : glisse pour déplacer la raquette, enchaîne les briques pour monter le multiplicateur jusqu\'à x8, remplis la jauge FURY pour enflammer toutes les balles. Briques blindées, acier, TNT en chaîne et cristaux, 9 power-ups, 5 drones et le boss OVERLORD tous les 5 secteurs.',
-    thumbnail: '/thumbnails/brickfury.jpg',
-    category: 'arcade',
-    orientation: 'portrait',
-    file: '/games/brickfury.html',
-    notes: 'Canvas 2D. Score BRICKFURY_SCORE, modes classic / hard (1 vie, balle plus rapide) / daily (même mur pour tous). Pub revive une fois par partie (+1 vie, mur et score conservés, context revive). Tactile : glisser n\'importe où (déplacement relatif), taper pour lancer ; souris : la raquette suit le curseur, clic pour lancer ; clavier : flèches / A-D / Q-D, Espace pour lancer, P pause. Défi ami par lien (bf_seed, bf_beat, bf_mode). Pour tester : ajouter #bftest à l\'URL expose window.BF_TEST (startLevel(5) = boss).',
-    pr: 63,
-    extras: [
-      { label: 'Prompt miniature 1:1 (Gemini, 1024x1024)', text: 'Close-up action shot of a neon arcade brick breaker inside a glowing golden arena frame, a wall of glossy candy-like bricks in molten red, tangerine, gold and coral shattering into bright shards, three blazing fireballs with long comet trails smashing through, orange hazard-striped TNT bricks exploding, round power-up capsules with simple white icons falling, dark volcanoes with glowing lava cracks behind a red neon grid floor, embers in the air, strong bloom, high contrast, no text, no letters, no numbers, no logo.' },
-      { label: 'Prompt image de blog 16:9 (Gemini, 1376x768)', text: 'Wide cinematic panorama of four neon arcade arenas side by side, a synthwave city with a striped sun, an ice zone with aurora curtains and jagged glowing peaks, a magma zone with lava volcanoes, a deep space zone with a ringed purple planet, each arena holding a wall of glossy neon bricks smashed by fireballs, a glowing energy paddle at the bottom, sparks and shards everywhere, strong bloom, no text, no letters, no logo.' },
-      { label: 'Prompt logo du jeu (Gemini, 1:1, palette propre au jeu)', text: 'Game logo wordmark reading exactly "BRICKFURY" in massive, heavy, blocky capital letters built like stacked glossy bricks, the letters cracked and shattering at the edges with small brick fragments and sparks flying off, a blazing fireball bursting through the narrow gap between BRICK and FURY with a short comet trail, color palette molten crimson red and electric gold with a dark maroon outline, glossy beveled surfaces with a fiery inner glow, centered on a plain pure black background, crisp vector style, high contrast, no other text, no mascot, square 1:1 1024x1024.' },
-    ],
-  },
-  {
     id: 'croaknight',
     title: 'CROAKNIGHT',
     description: 'Survie 3D néon (v2 : vrai cimetière de nuit, lune et brume, grenouille plus visible) : une grenouille saute de case en case dans un cimetière hanté et doit tenir chaque nuit jusqu\'à l\'aube. Langue pour fouetter zombies, squelettes, fantômes et vampires, LEAP pour sauter 2 cases, CROAK (chargé par les lucioles) pour tout balayer, boss Grave Keeper toutes les 3 nuits.',

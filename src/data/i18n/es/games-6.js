@@ -56,5 +56,55 @@ export default {
         }
       ]
     }
+  },
+  "brickfury": {
+    "description": "BRICKFURY es un juego de romper ladrillos de neón gratis al que puedes jugar online en tu navegador, pensado para todos los que crecieron derribando muros de bloques con una pala y una pelota y quieren recuperar la sensación arcade clásica, pero con mucho más fuego. Desliza la pala de energía para mantener la pelota en juego, apunta tus rebotes y rompe todos los ladrillos del muro para limpiar el sector. Es el rompe ladrillos que ya conoces, reconstruido desde cero con sensaciones modernas: temblores de pantalla, chispas y fragmentos que saltan en cada golpe, y una banda sonora de crujidos y explosiones que hace que cada muro dé gusto destruirlo. El corazón de BRICKFURY es el combo. Cada ladrillo que rompes sin perder la pelota sube tu multiplicador, hasta x8, así que un peloteo largo puede convertir una puntuación modesta en una enorme. Al mismo tiempo se llena el medidor FURY. Cuando está lleno, FURY estalla en la arena: todas las pelotas se convierten en bolas de fuego que atraviesan el muro y tu puntuación se duplica durante varios segundos. Saber cuándo perseguir el combo y cuándo jugar seguro es lo que separa una buena partida de un récord. Los muros se defienden. Los ladrillos blindados necesitan varios golpes, los de acero solo se funden con fuego, los de cristal siempre sueltan un power-up y los ladrillos TNT naranjas hacen volar a sus vecinos, así que un tiro bien colocado puede desatar una reacción en cadena que limpie media pantalla. Nueve cápsulas que caen cambian la partida: Multiball, Laser, pala Wide, Fireball, Magnet, Slow-Mo, Shield, una vida extra y una cápsula Shrink roja que vas a querer esquivar. Desde el segundo sector, drones de neón se unen a la pelea. Los Drifters zigzaguean por la arena, los Bombers lanzan explosivos sobre tu pala, los Shielders se protegen, los Splitters se dividen en dos drones más pequeños y los Builders reparan los ladrillos que acabas de destruir. Cada cinco sectores llega el OVERLORD, un jefe blindado gigante con tres fases de patrones de disparo y refuerzos, y la arena pasa a una nueva zona con su propio cielo y sus propios colores: el skyline synthwave de Neon City, la aurora y los picos de hielo de la Cryo Zone, los volcanes del Magma Core y los planetas con anillos de Deep Space. Elige tu desafío entre tres modos. Classic te da tres vidas y una serie infinita de muros generados. El modo Hard te deja una sola vida y una pelota más rápida, con su propia clasificación para los mejores jugadores. El modo Daily ofrece el mismo muro a todos los jugadores durante el día, la forma más justa de comparar puntuaciones. Una vez por partida puedes ver un anuncio corto para conseguir una vida extra y conservar tu puntuación, y al terminar puedes enviar un enlace para retar a un amigo en exactamente los mismos muros. BRICKFURY es un juego de romper ladrillos gratis que funciona en tu navegador en móvil, tableta y ordenador, sin descarga ni registro. En el móvil solo tienes que arrastrar el dedo por cualquier parte de la pantalla para mover la pala; en el ordenador, la pala sigue tu ratón o las flechas del teclado. Rompe el muro, encadena el combo, desata la FURY y escala en la clasificación mundial.",
+    "controls": "Arrastra el dedo por cualquier parte de la pantalla para mover la pala y toca para lanzar la pelota. En el ordenador, la pala sigue tu ratón o las flechas del teclado (A y D también funcionan); haz clic o pulsa Espacio para lanzar y pulsa P para pausar. Funciona en móvil, tableta y ordenador.",
+    "seo": {
+      "title": "BRICKFURY - Juego de romper ladrillos gratis | Ragequit Arcade",
+      "metaDescription": "Juega gratis a BRICKFURY, el rompe ladrillos de neón: combos x8, FURY, 9 power-ups y el jefe OVERLORD. Online y sin descarga.",
+      "faq": [
+        {
+          "q": "¿Cómo se juega a BRICKFURY?",
+          "a": "Mueve la pala para hacer rebotar la pelota contra el muro y rompe todos los ladrillos para limpiar el sector. En el móvil, arrastra el dedo por cualquier parte de la pantalla para mover la pala y toca para lanzar la pelota. En el ordenador, usa el ratón o las flechas del teclado, y pulsa Espacio o haz clic para lanzar. Si todas las pelotas pasan por debajo de la pala, pierdes una vida."
+        },
+        {
+          "q": "¿BRICKFURY es un juego de romper ladrillos gratis?",
+          "a": "Sí. BRICKFURY es un rompe ladrillos completamente gratis que funciona en tu navegador en móvil, tableta y ordenador. No hay nada que descargar y no necesitas cuenta para jugar. Inicia sesión con un perfil gratis de Ragequit Arcade si quieres que tus puntuaciones aparezcan en la clasificación mundial."
+        },
+        {
+          "q": "¿Cómo funciona el multiplicador de combo?",
+          "a": "Cada ladrillo que rompes sin perder la pelota suma a tu combo. Cada cinco ladrillos, el multiplicador sube un nivel, de x1 hasta un máximo de x8, y cada punto que consigues se multiplica. Perder una pelota reinicia el combo, así que los peloteos largos son la clave de las grandes puntuaciones."
+        },
+        {
+          "q": "¿Qué es FURY?",
+          "a": "El medidor FURY se llena a medida que rompes ladrillos. Cuando está lleno, FURY se activa durante unos segundos: cada pelota se convierte en una bola de fuego que atraviesa los ladrillos, incluido el acero, y tu puntuación se duplica. Hazla coincidir con un gran combo para lograr las puntuaciones más altas."
+        },
+        {
+          "q": "¿Qué tipos de ladrillos hay?",
+          "a": "Los ladrillos normales se rompen de un golpe. Los blindados necesitan varios golpes. Los de acero no se pueden romper con una pelota normal, solo con el fuego de FURY o del power-up Fireball. Los de cristal siempre sueltan un power-up. Los ladrillos TNT explotan y dañan a los que tienen alrededor, y pueden hacer estallar otros TNT en una reacción en cadena."
+        },
+        {
+          "q": "¿Qué power-ups puedo atrapar?",
+          "a": "Atrapa las cápsulas que caen con tu pala: Multiball añade pelotas, Laser permite disparar a tu pala, Wide la agranda, Fireball atraviesa los ladrillos, Magnet atrapa la pelota, Slow-Mo la ralentiza, Shield añade una barrera de seguridad y el corazón te da una vida extra. Evita la cápsula Shrink roja, que hace más pequeña tu pala."
+        },
+        {
+          "q": "¿Qué enemigos y jefes hay en BRICKFURY?",
+          "a": "Desde el segundo sector aparecen drones: los Drifters zigzaguean por la pantalla, los Bombers lanzan bombas que aturden tu pala, los Shielders se protegen, los Splitters se dividen en dos drones más pequeños y los Builders reparan los ladrillos destruidos. Cada cinco sectores te enfrentas al OVERLORD, un jefe gigante con tres fases. Golpéalo con la pelota para derribarlo."
+        },
+        {
+          "q": "¿Qué modos de juego hay?",
+          "a": "Classic te da tres vidas y una partida infinita de muros generados. Hard te da una sola vida y una pelota más rápida, con su propia clasificación. Daily da a todos los jugadores el mismo muro durante el día, para que puedas comparar tu puntuación de forma justa con todos los demás. Cada modo guarda su propio récord."
+        },
+        {
+          "q": "¿Puedo seguir después de perder mi última vida?",
+          "a": "Sí. Una vez por partida puedes elegir ver un anuncio corto para conseguir una vida extra. Se conservan tu muro y tu puntuación, así que sigues exactamente donde estabas. Si lo prefieres, puedes empezar una partida nueva."
+        },
+        {
+          "q": "¿Cómo reto a un amigo?",
+          "a": "Al final de una partida, toca Challenge a friend para compartir un enlace. Tu amigo juega exactamente los mismos muros y ve la puntuación que tiene que superar. Es la mejor forma de saber quién es el verdadero campeón del rompe ladrillos."
+        }
+      ]
+    }
   }
 }

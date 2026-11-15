@@ -56,5 +56,55 @@ export default {
         }
       ]
     }
+  },
+  "brickfury": {
+    "description": "BRICKFURY é um jogo quebra-tijolos neon grátis que você pode jogar online no navegador, feito para quem cresceu derrubando paredes de blocos com uma raquete e uma bola e quer a sensação clássica de arcade com muito mais fogo. Deslize a raquete de energia para manter a bola em jogo, mire seus rebotes e quebre todos os tijolos da parede para limpar o setor. É o quebra-tijolos que você já conhece, reconstruído do zero com sensações modernas: tremores de tela, faíscas e estilhaços voando a cada batida, e uma trilha de estalos e explosões que deixa cada parede gostosa de destruir. O coração de BRICKFURY é o combo. Cada tijolo que você quebra sem perder a bola aumenta seu multiplicador, até x8, então uma sequência longa pode transformar uma pontuação modesta em uma enorme. Ao mesmo tempo, a barra FURY vai enchendo. Quando ela está cheia, FURY explode na arena: todas as bolas viram bolas de fogo que atravessam a parede e sua pontuação dobra por vários segundos. Saber quando correr atrás do combo e quando jogar seguro é o que separa uma boa partida de um recorde. As paredes reagem. Tijolos blindados precisam de várias batidas, tijolos de aço só derretem com fogo, tijolos de cristal sempre soltam um power-up e os tijolos TNT laranja explodem os vizinhos, então um tiro bem colocado pode causar uma reação em cadeia que limpa metade da tela. Nove cápsulas que caem mudam a partida: Multiball, Laser, raquete Wide, Fireball, Magnet, Slow-Mo, Shield, uma vida extra e uma cápsula Shrink vermelha da qual você vai querer desviar. A partir do segundo setor, drones neon entram na briga. Os Drifters ziguezagueiam pela arena, os Bombers jogam explosivos na sua raquete, os Shielders se protegem, os Splitters se dividem em dois drones menores e os Builders consertam os tijolos que você acabou de destruir. A cada cinco setores chega o OVERLORD, um chefe blindado gigante com três fases de padrões de tiro e reforços, e a arena passa para uma nova zona com céu e cores próprios: o skyline synthwave de Neon City, a aurora e os picos de gelo da Cryo Zone, os vulcões do Magma Core e os planetas com anéis de Deep Space. Escolha seu desafio entre três modos. Classic te dá três vidas e uma série infinita de paredes geradas. O modo Hard te dá uma única vida e uma bola mais rápida, com ranking próprio para os melhores jogadores. O modo Daily traz a mesma parede para todos os jogadores durante o dia, o jeito mais justo de comparar pontuações. Uma vez por partida você pode assistir a um anúncio curto para ganhar uma vida extra e manter sua pontuação, e no fim da partida pode enviar um link para desafiar um amigo nas mesmíssimas paredes. BRICKFURY é um jogo de quebrar tijolos grátis que roda no seu navegador no celular, tablet e computador, sem download e sem cadastro. No celular, basta arrastar o dedo em qualquer lugar da tela para mover a raquete; no computador, a raquete segue o mouse ou as setas do teclado. Quebre a parede, encadeie o combo, solte a FURY e suba no ranking mundial.",
+    "controls": "Arraste o dedo em qualquer lugar da tela para mover a raquete e toque para lançar a bola. No computador, a raquete segue o mouse ou as setas do teclado (A e D também funcionam); clique ou aperte Espaço para lançar e aperte P para pausar. Funciona no celular, tablet e computador.",
+    "seo": {
+      "title": "BRICKFURY - Jogo quebra-tijolos grátis online | Ragequit Arcade",
+      "metaDescription": "Jogue BRICKFURY grátis, o quebra-tijolos neon: combos x8, FURY, 9 power-ups e o chefe OVERLORD. Online e sem download.",
+      "faq": [
+        {
+          "q": "Como se joga BRICKFURY?",
+          "a": "Mova a raquete para rebater a bola contra a parede e quebre todos os tijolos para limpar o setor. No celular, arraste o dedo em qualquer lugar da tela para mover a raquete e toque para lançar a bola. No computador, use o mouse ou as setas do teclado, e aperte Espaço ou clique para lançar. Se todas as bolas passarem pela raquete, você perde uma vida."
+        },
+        {
+          "q": "BRICKFURY é um jogo quebra-tijolos grátis?",
+          "a": "Sim. BRICKFURY é um quebra-tijolos totalmente grátis que roda no seu navegador no celular, tablet e computador. Não há nada para baixar e você não precisa de conta para jogar. Entre com um perfil grátis do Ragequit Arcade se quiser suas pontuações no ranking mundial."
+        },
+        {
+          "q": "Como funciona o multiplicador de combo?",
+          "a": "Cada tijolo que você quebra sem perder a bola soma ao seu combo. A cada cinco tijolos, o multiplicador sobe um nível, de x1 até no máximo x8, e cada ponto que você faz é multiplicado. Perder uma bola zera o combo, então sequências longas são o segredo das grandes pontuações."
+        },
+        {
+          "q": "O que é FURY?",
+          "a": "A barra FURY enche conforme você quebra tijolos. Quando ela está cheia, FURY é ativada por alguns segundos: cada bola vira uma bola de fogo que atravessa os tijolos, inclusive os de aço, e sua pontuação dobra. Combine com um grande combo para fazer as maiores pontuações."
+        },
+        {
+          "q": "Quais são os tipos de tijolos?",
+          "a": "Tijolos normais quebram com uma batida. Os blindados precisam de várias batidas. Os de aço não quebram com uma bola normal, só com o fogo da FURY ou do power-up Fireball. Os de cristal sempre soltam um power-up. Os tijolos TNT explodem e danificam os tijolos ao redor, e podem detonar outros TNT numa reação em cadeia."
+        },
+        {
+          "q": "Quais power-ups posso pegar?",
+          "a": "Pegue as cápsulas que caem com a sua raquete: Multiball adiciona bolas, Laser faz a raquete atirar, Wide aumenta a raquete, Fireball atravessa os tijolos, Magnet segura a bola, Slow-Mo deixa a bola mais lenta, Shield adiciona uma barreira de segurança e o coração dá uma vida extra. Evite a cápsula Shrink vermelha, que diminui sua raquete."
+        },
+        {
+          "q": "Quais inimigos e chefes existem em BRICKFURY?",
+          "a": "A partir do segundo setor aparecem drones: os Drifters ziguezagueiam pela tela, os Bombers jogam bombas que atordoam sua raquete, os Shielders se protegem, os Splitters se dividem em dois drones menores e os Builders consertam tijolos destruídos. A cada cinco setores você enfrenta o OVERLORD, um chefe gigante com três fases. Acerte-o com a bola para derrubá-lo."
+        },
+        {
+          "q": "Quais são os modos de jogo?",
+          "a": "Classic te dá três vidas e uma partida infinita de paredes geradas. Hard te dá uma vida e uma bola mais rápida, com ranking próprio. Daily dá a todos os jogadores a mesma parede durante o dia, para você comparar sua pontuação de forma justa com todo mundo. Cada modo guarda seu próprio recorde."
+        },
+        {
+          "q": "Posso continuar depois de perder a última vida?",
+          "a": "Sim. Uma vez por partida você pode escolher assistir a um anúncio curto para ganhar uma vida extra. Sua parede e sua pontuação são mantidas, então você continua exatamente de onde parou. Se preferir, pode simplesmente começar uma nova partida."
+        },
+        {
+          "q": "Como desafio um amigo?",
+          "a": "No fim de uma partida, toque em Challenge a friend para compartilhar um link. Seu amigo joga exatamente as mesmas paredes e vê a pontuação a bater. É o melhor jeito de decidir quem é o verdadeiro campeão do quebra-tijolos."
+        }
+      ]
+    }
   }
 }

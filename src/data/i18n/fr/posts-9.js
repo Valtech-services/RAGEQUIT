@@ -109,5 +109,101 @@ export default {
         "text": "Visez le centre, construisez votre combo, sautez en rythme et gardez votre calme quand le WARDEN arrive. Lancez HYPERHOP, maintenez votre premier saut et voyez combien de mondes vous pouvez traverser."
       }
     ]
+  },
+  "brickfury-tips": {
+    "title": "Astuces BRICKFURY : enchaîner les combos, déclencher la FURY et battre l'OVERLORD",
+    "excerpt": "BRICKFURY est un casse-briques néon gratuit où les meilleurs scores viennent des longs combos et d'une FURY déclenchée au bon moment. Apprenez à viser avec la raquette, à garder votre multiplicateur en vie, à gérer chaque brique et chaque drone, et à battre le boss OVERLORD.",
+    "seo": {
+      "title": "Astuces BRICKFURY : combos, FURY, bonus et OVERLORD | Ragequit Arcade",
+      "metaDescription": "Guide d'astuces pour BRICKFURY, le casse-briques néon gratuit : visez vos rebonds, enchaînez les combos x8, déclenchez la FURY et battez l'OVERLORD."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "BRICKFURY ressemble au casse-briques classique que vous connaissez déjà : une raquette, une balle et un mur de briques. Mais les meilleurs scores ne viennent pas du simple fait de vider les murs. Ils viennent des longs combos, d'une FURY déclenchée au bon moment et d'un usage malin de chaque bonus. Ce guide réunit les réflexes qui transforment une partie rapide en record."
+      },
+      {
+        "type": "h2",
+        "text": "Visez avec les bords de la raquette"
+      },
+      {
+        "type": "p",
+        "text": "L'angle du rebond dépend de l'endroit où la balle touche la raquette. Frappez-la avec le centre et elle remonte presque à la verticale. Frappez-la avec un bord et elle part en angle fermé. Utilisez les bords pour envoyer la balle derrière le mur : elle rebondit contre le haut et casse de nombreuses briques sans revenir vers vous."
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Visez les trous du mur pour faire passer la balle derrière les briques.",
+          "Sur mobile, glissez le doigt n'importe où sur l'écran : il ne cache jamais la balle.",
+          "Bougez tôt plutôt que vite : une raquette calme fait durer les échanges.",
+          "Quand plusieurs balles sont en jeu, suivez d'abord la plus basse."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Construisez votre combo et gardez-le en vie"
+      },
+      {
+        "type": "p",
+        "text": "Chaque brique cassée sans perdre la balle s'ajoute à votre combo, et toutes les cinq briques votre multiplicateur monte d'un cran, jusqu'à x8. Perdre une balle remet tout à zéro : un long échange prudent vaut plus qu'un tir risqué. Une fois à x4 ou plus, jouez avec soin : chaque brique vaut désormais plusieurs fois sa valeur de base."
+      },
+      {
+        "type": "h2",
+        "text": "Déclenchez la FURY au bon moment"
+      },
+      {
+        "type": "p",
+        "text": "La jauge FURY se remplit à mesure que vous cassez des briques. Quand elle éclate, chaque balle devient une boule de feu et votre score est doublé pendant quelques secondes. Les boules de feu font fondre les briques d'acier, les seules qu'une balle normale ne peut pas casser. La FURY combinée à un gros multiplicateur est le chemin le plus rapide vers un score énorme : essayez de garder votre combo pendant que la jauge se remplit."
+      },
+      {
+        "type": "h2",
+        "text": "Connaissez chaque brique"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Les briques blindées encaissent plusieurs coups : envoyez la balle derrière elles pour qu'elle les frappe encore et encore.",
+          "Les briques d'acier ne cassent que sous le feu, celui de la FURY ou du bonus Fireball.",
+          "Les briques de cristal lâchent toujours un bonus : cassez-les tôt.",
+          "Les briques TNT explosent et endommagent leurs voisines. Alignez plusieurs TNT et un seul coup vide la moitié du mur."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Attrapez les bons bonus"
+      },
+      {
+        "type": "p",
+        "text": "Des capsules tombent des briques cassées. La plupart sont des cadeaux : Multiball, Laser, Wide, Fireball, Magnet, Slow-Mo, Shield et la rare vie supplémentaire. La capsule Shrink rouge rétrécit votre raquette : écartez-vous quand vous la voyez. Shield est la meilleure assurance avant un boss, et Magnet vous laisse viser chaque tir en toute tranquillité."
+      },
+      {
+        "type": "h2",
+        "text": "Gérez les drones"
+      },
+      {
+        "type": "p",
+        "text": "Dès le deuxième secteur, des drones entrent dans la bataille. Les Bombers lâchent des explosifs sur votre raquette : restez en mouvement sous eux. Les Builders réparent les briques que vous cassez : éliminez-les en premier. Les Splitters se divisent en deux petits drones quand on les touche, et les Shielders demandent plusieurs coups. Toucher les drones avec la balle ou le laser rapporte gros."
+      },
+      {
+        "type": "h2",
+        "text": "Comment battre l'OVERLORD"
+      },
+      {
+        "type": "p",
+        "text": "Tous les cinq secteurs, l'OVERLORD arrive. Il combat en trois phases : d'abord des tirs simples, puis des salves de trois tirs avec des renforts de drones, enfin de larges salves de cinq tirs avec des Bombers. Gardez votre raquette en mouvement entre les tirs, frappez le boss avec la balle dès qu'il est devant vous et gardez le Shield pour la dernière phase. Le vaincre vous fait passer dans une nouvelle zone avec son propre ciel et ses propres couleurs."
+      },
+      {
+        "type": "h2",
+        "text": "Choisissez votre mode"
+      },
+      {
+        "type": "p",
+        "text": "Classic est le meilleur mode pour découvrir chaque zone, avec trois vies. Hard vous donne une seule vie et une balle plus rapide, pour un classement séparé. Daily propose le même mur à tous les joueurs pendant la journée, ce qui en fait la façon la plus juste de comparer les scores. À la fin d'une partie, envoyez un lien de défi à un ami : il joue les mêmes murs et voit le score à battre."
+      },
+      {
+        "type": "p",
+        "text": "Visez avec les bords, protégez votre combo, gardez la FURY pour les grands moments et le Shield pour l'OVERLORD. Lancez BRICKFURY et voyez combien de secteurs vous pouvez nettoyer."
+      }
+    ]
   }
 }

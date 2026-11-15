@@ -46,5 +46,101 @@ export default {
       { "type": "p", "text": "Classic ist der endlose Aufstieg und der beste Modus, um jede Welt kennenzulernen. Time Attack startet mit sechzig Sekunden, jedes Perfect bringt eine Sekunde dazu und ein Sturz kostet fünf, hier zählt Präzision also noch mehr als Tempo. Der Hard-Modus nutzt kleinere Türme und bringt Fallen und Drohnen viel früher, mit eigener Bestenliste. Der Daily-Lauf gibt allen dieselben Türme und ist damit die fairste Art, Punktzahlen mit Freunden zu vergleichen. Erfülle die drei täglichen Missionen für zusätzliche Münzen und gib sie dann im Shop für neue Roboter, Lichtspuren und Landeeffekte aus." },
       { "type": "p", "text": "Ziel auf die Mitte, bau deine Combo auf, spring im Takt und bleib ruhig, wenn der WARDEN kommt. Öffne HYPERHOP, halte deinen ersten Sprung und finde heraus, wie viele Welten du durchquerst." }
     ]
+  },
+  "brickfury-tips": {
+    "title": "BRICKFURY-Tipps: Combos verketten, FURY auslösen und den OVERLORD besiegen",
+    "excerpt": "BRICKFURY ist ein kostenloser Neon-Brick-Breaker, in dem die besten Punktzahlen aus langen Combos und perfekt getimter FURY entstehen. Erfahre, wie du mit dem Schläger zielst, deinen Multiplikator am Leben hältst, jeden Stein und jede Drohne meisterst und den OVERLORD-Boss besiegst.",
+    "seo": {
+      "title": "BRICKFURY-Tipps: Combos, FURY, Power-ups und OVERLORD | Ragequit Arcade",
+      "metaDescription": "Tipps für BRICKFURY, den kostenlosen Neon-Brick-Breaker: Abpraller zielen, x8-Combos verketten, FURY auslösen, Power-ups nutzen und den OVERLORD besiegen."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "BRICKFURY sieht aus wie der klassische Brick Breaker, den du schon kennst: ein Schläger, ein Ball und eine Mauer aus Steinen. Doch die besten Punktzahlen entstehen nicht einfach durch das Abräumen von Mauern. Sie entstehen durch lange Combos, perfekt getimte FURY und den klugen Einsatz jedes Power-ups. Dieser Guide zeigt dir die Gewohnheiten, die aus einer schnellen Runde einen Rekordlauf machen."
+      },
+      {
+        "type": "h2",
+        "text": "Ziele mit den Rändern des Schlägers"
+      },
+      {
+        "type": "p",
+        "text": "Der Abprallwinkel hängt davon ab, wo der Ball den Schläger trifft. Triffst du ihn mit der Mitte, fliegt der Ball fast senkrecht nach oben. Triffst du ihn mit einem Rand, fliegt er in einem steilen Winkel davon. Nutze die Ränder, um den Ball hinter die Mauer zu schicken, wo er an der Decke abprallt und viele Steine zerstört, ohne zu dir zurückzukommen."
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Ziele auf Lücken in der Mauer, um den Ball hinter die Steine zu bringen.",
+          "Ziehe auf dem Handy irgendwo auf dem Bildschirm: Dein Finger verdeckt nie den Ball.",
+          "Bewege dich lieber früh als schnell: Ein ruhiger Schläger hält Ballwechsel am Leben.",
+          "Sind mehrere Bälle im Spiel, folge zuerst dem untersten."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Baue deine Combo auf und halte sie am Leben"
+      },
+      {
+        "type": "p",
+        "text": "Jeder Stein, den du zerstörst, ohne den Ball zu verlieren, zählt zu deiner Combo, und alle fünf Steine steigt dein Multiplikator um eine Stufe, bis auf x8. Verlierst du einen Ball, wird alles zurückgesetzt, ein langer sicherer Ballwechsel ist also mehr wert als ein riskanter Schuss. Sobald du x4 oder mehr erreichst, spiel vorsichtig: Jeder Stein ist jetzt ein Vielfaches seines Grundwerts wert."
+      },
+      {
+        "type": "h2",
+        "text": "Löse FURY im richtigen Moment aus"
+      },
+      {
+        "type": "p",
+        "text": "Die FURY-Leiste füllt sich, während du Steine zerstörst. Wenn sie platzt, wird jeder Ball zum Feuerball und deine Punkte werden für einige Sekunden verdoppelt. Feuerbälle schmelzen Stahlsteine, die einzigen Steine, die ein normaler Ball nicht zerstören kann. FURY mit einem hohen Multiplikator ist der schnellste Weg zu einer riesigen Punktzahl, also versuche, deine Combo am Leben zu halten, während sich die Leiste füllt."
+      },
+      {
+        "type": "h2",
+        "text": "Kenne jeden Stein"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Gepanzerte Steine brauchen mehrere Treffer: Schicke den Ball hinter sie, damit er sie immer wieder trifft.",
+          "Stahlsteine zerbrechen nur im Feuer, durch FURY oder das Fireball-Power-up.",
+          "Kristallsteine lassen immer ein Power-up fallen: Zerstöre sie früh.",
+          "TNT-Steine explodieren und beschädigen ihre Nachbarn. Reihe mehrere TNT-Steine aneinander und ein einziger Treffer räumt die halbe Mauer."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Fange die richtigen Power-ups"
+      },
+      {
+        "type": "p",
+        "text": "Aus zerstörten Steinen fallen Kapseln. Die meisten sind Geschenke: Multiball, Laser, Wide, Fireball, Magnet, Slow-Mo, Shield und das seltene Extraleben. Die rote Shrink-Kapsel macht deinen Schläger kleiner, also geh zur Seite, wenn du sie siehst. Shield ist die beste Versicherung vor einem Boss, und mit Magnet kannst du jeden Schuss in Ruhe zielen."
+      },
+      {
+        "type": "h2",
+        "text": "Werde mit den Drohnen fertig"
+      },
+      {
+        "type": "p",
+        "text": "Ab dem zweiten Sektor mischen Drohnen mit. Bombers werfen Sprengsätze auf deinen Schläger, also bleib unter ihnen in Bewegung. Builders reparieren die Steine, die du zerstörst, also schalte sie zuerst aus. Splitters zerfallen bei einem Treffer in zwei kleinere Drohnen, und Shielders brauchen mehrere Treffer. Drohnen mit dem Ball oder dem Laser zu treffen bringt viele Punkte."
+      },
+      {
+        "type": "h2",
+        "text": "So besiegst du den OVERLORD"
+      },
+      {
+        "type": "p",
+        "text": "Alle fünf Sektoren erscheint der OVERLORD. Er kämpft in drei Phasen: zuerst Einzelschüsse, dann Fächer aus drei Schüssen mit Drohnenverstärkung, dann breite Fächer aus fünf Schüssen mit Bombers. Halte deinen Schläger zwischen den Schüssen in Bewegung, triff den Boss mit dem Ball, wann immer er vor dir ist, und heb dir das Shield für die letzte Phase auf. Besiegst du ihn, geht es weiter in eine neue Zone mit eigenem Himmel und eigenen Farben."
+      },
+      {
+        "type": "h2",
+        "text": "Wähle deinen Modus"
+      },
+      {
+        "type": "p",
+        "text": "Classic ist mit drei Leben der beste Modus, um jede Zone kennenzulernen. Hard gibt dir nur ein Leben und einen schnelleren Ball für eine eigene Bestenliste. Daily serviert allen Spielern am selben Tag dieselbe Mauer und ist damit der fairste Weg, Punktzahlen zu vergleichen. Wenn ein Lauf endet, schick einem Freund einen Herausforderungslink: Er spielt dieselben Mauern und sieht die Punktzahl, die er schlagen muss."
+      },
+      {
+        "type": "p",
+        "text": "Ziele mit den Rändern, schütze deine Combo, heb dir FURY für die großen Momente auf und behalte das Shield für den OVERLORD. Starte BRICKFURY und finde heraus, wie viele Sektoren du schaffst."
+      }
+    ]
   }
 }

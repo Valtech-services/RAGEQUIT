@@ -109,5 +109,101 @@ export default {
         "text": "Apunta al centro, construye tu combo, salta al ritmo y mantén la calma cuando llegue el WARDEN. Abre HYPERHOP, mantén tu primer salto y descubre cuántos mundos puedes cruzar."
       }
     ]
+  },
+  "brickfury-tips": {
+    "title": "Trucos de BRICKFURY: cómo encadenar combos, activar la FURY y vencer al OVERLORD",
+    "excerpt": "BRICKFURY es un rompe ladrillos de neón gratis en el que las mejores puntuaciones salen de los combos largos y de una FURY bien sincronizada. Aprende a apuntar con la pala, a mantener vivo tu multiplicador, a manejar cada ladrillo y cada dron y a vencer al jefe OVERLORD.",
+    "seo": {
+      "title": "Trucos de BRICKFURY: combos, FURY, power-ups y OVERLORD | Ragequit Arcade",
+      "metaDescription": "Guía de trucos de BRICKFURY, el juego de romper ladrillos de neón gratis: apunta tus rebotes, encadena combos x8, activa la FURY y vence al OVERLORD."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "BRICKFURY parece el rompe ladrillos clásico que ya conoces: una pala, una pelota y un muro de ladrillos. Pero las mejores puntuaciones no salen solo de limpiar muros. Salen de los combos largos, de una FURY activada en el momento justo y de usar con cabeza cada power-up. Esta guía reúne los hábitos que convierten una partida rápida en un récord."
+      },
+      {
+        "type": "h2",
+        "text": "Apunta con los bordes de la pala"
+      },
+      {
+        "type": "p",
+        "text": "El ángulo del rebote depende de dónde toca la pelota en la pala. Si la golpeas con el centro, sube casi recta. Si la golpeas con un borde, sale con un ángulo cerrado. Usa los bordes para mandar la pelota detrás del muro, donde rebota contra el techo y rompe muchos ladrillos sin volver hacia ti."
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Apunta a los huecos del muro para meter la pelota detrás de los ladrillos.",
+          "En el móvil, arrastra el dedo por cualquier parte de la pantalla: nunca tapa la pelota.",
+          "Muévete pronto mejor que rápido: una pala tranquila mantiene vivos los peloteos.",
+          "Cuando hay varias pelotas en juego, sigue primero la más baja."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Construye tu combo y mantenlo vivo"
+      },
+      {
+        "type": "p",
+        "text": "Cada ladrillo que rompes sin perder la pelota suma a tu combo, y cada cinco ladrillos tu multiplicador sube un nivel, hasta x8. Perder una pelota lo reinicia todo, así que un peloteo largo y seguro vale más que un tiro arriesgado. Cuando llegues a x4 o más, juega con cuidado: cada ladrillo vale ya varias veces su valor base."
+      },
+      {
+        "type": "h2",
+        "text": "Activa la FURY en el momento justo"
+      },
+      {
+        "type": "p",
+        "text": "El medidor FURY se llena a medida que rompes ladrillos. Cuando estalla, cada pelota se convierte en una bola de fuego y tu puntuación se duplica durante unos segundos. Las bolas de fuego funden los ladrillos de acero, los únicos que una pelota normal no puede romper. La FURY combinada con un multiplicador alto es el camino más rápido hacia una puntuación enorme, así que intenta mantener tu combo mientras el medidor se llena."
+      },
+      {
+        "type": "h2",
+        "text": "Conoce cada ladrillo"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Los ladrillos blindados aguantan varios golpes: manda la pelota detrás de ellos para que los golpee una y otra vez.",
+          "Los ladrillos de acero solo se rompen con fuego, el de la FURY o el del power-up Fireball.",
+          "Los ladrillos de cristal siempre sueltan un power-up: rómpelos pronto.",
+          "Los ladrillos TNT explotan y dañan a sus vecinos. Alinea varios TNT y un solo golpe limpia medio muro."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Atrapa los power-ups correctos"
+      },
+      {
+        "type": "p",
+        "text": "De los ladrillos rotos caen cápsulas. La mayoría son regalos: Multiball, Laser, Wide, Fireball, Magnet, Slow-Mo, Shield y la rara vida extra. La cápsula Shrink roja hace más pequeña tu pala, así que apártate cuando la veas. Shield es el mejor seguro antes de un jefe, y Magnet te deja apuntar cada tiro con calma."
+      },
+      {
+        "type": "h2",
+        "text": "Encárgate de los drones"
+      },
+      {
+        "type": "p",
+        "text": "Desde el segundo sector, los drones se unen a la pelea. Los Bombers lanzan explosivos sobre tu pala, así que no dejes de moverte debajo de ellos. Los Builders reparan los ladrillos que rompes, así que elimínalos primero. Los Splitters se dividen en dos drones más pequeños al recibir un golpe, y los Shielders necesitan varios golpes. Darles a los drones con la pelota o el láser da muchos puntos."
+      },
+      {
+        "type": "h2",
+        "text": "Cómo vencer al OVERLORD"
+      },
+      {
+        "type": "p",
+        "text": "Cada cinco sectores llega el OVERLORD. Pelea en tres fases: primero disparos sueltos, luego ráfagas de tres disparos con refuerzos de drones y, por último, amplias ráfagas de cinco disparos con Bombers. Mantén la pala en movimiento entre disparos, golpea al jefe con la pelota siempre que lo tengas delante y guarda el Shield para la última fase. Vencerlo te lleva a una nueva zona con su propio cielo y sus propios colores."
+      },
+      {
+        "type": "h2",
+        "text": "Elige tu modo"
+      },
+      {
+        "type": "p",
+        "text": "Classic es el mejor modo para conocer cada zona, con tres vidas. Hard te da una sola vida y una pelota más rápida, con una clasificación aparte. Daily ofrece el mismo muro a todos los jugadores durante el día, lo que lo convierte en la forma más justa de comparar puntuaciones. Cuando termine una partida, envía un enlace de reto a un amigo: jugará los mismos muros y verá la puntuación que tiene que superar."
+      },
+      {
+        "type": "p",
+        "text": "Apunta con los bordes, protege tu combo, guarda la FURY para los grandes momentos y el Shield para el OVERLORD. Abre BRICKFURY y descubre cuántos sectores eres capaz de limpiar."
+      }
+    ]
   }
 }

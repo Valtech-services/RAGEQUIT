@@ -90,6 +90,13 @@
   .logo { font-size: clamp(38px, 12.5vw, 56px); font-weight: 900; letter-spacing: 1px; line-height: 1; white-space: nowrap; }
   .logo span { display: inline-block; background: linear-gradient(180deg, #fff6c9 0%, var(--gold) 38%, var(--fury) 78%, #a3123a 100%); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 10px rgba(255,59,92,.75)); animation: drop .6s cubic-bezier(.2,1.6,.4,1) both, shiver 3.2s ease-in-out infinite; }
   .logo span.f { margin-left: 4px; }
+  /* title logo artwork (falls back to the text logo if the image cannot load) */
+  .logo-img { display: block; margin: 0 auto; width: min(64vw, 270px); height: auto; pointer-events: none; user-select: none; -webkit-user-drag: none;
+    filter: drop-shadow(0 0 16px rgba(255,90,40,.45)) drop-shadow(0 4px 10px rgba(0,0,0,.6)); animation: logoIn .7s cubic-bezier(.2,1.5,.4,1) both, logoGlow 2.6s ease-in-out .7s infinite; }
+  #loader .logo-img { width: min(74vw, 320px); }
+  @keyframes logoIn { from { opacity: 0; transform: scale(.7) rotate(-3deg); } to { opacity: 1; transform: none; } }
+  @keyframes logoGlow { 50% { filter: drop-shadow(0 0 26px rgba(255,120,40,.7)) drop-shadow(0 4px 10px rgba(0,0,0,.6)); transform: scale(1.02); } }
+  @media (max-height: 700px) { .logo-img { width: min(50vw, 200px); } }
   @keyframes drop { from { transform: translateY(-60px) rotate(-12deg); opacity: 0; } to { transform: none; opacity: 1; } }
   @keyframes shiver { 0%, 86%, 100% { transform: none; } 88% { transform: translate(-2px, 1px) rotate(-3deg); } 91% { transform: translate(2px, -1px) rotate(2deg); } 94% { transform: translate(-1px, 0); } }
   .tag { font-size: 13px; font-weight: 800; letter-spacing: 3px; color: var(--gold); margin-top: 10px; text-shadow: 0 0 10px rgba(255,204,51,.6); }
@@ -120,7 +127,7 @@
   #overChal, #shareMsg { margin-top: 8px; font-size: 13px; font-weight: 800; color: var(--gold); min-height: 16px; }
   .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
   .row2 .btn { font-size: 14px; letter-spacing: .6px; }
-  @media (prefers-reduced-motion: reduce) { .logo span, .pulse, #furyWrap.full { animation: none !important; } }
+  @media (prefers-reduced-motion: reduce) { .logo span, .logo-img, .pulse, #furyWrap.full { animation: none !important; } }
 </style>
 </head>
 <body>
@@ -1768,8 +1775,15 @@ function frame(now) {
 
 /* ================= BOOT ================= */
 function logoHtml() { return 'BRICK'.split('').map((c, i) => '<span style="animation-delay:' + (i * 0.06) + 's,' + (0.6 + i * 0.06) + 's">' + c + '</span>').join('') + 'FURY'.split('').map((c, i) => '<span class="' + (i === 0 ? 'f' : '') + '" style="animation-delay:' + (0.3 + i * 0.06) + 's,' + (0.9 + i * 0.06) + 's">' + c + '</span>').join(''); }
-$('loaderLogo').innerHTML = logoHtml();
-$('titleLogo').innerHTML = logoHtml();
+function setLogo(el) {
+  const img = new Image();
+  img.className = 'logo-img'; img.alt = 'BRICKFURY'; img.width = 520; img.height = 464; img.draggable = false;
+  img.onerror = () => { el.innerHTML = logoHtml(); };
+  img.src = './brickfury/sprites/logo.webp';
+  el.innerHTML = ''; el.appendChild(img);
+}
+setLogo($('loaderLogo'));
+setLogo($('titleLogo'));
 resize();
 requestAnimationFrame(frame);
 loadAll((f) => { $('loadFill').style.width = Math.round(f * 100) + '%'; $('loadTxt').textContent = 'LOADING ' + Math.round(f * 100) + '%'; }).then(() => {

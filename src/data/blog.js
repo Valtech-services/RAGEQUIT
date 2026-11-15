@@ -875,6 +875,50 @@ export const posts = [
       { type: 'p', text: "Aim for the centre, build your combo, jump on the beat and stay calm when the WARDEN arrives. Open HYPERHOP, hold your first jump and see how many worlds you can cross." }
     ],
   },
+  {
+    slug: 'brickfury-tips',
+    category: 'guides',
+    title: "BRICKFURY Tips: How to Chain Combos, Trigger FURY and Beat the OVERLORD",
+    date: '2026-11-15',
+    author: 'Ragequit Arcade',
+    excerpt: "BRICKFURY is a free neon brick breaker where the best scores come from long combos and perfectly timed FURY. Learn how to aim with the paddle, keep your multiplier alive, handle every brick and drone and beat the OVERLORD boss.",
+    image: '/blog/brickfury-tips.jpg',
+    seo: {
+      title: "BRICKFURY Tips: Brick Breaker Combos, FURY, Power-ups and the OVERLORD | Ragequit Arcade",
+      metaDescription: "A tips guide for BRICKFURY, the free neon brick breaker game: aim your rebounds, chain x8 combos, trigger FURY, use every power-up and beat the OVERLORD.",
+    },
+    content: [
+      { type: 'p', text: "BRICKFURY looks like the classic brick breaker you already know: a paddle, a ball and a wall of bricks. But the best scores do not come from simply clearing walls. They come from long combos, perfectly timed FURY and smart use of every power-up. This guide covers the habits that turn a quick game into a record run." },
+      { type: 'h2', text: "Aim with the edges of the paddle" },
+      { type: 'p', text: "The angle of the rebound depends on where the ball touches the paddle. Hit it with the centre and the ball goes up almost straight. Hit it with an edge and it leaves at a sharp angle. Use the edges to send the ball behind the wall, where it bounces against the top and breaks many bricks without coming back to you." },
+      { type: 'ul', items: [
+        "Aim for gaps in the wall to get the ball behind the bricks.",
+        "On mobile, drag anywhere on the screen: your finger never hides the ball.",
+        "Move early rather than fast: a calm paddle keeps rallies alive.",
+        "When several balls are in play, follow the lowest one first."
+      ] },
+      { type: 'h2', text: "Build your combo and keep it alive" },
+      { type: 'p', text: "Every brick you break without losing the ball adds to your combo, and every five bricks raise your multiplier by one step, up to x8. Losing a ball resets everything, so a long safe rally is worth more than a risky shot. Once you reach x4 or more, play carefully: every brick is now worth several times its base value." },
+      { type: 'h2', text: "Trigger FURY at the right time" },
+      { type: 'p', text: "The FURY gauge fills as you break bricks. When it bursts, every ball becomes a fireball and your score is doubled for a few seconds. Fireballs melt steel bricks, the only bricks a normal ball cannot break. FURY combined with a high multiplier is the fastest way to a huge score, so try to keep your combo alive while the gauge fills up." },
+      { type: 'h2', text: "Know every brick" },
+      { type: 'ul', items: [
+        "Armored bricks take several hits: send the ball behind them so it hits them again and again.",
+        "Steel bricks only break under fire, from FURY or the Fireball power-up.",
+        "Crystal bricks always drop a power-up: break them early.",
+        "TNT bricks explode and damage their neighbours. Line up several TNT bricks and one hit clears half the wall."
+      ] },
+      { type: 'h2', text: "Catch the right power-ups" },
+      { type: 'p', text: "Capsules fall from broken bricks. Most of them are gifts: Multiball, Laser, Wide, Fireball, Magnet, Slow-Mo, Shield and the rare extra life. The red Shrink capsule makes your paddle smaller, so step aside when you see it. Shield is the best insurance before a boss, and Magnet lets you aim each shot calmly." },
+      { type: 'h2', text: "Deal with the drones" },
+      { type: 'p', text: "From the second sector, drones join the fight. Bombers drop explosives on your paddle, so keep moving under them. Builders repair the bricks you break, so take them out first. Splitters break into two smaller drones when hit, and Shielders need several hits. Hitting drones with the ball or the laser earns big points." },
+      { type: 'h2', text: "How to beat the OVERLORD" },
+      { type: 'p', text: "Every five sectors the OVERLORD arrives. It fights in three phases: first single shots, then spreads of three shots with drone reinforcements, then wide spreads of five shots with Bombers. Keep your paddle moving between shots, hit the boss with the ball whenever it is in front of you and save the Shield for the last phase. Beating it moves you to a new zone with its own sky and colours." },
+      { type: 'h2', text: "Pick your mode" },
+      { type: 'p', text: "Classic is the best mode to learn every zone, with three lives. Hard gives you a single life and a faster ball for a separate leaderboard. Daily serves the same wall to every player for the day, which makes it the fairest way to compare scores. When a run ends, send a challenge link to a friend: they play the same walls and see the score to beat." },
+      { type: 'p', text: "Aim with the edges, protect your combo, save FURY for the big moments and keep the Shield for the OVERLORD. Open BRICKFURY and see how many sectors you can clear." },
+    ],
+  },
 ]
 
 // Trouve un article par son slug.
