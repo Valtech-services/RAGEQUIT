@@ -56,5 +56,55 @@ export default {
         }
       ]
     }
+  },
+  "brickfury": {
+    "description": "BRICKFURY, tarayıcında online oynayabileceğin ücretsiz, neon bir tuğla kırma oyunu. Raket ve topla blok duvarlarını yıkarak büyüyen ve klasik arcade hissini çok daha fazla ateşle yaşamak isteyen herkes için yapıldı. Topu oyunda tutmak için enerji raketini kaydır, sekmelerini nişanla ve sektörü temizlemek için duvardaki her tuğlayı kır. Bu, zaten bildiğin Arkanoid tarzı tuğla kırma oyunu; ama modern oyun hissiyle sıfırdan yeniden yapıldı: her vuruşta ekran sarsıntısı, kıvılcımlar ve uçuşan parçalar, bir de her duvarı yıkmayı keyifli kılan çatırtı ve patlama sesleri. BRICKFURY'nin kalbi komboda atıyor. Topu kaybetmeden kırdığın her tuğla çarpanını x8'e kadar yükseltir; yani uzun bir ralli mütevazı bir skoru devasa bir skora dönüştürebilir. Aynı anda FURY göstergesi dolar. Dolduğunda FURY tüm arenada patlar: her top duvarı delip geçen bir ateş topuna dönüşür ve skorun birkaç saniye boyunca iki katına çıkar. Ne zaman komboyu kovalayıp ne zaman güvenli oynayacağını bilmek, iyi bir koşuyu rekordan ayıran şeydir. Duvarlar karşılık verir. Zırhlı tuğlalar birkaç vuruş ister, çelik tuğlalar yalnızca ateşle erir, kristal tuğlalar her zaman bir güçlendirici düşürür ve turuncu TNT tuğlaları komşularını havaya uçurur; böylece iyi yerleştirilmiş tek bir atış ekranın yarısını temizleyen bir zincirleme reaksiyon başlatabilir. Düşen dokuz kapsül oyunu değiştirir: Multiball, Laser, Wide raket, Fireball, Magnet, Slow-Mo, Shield, ekstra can ve kaçmak isteyeceğin kırmızı Shrink kapsülü. İkinci sektörden itibaren neon dronlar savaşa katılır. Drifters arenada zikzak çizer, Bombers raketine patlayıcı bırakır, Shielders kendini korur, Splitters iki küçük drona bölünür ve Builders az önce yok ettiğin tuğlaları onarır. Her beş sektörde bir OVERLORD gelir: üç aşamalı mermi desenleri ve takviye birlikleriyle dev, zırhlı bir boss. Ardından arena kendine has gökyüzü ve renkleriyle yeni bir bölgeye geçer: Neon City'nin synthwave silueti, Cryo Zone'un kuzey ışıkları ve buz zirveleri, Magma Core'un volkanları ve Deep Space'in halkalı gezegenleri. Üç modla meydan okumanı seç. Classic sana üç can ve bitmeyen bir üretilmiş duvar serisi verir. Hard modu tek can ve daha hızlı bir top sunar; en iyi oyuncular için kendi liderlik tablosu vardır. Daily modu gün boyunca her oyuncuya aynı duvarı verir; skorları karşılaştırmanın en adil yolu budur. Her koşuda bir kez kısa bir reklam izleyerek ekstra can kazanabilir ve skorunu koruyabilirsin; koşudan sonra da aynı duvarlarda bir arkadaşına meydan okumak için link gönderebilirsin. BRICKFURY telefonda, tablette ve bilgisayarda tarayıcında ücretsiz çalışır; indirme ve kayıt yok. Mobilde raketi hareket ettirmek için ekranın herhangi bir yerinde parmağını kaydırman yeterli; bilgisayarda raket fareni ya da ok tuşlarını takip eder. Duvarı kır, komboyu zincirle, FURY'yi serbest bırak ve küresel liderlik tablosunda yüksel.",
+    "controls": "Raketi hareket ettirmek için ekranın herhangi bir yerinde parmağını kaydır, topu fırlatmak için dokun. Bilgisayarda raket fareyi ya da ok tuşlarını takip eder (A ve D de çalışır); fırlatmak için tıkla ya da Boşluk tuşuna bas, duraklatmak için P'ye bas. Mobilde, tablette ve bilgisayarda çalışır.",
+    "seo": {
+      "title": "BRICKFURY - Ücretsiz Online Tuğla Kırma Oyunu | Ragequit Arcade",
+      "metaDescription": "BRICKFURY'yi ücretsiz oyna: klasik tuğla kırma oyunu neonla yeniden doğdu. x8 kombolar, FURY, 9 güçlendirici ve OVERLORD boss'u. İndirme yok.",
+      "faq": [
+        {
+          "q": "BRICKFURY nasıl oynanır?",
+          "a": "Raketi hareket ettirerek topu duvara sektir ve sektörü temizlemek için her tuğlayı kır. Telefonda raketi hareket ettirmek için ekranın herhangi bir yerinde parmağını kaydır, topu fırlatmak için dokun. Bilgisayarda fareyi oynat ya da ok tuşlarını kullan; fırlatmak için Boşluk tuşuna bas veya tıkla. Bütün toplar raketin yanından geçip düşerse bir can kaybedersin."
+        },
+        {
+          "q": "BRICKFURY ücretsiz bir tuğla kırma oyunu mu?",
+          "a": "Evet. BRICKFURY, mobilde, tablette ve bilgisayarda tarayıcında çalışan tamamen ücretsiz bir tuğla kırma oyunu. İndirilecek bir şey yok ve oynamak için hesap gerekmiyor. Skorlarının küresel liderlik tablosunda görünmesini istiyorsan ücretsiz bir Ragequit Arcade profiliyle giriş yap."
+        },
+        {
+          "q": "Kombo çarpanı nasıl çalışır?",
+          "a": "Topu kaybetmeden kırdığın her tuğla komboya eklenir. Her beş tuğlada çarpan bir kademe artar, x1'den en fazla x8'e kadar, ve kazandığın her puan bu çarpanla çarpılır. Top kaybetmek komboyu sıfırlar; bu yüzden yüksek skorların anahtarı uzun rallilerdir."
+        },
+        {
+          "q": "FURY nedir?",
+          "a": "FURY göstergesi tuğla kırdıkça dolar. Dolduğunda FURY birkaç saniyeliğine devreye girer: her top, çelik dahil tuğlaları delip geçen bir ateş topuna dönüşür ve skorun iki katına çıkar. En yüksek skorlar için onu büyük bir komboyla aynı ana denk getir."
+        },
+        {
+          "q": "Hangi tuğla türleri var?",
+          "a": "Normal tuğlalar tek vuruşta kırılır. Zırhlı tuğlalar birkaç vuruş ister. Çelik tuğlalar normal topla kırılmaz; yalnızca FURY'nin ya da Fireball güçlendiricisinin ateşiyle kırılır. Kristal tuğlalar her zaman bir güçlendirici düşürür. TNT tuğlaları patlayarak çevresindeki tuğlalara hasar verir ve diğer TNT tuğlalarını zincirleme reaksiyonla patlatabilir."
+        },
+        {
+          "q": "Hangi güçlendiricileri yakalayabilirim?",
+          "a": "Düşen kapsülleri raketinle yakala: Multiball top ekler, Laser raketinin ateş etmesini sağlar, Wide raketi büyütür, Fireball tuğlaları delip geçer, Magnet topu yakalar, Slow-Mo topu yavaşlatır, Shield bir güvenlik bariyeri ekler ve kalp ekstra can verir. Raketini küçülten kırmızı Shrink kapsülünden kaç."
+        },
+        {
+          "q": "BRICKFURY'de hangi düşmanlar ve boss'lar var?",
+          "a": "İkinci sektörden itibaren dronlar ortaya çıkar: Drifters ekranda zikzak çizer, Bombers raketini sersemleten bombalar bırakır, Shielders kendini korur, Splitters iki küçük drona bölünür ve Builders yok edilen tuğlaları onarır. Her beş sektörde bir, üç aşamalı dev bir boss olan OVERLORD ile karşılaşırsın. Onu alt etmek için topla vur."
+        },
+        {
+          "q": "Oyun modları neler?",
+          "a": "Classic sana üç can ve bitmeyen bir üretilmiş duvar serisi verir. Hard tek can ve daha hızlı bir top sunar, kendi liderlik tablosuyla. Daily gün boyunca her oyuncuya aynı duvarı verir; böylece skorunu herkesle adil biçimde karşılaştırabilirsin. Her mod kendi en iyi skorunu saklar."
+        },
+        {
+          "q": "Son canımı kaybettikten sonra devam edebilir miyim?",
+          "a": "Evet. Her koşuda bir kez kısa bir reklam izleyerek bir ekstra can alabilirsin. Duvarın ve skorun korunur, böylece tam kaldığın yerden devam edersin. İstersen yeni bir koşuya da başlayabilirsin."
+        },
+        {
+          "q": "Bir arkadaşıma nasıl meydan okurum?",
+          "a": "Koşunun sonunda bir link paylaşmak için Challenge a friend'e dokun. Arkadaşın tam olarak aynı duvarları oynar ve geçmesi gereken skoru görür. Gerçek tuğla kırma şampiyonunun kim olduğunu belirlemenin en iyi yolu bu."
+        }
+      ]
+    }
   }
 }

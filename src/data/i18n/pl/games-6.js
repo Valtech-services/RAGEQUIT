@@ -56,5 +56,55 @@ export default {
         }
       ]
     }
+  },
+  "brickfury": {
+    "description": "BRICKFURY to darmowa neonowa gra w zbijanie klocków, w którą zagrasz online w przeglądarce. Powstała dla wszystkich, którzy dorastali, rozbijając paletką i piłką ściany z klocków w stylu Arkanoida, i chcą poczuć klasyczny klimat arcade, ale z dużo większym ogniem. Przesuwaj energetyczną paletkę, żeby utrzymać piłkę w grze, celuj odbiciami i rozbij każdy klocek w ścianie, aby oczyścić sektor. To zbijanie klocków, które dobrze znasz, zbudowane od nowa z nowoczesnym wyczuciem gry: drgania ekranu, iskry i lecące odłamki przy każdym trafieniu oraz ścieżka dźwiękowa pełna chrzęstu i eksplozji, dzięki której rozwalanie każdej ściany daje ogromną satysfakcję. Sercem BRICKFURY jest combo. Każdy klocek rozbity bez utraty piłki podnosi mnożnik, aż do x8, więc długa wymiana potrafi zamienić skromny wynik w ogromny. Jednocześnie napełnia się wskaźnik FURY. Gdy jest pełny, FURY wybucha na całej arenie: każda piłka zamienia się w kulę ognia, która przepala ścianę na wylot, a twoje punkty liczą się podwójnie przez kilka sekund. Wyczucie, kiedy gonić combo, a kiedy grać bezpiecznie, odróżnia dobry bieg od rekordu. Ściany się bronią. Opancerzone klocki wymagają kilku trafień, stalowe topią się tylko od ognia, kryształowe zawsze wypuszczają power-up, a pomarańczowe klocki TNT wysadzają sąsiadów, więc jeden dobrze wymierzony strzał może wywołać reakcję łańcuchową, która czyści pół ekranu. Dziewięć spadających kapsuł zmienia przebieg gry: Multiball, Laser, Wide (szersza paletka), Fireball, Magnet, Slow-Mo, Shield, dodatkowe życie i czerwona kapsuła Shrink, której lepiej unikać. Od drugiego sektora do walki dołączają neonowe drony. Drifters kluczą po arenie, Bombers zrzucają ładunki na twoją paletkę, Shielders osłaniają się tarczą, Splitters rozpadają się na dwa mniejsze drony, a Builders odbudowują klocki, które właśnie zniszczyłeś. Co pięć sektorów pojawia się OVERLORD, gigantyczny opancerzony boss z trzema fazami ostrzału i posiłkami, a arena przenosi się do nowej strefy z własnym niebem i kolorami: syntwave'owa panorama Neon City, zorza i lodowe szczyty Cryo Zone, wulkany Magma Core i planety z pierścieniami w Deep Space. Wybierz wyzwanie spośród trzech trybów. Classic daje trzy życia i niekończącą się serię generowanych ścian. Tryb Hard daje jedno życie i szybszą piłkę, z osobnym rankingiem dla najlepszych graczy. Tryb Daily serwuje wszystkim graczom tę samą ścianę przez cały dzień, co jest najuczciwszym sposobem porównywania wyników. Raz na bieg możesz obejrzeć krótką reklamę, aby zdobyć dodatkowe życie i zachować wynik, a po biegu wysłać link i rzucić wyzwanie znajomemu na dokładnie tych samych ścianach. BRICKFURY działa za darmo w przeglądarce na telefonie, tablecie i komputerze, bez pobierania i bez rejestracji. Na telefonie wystarczy przeciągać palcem w dowolnym miejscu ekranu, żeby przesuwać paletkę; na komputerze paletka podąża za myszą lub strzałkami. Rozbij ścianę, nakręć combo, uwolnij FURY i wspinaj się w globalnym rankingu.",
+    "controls": "Przeciągaj palcem w dowolnym miejscu ekranu, aby przesuwać paletkę, i stuknij, aby wypuścić piłkę. Na komputerze paletka podąża za myszą lub strzałkami (działają też A i D); kliknij lub naciśnij Spację, aby wypuścić piłkę, a P, aby zatrzymać grę. Działa na telefonie, tablecie i komputerze.",
+    "seo": {
+      "title": "BRICKFURY - Darmowa gra w zbijanie klocków | Ragequit Arcade",
+      "metaDescription": "Zagraj za darmo w BRICKFURY: klasyczne zbijanie klocków w neonowej odsłonie. Combo x8, FURY, 9 power-upów i boss OVERLORD. Bez pobierania.",
+      "faq": [
+        {
+          "q": "Jak grać w BRICKFURY?",
+          "a": "Przesuwaj paletkę, odbijaj piłkę w stronę ściany i rozbij każdy klocek, aby oczyścić sektor. Na telefonie przeciągaj palcem w dowolnym miejscu ekranu, żeby przesuwać paletkę, i stuknij, aby wypuścić piłkę. Na komputerze ruszaj myszą lub używaj strzałek, a piłkę wypuszczasz Spacją lub kliknięciem. Jeśli wszystkie piłki miną paletkę, tracisz życie."
+        },
+        {
+          "q": "Czy BRICKFURY to darmowa gra w zbijanie klocków?",
+          "a": "Tak. BRICKFURY to całkowicie darmowa gra w zbijanie klocków w stylu Arkanoida, która działa w przeglądarce na telefonie, tablecie i komputerze. Niczego nie trzeba pobierać ani zakładać konta. Zaloguj się do darmowego profilu Ragequit Arcade, jeśli chcesz, aby twoje wyniki trafiały do globalnego rankingu."
+        },
+        {
+          "q": "Jak działa mnożnik combo?",
+          "a": "Każdy klocek rozbity bez utraty piłki zwiększa twoje combo. Co pięć klocków mnożnik rośnie o jeden stopień, od x1 aż do maksymalnie x8, a każdy zdobyty punkt jest przez niego mnożony. Utrata piłki zeruje combo, więc długie wymiany to klucz do wysokich wyników."
+        },
+        {
+          "q": "Czym jest FURY?",
+          "a": "Wskaźnik FURY napełnia się, gdy rozbijasz klocki. Kiedy jest pełny, FURY włącza się na kilka sekund: każda piłka staje się kulą ognia, która przepala klocki na wylot, także stalowe, a twoje punkty liczą się podwójnie. Zgraj FURY z dużym combo, a zdobędziesz najwyższe wyniki."
+        },
+        {
+          "q": "Jakie są rodzaje klocków?",
+          "a": "Zwykłe klocki pękają po jednym trafieniu. Opancerzone wymagają kilku trafień. Stalowych klocków nie rozbije zwykła piłka, tylko ogień z FURY lub power-upu Fireball. Kryształowe klocki zawsze wypuszczają power-up. Klocki TNT wybuchają i niszczą klocki wokół siebie, a do tego mogą odpalić inne klocki TNT w reakcji łańcuchowej."
+        },
+        {
+          "q": "Jakie power-upy mogę złapać?",
+          "a": "Łap spadające kapsuły paletką: Multiball dodaje piłki, Laser pozwala paletce strzelać, Wide powiększa paletkę, Fireball przepala klocki, Magnet łapie piłkę, Slow-Mo spowalnia piłkę, Shield dodaje barierę ochronną, a serce daje dodatkowe życie. Unikaj czerwonej kapsuły Shrink, która zmniejsza paletkę."
+        },
+        {
+          "q": "Jacy wrogowie i bossowie są w BRICKFURY?",
+          "a": "Od drugiego sektora pojawiają się drony: Drifters kluczą po ekranie, Bombers zrzucają bomby, które ogłuszają paletkę, Shielders osłaniają się tarczą, Splitters rozpadają się na dwa mniejsze drony, a Builders odbudowują zniszczone klocki. Co pięć sektorów mierzysz się z OVERLORD, gigantycznym bossem z trzema fazami. Trafiaj go piłką, aby go pokonać."
+        },
+        {
+          "q": "Jakie są tryby gry?",
+          "a": "Classic daje trzy życia i niekończącą się serię generowanych ścian. Hard daje jedno życie i szybszą piłkę, z osobnym rankingiem. Daily daje wszystkim graczom tę samą ścianę przez cały dzień, więc możesz uczciwie porównać swój wynik z innymi. Każdy tryb zapisuje własny rekord."
+        },
+        {
+          "q": "Czy mogę grać dalej po utracie ostatniego życia?",
+          "a": "Tak. Raz na bieg możesz obejrzeć krótką reklamę, aby zdobyć jedno dodatkowe życie. Ściana i wynik zostają zachowane, więc grasz dalej dokładnie od tego miejsca. Jeśli wolisz, możesz po prostu zacząć nowy bieg."
+        },
+        {
+          "q": "Jak rzucić wyzwanie znajomemu?",
+          "a": "Po zakończeniu biegu stuknij Challenge a friend, aby udostępnić link. Twój znajomy zagra na dokładnie tych samych ścianach i zobaczy wynik do pobicia. To najlepszy sposób, żeby rozstrzygnąć, kto jest prawdziwym mistrzem zbijania klocków."
+        }
+      ]
+    }
   }
 }

@@ -46,5 +46,101 @@ export default {
       { "type": "p", "text": "Classic to niekończąca się wspinaczka i najlepszy tryb, by poznać każdy świat. Time Attack zaczyna się od sześćdziesięciu sekund, każdy perfect dodaje sekundę, a upadek kosztuje pięć, więc precyzja liczy się tu nawet bardziej niż szybkość. Tryb Hard ma mniejsze wieże i dużo wcześniej wprowadza pułapki i drony, a do tego własny ranking. W Daily wszyscy dostają te same wieże, co czyni go najuczciwszym sposobem porównywania wyników ze znajomymi. Wykonuj trzy codzienne misje, by zdobyć dodatkowe monety, a potem wydawaj je w sklepie na nowe roboty, świetlne smugi i efekty lądowania." },
       { "type": "p", "text": "Celuj w środek, buduj combo, skacz w rytm i zachowaj spokój, gdy pojawi się WARDEN. Otwórz HYPERHOP, przytrzymaj pierwszy skok i sprawdź, ile światów zdołasz przemierzyć." }
     ]
+  },
+  "brickfury-tips": {
+    "title": "BRICKFURY: jak łączyć combo, odpalać FURY i pokonać OVERLORD",
+    "excerpt": "BRICKFURY to darmowa neonowa gra w zbijanie klocków, w której najlepsze wyniki dają długie combo i idealnie wyczute FURY. Dowiedz się, jak celować paletką, utrzymać mnożnik, radzić sobie z każdym klockiem i dronem oraz pokonać bossa OVERLORD.",
+    "seo": {
+      "title": "BRICKFURY: porady, combo, FURY, power-upy i OVERLORD | Ragequit Arcade",
+      "metaDescription": "Poradnik do BRICKFURY, darmowej neonowej gry w zbijanie klocków: celuj odbiciami, łącz combo x8, odpalaj FURY, używaj power-upów i pokonaj OVERLORD."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "BRICKFURY wygląda jak klasyczne zbijanie klocków, które dobrze znasz: paletka, piłka i ściana z klocków. Najlepsze wyniki nie biorą się jednak z samego czyszczenia ścian. Dają je długie combo, idealnie wyczute FURY i sprytne użycie każdego power-upu. Ten poradnik pokazuje nawyki, które zamieniają szybką partię w rekordowy bieg."
+      },
+      {
+        "type": "h2",
+        "text": "Celuj krawędziami paletki"
+      },
+      {
+        "type": "p",
+        "text": "Kąt odbicia zależy od tego, w którym miejscu piłka dotknie paletki. Uderz ją środkiem, a piłka poleci niemal prosto w górę. Uderz ją krawędzią, a odleci pod ostrym kątem. Używaj krawędzi, żeby posłać piłkę za ścianę, gdzie odbija się od sufitu i rozbija mnóstwo klocków, zanim do ciebie wróci."
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Celuj w szczeliny w ścianie, żeby wbić piłkę za klocki.",
+          "Na telefonie przeciągaj palcem w dowolnym miejscu ekranu: palec nigdy nie zasłania piłki.",
+          "Ruszaj się wcześnie, a nie szybko: spokojna paletka podtrzymuje wymiany.",
+          "Gdy w grze jest kilka piłek, najpierw pilnuj tej, która jest najniżej."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Buduj combo i nie daj mu zgasnąć"
+      },
+      {
+        "type": "p",
+        "text": "Każdy klocek rozbity bez utraty piłki zwiększa combo, a co pięć klocków mnożnik rośnie o jeden stopień, aż do x8. Utrata piłki zeruje wszystko, więc długa, bezpieczna wymiana jest warta więcej niż ryzykowny strzał. Od x4 w górę graj ostrożnie: każdy klocek jest wtedy wart kilka razy więcej niż zwykle."
+      },
+      {
+        "type": "h2",
+        "text": "Odpalaj FURY w odpowiednim momencie"
+      },
+      {
+        "type": "p",
+        "text": "Wskaźnik FURY napełnia się, gdy rozbijasz klocki. Kiedy wybucha, każda piłka staje się kulą ognia, a twoje punkty liczą się podwójnie przez kilka sekund. Kule ognia topią stalowe klocki, jedyne, których zwykła piłka nie rozbije. FURY połączone z wysokim mnożnikiem to najszybsza droga do ogromnego wyniku, więc staraj się utrzymać combo, gdy wskaźnik się napełnia."
+      },
+      {
+        "type": "h2",
+        "text": "Poznaj każdy klocek"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Opancerzone klocki wytrzymują kilka trafień: posyłaj piłkę za nie, żeby obijała je raz za razem.",
+          "Stalowe klocki pękają tylko od ognia, z FURY lub power-upu Fireball.",
+          "Kryształowe klocki zawsze wypuszczają power-up: rozbijaj je wcześnie.",
+          "Klocki TNT wybuchają i niszczą sąsiadów. Ustaw kilka klocków TNT w linii, a jedno trafienie wyczyści pół ściany."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Łap właściwe power-upy"
+      },
+      {
+        "type": "p",
+        "text": "Kapsuły wypadają z rozbitych klocków. Większość z nich to prezenty: Multiball, Laser, Wide, Fireball, Magnet, Slow-Mo, Shield i rzadkie dodatkowe życie. Czerwona kapsuła Shrink zmniejsza paletkę, więc usuń się z drogi, gdy ją zobaczysz. Shield to najlepsze ubezpieczenie przed bossem, a Magnet pozwala spokojnie wycelować każdy strzał."
+      },
+      {
+        "type": "h2",
+        "text": "Rozpraw się z dronami"
+      },
+      {
+        "type": "p",
+        "text": "Od drugiego sektora do walki dołączają drony. Bombers zrzucają ładunki na paletkę, więc nie stój pod nimi w miejscu. Builders odbudowują rozbite klocki, więc eliminuj je w pierwszej kolejności. Splitters po trafieniu rozpadają się na dwa mniejsze drony, a Shielders wymagają kilku trafień. Trafianie dronów piłką lub laserem daje mnóstwo punktów."
+      },
+      {
+        "type": "h2",
+        "text": "Jak pokonać OVERLORD"
+      },
+      {
+        "type": "p",
+        "text": "Co pięć sektorów pojawia się OVERLORD. Walczy w trzech fazach: najpierw pojedyncze strzały, potem salwy po trzy pociski z dronami wsparcia, a na koniec szerokie salwy po pięć pocisków z Bombers. Ruszaj paletką między strzałami, trafiaj bossa piłką za każdym razem, gdy jest przed tobą, i zachowaj Shield na ostatnią fazę. Zwycięstwo przenosi cię do nowej strefy z własnym niebem i kolorami."
+      },
+      {
+        "type": "h2",
+        "text": "Wybierz tryb"
+      },
+      {
+        "type": "p",
+        "text": "Classic z trzema życiami to najlepszy tryb, żeby poznać każdą strefę. Hard daje jedno życie i szybszą piłkę, z osobnym rankingiem. Daily serwuje wszystkim graczom tę samą ścianę przez cały dzień, co czyni go najuczciwszym sposobem porównywania wyników. Po zakończeniu biegu wyślij znajomemu link z wyzwaniem: zagra na tych samych ścianach i zobaczy wynik do pobicia."
+      },
+      {
+        "type": "p",
+        "text": "Celuj krawędziami, chroń combo, zachowaj FURY na wielkie chwile i trzymaj Shield na OVERLORD. Uruchom BRICKFURY i sprawdź, ile sektorów zdołasz oczyścić."
+      }
+    ]
   }
 }

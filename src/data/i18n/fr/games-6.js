@@ -56,5 +56,55 @@ export default {
         }
       ]
     }
+  },
+  "brickfury": {
+    "description": "BRICKFURY est un casse-briques néon gratuit auquel vous pouvez jouer en ligne dans votre navigateur, pensé pour tous ceux qui ont grandi en démolissant des murs de blocs avec une raquette et une balle et qui veulent retrouver la sensation de l'arcade, avec beaucoup plus de feu. Faites glisser la raquette d'énergie pour garder la balle en jeu, visez vos rebonds et cassez chaque brique du mur pour nettoyer le secteur. C'est le casse-briques que vous connaissez déjà, entièrement reconstruit avec des sensations modernes : tremblements d'écran, étincelles et éclats qui volent à chaque impact, et une bande-son de craquements et d'explosions qui rend chaque mur jouissif à détruire. Le cœur de BRICKFURY, c'est le combo. Chaque brique cassée sans perdre la balle fait monter votre multiplicateur, jusqu'à x8 : un long échange peut transformer un score modeste en score énorme. En même temps, la jauge FURY se remplit. Quand elle est pleine, FURY explose dans l'arène : chaque balle devient une boule de feu qui traverse le mur et votre score est doublé pendant plusieurs secondes. Savoir quand chasser le combo et quand jouer la sécurité, c'est ce qui sépare une bonne partie d'un record. Les murs se défendent. Les briques blindées demandent plusieurs coups, les briques d'acier ne fondent que sous le feu, les briques de cristal lâchent toujours un bonus et les briques TNT orange font sauter leurs voisines : un tir bien placé peut déclencher une réaction en chaîne qui vide la moitié de l'écran. Neuf capsules qui tombent changent la partie : Multiball, Laser, raquette Wide, Fireball, Magnet, Slow-Mo, Shield, une vie supplémentaire, et une capsule Shrink rouge que vous voudrez éviter. Dès le deuxième secteur, des drones néon entrent dans la bataille. Les Drifters zigzaguent dans l'arène, les Bombers lâchent des explosifs sur votre raquette, les Shielders se protègent, les Splitters se divisent en deux petits drones et les Builders réparent les briques que vous venez de détruire. Tous les cinq secteurs arrive l'OVERLORD, un boss blindé géant avec trois phases de tirs et des renforts, puis l'arène passe dans une nouvelle zone avec son propre ciel et ses propres couleurs : la skyline synthwave de Neon City, l'aurore et les pics de glace de la Cryo Zone, les volcans du Magma Core et les planètes à anneaux de Deep Space. Choisissez votre défi parmi trois modes. Classic vous donne trois vies et une suite infinie de murs générés. Le mode Hard ne vous laisse qu'une seule vie et une balle plus rapide, avec son propre classement réservé aux meilleurs joueurs. Le mode Daily propose le même mur à tous les joueurs pendant la journée : la façon la plus juste de comparer les scores. Une fois par partie, vous pouvez regarder une courte publicité pour obtenir une vie supplémentaire et garder votre score, et à la fin d'une partie vous pouvez envoyer un lien pour défier un ami sur exactement les mêmes murs. BRICKFURY est un jeu de casse-briques gratuit qui tourne dans votre navigateur sur téléphone, tablette et ordinateur, sans téléchargement ni inscription. Sur mobile, il suffit de glisser le doigt n'importe où sur l'écran pour déplacer la raquette ; sur ordinateur, la raquette suit votre souris ou les flèches du clavier. Cassez le mur, enchaînez les combos, libérez la FURY et grimpez dans le classement mondial.",
+    "controls": "Faites glisser le doigt n'importe où sur l'écran pour déplacer la raquette et touchez l'écran pour lancer la balle. Sur ordinateur, la raquette suit votre souris ou les flèches du clavier (A et D fonctionnent aussi) ; cliquez ou appuyez sur Espace pour lancer et sur P pour mettre en pause. Fonctionne sur mobile, tablette et ordinateur.",
+    "seo": {
+      "title": "BRICKFURY - Casse-briques gratuit en ligne | Ragequit Arcade",
+      "metaDescription": "Jouez gratuitement à BRICKFURY, le casse-briques néon : combos x8, FURY, 9 bonus et un boss OVERLORD. En ligne, sans téléchargement.",
+      "faq": [
+        {
+          "q": "Comment jouer à BRICKFURY ?",
+          "a": "Déplacez la raquette pour renvoyer la balle vers le mur et cassez toutes les briques pour nettoyer le secteur. Sur téléphone, faites glisser le doigt n'importe où sur l'écran pour déplacer la raquette et touchez l'écran pour lancer la balle. Sur ordinateur, utilisez la souris ou les flèches du clavier, et appuyez sur Espace ou cliquez pour lancer. Si toutes les balles passent sous la raquette, vous perdez une vie."
+        },
+        {
+          "q": "BRICKFURY est-il un casse-briques gratuit ?",
+          "a": "Oui. BRICKFURY est un jeu de casse-briques entièrement gratuit qui tourne dans votre navigateur sur mobile, tablette et ordinateur. Rien à télécharger et aucun compte n'est nécessaire pour jouer. Connectez-vous avec un profil Ragequit Arcade gratuit si vous voulez voir vos scores dans le classement mondial."
+        },
+        {
+          "q": "Comment fonctionne le multiplicateur de combo ?",
+          "a": "Chaque brique cassée sans perdre la balle s'ajoute à votre combo. Toutes les cinq briques, le multiplicateur monte d'un cran, de x1 jusqu'à x8 au maximum, et chaque point marqué est multiplié. Perdre une balle remet le combo à zéro : les longs échanges sont la clé des gros scores."
+        },
+        {
+          "q": "Qu'est-ce que la FURY ?",
+          "a": "La jauge FURY se remplit à mesure que vous cassez des briques. Quand elle est pleine, la FURY se déclenche pendant quelques secondes : chaque balle devient une boule de feu qui traverse les briques, acier compris, et votre score est doublé. Faites-la coïncider avec un gros combo pour viser les meilleurs scores."
+        },
+        {
+          "q": "Quels sont les différents types de briques ?",
+          "a": "Les briques normales cassent en un coup. Les briques blindées demandent plusieurs coups. Les briques d'acier résistent à une balle normale et ne cèdent qu'au feu de la FURY ou du bonus Fireball. Les briques de cristal lâchent toujours un bonus. Les briques TNT explosent et endommagent les briques autour d'elles, et elles peuvent faire sauter d'autres TNT en réaction en chaîne."
+        },
+        {
+          "q": "Quels bonus peut-on attraper ?",
+          "a": "Attrapez les capsules qui tombent avec votre raquette : Multiball ajoute des balles, Laser permet à la raquette de tirer, Wide l'élargit, Fireball traverse les briques, Magnet attrape la balle, Slow-Mo la ralentit, Shield ajoute une barrière de sécurité et le cœur donne une vie supplémentaire. Évitez la capsule Shrink rouge, qui rétrécit votre raquette."
+        },
+        {
+          "q": "Quels ennemis et boss trouve-t-on dans BRICKFURY ?",
+          "a": "Dès le deuxième secteur, des drones apparaissent : les Drifters zigzaguent à l'écran, les Bombers lâchent des bombes qui paralysent votre raquette, les Shielders se protègent, les Splitters se divisent en deux petits drones et les Builders réparent les briques détruites. Tous les cinq secteurs, vous affrontez l'OVERLORD, un boss géant en trois phases. Frappez-le avec la balle pour l'abattre."
+        },
+        {
+          "q": "Quels sont les modes de jeu ?",
+          "a": "Classic vous donne trois vies et une suite infinie de murs générés. Hard vous laisse une seule vie et une balle plus rapide, avec son propre classement. Daily propose le même mur à tous les joueurs pendant la journée, pour comparer votre score équitablement avec tout le monde. Chaque mode garde son propre record."
+        },
+        {
+          "q": "Peut-on continuer après avoir perdu sa dernière vie ?",
+          "a": "Oui. Une fois par partie, vous pouvez choisir de regarder une courte publicité pour obtenir une vie supplémentaire. Votre mur et votre score sont conservés : vous reprenez exactement là où vous en étiez. Si vous préférez, vous pouvez simplement lancer une nouvelle partie."
+        },
+        {
+          "q": "Comment défier un ami ?",
+          "a": "À la fin d'une partie, touchez Challenge a friend pour partager un lien. Votre ami joue exactement les mêmes murs et voit le score à battre. C'est la meilleure façon de savoir qui est le vrai champion du casse-briques."
+        }
+      ]
+    }
   }
 }

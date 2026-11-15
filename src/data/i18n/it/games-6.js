@@ -56,5 +56,55 @@ export default {
         }
       ]
     }
+  },
+  "brickfury": {
+    "description": "BRICKFURY è un gioco spacca mattoni al neon gratis che puoi giocare online nel tuo browser, pensato per chi è cresciuto distruggendo muri di mattoncini con una racchetta e una pallina e vuole ritrovare la classica sensazione arcade, ma con molto più fuoco. Fai scorrere la racchetta di energia per tenere in gioco la pallina, mira i rimbalzi e rompi ogni mattone del muro per liberare il settore. È il gioco dei mattoncini che conosci già, ricostruito da zero con un feeling moderno: schermo che trema, scintille e schegge che volano a ogni colpo e una colonna sonora di schianti ed esplosioni che rende ogni muro una soddisfazione da distruggere. Il cuore di BRICKFURY è la combo. Ogni mattone che rompi senza perdere la pallina fa salire il moltiplicatore fino a x8, così una lunga serie di rimbalzi può trasformare un punteggio modesto in uno enorme. Nello stesso tempo si riempie la barra FURY. Quando è piena, la FURY esplode in tutta l'arena: ogni pallina diventa una palla di fuoco che brucia il muro da parte a parte e il tuo punteggio raddoppia per qualche secondo. Capire quando inseguire la combo e quando giocare sul sicuro è ciò che distingue una buona partita da un record. I muri si difendono. I mattoni corazzati richiedono più colpi, quelli d'acciaio si sciolgono solo col fuoco, quelli di cristallo lasciano sempre cadere un potenziamento e i mattoni TNT arancioni fanno saltare in aria i vicini, così un solo colpo ben piazzato può scatenare una reazione a catena che ripulisce mezzo schermo. Nove capsule in caduta cambiano la partita: Multiball, Laser, racchetta Wide, Fireball, Magnet, Slow-Mo, Shield, una vita extra e una capsula rossa Shrink che vorrai evitare. Dal secondo settore entrano in gioco i droni al neon. I Drifters zigzagano nell'arena, i Bombers sganciano esplosivi sulla tua racchetta, gli Shielders si proteggono, gli Splitters si dividono in due droni più piccoli e i Builders riparano i mattoni che hai appena distrutto. Ogni cinque settori arriva l'OVERLORD, un gigantesco boss corazzato con tre fasi di raffiche di proiettili e rinforzi, e l'arena si sposta in una nuova zona con il suo cielo e i suoi colori: lo skyline synthwave di Neon City, l'aurora e le vette ghiacciate della Cryo Zone, i vulcani del Magma Core e i pianeti con gli anelli di Deep Space. Scegli la tua sfida tra tre modalità. Classic ti dà tre vite e una serie infinita di muri generati. La modalità Hard ti dà una sola vita e una pallina più veloce, con una classifica dedicata ai giocatori migliori. La modalità Daily propone lo stesso muro a tutti i giocatori per tutta la giornata, il modo più giusto per confrontare i punteggi. Una volta per partita puoi guardare una breve pubblicità per ottenere una vita extra e mantenere il punteggio, e a fine partita puoi inviare un link per sfidare un amico sugli stessi identici muri. BRICKFURY è gratis nel tuo browser su smartphone, tablet e computer, senza download e senza registrazione. Su mobile basta trascinare il dito in qualsiasi punto dello schermo per muovere la racchetta; al computer la racchetta segue il mouse o i tasti freccia. Rompi il muro, concatena la combo, scatena la FURY e scala la classifica mondiale.",
+    "controls": "Trascina il dito in qualsiasi punto dello schermo per muovere la racchetta e tocca per lanciare la pallina. Al computer la racchetta segue il mouse o i tasti freccia (funzionano anche A e D); clicca o premi Spazio per lanciare e premi P per mettere in pausa. Funziona su smartphone, tablet e computer.",
+    "seo": {
+      "title": "BRICKFURY - Gioco spacca mattoni gratis online | Ragequit Arcade",
+      "metaDescription": "Gioca gratis a BRICKFURY: il classico spacca mattoni rinasce al neon. Combo fino a x8, FURY, 9 potenziamenti e il boss OVERLORD. Senza download.",
+      "faq": [
+        {
+          "q": "Come si gioca a BRICKFURY?",
+          "a": "Muovi la racchetta per far rimbalzare la pallina contro il muro e rompi ogni mattone per liberare il settore. Sul telefono trascina il dito in qualsiasi punto dello schermo per muovere la racchetta e tocca per lanciare la pallina. Al computer muovi il mouse o usa i tasti freccia e premi Spazio o clicca per lanciare. Se tutte le palline superano la racchetta, perdi una vita."
+        },
+        {
+          "q": "BRICKFURY è un gioco spacca mattoni gratis?",
+          "a": "Sì. BRICKFURY è un gioco spacca mattoni completamente gratis che funziona nel tuo browser su smartphone, tablet e computer. Non c'è nulla da scaricare e non serve un account per giocare. Accedi con un profilo Ragequit Arcade gratuito se vuoi i tuoi punteggi nella classifica mondiale."
+        },
+        {
+          "q": "Come funziona il moltiplicatore di combo?",
+          "a": "Ogni mattone che rompi senza perdere la pallina si aggiunge alla combo. Ogni cinque mattoni il moltiplicatore sale di un livello, da x1 fino a un massimo di x8, e ogni punto che fai viene moltiplicato. Perdere una pallina azzera la combo, quindi le lunghe serie di rimbalzi sono la chiave per i grandi punteggi."
+        },
+        {
+          "q": "Che cos'è la FURY?",
+          "a": "La barra FURY si riempie mentre rompi i mattoncini. Quando è piena, la FURY si attiva per qualche secondo: ogni pallina diventa una palla di fuoco che brucia i mattoni da parte a parte, anche quelli d'acciaio, e il tuo punteggio raddoppia. Abbinala a una grande combo per i punteggi più alti."
+        },
+        {
+          "q": "Quali tipi di mattoni ci sono?",
+          "a": "I mattoni normali si rompono con un colpo. Quelli corazzati richiedono più colpi. I mattoni d'acciaio non si rompono con una pallina normale, solo con il fuoco della FURY o del potenziamento Fireball. I mattoni di cristallo lasciano sempre cadere un potenziamento. I mattoni TNT esplodono e danneggiano quelli intorno, e possono far esplodere altri TNT in una reazione a catena."
+        },
+        {
+          "q": "Quali potenziamenti posso raccogliere?",
+          "a": "Prendi le capsule che cadono con la tua racchetta: Multiball aggiunge palline, Laser fa sparare la racchetta, Wide la allarga, Fireball brucia i mattoni, Magnet trattiene la pallina, Slow-Mo la rallenta, Shield aggiunge una barriera di sicurezza e il cuore dà una vita extra. Evita la capsula rossa Shrink, che rimpicciolisce la racchetta."
+        },
+        {
+          "q": "Quali nemici e boss ci sono in BRICKFURY?",
+          "a": "Dal secondo settore compaiono i droni: i Drifters zigzagano sullo schermo, i Bombers sganciano bombe che stordiscono la tua racchetta, gli Shielders si proteggono, gli Splitters si dividono in due droni più piccoli e i Builders riparano i mattoni distrutti. Ogni cinque settori affronti l'OVERLORD, un boss gigante con tre fasi. Colpiscilo con la pallina per abbatterlo."
+        },
+        {
+          "q": "Quali sono le modalità di gioco?",
+          "a": "Classic ti dà tre vite e una partita infinita di muri generati. Hard ti dà una vita e una pallina più veloce, con una classifica dedicata. Daily dà a tutti i giocatori lo stesso muro per la giornata, così puoi confrontare il tuo punteggio in modo equo con tutti gli altri. Ogni modalità conserva il proprio record."
+        },
+        {
+          "q": "Posso continuare dopo aver perso l'ultima vita?",
+          "a": "Sì. Una volta per partita puoi scegliere di guardare una breve pubblicità per ottenere una vita extra. Il muro e il punteggio vengono mantenuti, così riprendi esattamente da dove eri rimasto. Se preferisci, puoi semplicemente iniziare una nuova partita."
+        },
+        {
+          "q": "Come sfido un amico?",
+          "a": "A fine partita tocca Challenge a friend per condividere un link. Il tuo amico gioca sugli stessi identici muri e vede il punteggio da battere. È il modo migliore per stabilire chi è il vero campione dello spacca mattoni."
+        }
+      ]
+    }
   }
 }

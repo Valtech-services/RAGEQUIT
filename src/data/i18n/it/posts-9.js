@@ -46,5 +46,101 @@ export default {
       { "type": "p", "text": "Classic è la scalata infinita e la modalità migliore per conoscere ogni mondo. Time Attack parte con sessanta secondi, ogni perfect aggiunge un secondo e una caduta ne costa cinque, quindi la precisione conta ancora più della velocità. La modalità Hard usa torri più piccole e porta trappole e droni molto prima, con una classifica tutta sua. La partita Daily dà a tutti le stesse torri, ed è quindi il modo più equo per confrontare i punteggi con gli amici. Completa le tre missioni giornaliere per avere monete extra, poi spendile nel negozio in nuovi robot, scie luminose ed effetti di atterraggio." },
       { "type": "p", "text": "Punta al centro, costruisci la combo, salta a tempo e resta calmo quando arriva il WARDEN. Apri HYPERHOP, tieni premuto il tuo primo salto e scopri quanti mondi riesci ad attraversare." }
     ]
+  },
+  "brickfury-tips": {
+    "title": "Consigli BRICKFURY: come concatenare combo, attivare la FURY e battere l'OVERLORD",
+    "excerpt": "BRICKFURY è uno spacca mattoni al neon gratis in cui i punteggi migliori arrivano da lunghe combo e da una FURY attivata al momento giusto. Scopri come mirare con la racchetta, tenere vivo il moltiplicatore, gestire ogni mattone e ogni drone e battere il boss OVERLORD.",
+    "seo": {
+      "title": "Consigli BRICKFURY: combo, FURY, potenziamenti e OVERLORD | Ragequit Arcade",
+      "metaDescription": "Guida a BRICKFURY, il gioco spacca mattoni al neon gratis: mira i rimbalzi, concatena combo x8, attiva la FURY, usa i potenziamenti e batti l'OVERLORD."
+    },
+    "content": [
+      {
+        "type": "p",
+        "text": "BRICKFURY sembra il classico spacca mattoni che conosci già: una racchetta, una pallina e un muro di mattoncini. Ma i punteggi migliori non arrivano semplicemente ripulendo i muri. Arrivano da lunghe combo, da una FURY attivata al momento giusto e da un uso intelligente di ogni potenziamento. Questa guida raccoglie le abitudini che trasformano una partita veloce in una corsa da record."
+      },
+      {
+        "type": "h2",
+        "text": "Mira con i bordi della racchetta"
+      },
+      {
+        "type": "p",
+        "text": "L'angolo del rimbalzo dipende da dove la pallina tocca la racchetta. Colpiscila con il centro e la pallina sale quasi dritta. Colpiscila con un bordo e parte con un angolo stretto. Usa i bordi per mandare la pallina dietro il muro, dove rimbalza contro il soffitto e rompe molti mattoni senza tornare da te."
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Punta ai varchi nel muro per portare la pallina dietro i mattoni.",
+          "Su mobile trascina il dito in qualsiasi punto dello schermo: il dito non copre mai la pallina.",
+          "Muoviti in anticipo più che in fretta: una racchetta calma tiene vivi gli scambi.",
+          "Quando ci sono più palline in gioco, segui prima quella più bassa."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Costruisci la combo e tienila viva"
+      },
+      {
+        "type": "p",
+        "text": "Ogni mattone che rompi senza perdere la pallina si aggiunge alla combo, e ogni cinque mattoni il moltiplicatore sale di un livello, fino a x8. Perdere una pallina azzera tutto, quindi una lunga serie sicura vale più di un tiro rischioso. Quando arrivi a x4 o più, gioca con prudenza: ogni mattone ora vale più volte il suo valore base."
+      },
+      {
+        "type": "h2",
+        "text": "Attiva la FURY al momento giusto"
+      },
+      {
+        "type": "p",
+        "text": "La barra FURY si riempie mentre rompi i mattoni. Quando esplode, ogni pallina diventa una palla di fuoco e il tuo punteggio raddoppia per qualche secondo. Le palle di fuoco sciolgono i mattoni d'acciaio, gli unici che una pallina normale non riesce a rompere. La FURY abbinata a un moltiplicatore alto è la via più rapida per un punteggio enorme, quindi cerca di tenere viva la combo mentre la barra si riempie."
+      },
+      {
+        "type": "h2",
+        "text": "Conosci ogni mattone"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "I mattoni corazzati richiedono più colpi: manda la pallina dietro di loro così li colpisce ancora e ancora.",
+          "I mattoni d'acciaio si rompono solo col fuoco, della FURY o del potenziamento Fireball.",
+          "I mattoni di cristallo lasciano sempre cadere un potenziamento: rompili presto.",
+          "I mattoni TNT esplodono e danneggiano i vicini. Allinea più TNT e un solo colpo ripulisce mezzo muro."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Prendi i potenziamenti giusti"
+      },
+      {
+        "type": "p",
+        "text": "Dai mattoni rotti cadono delle capsule. Quasi tutte sono regali: Multiball, Laser, Wide, Fireball, Magnet, Slow-Mo, Shield e la rara vita extra. La capsula rossa Shrink rimpicciolisce la racchetta, quindi spostati quando la vedi. Shield è la migliore assicurazione prima di un boss, e Magnet ti permette di mirare ogni tiro con calma."
+      },
+      {
+        "type": "h2",
+        "text": "Gestisci i droni"
+      },
+      {
+        "type": "p",
+        "text": "Dal secondo settore i droni entrano in gioco. I Bombers sganciano esplosivi sulla tua racchetta, quindi continua a muoverti quando sono sopra di te. I Builders riparano i mattoni che rompi, quindi eliminali per primi. Gli Splitters si dividono in due droni più piccoli quando vengono colpiti, e gli Shielders richiedono più colpi. Colpire i droni con la pallina o il laser fa guadagnare molti punti."
+      },
+      {
+        "type": "h2",
+        "text": "Come battere l'OVERLORD"
+      },
+      {
+        "type": "p",
+        "text": "Ogni cinque settori arriva l'OVERLORD. Combatte in tre fasi: prima colpi singoli, poi ventagli di tre colpi con rinforzi di droni, infine ampi ventagli di cinque colpi con i Bombers. Tieni la racchetta in movimento tra un colpo e l'altro, colpisci il boss con la pallina ogni volta che è davanti a te e conserva lo Shield per l'ultima fase. Batterlo ti porta in una nuova zona con il suo cielo e i suoi colori."
+      },
+      {
+        "type": "h2",
+        "text": "Scegli la tua modalità"
+      },
+      {
+        "type": "p",
+        "text": "Classic, con tre vite, è la modalità migliore per imparare ogni zona. Hard ti dà una sola vita e una pallina più veloce per una classifica separata. Daily propone lo stesso muro a tutti i giocatori per la giornata, ed è quindi il modo più giusto per confrontare i punteggi. A fine partita manda un link di sfida a un amico: giocherà sugli stessi muri e vedrà il punteggio da battere."
+      },
+      {
+        "type": "p",
+        "text": "Mira con i bordi, proteggi la combo, tieni la FURY per i grandi momenti e conserva lo Shield per l'OVERLORD. Apri BRICKFURY e scopri quanti settori riesci a liberare."
+      }
+    ]
   }
 }
