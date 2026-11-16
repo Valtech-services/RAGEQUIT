@@ -64,7 +64,7 @@
   .icon-btn:active { transform: scale(.86); }
 
   /* Overlays */
-  .ov { position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; padding: calc(64px + var(--safe-top)) calc(16px + var(--safe-right)) calc(16px + var(--safe-bottom)) calc(16px + var(--safe-left)); opacity: 0; pointer-events: none; transition: opacity .3s ease; }
+  .ov { position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; padding: calc(64px + var(--safe-top)) calc(16px + var(--safe-right)) calc(16px + var(--safe-bottom) + var(--resv, 0px)) calc(16px + var(--safe-left)); opacity: 0; pointer-events: none; transition: opacity .3s ease; }
   .ov.show { opacity: 1; pointer-events: auto; }
   .ov.dim { background: rgba(8,3,16,.72); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
   .panel { width: 100%; max-width: 380px; max-height: 100%; overflow-y: auto; text-align: center; transform: translateY(18px) scale(.97); transition: transform .35s cubic-bezier(.2,1.4,.4,1); }
@@ -80,6 +80,16 @@
   .sub { font-size: 14px; font-weight: 700; color: var(--dim); margin-top: 6px; line-height: 1.4; }
 
   /* Loader */
+  #title { align-items: flex-end; padding-top: var(--menuT, 96px); padding-bottom: var(--menuB, 24px); }
+  #title .panel { max-width: min(var(--menuW, 340px), 340px); }
+  #title .btn { padding: 10px 12px; font-size: 15px; border-radius: 13px; margin-top: 8px; }
+  #title .btn small { font-size: 10px; margin-top: 3px; }
+  #title .modes { margin-top: 12px; gap: 0 8px; }
+  #title .modes .btn.wide { font-size: 19px; padding: 12px; }
+  #title .bests { margin-top: 10px; }
+  #title .how { margin-top: 8px; font-size: 11.5px; line-height: 1.45; }
+  #title .tag { font-size: 12px; margin-top: 6px; }
+  #title .logo-img { width: min(56vw, 230px); }
   #title { background: radial-gradient(ellipse at 50% 45%, rgba(11,5,22,.82) 0%, rgba(11,5,22,.55) 60%, rgba(11,5,22,.25) 100%); }
   #loader { background: var(--bg); z-index: 20; flex-direction: column; }
   #loader .bar { width: 220px; height: 8px; border-radius: 99px; background: rgba(255,255,255,.08); overflow: hidden; margin-top: 22px; border: 1px solid rgba(255,59,92,.35); }
@@ -96,7 +106,7 @@
   #loader .logo-img { width: min(74vw, 320px); }
   @keyframes logoIn { from { opacity: 0; transform: scale(.7) rotate(-3deg); } to { opacity: 1; transform: none; } }
   @keyframes logoGlow { 50% { filter: drop-shadow(0 0 26px rgba(255,120,40,.7)) drop-shadow(0 4px 10px rgba(0,0,0,.6)); transform: scale(1.02); } }
-  @media (max-height: 700px) { .logo-img { width: min(50vw, 200px); } }
+  @media (max-height: 700px) { .logo-img, #title .logo-img { width: min(44vw, 170px); } }
   @keyframes drop { from { transform: translateY(-60px) rotate(-12deg); opacity: 0; } to { transform: none; opacity: 1; } }
   @keyframes shiver { 0%, 86%, 100% { transform: none; } 88% { transform: translate(-2px, 1px) rotate(-3deg); } 91% { transform: translate(2px, -1px) rotate(2deg); } 94% { transform: translate(-1px, 0); } }
   .tag { font-size: 13px; font-weight: 800; letter-spacing: 3px; color: var(--gold); margin-top: 10px; text-shadow: 0 0 10px rgba(255,204,51,.6); }
@@ -222,6 +232,7 @@ const COLS = 10, BW = 35.2, BH = 17, GAP = 4, GX = 16;
 const PADDLE_Y = AH - 66;
 const PAL = { bg: '#0b0516', fury: '#ff3b5c', gold: '#ffcc33', lime: '#7cff6b', ice: '#5ad1ff', violet: '#b06bff', orange: '#ff8a2b', white: '#fff4f6' };
 const REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const TOUCH = !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches) || ('ontouchstart' in window);
 const AdSDK = { enabled: false, showRewarded(onReward, onCancel) { if (onCancel) onCancel(); } };
 
 const $ = (id) => document.getElementById(id);
@@ -330,11 +341,19 @@ function resize() {
   W = window.innerWidth; H = window.innerHeight;
   DPR = Math.min(2, window.devicePixelRatio || 1) * (Q.low ? 0.75 : 1);
   cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
-  const top = SAFE.t + 88, bottom = SAFE.b + 10;
+  // Touch screens: keep the bottom free (paddle raised ~10% of the screen), mobile Safari's toolbar floats over it.
+  const resv = TOUCH ? Math.round(H * 0.14) : 0;
+  const top = SAFE.t + 88, bottom = SAFE.b + 10 + resv;
   const availW = W - 12 - SAFE.l - SAFE.r, availH = H - top - bottom;
   S = Math.max(0.3, Math.min(availW / AW, availH / AH));
   OX = SAFE.l + 6 + (availW - AW * S) / 2;
   OY = top + Math.max(0, (availH - AH * S) / 2);
+  // the title menu sits inside the arena frame, its bottom just above the paddle
+  const rs = document.documentElement.style;
+  rs.setProperty('--resv', resv + 'px');
+  rs.setProperty('--menuW', Math.max(240, Math.round(AW * S - 40)) + 'px');
+  rs.setProperty('--menuB', Math.max(16, Math.round(H - (OY + (PADDLE_Y - 18) * S))) + 'px');
+  rs.setProperty('--menuT', Math.round(OY + 12) + 'px');
   const hud = $('hud');
   if (W >= 700) { hud.style.left = Math.max(56 + SAFE.l, OX - 4) + 'px'; hud.style.right = Math.max(10 + SAFE.r, W - OX - AW * S - 4) + 'px'; }
   else { hud.style.left = ''; hud.style.right = ''; }
