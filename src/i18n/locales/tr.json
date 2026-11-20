@@ -57,7 +57,15 @@
     "nicknamePlaceholder": "Bir takma ad seç",
     "save": "Kaydet",
     "classic": "Klasik",
-    "survival": "Hayatta kalma"
+    "survival": "Hayatta kalma",
+    "allGames": "Tüm oyunlar",
+    "noGameFound": "Aramanızla eşleşen oyun yok.",
+    "play": "Oyna",
+    "playersCount": "Sıralamadaki oyuncular: {{n}}",
+    "rankOf": "Gerçek sıran: {{total}} oyuncu arasında #{{rank}}",
+    "inTop": "İlk {{n}} içindesin, aşağıda vurgulandı",
+    "outOfTop": "İlk {{n}} dışında",
+    "topN": "İlk {{n}} oyuncu"
   },
   "auth": {
     "signup": "Kayıt ol",
@@ -259,7 +267,8 @@
       "like": "Beğen",
       "dislike": "Beğenme",
       "report": "Bildir",
-      "fullscreen": "Tam ekran"
+      "fullscreen": "Tam ekran",
+      "leaderboard": "Sıralama"
     }
   }
 }

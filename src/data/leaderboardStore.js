@@ -23,8 +23,12 @@ const LS_KEY = (game, mode, difficulty, arena) => {
 }
 const LS_NAME_KEY = 'rq_player_name'
 
-export function getPlayerName()     { return localStorage.getItem(LS_NAME_KEY) || '' }
-export function setPlayerName(name) { localStorage.setItem(LS_NAME_KEY, name.trim()) }
+export function getPlayerName() {
+  try { return localStorage.getItem(LS_NAME_KEY) || '' } catch (e) { return '' }
+}
+export function setPlayerName(name) {
+  try { localStorage.setItem(LS_NAME_KEY, name.trim()) } catch (e) {}
+}
 
 export function formatTime(ms) {
   if (!ms && ms !== 0) return '—'
@@ -133,12 +137,21 @@ export async function getLeaderboard(game, mode, limit = 20, difficulty = null, 
       deduped.push(row)
       if (deduped.length >= limit) break
     }
-    return deduped.map((row, i) => ({
-      rank:       i + 1,
-      name:       row.username || 'Player',
-      score:      row.score,
-      scoreLabel: row.score_label || String(row.score),
-    }))
+    // Rang « de compétition » : deux scores égaux partagent la même place
+    // (1, 2, 2, 4...). C'est la même règle que getPlayerBest (nombre de joueurs
+    // strictement meilleurs + 1), donc le rang affiché en haut pour le joueur
+    // et celui de sa ligne dans le tableau sont toujours identiques.
+    let rank = 0
+    return deduped.map((row, i) => {
+      if (i === 0 || row.score !== deduped[i - 1].score) rank = i + 1
+      return {
+        rank,
+        userId:     row.user_id,
+        name:       row.username || 'Player',
+        score:      row.score,
+        scoreLabel: row.score_label || String(row.score),
+      }
+    })
   } catch (e) { return [] }
 }
 
@@ -170,6 +183,7 @@ export async function getPlayerBest(game, mode, difficulty = null, arena = null)
         .select('id', { count: 'exact', head: true })
         .eq('game_id', game)
         .eq('mode', mode)
+        .not('user_id', 'is', null)
         .gt('score', best.score)
       cq = applyVariantFilters(cq, difficulty, arena)
       const { count } = await cq
@@ -184,4 +198,23 @@ export async function getPlayerBest(game, mode, difficulty = null, arena = null)
 
   // Anonyme : pas de rang au classement public (il faut se connecter)
   return null
+}
+
+/* =====================================================================
+   countPlayers — nombre de joueurs classés pour la combinaison
+   (une ligne par joueur et combinaison en base, cf. index unique
+   scores_one_best_per_player). Renvoie null si la requête échoue.
+   ===================================================================== */
+export async function countPlayers(game, mode, difficulty = null, arena = null) {
+  try {
+    let q = supabase
+      .from('scores')
+      .select('id', { count: 'exact', head: true })
+      .eq('game_id', game)
+      .eq('mode', mode)
+      .not('user_id', 'is', null)
+    q = applyVariantFilters(q, difficulty, arena)
+    const { count, error } = await q
+    return error ? null : (count ?? 0)
+  } catch (e) { return null }
 }

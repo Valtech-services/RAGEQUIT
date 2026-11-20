@@ -224,6 +224,7 @@
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
+a.mgp__action { box-sizing: border-box; text-decoration: none; }
 /* icône dans le dégradé cyan -> magenta du site (par défaut) */
 .mgp__action svg {
   width: 16px; height: 16px;

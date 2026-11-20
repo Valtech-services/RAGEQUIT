@@ -160,6 +160,7 @@
   cursor: pointer;
   transition: all var(--transition-fast);
 }
+a.gamepage__action { box-sizing: border-box; text-decoration: none; }
 .gamepage__action:hover    { color: var(--color-accent); border-color: var(--color-accent); }
 .gamepage__action.is-up    { color: #ffffff; background: var(--color-accent);  border-color: var(--color-accent); }
 .gamepage__action.is-down  { color: #ffffff; background: var(--color-magenta); border-color: var(--color-magenta); }
