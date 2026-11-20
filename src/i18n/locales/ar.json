@@ -57,7 +57,15 @@
     "nicknamePlaceholder": "اختر اسمًا مستعارًا",
     "save": "حفظ",
     "classic": "كلاسيكي",
-    "survival": "البقاء"
+    "survival": "البقاء",
+    "allGames": "كل الألعاب",
+    "noGameFound": "لا توجد لعبة تطابق بحثك.",
+    "play": "العب",
+    "playersCount": "اللاعبون المصنفون: {{n}}",
+    "rankOf": "ترتيبك الحقيقي: #{{rank}} من {{total}} لاعب",
+    "inTop": "أنت ضمن أفضل {{n}}، مميز أدناه",
+    "outOfTop": "خارج أفضل {{n}}",
+    "topN": "أفضل {{n}} لاعب"
   },
   "auth": {
     "signup": "إنشاء حساب",
@@ -259,7 +267,8 @@
       "like": "إعجاب",
       "dislike": "عدم إعجاب",
       "report": "إبلاغ",
-      "fullscreen": "ملء الشاشة"
+      "fullscreen": "ملء الشاشة",
+      "leaderboard": "لوحة الصدارة"
     }
   }
 }

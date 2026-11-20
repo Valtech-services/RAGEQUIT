@@ -57,7 +57,15 @@
     "nicknamePlaceholder": "Kies een bijnaam",
     "save": "Opslaan",
     "classic": "Klassiek",
-    "survival": "Overleven"
+    "survival": "Overleven",
+    "allGames": "Alle games",
+    "noGameFound": "Geen game gevonden voor je zoekopdracht.",
+    "play": "Spelen",
+    "playersCount": "Geklasseerde spelers: {{n}}",
+    "rankOf": "Je echte rang: #{{rank}} van {{total}} spelers",
+    "inTop": "Je staat in de top {{n}}, hieronder gemarkeerd",
+    "outOfTop": "Buiten de top {{n}}",
+    "topN": "Top {{n}} spelers"
   },
   "auth": {
     "signup": "Registreren",
@@ -259,7 +267,8 @@
       "like": "Leuk",
       "dislike": "Niet leuk",
       "report": "Melden",
-      "fullscreen": "Volledig scherm"
+      "fullscreen": "Volledig scherm",
+      "leaderboard": "Ranglijst"
     }
   }
 }

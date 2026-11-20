@@ -57,7 +57,15 @@
     "nicknamePlaceholder": "Spitzname wählen",
     "save": "Speichern",
     "classic": "Klassisch",
-    "survival": "Überleben"
+    "survival": "Überleben",
+    "allGames": "Alle Spiele",
+    "noGameFound": "Kein Spiel passt zu deiner Suche.",
+    "play": "Spielen",
+    "playersCount": "Platzierte Spieler: {{n}}",
+    "rankOf": "Dein echter Rang: #{{rank}} von {{total}} Spielern",
+    "inTop": "Du bist in den Top {{n}}, unten hervorgehoben",
+    "outOfTop": "Außerhalb der Top {{n}}",
+    "topN": "Top {{n}} Spieler"
   },
   "auth": {
     "signup": "Registrieren",
@@ -259,7 +267,8 @@
       "like": "Gefällt mir",
       "dislike": "Gefällt mir nicht",
       "report": "Melden",
-      "fullscreen": "Vollbild"
+      "fullscreen": "Vollbild",
+      "leaderboard": "Bestenliste"
     }
   }
 }

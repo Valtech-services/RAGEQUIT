@@ -41,7 +41,7 @@
   "leaderboard": {
     "title": "Leaderboard",
     "searchGame": "Search a game…",
-    "selectGame": "Select a game to see its leaderboard.",
+    "selectGame": "Pick a game to see its leaderboard.",
     "player": "Player",
     "score": "Score",
     "you": "You",
@@ -57,7 +57,15 @@
     "nicknamePlaceholder": "Choose a nickname",
     "save": "Save",
     "classic": "Classic",
-    "survival": "Survival"
+    "survival": "Survival",
+    "allGames": "All games",
+    "noGameFound": "No game matches your search.",
+    "play": "Play",
+    "playersCount": "Ranked players: {{n}}",
+    "rankOf": "Your real rank: #{{rank}} out of {{total}} players",
+    "inTop": "You are in the top {{n}}, highlighted below",
+    "outOfTop": "Outside the top {{n}}",
+    "topN": "Top {{n}} players"
   },
   "auth": {
     "signup": "Sign up",
@@ -258,7 +266,8 @@
       "like": "Like",
       "dislike": "Dislike",
       "report": "Report",
-      "fullscreen": "Fullscreen"
+      "fullscreen": "Fullscreen",
+      "leaderboard": "Leaderboard"
     }
   }
 }

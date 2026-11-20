@@ -57,7 +57,15 @@
     "nicknamePlaceholder": "ニックネームを選ぶ",
     "save": "保存",
     "classic": "クラシック",
-    "survival": "サバイバル"
+    "survival": "サバイバル",
+    "allGames": "すべてのゲーム",
+    "noGameFound": "検索に一致するゲームはありません。",
+    "play": "プレイ",
+    "playersCount": "ランクイン人数：{{n}}",
+    "rankOf": "あなたの実際の順位：{{total}}人中 #{{rank}}",
+    "inTop": "トップ{{n}}入り！下でハイライト表示",
+    "outOfTop": "トップ{{n}}圏外",
+    "topN": "トップ{{n}}プレイヤー"
   },
   "auth": {
     "signup": "新規登録",
@@ -259,7 +267,8 @@
       "like": "いいね",
       "dislike": "よくないね",
       "report": "報告",
-      "fullscreen": "全画面"
+      "fullscreen": "全画面",
+      "leaderboard": "ランキング"
     }
   }
 }

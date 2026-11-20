@@ -41,7 +41,7 @@
   "leaderboard": {
     "title": "Classement",
     "searchGame": "Chercher un jeu…",
-    "selectGame": "Sélectionne un jeu pour voir son classement.",
+    "selectGame": "Touche un jeu pour voir son classement.",
     "player": "Joueur",
     "score": "Score",
     "you": "Toi",
@@ -57,7 +57,15 @@
     "nicknamePlaceholder": "Choisis un pseudo",
     "save": "Enregistrer",
     "classic": "Classique",
-    "survival": "Survie"
+    "survival": "Survie",
+    "allGames": "Tous les jeux",
+    "noGameFound": "Aucun jeu ne correspond à ta recherche.",
+    "play": "Jouer",
+    "playersCount": "Joueurs classés : {{n}}",
+    "rankOf": "Ton vrai rang : #{{rank}} sur {{total}} joueurs",
+    "inTop": "Tu es dans le top {{n}}, en surbrillance ci-dessous",
+    "outOfTop": "Hors du top {{n}}",
+    "topN": "Top {{n}} des joueurs"
   },
   "auth": {
     "signup": "S'inscrire",
@@ -258,7 +266,8 @@
       "like": "J'aime",
       "dislike": "Je n'aime pas",
       "report": "Signaler",
-      "fullscreen": "Plein écran"
+      "fullscreen": "Plein écran",
+      "leaderboard": "Classement"
     }
   }
 }

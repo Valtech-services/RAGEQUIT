@@ -57,7 +57,15 @@
     "nicknamePlaceholder": "Wybierz pseudonim",
     "save": "Zapisz",
     "classic": "Klasyczny",
-    "survival": "Przetrwanie"
+    "survival": "Przetrwanie",
+    "allGames": "Wszystkie gry",
+    "noGameFound": "Żadna gra nie pasuje do wyszukiwania.",
+    "play": "Graj",
+    "playersCount": "Sklasyfikowani gracze: {{n}}",
+    "rankOf": "Twoje prawdziwe miejsce: #{{rank}} z {{total}} graczy",
+    "inTop": "Jesteś w top {{n}}, wyróżniony poniżej",
+    "outOfTop": "Poza top {{n}}",
+    "topN": "Top {{n}} graczy"
   },
   "auth": {
     "signup": "Zarejestruj się",
@@ -259,7 +267,8 @@
       "like": "Lubię",
       "dislike": "Nie lubię",
       "report": "Zgłoś",
-      "fullscreen": "Pełny ekran"
+      "fullscreen": "Pełny ekran",
+      "leaderboard": "Ranking"
     }
   }
 }
