@@ -919,6 +919,48 @@ export const posts = [
       { type: 'p', text: "Aim with the edges, protect your combo, save FURY for the big moments and keep the Shield for the OVERLORD. Open BRICKFURY and see how many sectors you can clear." },
     ],
   },
+  {
+    slug: 'croaknight-tips',
+    category: 'guides',
+    title: "CROAKNIGHT Tips: How to Survive Every Night and Beat the Grave Keeper",
+    date: '2026-11-21',
+    author: 'Ragequit Arcade',
+    excerpt: "CROAKNIGHT is a free 3D survival game where a frog knight must survive a haunted graveyard until dawn. Learn how to aim your tongue, save your LEAP, charge CROAK with fireflies, read every monster and take down the Grave Keeper.",
+    image: '/blog/croaknight-tips.jpg',
+    seo: {
+      title: "CROAKNIGHT Tips: Tongue, LEAP, CROAK and the Grave Keeper | Ragequit Arcade",
+      metaDescription: "A tips guide for CROAKNIGHT, the free 3D frog survival game: aim your tongue, escape with LEAP, charge CROAK, read every monster and beat the Grave Keeper.",
+    },
+    content: [
+      { type: 'p', text: "CROAKNIGHT looks simple: a frog, a grid of stone slabs and a graveyard full of monsters. But surviving night after night takes more than quick hops. The best runs come from smart positioning, well aimed tongue attacks and a CROAK saved for the right moment. This guide covers the habits that turn a short run into a record." },
+      { type: 'h2', text: "Face your target before you attack" },
+      { type: 'p', text: "The tongue always shoots where the frog is looking, up to three tiles away, and it stops at the first gravestone in its path. Before you attack, hop once toward the monster to turn the frog, then strike. A monster coming straight down your row or column is an easy kill. A monster hidden behind a gravestone is not: move to a free line first." },
+      { type: 'ul', items: [
+        "Keep monsters in front of you, never on your sides.",
+        "Use gravestones as walls: zombies and skeletons have to walk around them.",
+        "Do not spam the tongue: a missed attack leaves you open for a moment.",
+        "The tongue also grabs fireflies, so use it to collect them from a distance."
+      ] },
+      { type: 'h2', text: "Keep LEAP for emergencies" },
+      { type: 'p', text: "LEAP throws the frog two tiles forward in a front flip. You cannot be hit in the air and the landing stuns every monster around you. It recharges in a few seconds, so treat it as your escape button: when you are cornered between two monsters, leap over the danger and turn around to strike while they are stunned." },
+      { type: 'h2', text: "Charge CROAK and use it on a crowd" },
+      { type: 'p', text: "Fireflies charge your CROAK gauge. Six of them fill it, and every tongue kill adds a little more. When the gauge glows, wait until several monsters are close before you release it: a MASS CROAK that wipes out three or four monsters at once raises your combo instantly. If you are about to lose a heart, though, do not hesitate and croak right away." },
+      { type: 'h2', text: "Read every monster" },
+      { type: 'ul', items: [
+        "Zombies are slow and sometimes wander off: they are the safest combo starters.",
+        "Skeletons are fast and never stop chasing you: deal with them first.",
+        "Ghosts pass through gravestones and fade out of reach every few seconds: wait until they are solid again before you strike.",
+        "Vampire demons dash across a whole row or column along a red line: step off that line as soon as it appears."
+      ] },
+      { type: 'h2', text: "Grab the pumpkins" },
+      { type: 'p', text: "Carved pumpkins give power-ups when you hop on them, and they do not stay long. Shield blocks the next hit, Frenzy doubles your points and makes your tongue faster and longer, Freeze stops every monster for a few seconds, Magnet pulls the fireflies to you and the Heart gives you an extra life. Frenzy combined with a high combo is the fastest way to a huge score." },
+      { type: 'h2', text: "How to beat the Grave Keeper" },
+      { type: 'p', text: "Every third night the Grave Keeper rises, and the dawn will not come until he falls. Watch the ground: before each slam, a three by three zone turns red around him. Step out, then come back and hit him with the tongue while he recovers. Clear the zombies he summons quickly so you are never trapped, and save a full CROAK for him, because the shockwave deals heavy damage. Beating him refills your CROAK gauge." },
+      { type: 'h2', text: "Pick your mode" },
+      { type: 'p', text: "Easy, with five hearts and slower monsters, is the best mode to learn every monster. Normal is the standard challenge with three hearts. Hardcore gives you two hearts, faster monsters, longer nights and no healing at dawn, with its own leaderboard for the best players. When a run ends, send a challenge link to a friend: they play the same graveyard and see the score to beat." },
+      { type: 'p', text: "Face your target, save LEAP for emergencies, croak on a crowd and keep moving. Open CROAKNIGHT and see how many nights you can survive." },
+    ],
+  },
 ]
 
 // Trouve un article par son slug.

@@ -148,20 +148,19 @@
 
   /* title */
   #menu { align-items: flex-end; }
-  #menu .panel { padding-bottom: 4px; }
-  #logo { position: fixed; top: calc(9vh + var(--safe-top)); left: 0; right: 0; text-align: center; pointer-events: none; z-index: 10; opacity: 0; transition: opacity .4s; }
+  #menu .panel { padding-bottom: calc(4px + 13vh); padding-bottom: calc(4px + 13dvh); }
+  @media (min-aspect-ratio: 1/1) { #menu .panel { padding-bottom: 4vh; } }
+  #logo { position: fixed; top: calc(5vh + var(--safe-top)); left: 0; right: 0; text-align: center; pointer-events: none; z-index: 10; opacity: 0; transition: opacity .4s; }
   #menu.on ~ #logo, body.menuOn #logo { opacity: 1; }
-  #logo h1 { font-size: clamp(40px, 13vw, 76px); font-weight: 900; letter-spacing: 2px; line-height: .95; font-style: italic;
-    background: linear-gradient(180deg, #e8ffb8 0%, #9dff3a 45%, #3fbf0a 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
-    filter: drop-shadow(0 0 16px rgba(157,255,58,.55)) drop-shadow(0 4px 0 #2a0f5a); animation: logoBob 3s ease-in-out infinite; }
-  #logo h1 em { font-style: italic; background: linear-gradient(180deg, #e6d4ff, #a26bff 55%, #6a2cff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  #logo h1 { line-height: 0; filter: drop-shadow(0 0 18px rgba(157,255,58,.45)) drop-shadow(0 6px 10px rgba(10,2,30,.7)); animation: logoBob 3s ease-in-out infinite; }
+  #logo h1 img, #loading h1 img { width: min(82vw, 400px); height: auto; }
   #logo p { margin-top: 8px; font-size: 13px; font-weight: 800; letter-spacing: 4px; color: var(--dim); text-shadow: 0 0 8px #000; }
   @keyframes logoBob { 50% { transform: translateY(-6px) rotate(-1.5deg); } }
-  .modes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 4px 0 2px; }
+  .modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 4px 0 2px; }
   .mode { padding: 10px 2px; border-radius: 12px; border: 1px solid rgba(162,107,255,.4); background: rgba(20,10,44,.7); color: var(--dim); font-size: 11px; font-weight: 900; letter-spacing: 1px; transition: transform .1s; }
   .mode:active { transform: scale(.94); }
   .mode.sel { color: #10061f; background: var(--mc, #9dff3a); border-color: transparent; box-shadow: 0 0 16px var(--mc, #9dff3a); }
-  .mode[data-m="easy"] { --mc: #7fe8ff; } .mode[data-m="normal"] { --mc: #9dff3a; } .mode[data-m="hardcore"] { --mc: #ff2e55; } .mode[data-m="daily"] { --mc: #ffb36b; }
+  .mode[data-m="easy"] { --mc: #7fe8ff; } .mode[data-m="normal"] { --mc: #9dff3a; } .mode[data-m="hardcore"] { --mc: #ff2e55; }
   #modeInfo { font-size: 12px; color: var(--dim); min-height: 32px; margin: 8px 0 0; line-height: 1.35; }
   #bestLine { font-size: 13px; font-weight: 800; letter-spacing: 1px; color: var(--bone); margin-top: 6px; font-variant-numeric: tabular-nums; }
   #chal { display: none; margin-bottom: 8px; padding: 9px; border-radius: 12px; border: 1px dashed var(--pumpkin); color: #ffd2a6; font-size: 13px; font-weight: 800; }
@@ -171,7 +170,7 @@
 
   /* loading */
   #loading { z-index: 20; background: radial-gradient(ellipse at 50% 40%, #2a1258, #0d0720 70%); opacity: 1; pointer-events: auto; flex-direction: column; }
-  #loading h1 { font-size: 40px; font-weight: 900; font-style: italic; color: var(--lime); text-shadow: 0 0 20px rgba(157,255,58,.6); letter-spacing: 2px; }
+  #loading h1 { line-height: 0; filter: drop-shadow(0 0 18px rgba(157,255,58,.45)); animation: logoBob 3s ease-in-out infinite; }
   #loadTrack { margin-top: 18px; width: min(240px, 70vw); height: 8px; border-radius: 8px; background: rgba(255,255,255,.1); overflow: hidden; box-shadow: 0 0 0 1px rgba(162,107,255,.5) inset; }
   #loadFill { width: 0%; height: 100%; background: linear-gradient(90deg, #a26bff, #9dff3a); box-shadow: 0 0 12px #9dff3a; transition: width .2s; }
   #loadTxt { margin-top: 10px; font-size: 12px; font-weight: 800; letter-spacing: 3px; color: var(--dim); }
@@ -242,7 +241,7 @@
 <div id="banner"><h2 id="banTitle">NIGHT 1</h2><p id="banSub">SURVIVE UNTIL DAWN</p></div>
 <div id="toast"></div>
 
-<div class="ov" id="loading"><h1>CROAKNIGHT</h1><div id="loadTrack"><div id="loadFill"></div></div><div id="loadTxt">SUMMONING THE NIGHT</div></div>
+<div class="ov" id="loading"><h1><img src="./croaknight/sprites/logo.webp" alt="CROAKNIGHT" width="860" height="344" /></h1><div id="loadTrack"><div id="loadFill"></div></div><div id="loadTxt">SUMMONING THE NIGHT</div></div>
 
 <div class="ov" id="menu">
   <div class="panel">
@@ -251,7 +250,6 @@
       <button class="mode" data-m="easy">EASY</button>
       <button class="mode" data-m="normal">NORMAL</button>
       <button class="mode" data-m="hardcore">HARDCORE</button>
-      <button class="mode" data-m="daily">DAILY</button>
     </div>
     <div id="modeInfo"></div>
     <div id="bestLine">BEST 0</div>
@@ -259,7 +257,7 @@
     <div class="how"><b>Swipe</b> or arrows to hop &middot; <b>Tongue</b> (Space) lashes the first monster in front &middot; <b>Leap</b> (Shift) jumps 2 tiles &middot; <b>Croak</b> (E) blasts everything around, charged by fireflies</div>
   </div>
 </div>
-<div id="logo"><h1>CROAK<em>NIGHT</em></h1><p>SURVIVE UNTIL DAWN</p></div>
+<div id="logo"><h1><img src="./croaknight/sprites/logo.webp" alt="CROAKNIGHT" width="860" height="344" /></h1><p>SURVIVE UNTIL DAWN</p></div>
 
 <div class="ov dim" id="pause">
   <div class="panel card">
@@ -328,8 +326,7 @@ const PAL = { lime: 0x9dff3a, violet: 0xa26bff, pumpkin: 0xff8a1f, blood: 0xff2e
 const MODES = {
   easy:     { label: 'EASY', hearts: 5, speed: 0.8, spawn: 0.75, night: 45, heal: 2, info: '5 hearts, slower monsters, 45 s nights. Two hearts back at every dawn.' },
   normal:   { label: 'NORMAL', hearts: 3, speed: 1, spawn: 1, night: 50, heal: 1, info: '3 hearts, 50 s nights, the Grave Keeper rises every third night.' },
-  hardcore: { label: 'HARDCORE', hearts: 2, speed: 1.25, spawn: 1.45, night: 60, heal: 0, info: '2 hearts, fast and hungry monsters, 60 s nights, no healing at dawn.' },
-  daily:    { label: 'DAILY', hearts: 3, speed: 1.05, spawn: 1.1, night: 50, heal: 1, info: 'Same graveyard and same monsters for everyone today. One leaderboard, one shot at glory.' }
+  hardcore: { label: 'HARDCORE', hearts: 2, speed: 1.25, spawn: 1.45, night: 60, heal: 0, info: '2 hearts, fast and hungry monsters, 60 s nights, no healing at dawn.' }
 };
 const ENEMY = {
   zombie:   { file: 'm-zombie',   hp: 1, speed: 1.15, pts: 100, col: 0xb4a8cc, em: 0x3a3010, ei: 0.2, size: 1.1, ring: 0xe0c84a, rim: 1.1 },
@@ -367,7 +364,6 @@ function mulberry32(a) {
   };
 }
 function hashStr(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
-function dayKey() { const d = new Date(); return d.getUTCFullYear() + '-' + (d.getUTCMonth() + 1) + '-' + d.getUTCDate(); }
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const easeOut = (t) => 1 - Math.pow(1 - t, 3);
@@ -502,7 +498,7 @@ function readParams() {
   return p;
 }
 const PARAMS = readParams();
-const CHAL = PARAMS.ck_seed ? { seed: (parseInt(PARAMS.ck_seed, 10) >>> 0) || 1, beat: parseInt(PARAMS.ck_beat, 10) || 0, mode: MODES[PARAMS.ck_mode] && PARAMS.ck_mode !== 'daily' ? PARAMS.ck_mode : 'normal' } : null;
+const CHAL = PARAMS.ck_seed ? { seed: (parseInt(PARAMS.ck_seed, 10) >>> 0) || 1, beat: parseInt(PARAMS.ck_beat, 10) || 0, mode: MODES[PARAMS.ck_mode] ? PARAMS.ck_mode : 'normal' } : null;
 function gameUrl() {
   let base = 'https://ragequit-arcade.com/game/' + GAME_ID;
   try { if (window.parent.location.pathname.indexOf('/game/') >= 0) base = window.parent.location.origin + window.parent.location.pathname; } catch (e) {}
@@ -1237,7 +1233,7 @@ function newGame(mode, seed) {
     combo: 0, comboT: 0, bestCombo: 1, kills: 0, spawnT: 2, ffT: 1, pickT: 9, croak: 0, leapCD: 0, tongueCD: 0,
     powers: {}, shield: false, revived: false, invuln: 0, bossAlive: false, bossSpawned: false, boss: null, interT: 0, hurtT: 0
   };
-  buildBoard(mode === 'daily' ? hashStr('ck-' + dayKey()) : seed);
+  buildBoard(seed);
   for (const e of enemies) scene.remove(e.root); enemies.length = 0;
   for (const p of pickups) p.mesh.visible = false; pickups = [];
   for (const f of fireflies) { f.alive = false; f.s.visible = false; }
@@ -1749,14 +1745,14 @@ function updateCamera(dt) {
   const H = window.innerHeight;
   if (menu) {
     camLookT.set(F.pos.x, 0.75, F.pos.z);
-    camPosT.set(F.pos.x + Math.sin(t * 0.3) * 0.6, 2.3, F.pos.z + 4.4);
+    camPosT.set(F.pos.x + Math.sin(t * 0.3) * 0.6, 2.5, F.pos.z + 5.0);
   } else {
     camLookT.set(F.pos.x * 0.3, 0, F.pos.z * 0.22 + 0.25 + camBase.off);
     camPosT.set(camLookT.x, camBase.h, camLookT.z + camBase.z);
   }
   const k = camInit ? Math.min(1, dt * (menu ? 2.2 : 3.2)) : 1; camInit = true;
   camLook.lerp(camLookT, k); camPos.lerp(camPosT, k);
-  camShift = lerp(camShift, menu ? H * 0.06 : camBase.shift, k);
+  camShift = lerp(camShift, menu ? H * (window.innerWidth < H ? 0.15 : 0.03) : camBase.shift, k);
   camera.setViewOffset(window.innerWidth, H, 0, camShift, window.innerWidth, H);
   camera.position.copy(camPos);
   if (shake > 0) { camera.position.x += (Math.random() - 0.5) * shake * 0.5; camera.position.y += (Math.random() - 0.5) * shake * 0.4; shake = Math.max(0, shake - dt * 2.2); }
@@ -1892,7 +1888,7 @@ function revive() {
   }, () => { state = 'over'; setScreen('over'); show($('over'), true); $('bRevive').style.display = 'none'; $('adTimer').textContent = ''; finalizeRun(); });
 }
 async function shareChallenge() {
-  const mode = G.mode === 'daily' ? 'normal' : G.mode;
+  const mode = G.mode;
   const url = gameUrl() + '?ck_seed=' + G.seed + '&ck_beat=' + Math.floor(G.score) + '&ck_mode=' + mode;
   const text = 'I scored ' + fmt(G.score) + ' pts and reached night ' + G.night + ' in CROAKNIGHT. Same graveyard, beat me:';
   try { if (navigator.share) { await navigator.share({ title: 'CROAKNIGHT', text, url }); $('shareMsg').textContent = 'Shared!'; return; } } catch (e) { /* cancelled */ }
@@ -1940,15 +1936,15 @@ document.querySelectorAll('.mode').forEach((b) => b.addEventListener('click', ()
 $('bPlay').addEventListener('click', () => {
   Audio.init();
   if (CHAL && selMode === CHAL.mode && !startRun.usedChal) { startRun.usedChal = true; startRun(CHAL.mode, CHAL.seed); return; }
-  startRun(selMode, selMode === 'daily' ? hashStr('ck-' + dayKey()) : (Math.random() * 1e9) >>> 0);
+  startRun(selMode, (Math.random() * 1e9) >>> 0);
 });
-$('bAgain').addEventListener('click', () => { clearInterval(gameOver.iv); finalizeRun(); startRun(G.mode, G.mode === 'daily' ? G.seed : (Math.random() * 1e9) >>> 0); });
+$('bAgain').addEventListener('click', () => { clearInterval(gameOver.iv); finalizeRun(); startRun(G.mode, (Math.random() * 1e9) >>> 0); });
 $('bMenu').addEventListener('click', () => { clearInterval(gameOver.iv); finalizeRun(); wipe(); setTimeout(toMenu, 300); });
 $('bRevive').addEventListener('click', revive);
 $('bShare').addEventListener('click', shareChallenge);
 $('bPause').addEventListener('click', pauseGame);
 $('bResume').addEventListener('click', resumeGame);
-$('bRestart').addEventListener('click', () => { finalizeRunIfPlayed(); startRun(G.mode, G.mode === 'daily' ? G.seed : (Math.random() * 1e9) >>> 0); });
+$('bRestart').addEventListener('click', () => { finalizeRunIfPlayed(); startRun(G.mode, (Math.random() * 1e9) >>> 0); });
 $('bQuit').addEventListener('click', () => { finalizeRunIfPlayed(); wipe(); setTimeout(toMenu, 300); });
 function finalizeRunIfPlayed() { if (G && G.score > 0) finalizeRun(); }
 $('bSound').addEventListener('click', () => { Audio.init(); Audio.setMuted(!Audio.muted); });
