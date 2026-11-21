@@ -72,6 +72,24 @@ export default function MobileGamePage() {
     }
   }, [playing])
 
+  // Pendant la partie : aucun appui long du navigateur autour du jeu (bulle « Copier / Partager… »
+  // de Safari, loupe, menu contextuel). Le jeu garde ses propres gestes dans l'iframe.
+  useEffect(() => {
+    if (!playing) return
+    const root = document.documentElement
+    root.classList.add('rq-playing')
+    const clearSel = () => { try { const s = window.getSelection(); if (s && s.rangeCount) s.removeAllRanges() } catch { /* sélection indisponible */ } }
+    const noMenu = (e) => e.preventDefault()
+    document.addEventListener('selectionchange', clearSel)
+    document.addEventListener('contextmenu', noMenu)
+    clearSel()
+    return () => {
+      root.classList.remove('rq-playing')
+      document.removeEventListener('selectionchange', clearSel)
+      document.removeEventListener('contextmenu', noMenu)
+    }
+  }, [playing])
+
   useEffect(() => {
     return () => {
       try { if (document.fullscreenElement) document.exitFullscreen() } catch (e) {}

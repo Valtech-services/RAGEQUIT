@@ -36,7 +36,7 @@
   #skyband { position: fixed; left: 0; right: 0; top: 0; height: calc(26vh + var(--safe-top)); pointer-events: none; z-index: 1;
     background: radial-gradient(1px 1px at 12% 22%, rgba(255,255,255,.9), transparent), radial-gradient(1px 1px at 33% 12%, rgba(255,255,255,.7), transparent), radial-gradient(1.5px 1.5px at 58% 30%, rgba(255,255,255,.8), transparent), radial-gradient(1px 1px at 76% 16%, rgba(255,255,255,.7), transparent), radial-gradient(1px 1px at 89% 34%, rgba(255,255,255,.6), transparent), radial-gradient(1px 1px at 46% 8%, rgba(255,255,255,.8), transparent),
       linear-gradient(to bottom, var(--skyTop, #05021a) 0%, var(--skyHor, #2a0f5a) 46%, rgba(0,0,0,0) 100%); }
-  #moon { position: absolute; left: calc(16px + var(--safe-left)); top: calc(104px + var(--safe-top)); width: 40px; height: 40px; border-radius: 50%; opacity: var(--moonA, 1);
+  #moon { display: none; position: absolute; left: calc(16px + var(--safe-left)); top: calc(104px + var(--safe-top)); width: 40px; height: 40px; border-radius: 50%; opacity: var(--moonA, 1);
     background: radial-gradient(circle at 38% 36%, #fffaf0 0%, #e8e2ff 45%, #b9b0e8 72%, #8a7fc8 100%);
     box-shadow: 0 0 22px 6px rgba(200,190,255,.55), 0 0 70px 24px rgba(140,110,255,.28); }
   #moon::before, #moon::after { content: ""; position: absolute; border-radius: 50%; background: rgba(120,110,170,.35); }
@@ -58,39 +58,48 @@
   /* ---------- HUD ---------- */
   #hud { position: fixed; inset: 0; pointer-events: none; z-index: 4; opacity: 0; transition: opacity .3s; }
   #hud.on { opacity: 1; }
-  #scoreBox { position: absolute; top: calc(8px + var(--safe-top)); left: 50%; transform: translateX(-50%); text-align: center; }
-  #score { font-size: 38px; font-weight: 900; letter-spacing: 1px; font-variant-numeric: tabular-nums; line-height: 1;
+  #scoreBox { position: absolute; top: calc(6px + var(--safe-top)); left: 50%; transform: translateX(-50%); text-align: center; }
+  #score { font-size: 34px; font-weight: 900; letter-spacing: 1px; font-variant-numeric: tabular-nums; line-height: 1;
     text-shadow: 0 0 14px rgba(157,255,58,.55), 0 2px 0 #1a0b38; transition: transform .12s; }
   #score.bump { transform: scale(1.14); }
-  #combo { margin-top: 2px; font-size: 15px; font-weight: 900; color: var(--pumpkin); letter-spacing: 2px; height: 18px; opacity: 0; transition: opacity .2s, transform .2s;
+  #combo { position: absolute; top: calc(80px + var(--safe-top)); left: 50%; margin-left: -60px; width: 120px; text-align: center; font-size: 14px; font-weight: 900; color: var(--pumpkin); letter-spacing: 2px; height: 18px; opacity: 0; transition: opacity .2s, transform .2s, top .3s;
     text-shadow: 0 0 10px rgba(255,138,31,.8); font-variant-numeric: tabular-nums; }
   #combo.on { opacity: 1; }
-  #nightBox { position: absolute; top: calc(68px + var(--safe-top)); left: 50%; transform: translateX(-50%); width: min(236px, 60vw); }
-  #nightLbl { display: flex; justify-content: space-between; gap: 8px; white-space: nowrap; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: var(--dim); }
+  #nightBox { position: absolute; top: calc(46px + var(--safe-top)); left: 50%; transform: translateX(-50%); width: min(190px, 42vw); }
+  #nightLbl { display: flex; justify-content: space-between; gap: 6px; white-space: nowrap; font-size: 10px; font-weight: 800; letter-spacing: 1.5px; color: var(--dim); }
   #nightLbl b { color: var(--bone); }
   #nightBar { margin-top: 4px; height: 7px; border-radius: 6px; background: rgba(255,255,255,.1); overflow: hidden; box-shadow: 0 0 0 1px rgba(162,107,255,.35) inset; }
   #nightFill { height: 100%; width: 0%; border-radius: 6px; background: linear-gradient(90deg, #6a3bff, #ff6ad5 70%, #ffb36b); box-shadow: 0 0 10px rgba(255,106,213,.7); }
   #nightBox.boss #nightFill { background: linear-gradient(90deg, #ff2e55, #ff8a1f); animation: bossPulse .8s ease-in-out infinite; }
   @keyframes bossPulse { 50% { filter: brightness(1.5); } }
-  #bossBar { position: absolute; top: calc(98px + var(--safe-top)); left: 50%; transform: translateX(-50%) scaleX(0); width: min(260px, 66vw); transition: transform .35s cubic-bezier(.2,1.4,.4,1); text-align: center; }
+  #bossBar { position: absolute; top: calc(78px + var(--safe-top)); left: 50%; transform: translateX(-50%) scaleX(0); width: min(260px, 66vw); transition: transform .35s cubic-bezier(.2,1.4,.4,1); text-align: center; }
   #bossBar.on { transform: translateX(-50%) scaleX(1); }
   #bossBar span { font-size: 11px; font-weight: 900; letter-spacing: 3px; color: #ff9bb0; text-shadow: 0 0 8px rgba(255,46,85,.8); }
   #bossTrack { margin-top: 3px; height: 9px; border-radius: 6px; background: rgba(255,46,85,.15); box-shadow: 0 0 0 1px rgba(255,46,85,.6) inset; overflow: hidden; }
   #bossFill { height: 100%; width: 100%; background: linear-gradient(90deg, #ff2e55, #ff6ad5); box-shadow: 0 0 12px #ff2e55; transition: width .25s; }
-  #rightTop { position: absolute; top: calc(10px + var(--safe-top)); right: calc(10px + var(--safe-right)); display: flex; flex-direction: column; align-items: flex-end; gap: 8px; pointer-events: auto; }
-  #btnRow { display: flex; gap: 8px; }
-  .iconBtn { width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(162,107,255,.5); background: rgba(20,10,44,.72); color: var(--bone);
+  #rightTop { position: absolute; top: calc(6px + var(--safe-top)); right: calc(10px + var(--safe-right)); display: flex; flex-direction: column; align-items: flex-end; gap: 7px; pointer-events: auto; }
+  #btnRow { display: flex; gap: 6px; }
+  .iconBtn { width: 36px; height: 36px; border-radius: 12px; border: 1px solid rgba(162,107,255,.5); background: rgba(20,10,44,.72); color: var(--bone);
     display: grid; place-items: center; box-shadow: 0 0 12px rgba(162,107,255,.25); transition: transform .1s; }
   .iconBtn:active { transform: scale(.9); }
   .iconBtn svg { width: 20px; height: 20px; }
-  #hearts { display: flex; gap: 3px; }
-  #hearts svg { width: 20px; height: 20px; filter: drop-shadow(0 0 5px rgba(255,46,85,.8)); transition: transform .25s, opacity .25s; }
+  #hearts { display: flex; gap: 2px; align-items: center; font-size: 15px; font-weight: 900; color: #ffd6de; font-variant-numeric: tabular-nums; text-shadow: 0 0 8px rgba(255,46,85,.8); }
+  #hearts b { margin-left: 3px; }
+  #hearts svg { width: 18px; height: 18px; filter: drop-shadow(0 0 5px rgba(255,46,85,.8)); transition: transform .25s, opacity .25s; }
   #hearts svg.lost { opacity: .22; filter: none; transform: scale(.8); }
   #hearts svg.pop { animation: heartPop .4s ease; }
   @keyframes heartPop { 40% { transform: scale(1.5); } }
-  #powers { position: absolute; top: calc(124px + var(--safe-top)); left: 50%; transform: translateX(-50%); display: flex; gap: 6px; }
-  .pchip { font-size: 11px; font-weight: 900; letter-spacing: 1px; padding: 4px 9px; border-radius: 20px; background: rgba(20,10,44,.8); border: 1px solid currentColor;
-    box-shadow: 0 0 10px currentColor; animation: chipIn .25s ease both; font-variant-numeric: tabular-nums; }
+  /* firefly gauge (CROAK charge) under the top band, left */
+  #ffGauge { position: absolute; top: calc(56px + var(--safe-top)); left: calc(14px + var(--safe-left)); display: flex; flex-wrap: wrap; align-items: center; gap: 3px; width: 72px; }
+  #ffGauge i { width: 9px; height: 9px; border-radius: 50%; background: rgba(216,255,106,.14); box-shadow: 0 0 0 1px rgba(216,255,106,.35) inset; transition: background .2s, box-shadow .2s, transform .2s; }
+  #ffGauge i.on { background: #e4ff7a; box-shadow: 0 0 8px #c8ff3a, 0 0 0 1px #f4ffc0 inset; transform: scale(1.15); }
+  #ffGauge span { flex-basis: 100%; margin-top: 2px; font-size: 8px; font-weight: 900; letter-spacing: 1.5px; color: var(--dim); }
+  #ffGauge.full span { color: var(--lime); text-shadow: 0 0 8px var(--lime); animation: bossPulse .6s ease-in-out infinite; }
+  /* active powers ride above the frog, each with a shrinking ring */
+  #powers { position: fixed; left: 0; top: 0; display: flex; gap: 5px; pointer-events: none; z-index: 4; will-change: transform; }
+  .pchip { position: relative; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 9px; font-weight: 900; color: #10061f;
+    background: conic-gradient(currentColor var(--p, 360deg), rgba(255,255,255,.12) 0); box-shadow: 0 0 10px currentColor; animation: chipIn .25s ease both; }
+  .pchip b { position: absolute; inset: 3px; border-radius: 50%; background: rgba(16,8,36,.9); display: grid; place-items: center; color: currentColor; font-size: 8px; letter-spacing: .5px; }
   @keyframes chipIn { from { transform: scale(.4); opacity: 0; } }
 
   /* ---------- touch controls ---------- */
@@ -218,12 +227,13 @@
 <div id="flash"></div>
 <div class="lb" id="lbTop"></div><div class="lb" id="lbBot"></div>
 <div id="floats"></div>
+<div id="powers"></div>
 
 <div id="hud">
   <div id="scoreBox"><div id="score">0</div><div id="combo">x2 COMBO</div></div>
   <div id="nightBox"><div id="nightLbl"><b id="nightNum">NIGHT 1</b><span id="nightTime">DAWN IN 0:50</span></div><div id="nightBar"><div id="nightFill"></div></div></div>
   <div id="bossBar"><span>GRAVE KEEPER</span><div id="bossTrack"><div id="bossFill"></div></div></div>
-  <div id="powers"></div>
+  <div id="ffGauge"><i></i><i></i><i></i><i></i><i></i><i></i><span>CROAK</span></div>
   <div id="rightTop">
     <div id="btnRow">
       <button class="iconBtn" id="bSound" aria-label="Sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor" stroke="none"/><path id="sndWave" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
@@ -512,7 +522,7 @@ let pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
 renderer.setPixelRatio(pixelRatio);
 renderer.setClearColor(0x0d0720, 1);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.18;
+renderer.toneMappingExposure = 1.12;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -522,7 +532,7 @@ const scene = new THREE.Scene();
 scene.fog = new THREE.Fog(0x1a0b3a, 16, 40);
 const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 200);
 
-const hemi = new THREE.HemisphereLight(0x9a86ff, 0x1a0c2a, 0.6);           // tinted ambient (the night HDRI adds the rest)
+const hemi = new THREE.HemisphereLight(0x9a86ff, 0x1a0c2a, 0.5);           // tinted ambient (the night HDRI adds the rest)
 scene.add(hemi);
 const moonLight = new THREE.DirectionalLight(0xcfd8ff, 1.9);                // main light (moon), soft shadows
 moonLight.position.set(-5, 12, 6);
@@ -624,8 +634,8 @@ grassTex.wrapS = grassTex.wrapT = THREE.RepeatWrapping; grassTex.repeat.set(16, 
 // open grave: a dark pit with a dirt rim
 const pitTex = canvasTex(128, (g, s) => {
   g.fillStyle = 'rgba(0,0,0,0)'; g.fillRect(0, 0, s, s);
-  g.fillStyle = '#5a4234'; g.beginPath(); g.ellipse(s / 2, s / 2, 46, 58, 0, 0, Math.PI * 2); g.fill();
-  for (let i = 0; i < 60; i++) { g.fillStyle = 'rgba(' + (90 + Math.random() * 40 | 0) + ',' + (60 + Math.random() * 30 | 0) + ',40,.8)'; g.beginPath(); g.arc(s / 2 + (Math.random() - 0.5) * 92, s / 2 + (Math.random() - 0.5) * 116, 2 + Math.random() * 4, 0, 7); g.fill(); }
+  g.fillStyle = '#3a3046'; g.beginPath(); g.ellipse(s / 2, s / 2, 46, 58, 0, 0, Math.PI * 2); g.fill();
+  for (let i = 0; i < 60; i++) { g.fillStyle = 'rgba(' + (60 + Math.random() * 30 | 0) + ',' + (50 + Math.random() * 20 | 0) + ',' + (80 + Math.random() * 30 | 0) + ',.8)'; g.beginPath(); g.arc(s / 2 + (Math.random() - 0.5) * 92, s / 2 + (Math.random() - 0.5) * 116, 2 + Math.random() * 4, 0, 7); g.fill(); }
   const pit = g.createRadialGradient(s / 2, s / 2, 4, s / 2, s / 2, 40); pit.addColorStop(0, '#05020a'); pit.addColorStop(0.7, '#120818'); pit.addColorStop(1, 'rgba(40,24,30,1)');
   g.fillStyle = pit; g.beginPath(); g.ellipse(s / 2, s / 2, 32, 44, 0, 0, Math.PI * 2); g.fill();
 });
@@ -732,7 +742,7 @@ function updateRings(dt) {
 
 /* ================= ASSET LOADING ================= */
 const MODEL_FILES = ['hero-frog', 'm-zombie', 'm-skeleton', 'm-ghost', 'm-vampire', 'm-keeper', 'gravestone-round', 'gravestone-cross', 'gravestone-bevel', 'gravestone-broken', 'gravestone-decorative',
-  'pine', 'pine-crooked', 'pumpkin-carved', 'pumpkin-tall-carved', 'lantern-candle', 'crypt-small', 'iron-fence', 'iron-fence-border-column', 'rocks', 'trunk', 'candle-multiple', 'fire-basket', 'grave', 'lightpost-single', 'cross-column'];
+  'pine', 'pine-crooked', 'pumpkin-carved', 'pumpkin-tall-carved', 'lantern-candle', 'crypt-small', 'iron-fence', 'iron-fence-border-column', 'rocks', 'trunk', 'candle-multiple', 'fire-basket', 'lightpost-single', 'cross-column'];
 const SPRITE_FILES = ['spark', 'soft', 'sparkle', 'smoke', 'ring', 'dirt'];
 // PBR textures and night environment (true = colour data, false = linear data)
 const PBR_FILES = { slab_diff: ['webp', true], slab_nor: ['webp', false], slab_rough: ['webp', false], ground_diff: ['webp', true], ground_nor: ['webp', false], env_night: ['jpg', true] };
@@ -840,7 +850,7 @@ function decor(name, target, byWidth, col, em, ei) {
 const boardGroup = new THREE.Group(); scene.add(boardGroup);
 const ground = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), new THREE.MeshStandardMaterial({ map: grassTex, color: 0xa8b4c8, roughness: 1 }));
 ground.rotation.x = -Math.PI / 2; ground.position.y = -0.02; ground.receiveShadow = true; scene.add(ground);
-const tileMat = new THREE.MeshStandardMaterial({ map: stoneTex, emissiveMap: edgeFaint, emissive: new THREE.Color(PAL.violet), emissiveIntensity: 0.28, roughness: 0.92 });
+const tileMat = new THREE.MeshStandardMaterial({ map: stoneTex, emissiveMap: edgeFaint, emissive: new THREE.Color(PAL.violet), emissiveIntensity: 0.55, roughness: 0.92 });
 const tiles = new THREE.InstancedMesh(new THREE.BoxGeometry(0.93, 0.16, 0.93), tileMat, COLS * ROWS);
 tiles.receiveShadow = true; scene.add(tiles);
 // glow line around the board
@@ -867,7 +877,7 @@ const mistMat = new THREE.ShaderMaterial({
     '  vec2 p = vW.xz * 0.35 + vec2(uT * 0.05, uT * 0.02);',
     '  float v = n(p) * 0.6 + n(p * 2.1 - uT * 0.04) * 0.4;',
     '  vec2 q = abs(vW.xz) - uHalf; float out1 = smoothstep(-0.6, 1.5, max(q.x, q.y));',
-    '  float a = smoothstep(0.35, 0.85, v) * (0.12 + 0.4 * out1) * (1.0 - smoothstep(14.0, 24.0, length(vW.xz)));',
+    '  float a = smoothstep(0.35, 0.85, v) * (0.03 + 0.42 * out1) * (1.0 - smoothstep(14.0, 24.0, length(vW.xz)));',
     '  gl_FragColor = vec4(uCol, a);',
     '}'
   ].join('\n')
@@ -901,7 +911,7 @@ function buildBoard(seed) {
     const i = key(x, z);
     m4.makeRotationY(Math.floor(R() * 4) * Math.PI / 2 + (R() - 0.5) * 0.06).setPosition(tileX(x), (R() - 0.5) * 0.03, tileZ(z)); tiles.setMatrixAt(i, m4);
     const v = R(); c.set(v < 0.16 ? 0x9ab8a8 : v < 0.26 ? 0xb8a49a : [0xb8b2d8, 0xa8a2cc, 0x9a96c0][Math.floor(R() * 3)]);
-    c.multiplyScalar((x + z) % 2 ? 1.08 : 0.92);
+    c.multiplyScalar((x + z) % 2 ? 0.86 : 0.74);
     tiles.setColorAt(i, c);
   }
   tiles.instanceMatrix.needsUpdate = true; if (tiles.instanceColor) tiles.instanceColor.needsUpdate = true;
@@ -940,13 +950,15 @@ function buildBoard(seed) {
     boardGroup.add(o);
   }
   for (const g of GRAVES) {
-    const o = decor('grave', 0.92, true, 0x9a8070);
+    const o = new THREE.Mesh(graveGeo, graveMat); o.castShadow = true; o.receiveShadow = true;
     o.position.set(tileX(g.x), 0.08, tileZ(g.z)); o.rotation.y = Math.floor(R() * 4) * Math.PI / 2;
     boardGroup.add(o);
     const pit = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 0.8), new THREE.MeshBasicMaterial({ map: pitTex, transparent: true, depthWrite: false }));
     pit.rotation.x = -Math.PI / 2; pit.rotation.z = o.rotation.y; pit.position.set(tileX(g.x), 0.13, tileZ(g.z)); pit.renderOrder = 1; boardGroup.add(pit);
     g.glow = new THREE.Mesh(new THREE.PlaneGeometry(1.1, 1.1), new THREE.MeshBasicMaterial({ map: glowTex, color: new THREE.Color(PAL.violet).multiplyScalar(1.2), transparent: true, opacity: 0.5, depthWrite: false, blending: THREE.AdditiveBlending }));
     g.glow.rotation.x = -Math.PI / 2; g.glow.position.set(tileX(g.x), 0.11, tileZ(g.z)); boardGroup.add(g.glow);
+    g.core = new THREE.Mesh(new THREE.PlaneGeometry(0.42, 0.56), new THREE.MeshBasicMaterial({ map: glowTex, color: new THREE.Color(0.7, 1.6, 0.6), transparent: true, opacity: 0.5, depthWrite: false, blending: THREE.AdditiveBlending }));
+    g.core.rotation.x = -Math.PI / 2; g.core.rotation.z = o.rotation.y; g.core.position.set(tileX(g.x), 0.14, tileZ(g.z)); g.core.renderOrder = 2; boardGroup.add(g.core);
   }
   // rain puddles on a few free slabs: they mirror the night sky and the neon
   let nP = 0;
@@ -1011,6 +1023,13 @@ function buildBoard(seed) {
   boardGroup.traverse((m) => { if (m.isMesh) { m.castShadow = Math.abs(m.getWorldPosition(TMPV).x) < hx + 1; } });
 }
 const TMPV = new THREE.Vector3();
+// open grave: a low stone frame around the soul pit
+const graveGeo = (() => {
+  const parts = [[0.7, 0.1, 0.1, 0, -0.42], [0.7, 0.1, 0.1, 0, 0.42], [0.1, 0.1, 0.74, -0.32, 0], [0.1, 0.1, 0.74, 0.32, 0]].map(([w, h, d, x, z]) => new THREE.BoxGeometry(w, h, d).translate(x, h / 2, z));
+  const head = new THREE.BoxGeometry(0.5, 0.16, 0.12).translate(0, 0.08, -0.5);
+  return mergeGeometries([...parts, head]);
+})();
+const graveMat = addRim(new THREE.MeshStandardMaterial({ color: 0x5a5470, roughness: 0.9, emissive: new THREE.Color(0x2a1a5a), emissiveIntensity: 0.3 }), PAL.violet, 0.35);
 const puddleGeo = new THREE.CircleGeometry(0.34, 18);
 const puddleMat = new THREE.MeshStandardMaterial({ color: 0x5a4aa0, roughness: 0.03, metalness: 0.4, envMapIntensity: 3, transparent: true, opacity: 0.55, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 });
 const hillGeo = new THREE.ConeGeometry(1, 1, 7, 1);
@@ -1110,7 +1129,7 @@ function attachHero() {
   for (const c of ANIMS['hero-frog']) HERO.acts[c.name] = HERO.mixer.clipAction(c);
   for (const n of ['Punch', 'HitReact', 'Death', 'Wave', 'Yes', 'Jump_Land']) if (HERO.acts[n]) { HERO.acts[n].setLoop(THREE.LoopOnce, 1); HERO.acts[n].clampWhenFinished = true; }
   u.tongue.position.set(0, H * 0.62, 0.2);
-  u.cape.scale.set(0.62, 0.8, 1); u.cape.material.emissiveIntensity = 0.45; u.cape.material.color.set(0x4a1aa8);
+  u.cape.scale.set(0.58, 0.78, 1); u.cape.material.emissiveIntensity = 0.22; u.cape.material.color.set(0x3a1078); u.cape.material.roughness = 0.85;
   // a real little crown: gold band, five points, a ruby
   const gold = new THREE.MeshStandardMaterial({ color: PAL.gold, emissive: new THREE.Color(PAL.gold), emissiveIntensity: 0.3, metalness: 0.8, roughness: 0.25, envMapIntensity: 1.5 });
   const crown = new THREE.Group();
@@ -1121,6 +1140,7 @@ function attachHero() {
   // tapered cape with a ragged hem
   const cp = u.capeGeo.attributes.position.array;
   for (let i = 0; i < cp.length; i += 3) { const yN = (cp[i + 1] + 0.21) / 0.42; cp[i] *= 0.5 + 0.5 * (1 - yN); if (yN < 0.01) cp[i + 1] -= Math.abs(Math.sin(cp[i] * 30)) * 0.05; }
+  for (let i = 0; i < cp.length; i += 3) cp[i + 2] += cp[i] * cp[i] * 3.2;          // wraps around the back
   u.capeGeo.attributes.position.needsUpdate = true; u.capeGeo.computeVertexNormals(); u.capeBase = cp.slice();
   frogLight.intensity = 0.7;
   HERO.on = true; heroBase('Idle', 0);
@@ -1152,7 +1172,7 @@ function updateHero(dt) {
   if (HERO.head) { HERO.head.getWorldPosition(HV); u.body.worldToLocal(HV); u.crown.position.set(HV.x, HV.y + 0.19, HV.z - 0.02); }
   if (HERO.chest) { HERO.chest.getWorldPosition(HV); u.body.worldToLocal(HV); u.cape.position.set(HV.x, HV.y + 0.04, HV.z - 0.17); }
 }
-const FROG_S = 1.25;
+const FROG_S = 1.6;
 const frog = buildFrog(); frog.scale.setScalar(FROG_S); scene.add(frog);
 frog.userData.shadowBlob.scale.setScalar(FROG_S);
 const frogRing = new THREE.Mesh(new THREE.RingGeometry(0.36, 0.45, 40), new THREE.MeshBasicMaterial({ color: new THREE.Color(PAL.gold).multiplyScalar(1.5), transparent: true, opacity: 0.85, depthWrite: false, side: THREE.DoubleSide }));
@@ -1652,14 +1672,18 @@ function collectFirefly(f) {
 const HEART_SVG = '<svg viewBox="0 0 24 24"><path fill="#ff2e55" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.3 3 4.5 6.6 4.5c2.1 0 3.6 1.2 5.4 3.2 1.8-2 3.3-3.2 5.4-3.2 3.6 0 5.7 3.8 4.2 7.3C19.5 16.4 12 21 12 21z"/><path fill="#fff" opacity=".55" d="M7 7.2c-1.4.2-2.3 1.6-2 3 .2-1 1-1.9 2.3-2.2z"/></svg>';
 function renderHearts(pop) {
   const h = $('hearts'); let html = '';
+  if (G.maxHearts > 3) { h.innerHTML = HEART_SVG.replace('<svg', '<svg class="' + (pop ? 'pop' : '') + (G.hearts <= 0 ? ' lost' : '') + '"') + '<b>x' + Math.max(0, G.hearts) + '</b>'; return; }
   for (let i = 0; i < G.maxHearts; i++) html += HEART_SVG.replace('<svg', '<svg class="' + (i < G.hearts ? (pop && i === G.hearts - 1 ? 'pop' : '') : 'lost') + '"');
   h.innerHTML = html;
 }
 function renderPowers() {
   let html = '';
-  if (G.shield) html += '<div class="pchip" style="color:#7fe8ff">SHIELD</div>';
-  for (const k of ['frenzy', 'freeze', 'magnet']) if (G.powers[k] > 0) html += '<div class="pchip" style="color:#' + new THREE.Color(POWERS[k].col).getHexString() + '">' + POWERS[k].name + ' ' + Math.ceil(G.powers[k]) + '</div>';
-  if ($('powers').innerHTML !== html) $('powers').innerHTML = html;
+  const ab = { frenzy: 'FRZ', freeze: 'ICE', magnet: 'MAG' };
+  if (G.shield) html += '<div class="pchip" style="color:#7fe8ff"><b>SHLD</b></div>';
+  for (const k of ['frenzy', 'freeze', 'magnet']) if (G.powers[k] > 0) html += '<div class="pchip" data-k="' + k + '" style="color:#' + new THREE.Color(POWERS[k].col).getHexString() + '"><b>' + ab[k] + '</b></div>';
+  const el = $('powers');
+  if (el._h !== html) { el._h = html; el.innerHTML = html; }
+  for (const c of el.children) if (c.dataset.k) c.style.setProperty('--p', (360 * clamp(G.powers[c.dataset.k] / POWERS[c.dataset.k].dur, 0, 1)) + 'deg');
   $('frenzyFx').classList.toggle('on', G.powers.frenzy > 0);
   $('freezeFx').classList.toggle('on', G.powers.freeze > 0);
 }
@@ -1671,6 +1695,13 @@ function updateHud(dt) {
   const c = $('combo');
   if (G.combo >= 2) { c.textContent = 'x' + G.combo + ' COMBO'; c.classList.add('on'); c.style.transform = 'scale(' + (1 + Math.min(0.3, G.combo * 0.03)) + ')'; } else c.classList.remove('on');
   $('nightNum').textContent = 'NIGHT ' + G.night;
+  // firefly gauge
+  const pips = Math.floor(G.croak * 6 + 0.001), gg = $('ffGauge');
+  if (gg._n !== pips) { gg._n = pips; [...gg.children].forEach((e, i) => { if (e.tagName === 'I') e.classList.toggle('on', i < pips); }); gg.classList.toggle('full', pips >= 6); gg.lastChild.textContent = pips >= 6 ? 'CROAK READY' : 'CROAK'; }
+  $('combo').style.top = G.bossAlive ? 'calc(106px + var(--safe-top))' : '';
+  // powers follow the frog
+  const pw = $('powers');
+  if (pw.children.length) { PV.set(F.pos.x, 1.95 + F.y, F.pos.z).project(camera); pw.style.display = ''; pw.style.transform = 'translate(' + ((PV.x * 0.5 + 0.5) * window.innerWidth - pw.offsetWidth / 2).toFixed(1) + 'px,' + ((-PV.y * 0.5 + 0.5) * window.innerHeight - 30).toFixed(1) + 'px)'; } else pw.style.display = 'none';
   const left = Math.max(0, G.dur - G.nightT);
   const sec = Math.ceil(left);
   const txt = state === 'dawn' ? 'DAWN' : (G.bossAlive && left <= 0 ? 'KEEPER BLOCKS DAWN' : 'DAWN IN ' + Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0'));
@@ -1719,7 +1750,7 @@ function addShake(a) { shake = Math.max(shake, RM ? a * 0.25 : a); }
 /* ================= CAMERA ================= */
 // Play: a 3/4 view that follows the frog, framed in the free band between the HUD and the action buttons.
 // Menu: a low close-up on the frog, with the moon behind it.
-const CAM_EL = THREE.MathUtils.degToRad(50);
+const CAM_EL = THREE.MathUtils.degToRad(56);
 const camBase = { dist: 14, h: 11, z: 8, off: 0, shift: 0 };
 const camLook = new THREE.Vector3(0, 0, 0.6), camPos = new THREE.Vector3(0, 11, 9), camLookT = new THREE.Vector3(), camPosT = new THREE.Vector3();
 let camShift = 0, camInit = false;
@@ -1727,27 +1758,27 @@ function frameCamera() {
   const W = window.innerWidth, H = window.innerHeight, asp = W / H;
   camera.aspect = asp; camera.fov = asp < 0.75 ? 46 : 40; camera.updateProjectionMatrix();
   const portrait = asp < 1;
-  const top = portrait ? 112 : 84;                                   // score + night bar
-  const bot = portrait ? H * 0.11 + 40 : 24;                   // action buttons (they overlap the right edge a little)
+  const top = portrait ? 92 : 80;                                    // compact top band
+  const bot = portrait ? H * 0.11 + 10 : 24;                   // action buttons (they overlap the right edge a little)
   const Hf = Math.max(H * 0.5, H - top - bot);
   const vf = THREE.MathUtils.degToRad(camera.fov / 2), vfE = Math.atan(Math.tan(vf) * Hf / H), hf = Math.atan(Math.tan(vf) * asp);
-  const needW = (COLS + 0.9) / 2 / Math.tan(hf);
+  const needW = (portrait ? COLS - 0.1 : COLS + 0.9) / 2 / Math.tan(hf);   // portrait: zoomed in, the camera pans with the frog
   const needH = (ROWS * Math.sin(CAM_EL) + 1.7) / 2 / Math.tan(vfE);
   const d = Math.max(needW, needH) * (asp > 1 ? 1.1 : 1);
   camBase.dist = d; camBase.off = asp > 1 ? -0.5 : 0.1;
   camBase.h = Math.sin(CAM_EL) * d; camBase.z = Math.cos(CAM_EL) * d;
   camBase.shift = H / 2 - (top + Hf / 2);                            // pixels: lifts the board into the free band
-  scene.fog.near = d * 0.95; scene.fog.far = d * 2.6;
+  scene.fog.near = d * 1.2; scene.fog.far = d * 2.8;
 }
 function updateCamera(dt) {
   const menu = state === 'menu' || state === 'loading';
   const t = performance.now() / 1000;
   const H = window.innerHeight;
   if (menu) {
-    camLookT.set(F.pos.x, 0.75, F.pos.z);
-    camPosT.set(F.pos.x + Math.sin(t * 0.3) * 0.6, 2.5, F.pos.z + 5.0);
+    camLookT.set(F.pos.x, 0.95, F.pos.z);
+    camPosT.set(F.pos.x + Math.sin(t * 0.3) * 0.7, 3.0, F.pos.z + 6.8);
   } else {
-    camLookT.set(F.pos.x * 0.3, 0, F.pos.z * 0.22 + 0.25 + camBase.off);
+    camLookT.set(F.pos.x * (window.innerWidth < window.innerHeight ? 0.55 : 0.38), 0, F.pos.z * 0.28 + 0.25 + camBase.off);
     camPosT.set(camLookT.x, camBase.h, camLookT.z + camBase.z);
   }
   const k = camInit ? Math.min(1, dt * (menu ? 2.2 : 3.2)) : 1; camInit = true;
@@ -1782,7 +1813,7 @@ function skyAt(k, dawn) {
   scene.fog.color.copy(SK.fog); renderer.setClearColor(SK.fog);
   hemi.intensity = hemiI;
   mistMat.uniforms.uCol.value.copy(SK.fog).lerp(new THREE.Color(0xb0a0ff), 0.45);
-  moonPool.material.opacity = 0.24 * (1 - d) + 0.06;
+  moonPool.material.opacity = 0.12 * (1 - d) + 0.04;
   const sb = $('skyband').style, key = SK.top.getHexString() + SK.hor.getHexString() + d.toFixed(2);
   if (sb._k !== key) { sb._k = key; sb.setProperty('--skyTop', '#' + SK.top.getHexString()); sb.setProperty('--skyHor', '#' + SK.hor.getHexString()); sb.setProperty('--moonA', String(1 - d * 0.85)); }
   moonLight.color.setRGB(lerp(0.8, 1, d), lerp(0.85, 0.75, d), lerp(1, 0.7, d));
@@ -1794,6 +1825,7 @@ function setScreen(name) {
   show($('menu'), name === 'menu'); show($('over'), name === 'over'); show($('pause'), name === 'pause');
   show($('hud'), name === 'play' || name === 'pause'); show($('pad'), name === 'play');
   document.body.classList.toggle('menu', name === 'menu');
+  $('powers').style.display = name === 'play' ? '' : 'none';
 }
 function wipe() { const w = $('wipe'); w.classList.remove('go'); void w.offsetWidth; w.classList.add('go'); }
 function renderMenu() {
@@ -1980,7 +2012,7 @@ function updateFrog(dt, t) {
   frog.rotation.y = F.rot;
   frog.position.set(F.pos.x, 0.08 + F.y, F.pos.z);
   u.shadowBlob.position.set(F.pos.x, 0.095, F.pos.z); const sb = (1 - Math.min(0.6, F.y * 0.4)) * FROG_S; u.shadowBlob.scale.set(sb, sb, sb);
-  frogRing.position.set(F.pos.x, 0.105, F.pos.z); frogRing.visible = frog.visible; frogRing.material.opacity = 0.55 + 0.3 * Math.sin(t * 5); frogRing.scale.setScalar(1 + 0.06 * Math.sin(t * 5));
+  frogRing.position.set(F.pos.x, 0.105, F.pos.z); frogRing.visible = frog.visible; frogRing.material.opacity = 0.55 + 0.3 * Math.sin(t * 5); frogRing.scale.setScalar((1 + 0.06 * Math.sin(t * 5)) * 1.2);
   frogLight.position.set(F.pos.x, 0.9 + F.y, F.pos.z + 0.3);
   // eyes look around, blink
   const blink = (t % 3.7) < 0.12 ? 0.15 : 1;
@@ -2103,13 +2135,17 @@ function updateWorld(dt, t) {
     m.visible = p.life - p.t > 2.5 || Math.floor(t * 8) % 2 === 0;
     if (p.t > p.life) { m.visible = false; pickups = pickups.filter((q) => q !== p); }
   }
-  for (const g of GRAVES) if (g.glow) { g.pulse = Math.max(0, (g.pulse || 0) - dt); g.glow.material.opacity = 0.35 + Math.sin(t * 2 + g.x) * 0.12 + (g.pulse || 0) * 0.6; }
+  for (const g of GRAVES) if (g.glow) {
+    g.pulse = Math.max(0, (g.pulse || 0) - dt); g.glow.material.opacity = 0.35 + Math.sin(t * 2 + g.x) * 0.12 + (g.pulse || 0) * 0.6;
+    if (g.core) g.core.material.opacity = 0.35 + Math.sin(t * 3 + g.z) * 0.15 + (g.pulse || 0) * 0.8;
+    if (Math.random() < 0.06 * PFX_SCALE) FX.soft.emit(tileX(g.x) + (Math.random() - 0.5) * 0.3, 0.2, tileZ(g.z) + (Math.random() - 0.5) * 0.3, 0, 0.5 + Math.random() * 0.4, 0, Math.random() < 0.5 ? 0x9dff3a : PAL.violet, 0.3, 1.1, -0.1, -0.15, 0);
+  }
   boardGroup.children.forEach((o) => { if (o.userData.flame) { const k = 1 + Math.sin(t * 17 + o.position.x * 3) * 0.08 + Math.sin(t * 9.3 + o.position.z) * 0.06; o.scale.set(o.userData.flame * k, o.userData.flame * 1.3 * k, 1); } });
   for (const p of lampPools) p.material.opacity = 0.5 + Math.sin(t * 11 + p.position.x) * 0.06;
   for (let i = 0; i < pumpLights.length; i++) pumpLights[i].intensity = (pumpLights[i].userData.base || 6) * (0.85 + Math.sin(t * 13 + i * 3) * 0.08 + Math.sin(t * 7.3 + i) * 0.07);
   if (G && G.boss) { bossLight.position.set(G.boss.pos.x, 2, G.boss.pos.z); }
   // ambient: drifting fog motes and fireflies around the graveyard
-  if (Math.random() < 0.25 * PFX_SCALE) FX.soft.emit((Math.random() - 0.5) * (COLS + 6), 0.3 + Math.random() * 1.5, (Math.random() - 0.5) * (ROWS + 4), (Math.random() - 0.5) * 0.3, 0.05, (Math.random() - 0.5) * 0.3, Math.random() < 0.5 ? 0x6a3bff : 0x3a8a3a, 0.5 + Math.random() * 0.6, 3, 0, 0, 0);
+  if (Math.random() < 0.1 * PFX_SCALE) FX.soft.emit((Math.random() - 0.5) * (COLS + 6), 0.3 + Math.random() * 1.5, (Math.random() - 0.5) * (ROWS + 4), (Math.random() - 0.5) * 0.3, 0.05, (Math.random() - 0.5) * 0.3, Math.random() < 0.5 ? 0x6a3bff : 0x3a8a3a, 0.5 + Math.random() * 0.6, 3, 0, 0, 0);
   if (Math.random() < 0.35 * PFX_SCALE) { const a = Math.random() * 6.28, r = 3 + Math.random() * 9; FX.sparkle.emit(Math.cos(a) * r, 0.3 + Math.random() * 2.2, Math.sin(a) * r * 1.2, (Math.random() - 0.5) * 0.4, 0.15, (Math.random() - 0.5) * 0.4, Math.random() < 0.7 ? 0xd8ff6a : 0xffd166, 0.16 + Math.random() * 0.12, 2.5 + Math.random() * 2, -0.05, 0, 0); }
   if (Math.random() < 0.06 * PFX_SCALE) FX.smoke.emit((Math.random() - 0.5) * (COLS + 4), 0.1, (Math.random() - 0.5) * (ROWS + 2), 0.15, 0.03, 0, 0x3a2a6a, 1.6, 4, 0, 0.3, 0);
 }
