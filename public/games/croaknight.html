@@ -41,6 +41,7 @@
     box-shadow: 0 0 22px 6px rgba(200,190,255,.55), 0 0 70px 24px rgba(140,110,255,.28); }
   #moon::before, #moon::after { content: ""; position: absolute; border-radius: 50%; background: rgba(120,110,170,.35); }
   #moon::before { width: 10px; height: 10px; left: 24px; top: 12px; } #moon::after { width: 6px; height: 6px; left: 12px; top: 26px; }
+  #skyband { transition: opacity .5s; } body.menu #skyband { opacity: 0; }
   @media (min-aspect-ratio: 4/3) { #skyband { height: calc(20vh + var(--safe-top)); } #moon { left: 22%; top: calc(40px + var(--safe-top)); width: 52px; height: 52px; } }
   .vignette { position: fixed; inset: 0; pointer-events: none; z-index: 2; background: radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 50%, rgba(5,0,16,.72) 100%); }
   .scan { position: fixed; inset: 0; pointer-events: none; z-index: 2; opacity: .035; background: repeating-linear-gradient(0deg, #fff 0 1px, transparent 1px 4px); }
@@ -93,7 +94,8 @@
   @keyframes chipIn { from { transform: scale(.4); opacity: 0; } }
 
   /* ---------- touch controls ---------- */
-  #pad { position: fixed; right: calc(14px + var(--safe-right)); bottom: calc(18px + var(--safe-bottom)); width: 200px; height: 190px; z-index: 5; pointer-events: none; opacity: 0; transition: opacity .3s; }
+  /* raised well above Safari's bottom toolbar (about 11 % of the screen height + safe area) */
+  #pad { position: fixed; right: calc(14px + var(--safe-right)); bottom: calc(30px + 11vh + var(--safe-bottom)); bottom: calc(30px + 11dvh + var(--safe-bottom)); width: 200px; height: 190px; z-index: 5; pointer-events: none; opacity: 0; transition: opacity .3s; }
   #pad.on { opacity: 1; }
   .act { position: absolute; border-radius: 50%; border: 2px solid currentColor; background: radial-gradient(circle at 50% 35%, rgba(255,255,255,.14), rgba(16,8,36,.82) 70%);
     display: grid; place-items: center; pointer-events: auto; touch-action: none; box-shadow: 0 0 16px currentColor, inset 0 0 12px rgba(0,0,0,.5); transition: transform .08s; }
@@ -108,10 +110,12 @@
   #aTongue { width: 88px; height: 88px; right: 0; bottom: 6px; color: #ff6ad5; }
   #aLeap { width: 60px; height: 60px; right: 104px; bottom: 4px; color: var(--frost); }
   #aCroak { width: 60px; height: 60px; right: 78px; bottom: 98px; color: var(--lime); }
-  #swipeHint { position: fixed; left: 50%; bottom: calc(28px + var(--safe-bottom)); transform: translateX(-50%); z-index: 4; pointer-events: none; font-size: 12px; font-weight: 800; letter-spacing: 2px; color: var(--dim);
+  #swipeHint { position: fixed; left: 50%; bottom: calc(40px + 11vh + var(--safe-bottom)); bottom: calc(40px + 11dvh + var(--safe-bottom)); transform: translateX(-50%); z-index: 4; pointer-events: none; font-size: 12px; font-weight: 800; letter-spacing: 2px; color: var(--dim);
     opacity: 0; transition: opacity .4s; text-shadow: 0 0 8px #000; white-space: nowrap; }
   #swipeHint.on { opacity: .9; }
-  @media (pointer: fine) { #pad { display: none; } }
+  .act kbd { display: none; position: absolute; top: -18px; font: 800 9px/1 system-ui, sans-serif; letter-spacing: 1px; color: var(--bone); padding: 2px 5px; border-radius: 5px; background: rgba(20,10,44,.85); border: 1px solid rgba(255,255,255,.25); }
+  .act { cursor: pointer; }
+  @media (pointer: fine) { .act kbd { display: block; } #pad { bottom: calc(26px + var(--safe-bottom)); right: calc(26px + var(--safe-right)); } }
   @media (max-width: 420px) { #swipeHint { left: calc(20px + var(--safe-left)); transform: none; } }
 
   /* ---------- floating texts & banners ---------- */
@@ -194,7 +198,7 @@
   #adSub, #adWait { margin-top: 8px; font-size: 13px; color: var(--dim); }
   #adCount { margin-top: 16px; font-size: 60px; font-weight: 900; color: var(--bone); font-variant-numeric: tabular-nums; }
 
-  #toast { position: fixed; left: 50%; bottom: calc(220px + var(--safe-bottom)); transform: translate(-50%, 20px); z-index: 12; padding: 9px 16px; border-radius: 14px; background: rgba(20,10,44,.92);
+  #toast { position: fixed; left: 50%; bottom: calc(240px + 11vh + var(--safe-bottom)); bottom: calc(240px + 11dvh + var(--safe-bottom)); transform: translate(-50%, 20px); z-index: 12; padding: 9px 16px; border-radius: 14px; background: rgba(20,10,44,.92);
     border: 1px solid var(--violet); font-size: 13px; font-weight: 800; opacity: 0; transition: opacity .25s, transform .25s; pointer-events: none; white-space: nowrap; }
   #toast.on { opacity: 1; transform: translate(-50%, 0); }
   #wipe { position: fixed; inset: 0; z-index: 25; pointer-events: none; background: linear-gradient(110deg, #0d0720 40%, #2a1258 50%, #0d0720 60%); transform: translateX(-110%); }
@@ -231,9 +235,9 @@
 </div>
 <div id="swipeHint">SWIPE TO HOP</div>
 <div id="pad">
-  <div class="act" id="aCroak"><div class="ring"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="3" fill="currentColor"/><path d="M6.5 6.5a8 8 0 0 0 0 11M17.5 6.5a8 8 0 0 1 0 11M3.5 3.5a12 12 0 0 0 0 17M20.5 3.5a12 12 0 0 1 0 17"/></svg><small>CROAK</small></div>
-  <div class="act" id="aLeap"><div class="ring"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18c3-10 13-10 16 0"/><path d="M16 13l4 5 1-6"/></svg><small>LEAP</small></div>
-  <div class="act" id="aTongue"><div class="ring"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M3 12h13"/><circle cx="19" cy="12" r="3" fill="currentColor"/><path d="M3 8v8"/></svg><small>TONGUE</small></div>
+  <div class="act" id="aCroak"><div class="ring"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="3" fill="currentColor"/><path d="M6.5 6.5a8 8 0 0 0 0 11M17.5 6.5a8 8 0 0 1 0 11M3.5 3.5a12 12 0 0 0 0 17M20.5 3.5a12 12 0 0 1 0 17"/></svg><small>CROAK</small><kbd>E</kbd></div>
+  <div class="act" id="aLeap"><div class="ring"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18c3-10 13-10 16 0"/><path d="M16 13l4 5 1-6"/></svg><small>LEAP</small><kbd>SHIFT</kbd></div>
+  <div class="act" id="aTongue"><div class="ring"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M3 12h13"/><circle cx="19" cy="12" r="3" fill="currentColor"/><path d="M3 8v8"/></svg><small>TONGUE</small><kbd>SPACE</kbd></div>
 </div>
 <div id="banner"><h2 id="banTitle">NIGHT 1</h2><p id="banSub">SURVIVE UNTIL DAWN</p></div>
 <div id="toast"></div>
@@ -310,6 +314,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { clone as cloneSkinned } from 'three/addons/utils/SkeletonUtils.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
 /* ================= CONFIG ================= */
 const GAME_ID = 'croaknight';
@@ -327,11 +332,11 @@ const MODES = {
   daily:    { label: 'DAILY', hearts: 3, speed: 1.05, spawn: 1.1, night: 50, heal: 1, info: 'Same graveyard and same monsters for everyone today. One leaderboard, one shot at glory.' }
 };
 const ENEMY = {
-  zombie:   { file: 'zombie',   hp: 1, speed: 1.15, pts: 100, col: 0xb8d0a0,    em: 0x1a3010, ei: 0.22, size: 1.1, ring: 0x8aa04a },
-  skeleton: { file: 'skeleton', hp: 1, speed: 1.85, pts: 120, col: 0xdfe8ff,    em: 0x5a7aff, ei: 0.3,  size: 1.05, ring: PAL.frost },
-  ghost:    { file: 'ghost',    hp: 1, speed: 0.95, pts: 150, col: 0xbff6ff,    em: 0x3fd8ff, ei: 0.9,  size: 1.1, ring: 0x3fd8ff },
-  vampire:  { file: 'vampire',  hp: 1, speed: 1.25, pts: 200, col: 0xff9bb0,    em: 0x9a0022, ei: 0.45, size: 1.1, ring: PAL.blood },
-  keeper:   { file: 'keeper',   hp: 10, speed: 0.75, pts: 2500, col: 0xd9b8ff,  em: 0x8a20ff, ei: 0.55, size: 2.4, ring: PAL.pink }
+  zombie:   { file: 'm-zombie',   hp: 1, speed: 1.15, pts: 100, col: 0xb4a8cc, em: 0x3a3010, ei: 0.2, size: 1.1, ring: 0xe0c84a, rim: 1.1 },
+  skeleton: { file: 'm-skeleton', hp: 1, speed: 1.85, pts: 120, col: 0xf0eaff, em: 0x5a7aff, ei: 0.3,  size: 1.05, ring: PAL.frost, rim: 1.2, fly: true },
+  ghost:    { file: 'm-ghost',    hp: 1, speed: 0.95, pts: 150, col: 0xc8f2ff, em: 0x3fd8ff, ei: 0.8,  size: 1.1, ring: 0x3fd8ff, rim: 1.6, fly: true },
+  vampire:  { file: 'm-vampire',  hp: 1, speed: 1.25, pts: 200, col: 0xffc0cc, em: 0x9a0022, ei: 0.35, size: 1.1, ring: PAL.blood, rim: 1.3 },
+  keeper:   { file: 'm-keeper',   hp: 10, speed: 0.75, pts: 2500, col: 0xf0d8ff, em: 0x8a20ff, ei: 0.4, size: 2.6, ring: PAL.pink, rim: 1.4 }
 };
 const POWERS = {
   shield: { name: 'SHIELD', col: PAL.frost, dur: 0, icon: 0x7fe8ff },
@@ -511,7 +516,7 @@ let pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
 renderer.setPixelRatio(pixelRatio);
 renderer.setClearColor(0x0d0720, 1);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.1;
+renderer.toneMappingExposure = 1.18;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -521,16 +526,18 @@ const scene = new THREE.Scene();
 scene.fog = new THREE.Fog(0x1a0b3a, 16, 40);
 const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 200);
 
-const hemi = new THREE.HemisphereLight(0x9a86ff, 0x1a0c2a, 0.85);          // tinted ambient
+const hemi = new THREE.HemisphereLight(0x9a86ff, 0x1a0c2a, 0.6);           // tinted ambient (the night HDRI adds the rest)
 scene.add(hemi);
-const moonLight = new THREE.DirectionalLight(0xcfd8ff, 1.5);                // main light (moon), soft shadows
+const moonLight = new THREE.DirectionalLight(0xcfd8ff, 1.9);                // main light (moon), soft shadows
 moonLight.position.set(-5, 12, 6);
 moonLight.castShadow = true;
 moonLight.shadow.mapSize.set(1024, 1024);
 Object.assign(moonLight.shadow.camera, { left: -7, right: 7, top: 8, bottom: -8, near: 1, far: 30 });
 moonLight.shadow.bias = -0.0012; moonLight.shadow.radius = 4;
 scene.add(moonLight, moonLight.target);
-const frogLight = new THREE.PointLight(PAL.lime, 0.55, 2.4, 1.6);             // accent carried by the frog
+const backLight = new THREE.DirectionalLight(0x9a5aff, 1.4);                 // violet rim light from behind the graves
+backLight.position.set(3, 5, -12); scene.add(backLight, backLight.target);
+const frogLight = new THREE.PointLight(PAL.lime, 1.1, 3.2, 1.6);              // accent carried by the frog
 scene.add(frogLight);
 const pumpLights = [];
 for (let i = 0; i < 2; i++) { const l = new THREE.PointLight(PAL.pumpkin, 6, 6, 1.5); scene.add(l); pumpLights.push(l); }
@@ -558,6 +565,10 @@ const skyMat = new THREE.ShaderMaterial({
     '  c += uGlow * smoothstep(0.25, -0.08, h) * (0.35 + uDawn * 0.9);',
     '  float aur = smoothstep(0.1, 0.45, h) * smoothstep(0.85, 0.4, h) * (0.5 + 0.5 * sin(vP.x * 6.0 + uT * 0.25 + sin(vP.z * 3.0 + uT * 0.2) * 2.0));',
     '  c += vec3(0.25, 0.9, 0.35) * aur * 0.05 * (1.0 - uDawn);',
+    '  vec2 cp = vec2(atan(vP.z, vP.x) * 3.0 + uT * 0.012, h * 7.0);',
+    '  float cl = 0.0, am = 0.55; for (int i = 0; i < 4; i++) { vec2 ip = floor(cp), fp = fract(cp); fp = fp * fp * (3.0 - 2.0 * fp); cl += am * mix(mix(h21(ip), h21(ip + vec2(1.0, 0.0)), fp.x), mix(h21(ip + vec2(0.0, 1.0)), h21(ip + vec2(1.0, 1.0)), fp.x), fp.y); cp *= 2.03; am *= 0.5; }',
+    '  float cm = smoothstep(0.48, 0.82, cl) * smoothstep(-0.02, 0.12, h) * smoothstep(0.7, 0.25, h);',
+    '  c = mix(c, mix(vec3(0.10, 0.06, 0.22), vec3(0.55, 0.42, 0.85), smoothstep(0.6, 0.9, cl)), cm * 0.85);',
     '  vec2 g = floor(vec2(atan(vP.z, vP.x) * 120.0, h * 120.0)); float s = h21(g);',
     '  float tw = 0.5 + 0.5 * sin(uT * 2.0 + s * 40.0);',
     '  c += vec3(1.0) * step(0.994, s) * smoothstep(0.05, 0.3, h) * tw * (1.0 - uDawn) * 0.9;',
@@ -569,7 +580,10 @@ const sky = new THREE.Mesh(new THREE.SphereGeometry(90, 32, 16), skyMat);
 scene.add(sky);
 const moon = new THREE.Mesh(new THREE.CircleGeometry(3.2, 40), new THREE.MeshBasicMaterial({ color: new THREE.Color(1.6, 1.55, 2.2), fog: false }));
 moon.position.set(-9, 13, -40);
+const MOON_HOME = moon.position.clone();
 scene.add(moon);
+const moonGlow = new THREE.Sprite(new THREE.SpriteMaterial({ map: null, color: new THREE.Color(0.9, 0.8, 1.6), transparent: true, opacity: 0.55, depthWrite: false, blending: THREE.AdditiveBlending, fog: false }));
+moonGlow.scale.set(22, 22, 1); scene.add(moonGlow);
 const moonHalo = new THREE.Mesh(new THREE.CircleGeometry(7, 40), new THREE.MeshBasicMaterial({ color: 0x8a6aff, transparent: true, opacity: 0.18, fog: false, depthWrite: false }));
 moonHalo.position.copy(moon.position).add(new THREE.Vector3(0, 0, -0.5));
 scene.add(moonHalo);
@@ -581,6 +595,7 @@ function canvasTex(size, draw) {
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
 }
 const glowTex = canvasTex(64, (g, s) => { const r = g.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2); r.addColorStop(0, 'rgba(255,255,255,1)'); r.addColorStop(0.3, 'rgba(255,255,255,.5)'); r.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = r; g.fillRect(0, 0, s, s); });
+moonGlow.material.map = glowTex; moonGlow.material.needsUpdate = true;
 const ringTex = canvasTex(128, (g, s) => { g.strokeStyle = '#fff'; g.lineWidth = 7; g.shadowColor = '#fff'; g.shadowBlur = 12; g.beginPath(); g.arc(s / 2, s / 2, s / 2 - 14, 0, Math.PI * 2); g.stroke(); });
 const TEX = { spark: glowTex, soft: glowTex, sparkle: glowTex, smoke: glowTex, ring: ringTex, dirt: glowTex };
 const tileTex = canvasTex(128, (g, s) => {
@@ -720,24 +735,72 @@ function updateRings(dt) {
 }
 
 /* ================= ASSET LOADING ================= */
-const MODEL_FILES = ['zombie', 'skeleton', 'ghost', 'vampire', 'keeper', 'gravestone-round', 'gravestone-cross', 'gravestone-bevel', 'gravestone-broken', 'gravestone-decorative',
+const MODEL_FILES = ['hero-frog', 'm-zombie', 'm-skeleton', 'm-ghost', 'm-vampire', 'm-keeper', 'gravestone-round', 'gravestone-cross', 'gravestone-bevel', 'gravestone-broken', 'gravestone-decorative',
   'pine', 'pine-crooked', 'pumpkin-carved', 'pumpkin-tall-carved', 'lantern-candle', 'crypt-small', 'iron-fence', 'iron-fence-border-column', 'rocks', 'trunk', 'candle-multiple', 'fire-basket', 'grave', 'lightpost-single', 'cross-column'];
 const SPRITE_FILES = ['spark', 'soft', 'sparkle', 'smoke', 'ring', 'dirt'];
+// PBR textures and night environment (true = colour data, false = linear data)
+const PBR_FILES = { slab_diff: ['webp', true], slab_nor: ['webp', false], slab_rough: ['webp', false], ground_diff: ['webp', true], ground_nor: ['webp', false], env_night: ['jpg', true] };
 const MODELS = {}, ANIMS = {};
 let loadDone = 0;
-const loadTotal = MODEL_FILES.length + SPRITE_FILES.length + SND.length;
+const loadTotal = MODEL_FILES.length + SPRITE_FILES.length + Object.keys(PBR_FILES).length + SND.length;
 function stepLoad() { loadDone++; $('loadFill').style.width = Math.round(loadDone / loadTotal * 100) + '%'; }
 function loadAll() {
   const gl = new GLTFLoader(), tl = new THREE.TextureLoader();
   const jobs = [];
   for (const f of MODEL_FILES) jobs.push(new Promise((res) => {
-    gl.load(ASSET + 'models/' + f + '.glb', (g) => { MODELS[f] = g.scene; ANIMS[f] = g.animations || []; stepLoad(); res(); }, undefined, () => { stepLoad(); res(); });
+    gl.load(ASSET + 'models/' + f + '.glb', (g) => { MODELS[f] = g.scene; ANIMS[f] = f.startsWith('m-') ? aliasClips(g.animations || []) : (g.animations || []); stepLoad(); res(); }, undefined, () => { stepLoad(); res(); });
   }));
   for (const f of SPRITE_FILES) jobs.push(new Promise((res) => {
     tl.load(ASSET + 'sprites/' + f + '.webp', (t) => { t.colorSpace = THREE.SRGBColorSpace; TEX[f] = t; stepLoad(); res(); }, undefined, () => { stepLoad(); res(); });
   }));
+  for (const [f, [ext, srgb]] of Object.entries(PBR_FILES)) jobs.push(new Promise((res) => {
+    tl.load(ASSET + 'sprites/' + f + '.' + ext, (t) => { if (srgb) t.colorSpace = THREE.SRGBColorSpace; PBR[f] = t; stepLoad(); res(); }, undefined, () => { stepLoad(); res(); });
+  }));
   for (const n of SND) jobs.push(fetch(ASSET + 'audio/' + n + '.mp3').then((r) => r.arrayBuffer()).then((ab) => { RAW[n] = ab; }).catch(() => {}).then(() => { stepLoad(); }));
-  return Promise.all(jobs).then(() => { for (const k of Object.keys(FX)) FX[k].setTex(TEX[FX[k].texName]); });
+  return Promise.all(jobs).then(() => { for (const k of Object.keys(FX)) FX[k].setTex(TEX[FX[k].texName]); applyPBR(); attachHero(); });
+}
+const PBR = {};
+// monster clips renamed to the names the AI uses (walkers and flyers)
+function aliasClips(clips) {
+  const fly = clips.some((c) => c.name === 'Flying_Idle');
+  const map = fly ? { Flying_Idle: ['idle', 'walk'], Fast_Flying: ['sprint'], Death: ['die'], Headbutt: ['attack-melee-right'], Yes: ['emote-yes'], HitReact: ['hit'] }
+    : { Idle: ['idle'], Walk: ['walk'], Run: ['sprint'], Death: ['die'], Punch: ['attack-melee-right'], Yes: ['emote-yes'], HitReact: ['hit'] };
+  const out = [];
+  for (const c of clips) for (const n of (map[c.name] || [])) { const k = c.clone(); k.name = n; out.push(k); }
+  return out;
+}
+// bounding box of a skinned model in its current pose
+function skinnedBox(o) {
+  o.updateMatrixWorld(true);
+  const box = new THREE.Box3();
+  o.traverse((m) => { if (m.isSkinnedMesh) { m.computeBoundingBox(); box.union(m.boundingBox.clone().applyMatrix4(m.matrixWorld)); } else if (m.isMesh) box.expandByObject(m); });
+  return box;
+}
+// fresnel rim glow: the neon outline that keeps every character readable on the dark board
+function addRim(mat, col, str) {
+  const c = new THREE.Color(col).multiplyScalar(str);
+  mat.onBeforeCompile = (sh) => {
+    sh.uniforms.uRim = { value: c };
+    sh.fragmentShader = 'uniform vec3 uRim;\n' + sh.fragmentShader.replace('#include <emissivemap_fragment>',
+      '#include <emissivemap_fragment>\n float rimF = pow(1.0 - clamp(dot(normal, normalize(vViewPosition)), 0.0, 1.0), 2.4);\n totalEmissiveRadiance += uRim * rimF;');
+  };
+  mat.customProgramCacheKey = () => 'rim';
+  return mat;
+}
+function applyPBR() {
+  if (PBR.slab_diff) {
+    tileMat.map = PBR.slab_diff; tileMat.normalMap = PBR.slab_nor || null; tileMat.roughnessMap = PBR.slab_rough || null;
+    tileMat.normalScale.set(1.4, 1.4); tileMat.roughness = 1; tileMat.envMapIntensity = 0.7; tileMat.needsUpdate = true;
+  }
+  if (PBR.ground_diff) {
+    for (const t of [PBR.ground_diff, PBR.ground_nor]) if (t) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(14, 14); }
+    ground.material.map = PBR.ground_diff; ground.material.normalMap = PBR.ground_nor || null; ground.material.color.set(0x8a84a8); ground.material.envMapIntensity = 0.3; ground.material.needsUpdate = true;
+  }
+  if (PBR.env_night) {
+    PBR.env_night.mapping = THREE.EquirectangularReflectionMapping;
+    const pm = new THREE.PMREMGenerator(renderer);
+    scene.environment = pm.fromEquirectangular(PBR.env_night).texture; pm.dispose();
+  }
 }
 
 /* Size and seat a model: fit its height (or width) to a target and put its base on y = 0 */
@@ -759,7 +822,8 @@ function tintDecor(obj, col, em, ei) {
       const mat = m.material.clone(); mat.__ck = true;
       if (col) mat.color.multiply(new THREE.Color(col));
       if (em) { mat.emissive = new THREE.Color(em); mat.emissiveMap = mat.map; mat.emissiveIntensity = ei || 0.5; }
-      mat.roughness = 0.85; mat.metalness = 0;
+      mat.roughness = 0.85; mat.metalness = 0; mat.envMapIntensity = 0.45;
+      addRim(mat, PAL.violet, 0.22);
       m.material = mat;
     }
   });
@@ -839,9 +903,9 @@ function buildBoard(seed) {
   const m4 = new THREE.Matrix4(), c = new THREE.Color();
   for (let z = 0; z < ROWS; z++) for (let x = 0; x < COLS; x++) {
     const i = key(x, z);
-    m4.makeRotationY((R() - 0.5) * 0.06).setPosition(tileX(x), (R() - 0.5) * 0.03, tileZ(z)); tiles.setMatrixAt(i, m4);
-    const v = R(); c.set(v < 0.18 ? 0x3c5444 : v < 0.28 ? 0x56443c : [0x5a5470, 0x504a66, 0x48445c][Math.floor(R() * 3)]);
-    c.multiplyScalar((x + z) % 2 ? 1.06 : 0.94);
+    m4.makeRotationY(Math.floor(R() * 4) * Math.PI / 2 + (R() - 0.5) * 0.06).setPosition(tileX(x), (R() - 0.5) * 0.03, tileZ(z)); tiles.setMatrixAt(i, m4);
+    const v = R(); c.set(v < 0.16 ? 0x9ab8a8 : v < 0.26 ? 0xb8a49a : [0xb8b2d8, 0xa8a2cc, 0x9a96c0][Math.floor(R() * 3)]);
+    c.multiplyScalar((x + z) % 2 ? 1.08 : 0.92);
     tiles.setColorAt(i, c);
   }
   tiles.instanceMatrix.needsUpdate = true; if (tiles.instanceColor) tiles.instanceColor.needsUpdate = true;
@@ -888,6 +952,15 @@ function buildBoard(seed) {
     g.glow = new THREE.Mesh(new THREE.PlaneGeometry(1.1, 1.1), new THREE.MeshBasicMaterial({ map: glowTex, color: new THREE.Color(PAL.violet).multiplyScalar(1.2), transparent: true, opacity: 0.5, depthWrite: false, blending: THREE.AdditiveBlending }));
     g.glow.rotation.x = -Math.PI / 2; g.glow.position.set(tileX(g.x), 0.11, tileZ(g.z)); boardGroup.add(g.glow);
   }
+  // rain puddles on a few free slabs: they mirror the night sky and the neon
+  let nP = 0;
+  for (let tries = 0; tries < 40 && nP < 4; tries++) {
+    const x = Math.floor(R() * COLS), z = Math.floor(R() * ROWS), i = key(x, z);
+    if (BLOCK[i] || GRAVES.some((g) => g.x === x && g.z === z) || i === start) continue;
+    const pd = new THREE.Mesh(puddleGeo, puddleMat);
+    pd.rotation.x = -Math.PI / 2; pd.rotation.z = R() * 6.28; pd.scale.set(0.8 + R() * 0.5, 0.6 + R() * 0.4, 1);
+    pd.position.set(tileX(x) + (R() - 0.5) * 0.2, 0.086, tileZ(z) + (R() - 0.5) * 0.2); pd.renderOrder = 1; boardGroup.add(pd); nP++;
+  }
   // surroundings: iron fence, pines, crypt, lights
   const hx = COLS / 2 + 0.25, hz = ROWS / 2 + 0.25;
   for (let x = -Math.floor(hx); x <= Math.floor(hx); x++) {
@@ -908,6 +981,16 @@ function buildBoard(seed) {
     trees.push([x, z]);
     const t = decor(R() < 0.5 ? 'pine' : 'pine-crooked', 2.2 + R() * 1.6, false, 0x58607a, 0x0a1a14, 0.15);
     t.position.set(x, 0, z); t.rotation.y = R() * 6.28; boardGroup.add(t);
+  }
+  // gnarled dead trees and far hills: dark silhouettes rimmed by the violet back light
+  for (let k = 0; k < 9; k++) {
+    const side = k % 3; let x, z;
+    if (side === 0) { x = -hx - 2.6 - R() * 3; z = (R() - 0.5) * (ROWS + 6); } else if (side === 1) { x = hx + 2.6 + R() * 3; z = (R() - 0.5) * (ROWS + 6); } else { x = (R() - 0.5) * (COLS + 8); z = -hz - 3 - R() * 3; }
+    const t = deadTree(R, 2.4 + R() * 1.6); t.position.set(x, 0, z); t.rotation.y = R() * 6.28; boardGroup.add(t);
+  }
+  for (let k = 0; k < 14; k++) {
+    const a = (k / 14) * Math.PI * 2 + R() * 0.3, r = 24 + R() * 6, h = 4 + R() * 5;
+    const hill = new THREE.Mesh(hillGeo, hillMat); hill.position.set(Math.cos(a) * r, -0.5, Math.sin(a) * r - 4); hill.scale.set(5 + R() * 5, h, 5 + R() * 4); boardGroup.add(hill);
   }
   const crypt = decor('crypt-small', 1.9, false, 0x7a7090, 0x2a1a5a, 0.18); crypt.position.set(-hx - 2.4, 0, -hz - 1.4); crypt.rotation.y = 0.5; boardGroup.add(crypt);
   const crypt2 = decor('crypt-small', 1.7, false, 0x7a7090, 0x2a1a5a, 0.18); crypt2.position.set(hx + 2.5, 0, -hz + 1.4); crypt2.rotation.y = -0.9; boardGroup.add(crypt2);
@@ -932,6 +1015,32 @@ function buildBoard(seed) {
   boardGroup.traverse((m) => { if (m.isMesh) { m.castShadow = Math.abs(m.getWorldPosition(TMPV).x) < hx + 1; } });
 }
 const TMPV = new THREE.Vector3();
+const puddleGeo = new THREE.CircleGeometry(0.34, 18);
+const puddleMat = new THREE.MeshStandardMaterial({ color: 0x5a4aa0, roughness: 0.03, metalness: 0.4, envMapIntensity: 3, transparent: true, opacity: 0.55, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 });
+const hillGeo = new THREE.ConeGeometry(1, 1, 7, 1);
+const hillMat = new THREE.MeshStandardMaterial({ color: 0x120a26, roughness: 1, flatShading: true });
+const barkMat = addRim(new THREE.MeshStandardMaterial({ color: 0x241a30, roughness: 0.95 }), PAL.violet, 0.5);
+function deadTree(R, h) {
+  const g = new THREE.Group();
+  const branch = (len, rad, depth, parent) => {
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(rad * 0.6, rad, len, 5), barkMat);
+    m.geometry.translate(0, len / 2, 0); m.castShadow = depth > 1; parent.add(m);
+    if (depth <= 0) return m;
+    const n = depth > 1 ? 2 + Math.floor(R() * 2) : 2;
+    for (let i = 0; i < n; i++) {
+      const pivot = new THREE.Group(); pivot.position.y = len * (0.55 + R() * 0.4);
+      pivot.rotation.set((R() - 0.5) * 1.4, R() * 6.28, 0.5 + R() * 0.5); m.add(pivot);
+      branch(len * (0.5 + R() * 0.2), rad * 0.55, depth - 1, pivot);
+    }
+    return m;
+  };
+  const trunk = branch(h * 0.5, 0.14, 3, g); trunk.rotation.z = (R() - 0.5) * 0.25;
+  // one draw call per tree
+  g.updateMatrixWorld(true); const geos = [];
+  g.traverse((m) => { if (m.isMesh) { const q = m.geometry.clone(); q.applyMatrix4(m.matrixWorld); geos.push(q); m.geometry.dispose(); } });
+  const tree = new THREE.Mesh(mergeGeometries(geos), barkMat); tree.castShadow = true;
+  return tree;
+}
 
 /* ================= THE FROG (built in code) ================= */
 const FROG_SKIN = { body: 0x4fd81a, belly: 0xf2ffb0, spot: 0x2f9a14, cape: PAL.violet };
@@ -967,17 +1076,85 @@ function buildFrog() {
   const crown = mk(new THREE.CylinderGeometry(0.08, 0.09, 0.07, 6, 1, true), PAL.gold, PAL.gold, 0.9); crown.material.side = THREE.DoubleSide; crown.position.set(0, 0.56, -0.02); body.add(crown);
   // tongue
   const tongue = new THREE.Group(); tongue.position.set(0, 0.25, 0.3); body.add(tongue);
-  const tMat = new THREE.MeshStandardMaterial({ color: 0xff5aa8, emissive: new THREE.Color(PAL.pink), emissiveIntensity: 1.4 });
-  const tRope = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 1, 8), tMat); tRope.rotation.x = Math.PI / 2; tRope.position.z = 0.5; tongue.add(tRope);
-  const tTip = new THREE.Mesh(new THREE.SphereGeometry(0.075, 12, 10), tMat); tTip.position.z = 1; tongue.add(tTip);
+  const tMat = new THREE.MeshStandardMaterial({ color: 0xff5aa8, emissive: new THREE.Color(PAL.pink), emissiveIntensity: 1.1, roughness: 0.3 });
+  const tRope = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.07, 1, 10), tMat); tRope.rotation.x = Math.PI / 2; tRope.position.z = 0.5; tongue.add(tRope);
+  const tTip = new THREE.Mesh(new THREE.SphereGeometry(0.12, 14, 10), tMat); tTip.position.z = 1; tTip.scale.set(1, 0.8, 1); tongue.add(tTip);
+  const tGlow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color: new THREE.Color(1.6, 0.35, 1.0), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })); tGlow.scale.set(0.7, 0.7, 1); tTip.add(tGlow);
   tongue.scale.set(1, 1, 0.001); tongue.visible = false;
   // shield bubble
   const bubble = new THREE.Mesh(new THREE.SphereGeometry(0.55, 24, 16), new THREE.MeshBasicMaterial({ color: new THREE.Color(PAL.frost).multiplyScalar(0.9), transparent: true, opacity: 0.22, depthWrite: false, blending: THREE.AdditiveBlending }));
   bubble.position.y = 0.3; bubble.visible = false; g.add(bubble);
   const shadowBlob = new THREE.Mesh(new THREE.CircleGeometry(0.32, 20), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.4, depthWrite: false }));
   shadowBlob.rotation.x = -Math.PI / 2; shadowBlob.position.y = 0.095; scene.add(shadowBlob);
-  g.userData = { body, eyes, legs, cape, capeGeo, capeBase: capeGeo.attributes.position.array.slice(), tongue, tTip, tRope, bubble, shadowBlob, torso };
+  const proc = body.children.filter((o) => o !== cape && o !== crown && o !== tongue);
+  g.userData = { body, eyes, legs, cape, capeGeo, capeBase: capeGeo.attributes.position.array.slice(), tongue, tTip, tRope, bubble, shadowBlob, torso, crown, proc };
   return g;
+}
+/* The hero: an animated CC0 frog, recoloured toxic lime, crown and cape kept on its head and back */
+const HERO = { on: false, mixer: null, acts: {}, cur: null, over: null, overT: 0, head: null, chest: null, waveT: 3 };
+function attachHero() {
+  const src = MODELS['hero-frog']; if (!src) return;
+  const u = frog.userData;
+  const inner = cloneSkinned(src);
+  const box = skinnedBox(inner), sz = new THREE.Vector3(); box.getSize(sz);
+  const H = 0.9, sc = H / Math.max(0.01, sz.y);
+  inner.scale.multiplyScalar(sc); inner.position.set(-(box.min.x + box.max.x) / 2 * sc, -box.min.y * sc, -(box.min.z + box.max.z) / 2 * sc);
+  let mat = null;
+  inner.traverse((m) => {
+    if (m.isMesh) {
+      if (!mat) { mat = m.material.clone(); mat.color.set(0xd8ffc8); mat.emissive = new THREE.Color(0x3aff00); mat.emissiveMap = mat.map; mat.emissiveIntensity = 0.05; mat.roughness = 0.38; mat.metalness = 0; mat.envMapIntensity = 0.9; addRim(mat, PAL.lime, 0.55); }
+      m.material = mat; m.castShadow = true; m.frustumCulled = false;
+    }
+    if (m.isBone && m.name === 'Head') HERO.head = m;
+    if (m.isBone && m.name === 'Torso') HERO.chest = m;
+  });
+  for (const o of u.proc) o.visible = false;
+  u.body.add(inner);
+  HERO.mixer = new THREE.AnimationMixer(inner);
+  for (const c of ANIMS['hero-frog']) HERO.acts[c.name] = HERO.mixer.clipAction(c);
+  for (const n of ['Punch', 'HitReact', 'Death', 'Wave', 'Yes', 'Jump_Land']) if (HERO.acts[n]) { HERO.acts[n].setLoop(THREE.LoopOnce, 1); HERO.acts[n].clampWhenFinished = true; }
+  u.tongue.position.set(0, H * 0.62, 0.2);
+  u.cape.scale.set(0.62, 0.8, 1); u.cape.material.emissiveIntensity = 0.45; u.cape.material.color.set(0x4a1aa8);
+  // a real little crown: gold band, five points, a ruby
+  const gold = new THREE.MeshStandardMaterial({ color: PAL.gold, emissive: new THREE.Color(PAL.gold), emissiveIntensity: 0.3, metalness: 0.8, roughness: 0.25, envMapIntensity: 1.5 });
+  const crown = new THREE.Group();
+  const band = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.095, 0.05, 14, 1, true), gold); band.material.side = THREE.DoubleSide; crown.add(band);
+  for (let i = 0; i < 5; i++) { const a = i / 5 * Math.PI * 2, c = new THREE.Mesh(new THREE.ConeGeometry(0.022, 0.07, 5), gold); c.position.set(Math.cos(a) * 0.085, 0.055, Math.sin(a) * 0.085); crown.add(c); }
+  const ruby = new THREE.Mesh(new THREE.OctahedronGeometry(0.022), new THREE.MeshStandardMaterial({ color: PAL.blood, emissive: new THREE.Color(PAL.blood), emissiveIntensity: 1.2 })); ruby.position.set(0, 0.01, 0.092); crown.add(ruby);
+  crown.rotation.x = -0.15; u.body.remove(u.crown); u.body.add(crown); u.crown = crown;
+  // tapered cape with a ragged hem
+  const cp = u.capeGeo.attributes.position.array;
+  for (let i = 0; i < cp.length; i += 3) { const yN = (cp[i + 1] + 0.21) / 0.42; cp[i] *= 0.5 + 0.5 * (1 - yN); if (yN < 0.01) cp[i + 1] -= Math.abs(Math.sin(cp[i] * 30)) * 0.05; }
+  u.capeGeo.attributes.position.needsUpdate = true; u.capeGeo.computeVertexNormals(); u.capeBase = cp.slice();
+  frogLight.intensity = 0.7;
+  HERO.on = true; heroBase('Idle', 0);
+}
+function heroBase(name, fade) {
+  const a = HERO.acts[name]; if (!a || HERO.cur === a) return;
+  a.reset().fadeIn(fade == null ? 0.12 : fade).play(); if (HERO.cur) HERO.cur.fadeOut(fade == null ? 0.12 : fade); HERO.cur = a;
+}
+function heroOnce(name, dur, speed) {
+  if (!HERO.on || !HERO.acts[name]) return;
+  const a = HERO.acts[name]; a.reset(); a.timeScale = speed || 1; a.fadeIn(0.05).play();
+  if (HERO.cur && HERO.cur !== a) HERO.cur.fadeOut(0.05);
+  HERO.cur = a; HERO.over = name; HERO.overT = dur;
+}
+const HV = new THREE.Vector3();
+function updateHero(dt) {
+  if (!HERO.on) return;
+  const u = frog.userData;
+  if (HERO.overT > 0) { HERO.overT -= dt; if (HERO.overT <= 0) HERO.over = null; }
+  if (!HERO.over) {
+    if (state === 'dying' || state === 'over') heroBase('Death', 0.1);
+    else if (state === 'menu') { HERO.waveT -= dt; if (HERO.waveT <= 0) { HERO.waveT = 4 + Math.random() * 2; heroOnce(Math.random() < 0.6 ? 'Wave' : 'Yes', 1.6); } else heroBase('Idle'); }
+    else if (state === 'dawn') heroBase('Yes');
+    else if (F.t < 1) heroBase('Jump_Idle', 0.04);
+    else heroBase('Idle');
+  }
+  HERO.mixer.update(dt);
+  // crown rides the head, cape the back
+  if (HERO.head) { HERO.head.getWorldPosition(HV); u.body.worldToLocal(HV); u.crown.position.set(HV.x, HV.y + 0.19, HV.z - 0.02); }
+  if (HERO.chest) { HERO.chest.getWorldPosition(HV); u.body.worldToLocal(HV); u.cape.position.set(HV.x, HV.y + 0.04, HV.z - 0.17); }
 }
 const FROG_S = 1.25;
 const frog = buildFrog(); frog.scale.setScalar(FROG_S); scene.add(frog);
@@ -986,27 +1163,30 @@ const frogRing = new THREE.Mesh(new THREE.RingGeometry(0.36, 0.45, 40), new THRE
 frogRing.rotation.x = -Math.PI / 2; frogRing.renderOrder = 3; scene.add(frogRing);
 
 /* ================= ENEMIES ================= */
-const MATS = {};
+const MATS = {}, FIT = {};
 function enemyModel(type) {
   const d = ENEMY[type];
   let obj, mixer = null, acts = {};
   const src = MODELS[d.file];
   if (src) {
     const inner = cloneSkinned(src);
-    const box = new THREE.Box3().setFromObject(inner), sz = new THREE.Vector3(); box.getSize(sz);
-    inner.scale.setScalar(d.size / Math.max(0.01, sz.y));
+    if (!FIT[d.file]) { const box = skinnedBox(inner), sz = new THREE.Vector3(); box.getSize(sz); const sc = d.size / Math.max(0.01, sz.y); FIT[d.file] = { sc, x: -(box.min.x + box.max.x) / 2 * sc, y: -box.min.y * sc, z: -(box.min.z + box.max.z) / 2 * sc }; }
+    const ft = FIT[d.file];
+    inner.scale.multiplyScalar(ft.sc); inner.position.set(ft.x, ft.y, ft.z);
     obj = new THREE.Group(); obj.add(inner);
     if (!MATS[type]) {
       let base = null; inner.traverse((m) => { if (m.isMesh && !base) base = m.material; });
-      const mat = base.clone(); mat.color = new THREE.Color(d.col); mat.emissive = new THREE.Color(d.em); mat.emissiveMap = mat.map; mat.emissiveIntensity = d.ei; mat.roughness = 0.7;
-      if (type === 'ghost') { mat.transparent = true; mat.opacity = 0.72; mat.depthWrite = false; }
+      const mat = base.clone(); mat.color = new THREE.Color(d.col); mat.emissive = new THREE.Color(d.em); mat.emissiveMap = mat.map; mat.emissiveIntensity = d.ei; mat.roughness = 0.55; mat.metalness = 0; mat.envMapIntensity = 0.6;
+      addRim(mat, d.ring, d.rim || 1);
+      if (type === 'ghost') { mat.transparent = true; mat.opacity = 0.78; mat.depthWrite = false; }
       MATS[type] = mat;
     }
     inner.traverse((m) => { if (m.isMesh) { m.material = MATS[type]; m.castShadow = type !== 'ghost'; m.frustumCulled = false; } });
     mixer = new THREE.AnimationMixer(inner);
     for (const clip of ANIMS[d.file]) acts[clip.name] = mixer.clipAction(clip);
     if (acts.die) { acts.die.setLoop(THREE.LoopOnce, 1); acts.die.clampWhenFinished = true; }
-    if (acts['attack-melee-right']) { acts['attack-melee-right'].setLoop(THREE.LoopOnce, 1); }
+    if (acts['attack-melee-right']) { acts['attack-melee-right'].setLoop(THREE.LoopOnce, 1); acts['attack-melee-right'].clampWhenFinished = true; }
+    if (acts['emote-yes']) { acts['emote-yes'].setLoop(THREE.LoopOnce, 1); acts['emote-yes'].clampWhenFinished = true; }
   } else obj = fallbackShape(d.size, d.col);
   // colour-coded halo under each monster
   const halo = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: glowTex, color: new THREE.Color(d.ring).multiplyScalar(1.3), transparent: true, opacity: 0.55, depthWrite: false, blending: THREE.AdditiveBlending }));
@@ -1127,6 +1307,7 @@ function doTongue() {
   }
   const len = best ? Math.max(0.4, bd - (best.type === 'keeper' ? 0.6 : 0.25)) : maxD;
   F.tongue = { t: 0, len, target: best, hit: false };
+  heroOnce('Punch', 0.28, 2.4);
   Audio.play('tongue', 0.55, frenzy ? 1.25 : 1);
 }
 function doCroak() {
@@ -1150,6 +1331,7 @@ function hurtFrog() {
   if (G.invuln > 0 || F.dead || F.leap || G.god) return;
   if (G.shield) { G.shield = false; G.invuln = 1.2; ring(F.pos.x, F.pos.z, PAL.frost, 0.6, 3, 0.4); Audio.play('shield', 0.7); floatText(F.pos.x, 1, F.pos.z, 'BLOCKED', '#7fe8ff'); repel(1.8); return; }
   G.hearts--; G.invuln = 1.7; G.combo = 0; G.comboT = 0;
+  heroOnce('HitReact', 0.4, 1.4);
   renderHearts(); Audio.play('hurt', 0.8); flashHurt(); addShake(0.45); hitStop = 0.1;
   burst(F.pos.x, 0.4, F.pos.z, PAL.blood, 18, 3.5, 0.3, 0.5);
   repel(1.4);
@@ -1312,7 +1494,7 @@ class Enemy {
     else if (fdx || fdz) want = Math.atan2(fdx, fdz);
     let dy = want - this.yaw; while (dy > Math.PI) dy -= Math.PI * 2; while (dy < -Math.PI) dy += Math.PI * 2;
     this.yaw += dy * Math.min(1, dt * 12);
-    if (this.state !== 'rise' && this.state !== 'die') this.root.position.set(this.pos.x, 0.08 + (this.type === 'ghost' ? 0.18 + Math.sin(performance.now() / 300 + this.x) * 0.08 : 0), this.pos.z);
+    if (this.state !== 'rise' && this.state !== 'die') this.root.position.set(this.pos.x, 0.08 + (this.def.fly ? 0.22 + Math.sin(performance.now() / 300 + this.x) * 0.08 : 0), this.pos.z);
     else { this.root.position.x = this.pos.x; this.root.position.z = this.pos.z; }
     this.obj.rotation.y = this.yaw;
     const fl = this.flash > 0 ? 1 : 0;
@@ -1539,27 +1721,50 @@ function flashHurt() { const f = $('hurtFx'); f.style.transition = 'none'; f.sty
 function addShake(a) { shake = Math.max(shake, RM ? a * 0.25 : a); }
 
 /* ================= CAMERA ================= */
-const camBase = { dist: 14, h: 11, z: 8, off: 0 };
-const camLook = new THREE.Vector3(), camPos = new THREE.Vector3();
+// Play: a 3/4 view that follows the frog, framed in the free band between the HUD and the action buttons.
+// Menu: a low close-up on the frog, with the moon behind it.
+const CAM_EL = THREE.MathUtils.degToRad(50);
+const camBase = { dist: 14, h: 11, z: 8, off: 0, shift: 0 };
+const camLook = new THREE.Vector3(0, 0, 0.6), camPos = new THREE.Vector3(0, 11, 9), camLookT = new THREE.Vector3(), camPosT = new THREE.Vector3();
+let camShift = 0, camInit = false;
 function frameCamera() {
   const W = window.innerWidth, H = window.innerHeight, asp = W / H;
   camera.aspect = asp; camera.fov = asp < 0.75 ? 46 : 40; camera.updateProjectionMatrix();
-  const vf = THREE.MathUtils.degToRad(camera.fov / 2), hf = Math.atan(Math.tan(vf) * asp);
-  const needW = (COLS + 0.9) / 2 / Math.tan(hf);           // whole width visible
-  const needH = (ROWS * 0.82 + 1.5) / 2 / Math.tan(vf);    // whole depth (seen at an angle)
-  const d = Math.max(needW, needH) * (asp > 1 ? 1.12 : 1);
-  camBase.dist = d; camBase.off = asp > 1 ? -0.7 : 0; const el = THREE.MathUtils.degToRad(57);
-  camBase.h = Math.sin(el) * d; camBase.z = Math.cos(el) * d;
+  const portrait = asp < 1;
+  const top = portrait ? 112 : 84;                                   // score + night bar
+  const bot = portrait ? H * 0.11 + 40 : 24;                   // action buttons (they overlap the right edge a little)
+  const Hf = Math.max(H * 0.5, H - top - bot);
+  const vf = THREE.MathUtils.degToRad(camera.fov / 2), vfE = Math.atan(Math.tan(vf) * Hf / H), hf = Math.atan(Math.tan(vf) * asp);
+  const needW = (COLS + 0.9) / 2 / Math.tan(hf);
+  const needH = (ROWS * Math.sin(CAM_EL) + 1.7) / 2 / Math.tan(vfE);
+  const d = Math.max(needW, needH) * (asp > 1 ? 1.1 : 1);
+  camBase.dist = d; camBase.off = asp > 1 ? -0.5 : 0.1;
+  camBase.h = Math.sin(CAM_EL) * d; camBase.z = Math.cos(CAM_EL) * d;
+  camBase.shift = H / 2 - (top + Hf / 2);                            // pixels: lifts the board into the free band
+  scene.fog.near = d * 0.95; scene.fog.far = d * 2.6;
 }
 function updateCamera(dt) {
   const menu = state === 'menu' || state === 'loading';
-  const tx = menu ? 0 : F.pos.x * 0.18, tz = (menu ? 0.6 : F.pos.z * 0.16) + 0.25 + camBase.off;
-  camLook.x = lerp(camLook.x, tx, Math.min(1, dt * 3)); camLook.z = lerp(camLook.z, tz, Math.min(1, dt * 3)); camLook.y = 0;
   const t = performance.now() / 1000;
-  const sway = menu ? Math.sin(t * 0.25) * 1.2 : 0;
-  camPos.set(camLook.x + sway, camBase.h, camLook.z + camBase.z);
-  if (shake > 0) { camPos.x += (Math.random() - 0.5) * shake * 0.5; camPos.y += (Math.random() - 0.5) * shake * 0.4; shake = Math.max(0, shake - dt * 2.2); }
-  camera.position.copy(camPos); camera.lookAt(camLook.x, 0, camLook.z - (menu ? -0.4 : 0));
+  const H = window.innerHeight;
+  if (menu) {
+    camLookT.set(F.pos.x, 0.75, F.pos.z);
+    camPosT.set(F.pos.x + Math.sin(t * 0.3) * 0.6, 2.3, F.pos.z + 4.4);
+  } else {
+    camLookT.set(F.pos.x * 0.3, 0, F.pos.z * 0.22 + 0.25 + camBase.off);
+    camPosT.set(camLookT.x, camBase.h, camLookT.z + camBase.z);
+  }
+  const k = camInit ? Math.min(1, dt * (menu ? 2.2 : 3.2)) : 1; camInit = true;
+  camLook.lerp(camLookT, k); camPos.lerp(camPosT, k);
+  camShift = lerp(camShift, menu ? H * 0.06 : camBase.shift, k);
+  camera.setViewOffset(window.innerWidth, H, 0, camShift, window.innerWidth, H);
+  camera.position.copy(camPos);
+  if (shake > 0) { camera.position.x += (Math.random() - 0.5) * shake * 0.5; camera.position.y += (Math.random() - 0.5) * shake * 0.4; shake = Math.max(0, shake - dt * 2.2); }
+  camera.lookAt(camLook);
+  // the moon sits behind the frog on the title screen, high in the sky while playing
+  if (menu) { HV.set(-0.32, 0.2, -1).applyQuaternion(camera.quaternion).multiplyScalar(60).add(camera.position); moon.position.lerp(HV, k); }
+  else moon.position.lerp(MOON_HOME, k);
+  moon.lookAt(camera.position); moonHalo.position.copy(moon.position); moonHalo.lookAt(camera.position); moonGlow.position.copy(moon.position);
 }
 
 /* ================= SKY BY THE HOUR ================= */
@@ -1581,7 +1786,7 @@ function skyAt(k, dawn) {
   scene.fog.color.copy(SK.fog); renderer.setClearColor(SK.fog);
   hemi.intensity = hemiI;
   mistMat.uniforms.uCol.value.copy(SK.fog).lerp(new THREE.Color(0xb0a0ff), 0.45);
-  moonPool.material.opacity = 0.4 * (1 - d) + 0.08;
+  moonPool.material.opacity = 0.24 * (1 - d) + 0.06;
   const sb = $('skyband').style, key = SK.top.getHexString() + SK.hor.getHexString() + d.toFixed(2);
   if (sb._k !== key) { sb._k = key; sb.setProperty('--skyTop', '#' + SK.top.getHexString()); sb.setProperty('--skyHor', '#' + SK.hor.getHexString()); sb.setProperty('--moonA', String(1 - d * 0.85)); }
   moonLight.color.setRGB(lerp(0.8, 1, d), lerp(0.85, 0.75, d), lerp(1, 0.7, d));
@@ -1592,6 +1797,7 @@ function skyAt(k, dawn) {
 function setScreen(name) {
   show($('menu'), name === 'menu'); show($('over'), name === 'over'); show($('pause'), name === 'pause');
   show($('hud'), name === 'play' || name === 'pause'); show($('pad'), name === 'play');
+  document.body.classList.toggle('menu', name === 'menu');
 }
 function wipe() { const w = $('wipe'); w.classList.remove('go'); void w.offsetWidth; w.classList.add('go'); }
 function renderMenu() {
@@ -1772,7 +1978,7 @@ function updateFrog(dt, t) {
     u.body.rotation.x = 0;
   }
   // facing (smooth)
-  let want = DIR_ROT[F.dir], dy = want - F.rot;
+  let want = state === 'menu' ? DIR_ROT[2] : DIR_ROT[F.dir], dy = want - F.rot;
   while (dy > Math.PI) dy -= Math.PI * 2; while (dy < -Math.PI) dy += Math.PI * 2;
   F.rot += dy * Math.min(1, dt * 22);
   frog.rotation.y = F.rot;
@@ -1790,12 +1996,14 @@ function updateFrog(dt, t) {
   // tongue
   if (F.tongue) {
     const T = F.tongue; T.t += dt;
-    const out = 0.075, back = 0.11;
+    const out = 0.085, hold = 0.06, back = 0.13;
     let ext;
-    if (T.t < out) ext = T.t / out; else { ext = Math.max(0, 1 - (T.t - out) / back); if (!T.hit) { T.hit = true; tongueHit(T); } }
+    if (T.t < out) ext = easeOut(T.t / out);
+    else { if (!T.hit) { T.hit = true; tongueHit(T); } ext = T.t < out + hold ? 1 : Math.max(0, 1 - (T.t - out - hold) / back); }
+    if (ext > 0.3) { const L = ext * T.len, q = Math.random(); FX.soft.emit(F.pos.x + DIRS[F.dir][0] * L * q, 0.55 + F.y, F.pos.z + DIRS[F.dir][1] * L * q, 0, 0.3, 0, PAL.pink, 0.28, 0.25, 0, -0.6, 0); }
     u.tongue.visible = true; u.tongue.scale.set(1, 1, Math.max(0.001, ext * T.len / FROG_S));
     u.tTip.scale.set(1, 1, 1 / Math.max(0.05, ext * T.len / FROG_S));
-    if (T.t > out + back) { F.tongue = null; u.tongue.visible = false; }
+    if (T.t > out + hold + back) { F.tongue = null; u.tongue.visible = false; }
   }
   // invulnerability blink, shield bubble
   frog.visible = !(G && G.invuln > 0 && Math.floor(t * 14) % 2 === 0) || state !== 'play';
@@ -1906,6 +2114,7 @@ function updateWorld(dt, t) {
   if (G && G.boss) { bossLight.position.set(G.boss.pos.x, 2, G.boss.pos.z); }
   // ambient: drifting fog motes and fireflies around the graveyard
   if (Math.random() < 0.25 * PFX_SCALE) FX.soft.emit((Math.random() - 0.5) * (COLS + 6), 0.3 + Math.random() * 1.5, (Math.random() - 0.5) * (ROWS + 4), (Math.random() - 0.5) * 0.3, 0.05, (Math.random() - 0.5) * 0.3, Math.random() < 0.5 ? 0x6a3bff : 0x3a8a3a, 0.5 + Math.random() * 0.6, 3, 0, 0, 0);
+  if (Math.random() < 0.35 * PFX_SCALE) { const a = Math.random() * 6.28, r = 3 + Math.random() * 9; FX.sparkle.emit(Math.cos(a) * r, 0.3 + Math.random() * 2.2, Math.sin(a) * r * 1.2, (Math.random() - 0.5) * 0.4, 0.15, (Math.random() - 0.5) * 0.4, Math.random() < 0.7 ? 0xd8ff6a : 0xffd166, 0.16 + Math.random() * 0.12, 2.5 + Math.random() * 2, -0.05, 0, 0); }
   if (Math.random() < 0.06 * PFX_SCALE) FX.smoke.emit((Math.random() - 0.5) * (COLS + 4), 0.1, (Math.random() - 0.5) * (ROWS + 2), 0.15, 0.03, 0, 0x3a2a6a, 1.6, 4, 0, 0.3, 0);
 }
 
@@ -1931,10 +2140,12 @@ function simulate(rdt) {
   const running = state === 'play' || state === 'dawn' || state === 'menu' || state === 'dying';
   if (G && running) {
     updateFrog(dt, t);
+    updateHero(dt);
     updateWorld(dt, t);
     if (state === 'dying') {
       F.dieT += dt; const k = Math.min(1, F.dieT / 0.6);
-      frog.userData.body.rotation.z = k * Math.PI; frog.userData.body.scale.set(1 + k * 0.3, 1 - k * 0.6, 1 + k * 0.3); frog.visible = true;
+      if (!HERO.on) { frog.userData.body.rotation.z = k * Math.PI; frog.userData.body.scale.set(1 + k * 0.3, 1 - k * 0.6, 1 + k * 0.3); } else frog.userData.body.scale.set(1, 1, 1);
+      frog.visible = true;
     }
     if (state === 'play' || state === 'dying') updateHud(dt);
     const k = state === 'menu' ? 0.5 : clamp(G.nightT / G.dur, 0, 1);
@@ -1986,7 +2197,8 @@ if (TEST) {
     face: (d) => { F.dir = d; },
     ff: (sec) => { for (let i = 0; i < sec * 30; i++) simulate(1 / 30); },
     render: () => composer.render(),
-    god: (on) => { G.god = on; }
+    god: (on) => { G.god = on; },
+    dbg: () => ({ st: state, ft: !!F.tongue, dead: F.dead, cd: G.tongueCD, hero: HERO.on, calls: renderer.info.render.calls, tris: renderer.info.render.triangles }), quality: (q) => setQuality(q), cam: () => ({ pos: camera.position.toArray(), shift: camShift })
   };
 }
 </script>
