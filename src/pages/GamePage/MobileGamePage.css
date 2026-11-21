@@ -129,6 +129,18 @@
    MODE JEU (playing) — plein ecran SIMULE
    position:fixed sur tout le viewport, iframe 100dvh, interface masquee.
    ===================================================================== */
+/* Partie en cours : ni sélection ni bulle d'appui long (Copier / Partager…) sur la page autour du jeu */
+html.rq-playing,
+html.rq-playing body,
+.mgp--playing,
+.mgp--playing * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.mgp__back-overlay { touch-action: manipulation; }
+
 .mgp--playing {
   position: fixed;
   left: 0;
