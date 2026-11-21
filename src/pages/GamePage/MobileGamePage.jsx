@@ -78,7 +78,7 @@ export default function MobileGamePage() {
     if (!playing) return
     const root = document.documentElement
     root.classList.add('rq-playing')
-    const clearSel = () => { try { const s = window.getSelection(); if (s && s.rangeCount) s.removeAllRanges() } catch (e) {} }
+    const clearSel = () => { try { const s = window.getSelection(); if (s && s.rangeCount) s.removeAllRanges() } catch { /* sélection indisponible */ } }
     const noMenu = (e) => e.preventDefault()
     document.addEventListener('selectionchange', clearSel)
     document.addEventListener('contextmenu', noMenu)
