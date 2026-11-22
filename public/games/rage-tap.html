@@ -90,9 +90,15 @@
   @media (min-aspect-ratio: 1/1) { #menu .panel { padding-bottom: 1.5vh; padding-bottom: 1.5dvh; } }
   #logo { position: fixed; top: calc(5vh + var(--safe-top)); left: 0; right: 0; text-align: center; pointer-events: none; z-index: 10; opacity: 0; transition: opacity .4s; }
   body.menuOn #logo { opacity: 1; }
-  #logo h1 { display: inline-flex; gap: .18em; font-size: clamp(46px, 15vw, 86px); font-weight: 900; letter-spacing: 2px; line-height: 1; font-style: italic; }
-  #logo h1 span { display: inline-block; color: #fff; text-shadow: 0 0 18px var(--acc), 0 0 40px var(--acc), 0 5px 0 #4a0614; animation: logoShake 2.4s ease-in-out infinite; }
-  #logo h1 span.t { color: var(--volt); text-shadow: 0 0 18px var(--ember), 0 0 40px var(--ember), 0 5px 0 #5a2a04; animation-delay: .2s; }
+  #logo h1 { line-height: 0; font-size: 40px; font-weight: 900; }
+  .logoImg { width: min(86vw, 430px); height: auto; filter: drop-shadow(0 0 18px rgba(255,45,69,.45)) drop-shadow(0 6px 10px rgba(0,0,0,.6)); animation: logoShake 2.4s ease-in-out infinite; }
+  /* loading screen: logo and progress while the sounds arrive */
+  #loading { z-index: 40; flex-direction: column; background: radial-gradient(ellipse at 50% 40%, #3a0a1c, #0c0510 70%); opacity: 1; pointer-events: auto; transition: opacity .45s; }
+  #loading.done { opacity: 0; pointer-events: none; }
+  #loading .logoImg { width: min(80vw, 400px); }
+  #loadTrack { margin-top: 22px; width: min(240px, 66vw); height: 8px; border-radius: 8px; background: rgba(255,255,255,.1); overflow: hidden; box-shadow: 0 0 0 1px rgba(255,45,69,.5) inset; }
+  #loadFill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--rage), var(--volt)); box-shadow: 0 0 12px var(--volt); transition: width .2s; }
+  #loadTxt { margin-top: 10px; font-size: 12px; font-weight: 800; letter-spacing: 3px; color: var(--dim); }
   @keyframes logoShake { 0%, 70%, 100% { transform: none; } 74% { transform: translate(-3px, 2px) rotate(-2deg); } 78% { transform: translate(3px, -2px) rotate(2deg); } 82% { transform: none; } }
   #logo p { margin-top: 10px; font-size: 12px; font-weight: 800; letter-spacing: 4px; color: var(--dim); text-shadow: 0 0 8px #000; }
   .timers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
@@ -143,7 +149,7 @@
   #wipe { position: fixed; inset: 0; z-index: 25; pointer-events: none; background: linear-gradient(110deg, #0c0510 40%, #4a0a1c 50%, #0c0510 60%); transform: translateX(-110%); }
   #wipe.go { animation: wipe .55s cubic-bezier(.6,0,.4,1) both; }
   @keyframes wipe { 0% { transform: translateX(-110%); } 50% { transform: translateX(0); } 100% { transform: translateX(110%); } }
-  @media (prefers-reduced-motion: reduce) { #logo h1 span, .pulse, #big.stay { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { .logoImg, .pulse, #big.stay { animation: none; } }
 </style>
 </head>
 <body>
@@ -181,7 +187,8 @@
     <div class="how"><b>Every tap is a punch</b> &middot; tap anywhere on the screen &middot; two thumbs allowed on mobile &middot; mouse clicks only on desktop &middot; mobile and desktop have their own leaderboards</div>
   </div>
 </div>
-<div id="logo"><h1><span>RAGE</span><span class="t">TAP</span></h1><p>EVERY TAP IS A PUNCH</p></div>
+<div id="logo"><h1><img class="logoImg" id="logoImg" src="./rage-tap/sprites/logo.webp" alt="RAGE TAP" width="824" height="292" /></h1><p>EVERY TAP IS A PUNCH</p></div>
+<div class="ov on" id="loading"><img class="logoImg" src="./rage-tap/sprites/logo.webp" alt="RAGE TAP" width="824" height="292" /><div id="loadTrack"><div id="loadFill"></div></div><div id="loadTxt">TAPING UP THE GLOVES</div></div>
 
 <div class="ov dim" id="themes">
   <div class="panel card">
@@ -294,7 +301,14 @@ const Audio = {
   bell() { this.tone(1320, 0.9, 'triangle', 0.25); this.tone(1980, 0.6, 'sine', 0.12); },
   setMuted(m) { this.muted = m; save('ragetap_muted', m ? '1' : '0'); if (this.master) this.master.gain.value = m ? 0 : 0.6; $('sndWave').style.display = m ? 'none' : ''; }
 };
-for (const n of SND) fetch(ASSET + 'audio/' + n + '.mp3').then((r) => r.arrayBuffer()).then((ab) => { RAW[n] = ab; Audio.decode(); }).catch(() => {});
+// loading screen: sounds and logo, never longer than 4 s (the game works without them)
+let loadDone = 0;
+const loadTotal = SND.length + 1;
+function stepLoad() { loadDone++; $('loadFill').style.width = Math.round(loadDone / loadTotal * 100) + '%'; if (loadDone >= loadTotal) endLoading(); }
+function endLoading() { const L = $('loading'); if (!L || L.classList.contains('done')) return; L.classList.add('done'); setTimeout(() => { L.remove(); if (state === 'menu') resize(); }, 500); }
+setTimeout(endLoading, 4000);
+for (const n of SND) fetch(ASSET + 'audio/' + n + '.mp3').then((r) => r.arrayBuffer()).then((ab) => { RAW[n] = ab; Audio.decode(); }).catch(() => {}).then(stepLoad);
+{ const li = $('logoImg'); if (li.complete) stepLoad(); else { li.addEventListener('load', () => { stepLoad(); if (state === 'menu') resize(); }); li.addEventListener('error', stepLoad); } }
 $('sndWave').style.display = Audio.muted ? 'none' : '';
 
 /* ================= REWARDED ADS (shown by the site, never by the game) ================= */

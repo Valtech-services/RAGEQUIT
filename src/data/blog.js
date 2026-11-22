@@ -961,6 +961,39 @@ export const posts = [
       { type: 'p', text: "Face your target, save LEAP for emergencies, croak on a crowd and keep moving. Open CROAKNIGHT and see how many nights you can survive." },
     ],
   },
+  {
+    slug: 'rage-tap-tips',
+    category: 'guides',
+    title: "RAGE TAP Tips: How to Tap Faster and Raise Your CPS",
+    date: '2026-11-22',
+    author: 'Ragequit Arcade',
+    excerpt: "RAGE TAP is a free click speed test where every tap is a punch. Learn the two-thumb technique, how to pace a 30 second or 1 minute run, how to click faster with a mouse and how to climb from Turtle to Beyond Human.",
+    image: '/blog/rage-tap-tips.jpg',
+    seo: {
+      title: "RAGE TAP Tips: Tap Faster and Raise Your CPS | Ragequit Arcade",
+      metaDescription: "A tips guide for RAGE TAP, the free click speed test: the two-thumb technique, pacing long runs, faster mouse clicking and how to reach Beyond Human.",
+    },
+    content: [
+      { type: 'p', text: "RAGE TAP looks like the simplest game in the world: tap the screen as fast as you can before the clock runs out. But the gap between a Rabbit and a Rage God is not luck. It comes from technique, posture and pacing. Here is how to land more punches on the monster bag in every timer." },
+      { type: 'h2', text: "On mobile, use two thumbs" },
+      { type: 'p', text: "Every finger that touches the screen counts as a tap, so one finger is the slowest way to play. Hold your phone in both hands or put it flat on a table, and alternate your two thumbs like a drummer. Each thumb only has to tap half as often, which lets you keep a much higher speed for longer." },
+      { type: 'ul', items: [
+        "Keep your thumbs close to the screen: short movements are faster.",
+        "Tap with the tip of the thumb, not the flat pad.",
+        "Find a steady left, right rhythm instead of tapping both thumbs at random.",
+        "Lay the phone on a table for the longer timers so your hands stay relaxed."
+      ] },
+      { type: 'h2', text: "On desktop, work on your clicking style" },
+      { type: 'p', text: "Only the left mouse button counts. Rest your wrist on the desk and click with the tip of your finger rather than your whole hand. Many fast players tense their forearm slightly to make the finger vibrate on the button, while others alternate two fingers on the same button. Try both on the 5 second timer and keep the one that gives you the best peak CPS." },
+      { type: 'h2', text: "Pace the long timers" },
+      { type: 'p', text: "On 5 and 10 seconds you can go all in from the first tap. On 30 seconds and 1 minute, a flat-out start burns your forearms and your speed collapses at the end. Look at the CPS graph after a run: if it falls sharply in the second half, start a little slower and keep a rhythm you can hold until the bell." },
+      { type: 'h2', text: "Use the pace counter and the ranks" },
+      { type: 'p', text: "During a run, the counter under the timer tells you whether you are ahead of your record or behind it, and the gauge shows your live rank. Use them as targets: stay in the green against your best, and push to reach the next rank, from Cheetah to Machine Gun, Rage God and Beyond Human." },
+      { type: 'h2', text: "Warm up and stay relaxed" },
+      { type: 'p', text: "Cold hands are slow hands. Do one or two short 5 second runs before you go for a record on a longer timer. Keep your shoulders loose and breathe: a tense body gets tired much faster than your fingers do." },
+      { type: 'p', text: "Two thumbs on mobile, a tight clicking style on desktop, smart pacing on the long timers and a quick warm up: that is all it takes to climb the ranks. Open RAGE TAP and see how many punches you can land." },
+    ],
+  },
 ]
 
 // Trouve un article par son slug.
