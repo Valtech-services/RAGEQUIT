@@ -84,9 +84,9 @@
   @keyframes pulse { 50% { transform: scale(1.04); box-shadow: 0 0 40px var(--acc), 0 4px 0 rgba(0,0,0,.45); } }
 
   /* title: PLAY and help sit high, away from Safari's toolbar */
-  #menu { align-items: flex-end; background: linear-gradient(to top, rgba(8,2,12,.95) 0%, rgba(8,2,12,.82) 48%, rgba(8,2,12,0) 68%); }
-  #menu .panel { padding-bottom: calc(4px + 29vh); padding-bottom: calc(4px + 29dvh); }
-  @media (min-aspect-ratio: 1/1) { #menu .panel { padding-bottom: 23vh; padding-bottom: 23dvh; } }
+  #menu { align-items: flex-end; background: linear-gradient(to top, rgba(8,2,12,.95) 0%, rgba(8,2,12,.8) 36%, rgba(8,2,12,0) 56%); }
+  #menu .panel { padding-bottom: calc(4px + 9vh); padding-bottom: calc(4px + 9dvh); }
+  @media (min-aspect-ratio: 1/1) { #menu .panel { padding-bottom: 4vh; padding-bottom: 4dvh; } }
   #logo { position: fixed; top: calc(5vh + var(--safe-top)); left: 0; right: 0; text-align: center; pointer-events: none; z-index: 10; opacity: 0; transition: opacity .4s; }
   body.menuOn #logo { opacity: 1; }
   #logo h1 { display: inline-flex; gap: .18em; font-size: clamp(46px, 15vw, 86px); font-weight: 900; letter-spacing: 2px; line-height: 1; font-style: italic; }
@@ -108,6 +108,8 @@
   .how b { color: var(--chrome); }
 
   /* themes */
+  #cloudBox { display: none; margin-top: 12px; padding: 10px; border-radius: 12px; border: 1px dashed var(--volt); font-size: 12px; font-weight: 800; color: var(--chrome); }
+  #cloudBox.on { display: block; }
   #themes .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 12px; }
   .th { position: relative; padding: 14px 6px; border-radius: 14px; border: 2px solid transparent; background: rgba(255,255,255,.05); color: var(--chrome); font-size: 13px; font-weight: 900; letter-spacing: 1px; }
   .th i { display: block; height: 26px; margin: 0 auto 8px; width: 70%; border-radius: 8px; }
@@ -183,7 +185,9 @@
 <div class="ov dim" id="themes">
   <div class="panel card">
     <h2 style="font-size:26px;font-weight:900;letter-spacing:3px">THEMES</h2>
+    <p class="how" style="margin-top:6px">Watch one ad and the theme is yours for life. It only changes the look, never the score.</p>
     <div class="grid" id="themeGrid"></div>
+    <div id="cloudBox"><span>Sign in to keep your themes on all your devices.</span><button class="btn alt small" id="bLogin">SIGN IN</button></div>
     <button class="btn alt" id="bThemesBack">BACK</button>
   </div>
 </div>
@@ -392,13 +396,16 @@ function resize() {
   S = Math.min(W / 440, (H * (portrait ? 0.5 : 0.56)) / 420);
   LAY.ground = portrait ? H * 0.66 : H * 0.74;
   // portrait title: a smaller ring between the logo and the menu
-  if (portrait && menu) { S *= 0.5; LAY.ground = H * 0.17 + 330 * S; }
-  else if (menu) { S = Math.min(S * 0.55, H * 0.19 / 400); LAY.ground = H * 0.2 + 372 * S; }
+  if (menu) {
+    const lb = $('logo').getBoundingClientRect(), pt = $('timers').getBoundingClientRect().top - (CHAL ? 50 : 0);
+    const top = (lb.bottom || H * 0.2) + 8, band = Math.max(120, (pt || H * 0.6) - top - 18);
+    S = Math.min(S, band / 400); LAY.ground = top + 388 * S;
+  }
   LAY.cx = W / 2;
   LAY.boxX = LAY.cx - 100 * S;
   LAY.pivX = LAY.cx + 52 * S; LAY.pivY = LAY.ground - 372 * S;
   LAY.gR = Math.min(W * 0.33, 120, H * 0.13);
-  LAY.gY = H - safeB - (portrait ? H * 0.1 : 26) - 8;
+  LAY.gY = H - safeB - (portrait ? H * 0.1 : 34) - 8;
   if (portrait && LAY.gY - LAY.gR < LAY.ground + 14) LAY.gY = LAY.ground + 14 + LAY.gR;
   buildStatic();
 }
@@ -429,13 +436,64 @@ function buildStatic() {
   g.strokeStyle = hexA(T.acc, 0.22); g.lineWidth = 1;
   for (let i = -10; i <= 10; i++) { g.beginPath(); g.moveTo(LAY.cx + i * 26 * S, LAY.ground); g.lineTo(LAY.cx + i * 140 * S, H); g.stroke(); }
   for (let k = 1; k < 7; k++) { const y = LAY.ground + Math.pow(k / 7, 1.8) * (H - LAY.ground); g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); }
-  // ring posts and ropes behind the fighters
-  const postL = LAY.cx - 190 * S, postR = LAY.cx + 190 * S;
-  g.fillStyle = '#2a1a30'; for (const px of [postL, postR]) { g.fillRect(px - 5 * S, LAY.ground - 150 * S, 10 * S, 150 * S); }
+  // ring mat: lit canvas with a white border and a centre logo ring
+  const mw = 250 * S, md = 34 * S, my = LAY.ground + 6 * S;
+  g.fillStyle = hexA(T.acc, 0.18); g.beginPath(); g.moveTo(LAY.cx - mw, LAY.ground - md); g.lineTo(LAY.cx + mw, LAY.ground - md); g.lineTo(LAY.cx + mw * 1.25, my + md); g.lineTo(LAY.cx - mw * 1.25, my + md); g.closePath(); g.fill();
+  const mat = g.createRadialGradient(LAY.cx, LAY.ground, 10, LAY.cx, LAY.ground, mw * 1.2); mat.addColorStop(0, 'rgba(255,255,255,.16)'); mat.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = mat; g.fill();
+  g.strokeStyle = 'rgba(255,255,255,.35)'; g.lineWidth = 2 * S; g.stroke();
+  g.strokeStyle = hexA(T.acc, 0.5); g.lineWidth = 3 * S; g.beginPath(); g.ellipse(LAY.cx, LAY.ground + 2 * S, 70 * S, 16 * S, 0, 0, Math.PI * 2); g.stroke();
+  // apron under the ring, lit by the theme colour
+  const ap = g.createLinearGradient(0, my + md, 0, my + md + 40 * S); ap.addColorStop(0, shade(T.acc)); ap.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = ap; g.fillRect(LAY.cx - mw * 1.25, my + md, mw * 2.5, 40 * S);
+  g.fillStyle = hexA(T.volt, 0.9); g.fillRect(LAY.cx - mw * 1.25, my + md, mw * 2.5, 2 * S);
+  // ring posts with corner pads and ropes behind the fighters
+  const postL = LAY.cx - 200 * S, postR = LAY.cx + 200 * S;
+  for (const px of [postL, postR]) {
+    const pg = g.createLinearGradient(px - 6 * S, 0, px + 6 * S, 0); pg.addColorStop(0, '#5a4a66'); pg.addColorStop(0.5, '#c8c0d8'); pg.addColorStop(1, '#3a2a46');
+    g.fillStyle = pg; g.fillRect(px - 6 * S, LAY.ground - 160 * S, 12 * S, 160 * S);
+    g.fillStyle = T.acc; roundRectOn(g, px - 11 * S, LAY.ground - 176 * S, 22 * S, 150 * S, 8 * S); g.fill();
+    g.fillStyle = 'rgba(255,255,255,.25)'; g.fillRect(px - 7 * S, LAY.ground - 170 * S, 4 * S, 136 * S);
+  }
   for (let k = 0; k < 3; k++) {
     const y = LAY.ground - (45 + k * 42) * S;
-    g.strokeStyle = hexA(T.rope, 0.25); g.lineWidth = 8 * S; g.beginPath(); g.moveTo(postL, y); g.lineTo(postR, y); g.stroke();
-    g.strokeStyle = hexA(T.rope, 0.85); g.lineWidth = 2.5 * S; g.beginPath(); g.moveTo(postL, y); g.lineTo(postR, y); g.stroke();
+    g.strokeStyle = hexA(T.rope, 0.25); g.lineWidth = 9 * S; g.beginPath(); g.moveTo(postL, y); g.quadraticCurveTo(LAY.cx, y + 6 * S, postR, y); g.stroke();
+    g.strokeStyle = hexA(T.rope, 0.9); g.lineWidth = 3 * S; g.beginPath(); g.moveTo(postL, y); g.quadraticCurveTo(LAY.cx, y + 6 * S, postR, y); g.stroke();
+    g.strokeStyle = 'rgba(255,255,255,.35)'; g.lineWidth = 1; g.beginPath(); g.moveTo(postL, y - 1); g.quadraticCurveTo(LAY.cx, y + 5 * S, postR, y - 1); g.stroke();
+  }
+  buildCrowd(T);
+}
+function roundRectOn(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
+/* the crowd: two tiers of silhouettes with a rim of light, cached once; it jumps with the speed */
+let crowdCanvas = null, hazeCanvas = null;
+const CROWD = { top: 0, h: 0, flashes: [] };
+function buildCrowd(T) {
+  const top = Math.max(0, LAY.ground - 300 * S), h = LAY.ground - 120 * S - top;
+  CROWD.top = top; CROWD.h = h; CROWD.flashes = [];
+  crowdCanvas = document.createElement('canvas'); crowdCanvas.width = Math.round(W * DPR); crowdCanvas.height = Math.max(1, Math.round((h + 30 * S) * DPR));
+  const g = crowdCanvas.getContext('2d'); g.scale(DPR, DPR);
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let row = 0; row < 3; row++) {
+    const y = h * (0.35 + row * 0.3), sz = (14 + row * 5) * S, step = sz * 1.5;
+    for (let x = -sz + rnd() * step; x < W + sz; x += step * (0.75 + rnd() * 0.5)) {
+      const yy = y + (rnd() - 0.5) * sz * 0.5;
+      g.fillStyle = 'rgb(' + (14 + row * 5) + ',' + (6 + row * 3) + ',' + (18 + row * 6) + ')';
+      g.beginPath(); g.ellipse(x, yy + sz * 1.3, sz * 0.95, sz * 0.8, 0, Math.PI, 0); g.fill();
+      g.beginPath(); g.arc(x, yy, sz * 0.48, 0, Math.PI * 2); g.fill();
+      g.strokeStyle = hexA(rnd() < 0.5 ? T.acc : T.acc2, 0.25 + row * 0.12); g.lineWidth = 1.2; g.beginPath(); g.arc(x, yy, sz * 0.48, Math.PI * 1.1, Math.PI * 1.9); g.stroke();
+      if (rnd() < 0.12) { g.strokeStyle = 'rgb(' + (20 + row * 6) + ',10,26)'; g.lineWidth = sz * 0.28; g.lineCap = 'round'; g.beginPath(); g.moveTo(x + sz * 0.5, yy + sz * 0.7); g.lineTo(x + sz * 0.8, yy - sz * 0.6); g.stroke(); }
+      if (rnd() < 0.08) CROWD.flashes.push({ x, y: top + yy });
+    }
+  }
+  // fade the crowd into the dark at the top
+  g.globalCompositeOperation = 'destination-in';
+  const fd = g.createLinearGradient(0, 0, 0, h); fd.addColorStop(0, 'rgba(0,0,0,0)'); fd.addColorStop(0.5, 'rgba(0,0,0,1)'); g.fillStyle = fd; g.fillRect(0, 0, W, h + 30 * S);
+  // haze: soft smoke blobs, drawn twice per frame with a slow drift
+  if (!hazeCanvas) {
+    hazeCanvas = document.createElement('canvas'); hazeCanvas.width = 256; hazeCanvas.height = 128;
+    const hg = hazeCanvas.getContext('2d');
+    // blobs stay inside the tile vertically and wrap horizontally, so the haze has no visible edge or seam
+    for (let i = 0; i < 40; i++) { const x = rnd() * 256, y = 42 + rnd() * 44, r = 14 + rnd() * 24; for (const ox of [-256, 0, 256]) { const rg = hg.createRadialGradient(x + ox, y, 0, x + ox, y, r); rg.addColorStop(0, 'rgba(255,255,255,.18)'); rg.addColorStop(1, 'rgba(255,255,255,0)'); hg.fillStyle = rg; hg.fillRect(x + ox - r, y - r, r * 2, r * 2); } }
   }
 }
 function hexA(hex, a) { const n = parseInt(hex.slice(1), 16); return 'rgba(' + (n >> 16 & 255) + ',' + (n >> 8 & 255) + ',' + (n & 255) + ',' + a + ')'; }
@@ -483,6 +541,7 @@ function landHit(armIdx) {
   const n = Math.ceil(7 * PFX);
   for (let i = 0; i < n; i++) { const a = Math.PI + (Math.random() - 0.5) * 1.8, s = 160 + Math.random() * 260; spawn(p.x, p.y, Math.cos(a) * s, Math.sin(a) * s - 40, 0.35, 3, i % 2 ? T.volt : '#ffffff', 1, 500); }
   spawn(p.x, p.y, 0, 0, 0.12, 26 * S, '#ffffff', 2);
+  ringAt(p.x, p.y, T.volt, 8 * S, 46 * S, 0.22);
   shake = Math.max(shake, RM ? 0 : Math.min(6, 1.5 + cps * 0.25));
   const rate = 0.85 + Math.min(0.9, cps * 0.035) + Math.random() * 0.08;
   Audio.play('punch', 0.55, rate);
@@ -523,7 +582,8 @@ function drawBoxer(t) {
     const kx = (hx + fx) / 2 + 8 * s, ky = gy - 60 * s;
     glow(16 * s); cx.beginPath(); cx.moveTo(hx, hipY); cx.lineTo(kx, ky); cx.lineTo(fx, gy); cx.stroke();
     cx.strokeStyle = '#1e1028'; cx.lineWidth = 16 * s; cx.beginPath(); cx.moveTo(hx, hipY); cx.lineTo(kx, ky); cx.lineTo(fx, gy); cx.stroke();
-    cx.fillStyle = '#f6f2ff'; cx.beginPath(); cx.ellipse(fx + 8 * s, gy - 3 * s, 15 * s, 6 * s, 0, 0, Math.PI * 2); cx.fill();
+    cx.fillStyle = '#f6f2ff'; cx.beginPath(); cx.ellipse(fx + 8 * s, gy - 4 * s, 15 * s, 7 * s, 0, 0, Math.PI * 2); cx.fill();
+    cx.fillStyle = T.acc; cx.fillRect(fx + 2 * s, gy - 8 * s, 12 * s, 3 * s);
   }
   // rear arm first (behind the torso)
   drawArm(1, shX - 6 * s, shY + 4 * s, headX, headY, T);
@@ -532,8 +592,12 @@ function drawBoxer(t) {
   roundRect(hipX - 28 * s, shY - 6 * s, 58 * s, hipY - shY + 10 * s, 20 * s); cx.stroke();
   const tg = cx.createLinearGradient(hipX - 28 * s, 0, hipX + 30 * s, 0); tg.addColorStop(0, '#2a1638'); tg.addColorStop(1, '#4a2a5a');
   cx.fillStyle = tg; roundRect(hipX - 28 * s, shY - 6 * s, 58 * s, hipY - shY + 10 * s, 20 * s); cx.fill();
-  cx.fillStyle = T.acc; roundRect(hipX - 32 * s, hipY - 22 * s, 66 * s, 40 * s, 10 * s); cx.fill();
+  cx.strokeStyle = hexA(T.volt, 0.55); cx.lineWidth = 2.5 * s; cx.beginPath(); cx.moveTo(hipX - 26 * s, shY + 14 * s); cx.quadraticCurveTo(hipX - 30 * s, (shY + hipY) / 2, hipX - 24 * s, hipY); cx.stroke();
+  cx.fillStyle = 'rgba(255,255,255,.12)'; cx.beginPath(); cx.ellipse(shX + 4 * s, shY + 8 * s, 18 * s, 10 * s, -0.3, 0, Math.PI * 2); cx.fill();
+  const sg = cx.createLinearGradient(0, hipY - 22 * s, 0, hipY + 18 * s); sg.addColorStop(0, T.acc); sg.addColorStop(1, shade(T.acc));
+  cx.fillStyle = sg; roundRect(hipX - 32 * s, hipY - 22 * s, 66 * s, 40 * s, 10 * s); cx.fill();
   cx.fillStyle = T.volt; cx.fillRect(hipX - 32 * s, hipY - 22 * s, 66 * s, 6 * s);
+  cx.fillStyle = 'rgba(255,255,255,.75)'; cx.fillRect(hipX + 24 * s, hipY - 16 * s, 4 * s, 32 * s);
   // head with headband and its tails
   cx.fillStyle = '#2a1638'; cx.beginPath(); cx.arc(headX, headY, 27 * s, 0, Math.PI * 2); cx.fill();
   cx.strokeStyle = hexA(T.acc, 0.5); cx.lineWidth = 3 * s; cx.stroke();
@@ -590,7 +654,12 @@ function drawBag(t) {
   cx.fillStyle = hexA(T.acc, 0.3); roundRect(-w / 2 - 6 * s, top - 6 * s, w + 12 * s, h + 12 * s, w / 2 + 6 * s); cx.fill();
   const bg = cx.createLinearGradient(-w / 2, 0, w / 2, 0); bg.addColorStop(0, T.bagB); bg.addColorStop(0.45, T.bagA); bg.addColorStop(1, T.bagB);
   cx.fillStyle = bg; roundRect(-w / 2, top, w, h, w / 2); cx.fill();
-  cx.fillStyle = 'rgba(255,255,255,.12)'; roundRect(-w / 2 + 12 * s, top + 16 * s, 14 * s, h - 40 * s, 7 * s); cx.fill();
+  cx.fillStyle = 'rgba(255,255,255,.14)'; roundRect(-w / 2 + 12 * s, top + 16 * s, 14 * s, h - 40 * s, 7 * s); cx.fill();
+  cx.fillStyle = 'rgba(255,255,255,.07)'; roundRect(w / 2 - 22 * s, top + 30 * s, 8 * s, h - 70 * s, 4 * s); cx.fill();
+  cx.setLineDash([5 * s, 5 * s]); cx.strokeStyle = 'rgba(0,0,0,.45)'; cx.lineWidth = 1.5 * s;
+  cx.beginPath(); cx.moveTo(0, top + 8 * s); cx.lineTo(0, top + 18 * s); cx.moveTo(-w / 2 + 6 * s, top + h * 0.5); cx.lineTo(-w / 2 + 6 * s, top + h - 40 * s); cx.stroke(); cx.setLineDash([]);
+  const cap = cx.createLinearGradient(-w / 2, 0, w / 2, 0); cap.addColorStop(0, '#6a6078'); cap.addColorStop(0.5, '#e8e2f2'); cap.addColorStop(1, '#5a5068');
+  cx.fillStyle = cap; roundRect(-w * 0.32, top - 4 * s, w * 0.64, 12 * s, 6 * s); cx.fill();
   cx.fillStyle = '#1a0a14'; cx.fillRect(-w / 2, top + 22 * s, w, 7 * s); cx.fillRect(-w / 2, top + h - 30 * s, w, 7 * s);
   // monster face (looks at the boxer)
   const fy = top + h * 0.42, hurt = bag.hurt > 0, ko = !!bag.ko;
@@ -627,7 +696,8 @@ function drawGauge(t, cps) {
   needle = lerp(needle, Math.min(GAUGE_MAX * 1.04, cps), 0.2);
   const v = Math.min(1, needle / GAUGE_MAX) + (needle > GAUGE_MAX ? Math.sin(t * 60) * 0.01 : 0);
   cx.save();
-  cx.fillStyle = 'rgba(10,2,14,.75)'; cx.beginPath(); cx.arc(x, y, r + 12, Math.PI, 0); cx.closePath(); cx.fill();
+  cx.fillStyle = 'rgba(10,2,14,.8)'; cx.beginPath(); cx.arc(x, y, r + 14, Math.PI, 0); cx.closePath(); cx.fill();
+  cx.strokeStyle = hexA(T.acc, 0.5); cx.lineWidth = 2; cx.beginPath(); cx.arc(x, y, r + 14, Math.PI, 0); cx.stroke();
   cx.lineCap = 'butt';
   cx.strokeStyle = 'rgba(255,255,255,.08)'; cx.lineWidth = 12; cx.beginPath(); cx.arc(x, y, r, Math.PI, 0); cx.stroke();
   const red = 12 / GAUGE_MAX;
@@ -763,11 +833,11 @@ function renderThemes() {
   const grid = $('themeGrid'); grid.innerHTML = '';
   for (const [k, T] of Object.entries(THEMES)) {
     const b = document.createElement('button'); b.className = 'th' + (k === theme ? ' sel' : '');
-    b.innerHTML = '<i style="background:linear-gradient(90deg,' + T.acc + ',' + T.acc2 + ',' + T.volt + ')"></i>' + T.name + (unlocked.has(k) ? '' : '<em>WATCH AD TO UNLOCK</em>');
+    b.innerHTML = '<i style="background:linear-gradient(90deg,' + T.acc + ',' + T.acc2 + ',' + T.volt + ')"></i>' + T.name + (unlocked.has(k) ? '' : '<em>1 AD = YOURS FOREVER</em>');
     b.addEventListener('click', () => {
       if (unlocked.has(k)) { setTheme(k); renderThemes(); return; }
       state = 'ad';
-      showAd('theme', T.name + ' theme unlocked', () => { unlocked.add(k); save('ragetap_unlocked', [...unlocked].join(',')); setTheme(k); state = 'themes'; renderThemes(); }, () => { state = 'themes'; });
+      showAd('theme', T.name + ' theme unlocked forever', () => { unlocked.add(k); save('ragetap_unlocked', [...unlocked].join(',')); setTheme(k); state = 'themes'; renderThemes(); cloudSave(); }, () => { state = 'themes'; });
     });
     grid.appendChild(b);
   }
@@ -778,6 +848,25 @@ function setTheme(k) {
   st.setProperty('--acc', T.acc); st.setProperty('--ink', k === 'rage' ? '#ffffff' : '#12040c'); st.setProperty('--rage', T.acc); st.setProperty('--ember', T.acc2); st.setProperty('--volt', T.volt);
   buildStatic();
 }
+
+/* ================= ONLINE SAVE (unlocked themes follow the signed-in player) ================= */
+const cloud = { inFrame: window.parent !== window, signedIn: false };
+function cloudSave() { if (cloud.inFrame && cloud.signedIn) post({ type: 'RH_SAVE', game: GAME_ID, state: { themes: [...unlocked] }, progress: unlocked.size }); }
+window.addEventListener('message', (e) => {
+  if (!cloud.inFrame || e.source !== window.parent) return;
+  const d = e.data; if (!d || typeof d.type !== 'string') return;
+  if (d.type === 'RH_AUTH') {
+    const was = cloud.signedIn; cloud.signedIn = !!d.signedIn; show($('cloudBox'), cloud.inFrame && !cloud.signedIn);
+    if (cloud.signedIn && !was) post({ type: 'RH_SAVE_LOAD', game: GAME_ID });
+  } else if (d.type === 'RH_SAVE_STATE' && d.game === GAME_ID) {
+    const list = d.state && Array.isArray(d.state.themes) ? d.state.themes.filter((k) => THEMES[k]) : [];
+    const before = unlocked.size; list.forEach((k) => unlocked.add(k));
+    if (unlocked.size !== before) { save('ragetap_unlocked', [...unlocked].join(',')); if (state === 'themes') renderThemes(); }
+    if (unlocked.size > (Number(d.progress) || 0)) cloudSave();
+  }
+});
+$('bLogin').addEventListener('click', () => post({ type: 'RH_LOGIN_REQUEST', game: GAME_ID }));
+if (cloud.inFrame) post({ type: 'RH_AUTH_REQUEST', game: GAME_ID });
 
 /* ================= LOOP ================= */
 let last = now(), perfT = 0, perfN = 0, quality = 2, simT = 0, menuPunchT = 0;
@@ -810,6 +899,10 @@ function render(dt, t) {
   const cps = state === 'run' ? liveCps() : 0, rage = clamp(cps / 12, 0, 1);
   // the arena heats up with the speed
   if (rage > 0) { cx.globalCompositeOperation = 'lighter'; const g = cx.createRadialGradient(LAY.cx, LAY.ground - 150 * S, 10, LAY.cx, LAY.ground - 150 * S, Math.max(W, H) * 0.7); g.addColorStop(0, hexA(T.acc, 0.22 * rage * (0.8 + 0.2 * Math.sin(t * 20)))); g.addColorStop(1, hexA(T.acc, 0)); cx.fillStyle = g; cx.fillRect(0, 0, W, H); cx.globalCompositeOperation = 'source-over'; }
+  // crowd jumps with the speed, camera flashes go off faster
+  if (crowdCanvas) { const jump = rage > 0.15 ? Math.abs(Math.sin(t * (6 + rage * 8))) * 6 * rage * S : 0; cx.drawImage(crowdCanvas, 0, CROWD.top - jump, W, crowdCanvas.height / DPR); }
+  if (CROWD.flashes.length && Math.random() < (0.03 + rage * 0.35) * PFX) { const f = CROWD.flashes[(Math.random() * CROWD.flashes.length) | 0]; spawn(f.x + (Math.random() - 0.5) * 10, f.y, 0, 0, 0.12, 14 * S, '#ffffff', 2); }
+  if (hazeCanvas) { cx.globalAlpha = 0.5; cx.globalCompositeOperation = 'lighter'; const ox = (t * 12) % W; cx.drawImage(hazeCanvas, -ox, LAY.ground - 330 * S, W, 300 * S); cx.drawImage(hazeCanvas, W - ox, LAY.ground - 330 * S, W, 300 * S); cx.globalAlpha = 1; cx.globalCompositeOperation = 'source-over'; }
   // ambient embers rising
   if (Math.random() < (0.3 + rage) * PFX) spawn(Math.random() * W, H + 5, (Math.random() - 0.5) * 20, -40 - Math.random() * 60 - rage * 120, 2.5, 1.5 + Math.random() * 2, Math.random() < 0.5 ? T.acc : T.acc2, 0, 0);
   cx.save();

@@ -147,7 +147,7 @@ Priorité de Laurent : des jeux beaux, au niveau de ce qui tourne sur les résea
 - Transitions entre écrans (titre, jeu, game over, pub) : fondu, glissement ou balayage de 200 à 400 ms.
 - HUD : typographie système soignée (pile `system-ui`, graisses 800/900, chiffres `font-variant-numeric: tabular-nums`, léger halo), hiérarchie claire, icônes dessinées en SVG ou canvas.
 - Écran titre qui donne envie : logo-titre animé, fond vivant, bouton jouer qui pulse.
-- Écran titre épuré : aucun texte de description du mode au-dessus du bouton jouer (au plus une phrase d'accroche courte) ; le bouton jouer et le texte d'aide sont placés haut, environ 30 % de la hauteur d'écran au-dessus du bas en portrait (23 % en paysage), loin de la barre Safari, et le décor du titre reste visible entre le logo et le menu.
+- Écran titre épuré : aucun texte de description du mode au-dessus du bouton jouer (au plus une phrase d'accroche courte). Le menu (choix du mode, bouton jouer, texte d'aide) est calé en bas de l'écran : marge basse d'environ 9 % de la hauteur d'écran en portrait (`padding-bottom: calc(4px + 9dvh)`, avec `9vh` avant en repli) et 4 % en paysage, ce qui le garde au-dessus de la barre Safari sans le remonter au milieu de l'écran. Le décor animé du titre (personnage, plateau, scène) est agrandi pour remplir tout l'espace libre entre le logo et le menu.
 - Écran de game over avec résumé animé (score, record, meilleur combo) et rejouer en un tap.
 
 **4. Performance (non négociable)**
