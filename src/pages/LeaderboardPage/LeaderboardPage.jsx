@@ -41,6 +41,9 @@ function modeLabel(m, t) {
   if (MONUMENT_NAMES[m]) return MONUMENT_NAMES[m]
   if (m === 'survival') return t('leaderboard.survival')
   if (m === 'classic')  return t('leaderboard.classic')
+  // RAGE TAP : mobile-10s -> Mobile 10 s, desktop-60s -> Desktop 1 min
+  const dev = /^(mobile|desktop)-(\d+)s$/.exec(m)
+  if (dev) return (dev[1] === 'mobile' ? 'Mobile' : 'Desktop') + ' ' + (dev[2] === '60' ? '1 min' : dev[2] + ' s')
   return m.charAt(0).toUpperCase() + m.slice(1)
 }
 
