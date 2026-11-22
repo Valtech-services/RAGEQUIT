@@ -83,6 +83,15 @@ La tâche quotidienne ne produit que des PR de test.
 
 **Limite d'attente :** compter les jeux au statut `en test` dans `backlog.md`. S'il y en a 5 ou plus, la tâche ne crée aucun jeu : elle termine par un message court à Laurent listant les jeux qui attendent son test dans l'admin. La production reprend automatiquement dès qu'un jeu est validé (ou abandonné) et que le compteur repasse sous 5. Rien n'est jamais perdu : le backlog garde l'ordre et l'état de chaque jeu.
 
+**Feu vert de Laurent (prioritaire sur la limite d'attente)** : avant chaque exécution de la tâche « RageQuit : un jeu par jour » (8h50, heure de Paris), Laurent peut donner sa consigne pour cette exécution, la veille au soir ou le matin même.
+- Exemples de phrases : « OK pour ajouter un jeu dans la prochaine routine un jeu par jour », « vas-y, code demain », « ne code pas demain », « pas de jeu demain ».
+- **Enregistrement** : le Claude qui reçoit ce message (dans n'importe quelle conversation) l'inscrit dans `routines/feu-vert.md` par une petite PR qui ne touche qu'à ce fichier, fusionnée aussitôt. La ligne indique la date d'exécution concernée (le jour même si le message arrive avant 8h50, sinon le lendemain), la décision (`code` ou `pas de jeu`) et la phrase de Laurent. Une nouvelle consigne pour la même date remplace la précédente. Claude confirme à Laurent la date retenue.
+- **Lecture par la tâche** (au début de chaque exécution) :
+  - consigne `code` pour la date du jour : produire un jeu **même si 5 jeux ou plus sont déjà en test** (un 6e, 7e... jeu est accepté) ;
+  - consigne `pas de jeu` pour la date du jour : ne créer aucun jeu, même sous la limite, et le dire dans la notification ;
+  - aucune consigne pour la date du jour (oubli, vacances, déplacement) : la limite d'attente de 5 jeux s'applique normalement.
+- Une consigne ne vaut que pour une exécution : après usage, la tâche passe la ligne en `utilisée` (dans sa PR de test, ou dans une petite PR dédiée si elle ne crée pas de jeu). Les consignes dont la date est passée sont ignorées.
+
 ## Transformation obligatoire
 
 On ne republie jamais un jeu tel quel. La source sert de référence de gameplay ; le code est entièrement réécrit. Pour chaque jeu, être force de proposition et appliquer au minimum :
