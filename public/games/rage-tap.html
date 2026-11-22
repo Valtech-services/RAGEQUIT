@@ -85,8 +85,9 @@
 
   /* title: PLAY and help sit high, away from Safari's toolbar */
   #menu { align-items: flex-end; background: linear-gradient(to top, rgba(8,2,12,.95) 0%, rgba(8,2,12,.8) 36%, rgba(8,2,12,0) 56%); }
-  #menu .panel { padding-bottom: calc(4px + 9vh); padding-bottom: calc(4px + 9dvh); }
-  @media (min-aspect-ratio: 1/1) { #menu .panel { padding-bottom: 4vh; padding-bottom: 4dvh; } }
+  /* the game runs in an iframe below the site header and above the browser bars: the menu sits at the very bottom */
+  #menu .panel { padding-bottom: calc(2px + 1.5vh); padding-bottom: calc(2px + 1.5dvh); }
+  @media (min-aspect-ratio: 1/1) { #menu .panel { padding-bottom: 1.5vh; padding-bottom: 1.5dvh; } }
   #logo { position: fixed; top: calc(5vh + var(--safe-top)); left: 0; right: 0; text-align: center; pointer-events: none; z-index: 10; opacity: 0; transition: opacity .4s; }
   body.menuOn #logo { opacity: 1; }
   #logo h1 { display: inline-flex; gap: .18em; font-size: clamp(46px, 15vw, 86px); font-weight: 900; letter-spacing: 2px; line-height: 1; font-style: italic; }
