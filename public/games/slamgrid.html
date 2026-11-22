@@ -54,7 +54,17 @@
   #movesBar { position: relative; margin-top: 4px; height: 8px; border-radius: 6px; background: rgba(255,255,255,.08); overflow: hidden; box-shadow: 0 0 0 1px rgba(155,77,255,.45) inset; }
   #movesFill { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; border-radius: 6px; background: linear-gradient(90deg, #9b4dff, #f2ff3c); box-shadow: 0 0 10px rgba(242,255,60,.6); transition: width .25s cubic-bezier(.2,1.3,.4,1); }
   #movesBox.low #movesFill { background: linear-gradient(90deg, #ff3e8e, #ff9b3e); box-shadow: 0 0 10px rgba(255,62,142,.8); }
+  #movesBar { overflow: visible; }
   #parMark { position: absolute; top: -2px; bottom: -2px; width: 2px; background: #fff; box-shadow: 0 0 6px #fff; border-radius: 2px; }
+  #parMark::after { content: 'PAR'; position: absolute; top: 11px; left: 50%; transform: translateX(-50%); font-size: 8px; font-weight: 900; letter-spacing: 1px; color: #fff; text-shadow: 0 0 6px #000; }
+  #movesBox.overpar #movesFill { background: linear-gradient(90deg, #9b4dff, #ff9b3e); box-shadow: 0 0 10px rgba(255,155,62,.6); }
+  /* bigger HUD on large screens */
+  @media (min-width: 900px) and (min-height: 600px) {
+    #score { font-size: 46px; } #infoLine { font-size: 13px; gap: 14px; }
+    #movesBox { top: calc(84px + var(--safe-top)); width: 320px; } #movesLbl { font-size: 12px; } #movesBar { height: 10px; }
+    #combo { top: calc(122px + var(--safe-top)); font-size: 16px; } #bossBar { top: calc(142px + var(--safe-top)); width: 340px; } #bossBar span { font-size: 12px; }
+    #banner { top: calc(176px + var(--safe-top)); } .iconBtn { width: 44px; height: 44px; } #hearts svg { width: 24px; height: 24px; }
+  }
   #combo { position: absolute; top: calc(84px + var(--safe-top)); left: 50%; transform: translateX(-50%) scale(.6); font-size: 13px; font-weight: 900; color: var(--lemon); letter-spacing: 2px; opacity: 0; transition: opacity .2s, transform .25s cubic-bezier(.2,1.6,.4,1);
     text-shadow: 0 0 10px rgba(242,255,60,.8); white-space: nowrap; font-variant-numeric: tabular-nums; }
   #combo.on { opacity: 1; transform: translateX(-50%) scale(1); }
@@ -101,10 +111,10 @@
   /* ---------- floating texts & banners ---------- */
   #floats { position: fixed; inset: 0; pointer-events: none; z-index: 4; overflow: hidden; }
   .ft { position: absolute; left: 0; top: 0; font-weight: 900; font-size: 18px; white-space: nowrap; font-variant-numeric: tabular-nums; text-shadow: 0 0 10px currentColor, 0 2px 0 #12062a; will-change: transform, opacity; opacity: 0; }
-  #banner { position: fixed; left: 0; right: 0; top: 30%; z-index: 5; text-align: center; pointer-events: none; opacity: 0; }
+  #banner { position: fixed; left: 0; right: 0; top: calc(128px + var(--safe-top)); z-index: 5; text-align: center; pointer-events: none; opacity: 0; }
   #banner.go { animation: bannerIn 2s cubic-bezier(.2,.9,.3,1) both; }
   @keyframes bannerIn { 0% { opacity: 0; transform: scale(1.6); letter-spacing: 18px; } 14% { opacity: 1; transform: scale(1); letter-spacing: 4px; } 80% { opacity: 1; } 100% { opacity: 0; transform: translateY(-30px); } }
-  #banner h2 { font-size: clamp(30px, 9vw, 52px); font-weight: 900; letter-spacing: 4px; color: var(--bone); text-shadow: 0 0 22px var(--bc, #9b4dff), 0 3px 0 #12062a; }
+  #banner h2 { font-size: clamp(26px, 7.4vw, 40px); font-weight: 900; letter-spacing: 4px; color: var(--bone); text-shadow: 0 0 22px var(--bc, #9b4dff), 0 3px 0 #12062a; }
   #banner p { margin-top: 6px; font-size: 14px; font-weight: 800; letter-spacing: 3px; color: var(--bc, #9b4dff); text-shadow: 0 0 10px #000; }
   #toast { position: fixed; left: 50%; bottom: calc(150px + 9vh + var(--safe-bottom)); bottom: calc(150px + 9dvh + var(--safe-bottom)); transform: translate(-50%, 20px); z-index: 12; padding: 9px 16px; border-radius: 14px; background: rgba(22,10,46,.92);
     border: 1px solid var(--uv); font-size: 13px; font-weight: 800; opacity: 0; transition: opacity .25s, transform .25s; pointer-events: none; white-space: nowrap; }
@@ -150,6 +160,7 @@
   .mode:active { transform: scale(.94); }
   .mode.sel { color: #12062a; background: var(--mc, #f2ff3c); border-color: transparent; box-shadow: 0 0 16px var(--mc, #f2ff3c); }
   .mode[data-m="classic"] { --mc: #f2ff3c; } .mode[data-m="hard"] { --mc: #ff3e8e; } .mode[data-m="daily"] { --mc: #9fe8ff; }
+  #tagline { margin-top: 10px; font-size: 14px; font-weight: 800; color: var(--lemon); letter-spacing: .5px; text-shadow: 0 0 10px rgba(242,255,60,.45), 0 0 6px #000; }
   #bestLine { font-size: 13px; font-weight: 800; letter-spacing: 1px; color: var(--bone); margin-top: 10px; font-variant-numeric: tabular-nums; text-shadow: 0 0 6px #000; }
   #chal { display: none; margin-bottom: 8px; padding: 9px; border-radius: 12px; border: 1px dashed var(--plasma); color: #ffc0da; font-size: 13px; font-weight: 800; background: rgba(22,10,46,.7); }
   #chal.on { display: block; }
@@ -200,7 +211,7 @@
 <div id="floats"></div>
 
 <div id="hud">
-  <div id="scoreBox"><div id="score">0</div><div id="infoLine"><span><b id="boardNum">BOARD 1</b></span><span>PAR <b id="parNum">0</b></span></div></div>
+  <div id="scoreBox"><div id="score">0</div><div id="infoLine"><span><b id="boardNum">BOARD 1</b></span><span>PAR <b id="parNum">0</b></span><span>CUBES <b id="cubesNum">0</b></span></div></div>
   <div id="movesBox"><div id="movesLbl"><span>MOVES LEFT</span><b id="movesNum">0</b></div><div id="movesBar"><div id="movesFill"></div><div id="parMark"></div></div></div>
   <div id="combo">PERFECT x2</div>
   <div id="bossBar"><span>THE MONOLITH</span><div id="bossTrack"><div id="bossFill"></div></div></div>
@@ -231,6 +242,7 @@
       <button class="mode" data-m="hard">HARD</button>
       <button class="mode" data-m="daily">DAILY</button>
     </div>
+    <div id="tagline">Slam every cube before you run out of moves</div>
     <div id="bestLine">BEST 0</div>
     <button class="btn pulse" id="bPlay">PLAY</button>
     <div class="how"><b>Tap</b> a neighbour cube or <b>swipe</b> to hop &middot; every landing <b>flips</b> the cube: raised goes down, down pops back up &middot; slam them all before your moves run out &middot; land on gremlins to stomp them, never on spikes</div>
@@ -553,11 +565,11 @@ const floorMat = new THREE.ShaderMaterial({
     'void main(){',
     '  vec2 p = vW.xz * 0.5 + vec2(0.0, uT * 0.12);',
     '  vec2 gr = abs(fract(p) - 0.5); float l = min(gr.x, gr.y);',
-    '  float line = smoothstep(0.035, 0.0, l);',
+    '  float line = smoothstep(0.022, 0.0, l);',
     '  float d = length(vW.xz);',
-    '  float fade = smoothstep(34.0, 6.0, d);',
+    '  float fade = smoothstep(22.0, 5.0, d);',
     '  vec3 lc = mix(uA, uB, clamp(0.5 + 0.5 * sin(d * 0.25 - uT * 0.8), 0.0, 1.0)) * (1.0 + uBoss * 0.6);',
-    '  vec3 c = uBg * (0.6 + 0.4 * smoothstep(30.0, 0.0, d)) + lc * line * fade * 0.5;',
+    '  vec3 c = uBg * (0.6 + 0.4 * smoothstep(30.0, 0.0, d)) + lc * line * fade * 0.28;',
     '  c = mix(c, vec3(0.28, 0.08, 0.32), smoothstep(16.0, 40.0, d));',
     '  gl_FragColor = vec4(c, 1.0);',
     '}'
@@ -777,8 +789,10 @@ function applyPBR() {
 // materials by state: brushed dark metal, neon bevel, glowing top glyph
 function sideMat(col, ei) { return new THREE.MeshStandardMaterial({ color: 0x3a3352, metalness: 0.55, roughness: 0.5, emissive: new THREE.Color(col), emissiveMap: sideEdge, emissiveIntensity: ei, envMapIntensity: 1.1 }); }
 function topMat(col, tex, ei) { return new THREE.MeshStandardMaterial({ color: 0x5a5274, metalness: 0.5, roughness: 0.42, emissive: new THREE.Color(col), emissiveMap: tex, emissiveIntensity: ei, envMapIntensity: 1.2 }); }
-const SIDE = { up: sideMat(PAL.uv, 1.5), cry: sideMat(PAL.ice, 1.4), down: sideMat(PAL.lemon, 0.3) };
-const TOPM = { up: topMat(PAL.uv, TOP.up, 2.0), cry1: topMat(PAL.ice, TOP.cry1, 1.9), cry2: topMat(0xffe08a, TOP.cry2, 2.0), down: topMat(PAL.lemon, TOP.down, 1.5) };
+const SIDE = { up: sideMat(PAL.uv, 2.1), cry: sideMat(PAL.ice, 1.6), down: sideMat(PAL.lemon, 0.15) };
+SIDE.up.color.set(0x2a1650); SIDE.cry.color.set(0x24304a);
+const TOPM = { up: topMat(PAL.uv, TOP.up, 2.6), cry1: topMat(PAL.ice, TOP.cry1, 1.9), cry2: topMat(0xffe08a, TOP.cry2, 2.0), down: topMat(PAL.lemon, TOP.down, 0.75) };
+TOPM.up.color.set(0x2e1858);
 TOPM.down.color.set(0x2c2540); SIDE.down.color.set(0x262038);
 const bottomMat = new THREE.MeshStandardMaterial({ color: 0x120a22 });
 function matsFor(level, m) {
@@ -826,7 +840,7 @@ function tileLayer(tex, col, n) {
   const m = new THREE.InstancedMesh(new THREE.PlaneGeometry(0.9, 0.9), new THREE.MeshBasicMaterial({ map: tex, color: new THREE.Color(col).multiplyScalar(2.2), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.85 }), n);
   m.count = 0; m.renderOrder = 6; m.frustumCulled = false; scene.add(m); return m;
 }
-const LAYER = { warn: tileLayer(warnTex, PAL.plasma, 40), spore: tileLayer(crossTex, 0xb4ff3a, 40), beam: tileLayer(crossTex, PAL.plasma, 40), hint: tileLayer(hintTex, PAL.lemon, 4), warp: tileLayer(ringTex, PAL.ice, 8) };
+const LAYER = { warn: tileLayer(warnTex, PAL.plasma, 40), spore: tileLayer(crossTex, 0xb4ff3a, 40), beam: tileLayer(crossTex, PAL.plasma, 40), hint: tileLayer(hintTex, PAL.lemon, 4), hover: tileLayer(ringTex, 0xffffff, 1), warp: tileLayer(ringTex, PAL.ice, 8) };
 
 let cells = [];      // visual + logic per cell
 let BC = 3, BR = 3;  // board size
@@ -908,9 +922,12 @@ const heroFb = heroFallback(); heroBody.add(heroFb);
 const heroShadow = new THREE.Mesh(new THREE.CircleGeometry(0.3, 20), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.45, depthWrite: false }));
 heroShadow.rotation.x = -Math.PI / 2; heroShadow.renderOrder = 2; scene.add(heroShadow);
 const heroGlow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color: new THREE.Color(PAL.ice).multiplyScalar(1.1), transparent: true, opacity: 0.55, depthWrite: false, blending: THREE.AdditiveBlending }));
-heroGlow.scale.set(1.5, 1.5, 1); heroGlow.position.y = 0.45; heroRoot.add(heroGlow);
-const heroRing = new THREE.Mesh(new THREE.RingGeometry(0.36, 0.46, 40), new THREE.MeshBasicMaterial({ color: new THREE.Color(0xffffff).multiplyScalar(2), transparent: true, opacity: 0.8, depthWrite: false, side: THREE.DoubleSide }));
-heroRing.rotation.x = -Math.PI / 2; heroRing.renderOrder = 4; scene.add(heroRing);
+heroGlow.scale.set(1.1, 1.1, 1); heroGlow.position.y = 0.45; heroRoot.add(heroGlow);
+const heroRing = new THREE.Mesh(new THREE.RingGeometry(0.38, 0.44, 40), new THREE.MeshBasicMaterial({ color: new THREE.Color(PAL.ice).multiplyScalar(1.1), transparent: true, opacity: 0.8, depthWrite: false, side: THREE.DoubleSide }));
+heroRing.rotation.x = -Math.PI / 2; heroRing.renderOrder = 8; heroRing.material.depthTest = false; scene.add(heroRing);
+// floating diamond above the head: the hero can always be found, even behind tall cubes
+const heroMark = new THREE.Mesh(new THREE.OctahedronGeometry(0.11, 0), new THREE.MeshBasicMaterial({ color: new THREE.Color(PAL.lemon).multiplyScalar(2.2), depthTest: false, transparent: true }));
+heroMark.scale.set(1, 1.5, 1); heroMark.renderOrder = 9; scene.add(heroMark);
 // a glowing headband scarf tail generated in code, the hero's signature
 const scarf = new THREE.Mesh(new THREE.PlaneGeometry(0.08, 0.42, 1, 6), new THREE.MeshBasicMaterial({ color: new THREE.Color(PAL.lemon).multiplyScalar(1.8), side: THREE.DoubleSide, transparent: true, opacity: 0.95 }));
 const scarfBase = scarf.geometry.attributes.position.array.slice();
@@ -924,7 +941,7 @@ function attachHero() {
   let mat = null;
   inner.traverse((m) => {
     if (m.isMesh) {
-      if (!mat) { mat = m.material.clone(); mat.color.set(0xffffff); mat.emissive = new THREE.Color(0x2a86a8); mat.emissiveMap = null; mat.emissiveIntensity = 0.75; mat.roughness = 0.38; mat.metalness = 0.1; mat.envMapIntensity = 1; addRim(mat, PAL.ice, 1.8); }
+      if (!mat) { mat = m.material.clone(); mat.color.set(0xffffff); mat.emissive = new THREE.Color(0x2a86a8); mat.emissiveMap = null; mat.emissiveIntensity = 0.5; mat.roughness = 0.38; mat.metalness = 0.1; mat.envMapIntensity = 1; addRim(mat, PAL.ice, 1.8); }
       m.material = mat; m.castShadow = true; m.frustumCulled = false;
     }
     if (m.isBone && /head/i.test(m.name) && !heroHead) heroHead = m;
@@ -1168,6 +1185,7 @@ function refreshTele() {
     }
     if (B.boss && B.boss.lane) { const l = B.boss.lane; if (l.axis === 'row') for (let x = 0; x < BC; x++) put(LAYER.beam, x, l.i); else for (let z = 0; z < BR; z++) put(LAYER.beam, l.i, z); }
     G.hintCells.forEach(([x, z], k) => put(LAYER.hint, x, z, k === 0 ? 1 : 0.6));
+    if (G.hover && P.t >= 1 && Math.abs(G.hover[0] - P.x) + Math.abs(G.hover[1] - P.z) === 1 && walkable(G.hover[0], G.hover[1])) put(LAYER.hover, G.hover[0], G.hover[1], 1.05);
   }
   for (const k in LAYER) LAYER[k].instanceMatrix.needsUpdate = true;
 }
@@ -1476,13 +1494,15 @@ let lastHud = '';
 function updateHud(dt) {
   G.shown = G.shown < G.score ? Math.min(G.score, G.shown + Math.max(20, (G.score - G.shown) * dt * 6)) : G.score;
   const left = Math.max(0, B.L.budget - B.moves);
-  const key = Math.floor(G.shown) + '|' + left + '|' + G.combo + '|' + B.L.budget;
+  let cubes = 0; for (const c of cells) if (!c.hole && c.level > 0) cubes++;
+  const key = Math.floor(G.shown) + '|' + left + '|' + G.combo + '|' + B.L.budget + '|' + cubes;
   if (key === lastHud) return; lastHud = key;
   $('score').textContent = fmt(G.shown);
   $('movesNum').textContent = left;
   $('movesFill').style.width = (left / B.L.budget * 100) + '%';
   $('parMark').style.left = ((B.L.budget - B.L.par) / B.L.budget * 100) + '%';
-  $('movesBox').classList.toggle('low', left <= 2);
+  $('movesBox').classList.toggle('low', left <= 2); $('movesBox').classList.toggle('overpar', B.moves > B.L.par);
+  $('cubesNum').textContent = cubes;
   const ce = $('combo'); if (G.combo >= 1) { ce.textContent = 'PERFECT STREAK x' + G.combo; show(ce, true); } else show(ce, false);
   const hintReady = B.moves > B.L.par && G.hints > 0; $('pHint').classList.toggle('ready', hintReady);
 }
@@ -1530,18 +1550,19 @@ function frameCamera(snap) {
   const W = window.innerWidth, H = window.innerHeight, asp = W / H;
   camera.aspect = asp; camera.fov = asp < 0.75 ? 42 : 36; camera.clearViewOffset(); camera.updateProjectionMatrix();
   const portrait = asp < 1;
-  CAM.el = THREE.MathUtils.degToRad(portrait ? 62 : 54);
-  const top = portrait ? 108 : 96, bot = (IS_TOUCH ? H * 0.09 + 18 : 26) + 104;
+  CAM.el = THREE.MathUtils.degToRad(portrait ? 66 : 56);
+  CAM.az = THREE.MathUtils.degToRad(portrait ? 22 : 35);
+  const top = portrait ? 108 : (W >= 900 && H >= 600 ? 150 : 100), bot = (IS_TOUCH ? H * 0.09 + 18 : 26) + 104;
   const band = Math.max(H * 0.45, H - top - bot);
   const hx = (BC * CELL) / 2 + 0.3, hz = (BR * CELL) / 2 + 0.3;
   const pts = [];
-  for (const sx of [-1, 1]) for (const sz of [-1, 1]) for (const y of [-0.5, 2.2]) pts.push(new THREE.Vector3(sx * hx, y, sz * hz));
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) for (const y of [-0.45, 1.5]) pts.push(new THREE.Vector3(sx * hx, y, sz * hz));
   let d = 12, minY = 0, maxY = 0;
   for (let it = 0; it < 5; it++) {
     placeCam(d, CAM.az, CAM.el, camLook);
     let ex = 0; minY = 9; maxY = -9;
     for (const p of pts) { FV.copy(p).project(camera); ex = Math.max(ex, Math.abs(FV.x)); minY = Math.min(minY, FV.y); maxY = Math.max(maxY, FV.y); }
-    const f = Math.max(ex / (portrait ? 0.98 : 0.8), (maxY - minY) / (2 * band / H * 0.96));
+    const f = Math.max(ex / (portrait ? 0.98 : 0.9), (maxY - minY) / (2 * band / H));
     d *= f;
   }
   placeCam(d, CAM.az, CAM.el, camLook);
@@ -1686,8 +1707,10 @@ stage.addEventListener('pointerdown', (e) => {
   Audio.init();
   if (state !== 'play') return;
   ptr.id = e.pointerId; ptr.x = e.clientX; ptr.y = e.clientY; ptr.done = false;
+  const hc = pickCell(e.clientX, e.clientY); G.hover = hc ? [hc.x, hc.z] : null;
 });
 window.addEventListener('pointermove', (e) => {
+  if (state === 'play' && (ptr.id === null || ptr.id === e.pointerId)) { const c = pickCell(e.clientX, e.clientY); G.hover = c ? [c.x, c.z] : null; }
   if (ptr.id !== e.pointerId || state !== 'play' || ptr.done) return;
   const dx = e.clientX - ptr.x, dy = e.clientY - ptr.y;
   if (Math.hypot(dx, dy) > 34) { ptr.done = true; const l = Math.hypot(dx, dy); tryMoveDir(dirFromScreen(dx / l, dy / l)); }
@@ -1695,6 +1718,7 @@ window.addEventListener('pointermove', (e) => {
 window.addEventListener('pointerup', (e) => {
   if (ptr.id !== e.pointerId) return;
   ptr.id = null;
+  if (e.pointerType !== 'mouse' && G) G.hover = null;
   if (ptr.done || state !== 'play') return;
   if (Math.hypot(e.clientX - ptr.x, e.clientY - ptr.y) > 16) return;
   const c = pickCell(e.clientX, e.clientY);
@@ -1769,7 +1793,8 @@ function updateHero(dt, t) {
   P.pos.y = P.y;
   const gy = cellTop(Math.round(P.t < 0.5 ? P.fx : P.x), Math.round(P.t < 0.5 ? P.fz : P.z));
   heroShadow.position.set(P.pos.x, gy + 0.008, P.pos.z); const sb = 1 - Math.min(0.6, (P.y - gy) * 0.5); heroShadow.scale.set(sb, sb, sb);
-  heroRing.position.set(P.pos.x, gy + 0.012, P.pos.z); heroRing.material.opacity = 0.7 + 0.3 * Math.sin(t * 5); heroRing.scale.setScalar(1.1 + 0.08 * Math.sin(t * 5)); heroGlow.material.opacity = 0.45 + 0.15 * Math.sin(t * 4);
+  heroRing.position.set(P.pos.x, gy + 0.012, P.pos.z); heroRing.material.opacity = 0.5 + 0.2 * Math.sin(t * 5); heroRing.scale.setScalar(1.1 + 0.08 * Math.sin(t * 5)); heroGlow.material.opacity = 0.2 + 0.08 * Math.sin(t * 4);
+  heroMark.position.set(P.pos.x, P.y + 1.55 + Math.sin(t * 4) * 0.08, P.pos.z); heroMark.rotation.y = t * 2; heroMark.visible = state === 'play' || state === 'clear';
   heroLight.position.set(P.pos.x, P.y + 0.9, P.pos.z + 0.3);
   updateHeroAnim(dt, t);
 }
