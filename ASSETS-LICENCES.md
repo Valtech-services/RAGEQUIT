@@ -1,6 +1,6 @@
 # Assets libres utilisés dans les jeux
 
-Registre interne (non publié) : preuve de licence de chaque asset tiers. Seules les licences CC0 / domaine public sont acceptées (voir CLAUDE.md, « Assets libres »).
+Registre interne (non publié) : preuve de licence de chaque asset tiers. Depuis le 2026-11-22, toute licence qui autorise l'usage commercial et la modification est acceptée (voir CLAUDE.md, « Assets libres »). Quand la licence exige une attribution (CC-BY, MIT, OFL...), la colonne « Licence » commence par **CRÉDIT EXIGÉ** et indique l'auteur et le texte affiché dans le panneau « Credits » du jeu.
 
 | Jeu (`id`) | Fichier dans `public/games/<id>/` | Pack d'origine | Dépôt / URL | Licence | Ajouté le |
 |---|---|---|---|---|---|

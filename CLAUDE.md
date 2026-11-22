@@ -97,7 +97,11 @@ Réécrire le code (plutôt que retoucher celui de l'auteur) garantit que le fic
 
 Laurent veut des jeux beaux, et l'automatisation avant tout. Utiliser des assets gratuits est encouragé, à chaque jeu, dès qu'ils rendent le jeu plus beau qu'un rendu en code : en général un personnage principal animé, 4 à 5 ennemis, un boss, quelques objets (projectiles, power-ups, pièces) et les sons.
 
-**Licence : CC0 ou domaine public uniquement** (usage commercial libre, aucune attribution exigée, compatible avec la règle « aucun crédit »). Refuser CC-BY, CC-BY-SA, toute licence « non commercial », les assets sans licence claire et les « free » de stores dont les conditions interdisent la redistribution web. Vérifier la licence dans le fichier `LICENSE`/`README` du pack lui-même, pas seulement sur une page tierce.
+**Licence : toute licence qui autorise l'usage commercial et la modification** (décision de Laurent du 2026-11-22).
+- Acceptées : CC0 / domaine public (à préférer : aucun crédit à afficher), CC-BY 3.0 / 4.0, MIT, Apache-2.0, BSD, Zlib, OFL (polices), et les sorties de modèles d'IA dont la fiche autorise l'usage commercial (FLUX.1-schnell Apache-2.0, TRELLIS MIT...).
+- Refusées : toute licence « non commercial » (NC), « pas de modification » (ND, incompatible avec les recolorations), « partage à l'identique » (SA), les assets sans licence claire, les conditions de stores ou de services qui interdisent la redistribution web ou l'usage commercial (vérifier en particulier les offres gratuites des générateurs 3D type Tripo), et les modèles d'exemple de Three.js dont la licence n'est pas explicite dans le dépôt.
+- Vérifier la licence dans le fichier `LICENSE`/`README` du pack ou sur la fiche du modèle elle-même, pas seulement sur une page tierce.
+- **Panneau « Credits »** : dès qu'un jeu contient au moins un élément dont la licence exige une attribution (CC-BY, MIT, OFL...), il affiche un bouton « Credits » dans son menu titre ou sa pause (jamais pendant l'action), qui ouvre une liste : élément, auteur, licence, lien vers la licence. C'est la seule mention d'auteur autorisée dans un jeu (exception à la règle 2 « Suppression des crédits »). Un jeu 100 % CC0 n'a pas ce bouton.
 
 **Sources joignables par la tâche automatique** (dépôts GitHub, clonés hors du repo) :
 - Kenney : dépôts `KenneyNL/*` (starter kits avec modèles `.glb`, sprites et sons, assets déclarés CC0 dans le README).
@@ -110,7 +114,7 @@ Les sites kenney.nl, quaternius.com, poly.pizza, opengameart.org et itch.io ne s
 - Optimisation obligatoire avant commit : modèles avec `npx @gltf-transform/cli` (textures WebP 512 px max, `simplify` vers 3 000 à 10 000 triangles par personnage, `prune`, `dedup`), sprites en WebP ou PNG compressé, sons en `.ogg` ou `.mp3` courts. **Budget : 5 Mo maximum par jeu**, 8 Mo pour un jeu 3D riche.
 - Recolorer, re-teinter ou retexturer pour l'identité néon du jeu (matériaux émissifs, palette du jeu) : les assets ne doivent pas avoir l'air d'un pack générique.
 - Écran de chargement soigné avec barre de progression ; le jeu reste jouable si un asset ne charge pas (repli sur une forme générée en code).
-- Aucun nom d'auteur ni de pack dans le jeu ni sur le site (CC0 ne l'exige pas).
+- Aucun nom d'auteur ni de pack dans le jeu ni sur le site, sauf dans le panneau « Credits » quand la licence l'exige (voir ci-dessus).
 
 **Traçabilité (preuve de licence)** : chaque asset utilisé est noté dans `ASSETS-LICENCES.md` à la racine du dépôt (jamais dans `public/`) : jeu, fichier, pack d'origine, URL du dépôt, licence, date. La PR liste aussi ces assets.
 
@@ -120,12 +124,12 @@ Laurent veut un meilleur rendu 3D et 2D **sans rien payer**. La tâche quotidien
 1. **Bibliothèques CC0 sur GitHub** (Kenney, Quaternius..., voir « Assets libres ») : personnages animés, ennemis, objets, sons.
 2. **Poly Haven** (CC0, accès vérifié le 2026-11-14) : textures PBR (couleur, normale, rugosité), HDRI d'éclairage et modèles. Liste : `https://api.polyhaven.com/assets?t=textures` (ou `hdris`, `models`), fichiers : `https://api.polyhaven.com/files/<id>` puis téléchargement sur `dl.polyhaven.org`. Toujours prendre la résolution `1k` (jamais plus), convertir en WebP ou JPG (qualité 80), recolorer/teinter pour l'identité néon du jeu. HDRI : version `1k`, convertie en image équirectangulaire légère (ou `PMREMGenerator`) pour l'éclairage et les reflets, jamais affichée telle quelle en fond si elle casse l'ambiance.
 3. **ambientCG** (CC0) : matériaux PBR. L'API (`ambientcg.com/api/v2/full_json`) répond, mais les fichiers sont servis par `acg-download.struffelproductions.com` : utilisable seulement si ce domaine est aussi autorisé, sinon passer à la source suivante. Version `1K-JPG` uniquement.
-4. **Connecteur Hugging Face** (compte gratuit, quota GPU quotidien gratuit), s'il est connecté : images avec FLUX.1-schnell (Apache-2.0 : textures, fonds, sprites, miniatures, images de blog), modèles 3D depuis une image avec TRELLIS (MIT). N'utiliser que des modèles dont la fiche indique une licence qui permet l'usage commercial sans attribution (Apache-2.0, MIT, CC0) ; écarter les licences « non commercial », CC-BY-NC, OpenRAIL restrictives et toute licence exigeant de citer l'auteur.
+4. **Connecteur Hugging Face** (compte gratuit, quota GPU quotidien gratuit), s'il est connecté : images avec FLUX.1-schnell (Apache-2.0 : textures, fonds, sprites, miniatures, images de blog), modèles 3D depuis une image avec TRELLIS (MIT). N'utiliser que des modèles dont la fiche indique une licence qui permet l'usage commercial (Apache-2.0, MIT, CC0, CC-BY avec panneau « Credits ») ; écarter les licences « non commercial », CC-BY-NC, OpenRAIL restrictives et les modèles sans licence claire.
 5. **Rendu en code** (shaders, canvas, géométrie Three.js), toujours disponible.
 
 Bon usage : les textures servent surtout aux sols, murs, tours, rochers et décors proches (jeux 3D) et aux fonds ou matières des briques et plateaux (jeux 2D) ; garder le néon pour les bords, les dangers et le héros. Budget de poids et fluidité inchangés (5 Mo par jeu, 8 Mo pour un jeu 3D riche, jamais sous 30 images par seconde) : préférer une texture répétée à une grande image. Avant/après en captures Playwright dans la PR.
 
-Interdits : payer, saisir un moyen de paiement, démarrer un essai qui se convertit en abonnement, créer plusieurs comptes pour cumuler des crédits gratuits. Chaque fichier obtenu ou généré est noté dans `ASSETS-LICENCES.md` (jeu, fichier, source ou modèle, licence, prompt s'il y en a un, date) et listé dans la PR, qui indique aussi quelles sources étaient indisponibles ou épuisées. Les règles « Assets libres » (optimisation, recoloration, aucun crédit visible) s'appliquent aussi à ces fichiers.
+Interdits : payer, saisir un moyen de paiement, démarrer un essai qui se convertit en abonnement, créer plusieurs comptes pour cumuler des crédits gratuits. Chaque fichier obtenu ou généré est noté dans `ASSETS-LICENCES.md` (jeu, fichier, source ou modèle, licence, prompt s'il y en a un, date) et listé dans la PR, qui indique aussi quelles sources étaient indisponibles ou épuisées. Les règles « Assets libres » (optimisation, recoloration, crédits uniquement dans le panneau « Credits » quand la licence l'exige) s'appliquent aussi à ces fichiers.
 
 ## Finition visuelle (obligatoire)
 
@@ -166,7 +170,7 @@ Priorité de Laurent : des jeux beaux, au niveau de ce qui tourne sur les résea
 - Exception autorisée : les jeux 3D peuvent charger Three.js (et ses addons) via une importmap depuis unpkg ou jsDelivr, version figée (ex. `three@0.160.0`), comme `city-runner`. Aucune autre bibliothèque externe.
 
 2. SUPPRESSION DES CRÉDITS
-- Aucune référence à un auteur, un pseudo, un créateur, une entreprise, un studio ou une source (CodePen, GitHub, etc.) : ni commentaire de crédit, ni `<meta author>`, ni texte visible, ni lien, ni watermark. Le fichier ne contient aucune attribution.
+- Aucune référence à un auteur, un pseudo, un créateur, une entreprise, un studio ou une source (CodePen, GitHub, etc.) : ni commentaire de crédit, ni `<meta author>`, ni texte visible, ni lien, ni watermark. Le fichier ne contient aucune attribution, à une seule exception : le panneau « Credits » des assets dont la licence exige une attribution (voir « Assets libres »). Le code du jeu source, lui, n'est jamais crédité puisqu'il est entièrement réécrit.
 
 3. AFFICHAGE MOBILE
 - Viewport : `<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />`
@@ -234,6 +238,12 @@ Le site fournit un pont générique (`src/lib/gameBridge.js`, branché sur la pa
 
 9. NE RIEN INVENTER D'AUTRE
 - Aucun autre type de message que ceux décrits ici, aucun autre appel réseau depuis le jeu, aucun tracker tiers dans le jeu.
+
+## Routines quotidiennes
+
+En plus de la tâche « un jeu par jour », deux routines tournent chaque jour (heure de Paris). Chacune lit ce fichier puis son propre fichier d'instructions, qui fait foi pour elle :
+- **Vers 10h, amélioration d'un jeu en test** : `routines/amelioration-jeu.md` (historique dans `routines/historique-ameliorations.md`). Un jeu de `testGames.js` tiré au hasard, un brief d'amélioration écrit puis appliqué dans une PR de test fusionnée.
+- **Vers midi, audit du site** : `routines/audit-site.md` (mémoire dans `routines/audit-site-suivi.md`). Balayage du site en ligne, captures sur plusieurs appareils et rapport des 10 points à améliorer. Cette routine ne modifie jamais le site : Laurent choisit ensuite les points à lancer.
 
 ## Choix des sources (backlog)
 
