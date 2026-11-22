@@ -131,9 +131,10 @@
   @keyframes blink { 50% { opacity: .45; } }
 
   /* title */
-  #menu { align-items: flex-end; background: linear-gradient(to top, rgba(8,3,22,.94) 0%, rgba(8,3,22,.78) 34%, rgba(8,3,22,0) 58%); }
-  #menu .panel { padding-bottom: calc(4px + 9vh); padding-bottom: calc(4px + 9dvh); }
-  @media (min-aspect-ratio: 1/1) { #menu .panel { padding-bottom: 3vh; } }
+  #menu { align-items: flex-end; background: linear-gradient(to top, rgba(8,3,22,.94) 0%, rgba(8,3,22,.8) 50%, rgba(8,3,22,0) 70%); }
+  /* PLAY and the help text sit 20 % of the screen higher than the bottom, away from Safari's toolbar */
+  #menu .panel { padding-bottom: calc(4px + 29vh); padding-bottom: calc(4px + 29dvh); }
+  @media (min-aspect-ratio: 1/1) { #menu .panel { padding-bottom: 23vh; padding-bottom: 23dvh; } }
   #logo { position: fixed; top: calc(6vh + var(--safe-top)); left: 0; right: 0; text-align: center; pointer-events: none; z-index: 10; opacity: 0; transition: opacity .4s; }
   body.menuOn #logo { opacity: 1; }
   .word { display: inline-flex; gap: 3px; perspective: 400px; }
@@ -149,8 +150,7 @@
   .mode:active { transform: scale(.94); }
   .mode.sel { color: #12062a; background: var(--mc, #f2ff3c); border-color: transparent; box-shadow: 0 0 16px var(--mc, #f2ff3c); }
   .mode[data-m="classic"] { --mc: #f2ff3c; } .mode[data-m="hard"] { --mc: #ff3e8e; } .mode[data-m="daily"] { --mc: #9fe8ff; }
-  #modeInfo { font-size: 12px; color: var(--dim); min-height: 32px; margin: 8px 0 0; line-height: 1.35; text-shadow: 0 0 6px #000; }
-  #bestLine { font-size: 13px; font-weight: 800; letter-spacing: 1px; color: var(--bone); margin-top: 6px; font-variant-numeric: tabular-nums; text-shadow: 0 0 6px #000; }
+  #bestLine { font-size: 13px; font-weight: 800; letter-spacing: 1px; color: var(--bone); margin-top: 10px; font-variant-numeric: tabular-nums; text-shadow: 0 0 6px #000; }
   #chal { display: none; margin-bottom: 8px; padding: 9px; border-radius: 12px; border: 1px dashed var(--plasma); color: #ffc0da; font-size: 13px; font-weight: 800; background: rgba(22,10,46,.7); }
   #chal.on { display: block; }
   .how { margin-top: 10px; font-size: 11px; color: var(--dim); line-height: 1.5; text-shadow: 0 0 6px #000; }
@@ -231,7 +231,6 @@
       <button class="mode" data-m="hard">HARD</button>
       <button class="mode" data-m="daily">DAILY</button>
     </div>
-    <div id="modeInfo"></div>
     <div id="bestLine">BEST 0</div>
     <button class="btn pulse" id="bPlay">PLAY</button>
     <div class="how"><b>Tap</b> a neighbour cube or <b>swipe</b> to hop &middot; every landing <b>flips</b> the cube: raised goes down, down pops back up &middot; slam them all before your moves run out &middot; land on gremlins to stomp them, never on spikes</div>
@@ -1560,8 +1559,8 @@ function updateCamera(dt, t) {
   const W = window.innerWidth, H = window.innerHeight;
   if (menu) {
     const az = CAM.az + Math.sin(t * 0.15) * 0.35, look = HV.set(P.pos.x * 0.5, 0.5, P.pos.z * 0.5);
-    placeCam(CAM.dist * 0.82, az, THREE.MathUtils.degToRad(40), look);
-    camera.setViewOffset(W, H, 0, H * (W < H ? 0.1 : 0.06), W, H);
+    placeCam(CAM.dist * (W < H ? 0.92 : 0.86), az, THREE.MathUtils.degToRad(40), look);
+    camera.setViewOffset(W, H, 0, H * (W < H ? 0.19 : 0.12), W, H);
   } else {
     placeCam(CAM.dist, CAM.az, CAM.el, camLook);
     camera.setViewOffset(W, H, 0, CAM.shift, W, H);
@@ -1590,7 +1589,6 @@ function setScreen(name) {
 function wipe() { const w = $('wipe'); w.classList.remove('go'); void w.offsetWidth; w.classList.add('go'); }
 function renderMenu() {
   document.querySelectorAll('.mode').forEach((b) => b.classList.toggle('sel', b.dataset.m === selMode));
-  $('modeInfo').textContent = MODES[selMode].info;
   $('bestLine').textContent = 'BEST ' + MODES[selMode].label + '  ' + fmt(+load(bestKey(selMode), 0));
   if (CHAL) { $('chal').textContent = 'CHALLENGE: beat ' + fmt(CHAL.beat) + ' pts on the same boards (' + MODES[CHAL.mode].label + ')'; show($('chal'), true); }
 }
