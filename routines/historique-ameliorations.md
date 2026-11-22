@@ -4,3 +4,4 @@ Une ligne par exécution de la routine `routines/amelioration-jeu.md` (la plus r
 
 | Date | Jeu (`id`) | PR | Résumé |
 |---|---|---|---|
+| 2026-11-22 | `yeti-rush` | #89 | Écran titre menu en bas avec skieur en gros plan, piste vivante (bosses, paillettes, balises), missions par run, CLOSE / PERFECT, crevasses, musique générée, correctif du menu pause. |
