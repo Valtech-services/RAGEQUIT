@@ -16,3 +16,6 @@ Statuts : `proposé`, `lancé` (demandé par Laurent), `fait`, `refusé` (ne jam
 | A-008 | 2026-11-23 | Manifest vers /favicon.png inexistant, pas d'apple-touch-icon, og:image = logo transparent | image, partage | fait | 2026-11-23 | |
 | A-009 | 2026-11-23 | Page de jeu sur iPad portrait : lecteur 470 px, tiers droit vide | tablette | fait | 2026-11-23 | |
 | A-010 | 2026-11-23 | Option : thème saisonnier palette Vice City (GTA VI) | tendance | fait | 2026-11-23 | activé ; désactivable dans src/config/season.js (SEASON_THEME = null) |
+| A-011 | 2026-11-23 | Lien « ← Back to the blog » cyan sur dégradé : contraste faible sur mobile | blog, accessibilité | proposé | 2026-11-23 | ex-« autres constats » |
+| A-012 | 2026-11-23 | Classement : 24 images sans texte alternatif | classement, accessibilité | proposé | 2026-11-23 | ex-« autres constats » ; vérifier si décoratives (nom du jeu à côté) |
+| A-013 | 2026-11-23 | Langue à ajouter : indonésien (puis coréen) | langues, SEO | proposé | 2026-11-23 | ex-« autres constats » |
