@@ -8,10 +8,10 @@
    ===================================================================== */
 const RE = /^\/thumbnails\/([\w-]+)\.(jpe?g|png|webp)$/i
 
-function fallback(original) {
+function fallback(original, onFail) {
   return e => {
     const img = e.currentTarget
-    if (img.dataset.fallback) return
+    if (img.dataset.fallback) { if (onFail) onFail(e); return }
     img.dataset.fallback = '1'
     img.removeAttribute('srcset')
     img.src = original
@@ -51,4 +51,13 @@ export function blogImg(src, sizes = '(max-width: 767px) 92vw, 420px') {
       img.src = src
     },
   }
+}
+
+/* Images de catégories : affichées en 28 à 48 px, WebP 128 px. */
+const CAT_RE = /^\/categories\/([\w-]+)\.(jpe?g|png)$/i
+
+export function catImg(src, onFail) {
+  const m = CAT_RE.exec(src || '')
+  if (!m) return { src, onError: onFail }
+  return { src: `/categories/w128/${m[1]}.webp`, onError: fallback(src, onFail) }
 }

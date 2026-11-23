@@ -30,11 +30,11 @@ Object.defineProperty(globalThis, 'navigator', { value: { ...w.navigator, langua
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
-function buildHead(template, url, h, siteUrl) {
+function buildHead(template, url, h, siteUrl, season) {
   const abs = u => (u && u.startsWith('http') ? u : siteUrl + (u || ''))
   const canonical = siteUrl + (url === '/' ? '/' : url)
   let html = template
-    .replace(/<html lang="[^"]*">/, `<html lang="${h.lang || 'en'}"${h.dir === 'rtl' ? ' dir="rtl"' : ''}>`)
+    .replace(/<html lang="[^"]*">/, `<html lang="${h.lang || 'en'}"${h.dir === 'rtl' ? ' dir="rtl"' : ''}${season ? ` data-season="${season}"` : ''}>`)
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(h.title)}</title>`)
     .replace(/<meta name="description" content="[^"]*"\s*\/?>/, `<meta name="description" content="${esc(h.description)}" />`)
   const tags = [
@@ -48,6 +48,8 @@ function buildHead(template, url, h, siteUrl) {
     `<meta property="og:description" content="${esc(h.description)}" />`,
     `<meta property="og:url" content="${esc(canonical)}" />`,
     `<meta property="og:image" content="${esc(abs(h.image))}" />`,
+    // Dimensions connues de l'image de partage par défaut (A-008).
+    ...(h.image === '/og-image.jpg' ? [`<meta property="og:image:width" content="1200" />`, `<meta property="og:image:height" content="630" />`] : []),
     `<meta name="twitter:card" content="summary_large_image" />`,
     ...(h.robots ? [`<meta name="robots" content="${h.robots}" />`] : []),
     // Données structurées schema.org (A-003). L'id permet au navigateur de
@@ -63,7 +65,7 @@ async function main() {
   // Coquille vide conservée pour les URL non prérendues (admin, 404...).
   fs.writeFileSync(path.join(dist, '200.html'), template)
 
-  const { render, routes, head, SITE_URL, missingTranslations, CONTENT_LANGS } = await import(pathToFileURL(ssrEntry).href)
+  const { render, routes, head, SITE_URL, missingTranslations, CONTENT_LANGS, SEASON_THEME } = await import(pathToFileURL(ssrEntry).href)
   for (const l of CONTENT_LANGS) {
     const miss = missingTranslations(l)
     if (miss.length) console.warn(`[prerender] traductions manquantes (${l}) : ${miss.length} -> ${miss.slice(0, 8).join(', ')}${miss.length > 8 ? '…' : ''}`)
@@ -76,7 +78,7 @@ async function main() {
     try {
       const appHtml = render(url)
       if (!appHtml || appHtml.length < 200) throw new Error('rendu vide')
-      const page = buildHead(template, url, head(url), SITE_URL)
+      const page = buildHead(template, url, head(url), SITE_URL, SEASON_THEME)
         .replace('<div id="root"></div>', `<div id="root">${appHtml}</div>`)
       const out = url === '/' ? templatePath : path.join(dist, url.slice(1), 'index.html')
       fs.mkdirSync(path.dirname(out), { recursive: true })
@@ -94,7 +96,7 @@ async function main() {
     const nfUrl = '/page-not-found-404'
     const nfHtml = render(nfUrl)
     const nfHead = { ...head(nfUrl), title: 'Page not found | Ragequit Arcade', robots: 'noindex, follow', alternates: [], xDefault: null, jsonLd: '' }
-    const nfPage = buildHead(template, nfUrl, nfHead, SITE_URL)
+    const nfPage = buildHead(template, nfUrl, nfHead, SITE_URL, SEASON_THEME)
       .replace(/\n\s*<link rel="canonical"[^>]*>/, '')
       .replace(/\n\s*<meta property="og:url"[^>]*>/, '')
       .replace('<div id="root"></div>', `<div id="root">${nfHtml}</div>`)

@@ -1,0 +1,54 @@
+/* =====================================================================
+   THÈME SAISONNIER « VICE CITY » (A-010)
+   Activé par <html data-season="vice-city"> (src/config/season.js).
+   Ne redéfinit que des variables et quelques accents : la mise en page,
+   la grille et les composants restent identiques.
+   ===================================================================== */
+html[data-season="vice-city"] {
+  --vc-turquoise: #12D6D0;
+  --vc-pink:      #FF3FA4;
+  --vc-sunset:    #FF8A3D;
+  --vc-yellow:    #FFD23F;
+  --vc-night:     #2B1A4F;
+
+  --color-bg:      var(--vc-turquoise);
+  --color-bg-deep: var(--vc-sunset);
+  --bg-gradient: linear-gradient(160deg,
+    #12D6D0 0%,
+    #7A5BE0 36%,
+    #FF3FA4 66%,
+    #FF8A3D 100%
+  );
+  --color-accent:      var(--vc-turquoise);
+  --color-accent-dark: #0BA39E;
+  --color-accent-dim:  rgba(18, 214, 208, 0.12);
+  --color-magenta:     var(--vc-pink);
+  --color-accent-2:    var(--vc-pink);
+  --color-violet:      #7A5BE0;
+  --gradient-brand: linear-gradient(135deg, #12D6D0 0%, #FF3FA4 60%, #FF8A3D 100%);
+}
+
+/* Boutons PLAY : jaune coucher de soleil, icône sombre pour le contraste. */
+html[data-season="vice-city"] .gamepage__play-btn,
+html[data-season="vice-city"] .mgp__hero-play {
+  background: var(--vc-yellow);
+  color: var(--vc-night);
+  box-shadow: 0 8px 30px rgba(255, 210, 63, 0.55);
+}
+
+/* Badge NEW : jaune sur texte nuit. */
+html[data-season="vice-city"] .gamecard__badge-new {
+  background: var(--vc-yellow);
+  color: var(--vc-night);
+}
+
+/* Bouton « tout accepter » des cookies et bouton de la page 404. */
+html[data-season="vice-city"] .cookie-banner__btn--accept,
+html[data-season="vice-city"] .notfound__btn {
+  background: linear-gradient(135deg, #12D6D0 0%, #FF3FA4 60%, #FF8A3D 100%);
+}
+html[data-season="vice-city"] .notfound__code {
+  background: linear-gradient(90deg, #12D6D0, #FF3FA4, #FF8A3D);
+  -webkit-background-clip: text;
+  background-clip: text;
+}

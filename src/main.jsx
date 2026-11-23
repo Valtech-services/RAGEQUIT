@@ -4,14 +4,19 @@ import { BrowserRouter } from 'react-router-dom'
 import './styles/tokens.css'
 import './styles/animations.css'
 import './styles/global.css'
+import './styles/season.css'
 import i18n, { firstVisit } from './i18n/i18n'
 import { CONTENT_LANGS, langFromPath, withLang } from './i18n/locale'
 import { loadTranslations } from './data/localized'
 import { AuthProvider } from './context/AuthContext'
 import { initGA } from './lib/analytics-ga'
 import App from './App.jsx'
+import { SEASON_THEME } from './config/season'
 
 initGA()
+
+/* Thème saisonnier (A-010) : aussi posé par le prérendu sur <html>. */
+if (SEASON_THEME) document.documentElement.dataset.season = SEASON_THEME
 
 /* Langue d'interface alignée sur l'URL avant le premier rendu (pas de flash). */
 const urlLang = langFromPath(window.location.pathname)

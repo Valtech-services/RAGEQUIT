@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import Home from './pages/Home/Home'
 import CategoryPage from './pages/CategoryPage/CategoryPage'
@@ -7,11 +7,14 @@ import GamePage from './pages/GamePage/GamePage'
 import LeaderboardPage from './pages/LeaderboardPage/LeaderboardPage'
 import LegalPage from './pages/LegalPage/LegalPage'
 import CookieBanner from './components/CookieBanner/CookieBanner'
-import AdminPage from './pages/AdminPage/AdminPage'
 import BlogPage from './pages/BlogPage/BlogPage'
 import ArticlePage from './pages/BlogPage/ArticlePage'
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage'
 import { CONTENT_LANGS, RTL_LANGS, langFromPath } from './i18n/locale'
+
+/* Admin chargée à part (A-006) : ses bibliothèques (tableurs, graphiques)
+   ne sont téléchargées que par l'administrateur. */
+const AdminPage = lazy(() => import('./pages/AdminPage/AdminPage'))
 
 /* Remet le scroll en haut a chaque changement de page. */
 function ScrollToTop() {
@@ -61,7 +64,7 @@ export default function App() {
       <Routes>
         {pageRoutes('')}
         {CONTENT_LANGS.map(l => pageRoutes('/' + l))}
-        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin" element={<Suspense fallback={null}><AdminPage /></Suspense>} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <CookieBanner />
