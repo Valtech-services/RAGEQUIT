@@ -18,6 +18,7 @@ import { getLegalContent } from './data/legalContent'
 import { CONTENT_LANGS, ALL_CONTENT_LANGS, langFromPath, withLang } from './i18n/locale'
 
 export { SITE_URL }
+export { SEASON_THEME } from './config/season'
 export { missingTranslations, CONTENT_LANGS }
 
 /* Toutes les URL publiques à prérendre, dans chaque langue (l'admin est exclue). */

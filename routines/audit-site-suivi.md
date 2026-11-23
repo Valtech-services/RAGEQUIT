@@ -11,8 +11,8 @@ Statuts : `proposé`, `lancé` (demandé par Laurent), `fait`, `refusé` (ne jam
 | A-003 | 2026-11-23 | Aucune donnée structurée (VideoGame, FAQPage, BreadcrumbList, BlogPosting) | SEO | fait | 2026-11-23 | à générer dans entry-server.jsx |
 | A-004 | 2026-11-23 | H1 absent (accueil, catégories, jeu desktop) et double H1 sur les articles | SEO, accessibilité | fait | 2026-11-23 | |
 | A-005 | 2026-11-23 | Accueils traduits : titre et description repassent en anglais après hydratation | SEO multilingue | fait | 2026-11-23 | src/hooks/usePageTitle.js |
-| A-006 | 2026-11-23 | Préchargement des 7 images de catégories sur chaque page et aucun cache long | performance | proposé | 2026-11-23 | vercel.json en-têtes Cache-Control |
-| A-007 | 2026-11-23 | Bandeau cookies qui couvre ~45 % de l'écran mobile | joueurs, revenus pub | proposé | 2026-11-23 | |
-| A-008 | 2026-11-23 | Manifest vers /favicon.png inexistant, pas d'apple-touch-icon, og:image = logo transparent | image, partage | proposé | 2026-11-23 | |
-| A-009 | 2026-11-23 | Page de jeu sur iPad portrait : lecteur 470 px, tiers droit vide | tablette | proposé | 2026-11-23 | |
-| A-010 | 2026-11-23 | Option : thème saisonnier palette Vice City (GTA VI) | tendance | proposé | 2026-11-23 | option à décider |
+| A-006 | 2026-11-23 | Préchargement des 7 images de catégories sur chaque page et aucun cache long | performance | fait | 2026-11-23 | vercel.json en-têtes Cache-Control |
+| A-007 | 2026-11-23 | Bandeau cookies qui couvre ~45 % de l'écran mobile | joueurs, revenus pub | fait | 2026-11-23 | |
+| A-008 | 2026-11-23 | Manifest vers /favicon.png inexistant, pas d'apple-touch-icon, og:image = logo transparent | image, partage | fait | 2026-11-23 | |
+| A-009 | 2026-11-23 | Page de jeu sur iPad portrait : lecteur 470 px, tiers droit vide | tablette | fait | 2026-11-23 | |
+| A-010 | 2026-11-23 | Option : thème saisonnier palette Vice City (GTA VI) | tendance | fait | 2026-11-23 | activé ; désactivable dans src/config/season.js (SEASON_THEME = null) |

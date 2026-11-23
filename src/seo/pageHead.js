@@ -11,7 +11,8 @@ import { ALL_CONTENT_LANGS, LOCALES, RTL_LANGS, langFromPath, stripLang, withLan
 
 export const SITE_URL = 'https://ragequit-arcade.com'
 const BRAND = 'Ragequit Arcade'
-const LOGO = '/ragequit-logo-white.png'
+/* Image de partage par défaut (A-008) : 1200x630, logo + jeux. */
+export const SHARE_IMAGE = '/og-image.jpg'
 const SOCIALS = [
   'https://www.instagram.com/ragequit_arcade/',
   'https://www.tiktok.com/@ragequit.arcade',
@@ -42,7 +43,7 @@ export function pageHead(url) {
   const path = stripLang(url)
   const site = getSiteSeo(lang)
   const ui = UI[lang] || UI.en
-  const def = { title: site.title, description: site.description, image: LOGO }
+  const def = { title: site.title, description: site.description, image: SHARE_IMAGE }
   const [, section, id] = path.split('/')
   let h = null
   if (path === '/') {
@@ -75,7 +76,7 @@ const ORG_ID = SITE_URL + '/#organization'
 const SITE_ID = SITE_URL + '/#website'
 
 function organization() {
-  return { '@type': 'Organization', '@id': ORG_ID, name: BRAND, url: SITE_URL + '/', logo: abs(LOGO), sameAs: SOCIALS }
+  return { '@type': 'Organization', '@id': ORG_ID, name: BRAND, url: SITE_URL + '/', logo: abs('/icon-512.png'), sameAs: SOCIALS }
 }
 
 function breadcrumb(lang, items) {

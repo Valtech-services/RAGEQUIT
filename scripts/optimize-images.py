@@ -12,7 +12,8 @@ Nécessite Pillow (pip install pillow). Le script est idempotent.
   utilisées par les cartes de jeux (src/lib/thumb.js).
 - public/blog/*.jpg : 1376 px de large max, qualité 80,
   + variante WebP 640 px dans public/blog/w640/ (cartes du blog).
-- public/categories/*.jpg : 1024 px max, qualité 80.
+- public/categories/*.jpg : 1024 px max, qualité 80,
+  + variante WebP 128 px dans public/categories/w128/ (vignettes 28-48 px).
 - logos PNG de l'en-tête : 640 px (logo) et 256 px (icône) de large.
 """
 import os, sys
@@ -97,6 +98,13 @@ for f in sorted(os.listdir(bdir)):
     if os.path.isfile(p) and f.lower().endswith(('.jpg', '.jpeg', '.png')):
         if webp(p, os.path.join(bdir, 'w640', os.path.splitext(f)[0] + '.webp'), 640):
             changed.append(f'blog/w640/{os.path.splitext(f)[0]}.webp')
+
+cdir = os.path.join(ROOT, 'categories')
+for f in sorted(os.listdir(cdir)):
+    p = os.path.join(cdir, f)
+    if os.path.isfile(p) and f.lower().endswith(('.jpg', '.jpeg', '.png')):
+        if webp(p, os.path.join(cdir, 'w128', os.path.splitext(f)[0] + '.webp'), 128):
+            changed.append(f'categories/w128/{os.path.splitext(f)[0]}.webp')
 
 for f, w in (('ragequit-logo-white.png', 640), ('ragequit-icon-white.png', 256)):
     p = os.path.join(ROOT, f)

@@ -216,7 +216,8 @@
     "body": "We use cookies to keep our games free, analyze traffic, and serve relevant ads. You can accept all cookies or only the essential ones.",
     "learnMore": "Learn more",
     "essential": "Essential only",
-    "acceptAll": "Accept all"
+    "acceptAll": "Accept all",
+    "short": "We use cookies to keep our games free (ads and audience stats)."
   },
   "ui": {
     "home": {

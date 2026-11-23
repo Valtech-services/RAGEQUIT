@@ -47,8 +47,15 @@ export default function CookieBanner() {
           <strong className="cookie-banner__title">
             {t('cookies.title', 'We use cookies')}
           </strong>
-          <p>
+          <p className="cookie-banner__long">
             {t('cookies.body', 'We use cookies to keep our games free, analyze traffic, and serve relevant ads. You can accept all cookies or only the essential ones.')}{' '}
+            <Link to="/legal/cookies" className="cookie-banner__link">
+              {t('cookies.learnMore', 'Learn more')}
+            </Link>
+          </p>
+          {/* Version courte sur mobile (A-007) : le jeu reste visible. */}
+          <p className="cookie-banner__short">
+            {t('cookies.short', 'We use cookies to keep our games free (ads and audience stats).')}{' '}
             <Link to="/legal/cookies" className="cookie-banner__link">
               {t('cookies.learnMore', 'Learn more')}
             </Link>

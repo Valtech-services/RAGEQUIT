@@ -291,6 +291,28 @@ a.gamepage__action { box-sizing: border-box; text-decoration: none; }
 }
 /* En dessous de 768px c'est MobileGamePage qui prend le relais (wrapper) */
 
+/* Tablette en portrait (A-009, iPad 820x1180...) : le jeu prend toute la
+   largeur à côté du menu, la colonne de droite passe dessous et les jeux
+   similaires remplissent la largeur. */
+@media (min-width: 768px) and (max-width: 1100px) and (orientation: portrait) {
+  .gamepage { --cell: 120px; }
+  .gamepage__layout {
+    grid-template-columns: var(--cell) minmax(0, 1fr);
+    align-items: start;
+  }
+  .gamepage__col-side {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .gamepage__ad--right { flex: 0 0 auto; min-height: 0; max-height: none; }
+  .gamepage__side-games { display: none; }
+  .gamepage__related-grid {
+    grid-template-columns: repeat(auto-fill, minmax(var(--cell), 1fr));
+    grid-auto-rows: auto;
+  }
+  .gamepage__related-cell { aspect-ratio: 1 / 1; }
+}
+
 .gamepage__report-input,
 .gamepage__report-textarea {
   width: 100%;

@@ -11,6 +11,7 @@ import NotFoundPage from '../NotFoundPage/NotFoundPage'
 import { useTranslation } from 'react-i18next'
 import { track } from '../../lib/analytics'
 import './CategoryPage.css'
+import { catImg } from '../../lib/thumb'
 
 export default function CategoryPage() {
   const games = useGames()
@@ -43,8 +44,7 @@ export default function CategoryPage() {
         <div className="category__header-nav"><Navbar inGrid={true} /></div>
         <div className="category__header-title">
           {category.image && (
-            <img src={category.image} alt={category.label} className="category__header-img"
-              onError={e => { e.currentTarget.style.display='none' }} />
+            <img {...catImg(category.image, e => { e.currentTarget.style.display='none' })} alt={category.label} className="category__header-img" width="48" height="48" />
           )}
           <h1 className="category__page-title">{t(`categoryTitles.${category.id}`)}</h1>
         </div>
@@ -56,8 +56,7 @@ export default function CategoryPage() {
               className="category__shortcut"
               onClick={() => handleCatClick(cat.id)}>
               {cat.image ? (
-                <img src={cat.image} alt={cat.label} className="category__shortcut-img"
-                  onError={e => { e.currentTarget.style.display='none'; e.currentTarget.nextElementSibling.style.display='inline' }} />
+                <img {...catImg(cat.image, e => { e.currentTarget.style.display='none'; e.currentTarget.nextElementSibling.style.display='inline' })} alt={cat.label} className="category__shortcut-img" loading="lazy" width="28" height="28" />
               ) : null}
               <span className="category__shortcut-icon" style={cat.image ? {display:'none'} : {}}>{catIcons[cat.id] || '🎮'}</span>
               <span className="category__shortcut-label">{t(`categoryTitles.${cat.id}`)}</span>

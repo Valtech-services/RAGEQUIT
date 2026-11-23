@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import GameCard from '../GameCard/GameCard'
 import Navbar from '../Navbar/Navbar'
 import './BentoGrid.css'
+import { catImg } from '../../lib/thumb'
 
 /*
   BentoGrid — grille style Poki à cellules de taille FIXE.
@@ -73,10 +74,12 @@ export default function BentoGrid({ showNav = true }) {
           >
             {cat.image ? (
               <img
-                src={cat.image}
+                {...catImg(cat.image, e => { e.currentTarget.style.display='none'; e.currentTarget.nextElementSibling.style.display='flex' })}
                 alt={cat.label}
                 className="bento__cat-img"
-                onError={e => { e.currentTarget.style.display='none'; e.currentTarget.nextElementSibling.style.display='flex' }}
+                loading="lazy"
+                width="44"
+                height="44"
               />
             ) : null}
             <span className="bento__cat-icon" style={cat.image ? {display:'none'} : {display:'flex'}}>{catIcons[cat.id] || '🎮'}</span>
