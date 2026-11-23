@@ -138,7 +138,10 @@
     "backToHome": "Torna alla home",
     "gameNotFound": "Gioco non trovato.",
     "categoryNotFound": "Categoria non trovata.",
-    "noGamesYet": "Ancora nessun gioco in questa categoria. Torna presto."
+    "noGamesYet": "Ancora nessun gioco in questa categoria. Torna presto.",
+    "pageNotFoundTitle": "Game over: pagina non trovata",
+    "pageNotFoundText": "Questa pagina non esiste o è stata spostata. I giochi però sono ancora qui, e sono tutti gratis.",
+    "tryTheseGames": "Prova uno di questi giochi"
   },
   "seo": {
     "aboutLabel": "Su Ragequit Arcade",

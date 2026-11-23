@@ -6,6 +6,7 @@ import { useAuth } from '../../context/AuthContext'
 import { useTranslation } from 'react-i18next'
 import './Navbar.css'
 import { track } from '../../lib/analytics'
+import { thumbImg } from '../../lib/thumb'
 
 function getBadge(gamesPlayed = 0) {
   if (gamesPlayed >= 50) return { label: 'Rage Master', color: '#ff00ff' }
@@ -206,7 +207,7 @@ export default function Navbar({ title, inGrid = false }) {
                       <Link key={game.id} to={`/game/${game.id}`} className="nb-drawer__result"
                         onClick={() => { track('search_result_click', { game_id: game.id, props: { query } }); setSearchOpen(false); setQuery('') }}>
                         <div className="nb-drawer__result-thumb">
-                          <img src={game.thumbnail} alt={game.title} />
+                          <img {...thumbImg(game.thumbnail, '120px')} alt={game.title} loading="lazy" />
                         </div>
                         <div className="nb-drawer__result-info">
                           <span className="nb-drawer__result-title">{game.title}</span>
@@ -223,7 +224,7 @@ export default function Navbar({ title, inGrid = false }) {
                     <div className="nb-drawer__game-row">
                       {recent.map(game => (
                         <Link key={game.id} to={`/game/${game.id}`} className="nb-drawer__game-thumb" onClick={() => setSearchOpen(false)}>
-                          <img src={game.thumbnail} alt={game.title} />
+                          <img {...thumbImg(game.thumbnail, '120px')} alt={game.title} loading="lazy" />
                         </Link>
                       ))}
                     </div>
@@ -233,7 +234,7 @@ export default function Navbar({ title, inGrid = false }) {
                     <div className="nb-drawer__game-grid">
                       {popular.map(game => (
                         <Link key={game.id} to={`/game/${game.id}`} className="nb-drawer__game-thumb" onClick={() => setSearchOpen(false)}>
-                          <img src={game.thumbnail} alt={game.title} />
+                          <img {...thumbImg(game.thumbnail, '120px')} alt={game.title} loading="lazy" />
                         </Link>
                       ))}
                     </div>
@@ -338,7 +339,7 @@ export default function Navbar({ title, inGrid = false }) {
                         <span className="nb-drawer__favorite-label">{t('profile.favoriteGame')}</span>
                         <Link to={`/game/${favoriteGame.id}`} className="nb-drawer__favorite-game"
                           onClick={() => setProfileOpen(false)}>
-                          <img src={favoriteGame.thumbnail} alt={favoriteGame.title} className="nb-drawer__favorite-thumb" />
+                          <img {...thumbImg(favoriteGame.thumbnail, '60px')} alt={favoriteGame.title} className="nb-drawer__favorite-thumb" />
                           <span className="nb-drawer__favorite-title">{favoriteGame.title}</span>
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{flexShrink:0,opacity:0.5}}>
                             <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/>

@@ -1,39 +1,62 @@
 /* =====================================================================
-   usePageTitle — titre dynamique de l'onglet + meta description par page
-   Usage :
-     usePageTitle()                                → titre par défaut
-     usePageTitle('Rage Hockey')                   → "RAGEQUIT — Rage Hockey"
-     usePageTitle('Rage Hockey', 'Play Rage...')   → titre + meta description
-   Le 2e argument (optionnel) définit la <meta name="description"> de la page,
-   pour un meilleur référencement Google. Sans lui, la description par défaut
-   du site est restaurée.
+   usePageTitle — titre de l'onglet, meta description et données
+   structurées (JSON-LD) de la page affichée.
+   Pour toute URL publique, tout vient de src/seo/pageHead.js, comme le
+   HTML prérendu : même titre, même description, dans la langue de l'URL
+   (point d'audit A-005). Les arguments ne servent qu'aux pages sans URL
+   publique (404, admin) :
+     usePageTitle('Admin')                         → "Admin | Ragequit Arcade"
+     usePageTitle('Page not found', 'Texte...')    → titre + description
    ===================================================================== */
 import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import { useSiteSeo } from '../data/localized'
+import { pageHead, structuredDataJson } from '../seo/pageHead'
 
-const SITE    = 'RAGEQUIT'
-const DEFAULT = 'Ragequit Arcade — Free Online Games'
-const DEFAULT_DESC = "Play the most addictive free online games on Ragequit Arcade. No download, no signup — instant browser games on mobile and desktop. A new game every week."
+const BRAND = 'Ragequit Arcade'
 
-// Met à jour (ou crée) la balise <meta name="description">.
-function setMetaDescription(desc) {
-  let tag = document.querySelector('meta[name="description"]')
+function setMeta(name, content) {
+  let tag = document.querySelector(`meta[name="${name}"]`)
+  if (!content) { if (tag && name === 'robots') tag.remove(); return }
   if (!tag) {
     tag = document.createElement('meta')
-    tag.setAttribute('name', 'description')
+    tag.setAttribute('name', name)
     document.head.appendChild(tag)
   }
-  tag.setAttribute('content', desc || DEFAULT_DESC)
+  tag.setAttribute('content', content)
 }
 
-export default function usePageTitle(pageTitle, metaDescription) {
+function setJsonLd(json) {
+  let tag = document.getElementById('rq-jsonld')
+  if (!json) { if (tag) tag.remove(); return }
+  if (!tag) {
+    tag = document.createElement('script')
+    tag.type = 'application/ld+json'
+    tag.id = 'rq-jsonld'
+    document.head.appendChild(tag)
+  }
+  tag.textContent = json
+}
+
+export default function usePageTitle(fallbackTitle, fallbackDescription, { noindex = false } = {}) {
+  const { pathname } = useLocation()
+  // Abonnement au chargement des traductions : le titre se met à jour
+  // dès que la langue de la page est disponible.
+  const siteSeo = useSiteSeo()
+
   useEffect(() => {
-    // Un titre SEO complet (« ... | Ragequit Arcade ») est utilisé tel quel,
-    // identique à celui du HTML prérendu.
-    document.title = !pageTitle ? DEFAULT : pageTitle.includes('| Ragequit Arcade') ? pageTitle : `${SITE} — ${pageTitle}`
-    setMetaDescription(metaDescription)
-    return () => {
-      document.title = DEFAULT
-      setMetaDescription(null) // restaure la description par défaut
+    const h = pageHead(pathname)
+    // URL inconnue sans titre fourni : la page 404 affichée s'en charge.
+    if (!h.matched && !fallbackTitle) return
+    let title = h.title
+    let description = h.description
+    if (!h.matched) {
+      if (fallbackTitle) title = fallbackTitle.includes('| ' + BRAND) ? fallbackTitle : `${fallbackTitle} | ${BRAND}`
+      if (fallbackDescription) description = fallbackDescription
     }
-  }, [pageTitle, metaDescription])
+    document.title = title
+    setMeta('description', description)
+    setMeta('robots', noindex || !h.matched ? 'noindex, follow' : null)
+    setJsonLd(h.matched ? structuredDataJson(pathname) : null)
+  }, [pathname, siteSeo, fallbackTitle, fallbackDescription, noindex])
 }

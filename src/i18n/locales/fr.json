@@ -138,7 +138,10 @@
     "backToHome": "Retour à l'accueil",
     "gameNotFound": "Jeu introuvable.",
     "categoryNotFound": "Catégorie introuvable.",
-    "noGamesYet": "Aucun jeu dans cette catégorie pour l'instant. Reviens bientôt."
+    "noGamesYet": "Aucun jeu dans cette catégorie pour l'instant. Reviens bientôt.",
+    "pageNotFoundTitle": "Game over : page introuvable",
+    "pageNotFoundText": "Cette page n'existe pas ou a été déplacée. Les jeux, eux, sont toujours là, et ils sont tous gratuits.",
+    "tryTheseGames": "Essayez l'un de ces jeux"
   },
   "seo": {
     "aboutLabel": "À propos de Ragequit Arcade",

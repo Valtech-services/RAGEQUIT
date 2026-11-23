@@ -138,7 +138,10 @@
     "backToHome": "Ana sayfaya dön",
     "gameNotFound": "Oyun bulunamadı.",
     "categoryNotFound": "Kategori bulunamadı.",
-    "noGamesYet": "Bu kategoride henüz oyun yok. Yakında tekrar gel."
+    "noGamesYet": "Bu kategoride henüz oyun yok. Yakında tekrar gel.",
+    "pageNotFoundTitle": "Game over: sayfa bulunamadı",
+    "pageNotFoundText": "Bu sayfa yok ya da taşındı. Oyunlar ise hâlâ burada ve hepsi ücretsiz.",
+    "tryTheseGames": "Bu oyunlardan birini dene"
   },
   "seo": {
     "aboutLabel": "Ragequit Arcade Hakkında",

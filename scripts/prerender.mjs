@@ -49,6 +49,10 @@ function buildHead(template, url, h, siteUrl) {
     `<meta property="og:url" content="${esc(canonical)}" />`,
     `<meta property="og:image" content="${esc(abs(h.image))}" />`,
     `<meta name="twitter:card" content="summary_large_image" />`,
+    ...(h.robots ? [`<meta name="robots" content="${h.robots}" />`] : []),
+    // Données structurées schema.org (A-003). L'id permet au navigateur de
+    // les remplacer lors d'une navigation interne.
+    ...(h.jsonLd ? [`<script type="application/ld+json" id="rq-jsonld">${h.jsonLd}</script>`] : []),
   ].join('\n    ')
   return html.replace('</head>', `    ${tags}\n  </head>`)
 }
@@ -83,6 +87,29 @@ async function main() {
     }
   }
   console.log(`[prerender] ${ok}/${urls.length} pages prérendues`)
+
+  // Page 404 (A-002) : servie par Vercel avec le statut HTTP 404 pour toute
+  // URL inconnue. Contenu complet (menu, jeux, liens) et noindex.
+  try {
+    const nfUrl = '/page-not-found-404'
+    const nfHtml = render(nfUrl)
+    const nfHead = { ...head(nfUrl), title: 'Page not found | Ragequit Arcade', robots: 'noindex, follow', alternates: [], xDefault: null, jsonLd: '' }
+    const nfPage = buildHead(template, nfUrl, nfHead, SITE_URL)
+      .replace(/\n\s*<link rel="canonical"[^>]*>/, '')
+      .replace(/\n\s*<meta property="og:url"[^>]*>/, '')
+      .replace('<div id="root"></div>', `<div id="root">${nfHtml}</div>`)
+    fs.writeFileSync(path.join(dist, '404.html'), nfPage)
+    console.log('[prerender] page 404 écrite')
+  } catch (e) {
+    failed.push('404 : ' + (e && e.message))
+  }
+
+  // Miniatures légères (A-001) : chaque jeu doit avoir ses variantes WebP.
+  const thumbs = new Set()
+  for (const u of urls) { const m = u.match(/^\/game\/([\w-]+)$/); if (m) thumbs.add(m[1]) }
+  const noVariant = [...thumbs].filter(id => !fs.existsSync(path.join(dist, 'thumbnails', 'w640', id + '.webp')))
+  if (noVariant.length) console.warn('[prerender] miniatures WebP manquantes (lancer python3 scripts/optimize-images.py) : ' + noVariant.join(', '))
+  else console.log('[prerender] miniatures WebP : complètes')
 
   // Sitemap : toute URL prérendue absente de sitemap.xml y est ajoutée
   // automatiquement (date du jour), pour qu'aucun jeu ni article ne soit oublié.

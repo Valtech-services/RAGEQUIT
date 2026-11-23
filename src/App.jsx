@@ -10,6 +10,7 @@ import CookieBanner from './components/CookieBanner/CookieBanner'
 import AdminPage from './pages/AdminPage/AdminPage'
 import BlogPage from './pages/BlogPage/BlogPage'
 import ArticlePage from './pages/BlogPage/ArticlePage'
+import NotFoundPage from './pages/NotFoundPage/NotFoundPage'
 import { CONTENT_LANGS, RTL_LANGS, langFromPath } from './i18n/locale'
 
 /* Remet le scroll en haut a chaque changement de page. */
@@ -61,6 +62,7 @@ export default function App() {
         {pageRoutes('')}
         {CONTENT_LANGS.map(l => pageRoutes('/' + l))}
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <CookieBanner />
     </>

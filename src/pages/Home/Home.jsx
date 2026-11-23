@@ -9,7 +9,7 @@ import './Home.css'
 
 export default function Home() {
   const siteSeo = useSiteSeo()
-  usePageTitle()   // → "RAGEQUIT — Jeux Gratuits en Ligne"
+  usePageTitle()   // titre et description de l'accueil dans la langue de l'URL
 
   // Enregistre une vue de la page d'accueil (une fois au montage).
   useEffect(() => { trackPageView() }, [])

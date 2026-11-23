@@ -35,7 +35,7 @@ export default function SeoBlock({ type, data }) {
         {type === 'site' && (
           <>
             <span className="seo-block__label">{t('seo.aboutLabel')}</span>
-            <h2 className="seo-block__title">{t('ui.home.title')}</h2>
+            <h1 className="seo-block__title">{t('ui.home.title')}</h1>
             <p className="seo-block__text">{t('ui.home.p1')}</p>
 
             <h3 className="seo-block__subtitle">{t('ui.home.gamesTitle')}</h3>

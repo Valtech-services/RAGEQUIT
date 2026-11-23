@@ -138,7 +138,10 @@
     "backToHome": "На главную",
     "gameNotFound": "Игра не найдена.",
     "categoryNotFound": "Категория не найдена.",
-    "noGamesYet": "В этой категории пока нет игр. Загляни позже."
+    "noGamesYet": "В этой категории пока нет игр. Загляни позже.",
+    "pageNotFoundTitle": "Game over: страница не найдена",
+    "pageNotFoundText": "Этой страницы нет или она была перемещена. Зато игры на месте, и все они бесплатные.",
+    "tryTheseGames": "Попробуй одну из этих игр"
   },
   "seo": {
     "aboutLabel": "О Ragequit Arcade",

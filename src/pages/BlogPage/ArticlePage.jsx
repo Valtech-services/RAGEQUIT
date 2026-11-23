@@ -7,8 +7,10 @@ import Footer from '../../components/Footer/Footer'
 import { useTranslation } from 'react-i18next'
 import { useLang, LOCALES } from '../../i18n/locale'
 import usePageTitle from '../../hooks/usePageTitle'
+import NotFoundPage from '../NotFoundPage/NotFoundPage'
 import { trackPageView } from '../../lib/analytics'
 import './BlogPage.css'
+import { blogImg } from '../../lib/thumb'
 
 export default function ArticlePage() {
   const posts = usePosts()
@@ -19,26 +21,12 @@ export default function ArticlePage() {
   const post = posts.find(p => p.slug === slug) || null
 
   usePageTitle(
-    post ? (post.seo?.title || post.title) : 'Article not found',
+    post ? (post.seo?.title || post.title) : undefined,
     post?.seo?.metaDescription
   )
   useEffect(() => { trackPageView() }, [slug])
 
-  if (!post) {
-    return (
-      <div className="blog">
-        <div className="blog__header">
-          <div className="blog__header-nav"><Navbar inGrid={true} /></div>
-          <div className="blog__header-title"><h1 className="blog__header-h1">{t('ui.blog.notFound')}</h1></div>
-        </div>
-        <div className="blog__content">
-          <p className="blog__empty">{t('ui.blog.notFoundText')}</p>
-          <Link to="/blog" className="blog__back">{t('ui.blog.back')}</Link>
-        </div>
-        <Footer />
-      </div>
-    )
-  }
+  if (!post) return <NotFoundPage />
 
   // Autres articles (pour la section "à lire aussi").
   const others = posts.filter(p => p.slug !== post.slug).slice(0, 3)
@@ -47,7 +35,7 @@ export default function ArticlePage() {
     <div className="blog">
       <div className="blog__header">
         <div className="blog__header-nav"><Navbar inGrid={true} /></div>
-        <div className="blog__header-title"><h1 className="blog__header-h1">Blog</h1></div>
+        <div className="blog__header-title"><p className="blog__header-h1">Blog</p></div>
       </div>
 
       <article className="blog__article">
@@ -61,8 +49,7 @@ export default function ArticlePage() {
 
         {post.image && (
           <div className="blog__article-hero">
-            <img src={post.image} alt={post.title}
-              onError={e => { e.currentTarget.style.display = 'none' }} />
+            <img {...blogImg(post.image, '(max-width: 767px) 92vw, 760px')} alt={post.title} />
           </div>
         )}
 

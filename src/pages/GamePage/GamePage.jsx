@@ -12,11 +12,13 @@ import MobileGamePage from './MobileGamePage'
 import { submitScore } from '../../data/leaderboardStore'
 import { submitVote, submitReport } from '../../data/feedbackStore'
 import usePageTitle from '../../hooks/usePageTitle'
+import NotFoundPage from '../NotFoundPage/NotFoundPage'
 import { useTranslation } from 'react-i18next'
 import { track } from '../../lib/analytics'
 import { useGameBridge } from '../../lib/gameBridge'
 import AdSlot from '../../components/AdSlot'
 import './GamePage.css'
+import { thumbImg } from '../../lib/thumb'
 
 export default function GamePage() {
   const [isMobile] = useState(() => window.innerWidth < 768)
@@ -263,19 +265,7 @@ async function saveVirusLabCloud(){
     }, '*')
   }, [user, profile, playing])
 
-  if(!game) {
-    return (
-      <div className="gamepage">
-        <div className="gamepage__notfound-header">
-          <div className="gamepage__nav"><Navbar inGrid={true} /></div>
-        </div>
-        <div className="gamepage--notfound">
-          <p>{t('ui.game.notFound')}</p>
-          <Link to="/" className="gamepage__back-link">{t('ui.game.backHome')}</Link>
-        </div>
-      </div>
-    )
-  }
+  if(!game) return <NotFoundPage />
 
   const related = games.filter(g => g.id !== game.id).slice(0, 12)
 
@@ -304,10 +294,10 @@ async function saveVirusLabCloud(){
             <div className="gamepage__bar">
               <div className="gamepage__bar-game">
                 <div className="gamepage__bar-thumb">
-                  <img src={game.thumbnail} alt={game.title} />
+                  <img {...thumbImg(game.thumbnail, '48px')} alt={game.title} />
                 </div>
                 <div className="gamepage__bar-info">
-                  <span className="gamepage__bar-title">{game.title}</span>
+                  <h1 className="gamepage__bar-title">{game.title}</h1>
                   <span className="gamepage__bar-author">by {game.author}</span>
                 </div>
               </div>
@@ -352,7 +342,7 @@ async function saveVirusLabCloud(){
             {related.slice(0, 8).map(g => (
               <Link key={g.id} to={`/game/${g.id}`} className="gamepage__side-thumb"
                 onClick={() => track('game_click', { game_id: g.id, source: 'sidebar' })}>
-                <img src={g.thumbnail} alt={g.title} />
+                <img {...thumbImg(g.thumbnail, '140px')} alt={g.title} loading="lazy" />
               </Link>
             ))}
           </div>

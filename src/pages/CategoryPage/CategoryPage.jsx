@@ -7,6 +7,7 @@ import GameCard from '../../components/GameCard/GameCard'
 import SeoBlock from '../../components/SeoBlock/SeoBlock'
 import Footer from '../../components/Footer/Footer'
 import usePageTitle from '../../hooks/usePageTitle'
+import NotFoundPage from '../NotFoundPage/NotFoundPage'
 import { useTranslation } from 'react-i18next'
 import { track } from '../../lib/analytics'
 import './CategoryPage.css'
@@ -18,7 +19,7 @@ export default function CategoryPage() {
   const { id } = useParams()
   const category = categories.find(c => c.id === id)
   usePageTitle(
-    category ? (category.seo?.title || t(`categoryTitles.${category.id}`)) : t('common.notFound'),
+    category ? (category.seo?.title || t(`categoryTitles.${category.id}`)) : undefined,
     category?.seo?.metaDescription
   )
 
@@ -26,22 +27,7 @@ export default function CategoryPage() {
     if(category) track('category_view', { category: id })
   }, [id])
 
-  if(!category) {
-    return (
-      <div className="category">
-        <div className="category__header">
-          <div className="category__header-nav"><Navbar inGrid={true} /></div>
-          <div className="category__header-title">
-            <span className="category__page-title">{t('common.notFound')}</span>
-          </div>
-        </div>
-        <div className="category--notfound">
-          <p>{t('common.categoryNotFound')}</p>
-          <Link to="/" className="category__back-link">{t('common.backToHome')}</Link>
-        </div>
-      </div>
-    )
-  }
+  if(!category) return <NotFoundPage />
 
   const catGames  = games.filter(g => g.category === id)
   const otherCats = categories.filter(c => c.id !== 'all' && c.id !== id)
@@ -60,7 +46,7 @@ export default function CategoryPage() {
             <img src={category.image} alt={category.label} className="category__header-img"
               onError={e => { e.currentTarget.style.display='none' }} />
           )}
-          <span className="category__page-title">{t(`categoryTitles.${category.id}`)}</span>
+          <h1 className="category__page-title">{t(`categoryTitles.${category.id}`)}</h1>
         </div>
       </div>
       <div className="category__content">
