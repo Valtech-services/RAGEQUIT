@@ -32,6 +32,23 @@ Site : https://ragequit-arcade.com (production). Avec Playwright :
   - langues : quelle langue ajouter en priorité (audience, recherche), traductions manquantes.
 - **Tendances** (recherche web) : couleurs, typographies, animations et mises en page des sites de jeux et des jeux qui marchent en ce moment (par exemple la palette Vice City de GTA VI, rose et turquoise avec du jaune coucher de soleil, face au bleu et rose actuels du site). Toujours proposé comme une option argumentée, jamais imposé.
 
+## 2 bis. Contrôle AdSense (« low value content »)
+
+Demande de Laurent du 2026-11-23 : AdSense a refusé le site plusieurs fois pour « low value content ». Chaque audit regarde le site comme le relecteur et le robot AdSense, et transforme chaque risque en point numéroté (zone `adsense`). Google ne publie pas sa grille exacte : ces contrôles suivent ses règles publiques (règlement du programme, consignes aux éditeurs, contenu utile) et le bon sens, sans jamais promettre une acceptation.
+
+À vérifier à chaque exécution, sur le HTML prérendu (sans JavaScript, comme le robot) et sur le rendu mobile :
+- **Contenu original et utile visible** : quantité de texte propre à chaque page (descriptions, guides, FAQ) par rapport aux vignettes et au lecteur ; texte présent dans le premier écran ou juste dessous, pas seulement en bas de page ; pages trop maigres (moins d'environ 300 mots utiles) listées.
+- **Pages vides ou quasi vides** : 404, pages sans texte, pages qui n'affichent qu'un jeu ou une grille ; codes HTTP corrects (404 réels, pas de redirections en chaîne).
+- **Contenu dupliqué ou en série** : descriptions et FAQ trop proches d'un jeu à l'autre, textes génériques répétés, traductions visiblement automatiques ou incomplètes (échantillon de 2 ou 3 langues lues par Claude) ; balises `canonical` et `hreflang` cohérentes.
+- **Pages de confiance** : À propos, Contact (adresse e-mail joignable), Mentions légales, Confidentialité, Cookies, Conditions : présentes, liées depuis toutes les pages, à jour, cohérentes entre elles et avec le site (nom, e-mail, régie AdinPlay / Google).
+- **`ads.txt`** à la racine avec l'identifiant éditeur (`pub-…`) attendu, `robots.txt` qui n'empêche pas le robot AdSense (`Mediapartners-Google`), sitemap complet.
+- **Consentement** : bandeau conforme (refuser aussi simple qu'accepter), aucune pub ni cookie publicitaire avant le choix ; mode de consentement compatible avec les exigences Google pour l'Europe (CMP certifiée si la régie l'exige).
+- **Navigation et expérience** : menu clair, liens internes entre jeux, catégories, blog et guides ; aucun lien cassé ; page rapide sur mobile ; pas de contenu masqué ni de faux boutons ; emplacements pub prévus qui ne poussent pas au clic accidentel (distance avec les boutons PLAY et les contrôles de jeu).
+- **Blog** : nombre d'articles, fréquence de publication, longueur et originalité ; sujets qui apportent une vraie valeur (guides, stratégies, coulisses) plutôt que des textes de remplissage.
+- **Règlement** : aucun contenu interdit ou sensible pour la pub (violence graphique, contenu choquant, droits d'auteur, noms ou visuels de jeux tiers).
+
+Le rapport ajoute en tête une ligne « Préparation AdSense » : les risques encore ouverts classés du plus probable au moins probable, et ce qui a été réglé depuis la veille.
+
 ## 3. Le rapport des 10 points
 
 - **Tout constat devient un point numéroté** (`A-xxx`) inscrit dans le suivi : plus de section « autres constats » hors liste (décision de Laurent du 2026-11-23). Le rapport présente d'abord les 10 points les plus importants, puis tous les autres points ouverts, numérotés et décrits de la même façon (problème, pourquoi, solution, effort, impact), pour que Laurent puisse les lancer aussi.
@@ -44,7 +61,7 @@ Site : https://ragequit-arcade.com (production). Avec Playwright :
 
 - **Page de rapport** : une page HTML privée publiée avec l'outil Artifact, toujours à la même adresse (republier l'artifact dont l'URL est notée en tête de `routines/audit-site-suivi.md` ; à la première exécution, la créer et noter son URL). Elle contient le résumé du jour, les 10 points et leurs captures (JPG compressés, 1200 px de large au plus), et l'historique des points `fait`. Si l'outil Artifact n'est pas disponible, joindre le rapport en fichier et le dire dans la notification.
 - **Mémoire** : mettre à jour `routines/audit-site-suivi.md` (statuts, nouveaux points avec leur date), puis le commiter dans une petite PR `claude/audit-site-AAAA-MM-JJ` qui ne touche qu'à ce fichier, et la fusionner. Aucune capture n'est commitée dans le dépôt.
-- **Toujours** finir par une notification à Laurent (`PushNotification`, résumé entre balises `routine_summary`) : les 10 titres numérotés, le nombre d'autres points ouverts, ce qui a été réglé depuis la veille, le lien de la page de rapport. En cas d'échec : la raison.
+- **Toujours** finir par une notification à Laurent (`PushNotification`, résumé entre balises `routine_summary`) : les 10 titres numérotés, le nombre d'autres points ouverts, les principaux risques AdSense, ce qui a été réglé depuis la veille, le lien de la page de rapport. En cas d'échec : la raison.
 
 ## Interdits
 
