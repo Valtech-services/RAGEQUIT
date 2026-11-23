@@ -15,6 +15,7 @@ import GameCard from '../../components/GameCard/GameCard'
 import SeoBlock from '../../components/SeoBlock/SeoBlock'
 import Footer from '../../components/Footer/Footer'
 import usePageTitle from '../../hooks/usePageTitle'
+import NotFoundPage from '../NotFoundPage/NotFoundPage'
 import './MobileGamePage.css'
 import { watchVisibleViewport } from '../../lib/visibleViewport'
 
@@ -302,14 +303,7 @@ if (d.type.endsWith('_SCORE')) {
     }, '*')
   }, [user, profile, playing])
 
-  if (!game) {
-    return (
-      <div className="mgp mgp--notfound">
-        <span>{t('common.gameNotFound')}</span>
-        <Link to="/" className="mgp__back-link">{t('common.backToHome')}</Link>
-      </div>
-    )
-  }
+  if (!game) return <NotFoundPage />
 
   const related = games.filter(g => g.id !== game.id).slice(0, 12)
 

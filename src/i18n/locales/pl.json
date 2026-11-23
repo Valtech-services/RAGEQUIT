@@ -138,7 +138,10 @@
     "backToHome": "Powrót do strony głównej",
     "gameNotFound": "Nie znaleziono gry.",
     "categoryNotFound": "Nie znaleziono kategorii.",
-    "noGamesYet": "Brak gier w tej kategorii. Wróć wkrótce."
+    "noGamesYet": "Brak gier w tej kategorii. Wróć wkrótce.",
+    "pageNotFoundTitle": "Game over: nie znaleziono strony",
+    "pageNotFoundText": "Ta strona nie istnieje lub została przeniesiona. Gry wciąż tu są i wszystkie są darmowe.",
+    "tryTheseGames": "Wypróbuj jedną z tych gier"
   },
   "seo": {
     "aboutLabel": "O Ragequit Arcade",

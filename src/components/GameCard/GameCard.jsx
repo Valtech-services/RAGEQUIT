@@ -11,6 +11,7 @@ import { track } from '../../lib/analytics'
 import { useId } from 'react'
 import { useIsHot } from '../../lib/hotGames'
 import './GameCard.css'
+import { thumbImg } from '../../lib/thumb'
 
 // Flamme « hot » : trois couches (contour, cœur, noyau) qui vacillent doucement.
 function HotFlame() {
@@ -68,7 +69,7 @@ export default function GameCard({ game, size = 'medium', source = 'bento' }) {
         className={`gamecard gamecard--${size} ${game.isNew ? 'gamecard--new' : ''} ${shimmer ? 'shimmer-effect' : ''}`}
         onClick={handleClick}
       >
-        <img className="gamecard__img" src={game.thumbnail} alt={game.title} loading="lazy" />
+        <img className="gamecard__img" {...thumbImg(game.thumbnail)} alt={game.title} loading="lazy" decoding="async" />
 
         {/* Overlay : nom du jeu qui monte au survol */}
         <div className="gamecard__overlay">

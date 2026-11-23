@@ -8,6 +8,7 @@ import { useLang, LOCALES } from '../../i18n/locale'
 import usePageTitle from '../../hooks/usePageTitle'
 import { trackPageView } from '../../lib/analytics'
 import './BlogPage.css'
+import { blogImg } from '../../lib/thumb'
 
 export default function BlogPage() {
   const posts = usePosts()
@@ -50,8 +51,7 @@ export default function BlogPage() {
                       <Link key={post.slug} to={`/blog/${post.slug}`} className="blog__card">
                         {post.image && (
                           <div className="blog__card-img">
-                            <img src={post.image} alt={post.title}
-                              onError={e => { e.currentTarget.style.display = 'none' }} />
+                            <img {...blogImg(post.image)} alt={post.title} loading="lazy" decoding="async" />
                           </div>
                         )}
                         <div className="blog__card-body">

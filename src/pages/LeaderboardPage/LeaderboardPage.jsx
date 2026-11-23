@@ -12,6 +12,7 @@ import usePageTitle from '../../hooks/usePageTitle'
 import { useTranslation } from 'react-i18next'
 import './LeaderboardPage.css'
 import { track } from '../../lib/analytics'
+import { thumbImg } from '../../lib/thumb'
 
 /*
   LeaderboardPage
@@ -136,7 +137,7 @@ function GamePicker({ games, categories, t }) {
               <Link to={`/leaderboard?game=${g.id}`} className="lbpage__tile"
                 onClick={() => track('leaderboard_game_select', { game_id: g.id })}>
                 <span className="lbpage__tile-thumb">
-                  <img src={g.thumbnail} alt="" loading="lazy" width="120" height="120" />
+                  <img {...thumbImg(g.thumbnail, '120px')} alt="" loading="lazy" width="120" height="120" />
                 </span>
                 <span className="lbpage__tile-body">
                   <span className="lbpage__tile-name">{g.title}</span>
@@ -223,7 +224,7 @@ function GameBoard({ game, t }) {
         </Link>
         <div className="lbpage__gamehead-main">
           <span className="lbpage__gamehead-thumb">
-            <img src={game.thumbnail} alt={game.title} width="120" height="120" />
+            <img {...thumbImg(game.thumbnail, '120px')} alt={game.title} width="120" height="120" />
           </span>
           <div className="lbpage__gamehead-info">
             <h2 className="lbpage__gamehead-title">{game.title}</h2>

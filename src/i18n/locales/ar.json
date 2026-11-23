@@ -138,7 +138,10 @@
     "backToHome": "العودة للرئيسية",
     "gameNotFound": "اللعبة غير موجودة.",
     "categoryNotFound": "الفئة غير موجودة.",
-    "noGamesYet": "لا توجد ألعاب في هذه الفئة بعد. عُد قريبًا."
+    "noGamesYet": "لا توجد ألعاب في هذه الفئة بعد. عُد قريبًا.",
+    "pageNotFoundTitle": "Game over: الصفحة غير موجودة",
+    "pageNotFoundText": "هذه الصفحة غير موجودة أو تم نقلها. لكن الألعاب ما زالت هنا، وكلها مجانية.",
+    "tryTheseGames": "جرّب إحدى هذه الألعاب"
   },
   "seo": {
     "aboutLabel": "عن Ragequit Arcade",

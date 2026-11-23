@@ -138,7 +138,10 @@
     "backToHome": "ホームに戻る",
     "gameNotFound": "ゲームが見つかりません。",
     "categoryNotFound": "カテゴリが見つかりません。",
-    "noGamesYet": "このカテゴリにはまだゲームがありません。またお越しください。"
+    "noGamesYet": "このカテゴリにはまだゲームがありません。またお越しください。",
+    "pageNotFoundTitle": "Game over：ページが見つかりません",
+    "pageNotFoundText": "このページは存在しないか、移動しました。ゲームはすべてここにあり、すべて無料です。",
+    "tryTheseGames": "こちらのゲームを遊んでみよう"
   },
   "seo": {
     "aboutLabel": "Ragequit Arcade について",

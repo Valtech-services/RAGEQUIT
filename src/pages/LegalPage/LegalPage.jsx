@@ -8,6 +8,7 @@ import { supabase } from '../../lib/supabase'
 import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Footer/Footer'
 import usePageTitle from '../../hooks/usePageTitle'
+import NotFoundPage from '../NotFoundPage/NotFoundPage'
 import './LegalPage.css'
 
 function ContactForm({ user }) {
@@ -71,7 +72,8 @@ export default function LegalPage() {
   const content  = getLegalContent(i18n.language)[page]
   const { user } = useAuth()
 
-  usePageTitle(content ? content.title : t('legal.pageNotFound'))
+  usePageTitle(content ? content.title : undefined)
+  if (!content) return <NotFoundPage />
 
   return (
     <div className="legal">
