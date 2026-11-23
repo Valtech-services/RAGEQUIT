@@ -36,7 +36,7 @@ export default {
         },
         {
           "q": "Czy autoclickery są dozwolone?",
-          "a": "Nie. Rozgrywka o nieludzko równym rytmie albo ze średnią prędkością poza zasięgiem człowieka nie jest klasyfikowana, a jej wynik nie trafia do rankingu. Szybkie stukanie człowieka nigdy nie jest ograniczane, nawet jeśli stuknięcia następują tuż po sobie."
+          "a": "Na komputerze nie: rozgrywka o nieludzko równym rytmie lub o średniej prędkości poza zasięgiem człowieka nie jest klasyfikowana, a jej wynik nie trafia do rankingu. Każde kliknięcie lewym przyciskiem przed gongiem jest liczone, niezależnie od tempa. Na telefonie nie ma żadnego filtra: liczy się każde stuknięcie w ekran, dowolną liczbą palców i w dowolnym tempie."
         },
         {
           "q": "Do czego służą motywy?",

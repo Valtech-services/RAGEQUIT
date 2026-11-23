@@ -36,7 +36,7 @@ export default {
         },
         {
           "q": "Autoclickers são permitidos?",
-          "a": "Não. Uma partida com um ritmo regular demais para um humano, ou com uma velocidade média fora do alcance humano, não entra no ranking e a pontuação não é enviada. Toques humanos rápidos nunca são limitados, por mais próximos que sejam."
+          "a": "No computador, não: uma partida com ritmo perfeitamente regular, inumano, ou com velocidade média fora do alcance humano não é classificada e sua pontuação não é enviada ao ranking. Cada clique esquerdo feito antes do gongo é contado, por mais rápido que seja. No celular não há nenhum filtro: cada toque na tela conta, com quantos dedos você quiser e em qualquer velocidade."
         },
         {
           "q": "Para que servem os temas?",

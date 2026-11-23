@@ -36,7 +36,7 @@ export default {
         },
         {
           "q": "¿Se permiten los autoclickers?",
-          "a": "No. Una partida con un ritmo inhumanamente regular, o con una velocidad media fuera del alcance humano, no entra en la clasificación y su puntuación no se envía. Los toques humanos rápidos nunca se limitan, por muy seguidos que sean."
+          "a": "En ordenador, no: una partida con un ritmo perfectamente regular, inhumano, o con una velocidad media fuera del alcance humano no se clasifica y su puntuación no se envía a la clasificación. Cada clic izquierdo hecho antes de la campana se cuenta, por rápido que sea. En el móvil no hay ningún filtro: cada toque en la pantalla cuenta, con tantos dedos como quieras y a cualquier velocidad."
         },
         {
           "q": "¿Para qué sirven los temas?",
