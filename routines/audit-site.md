@@ -14,7 +14,12 @@ Ce fichier fait foi pour la routine, en plus de `CLAUDE.md` (à lire en premier)
 ## 2. Balayer le site en ligne
 
 Site : https://ragequit-arcade.com (production). Avec Playwright :
-- **Pages** : accueil, chaque catégorie, au moins 3 pages de jeu (dont le plus récent), liste du blog, 2 articles, pages légales, page 404, et les mêmes pages dans 2 ou 3 langues (`/fr`, `/de`, `/ja`, `/ar` en droite à gauche). Jamais `/admin`.
+- **Pages** : accueil, chaque catégorie, au moins 3 pages de jeu (dont le plus récent), liste du blog, 2 articles, pages légales, page 404, et les mêmes pages dans 2 ou 3 langues (`/fr`, `/de`, `/ja`, `/ar` en droite à gauche), et la page admin (voir ci-dessous).
+- **Page admin (décision de Laurent du 2026-11-23 : elle fait partie de l'amélioration du site)** : `/admin` exige une connexion Google admin puis un code PIN ; la routine ne s'y connecte jamais avec de vrais identifiants et ne modifie aucune donnée. Elle audite :
+  - l'écran de connexion en ligne (`/admin`, mobile et desktop) ;
+  - les onglets (Dashboard, Test des jeux, À côté, Réserve) en lisant le code (`src/pages/AdminPage/`) et, si possible, en les affichant avec Playwright sur un build local où la session est simulée (réponses réseau factices, aucune requête vers la vraie base) ; si cet affichage n'est pas possible, le dire dans le rapport ;
+  - ergonomie mobile (Laurent teste les jeux depuis son téléphone), lisibilité, boutons « Copier », temps de chargement, erreurs, et tout ce qui ralentit son travail quotidien (tester un jeu, copier les prompts, lire la réserve).
+  Les points admin ont la zone `admin` dans le suivi.
 - **Appareils** : iPhone SE (375x667), iPhone 15 Pro (393x852), Android (412x915), iPad portrait (820x1180) et paysage (1180x820), desktop 1366x768 et 1920x1080. Captures du header, des menus ouverts, du footer, des pages de jeu (cadre du jeu, boutons, leaderboard) et du blog.
 - **La grille bento de l'accueil est hors champ** : ne rien proposer à son sujet tant que Laurent ne l'a pas demandé.
 - **Contrôles techniques** :
@@ -29,8 +34,9 @@ Site : https://ragequit-arcade.com (production). Avec Playwright :
 
 ## 3. Le rapport des 10 points
 
-- Exactement 10 points (moins seulement si le site n'a vraiment plus rien d'utile à améliorer : le dire franchement plutôt qu'inventer).
-- On ne garde que les points encore ouverts (`proposé`) qui restent pertinents, puis on complète avec de nouveaux points. Les points `fait` sortent de la liste, les points `refusé` ne reviennent jamais.
+- **Tout constat devient un point numéroté** (`A-xxx`) inscrit dans le suivi : plus de section « autres constats » hors liste (décision de Laurent du 2026-11-23). Le rapport présente d'abord les 10 points les plus importants, puis tous les autres points ouverts, numérotés et décrits de la même façon (problème, pourquoi, solution, effort, impact), pour que Laurent puisse les lancer aussi.
+- Si le site n'a vraiment plus rien d'utile à améliorer, le dire franchement plutôt qu'inventer.
+- On garde tous les points encore ouverts (`proposé`) qui restent pertinents, puis on complète avec de nouveaux points. Les points `fait` sortent de la liste, les points `refusé` ne reviennent jamais.
 - Pour chaque point : numéro stable, titre court, problème constaté avec sa capture (appareil et page), pourquoi c'est important (joueurs, SEO, revenus pub, image), solution proposée concrète, effort (S / M / L) et impact (faible / moyen / fort). Classés par impact puis par effort.
 - En tête du rapport : ce qui a changé depuis la veille (points passés en `fait`, nouveaux points).
 
@@ -38,7 +44,7 @@ Site : https://ragequit-arcade.com (production). Avec Playwright :
 
 - **Page de rapport** : une page HTML privée publiée avec l'outil Artifact, toujours à la même adresse (republier l'artifact dont l'URL est notée en tête de `routines/audit-site-suivi.md` ; à la première exécution, la créer et noter son URL). Elle contient le résumé du jour, les 10 points et leurs captures (JPG compressés, 1200 px de large au plus), et l'historique des points `fait`. Si l'outil Artifact n'est pas disponible, joindre le rapport en fichier et le dire dans la notification.
 - **Mémoire** : mettre à jour `routines/audit-site-suivi.md` (statuts, nouveaux points avec leur date), puis le commiter dans une petite PR `claude/audit-site-AAAA-MM-JJ` qui ne touche qu'à ce fichier, et la fusionner. Aucune capture n'est commitée dans le dépôt.
-- **Toujours** finir par une notification à Laurent (`PushNotification`, résumé entre balises `routine_summary`) : les 10 titres numérotés, ce qui a été réglé depuis la veille, le lien de la page de rapport. En cas d'échec : la raison.
+- **Toujours** finir par une notification à Laurent (`PushNotification`, résumé entre balises `routine_summary`) : les 10 titres numérotés, le nombre d'autres points ouverts, ce qui a été réglé depuis la veille, le lien de la page de rapport. En cas d'échec : la raison.
 
 ## Interdits
 
