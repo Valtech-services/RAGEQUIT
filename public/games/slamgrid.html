@@ -47,6 +47,14 @@
   #score.bump { transform: scale(1.14); }
   #infoLine { margin-top: 3px; display: flex; gap: 10px; justify-content: center; white-space: nowrap; font-size: 10px; font-weight: 900; letter-spacing: 1.6px; color: var(--dim); }
   #infoLine b { color: var(--bone); }
+  #gemsBox { display: inline-flex; gap: 3px; align-items: center; }
+  #gemsBox i { width: 9px; height: 9px; transform: rotate(45deg); border: 1.5px solid #ffb43e; border-radius: 2px; opacity: .55; transition: transform .25s cubic-bezier(.2,1.8,.4,1), background .2s, opacity .2s; }
+  #gemsBox i.got { background: #ffb43e; opacity: 1; box-shadow: 0 0 8px #ffb43e; transform: rotate(45deg) scale(1.15); }
+  #chain { position: absolute; top: calc(72px + var(--safe-top)); right: calc(12px + var(--safe-right)); font-size: 11px; font-weight: 900; letter-spacing: 1.5px; color: var(--ice); text-align: right;
+    text-shadow: 0 0 8px rgba(159,232,255,.8); opacity: 0; transform: translateX(10px); transition: opacity .2s, transform .25s cubic-bezier(.2,1.6,.4,1); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  #chain.on { opacity: 1; transform: none; }
+  #chain b { display: block; font-size: 20px; color: #fff; }
+  #chain.hot b { color: var(--lemon); text-shadow: 0 0 12px rgba(242,255,60,.9); }
   #movesBox { position: absolute; top: calc(58px + var(--safe-top)); left: 50%; transform: translateX(-50%); width: min(210px, 50vw); }
   #movesLbl { display: flex; justify-content: space-between; font-size: 10px; font-weight: 900; letter-spacing: 1.4px; color: var(--dim); white-space: nowrap; }
   #movesLbl b { color: var(--lemon); font-variant-numeric: tabular-nums; }
@@ -62,13 +70,12 @@
   @media (min-width: 900px) and (min-height: 600px) {
     #score { font-size: 46px; } #infoLine { font-size: 13px; gap: 14px; }
     #movesBox { top: calc(84px + var(--safe-top)); width: 320px; } #movesLbl { font-size: 12px; } #movesBar { height: 10px; }
-    #combo { top: calc(122px + var(--safe-top)); font-size: 16px; } #bossBar { top: calc(142px + var(--safe-top)); width: 340px; } #bossBar span { font-size: 12px; }
-    #banner { top: calc(176px + var(--safe-top)); } .iconBtn { width: 44px; height: 44px; } #hearts svg { width: 24px; height: 24px; }
+    .iconBtn { width: 44px; height: 44px; } #hearts svg { width: 24px; height: 24px; }
   }
-  #combo { position: absolute; top: calc(84px + var(--safe-top)); left: 50%; transform: translateX(-50%) scale(.6); font-size: 13px; font-weight: 900; color: var(--lemon); letter-spacing: 2px; opacity: 0; transition: opacity .2s, transform .25s cubic-bezier(.2,1.6,.4,1);
+  #combo { position: absolute; top: calc(92px + var(--safe-top)); left: 50%; transform: translateX(-50%) scale(.6); font-size: 13px; font-weight: 900; color: var(--lemon); letter-spacing: 2px; opacity: 0; transition: opacity .2s, transform .25s cubic-bezier(.2,1.6,.4,1);
     text-shadow: 0 0 10px rgba(242,255,60,.8); white-space: nowrap; font-variant-numeric: tabular-nums; }
   #combo.on { opacity: 1; transform: translateX(-50%) scale(1); }
-  #bossBar { position: absolute; top: calc(102px + var(--safe-top)); left: 50%; transform: translateX(-50%) scaleX(0); width: min(250px, 64vw); transition: transform .35s cubic-bezier(.2,1.4,.4,1); text-align: center; }
+  #bossBar { position: absolute; top: calc(112px + var(--safe-top)); left: 50%; transform: translateX(-50%) scaleX(0); width: min(250px, 64vw); transition: transform .35s cubic-bezier(.2,1.4,.4,1); text-align: center; }
   #bossBar.on { transform: translateX(-50%) scaleX(1); }
   #bossBar span { font-size: 10px; font-weight: 900; letter-spacing: 3px; color: #ffa0c4; text-shadow: 0 0 8px rgba(255,62,142,.8); }
   #bossTrack { margin-top: 3px; height: 8px; border-radius: 6px; background: rgba(255,62,142,.15); box-shadow: 0 0 0 1px rgba(255,62,142,.6) inset; overflow: hidden; }
@@ -86,8 +93,8 @@
   #hearts b { margin-left: 3px; }
   @keyframes heartPop { 40% { transform: scale(1.5); } }
 
-  /* ---------- power buttons (bottom, raised above Safari's toolbar) ---------- */
-  #pad { position: fixed; left: 50%; bottom: calc(18px + 9vh + var(--safe-bottom)); bottom: calc(18px + 9dvh + var(--safe-bottom)); transform: translateX(-50%); z-index: 5; display: flex; gap: 16px; align-items: flex-end; pointer-events: none; opacity: 0; transition: opacity .3s; }
+  /* ---------- power buttons (bottom: the game runs in an iframe above the browser bars) ---------- */
+  #pad { position: fixed; left: 50%; bottom: calc(22px + 1.5vh + var(--safe-bottom)); bottom: calc(22px + 1.5dvh + var(--safe-bottom)); transform: translateX(-50%); z-index: 5; display: flex; gap: 16px; align-items: flex-end; pointer-events: none; opacity: 0; transition: opacity .3s; }
   #pad.on { opacity: 1; }
   .pw { position: relative; width: 62px; height: 62px; border-radius: 50%; border: 2px solid currentColor; display: grid; place-items: center; pointer-events: auto; touch-action: none;
     background: radial-gradient(circle at 50% 32%, rgba(255,255,255,.16), rgba(18,8,40,.86) 70%); box-shadow: 0 0 16px currentColor, inset 0 0 12px rgba(0,0,0,.5); transition: transform .08s, filter .2s; }
@@ -103,7 +110,7 @@
   #pUndo { color: var(--ice); --cc: var(--ice); } #pHint { color: var(--lemon); --cc: var(--lemon); } #pReset { color: #c79bff; --cc: #c79bff; }
   .pw kbd { display: none; position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font: 800 9px/1 system-ui, sans-serif; letter-spacing: 1px; color: var(--bone); padding: 2px 5px; border-radius: 5px; background: rgba(20,10,44,.85); border: 1px solid rgba(255,255,255,.25); }
   @media (pointer: fine) { .pw kbd { display: block; } #pad { bottom: calc(26px + var(--safe-bottom)); } }
-  #tapHint { position: fixed; left: 50%; bottom: calc(118px + 9vh + var(--safe-bottom)); bottom: calc(118px + 9dvh + var(--safe-bottom)); transform: translateX(-50%); z-index: 4; pointer-events: none; font-size: 12px; font-weight: 800; letter-spacing: 2px; color: var(--dim);
+  #tapHint { position: fixed; left: 50%; bottom: calc(122px + 1.5vh + var(--safe-bottom)); bottom: calc(122px + 1.5dvh + var(--safe-bottom)); transform: translateX(-50%); z-index: 4; pointer-events: none; font-size: 12px; font-weight: 800; letter-spacing: 2px; color: var(--dim);
     opacity: 0; transition: opacity .4s; text-shadow: 0 0 8px #000; white-space: nowrap; }
   #tapHint.on { opacity: .95; }
   @media (pointer: fine) { #tapHint { bottom: calc(120px + var(--safe-bottom)); } }
@@ -111,14 +118,19 @@
   /* ---------- floating texts & banners ---------- */
   #floats { position: fixed; inset: 0; pointer-events: none; z-index: 4; overflow: hidden; }
   .ft { position: absolute; left: 0; top: 0; font-weight: 900; font-size: 18px; white-space: nowrap; font-variant-numeric: tabular-nums; text-shadow: 0 0 10px currentColor, 0 2px 0 #12062a; will-change: transform, opacity; opacity: 0; }
-  #banner { position: fixed; left: 0; right: 0; top: calc(128px + var(--safe-top)); z-index: 5; text-align: center; pointer-events: none; opacity: 0; }
+  #banner { position: fixed; left: 0; right: 0; top: calc(146px + var(--safe-top)); z-index: 5; text-align: center; pointer-events: none; opacity: 0; }
   #banner.go { animation: bannerIn 2s cubic-bezier(.2,.9,.3,1) both; }
   @keyframes bannerIn { 0% { opacity: 0; transform: scale(1.6); letter-spacing: 18px; } 14% { opacity: 1; transform: scale(1); letter-spacing: 4px; } 80% { opacity: 1; } 100% { opacity: 0; transform: translateY(-30px); } }
   #banner h2 { font-size: clamp(26px, 7.4vw, 40px); font-weight: 900; letter-spacing: 4px; color: var(--bone); text-shadow: 0 0 22px var(--bc, #9b4dff), 0 3px 0 #12062a; }
   #banner p { margin-top: 6px; font-size: 14px; font-weight: 800; letter-spacing: 3px; color: var(--bc, #9b4dff); text-shadow: 0 0 10px #000; }
-  #toast { position: fixed; left: 50%; bottom: calc(150px + 9vh + var(--safe-bottom)); bottom: calc(150px + 9dvh + var(--safe-bottom)); transform: translate(-50%, 20px); z-index: 12; padding: 9px 16px; border-radius: 14px; background: rgba(22,10,46,.92);
+  #toast { position: fixed; left: 50%; bottom: calc(150px + 1.5vh + var(--safe-bottom)); bottom: calc(150px + 1.5dvh + var(--safe-bottom)); transform: translate(-50%, 20px); z-index: 12; padding: 9px 16px; border-radius: 14px; background: rgba(22,10,46,.92);
     border: 1px solid var(--uv); font-size: 13px; font-weight: 800; opacity: 0; transition: opacity .25s, transform .25s; pointer-events: none; white-space: nowrap; }
   #toast.on { opacity: 1; transform: translate(-50%, 0); }
+  /* large screens: these overrides must come after the base rules above */
+  @media (min-width: 900px) and (min-height: 600px) {
+    #combo { top: calc(128px + var(--safe-top)); font-size: 16px; } #bossBar { top: calc(152px + var(--safe-top)); width: 340px; } #bossBar span { font-size: 12px; }
+    #banner { top: calc(196px + var(--safe-top)); } #chain { top: calc(100px + var(--safe-top)); }
+  }
 
   /* ---------- overlays ---------- */
   .ov { position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center;
@@ -141,10 +153,9 @@
   @keyframes blink { 50% { opacity: .45; } }
 
   /* title */
-  #menu { align-items: flex-end; background: linear-gradient(to top, rgba(8,3,22,.94) 0%, rgba(8,3,22,.8) 50%, rgba(8,3,22,0) 70%); }
-  /* PLAY and the help text sit 20 % of the screen higher than the bottom, away from Safari's toolbar */
-  #menu .panel { padding-bottom: calc(4px + 29vh); padding-bottom: calc(4px + 29dvh); }
-  @media (min-aspect-ratio: 1/1) { #menu .panel { padding-bottom: 23vh; padding-bottom: 23dvh; } }
+  #menu { align-items: flex-end; background: linear-gradient(to top, rgba(8,3,22,.92) 0%, rgba(8,3,22,.7) 24%, rgba(8,3,22,0) 42%); }
+  /* menu pinned to the bottom: the game runs in an iframe above the browser bars (decision of 2026-11-22) */
+  #menu .panel { padding-bottom: calc(2px + 1.5vh); padding-bottom: calc(2px + 1.5dvh); }
   #logo { position: fixed; top: calc(6vh + var(--safe-top)); left: 0; right: 0; text-align: center; pointer-events: none; z-index: 10; opacity: 0; transition: opacity .4s; }
   body.menuOn #logo { opacity: 1; }
   .word { display: inline-flex; gap: 3px; perspective: 400px; }
@@ -179,7 +190,7 @@
   #overScore { margin: 12px 0 2px; font-size: 52px; font-weight: 900; font-variant-numeric: tabular-nums; color: var(--bone); text-shadow: 0 0 22px rgba(242,255,60,.55); }
   #overRec { display: none; font-size: 13px; font-weight: 900; letter-spacing: 3px; color: var(--lemon); animation: blink 1s infinite; }
   #overRec.on { display: block; }
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 12px 0 4px; }
+  .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin: 12px 0 4px; }
   .stat { padding: 8px 2px; border-radius: 12px; background: rgba(255,255,255,.05); border: 1px solid rgba(155,77,255,.28); opacity: 0; transform: translateY(8px); transition: opacity .3s, transform .3s; }
   .stat.in { opacity: 1; transform: none; }
   .stat b { display: block; font-size: 18px; font-weight: 900; font-variant-numeric: tabular-nums; }
@@ -211,9 +222,10 @@
 <div id="floats"></div>
 
 <div id="hud">
-  <div id="scoreBox"><div id="score">0</div><div id="infoLine"><span><b id="boardNum">BOARD 1</b></span><span>PAR <b id="parNum">0</b></span><span>CUBES <b id="cubesNum">0</b></span></div></div>
+  <div id="scoreBox"><div id="score">0</div><div id="infoLine"><span><b id="boardNum">BOARD 1</b></span><span>PAR <b id="parNum">0</b></span><span>CUBES <b id="cubesNum">0</b></span><span id="gemsBox"><i></i><i></i><i></i></span></div></div>
   <div id="movesBox"><div id="movesLbl"><span>MOVES LEFT</span><b id="movesNum">0</b></div><div id="movesBar"><div id="movesFill"></div><div id="parMark"></div></div></div>
   <div id="combo">PERFECT x2</div>
+  <div id="chain">SLAM CHAIN<b id="chainNum">0</b></div>
   <div id="bossBar"><span>THE MONOLITH</span><div id="bossTrack"><div id="bossFill"></div></div></div>
   <div id="rightTop">
     <div id="btnRow">
@@ -268,6 +280,7 @@
       <div class="stat"><b id="stBoards">0</b><span>BOARDS</span></div>
       <div class="stat"><b id="stPerfect">0</b><span>PERFECT</span></div>
       <div class="stat"><b id="stCombo">x1</b><span>COMBO</span></div>
+      <div class="stat"><b id="stChain">0</b><span>CHAIN</span></div>
       <div class="stat"><b id="stBest">0</b><span>RECORD</span></div>
     </div>
     <button class="btn ad" id="bRevive">WATCH AD TO CONTINUE</button>
@@ -402,9 +415,11 @@ const Audio = {
 const Music = {
   on: false, next: 0, step: 0, level: 0, timer: 0,
   ROOT: [38, 41, 36, 43], // D, F, C, G
-  start() { if (!Audio.ctx || this.on) return; this.on = true; this.next = Audio.ctx.currentTime + 0.05; this.step = 0; Audio.musicBus.gain.setTargetAtTime(0.3, Audio.ctx.currentTime, 0.4); this.timer = setInterval(() => this.tick(), 60); },
+  start() { if (!Audio.ctx || this.on) return; this.on = true; this.next = Audio.ctx.currentTime + 0.05; this.t0 = this.next; this.step = 0; Audio.musicBus.gain.setTargetAtTime(0.3, Audio.ctx.currentTime, 0.4); this.timer = setInterval(() => this.tick(), 60); },
   stop() { if (!this.on) return; this.on = false; clearInterval(this.timer); if (Audio.ctx) Audio.musicBus.gain.setTargetAtTime(0, Audio.ctx.currentTime, 0.2); },
   hz(m) { return 440 * Math.pow(2, (m - 69) / 12); },
+  // 0..1 kick envelope of the current beat (drives the equalizer towers)
+  pulse() { if (!this.on || !Audio.ctx) return 0; const b = (Audio.ctx.currentTime - this.t0) / (60 / 112); if (b < 0) return 0; const f = b - Math.floor(b); return Math.pow(1 - f, 3); },
   v(f, t, d, type, vol, cut) {
     const c = Audio.ctx, o = c.createOscillator(), g = c.createGain(), lp = c.createBiquadFilter();
     o.type = type; o.frequency.value = f; lp.type = 'lowpass'; lp.frequency.value = cut || 1800;
@@ -871,6 +886,7 @@ function buildBoardVisual(L, rise) {
   slab.scale.set(W, 1, D); rimPlane.scale.set(W + 0.3, D + 0.3, 1); slabGlow.scale.set(W * 2.4, D * 2.4, 1);
   keyLight.shadow.camera.left = -W; keyLight.shadow.camera.right = W; keyLight.shadow.camera.top = D; keyLight.shadow.camera.bottom = -D; keyLight.shadow.camera.updateProjectionMatrix();
   uvLight.position.set(-W / 2 - 0.6, 1.2, D / 2 + 0.6);
+  EQ.r = Math.max(W, D) * 0.72 + 1.4;
   for (const c of cells) if (!c.hole) {
     // cubes rise from the slab one after the other (diagonal wave)
     c.top = rise ? -0.02 : topOf(L.init[c.i]); c.delay = rise ? (c.x + c.z) * 0.045 : 0;
@@ -905,6 +921,95 @@ function updateCells(dt) {
   }
 }
 const cellTop = (x, z) => { const c = cells[idx(x, z)]; return c && !c.hole ? Math.max(0.02, c.top) : 0; };
+
+/* ================= GEMS (3 amber prisms per board, placed on the solution route) ================= */
+const GEM_COL = 0xffb43e;
+const gemGeo = new THREE.OctahedronGeometry(0.17, 0); gemGeo.scale(1, 1.45, 1);
+const gemMat = new THREE.MeshStandardMaterial({ color: 0xffd27a, emissive: new THREE.Color(GEM_COL), emissiveIntensity: 1.25, metalness: 0.3, roughness: 0.15, flatShading: true });
+const gemCoreMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(0xfff2c0).multiplyScalar(1.6), toneMapped: false });
+const gemHaloMat = new THREE.MeshBasicMaterial({ map: glowTex, color: new THREE.Color(GEM_COL).multiplyScalar(1.3), transparent: true, opacity: 0.55, depthWrite: false, blending: THREE.AdditiveBlending });
+const GEMS = [];
+for (let i = 0; i < 3; i++) {
+  const g = new THREE.Group();
+  const m = new THREE.Mesh(gemGeo, gemMat); m.castShadow = true; g.add(m);
+  const core = new THREE.Mesh(new THREE.OctahedronGeometry(0.07, 0), gemCoreMat); g.add(core);
+  const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color: new THREE.Color(GEM_COL), transparent: true, opacity: 0.32, depthWrite: false, blending: THREE.AdditiveBlending }));
+  halo.scale.setScalar(0.62); g.add(halo);
+  const pad = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 0.7), gemHaloMat); pad.rotation.x = -Math.PI / 2; pad.renderOrder = 3;
+  g.visible = false; pad.visible = false; scene.add(g, pad);
+  GEMS.push({ g, m, pad, cell: -1, got: true, pop: 0, ph: i * 2.1 });
+}
+function placeGems(L) {
+  const route = L.path.slice(0, -1).filter((c, k, a) => a.indexOf(c) === k && c !== L.start);
+  const pick = [];
+  if (route.length >= 3) for (const f of [0.22, 0.55, 0.85]) { let k = Math.floor(f * route.length); while (pick.indexOf(route[k]) >= 0 && k < route.length - 1) k++; if (pick.indexOf(route[k]) < 0) pick.push(route[k]); }
+  GEMS.forEach((q, i) => { q.cell = i < pick.length ? pick[i] : -1; q.got = q.cell < 0; q.pop = 0; q.g.visible = !q.got; q.pad.visible = !q.got; q.g.scale.setScalar(0.001); });
+  B.gems = 0; renderGems();
+}
+function renderGems() { const n = B ? B.gems : 0; document.querySelectorAll('#gemsBox i').forEach((el, i) => el.classList.toggle('got', i < n)); }
+function collectGem(x, z) {
+  const ci = idx(x, z);
+  for (const q of GEMS) {
+    if (q.got || q.cell !== ci) continue;
+    q.got = true; q.pop = 0.0001; B.gems++; G.gems++;
+    const y = cellTop(x, z) + 0.6, px = cx(x), pz = cz(z);
+    burst(px, y, pz, GEM_COL, 16, 3.2, 0.24, 0.45, 4); sparkles(px, y, pz, 0xfff2c0, 10, 0.5);
+    ring(px, pz, GEM_COL, 0.3, 2.4, 0.4, cellTop(x, z) + 0.05);
+    Audio.play('crystal', 0.55, 1.35 + B.gems * 0.15); Audio.tone(880 * Math.pow(1.26, B.gems), 0.18, 'triangle', 0.08, 1.5);
+    const pts = 100 + 10 * G.n;
+    addScore(pts, px, y + 0.3, pz, '#ffb43e', 'GEM +' + pts);
+    renderGems();
+    if (B.gems === 3) {
+      later(0.25, () => { addScore(500, px, y + 0.8, pz, '#ffd27a', 'GEM SWEEP +500'); flash(0.18, '#ffb43e'); Audio.play('perfect', 0.6, 1.25); for (const c of cells) if (!c.hole && c.level === 0) c.flash = Math.max(c.flash, 0.6); });
+    }
+  }
+}
+function updateGems(dt, t) {
+  for (const q of GEMS) {
+    if (q.cell < 0) continue;
+    const x = q.cell % BC, z = (q.cell / BC) | 0, base = cellTop(x, z);
+    if (q.pop > 0) {
+      q.pop += dt; const k = Math.min(1, q.pop / 0.35);
+      q.g.position.y = base + 0.55 + k * 0.9; q.g.scale.setScalar(Math.max(0.001, (1 - k) * 1.6)); q.g.rotation.y += dt * 20;
+      q.pad.visible = false;
+      if (k >= 1) { q.g.visible = false; q.pop = 0; }
+      continue;
+    }
+    if (q.got) continue;
+    const s = q.g.scale.x + (1 - q.g.scale.x) * Math.min(1, dt * 6);
+    q.g.scale.setScalar(s);
+    q.g.position.set(cx(x), base + 0.55 + Math.sin(t * 2.6 + q.ph) * 0.07, cz(z)); q.g.rotation.y = t * 1.8 + q.ph;
+    q.pad.position.set(cx(x), base + 0.02, cz(z)); q.pad.scale.setScalar(0.8 + 0.15 * Math.sin(t * 3 + q.ph));
+  }
+}
+function shatterGems() {
+  for (const q of GEMS) if (!q.got && q.cell >= 0) { q.got = true; q.pop = 0.0001; sparkles(q.g.position.x, q.g.position.y, q.g.position.z, GEM_COL, 6, 0.4); }
+}
+
+/* ================= EQUALIZER TOWERS (neon bars behind the board, pumping on the beat and on every slam) ================= */
+const EQ_N = 34;
+const eqGeo = new THREE.BoxGeometry(0.26, 1, 0.26); eqGeo.translate(0, 0.5, 0);
+const eqMat = new THREE.MeshBasicMaterial({ color: 0xffffff, toneMapped: false, transparent: true, opacity: 0.62, depthWrite: false, blending: THREE.AdditiveBlending, fog: false });
+const eqBars = new THREE.InstancedMesh(eqGeo, eqMat, EQ_N); eqBars.frustumCulled = false; eqBars.renderOrder = 1;
+const EQ = { kick: 0, h: new Float32Array(EQ_N), seed: new Float32Array(EQ_N), r: 5 };
+for (let i = 0; i < EQ_N; i++) { EQ.seed[i] = Math.random(); eqBars.setColorAt(i, new THREE.Color(PAL.uv).lerp(new THREE.Color(PAL.plasma), Math.abs(i / (EQ_N - 1) - 0.5) * 2).multiplyScalar(0.9)); }
+scene.add(eqBars);
+const EM = new THREE.Matrix4(), EP = new THREE.Vector3(), EQQ = new THREE.Quaternion(), ES = new THREE.Vector3();
+function updateEq(dt, t) {
+  EQ.kick = Math.max(0, EQ.kick - dt * 2.2);
+  const beat = Music.pulse(), boss = skyMat.uniforms.uBoss.value;
+  const back = CAM.az + Math.PI;                         // arc behind the board, as seen from the camera
+  for (let i = 0; i < EQ_N; i++) {
+    const u = i / (EQ_N - 1), a = back + (u - 0.5) * 3.1;
+    const wave = 0.5 + 0.5 * Math.sin(t * 2.2 + i * 0.55 + EQ.seed[i] * 6);
+    const want = 0.25 + wave * 0.9 + beat * (0.6 + EQ.seed[i] * 1.2) + EQ.kick * (1.4 + EQ.seed[i] * 1.6) + boss * 0.5;
+    EQ.h[i] += (want - EQ.h[i]) * Math.min(1, dt * 14);
+    EP.set(Math.sin(a) * EQ.r, -1.2, Math.cos(a) * EQ.r);
+    ES.set(1, Math.min(2.8, Math.max(0.05, EQ.h[i]) * 0.85), 1);
+    EM.compose(EP, EQQ, ES); eqBars.setMatrixAt(i, EM);
+  }
+  eqBars.instanceMatrix.needsUpdate = true;
+}
 
 /* ================= THE HERO (CC0 ninja, recoloured in the game palette) ================= */
 const heroRoot = new THREE.Group(); scene.add(heroRoot);
@@ -1068,7 +1173,7 @@ function runJobs(dt) { for (let i = jobs.length - 1; i >= 0; i--) { jobs[i].t -=
 function newGame(mode, seed) {
   const M = MODES[mode];
   G = { mode, M, seed, n: 0, score: 0, shown: 0, hearts: M.hearts, maxHearts: M.hearts, combo: 0, bestCombo: 0, perfects: 0, boards: 0, stomps: 0,
-    undo: 3, hints: 2, adHints: 0, revived: false, final: false, lock: 0, queue: null, chal: null, hintCells: [] };
+    undo: 3, hints: 2, adHints: 0, revived: false, final: false, lock: 0, queue: null, chal: null, hintCells: [], chain: 0, bestChain: 0, gems: 0 };
 }
 
 /* ================= GREMLINS ================= */
@@ -1256,14 +1361,17 @@ function updateBossBar() { if (B && B.boss) $('bossFill').style.width = Math.max
 /* ================= BOARD FLOW ================= */
 function snapshot() {
   return { lv: cells.map((c) => c.level), x: P.x, z: P.z, moves: B.moves, turn: B.turn, en: B.en.map((e) => ({ type: e.type, x: e.x, z: e.z, alive: e.alive, dir: e.dir, ph: e.ph })),
-    boss: B.boss ? { lane: B.boss.lane ? { ...B.boss.lane } : null, turn: B.boss.turn, axis: B.boss.axis } : null, score: G.score, stomps: G.stomps };
+    boss: B.boss ? { lane: B.boss.lane ? { ...B.boss.lane } : null, turn: B.boss.turn, axis: B.boss.axis } : null, score: G.score, stomps: G.stomps, chain: G.chain, gems: GEMS.map((q) => q.got), gemN: B.gems };
 }
 function restore(s) {
   cells.forEach((c, i) => { if (!c.hole && c.level !== s.lv[i]) setLevel(c, s.lv[i]); });
   P.x = s.x; P.z = s.z; P.fx = s.x; P.fz = s.z; P.t = 1;
   B.moves = s.moves; B.turn = s.turn; B.en = s.en.map((e) => ({ ...e }));
   if (B.boss && s.boss) { B.boss.lane = s.boss.lane ? { ...s.boss.lane } : null; B.boss.turn = s.boss.turn; B.boss.axis = s.boss.axis; }
-  G.score = s.score; G.stomps = s.stomps;
+  G.score = s.score; G.stomps = s.stomps; G.chain = s.chain || 0;
+  // gems picked up after this snapshot come back (their points were rolled back with the score)
+  if (s.gems) GEMS.forEach((q, i) => { if (q.cell >= 0 && q.got && !s.gems[i]) { q.got = false; q.pop = 0; q.g.visible = true; q.pad.visible = true; q.g.scale.setScalar(0.001); } });
+  if (s.gemN != null) { B.gems = s.gemN; renderGems(); }
   syncActors(); planEnemies(); updateBossBar();
 }
 function startBoard(rise) {
@@ -1274,6 +1382,7 @@ function startBoard(rise) {
   buildActors();
   if (L.boss) spawnBoss(); else removeBoss();
   G.hintCells = [];
+  placeGems(L);
   planEnemies();
   $('boardNum').textContent = 'BOARD ' + G.n; $('parNum').textContent = L.par;
   Music.level = L.boss ? 2 : G.n >= 6 ? 1 : 0;
@@ -1338,13 +1447,32 @@ function landHero() {
     burst(cx(P.x), y + 0.1, cz(P.z), now === 0 ? PAL.lemon : PAL.ice, 10, 3, 0.22, 0.35);
     addShake(0.1); hitStop = 0.05;
     heroOnce('land', 0.25, 1.4);
+    // shockwave: the neighbouring cubes jolt outwards from the impact
+    for (const n of cells) {
+      if (n.hole || n === c) continue;
+      const d = Math.abs(n.x - P.x) + Math.abs(n.z - P.z);
+      if (d > 2) continue;
+      later(d * 0.045, () => { n.vel -= d === 1 ? 2.8 : 1.3; n.flash = Math.max(n.flash, d === 1 ? 0.45 : 0.22); });
+    }
+    EQ.kick = Math.min(1.5, EQ.kick + 0.7);
+    // SLAM CHAIN: consecutive slams without popping a cube back up
+    G.chain++; G.bestChain = Math.max(G.bestChain, G.chain);
+    const cp = 5 * Math.min(G.chain, 20);
+    G.score += cp; bumpScore();
+    if (G.chain % 5 === 0) {
+      addScore(25 * G.chain, cx(P.x), y + 1.2, cz(P.z), '#9fe8ff', 'CHAIN ' + G.chain + '  +' + 25 * G.chain);
+      Audio.play('combo', 0.45, 1 + Math.min(0.5, G.chain * 0.02)); sparkles(cx(P.x), y + 0.4, cz(P.z), PAL.ice, 14, 0.9);
+      ring(cx(P.x), cz(P.z), PAL.ice, 0.5, 3.6, 0.5, y + 0.06);
+    }
   } else {
     // the cube pops back up: a sour note
     Audio.play('pop', 0.6, 0.75); c.vel = 7;
     ring(cx(P.x), cz(P.z), PAL.uv, 0.3, 1.4, 0.3, y + 0.04);
     sparkles(cx(P.x), y + 0.2, cz(P.z), PAL.uv, 8, 0.6);
-    floatText(cx(P.x), y + 0.9, cz(P.z), 'UP AGAIN', '#c79bff', 15);
+    floatText(cx(P.x), y + 0.9, cz(P.z), G.chain >= 5 ? 'CHAIN BROKEN' : 'UP AGAIN', '#c79bff', 15);
+    G.chain = 0;
   }
+  collectGem(P.x, P.z);
   // stomp the gremlin standing there (spikers hurt instead)
   const ei = enemyAt(P.x, P.z);
   let hurtNow = false;
@@ -1386,13 +1514,13 @@ function hurt(h) {
   heroOnce('hit', 0.45);
   burst(P.pos.x, P.pos.y + 0.5, P.pos.z, PAL.plasma, 16, 3.5, 0.3, 0.45);
   floatText(P.pos.x, P.pos.y + 1.1, P.pos.z, h.kind === 'beam' ? 'ZAPPED' : h.kind === 'spore' ? 'SPORED' : h.kind === 'spike' ? 'SPIKED' : 'OUCH', '#ff3e8e', 20);
-  G.combo = 0;
+  G.combo = 0; G.chain = 0;
   loseHeart(false);
 }
 function loseHeart(resetGrid) {
   G.hearts--; renderHearts(true);
   if (G.hearts <= 0) { state = 'dying'; G.lock = 9; Music.stop(); Audio.play('over', 0.8); later(1.3, gameOver); return; }
-  if (resetGrid) { G.lock = 1.1; later(0.9, () => { if (state !== 'play') return; resetBoard(true); riseAgain(); }); }
+  if (resetGrid) { G.chain = 0; G.lock = 1.1; later(0.9, () => { if (state !== 'play') return; resetBoard(true); riseAgain(); }); }
 }
 function riseAgain() { for (const c of cells) if (!c.hole) { c.top = -0.02; c.vel = 0; c.delay = (c.x + c.z) * 0.035; } Audio.play('power', 0.5, 0.8); }
 function killActor(i, stomped) {
@@ -1418,7 +1546,7 @@ function boardClear() {
   else G.combo = 0;
   G.bestCombo = Math.max(G.bestCombo, G.combo);
   G.boards++;
-  G.hintCells = []; refreshTele();
+  G.hintCells = []; refreshTele(); shatterGems(); EQ.kick = 1.6;
   Audio.play('clear', 0.8);
   if (perfect) later(0.25, () => Audio.play(G.combo >= 2 ? 'combo' : 'perfect', 0.8));
   // light wave across the grid, from the hero outwards
@@ -1495,7 +1623,7 @@ function updateHud(dt) {
   G.shown = G.shown < G.score ? Math.min(G.score, G.shown + Math.max(20, (G.score - G.shown) * dt * 6)) : G.score;
   const left = Math.max(0, B.L.budget - B.moves);
   let cubes = 0; for (const c of cells) if (!c.hole && c.level > 0) cubes++;
-  const key = Math.floor(G.shown) + '|' + left + '|' + G.combo + '|' + B.L.budget + '|' + cubes;
+  const key = Math.floor(G.shown) + '|' + left + '|' + G.combo + '|' + B.L.budget + '|' + cubes + '|' + G.chain;
   if (key === lastHud) return; lastHud = key;
   $('score').textContent = fmt(G.shown);
   $('movesNum').textContent = left;
@@ -1503,6 +1631,7 @@ function updateHud(dt) {
   $('parMark').style.left = ((B.L.budget - B.L.par) / B.L.budget * 100) + '%';
   $('movesBox').classList.toggle('low', left <= 2); $('movesBox').classList.toggle('overpar', B.moves > B.L.par);
   $('cubesNum').textContent = cubes;
+  const ch = $('chain'); $('chainNum').textContent = 'x' + G.chain; ch.classList.toggle('on', G.chain >= 2); ch.classList.toggle('hot', G.chain >= 10);
   const ce = $('combo'); if (G.combo >= 1) { ce.textContent = 'PERFECT STREAK x' + G.combo; show(ce, true); } else show(ce, false);
   const hintReady = B.moves > B.L.par && G.hints > 0; $('pHint').classList.toggle('ready', hintReady);
 }
@@ -1550,19 +1679,19 @@ function frameCamera(snap) {
   const W = window.innerWidth, H = window.innerHeight, asp = W / H;
   camera.aspect = asp; camera.fov = asp < 0.75 ? 42 : 36; camera.clearViewOffset(); camera.updateProjectionMatrix();
   const portrait = asp < 1;
-  CAM.el = THREE.MathUtils.degToRad(portrait ? 66 : 56);
+  CAM.el = THREE.MathUtils.degToRad(portrait ? 70 : 56);
   CAM.az = THREE.MathUtils.degToRad(portrait ? 22 : 35);
-  const top = portrait ? 108 : (W >= 900 && H >= 600 ? 150 : 100), bot = (IS_TOUCH ? H * 0.09 + 18 : 26) + 104;
+  const top = portrait ? 108 : (W >= 900 && H >= 600 ? 150 : 100), bot = (IS_TOUCH ? H * 0.015 + 22 : 26) + 104;
   const band = Math.max(H * 0.45, H - top - bot);
   const hx = (BC * CELL) / 2 + 0.3, hz = (BR * CELL) / 2 + 0.3;
   const pts = [];
-  for (const sx of [-1, 1]) for (const sz of [-1, 1]) for (const y of [-0.45, 1.5]) pts.push(new THREE.Vector3(sx * hx, y, sz * hz));
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) for (const y of [-0.45, 1.15]) pts.push(new THREE.Vector3(sx * hx, y, sz * hz));
   let d = 12, minY = 0, maxY = 0;
   for (let it = 0; it < 5; it++) {
     placeCam(d, CAM.az, CAM.el, camLook);
     let ex = 0; minY = 9; maxY = -9;
     for (const p of pts) { FV.copy(p).project(camera); ex = Math.max(ex, Math.abs(FV.x)); minY = Math.min(minY, FV.y); maxY = Math.max(maxY, FV.y); }
-    const f = Math.max(ex / (portrait ? 0.98 : 0.9), (maxY - minY) / (2 * band / H));
+    const f = Math.max(ex / (portrait ? 1.0 : 0.9), (maxY - minY) / (2 * band / H));
     d *= f;
   }
   placeCam(d, CAM.az, CAM.el, camLook);
@@ -1580,8 +1709,8 @@ function updateCamera(dt, t) {
   const W = window.innerWidth, H = window.innerHeight;
   if (menu) {
     const az = CAM.az + Math.sin(t * 0.15) * 0.35, look = HV.set(P.pos.x * 0.5, 0.5, P.pos.z * 0.5);
-    placeCam(CAM.dist * (W < H ? 0.92 : 0.86), az, THREE.MathUtils.degToRad(40), look);
-    camera.setViewOffset(W, H, 0, H * (W < H ? 0.19 : 0.12), W, H);
+    placeCam(CAM.dist * (W < H ? 0.84 : 0.8), az, THREE.MathUtils.degToRad(40), look);
+    camera.setViewOffset(W, H, 0, H * (W < H ? 0.06 : 0.03), W, H);
   } else {
     placeCam(CAM.dist, CAM.az, CAM.el, camLook);
     camera.setViewOffset(W, H, 0, CAM.shift, W, H);
@@ -1647,7 +1776,7 @@ function gameOver() {
   const best = +load(bestKey(G.mode), 0);
   $('overTitle').textContent = G.boards >= 5 ? 'GRID LOCKED' : 'CRUSHED';
   $('overSub').textContent = MODES[G.mode].label + '  /  BOARD ' + G.n + (G.chal ? '  /  TARGET ' + fmt(G.chal.beat) : '');
-  $('stBoards').textContent = G.boards; $('stPerfect').textContent = G.perfects; $('stCombo').textContent = 'x' + Math.max(1, G.bestCombo); $('stBest').textContent = fmt(Math.max(best, score));
+  $('stBoards').textContent = G.boards; $('stPerfect').textContent = G.perfects; $('stCombo').textContent = 'x' + Math.max(1, G.bestCombo); $('stChain').textContent = G.bestChain; $('stBest').textContent = fmt(Math.max(best, score));
   show($('overRec'), score > best && score > 0);
   $('shareMsg').textContent = G.chal ? (score > G.chal.beat ? 'Challenge beaten!' : 'Challenge failed by ' + fmt(G.chal.beat - score) + ' pts') : '';
   setScreen('over');
@@ -1859,6 +1988,8 @@ function updateWorld(dt, t) {
   updateCells(dt);
   teleTick -= dt; if (teleTick <= 0) { teleTick = 0.05; if (B && (state === 'play' || state === 'pause')) refreshTele(); }
   updateDeco(t);
+  updateEq(dt, t);
+  if (B) updateGems(dt, t);
   // ambient: drifting sparks rising from the void around the arena
   if (Math.random() < 0.35 * PFX_SCALE) { const a = Math.random() * 6.28, r = 4 + Math.random() * 8; FX.sparkle.emit(Math.cos(a) * r, -1 + Math.random() * 0.5, Math.sin(a) * r, 0, 0.4 + Math.random() * 0.5, 0, Math.random() < 0.6 ? PAL.uv : PAL.lemon, 0.16 + Math.random() * 0.14, 3 + Math.random() * 2, -0.05, 0, 0); }
   // lit cubes breathe a little lemon light
