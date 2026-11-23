@@ -36,7 +36,7 @@ export default {
         },
         {
           "q": "Les autoclickers sont-ils autorisés ?",
-          "a": "Non. Une partie au rythme parfaitement régulier, inhumain, ou dont la vitesse moyenne dépasse les capacités humaines n'est pas classée et son score n'est pas envoyé au classement. Une frappe humaine rapide n'est jamais limitée, aussi rapprochés que soient vos taps."
+          "a": "Sur ordinateur, non : une partie au rythme parfaitement régulier, inhumain, ou dont la vitesse moyenne dépasse les capacités humaines n'est pas classée et son score n'est pas envoyé au classement. Chaque clic gauche fait avant la cloche est compté, aussi rapide soit-il. Sur mobile, il n'y a aucun filtre : chaque tap sur l'écran compte, avec autant de doigts que vous voulez et à n'importe quelle vitesse."
         },
         {
           "q": "À quoi servent les thèmes ?",

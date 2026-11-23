@@ -187,8 +187,8 @@
     <div class="how"><b>Every tap is a punch</b> &middot; tap anywhere on the screen &middot; two thumbs allowed on mobile &middot; mouse clicks only on desktop &middot; mobile and desktop have their own leaderboards</div>
   </div>
 </div>
-<div id="logo"><h1><img class="logoImg" id="logoImg" src="./rage-tap/sprites/logo.webp" alt="RAGE TAP" width="824" height="292" /></h1><p>EVERY TAP IS A PUNCH</p></div>
-<div class="ov on" id="loading"><img class="logoImg" src="./rage-tap/sprites/logo.webp" alt="RAGE TAP" width="824" height="292" /><div id="loadTrack"><div id="loadFill"></div></div><div id="loadTxt">TAPING UP THE GLOVES</div></div>
+<div id="logo"><h1><img draggable="false" class="logoImg" id="logoImg" src="./rage-tap/sprites/logo.webp" alt="RAGE TAP" width="824" height="292" /></h1><p>EVERY TAP IS A PUNCH</p></div>
+<div class="ov on" id="loading"><img draggable="false" class="logoImg" src="./rage-tap/sprites/logo.webp" alt="RAGE TAP" width="824" height="292" /><div id="loadTrack"><div id="loadFill"></div></div><div id="loadTxt">TAPING UP THE GLOVES</div></div>
 
 <div class="ov dim" id="themes">
   <div class="panel card">
@@ -239,7 +239,7 @@ const ASSET = './rage-tap/';
 const TIMERS = [5, 10, 30, 60];
 const GAUGE_MAX = 20;
 // average CPS above which a run is not sent to the leaderboard (humanly out of reach)
-const CPS_CAP = { desktop: 30, mobile: 35 };
+const CPS_CAP = { desktop: 30 };
 const RANKS = [
   [0, 'TURTLE', '#9fb4c8'], [4, 'RABBIT', '#c8f0ff'], [6, 'CHEETAH', '#ffe14a'], [8, 'MACHINE GUN', '#ff8a1f'], [10, 'RAGE GOD', '#ff2d45'], [13, 'BEYOND HUMAN', '#ff5aff']
 ];
@@ -384,7 +384,8 @@ function onPointer(e) {
   if (isMouse && e.button !== 0) return;
   const dev = isMouse ? 'desktop' : 'mobile';
   if (e.cancelable) e.preventDefault();
-  const t = now();
+  // time of the real press (not of the handler): a tap made before the bell still counts even if the frame was busy
+  const t = e.timeStamp > 0 && e.timeStamp <= now() + 5 ? e.timeStamp : now();
   if (state === 'armed') { R.dev = dev; R.t0 = t; R.best = +load(bestKey(modeOf(dev, R.T)), 0); state = 'run'; document.body.classList.add('running'); hideBig(); }
   if (R.dev !== dev) return;                       // one input type per run (mobile and desktop boards stay apart)
   if (t - R.t0 > R.T * 1000) return;
@@ -398,6 +399,12 @@ function onPointer(e) {
 window.addEventListener('pointerdown', onPointer, { passive: false });
 document.addEventListener('contextmenu', (e) => e.preventDefault());
 document.addEventListener('dblclick', (e) => e.preventDefault());
+// mobile: every finger counts, no browser gesture (pinch, double-tap zoom, callout) may steal a tap
+const inRun = () => state === 'armed' || state === 'run';
+document.addEventListener('touchstart', (e) => { if (inRun() && e.cancelable && !(e.target.closest && e.target.closest('button'))) e.preventDefault(); }, { passive: false });
+document.addEventListener('touchmove', (e) => { if (inRun() && e.cancelable) e.preventDefault(); }, { passive: false });
+['gesturestart', 'gesturechange', 'gestureend'].forEach((n) => document.addEventListener(n, (e) => e.preventDefault()));
+document.addEventListener('dragstart', (e) => e.preventDefault());
 
 /* ================= CANVAS ================= */
 const cv = $('c'), cx = cv.getContext('2d', { alpha: false });
@@ -782,14 +789,14 @@ function endRun() {
 }
 function finishScore() {
   const n = R.count, cps = n / R.T;
-  // autoclicker check: inhumanly steady rhythm or out-of-reach average
-  if (R.taps.length >= 31) {
+  // autoclicker check, desktop only: on mobile every tap counts (multi-finger, any rhythm), no filter
+  if (R.dev === 'desktop' && R.taps.length >= 31) {
     const iv = []; for (let i = 1; i < R.taps.length; i++) iv.push(R.taps[i] - R.taps[i - 1]);
     const m = iv.reduce((a, b) => a + b, 0) / iv.length, sd = Math.sqrt(iv.reduce((a, b) => a + (b - m) * (b - m), 0) / iv.length);
     R.cv = m > 0 ? sd / m : 0;
     if (m > 0 && R.cv < 0.08) R.flagged = true;
   }
-  if (R.dev && cps > CPS_CAP[R.dev]) R.flagged = true;
+  if (R.dev === 'desktop' && cps > CPS_CAP.desktop) R.flagged = true;
   R.mode = modeOf(R.dev || guessDev, R.T);
   R.prevBest = +load(bestKey(R.mode), 0);
   if (!R.flagged && n > R.prevBest) save(bestKey(R.mode), n);
@@ -900,7 +907,7 @@ function frame() {
     if (R.best) { const d = Math.round(R.count - R.best * el / R.T); const g = $('ghost'); g.textContent = (d >= 0 ? '+' : '') + d + ' VS BEST'; g.className = 'on ' + (d >= 0 ? 'up' : 'down'); }
     const ri = RANKS.indexOf(rankOf(el > 1 ? R.count / el : 0));
     if (ri > R.rankIdx) { R.rankIdx = ri; Audio.play('rank', 0.6); floatText(LAY.cx, LAY.ground - 420 * S, RANKS[ri][1], RANKS[ri][2], 30 * Math.max(0.8, S), -40); flashA = RM ? 0.04 : 0.12; }
-    if (el >= R.T) endRun();
+    if (now() - R.t0 >= R.T * 1000 + 150) endRun();   // short grace so taps queued during a busy frame are still counted
   }
   // attract mode on the title: the boxer warms up
   if (state === 'menu' || state === 'themes') { menuPunchT -= dt; if (menuPunchT <= 0) { menuPunchT = 0.28 + Math.random() * 0.5; punch(); } }

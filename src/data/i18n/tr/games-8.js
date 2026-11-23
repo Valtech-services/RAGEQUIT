@@ -36,7 +36,7 @@ export default {
         },
         {
           "q": "Otomatik tıklayıcılara izin var mı?",
-          "a": "Hayır. İnsanüstü derecede düzenli bir ritme ya da insanın ulaşamayacağı bir ortalama hıza sahip bir tur sıralamaya girmez ve skoru sıralamaya gönderilmez. Hızlı insan dokunuşu ise, dokunuşların ne kadar sık olursa olsun, asla sınırlanmaz."
+          "a": "Bilgisayarda hayır: İnsanüstü derecede düzenli bir ritme ya da insan sınırlarını aşan bir ortalama hıza sahip bir tur sıralamaya girmez ve skoru liderlik tablosuna gönderilmez. Gongdan önce yapılan her sol tık, ne kadar hızlı olursa olsun sayılır. Mobilde hiçbir filtre yoktur: Ekrandaki her dokunuş, istediğin kadar parmakla ve her hızda sayılır."
         },
         {
           "q": "Temalar ne işe yarar?",
