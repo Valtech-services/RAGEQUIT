@@ -264,7 +264,8 @@
       "notFoundText": "Cet article n'existe pas.",
       "playTitle": "Jouer à {{game}}",
       "playText": "Gratuit dans votre navigateur, sans téléchargement ni inscription.",
-      "playNow": "Jouer"
+      "playNow": "Jouer",
+      "gamesInArticle": "Les jeux de cet article"
     },
     "game": {
       "notFound": "Jeu introuvable.",

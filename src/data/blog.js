@@ -389,6 +389,34 @@ export const posts = [
       metaDescription: "A tips guide for RAGE TAP, the free click speed test: the two-thumb technique, pacing long runs, faster mouse clicking and how to reach Beyond Human.",
     },
   },
+  {
+    slug: 'what-makes-one-button-games-addictive',
+    category: 'about',
+    games: ['staq', 'rage-tap', 'rooftop-rush', 'hyperhop', 'fox-runner', 'neon-rush', 'voidfall'],
+    title: 'What Makes One-Button Games So Addictive',
+    date: '2026-11-24',
+    author: 'Ragequit Arcade',
+    excerpt: 'One tap, one hold, one release. Why do the simplest games keep you hooked for hours? A look at instant starts, readable failure, hidden skill and fair difficulty, with tips to score higher.',
+    image: '/blog/what-makes-one-button-games-addictive.jpg',
+    seo: {
+      title: 'What Makes One-Button Games So Addictive | Ragequit Arcade',
+      metaDescription: 'Why one-button games are so addictive: instant starts, readable failure, hidden skill, rhythm and fair difficulty, plus practical tips to beat your high score.',
+    },
+  },
+  {
+    slug: 'best-free-games-for-a-five-minute-break',
+    category: 'about',
+    games: ['rage-tap', 'staq', 'fox-runner', 'neon-rush', 'rooftop-rush', 'linestorm', 'voltlink', 'flashout', 'hyperhop', 'brickfury', 'voidfall', 'rage-hockey', 'virus-lab', 'stellar-forge', 'croaknight'],
+    title: 'The Best Free Games for a Five-Minute Break',
+    date: '2026-11-24',
+    author: 'Ragequit Arcade',
+    excerpt: 'Got five minutes on the bus or between meetings? Here are the Ragequit Arcade games that fit a short break best, sorted by how much time you have and the mood you are in.',
+    image: '/blog/best-free-games-for-a-five-minute-break.jpg',
+    seo: {
+      title: 'The Best Free Games for a Five-Minute Break | Ragequit Arcade',
+      metaDescription: 'The best free browser games for a short break, sorted by session length: one-minute reflex tests, calm puzzles, daily score chases and two-player matches.',
+    },
+  },
 ]
 
 // Trouve un article par son slug.
