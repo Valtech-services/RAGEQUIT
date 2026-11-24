@@ -10,3 +10,4 @@ Règle complète : `CLAUDE.md`, paragraphe « Feu vert de Laurent ». Une ligne 
 | Date d'exécution | Décision | Phrase de Laurent | Reçue le | État |
 |---|---|---|---|---|
 | 2026-11-23 | code | Tu peux coder le jeu aujourd'hui (source : mémoire, non lue par la routine de 8h50) | 2026-11-23 07:54 | utilisée (jeu QUADSHOCK lancé à la main en conversation, PR #93) |
+| 2026-11-24 | code | Tu peux coder le prochain jeu (source : mémoire) | 2026-11-24 (mémoire Claude) | utilisée (jeu HIVEBREAK, PR #101) |
