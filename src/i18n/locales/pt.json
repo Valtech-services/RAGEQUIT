@@ -65,7 +65,11 @@
     "rankOf": "Sua posição real: #{{rank}} de {{total}} jogadores",
     "inTop": "Você está no top {{n}}, destacado abaixo",
     "outOfTop": "Fora do top {{n}}",
-    "topN": "Top {{n}} jogadores"
+    "topN": "Top {{n}} jogadores",
+    "aboutTitle": "Como funcionam as classificações",
+    "about1": "Cada jogo da Ragequit Arcade tem a sua própria classificação mundial. Quando uma partida termina mesmo, depois de um eventual continue, a tua pontuação final é enviada para a classificação desse jogo e do modo que jogaste, por isso uma partida em Hard nunca é comparada com uma em Normal. Alguns jogos separam ainda mais as classificações quando as condições são demasiado diferentes para serem justas: o RAGE TAP, por exemplo, tem uma classificação por temporizador e classificações separadas para ecrãs táteis e para rato.",
+    "about2": "Podes jogar todos os jogos sem conta. Para veres as tuas pontuações nas classificações e as guardares em todos os teus dispositivos, inicia sessão com um perfil gratuito da Ragequit Arcade: os outros jogadores só veem o teu nome de jogador, nunca o teu email. Cada classificação mostra os 50 melhores e, com sessão iniciada, também a tua posição real entre todos os que jogaram, mesmo fora do top 50.",
+    "about3": "Escolhe um jogo abaixo para abrir a sua classificação, ou toca no botão do troféu em qualquer página de jogo. Para subir, lê o guia de estratégia de cada jogo no nosso blog, domina um modo antes de passares ao seguinte e desafia os teus amigos com uma ligação nos jogos que o permitem: vencer um amigo é muitas vezes a forma mais rápida de bater o teu próprio recorde. Alguns jogos também rejeitam partidas que nenhum humano conseguiria fazer, como as de autoclicker no RAGE TAP, para que as classificações continuem justas."
   },
   "auth": {
     "signup": "Registar",
@@ -157,7 +161,10 @@
     "aboutGame": "Sobre este jogo",
     "controls": "Controlos",
     "developer": "Programador",
-    "faqTitle": "Perguntas frequentes"
+    "faqTitle": "Perguntas frequentes",
+    "guideLabel": "Guia de estratégia",
+    "guideCta": "Ler o guia",
+    "readMore": "Mais sobre este jogo"
   },
   "legal": {
     "lastUpdated": "Última atualização:",
@@ -255,7 +262,10 @@
       "back": "← Voltar ao blog",
       "readNext": "Leia também",
       "notFound": "Não encontrado",
-      "notFoundText": "Este artigo não existe."
+      "notFoundText": "Este artigo não existe.",
+      "playTitle": "Jogar {{game}}",
+      "playText": "Grátis no teu navegador, sem downloads nem registo.",
+      "playNow": "Jogar"
     },
     "game": {
       "notFound": "Jogo não encontrado.",
@@ -272,7 +282,8 @@
       "dislike": "Não gosto",
       "report": "Reportar",
       "fullscreen": "Ecrã inteiro",
-      "leaderboard": "Ranking"
+      "leaderboard": "Ranking",
+      "moreGames": "Mais jogos"
     }
   }
 }

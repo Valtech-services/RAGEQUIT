@@ -401,6 +401,17 @@ export default function LeaderboardPage() {
           ? <GameBoard key={game.id} game={game} t={t} />
           : <GamePicker games={games} categories={categories} t={t} />}
 
+        {/* A-021 : texte prérendu qui explique les classements (Google et AdSense
+            lisent la page sans attendre les scores chargés depuis Supabase). */}
+        {!game && (
+          <section className="lbpage__about">
+            <h2 className="lbpage__about-title">{t('leaderboard.aboutTitle')}</h2>
+            <p className="lbpage__about-text">{t('leaderboard.about1')}</p>
+            <p className="lbpage__about-text">{t('leaderboard.about2')}</p>
+            <p className="lbpage__about-text">{t('leaderboard.about3')}</p>
+          </section>
+        )}
+
         {!user && (
           <div className="lbpage__nickname">
             <label className="lbpage__nickname-label" htmlFor="lb-nickname">{t('leaderboard.nicknameLabel')}</label>

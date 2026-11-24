@@ -12,6 +12,7 @@ export const posts = [
   // Exemple de structure (à remplir) :
   // {
   //   slug: 'why-we-build-our-own-games',
+  //   game: 'id-du-jeu',            // jeu guidé par l'article (liens jeu <-> guide, A-015)
   //   title: 'Why We Build Our Own Games',
   //   date: '2026-09-01',
   //   author: 'Ragequit Arcade',
@@ -100,6 +101,7 @@ export const posts = [
   },
      {
     slug: 'virus-lab-strategy-guide',
+    game: 'virus-lab',
     category: 'guides',
     title: 'Virus Lab Strategy: Why a Shorter Genome Wins',
     date: '2026-08-27',
@@ -134,6 +136,7 @@ export const posts = [
   },
      {
     slug: 'flashout-memory-tips',
+    game: 'flashout',
     category: 'guides',    
     title: 'How to Get a High Score in FLASHOUT',
     date: '2026-08-28',
@@ -200,6 +203,7 @@ export const posts = [
   },
      {
     slug: 'rooftop-rush-tips',
+    game: 'rooftop-rush',
     category: 'guides',
     title: 'Rooftop Rush: How to Chain a GODLIKE Combo',
     date: '2026-08-30',
@@ -234,6 +238,7 @@ export const posts = [
   },
      {
     slug: 'snake-candy-arena-tips',
+    game: 'snake',
     category: 'guides',
     title: 'Snake Candy Arena: How to Fill the Whole Board',
     date: '2026-08-31',
@@ -268,6 +273,7 @@ export const posts = [
   },
      {
     slug: 'bird-blitz-which-monument-first',
+    game: 'bird-blitz',
     category: 'guides',
     title: 'Bird Blitz: Which Monument Should You Defend First?',
     date: '2026-09-01',
@@ -302,6 +308,7 @@ export const posts = [
   },
      {
     slug: 'rage-hockey-tips',
+    game: 'rage-hockey',
     category: 'guides',
     title: 'Rage Hockey: How to Win Every Arena',
     date: '2026-09-02',
@@ -336,6 +343,7 @@ export const posts = [
   },
      {
     slug: 'staq-perfect-drops',
+    game: 'staq',
     category: 'guides',
     title: 'STAQ: The Secret to an Endless Perfect Streak',
     date: '2026-09-03',
@@ -370,6 +378,7 @@ export const posts = [
   },
      {
     slug: 'stellar-forge-guide',
+    game: 'stellar-forge',
     category: 'guides',
     title: 'Stellar Forge: From Hand Pick to Galactic Empire',
     date: '2026-09-04',
@@ -404,6 +413,7 @@ export const posts = [
   },
      {
     slug: 'neon-rush-tips',
+    game: 'neon-rush',
     category: 'guides',
     title: 'Neon Rush: How to Survive the Tunnel and Chain Combos',
     date: '2026-09-05',
@@ -438,6 +448,7 @@ export const posts = [
   },
      {
     slug: 'octaflux-tips',
+    game: 'octaflux',
     category: 'guides',
     title: 'OCTAFLUX: How to Trigger Massive Cascade Chains',
     date: '2026-09-06',
@@ -472,6 +483,7 @@ export const posts = [
   },
      {
     slug: 'dead-zone-survival-tips',
+    game: 'dead-zone',
     category: 'guides',
     title: 'Dead Zone: How to Survive Longer Against the Horde',
     date: '2026-09-16',
@@ -506,6 +518,7 @@ export const posts = [
   },
         {
     slug: 'voidfall-tips',
+    game: 'voidfall',
     category: 'guides',
     title: 'VOIDFALL: How to Fall Further and Beat Your Record',
     date: '2026-09-23',
@@ -549,6 +562,7 @@ export const posts = [
   },
     {
     slug: 'fox-runner-tips',
+    game: 'fox-runner',
     category: 'guides',
     title: 'Fox Runner: How to Run Farther and Beat Your Best Distance',
     date: '2026-09-28',
@@ -587,6 +601,7 @@ export const posts = [
   },
      {
     slug: 'city-runner-tips',
+    game: 'city-runner',
     category: 'guides',
     title: 'City Runner: How to Fly Farther and Beat Your Best Distance',
     date: '2026-10-11',
@@ -620,6 +635,7 @@ export const posts = [
   },
   {
     slug: 'linestorm-tips',
+    game: 'linestorm',
     category: 'guides',
     title: 'LINESTORM: How to Split, Merge and Survive the Storm',
     date: '2026-10-30',
@@ -657,6 +673,7 @@ export const posts = [
   },
   {
     slug: 'loopstrike-tips',
+    game: 'loopstrike',
     category: 'guides',
     title: "LOOPSTRIKE: How to Trap More Cores in One Loop",
     date: '2026-11-02',
@@ -690,6 +707,7 @@ export const posts = [
   },
   {
     slug: 'mazequake-tips',
+    game: 'mazequake',
     category: 'guides',
     title: "MAZEQUAKE: How to Escape Bigger Mazes Before the Clock Runs Out",
     date: '2026-11-03',
@@ -723,6 +741,7 @@ export const posts = [
   },
   {
     slug: 'arcane-brawl-tips',
+    game: 'arcane-brawl',
     category: 'guides',
     title: "ARCANE BRAWL: How to Stay on the Ring and Knock Out Every Golem",
     date: '2026-11-08',
@@ -771,6 +790,7 @@ export const posts = [
   },
   {
     slug: 'voltlink-tips',
+    game: 'voltlink',
     category: 'guides',
     title: "VOLTLINK: How to Master Loops, Surges and Every Boss",
     date: '2026-11-11',
@@ -824,6 +844,7 @@ export const posts = [
   },
   {
     slug: 'hyperhop-tips',
+    game: 'hyperhop',
     category: 'guides',
     title: "HYPERHOP: How to Land Every Perfect and Beat the WARDEN",
     date: '2026-11-14',
@@ -877,6 +898,7 @@ export const posts = [
   },
   {
     slug: 'brickfury-tips',
+    game: 'brickfury',
     category: 'guides',
     title: "BRICKFURY Tips: How to Chain Combos, Trigger FURY and Beat the OVERLORD",
     date: '2026-11-15',
@@ -921,6 +943,7 @@ export const posts = [
   },
   {
     slug: 'croaknight-tips',
+    game: 'croaknight',
     category: 'guides',
     title: "CROAKNIGHT Tips: How to Survive Every Night and Beat the Grave Keeper",
     date: '2026-11-21',
@@ -963,6 +986,7 @@ export const posts = [
   },
   {
     slug: 'rage-tap-tips',
+    game: 'rage-tap',
     category: 'guides',
     title: "RAGE TAP Tips: How to Tap Faster and Raise Your CPS",
     date: '2026-11-22',

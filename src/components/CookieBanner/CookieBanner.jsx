@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from '../../i18n/locale'
 import { useTranslation } from 'react-i18next'
-import { getConsent, setConsent } from '../../lib/consent'
+import { getConsent, setConsent, getCmpState, initCmp } from '../../lib/consent'
 import './CookieBanner.css'
 
 /*
@@ -21,16 +21,21 @@ export default function CookieBanner() {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    // Affiche la bannière si aucun choix n'a encore été fait
-    if (!getConsent()) setVisible(true)
+    // A-016 : si la CMP Google (certifiée TCF) s'affiche, c'est elle qui
+    // recueille le choix ; notre bandeau ne sert que de repli (CMP absente,
+    // message non publié dans AdSense, visiteur hors EEE).
+    initCmp()
+    const refresh = () => setVisible(getCmpState() === 'absent' && !getConsent())
+    refresh()
 
     // Réagit aux changements de consentement (ex : reset depuis le footer)
-    const onChange = (e) => {
-      const value = e?.detail?.value
-      setVisible(!value) // null => réafficher ; sinon masquer
+    // et à l'état de la CMP.
+    window.addEventListener('rq-consent-change', refresh)
+    window.addEventListener('rq-cmp-state', refresh)
+    return () => {
+      window.removeEventListener('rq-consent-change', refresh)
+      window.removeEventListener('rq-cmp-state', refresh)
     }
-    window.addEventListener('rq-consent-change', onChange)
-    return () => window.removeEventListener('rq-consent-change', onChange)
   }, [])
 
   const decide = (value) => {

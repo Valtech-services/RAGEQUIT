@@ -355,3 +355,12 @@
   .lbpage__tile, .lbpage__play-btn { transition: none; }
   .lbpage__tile:hover, .lbpage__play-btn:hover { transform: none; }
 }
+
+/* ---- A-021 : texte « How the leaderboards work » ---- */
+.lbpage__about {
+  margin-top: 24px; background: #ffffff; border-radius: 18px; padding: 20px 22px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.16);
+}
+.lbpage__about-title { margin: 0 0 10px; font-size: 1.2rem; font-weight: 800; color: #111111; }
+.lbpage__about-text { margin: 0 0 12px; color: #333333; line-height: 1.7; font-size: 15px; }
+.lbpage__about-text:last-child { margin-bottom: 0; }

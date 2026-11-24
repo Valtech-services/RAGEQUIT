@@ -282,3 +282,23 @@ a.mgp__action { box-sizing: border-box; text-decoration: none; }
   width: 100%; padding: 10px; border: none; border-radius: 10px; cursor: pointer;
   background: transparent; color: #8a8aa5; font-size: 14px;
 }
+
+/* ---- A-017 : accroche du jeu sous le lecteur + lien « More games » ---- */
+.mgp__intro {
+  background: #ffffff;
+  border-radius: var(--radius-card);
+  padding: 14px 16px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+.mgp__intro-text { margin: 0; color: #333333; font-size: 15px; line-height: 1.6; }
+.mgp__intro-more {
+  display: inline-flex; align-items: center; min-height: 40px; margin-top: 4px;
+  color: #b0105a; font-weight: 800; font-size: 14px; text-decoration: none;
+}
+.mgp__more-games {
+  display: flex; align-items: center; justify-content: center; min-height: 48px;
+  background: #ffffff; color: #111111; border-radius: var(--radius-card);
+  font-weight: 800; font-size: 15px; text-decoration: none;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+#about { scroll-margin-top: 12px; }

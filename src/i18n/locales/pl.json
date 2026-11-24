@@ -65,7 +65,11 @@
     "rankOf": "Twoje prawdziwe miejsce: #{{rank}} z {{total}} graczy",
     "inTop": "Jesteś w top {{n}}, wyróżniony poniżej",
     "outOfTop": "Poza top {{n}}",
-    "topN": "Top {{n}} graczy"
+    "topN": "Top {{n}} graczy",
+    "aboutTitle": "Jak działają rankingi",
+    "about1": "Każda gra w Ragequit Arcade ma własny światowy ranking. Gdy rozgrywka naprawdę się kończy, po ewentualnym continue, Twój końcowy wynik trafia do rankingu tej gry i trybu, w którym grałeś, więc gra w trybie Hard nigdy nie jest porównywana z grą w trybie Normal. Niektóre gry dzielą rankingi jeszcze bardziej, gdy warunki są zbyt różne, by porównanie było uczciwe: RAGE TAP ma na przykład osobny ranking dla każdego licznika czasu oraz osobne rankingi dla ekranów dotykowych i myszy.",
+    "about2": "Możesz grać we wszystkie gry bez konta. Aby widzieć swoje wyniki w rankingach i mieć je na wszystkich urządzeniach, zaloguj się darmowym profilem Ragequit Arcade: inni gracze widzą tylko Twoją nazwę gracza, nigdy Twój adres e-mail. Każdy ranking pokazuje 50 najlepszych graczy, a po zalogowaniu także Twoje prawdziwe miejsce wśród wszystkich, którzy grali, nawet poza pierwszą pięćdziesiątką.",
+    "about3": "Wybierz grę poniżej, aby otworzyć jej ranking, albo dotknij przycisku z pucharem na dowolnej stronie gry. Aby awansować, przeczytaj poradnik strategii każdej gry na naszym blogu, opanuj jeden tryb, zanim przejdziesz do kolejnego, i rzucaj wyzwania znajomym za pomocą linku w grach, które to oferują: pokonanie znajomego to często najszybszy sposób na pobicie własnego rekordu. Niektóre gry odrzucają też rozgrywki, których żaden człowiek nie mógłby osiągnąć, na przykład z autoclickerem w RAGE TAP, aby rankingi pozostały uczciwe."
   },
   "auth": {
     "signup": "Zarejestruj się",
@@ -157,7 +161,10 @@
     "aboutGame": "O tej grze",
     "controls": "Sterowanie",
     "developer": "Twórca",
-    "faqTitle": "Często zadawane pytania"
+    "faqTitle": "Często zadawane pytania",
+    "guideLabel": "Poradnik strategii",
+    "guideCta": "Przeczytaj poradnik",
+    "readMore": "Więcej o tej grze"
   },
   "legal": {
     "lastUpdated": "Ostatnia aktualizacja:",
@@ -255,7 +262,10 @@
       "back": "← Wróć do bloga",
       "readNext": "Czytaj także",
       "notFound": "Nie znaleziono",
-      "notFoundText": "Ten artykuł nie istnieje."
+      "notFoundText": "Ten artykuł nie istnieje.",
+      "playTitle": "Zagraj w {{game}}",
+      "playText": "Za darmo w przeglądarce, bez pobierania i rejestracji.",
+      "playNow": "Graj teraz"
     },
     "game": {
       "notFound": "Nie znaleziono gry.",
@@ -272,7 +282,8 @@
       "dislike": "Nie lubię",
       "report": "Zgłoś",
       "fullscreen": "Pełny ekran",
-      "leaderboard": "Ranking"
+      "leaderboard": "Ranking",
+      "moreGames": "Więcej gier"
     }
   }
 }

@@ -220,6 +220,7 @@ const legalByLang = {
             "Vercel Inc. (website hosting);",
             "Supabase Inc. (database, accounts and statistics, servers in the European Union, Frankfurt);",
             "Google (sign-in with Google, only if you choose to sign in);",
+            "Google Ireland Ltd (consent management platform for visitors in the European Economic Area, the United Kingdom and Switzerland: it displays the consent message and stores your choice);",
             "ipwho.is (country lookup, only with your consent)."
           ]
         },
@@ -349,13 +350,13 @@ const legalByLang = {
         {
           "heading": "Third parties",
           "paragraphs": [
-            "We do not use Google Analytics. Google is only involved if you choose to sign in with Google. When an advertising partner is active, it is named in this policy with a link to its own cookie and privacy policies."
+            "We do not use Google Analytics. Google is involved in two cases only: if you choose to sign in with Google, and, for visitors in the European Economic Area, the United Kingdom and Switzerland, through its consent management platform (certified under the IAB Transparency and Consent Framework), which displays the consent message and records your choice. When an advertising partner is active, it is named in this policy with a link to its own cookie and privacy policies."
           ]
         },
         {
           "heading": "Your choice",
           "paragraphs": [
-            "On your first visit, a banner lets you accept all cookies or keep only the essential ones. Nothing optional is set before you choose. You can change your mind at any time with the \"Manage cookies\" link in the footer, which brings the banner back.",
+            "On your first visit, a consent message lets you accept all cookies or keep only the essential ones. In the European Economic Area, the United Kingdom and Switzerland, this message is provided by Google's certified consent management platform; elsewhere it is our own banner. Nothing optional is set before you choose. You can change your mind at any time with the \"Manage cookies\" link in the footer, which brings the message back.",
             "You can also delete cookies and site data from your browser settings; your local game progress will then be lost if you are not signed in."
           ]
         },
@@ -587,6 +588,7 @@ const legalByLang = {
             "Vercel Inc. (hébergement du site) ;",
             "Supabase Inc. (base de données, comptes et statistiques, serveurs dans l'Union européenne, à Francfort) ;",
             "Google (connexion avec Google, uniquement si vous choisissez de vous connecter) ;",
+            "Google Ireland Ltd (plateforme de gestion du consentement pour les visiteurs de l'Espace économique européen, du Royaume-Uni et de la Suisse : elle affiche le message de consentement et conserve votre choix) ;",
             "ipwho.is (détermination du pays, uniquement avec votre consentement)."
           ]
         },
@@ -716,13 +718,13 @@ const legalByLang = {
         {
           "heading": "Tiers",
           "paragraphs": [
-            "Nous n'utilisons pas Google Analytics. Google n'intervient que si vous choisissez de vous connecter avec Google. Lorsqu'un partenaire publicitaire est actif, il est nommé dans cette politique, avec un lien vers ses propres politiques de cookies et de confidentialité."
+            "Nous n'utilisons pas Google Analytics. Google n'intervient que dans deux cas : si vous choisissez de vous connecter avec Google et, pour les visiteurs de l'Espace économique européen, du Royaume-Uni et de la Suisse, à travers sa plateforme de gestion du consentement (certifiée selon le Transparency and Consent Framework de l'IAB), qui affiche le message de consentement et enregistre votre choix. Lorsqu'un partenaire publicitaire est actif, il est nommé dans cette politique avec un lien vers ses propres politiques de cookies et de confidentialité."
           ]
         },
         {
           "heading": "Votre choix",
           "paragraphs": [
-            "Lors de votre première visite, un bandeau vous permet d'accepter tous les cookies ou de ne conserver que les cookies essentiels. Aucun cookie facultatif n'est déposé avant votre choix. Vous pouvez changer d'avis à tout moment grâce au lien « Gérer les cookies » en pied de page, qui fait réapparaître le bandeau.",
+            "Lors de votre première visite, un message de consentement vous permet d'accepter tous les cookies ou de ne garder que les cookies essentiels. Dans l'Espace économique européen, au Royaume-Uni et en Suisse, ce message est fourni par la plateforme de gestion du consentement certifiée de Google ; ailleurs, il s'agit de notre propre bandeau. Rien d'optionnel n'est déposé avant votre choix. Vous pouvez changer d'avis à tout moment grâce au lien « Gérer les cookies » en pied de page, qui fait réapparaître le message.",
             "Vous pouvez aussi supprimer les cookies et les données du site depuis les réglages de votre navigateur ; votre progression locale dans les jeux sera alors perdue si vous n'êtes pas connecté."
           ]
         },
@@ -954,6 +956,7 @@ const legalByLang = {
             "Vercel Inc. (alojamiento del sitio web);",
             "Supabase Inc. (base de datos, cuentas y estadísticas, con servidores en la Unión Europea, en Fráncfort);",
             "Google (inicio de sesión con Google, solo si decides iniciar sesión);",
+            "Google Ireland Ltd (plataforma de gestión del consentimiento para los visitantes del Espacio Económico Europeo, el Reino Unido y Suiza: muestra el mensaje de consentimiento y guarda tu elección);",
             "ipwho.is (identificación del país, solo con tu consentimiento)."
           ]
         },
@@ -1083,13 +1086,13 @@ const legalByLang = {
         {
           "heading": "Terceros",
           "paragraphs": [
-            "No usamos Google Analytics. Google solo interviene si decides iniciar sesión con Google. Cuando haya un socio publicitario activo, se indicará en esta política con un enlace a sus propias políticas de cookies y de privacidad."
+            "No usamos Google Analytics. Google solo interviene en dos casos: si decides iniciar sesión con Google y, para los visitantes del Espacio Económico Europeo, el Reino Unido y Suiza, a través de su plataforma de gestión del consentimiento (certificada según el Transparency and Consent Framework de IAB), que muestra el mensaje de consentimiento y registra tu elección. Cuando un socio publicitario está activo, se indica en esta política con un enlace a sus propias políticas de cookies y de privacidad."
           ]
         },
         {
           "heading": "Tu elección",
           "paragraphs": [
-            "En tu primera visita, un banner te permite aceptar todas las cookies o quedarte solo con las esenciales. No se activa nada opcional antes de que elijas. Puedes cambiar de opinión en cualquier momento con el enlace «Gestionar cookies» del pie de página, que vuelve a mostrar el banner.",
+            "En tu primera visita, un mensaje de consentimiento te permite aceptar todas las cookies o quedarte solo con las esenciales. En el Espacio Económico Europeo, el Reino Unido y Suiza, este mensaje lo proporciona la plataforma de gestión del consentimiento certificada de Google; en el resto del mundo es nuestro propio banner. No se instala nada opcional antes de que elijas. Puedes cambiar de opinión en cualquier momento con el enlace \"Gestionar cookies\" del pie de página, que vuelve a mostrar el mensaje.",
             "También puedes eliminar las cookies y los datos del sitio desde la configuración de tu navegador; en ese caso, perderás tu progreso local en los juegos si no has iniciado sesión."
           ]
         },
@@ -1321,6 +1324,7 @@ const legalByLang = {
             "Vercel Inc. (alojamento do site);",
             "Supabase Inc. (base de dados, contas e estatísticas, com servidores na União Europeia, em Frankfurt);",
             "Google (início de sessão com o Google, apenas se optares por iniciar sessão);",
+            "Google Ireland Ltd (plataforma de gestão de consentimento para os visitantes do Espaço Económico Europeu, do Reino Unido e da Suíça: mostra a mensagem de consentimento e guarda a tua escolha);",
             "ipwho.is (identificação do país, apenas com o teu consentimento)."
           ]
         },
@@ -1450,13 +1454,13 @@ const legalByLang = {
         {
           "heading": "Terceiros",
           "paragraphs": [
-            "Não utilizamos o Google Analytics. O Google só intervém se optares por iniciar sessão com o Google. Quando houver um parceiro publicitário ativo, será identificado nesta política, com uma ligação para as suas próprias políticas de cookies e de privacidade."
+            "Não usamos o Google Analytics. A Google só intervém em dois casos: se optares por iniciar sessão com o Google e, para os visitantes do Espaço Económico Europeu, do Reino Unido e da Suíça, através da sua plataforma de gestão de consentimento (certificada segundo o Transparency and Consent Framework da IAB), que mostra a mensagem de consentimento e regista a tua escolha. Quando um parceiro publicitário está ativo, é indicado nesta política com uma ligação para as suas próprias políticas de cookies e de privacidade."
           ]
         },
         {
           "heading": "A tua escolha",
           "paragraphs": [
-            "Na tua primeira visita, um banner permite-te aceitar todos os cookies ou manter apenas os essenciais. Nada de opcional é ativado antes de escolheres. Podes mudar de ideias a qualquer momento através do link «Gerir cookies» no rodapé, que volta a mostrar o banner.",
+            "Na tua primeira visita, uma mensagem de consentimento permite-te aceitar todos os cookies ou manter apenas os essenciais. No Espaço Económico Europeu, no Reino Unido e na Suíça, esta mensagem é fornecida pela plataforma de gestão de consentimento certificada da Google; nos restantes países é o nosso próprio banner. Nada de opcional é definido antes da tua escolha. Podes mudar de ideias a qualquer momento através da ligação \"Gerir cookies\" no rodapé, que volta a mostrar a mensagem.",
             "Também podes eliminar os cookies e os dados do site nas definições do teu navegador; nesse caso, perderás o teu progresso local nos jogos se não tiveres sessão iniciada."
           ]
         },
@@ -1688,6 +1692,7 @@ const legalByLang = {
             "Vercel Inc. (Hosting der Website);",
             "Supabase Inc. (Datenbank, Konten und Statistiken, Server in der Europäischen Union, Frankfurt);",
             "Google (Anmeldung mit Google, nur wenn du dich anmelden möchtest);",
+            "Google Ireland Ltd (Plattform zur Einwilligungsverwaltung für Besucher aus dem Europäischen Wirtschaftsraum, dem Vereinigten Königreich und der Schweiz: zeigt die Einwilligungsmeldung an und speichert deine Wahl);",
             "ipwho.is (Ermittlung des Landes, nur mit deiner Einwilligung)."
           ]
         },
@@ -1817,13 +1822,13 @@ const legalByLang = {
         {
           "heading": "Drittanbieter",
           "paragraphs": [
-            "Wir verwenden kein Google Analytics. Google ist nur beteiligt, wenn du dich mit Google anmeldest. Sobald ein Werbepartner aktiv ist, wird er in dieser Richtlinie genannt, mit einem Link zu seiner eigenen Cookie-Richtlinie und Datenschutzerklärung."
+            "Wir verwenden kein Google Analytics. Google ist nur in zwei Fällen beteiligt: wenn du dich mit Google anmeldest und, für Besucher aus dem Europäischen Wirtschaftsraum, dem Vereinigten Königreich und der Schweiz, über seine Plattform zur Einwilligungsverwaltung (zertifiziert nach dem Transparency and Consent Framework des IAB), die die Einwilligungsmeldung anzeigt und deine Wahl speichert. Ist ein Werbepartner aktiv, wird er in dieser Richtlinie mit einem Link zu seinen eigenen Cookie- und Datenschutzrichtlinien genannt."
           ]
         },
         {
           "heading": "Deine Wahl",
           "paragraphs": [
-            "Bei deinem ersten Besuch kannst du über ein Banner alle Cookies akzeptieren oder nur die notwendigen zulassen. Vor deiner Entscheidung wird nichts Optionales gesetzt. Du kannst deine Meinung jederzeit über den Link „Cookies verwalten“ in der Fußzeile ändern, der das Banner wieder öffnet.",
+            "Bei deinem ersten Besuch kannst du über eine Einwilligungsmeldung alle Cookies akzeptieren oder nur die notwendigen behalten. Im Europäischen Wirtschaftsraum, im Vereinigten Königreich und in der Schweiz stammt diese Meldung von Googles zertifizierter Plattform zur Einwilligungsverwaltung, anderswo ist es unser eigenes Banner. Vor deiner Wahl wird nichts Optionales gesetzt. Du kannst deine Entscheidung jederzeit über den Link „Cookies verwalten“ in der Fußzeile ändern, der die Meldung wieder anzeigt.",
             "Du kannst Cookies und Websitedaten auch in den Einstellungen deines Browsers löschen; dein lokaler Spielfortschritt geht dann verloren, wenn du nicht angemeldet bist."
           ]
         },
@@ -2055,6 +2060,7 @@ const legalByLang = {
             "Vercel Inc. (hosting del sito);",
             "Supabase Inc. (database, account e statistiche, server nell'Unione europea, Francoforte);",
             "Google (accesso con Google, solo se scegli di accedere);",
+            "Google Ireland Ltd (piattaforma di gestione del consenso per i visitatori dello Spazio economico europeo, del Regno Unito e della Svizzera: mostra il messaggio di consenso e conserva la tua scelta);",
             "ipwho.is (rilevamento del Paese, solo con il tuo consenso)."
           ]
         },
@@ -2184,13 +2190,13 @@ const legalByLang = {
         {
           "heading": "Terze parti",
           "paragraphs": [
-            "Non utilizziamo Google Analytics. Google interviene solo se scegli di accedere con Google. Quando un partner pubblicitario è attivo, viene indicato in questa policy con un link alle sue politiche su cookie e privacy."
+            "Non usiamo Google Analytics. Google interviene solo in due casi: se scegli di accedere con Google e, per i visitatori dello Spazio economico europeo, del Regno Unito e della Svizzera, tramite la sua piattaforma di gestione del consenso (certificata secondo il Transparency and Consent Framework di IAB), che mostra il messaggio di consenso e registra la tua scelta. Quando un partner pubblicitario è attivo, viene indicato in questa informativa con un link alle sue politiche sui cookie e sulla privacy."
           ]
         },
         {
           "heading": "La tua scelta",
           "paragraphs": [
-            "Alla tua prima visita, un banner ti permette di accettare tutti i cookie o di mantenere solo quelli essenziali. Nulla di facoltativo viene installato prima della tua scelta. Puoi cambiare idea in qualsiasi momento con il link \"Gestisci cookie\" nel piè di pagina, che riapre il banner.",
+            "Alla tua prima visita, un messaggio di consenso ti permette di accettare tutti i cookie o di mantenere solo quelli essenziali. Nello Spazio economico europeo, nel Regno Unito e in Svizzera questo messaggio è fornito dalla piattaforma di gestione del consenso certificata di Google; altrove è il nostro banner. Nulla di facoltativo viene impostato prima della tua scelta. Puoi cambiare idea in qualsiasi momento con il link \"Gestisci cookie\" nel piè di pagina, che fa ricomparire il messaggio.",
             "Puoi anche eliminare i cookie e i dati del sito dalle impostazioni del browser; in tal caso i tuoi progressi di gioco locali andranno persi se non hai effettuato l'accesso."
           ]
         },
@@ -2422,6 +2428,7 @@ const legalByLang = {
             "Vercel Inc. (hosting van de website);",
             "Supabase Inc. (database, accounts en statistieken, servers in de Europese Unie, Frankfurt);",
             "Google (inloggen met Google, alleen als je ervoor kiest in te loggen);",
+            "Google Ireland Ltd (platform voor toestemmingsbeheer voor bezoekers uit de Europese Economische Ruimte, het Verenigd Koninkrijk en Zwitserland: toont de toestemmingsmelding en bewaart je keuze);",
             "ipwho.is (bepaling van het land, alleen met je toestemming)."
           ]
         },
@@ -2551,13 +2558,13 @@ const legalByLang = {
         {
           "heading": "Derden",
           "paragraphs": [
-            "We gebruiken geen Google Analytics. Google is alleen betrokken als je ervoor kiest in te loggen met Google. Wanneer een advertentiepartner actief is, wordt die in dit beleid vermeld met een link naar zijn eigen cookie- en privacybeleid."
+            "We gebruiken geen Google Analytics. Google is maar in twee gevallen betrokken: als je ervoor kiest in te loggen met Google en, voor bezoekers uit de Europese Economische Ruimte, het Verenigd Koninkrijk en Zwitserland, via zijn platform voor toestemmingsbeheer (gecertificeerd volgens het Transparency and Consent Framework van IAB), dat de toestemmingsmelding toont en je keuze vastlegt. Als er een advertentiepartner actief is, wordt die in dit beleid genoemd met een link naar zijn eigen cookie- en privacybeleid."
           ]
         },
         {
           "heading": "Jouw keuze",
           "paragraphs": [
-            "Bij je eerste bezoek kun je via een banner alle cookies accepteren of alleen de essentiële behouden. Er wordt niets optioneels geplaatst voordat je een keuze maakt. Je kunt je keuze altijd wijzigen via de link \"Cookies beheren\" onderaan de pagina, die de banner opnieuw opent.",
+            "Bij je eerste bezoek kun je via een toestemmingsmelding alle cookies accepteren of alleen de essentiële houden. In de Europese Economische Ruimte, het Verenigd Koninkrijk en Zwitserland komt deze melding van het gecertificeerde platform voor toestemmingsbeheer van Google; elders is het onze eigen banner. Er wordt niets optioneels geplaatst voordat je kiest. Je kunt op elk moment van gedachten veranderen via de link \"Cookies beheren\" onderaan de pagina, die de melding opnieuw toont.",
             "Je kunt cookies en sitegegevens ook verwijderen via de instellingen van je browser; je lokale spelvoortgang gaat dan verloren als je niet bent ingelogd."
           ]
         },
@@ -2789,6 +2796,7 @@ const legalByLang = {
             "Vercel Inc. (hosting serwisu);",
             "Supabase Inc. (baza danych, konta i statystyki, serwery w Unii Europejskiej, Frankfurt);",
             "Google (logowanie przez Google, tylko jeśli zdecydujesz się zalogować);",
+            "Google Ireland Ltd (platforma zarządzania zgodami dla odwiedzających z Europejskiego Obszaru Gospodarczego, Wielkiej Brytanii i Szwajcarii: wyświetla komunikat o zgodzie i przechowuje Twój wybór);",
             "ipwho.is (ustalanie kraju, tylko za Twoją zgodą)."
           ]
         },
@@ -2918,13 +2926,13 @@ const legalByLang = {
         {
           "heading": "Podmioty zewnętrzne",
           "paragraphs": [
-            "Nie korzystamy z Google Analytics. Google uczestniczy wyłącznie wtedy, gdy zdecydujesz się zalogować przez Google. Gdy partner reklamowy jest aktywny, wskazujemy go w tej polityce wraz z linkiem do jego własnych polityk cookie i prywatności."
+            "Nie korzystamy z Google Analytics. Google bierze udział tylko w dwóch przypadkach: jeśli zdecydujesz się zalogować przez Google oraz, w przypadku odwiedzających z Europejskiego Obszaru Gospodarczego, Wielkiej Brytanii i Szwajcarii, poprzez swoją platformę zarządzania zgodami (certyfikowaną zgodnie z Transparency and Consent Framework IAB), która wyświetla komunikat o zgodzie i zapisuje Twój wybór. Gdy aktywny jest partner reklamowy, jest on wymieniony w tej polityce wraz z linkiem do jego własnych zasad dotyczących plików cookie i prywatności."
           ]
         },
         {
           "heading": "Twój wybór",
           "paragraphs": [
-            "Przy pierwszej wizycie baner pozwala zaakceptować wszystkie pliki cookie lub zachować tylko niezbędne. Nic opcjonalnego nie jest zapisywane, zanim dokonasz wyboru. Możesz zmienić zdanie w dowolnym momencie za pomocą linku \"Zarządzaj cookies\" w stopce, który ponownie wyświetla baner.",
+            "Podczas pierwszej wizyty komunikat o zgodzie pozwala zaakceptować wszystkie pliki cookie lub zachować tylko niezbędne. W Europejskim Obszarze Gospodarczym, Wielkiej Brytanii i Szwajcarii komunikat ten pochodzi z certyfikowanej platformy zarządzania zgodami Google; w pozostałych krajach jest to nasz własny baner. Nic opcjonalnego nie jest zapisywane przed dokonaniem wyboru. Możesz w każdej chwili zmienić zdanie za pomocą linku „Zarządzaj plikami cookie” w stopce, który ponownie wyświetla komunikat.",
             "Możesz również usunąć pliki cookie i dane witryny w ustawieniach przeglądarki; jeśli nie jesteś zalogowany, Twoje lokalne postępy w grach zostaną wtedy utracone."
           ]
         },
@@ -3156,6 +3164,7 @@ const legalByLang = {
             "Vercel Inc. (web sitesi barındırma);",
             "Supabase Inc. (veritabanı, hesaplar ve istatistikler, sunucular Avrupa Birliği'nde, Frankfurt);",
             "Google (Google ile giriş, yalnızca giriş yapmayı seçersen);",
+            "Google Ireland Ltd (Avrupa Ekonomik Alanı, Birleşik Krallık ve İsviçre'deki ziyaretçiler için onay yönetim platformu: onay mesajını gösterir ve tercihini saklar);",
             "ipwho.is (ülke tespiti, yalnızca onayınla)."
           ]
         },
@@ -3285,13 +3294,13 @@ const legalByLang = {
         {
           "heading": "Üçüncü taraflar",
           "paragraphs": [
-            "Google Analytics kullanmayız. Google yalnızca Google ile giriş yapmayı seçersen devreye girer. Bir reklam ortağı etkin olduğunda, kendi çerez ve gizlilik politikalarının bağlantısıyla birlikte bu politikada belirtilir."
+            "Google Analytics kullanmıyoruz. Google yalnızca iki durumda devreye girer: Google ile giriş yapmayı seçersen ve Avrupa Ekonomik Alanı, Birleşik Krallık ve İsviçre'deki ziyaretçiler için, onay mesajını gösteren ve tercihini kaydeden onay yönetim platformu (IAB Transparency and Consent Framework kapsamında sertifikalı) aracılığıyla. Bir reklam ortağı etkin olduğunda, kendi çerez ve gizlilik politikalarına bağlantıyla birlikte bu politikada adı belirtilir."
           ]
         },
         {
           "heading": "Senin tercihin",
           "paragraphs": [
-            "İlk ziyaretinde bir bant, tüm çerezleri kabul etmeni ya da yalnızca zorunlu olanları tutmanı sağlar. Sen seçim yapmadan isteğe bağlı hiçbir şey yerleştirilmez. Fikrini istediğin zaman alt bilgideki \"Çerezleri yönet\" bağlantısıyla değiştirebilirsin; bu bağlantı bandı yeniden açar.",
+            "İlk ziyaretinde bir onay mesajı, tüm çerezleri kabul etmeni ya da yalnızca zorunlu olanları tutmanı sağlar. Avrupa Ekonomik Alanı, Birleşik Krallık ve İsviçre'de bu mesaj Google'ın sertifikalı onay yönetim platformu tarafından sunulur; diğer yerlerde bizim kendi bannerımızdır. Sen seçim yapmadan isteğe bağlı hiçbir şey kaydedilmez. Fikrini istediğin zaman alt bilgideki \"Çerezleri yönet\" bağlantısıyla değiştirebilirsin; bu bağlantı mesajı yeniden gösterir.",
             "Çerezleri ve site verilerini tarayıcı ayarlarından da silebilirsin; giriş yapmamışsan yerel oyun ilerlemen bu durumda kaybolur."
           ]
         },
@@ -3523,6 +3532,7 @@ const legalByLang = {
             "Vercel Inc. (хостинг сайта);",
             "Supabase Inc. (база данных, аккаунты и статистика; серверы в Европейском союзе, Франкфурт);",
             "Google (вход через Google — только если вы решите войти);",
+            "Google Ireland Ltd (платформа управления согласием для посетителей из Европейской экономической зоны, Великобритании и Швейцарии: показывает сообщение о согласии и хранит ваш выбор);",
             "ipwho.is (определение страны — только с вашего согласия)."
           ]
         },
@@ -3652,13 +3662,13 @@ const legalByLang = {
         {
           "heading": "Третьи стороны",
           "paragraphs": [
-            "Мы не используем Google Analytics. Google участвует только в том случае, если вы решите войти через Google. Когда рекламный партнёр подключён, он указывается в этой политике со ссылкой на его собственные политики в отношении cookie и конфиденциальности."
+            "Мы не используем Google Analytics. Google участвует только в двух случаях: если вы решите войти через Google, а также для посетителей из Европейской экономической зоны, Великобритании и Швейцарии — через свою платформу управления согласием (сертифицированную по IAB Transparency and Consent Framework), которая показывает сообщение о согласии и сохраняет ваш выбор. Когда рекламный партнёр активен, он указывается в этой политике со ссылкой на его собственные политики в отношении файлов cookie и конфиденциальности."
           ]
         },
         {
           "heading": "Ваш выбор",
           "paragraphs": [
-            "При первом посещении баннер позволяет принять все cookie или оставить только необходимые. Ничего необязательного не устанавливается до того, как вы сделаете выбор. Вы можете передумать в любой момент по ссылке «Настройки cookie» внизу страницы — она снова откроет баннер.",
+            "При первом посещении сообщение о согласии позволяет принять все файлы cookie или оставить только необходимые. В Европейской экономической зоне, Великобритании и Швейцарии это сообщение предоставляет сертифицированная платформа управления согласием Google; в остальных странах — наш собственный баннер. До вашего выбора ничего необязательного не устанавливается. Вы можете в любой момент изменить решение по ссылке «Настройки cookie» в нижней части страницы, которая снова показывает сообщение.",
             "Вы также можете удалить cookie и данные сайта в настройках браузера; в этом случае ваш локальный прогресс в играх будет утерян, если вы не вошли в аккаунт."
           ]
         },
@@ -3890,6 +3900,7 @@ const legalByLang = {
             "Vercel Inc. (استضافة الموقع)؛",
             "Supabase Inc. (قاعدة البيانات والحسابات والإحصاءات، بخوادم في الاتحاد الأوروبي، فرانكفورت)؛",
             "Google (تسجيل الدخول باستخدام Google، فقط إذا اخترت تسجيل الدخول)؛",
+            "Google Ireland Ltd (منصة إدارة الموافقة للزوار من المنطقة الاقتصادية الأوروبية والمملكة المتحدة وسويسرا: تعرض رسالة الموافقة وتحفظ اختيارك)؛",
             "ipwho.is (تحديد البلد، بموافقتك فقط)."
           ]
         },
@@ -4019,13 +4030,13 @@ const legalByLang = {
         {
           "heading": "الأطراف الثالثة",
           "paragraphs": [
-            "لا نستخدم Google Analytics. لا تتدخل Google إلا إذا اخترت تسجيل الدخول باستخدام Google. عندما يكون هناك شريك إعلاني نشط، نذكر اسمه في هذه السياسة مع رابط إلى سياستيه الخاصتين بملفات تعريف الارتباط والخصوصية."
+            "لا نستخدم Google Analytics. لا تتدخل Google إلا في حالتين: إذا اخترت تسجيل الدخول باستخدام Google، وبالنسبة للزوار من المنطقة الاقتصادية الأوروبية والمملكة المتحدة وسويسرا، عبر منصتها لإدارة الموافقة (المعتمدة وفق إطار IAB Transparency and Consent Framework)، التي تعرض رسالة الموافقة وتسجّل اختيارك. عندما يكون شريك إعلاني نشطًا، يُذكر اسمه في هذه السياسة مع رابط إلى سياساته الخاصة بملفات تعريف الارتباط والخصوصية."
           ]
         },
         {
           "heading": "اختيارك",
           "paragraphs": [
-            "عند زيارتك الأولى، يتيح لك شريط قبول جميع ملفات تعريف الارتباط أو الاكتفاء بالأساسية منها. لا يُوضع أي شيء اختياري قبل أن تختار. يمكنك تغيير رأيك في أي وقت عبر رابط \"إدارة ملفات تعريف الارتباط\" في أسفل الصفحة، الذي يعيد إظهار الشريط.",
+            "عند زيارتك الأولى، تتيح لك رسالة موافقة قبول جميع ملفات تعريف الارتباط أو الاكتفاء بالضرورية منها. في المنطقة الاقتصادية الأوروبية والمملكة المتحدة وسويسرا، تُقدَّم هذه الرسالة عبر منصة Google المعتمدة لإدارة الموافقة؛ وفي غيرها تكون شريطنا الخاص. لا يُحفظ أي شيء اختياري قبل أن تختار. يمكنك تغيير رأيك في أي وقت عبر رابط \"إدارة ملفات تعريف الارتباط\" في أسفل الصفحة، الذي يعيد عرض الرسالة.",
             "يمكنك أيضًا حذف ملفات تعريف الارتباط وبيانات الموقع من إعدادات متصفحك؛ وسيُفقد عندئذٍ تقدمك المحلي في الألعاب إذا لم تكن مسجّل الدخول."
           ]
         },
@@ -4257,6 +4268,7 @@ const legalByLang = {
             "Vercel Inc.（ウェブサイトのホスティング）",
             "Supabase Inc.（データベース、アカウント、統計。サーバーは欧州連合内のフランクフルト）",
             "Google（Googleでのログイン。お客様がログインを選択した場合のみ）",
+            "Google Ireland Ltd（欧州経済領域、英国、スイスからの訪問者向けの同意管理プラットフォーム。同意メッセージを表示し、お客様の選択を保存します）；",
             "ipwho.is（国の照会。お客様の同意がある場合のみ）"
           ]
         },
@@ -4386,13 +4398,13 @@ const legalByLang = {
         {
           "heading": "第三者",
           "paragraphs": [
-            "当方はGoogle Analyticsを使用していません。Googleが関与するのは、お客様がGoogleでのログインを選択した場合のみです。広告パートナーが稼働している場合は、その名称を本ポリシーに記載し、各パートナーのCookieポリシーおよびプライバシーポリシーへのリンクを掲載します。"
+            "当サイトはGoogleアナリティクスを使用していません。Googleが関わるのは次の2つの場合のみです。お客様がGoogleでのログインを選択した場合、そして欧州経済領域、英国、スイスからの訪問者に対して、同意メッセージを表示しお客様の選択を記録する同意管理プラットフォーム（IAB Transparency and Consent Frameworkの認定済み）を通じてです。広告パートナーが有効な場合は、そのCookieポリシーおよびプライバシーポリシーへのリンクとともに本ポリシーに記載します。"
           ]
         },
         {
           "heading": "お客様の選択",
           "paragraphs": [
-            "初回訪問時に表示されるバナーで、すべてのCookieを許可するか、必須のCookieのみにするかを選べます。お客様が選択するまで、任意のCookieは一切設置されません。フッターの「Cookie設定」リンクからバナーを再表示し、いつでも選択を変更できます。",
+            "初回訪問時に表示される同意メッセージで、すべてのCookieを許可するか、必須のCookieのみに限定するかを選べます。欧州経済領域、英国、スイスでは、このメッセージはGoogleの認定同意管理プラットフォームによって表示され、それ以外の地域では当サイト独自のバナーが表示されます。お客様が選択するまで、任意のものは一切保存されません。フッターの「Cookie設定」リンクからいつでも選択を変更でき、メッセージが再び表示されます。",
             "ブラウザの設定からCookieやサイトデータを削除することもできます。その場合、ログインしていなければ、端末に保存されたゲームの進行状況は失われます。"
           ]
         },
@@ -4412,6 +4424,7 @@ const legalByLang = {
     }
   }
 }
+
 
 /*
   Renvoie le contenu légal pour une langue donnée.

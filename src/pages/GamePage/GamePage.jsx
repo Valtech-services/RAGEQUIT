@@ -348,7 +348,7 @@ async function saveVirusLabCloud(){
           </div>
         </aside>
       </div>
-      <SeoBlock type="game" data={game.seo ? { ...game.seo, description: game.description, controls: game.controls, author: game.author, title: game.title } : null} />
+      <SeoBlock type="game" data={game.seo ? { ...game.seo, id: game.id, description: game.description, controls: game.controls, author: game.author, title: game.title } : null} />
       {reportOpen && (
         <div className="gamepage__report-overlay" onClick={() => { setReportOpen(false); setReportSent(false) }}>
           <div className="gamepage__report" onClick={e => e.stopPropagation()}>

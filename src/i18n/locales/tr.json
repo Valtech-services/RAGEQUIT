@@ -65,7 +65,11 @@
     "rankOf": "Gerçek sıran: {{total}} oyuncu arasında #{{rank}}",
     "inTop": "İlk {{n}} içindesin, aşağıda vurgulandı",
     "outOfTop": "İlk {{n}} dışında",
-    "topN": "İlk {{n}} oyuncu"
+    "topN": "İlk {{n}} oyuncu",
+    "aboutTitle": "Sıralamalar nasıl işler",
+    "about1": "Ragequit Arcade'deki her oyunun kendi dünya sıralaması vardır. Bir oyun gerçekten bittiğinde, varsa devam hakkından sonra, son skorun o oyunun ve oynadığın modun sıralamasına gönderilir; yani Hard modda oynanan bir oyun hiçbir zaman Normal modla karşılaştırılmaz. Bazı oyunlar, koşullar adil bir karşılaştırma için fazla farklı olduğunda sıralamalarını daha da ayırır: örneğin RAGE TAP'in her süre için ayrı bir sıralaması, dokunmatik ekranlar ve fare için de ayrı sıralamaları vardır.",
+    "about2": "Tüm oyunları hesap olmadan oynayabilirsin. Skorlarını sıralamalarda görmek ve tüm cihazlarında saklamak için ücretsiz bir Ragequit Arcade profiliyle giriş yap: diğer oyuncular yalnızca oyuncu adını görür, e-posta adresini asla görmez. Her sıralama en iyi 50 oyuncuyu gösterir; giriş yaptığında ise ilk 50'nin dışında olsan bile oynayan herkes arasındaki gerçek sıranı da gösterir.",
+    "about3": "Sıralamasını açmak için aşağıdan bir oyun seç ya da herhangi bir oyun sayfasındaki kupa düğmesine dokun. Yükselmek için blogumuzdaki her oyunun strateji rehberini oku, bir sonrakine geçmeden önce bir modda ustalaş ve bunu sunan oyunlarda arkadaşlarına bağlantıyla meydan oku: bir arkadaşını yenmek, çoğu zaman kendi rekorunu kırmanın en hızlı yoludur. Bazı oyunlar, sıralamalar adil kalsın diye RAGE TAP'teki otomatik tıklayıcı oyunları gibi hiçbir insanın yapamayacağı oyunları da reddeder."
   },
   "auth": {
     "signup": "Kayıt ol",
@@ -157,7 +161,10 @@
     "aboutGame": "Bu oyun hakkında",
     "controls": "Kontroller",
     "developer": "Geliştirici",
-    "faqTitle": "Sık sorulan sorular"
+    "faqTitle": "Sık sorulan sorular",
+    "guideLabel": "Strateji rehberi",
+    "guideCta": "Rehberi oku",
+    "readMore": "Bu oyun hakkında daha fazlası"
   },
   "legal": {
     "lastUpdated": "Son güncelleme:",
@@ -255,7 +262,10 @@
       "back": "← Bloga dön",
       "readNext": "Sıradaki yazı",
       "notFound": "Bulunamadı",
-      "notFoundText": "Bu yazı mevcut değil."
+      "notFoundText": "Bu yazı mevcut değil.",
+      "playTitle": "{{game}} oyna",
+      "playText": "Tarayıcında ücretsiz, indirme ve kayıt yok.",
+      "playNow": "Hemen oyna"
     },
     "game": {
       "notFound": "Oyun bulunamadı.",
@@ -272,7 +282,8 @@
       "dislike": "Beğenme",
       "report": "Bildir",
       "fullscreen": "Tam ekran",
-      "leaderboard": "Sıralama"
+      "leaderboard": "Sıralama",
+      "moreGames": "Daha fazla oyun"
     }
   }
 }

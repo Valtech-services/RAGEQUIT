@@ -151,7 +151,7 @@ export default function Navbar({ title, inGrid = false }) {
               <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 18.9V21H7v2h10v-2h-4v-2.1a5.01 5.01 0 0 0 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/>
             </svg>
           </Link>
-          <Link className="navbar__btn" aria-label="Blog" to="/blog" onClick={() => track('navbar_blog_click')}>
+          <Link className="navbar__btn navbar__btn--blog" aria-label="Blog" to="/blog" onClick={() => track('navbar_blog_click')}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm2 4v2h12V8H6zm0 4v2h12v-2H6zm0 4v2h8v-2H6z"/>
             </svg>
@@ -198,6 +198,11 @@ export default function Navbar({ title, inGrid = false }) {
                     {t(`categoryTitles.${cat.id}`)}
                   </button>
                 ))}
+                {/* A-018 : sur mobile le bouton Blog quitte l'en-tête, il reste accessible ici. */}
+                <Link to="/blog" className="nb-drawer__chip nb-drawer__chip--blog"
+                  onClick={() => { track('navbar_blog_click', { source: 'navbar_drawer' }); setSearchOpen(false) }}>
+                  {t('footer.blog', 'Blog')}
+                </Link>
               </div>
               {results.length > 0 ? (
                 <div className="nb-drawer__section">

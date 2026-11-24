@@ -1,5 +1,8 @@
 import { Link } from '../../i18n/locale'
-import { useCategories, useGames } from '../../data/localized'
+import { useCategories, useGames, usePosts } from '../../data/localized'
+import { toParagraphs } from '../../lib/paragraphs'
+import { blogImg } from '../../lib/thumb'
+import { track } from '../../lib/analytics'
 import { useTranslation } from 'react-i18next'
 import './SeoBlock.css'
 
@@ -10,8 +13,9 @@ function firstSentence(text) {
   return match ? match[0].trim() : text
 }
 
-export default function SeoBlock({ type, data }) {
+export default function SeoBlock({ type, data, id }) {
   const games = useGames()
+  const posts = usePosts()
   const categories = useCategories()
   const { t, i18n } = useTranslation()
   if (!data) return null
@@ -27,8 +31,11 @@ export default function SeoBlock({ type, data }) {
     ? games.filter(g => g.category === data.id)
     : []
 
+  // A-015 : guide du blog consacré à ce jeu (champ `game` des articles).
+  const guide = type === 'game' && data.id ? posts.find(p => p.game === data.id) : null
+
   return (
-    <div className="seo-block">
+    <div className="seo-block" id={id}>
       <div className="seo-block__inner">
 
         {/* TYPE SITE — page d'accueil */}
@@ -113,12 +120,15 @@ export default function SeoBlock({ type, data }) {
           </>
         )}
 
-        {/* TYPE GAME */}
+        {/* TYPE GAME — description en paragraphes, puis contrôles, guide et FAQ
+            sous des intertitres (A-017), lien vers le guide du blog (A-015). */}
         {type === 'game' && (
           <>
             <span className="seo-block__label">{t('seo.aboutGame')}</span>
             <h2 className="seo-block__title">{data.title}</h2>
-            <p className="seo-block__text">{data.description}</p>
+            {toParagraphs(data.description).map((para, i) => (
+              <p key={i} className="seo-block__text">{para}</p>
+            ))}
 
             {data.controls && (
               <div className="seo-block__info-card">
@@ -133,15 +143,35 @@ export default function SeoBlock({ type, data }) {
               </div>
             )}
 
+            {guide && (
+              <Link to={`/blog/${guide.slug}`} className="seo-block__guide"
+                onClick={() => track('game_guide_click', { game_id: data.id })}>
+                {guide.image && (
+                  <span className="seo-block__guide-img">
+                    <img {...blogImg(guide.image, '160px')} alt="" loading="lazy" />
+                  </span>
+                )}
+                <span className="seo-block__guide-body">
+                  <span className="seo-block__info-label">{t('seo.guideLabel')}</span>
+                  <span className="seo-block__guide-title">{guide.title}</span>
+                  {guide.excerpt && <span className="seo-block__guide-text">{guide.excerpt}</span>}
+                  <span className="seo-block__guide-cta">{t('seo.guideCta')} →</span>
+                </span>
+              </Link>
+            )}
+
             {data.faq && data.faq.length > 0 && (
-              <div className="seo-block__faq">
-                {data.faq.map((item, i) => (
-                  <div key={i} className="seo-block__faq-item">
-                    <h4 className="seo-block__faq-q">{item.q}</h4>
-                    <p className="seo-block__faq-a">{item.a}</p>
-                  </div>
-                ))}
-              </div>
+              <>
+                <h2 className="seo-block__subtitle seo-block__faq-title">{t('seo.faqTitle')}</h2>
+                <div className="seo-block__faq">
+                  {data.faq.map((item, i) => (
+                    <div key={i} className="seo-block__faq-item">
+                      <h3 className="seo-block__faq-q">{item.q}</h3>
+                      <p className="seo-block__faq-a">{item.a}</p>
+                    </div>
+                  ))}
+                </div>
+              </>
             )}
           </>
         )}
