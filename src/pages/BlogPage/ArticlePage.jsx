@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { usePosts, useGames } from '../../data/localized'
+import { getPostContent } from '../../data/postContent'
 import { useParams } from 'react-router-dom'
 import { Link } from '../../i18n/locale'
 import Navbar from '../../components/Navbar/Navbar'
@@ -75,7 +76,7 @@ export default function ArticlePage() {
         {game && <PlayCard game={game} where="top" t={t} />}
 
         <div className="blog__article-body">
-          {post.content?.map((block, i) => {
+          {getPostContent(post.slug, lang).map((block, i) => {
             if (block.type === 'h2') return <h2 key={i} className="blog__h2">{block.text}</h2>
             if (block.type === 'ul') return (
               <ul key={i} className="blog__ul">

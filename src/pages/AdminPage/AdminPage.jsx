@@ -14,7 +14,6 @@ import './AdminPage.css'
 import { watchVisibleViewport } from '../../lib/visibleViewport'
 
 const ADMIN_ID = '4340752c-bfae-492c-a61b-a9552ac8c908'
-const ADMIN_PIN = import.meta.env.VITE_ADMIN_PIN || null
 
 const C = { cyan: '#00D9FF', violet: '#8B5CF6', magenta: '#FF2D78',
             green: '#00C781', yellow: '#FFB02E', red: '#FF4466' }
@@ -213,20 +212,55 @@ function AdminLogin(){
   )
 }
 
+// A-024 : le PIN n'est plus dans le JavaScript public. Il est vérifié par la
+// fonction serveur /api/admin-pin (variable ADMIN_PIN dans Vercel), avec le
+// jeton du compte Google connecté. La vraie protection des données reste
+// côté base (règles RLS, voir supabase/migrations/*_admin_only_reads.sql).
 function AdminPinGate({ onUnlock }){
-  const [pin, setPin] = useState(''); const [err, setErr] = useState('')
-  function submit(){ if(pin === ADMIN_PIN){ sessionStorage.setItem('rq_admin_pin_ok','1'); onUnlock() } else { setErr('PIN incorrect'); setPin('') } }
+  const [pin, setPin] = useState(''); const [err, setErr] = useState(''); const [busy, setBusy] = useState(false)
+  async function submit(){
+    if(busy || !pin) return
+    setBusy(true); setErr('')
+    try {
+      const { data } = await supabase.auth.getSession()
+      const r = await fetch('/api/admin-pin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + (data?.session?.access_token || '') },
+        body: JSON.stringify({ pin }),
+      })
+      const j = await r.json().catch(() => ({}))
+      if(r.ok && j.ok){ sessionStorage.setItem('rq_admin_pin_ok','1'); onUnlock() }
+      else { setErr(r.status === 403 ? 'Compte non autorisé' : 'PIN incorrect'); setPin('') }
+    } catch(e) { setErr('Vérification impossible, réessaie') }
+    setBusy(false)
+  }
   return (
     <div className="adm-login"><div className="adm-login__card">
       <img src="/ragequit-logo-white.png" alt="Ragequit" className="adm-login__logo" />
       <h1 className="adm-login__title">Code PIN</h1>
-      <input className="adm-pin" type="password" inputMode="numeric" maxLength={6} value={pin} autoFocus
+      <input className="adm-pin" type="password" inputMode="numeric" maxLength={12} value={pin} autoFocus
         onChange={e => { setPin(e.target.value.replace(/\D/g,'')); setErr('') }}
         onKeyDown={e => e.key === 'Enter' && submit()} placeholder="••••••" />
-      <button className="adm-login__btn adm-login__btn--pin" onClick={submit}>Déverrouiller</button>
+      <button className="adm-login__btn adm-login__btn--pin" onClick={submit} disabled={busy}>{busy ? 'Vérification…' : 'Déverrouiller'}</button>
       {err && <p className="adm-login__err">{err}</p>}
     </div></div>
   )
+}
+
+/* PIN demandé seulement s'il est configuré côté serveur (ADMIN_PIN). Si la
+   fonction ne répond pas (aperçu local sans fonctions), le PIN est demandé
+   par prudence. */
+function usePinRequired(){
+  const [state, setState] = useState('loading') // 'loading' | 'on' | 'off'
+  useEffect(() => {
+    let alive = true
+    fetch('/api/admin-pin', { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(j => { if(alive) setState(j.enabled ? 'on' : 'off') })
+      .catch(() => { if(alive) setState('on') })
+    return () => { alive = false }
+  }, [])
+  return state
 }
 
 // ── TEST DES JEUX (staging, admin only) ────────────────────────────────────
@@ -747,6 +781,7 @@ function AdminShell(){
 export default function AdminPage(){
   const { user, loading } = useAuth()
   const [pinOk, setPinOk] = useState(() => sessionStorage.getItem('rq_admin_pin_ok') === '1')
+  const pinState = usePinRequired()
   usePageTitle('Admin')
   if(loading) return <div className="adm-loading">Chargement…</div>
   if(!user) return <AdminLogin />
@@ -756,6 +791,7 @@ export default function AdminPage(){
       <p className="adm-login__sub">Ce compte n'a pas les droits admin.</p>
     </div></div>
   )
-  if(ADMIN_PIN && !pinOk) return <AdminPinGate onUnlock={() => setPinOk(true)} />
+  if(!pinOk && pinState === 'loading') return <div className="adm-loading">Chargement…</div>
+  if(!pinOk && pinState === 'on') return <AdminPinGate onUnlock={() => setPinOk(true)} />
   return <AdminShell />
 }

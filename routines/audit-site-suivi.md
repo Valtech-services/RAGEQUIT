@@ -24,11 +24,11 @@ Statuts : `proposé`, `lancé` (demandé par Laurent), `fait`, `refusé` (ne jam
 | A-016 | 2026-11-24 | Pas de CMP certifiée Google (TCF v2.2) pour servir AdSense en EEE/UK/CH | adsense, revenus pub | fait | 2026-11-24 | CMP Google chargée (index.html), repli sur le bandeau maison ; reste à publier le message RGPD dans AdSense > Confidentialité et messages |
 | A-017 | 2026-11-24 | Fiche mobile : texte sous 12 vignettes (~1 150 px) et description en un seul bloc | adsense, joueurs | fait | 2026-11-24 | accroche + 6 vignettes + More games ; description en paragraphes, FAQ sous H2 |
 | A-018 | 2026-11-24 | En-tête mobile : 4 boutons de 28 px de large (icônes 16 px) | joueurs, accessibilité | fait | 2026-11-24 | mobile : 3 boutons de 39x46 px, icônes 20 px, Blog dans le tiroir de recherche |
-| A-019 | 2026-11-24 | Script principal 1,24 Mo (370 Ko gzip) : legalContent 276 Ko, blog 125 Ko, 12 locales chargés partout | performance | proposé | 2026-11-24 | suite de A-006 |
-| A-020 | 2026-11-24 | Pied de page : 3 catégories sur 7 | SEO, navigation | proposé | 2026-11-24 | Footer.jsx codé en dur |
+| A-019 | 2026-11-24 | Script principal 1,24 Mo (370 Ko gzip) : legalContent 276 Ko, blog 125 Ko, 12 locales chargés partout | performance | fait | 2026-11-24 | lazy : textes légaux, texte des articles (blogContent.js), textes d'interface par langue ; script principal 370 -> 237 Ko gzip |
+| A-020 | 2026-11-24 | Pied de page : 3 catégories sur 7 | SEO, navigation | fait | 2026-11-24 | pied de page généré depuis useCategories (7 catégories traduites) |
 | A-021 | 2026-11-24 | Page Classement indexable avec 87 mots prérendus (12 langues) | adsense, SEO | fait | 2026-11-24 | texte « How the leaderboards work » prérendu en 12 langues (323 mots) |
 | A-022 | 2026-11-24 | Mentions légales : meta description « Laurent Valard (Valtech Services) » dans 12 langues | SEO | proposé | 2026-11-24 | |
-| A-023 | 2026-11-24 | Blog : 23 articles sur 26 sont des guides de jeu, aucun éditorial depuis le 29/08 | adsense, contenu | proposé | 2026-11-24 | |
-| A-024 | 2026-11-24 | Admin : PIN en variable VITE_ (lisible dans le JS public), contrôle admin côté navigateur | admin, sécurité | proposé | 2026-11-24 | vérifier les règles RLS ; non vérifié en production |
+| A-023 | 2026-11-24 | Blog : 23 articles sur 26 sont des guides de jeu, aucun éditorial depuis le 29/08 | adsense, contenu | lancé | 2026-11-24 | 2 articles éditoriaux en préparation (PR séparée) |
+| A-024 | 2026-11-24 | Admin : PIN en variable VITE_ (lisible dans le JS public), contrôle admin côté navigateur | admin, sécurité | fait | 2026-11-24 | PIN vérifié côté serveur (api/admin-pin.js, variable ADMIN_PIN) ; règles RLS dans supabase/migrations/20261124140000_admin_only_reads.sql à exécuter par Laurent |
 | A-025 | 2026-11-24 | Option tendance : mode sombre automatique (prefers-color-scheme) | tendance | proposé | 2026-11-24 | option à décider |
 | A-026 | 2026-11-24 | Pas de meta google-adsense-account (vérification par ads.txt seulement) | adsense | proposé | 2026-11-24 | |

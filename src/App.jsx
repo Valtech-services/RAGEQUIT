@@ -5,10 +5,9 @@ import Home from './pages/Home/Home'
 import CategoryPage from './pages/CategoryPage/CategoryPage'
 import GamePage from './pages/GamePage/GamePage'
 import LeaderboardPage from './pages/LeaderboardPage/LeaderboardPage'
-import LegalPage from './pages/LegalPage/LegalPage'
 import CookieBanner from './components/CookieBanner/CookieBanner'
 import BlogPage from './pages/BlogPage/BlogPage'
-import ArticlePage from './pages/BlogPage/ArticlePage'
+import { LegalPage, ArticlePage } from './pages/lazyPages'
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage'
 import { CONTENT_LANGS, RTL_LANGS, langFromPath } from './i18n/locale'
 
@@ -45,9 +44,9 @@ function pageRoutes(prefix) {
     <Route key={prefix + 'cat'} path={prefix + '/category/:id'} element={<CategoryPage />} />,
     <Route key={prefix + 'game'} path={prefix + '/game/:id'} element={<GamePage />} />,
     <Route key={prefix + 'lb'} path={prefix + '/leaderboard'} element={<LeaderboardPage />} />,
-    <Route key={prefix + 'legal'} path={prefix + '/legal/:page'} element={<LegalPage />} />,
+    <Route key={prefix + 'legal'} path={prefix + '/legal/:page'} element={<Suspense fallback={null}><LegalPage /></Suspense>} />,
     <Route key={prefix + 'blog'} path={prefix + '/blog'} element={<BlogPage />} />,
-    <Route key={prefix + 'post'} path={prefix + '/blog/:slug'} element={<ArticlePage />} />,
+    <Route key={prefix + 'post'} path={prefix + '/blog/:slug'} element={<Suspense fallback={null}><ArticlePage /></Suspense>} />,
   ]
 }
 

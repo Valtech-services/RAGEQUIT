@@ -70,7 +70,8 @@ function localizePost(p, lang) {
     title: t.title || p.title,
     excerpt: t.excerpt || p.excerpt,
     seo: { ...p.seo, ...(t.seo || {}) },
-    content: t.content && t.content.length === p.content.length ? t.content : p.content,
+    // Le texte complet des articles est dans blogContent.js, lu par ArticlePage
+    // via postContent.js (A-019).
   }
 }
 
@@ -88,12 +89,12 @@ export const useCategories = () => getCategories(useContentLang())
 export const usePosts = () => getPosts(useContentLang())
 export const useSiteSeo = () => getSiteSeo(useContentLang())
 
-/* Contrôle : liste des contenus anglais sans traduction pour une langue. */
+/* Contrôle : jeux et catégories sans traduction (articles : postContent.js). */
 export function missingTranslations(lang) {
   const t = TRANSLATIONS[lang] || {}
   return [
     ...baseGames.filter(g => !t.games?.[g.id]).map(g => 'game:' + g.id),
     ...baseCategories.filter(c => c.id !== 'all' && !t.categories?.[c.id]).map(c => 'category:' + c.id),
-    ...basePosts.filter(p => !t.posts?.[p.slug] || t.posts[p.slug].content?.length !== p.content.length).map(p => 'post:' + p.slug),
+    // Les articles sont contrôlés dans postContent.js (texte complet séparé).
   ]
 }

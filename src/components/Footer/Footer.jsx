@@ -2,11 +2,13 @@ import { Link } from '../../i18n/locale'
 import { useTranslation } from 'react-i18next'
 import { track } from '../../lib/analytics'
 import { manageConsent } from '../../lib/consent'
+import { useCategories } from '../../data/localized'
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher'
 import './Footer.css'
 
 export default function Footer() {
   const { t } = useTranslation()
+  const categories = useCategories()
   const year = new Date().getFullYear()
   const social = (network) => track('social_click', { props: { network } })
   const footerLink = (section, label) => track('footer_click', { props: { section, label } })
@@ -45,9 +47,12 @@ export default function Footer() {
         </div>
 <div className="footer__col">
           <span className="footer__col-title">{t('footer.games')}</span>
-          <Link to="/category/sports" className="footer__link" onClick={() => footerLink('games','sports')}>{t('footer.sportsGames')}</Link>
-          <Link to="/category/arcade" className="footer__link" onClick={() => footerLink('games','arcade')}>{t('footer.arcadeGames')}</Link>
-          <Link to="/category/idle" className="footer__link" onClick={() => footerLink('games','idle')}>{t('footer.idleGames', 'Idle / Clicker Games')}</Link>
+          {/* A-020 : toutes les catégories (noms traduits), pas seulement trois. */}
+          {categories.filter(c => c.id !== 'all').map(c => (
+            <Link key={c.id} to={`/category/${c.id}`} className="footer__link" onClick={() => footerLink('games', c.id)}>
+              {t(`categoryTitles.${c.id}`, { defaultValue: c.label + ' Games' })}
+            </Link>
+          ))}
           <Link to="/leaderboard" className="footer__link" onClick={() => footerLink('games','leaderboard')}>{t('footer.leaderboard')}</Link>
         </div>
         <div className="footer__col">
