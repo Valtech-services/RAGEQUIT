@@ -11,6 +11,7 @@ import { loadTranslations } from './data/localized'
 import { AuthProvider } from './context/AuthContext'
 import { initGA } from './lib/analytics-ga'
 import App from './App.jsx'
+import { preloadPage } from './pages/lazyPages'
 import { SEASON_THEME } from './config/season'
 
 initGA()
@@ -38,7 +39,13 @@ else if (firstVisit) {
   React prend ensuite le relais et redessine la page à l'identique.
 */
 /* La traduction de la langue de la page est chargée avant le rendu (pas de flash en anglais). */
-loadTranslations(langFromPath(window.location.pathname)).finally(() => {
+/* A-019 : on attend aussi les textes d'interface de la langue (fichier séparé)
+   et la page d'arrivée si elle est chargée à la demande (légal, article). */
+Promise.allSettled([
+  loadTranslations(langFromPath(window.location.pathname)),
+  i18n.loadLanguages([langFromPath(window.location.pathname), (i18n.language || 'en').slice(0, 2)]),
+  preloadPage(window.location.pathname),
+]).finally(() => {
   createRoot(document.getElementById('root')).render(
     <StrictMode>
       <AuthProvider>

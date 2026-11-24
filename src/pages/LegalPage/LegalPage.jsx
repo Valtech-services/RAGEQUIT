@@ -3,6 +3,10 @@ import { useParams } from 'react-router-dom'
 import { Link } from '../../i18n/locale'
 import { useTranslation } from 'react-i18next'
 import { getLegalContent } from '../../data/legalContent'
+import { setLegalSource } from '../../data/legalSource'
+
+// A-019 : cette page (chargée à la demande) fournit les textes légaux à pageHead.js.
+setLegalSource(getLegalContent)
 import { useAuth } from '../../context/AuthContext'
 import { supabase } from '../../lib/supabase'
 import Navbar from '../../components/Navbar/Navbar'

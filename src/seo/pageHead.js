@@ -6,7 +6,7 @@
    identique au HTML prérendu, dans la langue de l'URL (points A-003, A-005).
    ===================================================================== */
 import { getGames, getCategories, getPosts, getSiteSeo } from '../data/localized'
-import { getLegalContent } from '../data/legalContent'
+import { legalFor } from '../data/legalSource'
 import { ALL_CONTENT_LANGS, LOCALES, RTL_LANGS, langFromPath, stripLang, withLang } from '../i18n/locale'
 
 export const SITE_URL = 'https://ragequit-arcade.com'
@@ -62,7 +62,7 @@ export function pageHead(url) {
   } else if (section === 'leaderboard' && path === '/leaderboard') {
     h = { title: ui.lb + ' | ' + BRAND, description: ui.lbDesc, image: def.image }
   } else if (section === 'legal' && id) {
-    const l = getLegalContent(lang)[id]
+    const l = legalFor(lang)[id]
     if (l) h = { title: l.title + ' | ' + BRAND, description: (l.sections?.[0]?.paragraphs?.[0] || def.description).slice(0, 155), image: def.image }
   }
   const matched = !!h

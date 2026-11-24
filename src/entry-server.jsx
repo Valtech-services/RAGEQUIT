@@ -9,13 +9,18 @@
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom'
 import i18n from './i18n/i18n'
+import './i18n/allLocales'
 import { AuthProvider } from './context/AuthContext'
 import App from './App.jsx'
-import { getGames, getCategories, getPosts, missingTranslations } from './data/localized'
+import { getGames, getCategories, getPosts } from './data/localized'
+import { missingTranslations } from './data/postContent'
 import { pageHead, structuredDataJson, SITE_URL } from './seo/pageHead'
 import './data/i18n/all.js'
 import { getLegalContent } from './data/legalContent'
+import { setLegalSource } from './data/legalSource'
 import { CONTENT_LANGS, ALL_CONTENT_LANGS, langFromPath, withLang } from './i18n/locale'
+
+setLegalSource(getLegalContent)
 
 export { SITE_URL }
 export { SEASON_THEME } from './config/season'
