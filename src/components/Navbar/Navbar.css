@@ -678,3 +678,18 @@
     width: calc(100% - 2 * var(--page-padding-mobile));
   }
 }
+
+/* =====================================================================
+   A-018 — zones tactiles de l'en-tête sur mobile
+   La tuile logo fait environ un tiers de l'écran : 4 boutons y tenaient en
+   28 px de large. Sous 600 px on garde 3 boutons (classement, profil,
+   recherche) de 38 à 40 px avec des icônes de 20 px ; le blog reste dans le
+   tiroir de recherche, le pied de page et les cartes de guide.
+   ===================================================================== */
+@media (max-width: 600px) {
+  .navbar--in-grid .navbar__actions { grid-template-columns: 1fr 1fr 1fr; }
+  .navbar--in-grid .navbar__btn--blog { display: none; }
+  .navbar--in-grid .navbar__btn svg { width: 20px; height: 20px; }
+  .navbar--in-grid .navbar__btn { min-height: 40px; }
+}
+.nb-drawer__chip--blog { text-decoration: none; display: inline-flex; align-items: center; }

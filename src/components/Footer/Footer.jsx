@@ -1,7 +1,7 @@
 import { Link } from '../../i18n/locale'
 import { useTranslation } from 'react-i18next'
 import { track } from '../../lib/analytics'
-import { resetConsent } from '../../lib/consent'
+import { manageConsent } from '../../lib/consent'
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher'
 import './Footer.css'
 
@@ -62,7 +62,7 @@ export default function Footer() {
           <Link to="/legal/privacy" className="footer__link" onClick={() => footerLink('legal','privacy')}>{t('footer.privacy')}</Link>
           <Link to="/legal/terms" className="footer__link" onClick={() => footerLink('legal','terms')}>{t('footer.terms')}</Link>
           <Link to="/legal/cookies" className="footer__link" onClick={() => footerLink('legal','cookies')}>{t('footer.cookies')}</Link>
-          <button type="button" className="footer__link footer__link--btn" onClick={() => { resetConsent(); footerLink('legal','manage-cookies') }}>{t('footer.manageCookies', 'Manage cookies')}</button>
+          <button type="button" className="footer__link footer__link--btn" onClick={() => { manageConsent(); footerLink('legal','manage-cookies') }}>{t('footer.manageCookies', 'Manage cookies')}</button>
         </div>
 
       </div>

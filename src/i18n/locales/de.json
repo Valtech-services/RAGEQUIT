@@ -65,7 +65,11 @@
     "rankOf": "Dein echter Rang: #{{rank}} von {{total}} Spielern",
     "inTop": "Du bist in den Top {{n}}, unten hervorgehoben",
     "outOfTop": "Außerhalb der Top {{n}}",
-    "topN": "Top {{n}} Spieler"
+    "topN": "Top {{n}} Spieler",
+    "aboutTitle": "So funktionieren die Bestenlisten",
+    "about1": "Jedes Spiel auf Ragequit Arcade hat seine eigene weltweite Bestenliste. Wenn ein Lauf wirklich endet, also nach einem möglichen Continue, wird dein Endergebnis an die Liste dieses Spiels und des gespielten Modus geschickt: Ein Lauf im Hard-Modus wird nie mit einem im Normal-Modus verglichen. Manche Spiele trennen ihre Listen weiter, wenn die Bedingungen zu unterschiedlich sind, um fair zu sein: RAGE TAP etwa hat eine Liste pro Timer und getrennte Listen für Touchscreens und für Mäuse.",
+    "about2": "Du kannst alle Spiele ohne Konto spielen. Damit deine Ergebnisse in den Bestenlisten erscheinen und dir auf allen Geräten erhalten bleiben, melde dich mit einem kostenlosen Ragequit-Arcade-Profil an: Andere Spieler sehen nur deinen Spielernamen, nie deine E-Mail-Adresse. Jede Liste zeigt die besten 50 Spieler und, sobald du angemeldet bist, auch deinen echten Rang unter allen, die gespielt haben, selbst außerhalb der Top 50.",
+    "about3": "Wähle unten ein Spiel, um seine Bestenliste zu öffnen, oder tippe auf einer Spielseite auf den Pokal-Button. Um aufzusteigen, lies den Strategie-Guide jedes Spiels in unserem Blog, meistere einen Modus nach dem anderen und fordere deine Freunde per Link heraus, wo das Spiel es anbietet: Einen Freund zu schlagen ist oft der schnellste Weg, den eigenen Rekord zu brechen. Manche Spiele lehnen außerdem Läufe ab, die kein Mensch schaffen kann, etwa Autoclicker-Läufe in RAGE TAP, damit die Listen fair bleiben."
   },
   "auth": {
     "signup": "Registrieren",
@@ -157,7 +161,10 @@
     "aboutGame": "Über dieses Spiel",
     "controls": "Steuerung",
     "developer": "Entwickler",
-    "faqTitle": "Häufige Fragen"
+    "faqTitle": "Häufige Fragen",
+    "guideLabel": "Strategie-Guide",
+    "guideCta": "Guide lesen",
+    "readMore": "Mehr über dieses Spiel"
   },
   "legal": {
     "lastUpdated": "Zuletzt aktualisiert:",
@@ -255,7 +262,10 @@
       "back": "← Zurück zum Blog",
       "readNext": "Weiterlesen",
       "notFound": "Nicht gefunden",
-      "notFoundText": "Dieser Artikel existiert nicht."
+      "notFoundText": "Dieser Artikel existiert nicht.",
+      "playTitle": "{{game}} spielen",
+      "playText": "Kostenlos im Browser, ohne Download und ohne Anmeldung.",
+      "playNow": "Jetzt spielen"
     },
     "game": {
       "notFound": "Spiel nicht gefunden.",
@@ -272,7 +282,8 @@
       "dislike": "Gefällt mir nicht",
       "report": "Melden",
       "fullscreen": "Vollbild",
-      "leaderboard": "Bestenliste"
+      "leaderboard": "Bestenliste",
+      "moreGames": "Mehr Spiele"
     }
   }
 }

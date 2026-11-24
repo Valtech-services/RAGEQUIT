@@ -17,6 +17,7 @@ import Footer from '../../components/Footer/Footer'
 import usePageTitle from '../../hooks/usePageTitle'
 import NotFoundPage from '../NotFoundPage/NotFoundPage'
 import './MobileGamePage.css'
+import { teaser } from '../../lib/paragraphs'
 import { watchVisibleViewport } from '../../lib/visibleViewport'
 
 export default function MobileGamePage() {
@@ -305,7 +306,9 @@ if (d.type.endsWith('_SCORE')) {
 
   if (!game) return <NotFoundPage />
 
-  const related = games.filter(g => g.id !== game.id).slice(0, 12)
+  // A-017 : 6 suggestions sous le lecteur (au lieu de 12), pour que le texte
+  // du jeu arrive dans le premier écran et demi ; lien « More games » ensuite.
+  const related = games.filter(g => g.id !== game.id).slice(0, 6)
 
   /* ---- MODE JEU : plein écran simulé ---- */
   if (playing) {
@@ -383,6 +386,14 @@ if (d.type.endsWith('_SCORE')) {
       </button>
       {/* Bannière publicitaire mobile — placeholder en attendant AdSense. */}
       <AdSlot slot="mobile" className="mgp__ad" />
+      {/* A-017 : accroche du jeu juste sous le lecteur, lien vers le texte complet. */}
+      <div className="mgp__intro">
+        <p className="mgp__intro-text">{teaser(game.description)}</p>
+        <a href="#about" className="mgp__intro-more"
+          onClick={e => { e.preventDefault(); document.getElementById('about')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); track('game_read_more', { game_id: game.id }) }}>
+          {t('seo.readMore')} ↓
+        </a>
+      </div>
       <div className="mgp__related">
         {related.map(g => (
           <div key={g.id} className="mgp__related-cell">
@@ -390,10 +401,16 @@ if (d.type.endsWith('_SCORE')) {
           </div>
         ))}
       </div>
+      <Link to={`/category/${game.category}`} className="mgp__more-games"
+        onClick={() => track('game_more_games', { game_id: game.id })}>
+        {t('ui.game.moreGames')} →
+      </Link>
       <SeoBlock
         type="game"
+        id="about"
         data={game.seo ? {
           ...game.seo,
+          id: game.id,
           description: game.description,
           controls: game.controls,
           author: game.author,

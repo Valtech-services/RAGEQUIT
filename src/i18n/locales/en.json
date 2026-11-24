@@ -65,7 +65,11 @@
     "rankOf": "Your real rank: #{{rank}} out of {{total}} players",
     "inTop": "You are in the top {{n}}, highlighted below",
     "outOfTop": "Outside the top {{n}}",
-    "topN": "Top {{n}} players"
+    "topN": "Top {{n}} players",
+    "aboutTitle": "How the leaderboards work",
+    "about1": "Every game on Ragequit Arcade has its own global leaderboard. When a run really ends, after any continue, your final score is sent to the board of that game and of the mode you played, so a Hard run is never compared with a Normal one. Some games split their boards further when the conditions are too different to be fair: RAGE TAP, for example, has one board per timer, and separate boards for touch screens and for mice.",
+    "about2": "You can play every game without an account. To see your scores on the boards and keep them on all your devices, sign in with a free Ragequit Arcade profile: only your player name is shown to other players, never your email. Each board lists the top 50 players, and once you are signed in it also shows your real rank among everyone who played, even outside the top 50.",
+    "about3": "Pick a game below to open its leaderboard, or tap the trophy button on any game page. To climb, read the strategy guide of each game on our blog, master one mode before the next, and challenge your friends with a link in the games that offer it: beating a friend is often the fastest way to beat your own record. Some games also reject runs that no human could produce, such as autoclicker runs in RAGE TAP, so the boards stay fair."
   },
   "auth": {
     "signup": "Sign up",
@@ -157,7 +161,10 @@
     "aboutGame": "About this game",
     "controls": "Controls",
     "developer": "Developer",
-    "faqTitle": "Frequently asked questions"
+    "faqTitle": "Frequently asked questions",
+    "guideLabel": "Strategy guide",
+    "guideCta": "Read the guide",
+    "readMore": "Read more about this game"
   },
   "legal": {
     "lastUpdated": "Last updated:",
@@ -254,7 +261,10 @@
       "back": "← Back to the blog",
       "readNext": "Read next",
       "notFound": "Not found",
-      "notFoundText": "This article does not exist."
+      "notFoundText": "This article does not exist.",
+      "playTitle": "Play {{game}}",
+      "playText": "Free in your browser, no download, no signup.",
+      "playNow": "Play now"
     },
     "game": {
       "notFound": "Game not found.",
@@ -271,7 +281,8 @@
       "dislike": "Dislike",
       "report": "Report",
       "fullscreen": "Fullscreen",
-      "leaderboard": "Leaderboard"
+      "leaderboard": "Leaderboard",
+      "moreGames": "More games"
     }
   }
 }

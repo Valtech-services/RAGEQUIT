@@ -65,7 +65,11 @@
     "rankOf": "Je echte rang: #{{rank}} van {{total}} spelers",
     "inTop": "Je staat in de top {{n}}, hieronder gemarkeerd",
     "outOfTop": "Buiten de top {{n}}",
-    "topN": "Top {{n}} spelers"
+    "topN": "Top {{n}} spelers",
+    "aboutTitle": "Zo werken de ranglijsten",
+    "about1": "Elk spel op Ragequit Arcade heeft zijn eigen wereldwijde ranglijst. Als een run echt eindigt, na een eventuele continue, wordt je eindscore naar de ranglijst van dat spel en van de gespeelde modus gestuurd, zodat een Hard-run nooit met een Normal-run wordt vergeleken. Sommige spellen splitsen hun ranglijsten verder als de omstandigheden te verschillend zijn om eerlijk te zijn: RAGE TAP heeft bijvoorbeeld een ranglijst per timer en aparte ranglijsten voor touchscreens en voor muizen.",
+    "about2": "Je kunt alle spellen zonder account spelen. Om je scores op de ranglijsten te zien en ze op al je apparaten te bewaren, log je in met een gratis Ragequit Arcade-profiel: andere spelers zien alleen je spelersnaam, nooit je e-mailadres. Elke ranglijst toont de beste 50 spelers en, zodra je bent ingelogd, ook je echte positie tussen iedereen die heeft gespeeld, ook buiten de top 50.",
+    "about3": "Kies hieronder een spel om de ranglijst te openen, of tik op de trofeeknop op een spelpagina. Om te stijgen lees je de strategiegids van elk spel op onze blog, beheers je één modus voordat je de volgende probeert en daag je vrienden uit met een link in de spellen die dat aanbieden: een vriend verslaan is vaak de snelste manier om je eigen record te breken. Sommige spellen weigeren ook runs die geen mens kan halen, zoals autoclicker-runs in RAGE TAP, zodat de ranglijsten eerlijk blijven."
   },
   "auth": {
     "signup": "Registreren",
@@ -157,7 +161,10 @@
     "aboutGame": "Over dit spel",
     "controls": "Besturing",
     "developer": "Ontwikkelaar",
-    "faqTitle": "Veelgestelde vragen"
+    "faqTitle": "Veelgestelde vragen",
+    "guideLabel": "Strategiegids",
+    "guideCta": "Lees de gids",
+    "readMore": "Meer over dit spel"
   },
   "legal": {
     "lastUpdated": "Laatst bijgewerkt:",
@@ -255,7 +262,10 @@
       "back": "← Terug naar de blog",
       "readNext": "Lees ook",
       "notFound": "Niet gevonden",
-      "notFoundText": "Dit artikel bestaat niet."
+      "notFoundText": "Dit artikel bestaat niet.",
+      "playTitle": "Speel {{game}}",
+      "playText": "Gratis in je browser, zonder download of account.",
+      "playNow": "Nu spelen"
     },
     "game": {
       "notFound": "Game niet gevonden.",
@@ -272,7 +282,8 @@
       "dislike": "Niet leuk",
       "report": "Melden",
       "fullscreen": "Volledig scherm",
-      "leaderboard": "Ranglijst"
+      "leaderboard": "Ranglijst",
+      "moreGames": "Meer spellen"
     }
   }
 }

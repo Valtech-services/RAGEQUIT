@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { usePosts } from '../../data/localized'
+import { usePosts, useGames } from '../../data/localized'
 import { useParams } from 'react-router-dom'
 import { Link } from '../../i18n/locale'
 import Navbar from '../../components/Navbar/Navbar'
@@ -10,10 +10,27 @@ import usePageTitle from '../../hooks/usePageTitle'
 import NotFoundPage from '../NotFoundPage/NotFoundPage'
 import { trackPageView } from '../../lib/analytics'
 import './BlogPage.css'
-import { blogImg } from '../../lib/thumb'
+import { blogImg, thumbImg } from '../../lib/thumb'
+import { track } from '../../lib/analytics'
+
+/* A-015 : carte « Jouer » vers le jeu dont parle le guide (haut et bas d'article). */
+function PlayCard({ game, where, t }) {
+  return (
+    <Link to={`/game/${game.id}`} className={`blog__play blog__play--${where}`}
+      onClick={() => track('blog_play_click', { game_id: game.id, props: { where } })}>
+      <span className="blog__play-thumb"><img {...thumbImg(game.thumbnail, '96px')} alt="" loading="lazy" width="96" height="96" /></span>
+      <span className="blog__play-body">
+        <span className="blog__play-title">{t('ui.blog.playTitle', { game: game.title })}</span>
+        <span className="blog__play-text">{t('ui.blog.playText')}</span>
+      </span>
+      <span className="blog__play-btn">{t('ui.blog.playNow')}</span>
+    </Link>
+  )
+}
 
 export default function ArticlePage() {
   const posts = usePosts()
+  const games = useGames()
   const { t } = useTranslation()
   const lang = useLang()
   const dateLocale = LOCALES[lang] || 'en-US'
@@ -27,6 +44,8 @@ export default function ArticlePage() {
   useEffect(() => { trackPageView() }, [slug])
 
   if (!post) return <NotFoundPage />
+
+  const game = post.game ? games.find(g => g.id === post.game) : null
 
   // Autres articles (pour la section "à lire aussi").
   const others = posts.filter(p => p.slug !== post.slug).slice(0, 3)
@@ -53,6 +72,8 @@ export default function ArticlePage() {
           </div>
         )}
 
+        {game && <PlayCard game={game} where="top" t={t} />}
+
         <div className="blog__article-body">
           {post.content?.map((block, i) => {
             if (block.type === 'h2') return <h2 key={i} className="blog__h2">{block.text}</h2>
@@ -64,6 +85,8 @@ export default function ArticlePage() {
             return <p key={i} className="blog__p">{block.text}</p>
           })}
         </div>
+
+        {game && <PlayCard game={game} where="bottom" t={t} />}
 
         {others.length > 0 && (
           <div className="blog__related">

@@ -115,9 +115,28 @@
     padding-top: var(--gap-lg);
   }
   .seo-block__faq-item { background: #f4f4f6; border-radius: var(--radius-md); padding: var(--gap-md); }
+  .seo-block__faq-title { margin-top: var(--gap-lg); }
   .seo-block__faq-q { font-family: var(--font-body); font-size: var(--text-sm); font-weight: 700; color: #111111; margin-bottom: 6px; line-height: 1.5; }
   .seo-block__faq-a { font-size: var(--text-sm); color: #555555; line-height: 1.7; }
   
+  /* ---- Carte « guide de stratégie » (A-015) ---- */
+  .seo-block__guide {
+    display: flex; gap: 14px; align-items: stretch;
+    background: linear-gradient(135deg, rgba(0,217,255,0.10), rgba(255,45,120,0.10));
+    border: 1.5px solid rgba(0,217,255,0.35);
+    border-radius: var(--radius-md); padding: 12px;
+    margin: var(--gap-md) 0; text-decoration: none; color: inherit;
+    transition: transform var(--transition-fast), border-color var(--transition-fast);
+  }
+  .seo-block__guide:hover { transform: translateY(-2px); border-color: var(--color-accent); }
+  .seo-block__guide-img { flex: 0 0 120px; border-radius: 10px; overflow: hidden; background: #171033; aspect-ratio: 16/9; align-self: center; }
+  .seo-block__guide-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .seo-block__guide-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .seo-block__guide-title { font-weight: 800; color: #111111; line-height: 1.3; font-size: var(--text-md); }
+  .seo-block__guide-text { color: #555555; font-size: var(--text-sm); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .seo-block__guide-cta { color: #b0105a; font-weight: 800; font-size: var(--text-sm); margin-top: 2px; }
+  @media (max-width: 480px) { .seo-block__guide-img { flex-basis: 88px; } }
+
   /* ---- Responsive ---- */
   @media (max-width: 768px) {
     .seo-block { padding: var(--gap-lg) var(--gap-md); }
