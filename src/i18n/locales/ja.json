@@ -265,7 +265,8 @@
       "notFoundText": "この記事は存在しません。",
       "playTitle": "{{game}}をプレイ",
       "playText": "ブラウザで無料、ダウンロードも登録も不要。",
-      "playNow": "今すぐプレイ"
+      "playNow": "今すぐプレイ",
+      "gamesInArticle": "この記事で紹介したゲーム"
     },
     "game": {
       "notFound": "ゲームが見つかりません。",

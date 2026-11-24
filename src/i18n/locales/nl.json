@@ -265,7 +265,8 @@
       "notFoundText": "Dit artikel bestaat niet.",
       "playTitle": "Speel {{game}}",
       "playText": "Gratis in je browser, zonder download of account.",
-      "playNow": "Nu spelen"
+      "playNow": "Nu spelen",
+      "gamesInArticle": "De spellen uit dit artikel"
     },
     "game": {
       "notFound": "Game niet gevonden.",

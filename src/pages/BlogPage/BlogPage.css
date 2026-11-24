@@ -105,3 +105,10 @@
   .blog__play { flex-wrap: wrap; }
   .blog__play-btn { flex: 1 1 100%; justify-content: center; }
 }
+
+/* ---- A-023 : jeux cités dans un article éditorial ---- */
+.blog__games { margin-top: 24px; background: #ffffff; border-radius: var(--radius-lg); padding: var(--gap-lg); box-shadow: 0 8px 40px rgba(0,0,0,0.22); }
+.blog__games-title { margin: 0 0 14px; font-size: var(--text-lg); font-weight: 800; color: #111111; }
+.blog__games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 12px; }
+.blog__games-item { display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: #111111; font-weight: 700; font-size: var(--text-xs); text-align: center; }
+.blog__games-item img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 14px; background: #171033; }

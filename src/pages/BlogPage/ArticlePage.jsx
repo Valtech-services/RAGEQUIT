@@ -89,6 +89,22 @@ export default function ArticlePage() {
 
         {game && <PlayCard game={game} where="bottom" t={t} />}
 
+        {/* A-023 : articles éditoriaux, liens vers les jeux cités (champ games). */}
+        {!game && post.games?.length > 0 && (
+          <div className="blog__games">
+            <h2 className="blog__games-title">{t('ui.blog.gamesInArticle')}</h2>
+            <div className="blog__games-grid">
+              {post.games.map(id => games.find(g => g.id === id)).filter(Boolean).map(g => (
+                <Link key={g.id} to={`/game/${g.id}`} className="blog__games-item"
+                  onClick={() => track('blog_play_click', { game_id: g.id, props: { where: 'list' } })}>
+                  <img {...thumbImg(g.thumbnail, '120px')} alt="" loading="lazy" width="120" height="120" />
+                  <span>{g.title}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
         {others.length > 0 && (
           <div className="blog__related">
             <h3 className="blog__related-title">{t('ui.blog.readNext')}</h3>

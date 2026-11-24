@@ -28,7 +28,7 @@ Statuts : `proposé`, `lancé` (demandé par Laurent), `fait`, `refusé` (ne jam
 | A-020 | 2026-11-24 | Pied de page : 3 catégories sur 7 | SEO, navigation | fait | 2026-11-24 | pied de page généré depuis useCategories (7 catégories traduites) |
 | A-021 | 2026-11-24 | Page Classement indexable avec 87 mots prérendus (12 langues) | adsense, SEO | fait | 2026-11-24 | texte « How the leaderboards work » prérendu en 12 langues (323 mots) |
 | A-022 | 2026-11-24 | Mentions légales : meta description « Laurent Valard (Valtech Services) » dans 12 langues | SEO | proposé | 2026-11-24 | |
-| A-023 | 2026-11-24 | Blog : 23 articles sur 26 sont des guides de jeu, aucun éditorial depuis le 29/08 | adsense, contenu | lancé | 2026-11-24 | 2 articles éditoriaux en préparation (PR séparée) |
+| A-023 | 2026-11-24 | Blog : 23 articles sur 26 sont des guides de jeu, aucun éditorial depuis le 29/08 | adsense, contenu | fait | 2026-11-24 | 2 articles éditoriaux publiés en 12 langues (one-button games, pause de 5 minutes) ; série à poursuivre |
 | A-024 | 2026-11-24 | Admin : PIN en variable VITE_ (lisible dans le JS public), contrôle admin côté navigateur | admin, sécurité | fait | 2026-11-24 | PIN vérifié côté serveur (api/admin-pin.js, variable ADMIN_PIN) ; règles RLS dans supabase/migrations/20261124140000_admin_only_reads.sql à exécuter par Laurent |
 | A-025 | 2026-11-24 | Option tendance : mode sombre automatique (prefers-color-scheme) | tendance | proposé | 2026-11-24 | option à décider |
 | A-026 | 2026-11-24 | Pas de meta google-adsense-account (vérification par ads.txt seulement) | adsense | proposé | 2026-11-24 | |
