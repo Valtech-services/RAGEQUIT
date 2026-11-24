@@ -38,6 +38,12 @@
   #hurtFx { position: fixed; inset: 0; pointer-events: none; z-index: 3; opacity: 0; background: radial-gradient(ellipse at center, rgba(255,59,79,0) 40%, rgba(255,59,79,.55) 100%); }
   #freezeFx { position: fixed; inset: 0; pointer-events: none; z-index: 2; opacity: 0; transition: opacity .3s; background: radial-gradient(ellipse at center, rgba(54,214,255,0) 45%, rgba(54,214,255,.32) 100%); }
   #freezeFx.on { opacity: 1; }
+  /* speed lines while dashing, launching or riding a geyser */
+  #speedFx { position: fixed; inset: -12%; pointer-events: none; z-index: 2; opacity: 0;
+    background: repeating-conic-gradient(from 0deg at 50% 52%, rgba(255,255,255,0) 0deg 4deg, rgba(225,240,255,.5) 4deg 4.5deg, rgba(255,255,255,0) 4.5deg 9deg);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 52%, transparent 36%, #000 78%); mask-image: radial-gradient(ellipse at 50% 52%, transparent 36%, #000 78%); }
+  #speedFx.on { animation: spd .24s steps(3) infinite; }
+  @keyframes spd { 50% { transform: rotate(2.2deg) scale(1.04); } }
   #lowFx { position: fixed; inset: 0; pointer-events: none; z-index: 2; opacity: 0; background: radial-gradient(ellipse at center, rgba(255,59,79,0) 55%, rgba(255,59,79,.3) 100%); }
   #lowFx.on { animation: lowPulse 1s ease-in-out infinite; }
   @keyframes lowPulse { 50% { opacity: 1; } }
@@ -149,6 +155,7 @@
 
   /* title */
   #menu { align-items: flex-end; }
+  #menu { padding-bottom: calc(2px + 1.5vh + var(--safe-bottom)); padding-bottom: calc(2px + 1.5dvh + var(--safe-bottom)); }
   #menu .panel { padding-bottom: 4px; }
   #logo { position: fixed; top: calc(8vh + var(--safe-top)); left: 0; right: 0; text-align: center; pointer-events: none; z-index: 10; opacity: 0; transition: opacity .4s; }
   body.menuOn #logo { opacity: 1; }
@@ -163,7 +170,6 @@
   .mode:active { transform: scale(.94); }
   .mode.sel { color: #12062a; background: var(--mc, #ffc93c); border-color: transparent; box-shadow: 0 0 16px var(--mc, #ffc93c); }
   .mode[data-m="classic"] { --mc: #ffc93c; } .mode[data-m="hard"] { --mc: #ff4d9d; } .mode[data-m="daily"] { --mc: #36d6ff; }
-  #modeInfo { font-size: 12px; color: var(--dim); min-height: 32px; margin: 8px 0 0; line-height: 1.35; }
   #bestLine { font-size: 13px; font-weight: 800; letter-spacing: 1px; color: var(--star); margin-top: 6px; font-variant-numeric: tabular-nums; }
   #chal { display: none; margin-bottom: 8px; padding: 9px; border-radius: 12px; border: 1px dashed var(--rose); color: #ffc6df; font-size: 13px; font-weight: 800; }
   #chal.on { display: block; }
@@ -237,6 +243,7 @@
 <div class="vignette"></div>
 <div class="scan"></div>
 <div id="freezeFx"></div>
+<div id="speedFx"></div>
 <div id="lowFx"></div>
 <div id="hurtFx"></div>
 <div id="flash"></div>
@@ -277,7 +284,6 @@
       <button class="mode" data-m="hard">HARD</button>
       <button class="mode" data-m="daily">DAILY</button>
     </div>
-    <div id="modeInfo"></div>
     <div id="bestLine">BEST 0</div>
     <div id="suitRow">
       <button class="sArrow" id="suitPrev" aria-label="Previous suit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
@@ -1016,7 +1022,7 @@ function disposeTree(root) {
 function clearWorld() {
   disposeTree(world);
   while (world.children.length) world.remove(world.children[0]);
-  bodies = []; pads = []; shards = []; caps = []; arcs = []; gate = null; fadeProps.length = 0; vents.length = 0; moon = null;
+  bodies = []; pads = []; shards = []; caps = []; arcs = []; gate = null; fadeProps.length = 0; vents.length = 0; moon = null; star = null;
   for (const e of enemies) e.remove(); enemies.length = 0; orbs.length = 0; meteors.length = 0;
   if (B) { scene.remove(B.root); disposeTree(B.root); B = null; }
   gateLight.intensity = 0; bossLight.intensity = 0; gateLight.visible = false; bossLight.visible = false;
@@ -1110,14 +1116,79 @@ const shardGeo = new THREE.OctahedronGeometry(0.34, 0); shardGeo.__shared = true
 const shardMat = markShared(new THREE.MeshStandardMaterial({ color: 0xfff0b0, emissive: new THREE.Color(PAL.gold), emissiveIntensity: 1.9, roughness: 0.25, metalness: 0.4, flatShading: true }));
 const haloMats = {};
 function haloMat(col) { if (!haloMats[col]) haloMats[col] = markShared(new THREE.SpriteMaterial({ map: glowTex, color: new THREE.Color(col).multiplyScalar(1.2), transparent: true, opacity: 0.7, depthWrite: false, blending: THREE.AdditiveBlending })); return haloMats[col]; }
+/* shard beacons: a soft light pillar above every shard still in play, readable from across the planet
+   (shrinks away as the hero comes close so it never hides the action) */
+const beamGeo = new THREE.CylinderGeometry(0.2, 0.42, 1, 10, 1, true); beamGeo.translate(0, 0.5, 0); beamGeo.__shared = true;
+const beamMat = markShared(new THREE.ShaderMaterial({
+  uniforms: { uC: { value: new THREE.Color(PAL.gold).multiplyScalar(1.3) }, uT: { value: 0 } },
+  vertexShader: 'varying float vY; void main(){ vY = position.y; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+  fragmentShader: 'uniform vec3 uC; uniform float uT; varying float vY; void main(){ float a = pow(1.0 - vY, 1.8) * (0.42 + 0.14 * sin(uT * 4.0 - vY * 10.0)); gl_FragColor = vec4(uC * a, a); }',
+  transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide
+}));
 function addShard(p, b, n) {
   const g = new THREE.Group(); g.position.copy(p);
   const m = new THREE.Mesh(shardGeo, shardMat); m.scale.set(1, 1.5, 1); g.add(m);
   const h = new THREE.Sprite(haloMat(PAL.gold)); h.scale.set(1.5, 1.5, 1); g.add(h);
-  if (n) orient(g, n, anyPerp(n, T2));
+  let beam = null;
+  if (n) { orient(g, n, anyPerp(n, T2)); beam = new THREE.Mesh(beamGeo, beamMat); beam.scale.set(1, 6, 1); beam.renderOrder = 3; g.add(beam); }
   world.add(g);
   if (b && b.moon) b.attached.push(g);
-  shards.push({ g, m, alive: true, p: p.clone(), body: b, n: n ? n.clone() : null, t: Math.random() * 6, pull: false });
+  shards.push({ g, m, beam, alive: true, p: p.clone(), body: b, n: n ? n.clone() : null, t: Math.random() * 6, pull: false });
+}
+
+/* STAR SPRITE: a shy golden star that shows up once per sector and runs away across the planet.
+   Catch it (run, dash, cut corners) for +5 s, 500 points and a short magnet. */
+const starGeo = (() => {
+  const sh = new THREE.Shape();
+  for (let i = 0; i < 10; i++) { const r = i % 2 ? 0.27 : 0.64, a = i / 10 * Math.PI * 2 + Math.PI / 2; if (i) sh.lineTo(Math.cos(a) * r, Math.sin(a) * r); else sh.moveTo(Math.cos(a) * r, Math.sin(a) * r); }
+  sh.closePath();
+  const g = new THREE.ExtrudeGeometry(sh, { depth: 0.2, bevelEnabled: true, bevelThickness: 0.08, bevelSize: 0.06, bevelSegments: 1 }); g.center(); g.__shared = true; return g;
+})();
+const starMat = markShared(new THREE.MeshStandardMaterial({ color: 0xfff6d0, emissive: new THREE.Color(0xffd24a), emissiveIntensity: 2.2, roughness: 0.2, metalness: 0.5, flatShading: true }));
+const STAR_COL = 0xfff0a0;
+let star = null;
+function spawnStar() {
+  const b = H.body; if (!b || b.moon || H.flight) return false;
+  // appear ahead of the camera (slightly to one side) so the player sees it pop up
+  const fw = tangent(V().copy(CAM.fwd), H.n); if (fw.lengthSq() < 1e-4) anyPerp(H.n, fw); fw.normalize().applyAxisAngle(H.n, (Math.random() < 0.5 ? -1 : 1) * (0.35 + Math.random() * 0.45));
+  const ax = V().crossVectors(H.n, fw).normalize();
+  const n = H.n.clone().applyAxisAngle(ax, Math.min(0.9, 8.5 / b.r)).normalize();
+  const g = new THREE.Group(); const m = new THREE.Mesh(starGeo, starMat); m.position.y = 0.95; m.castShadow = true; g.add(m);
+  const h = new THREE.Sprite(haloMat(STAR_COL)); h.scale.set(3.4, 3.4, 1); h.position.y = 0.95; g.add(h);
+  world.add(g);
+  star = { g, m, h, b, n, f: anyPerp(n, V()), t: 0, life: 15 };
+  surf(b, n, 0, g.position); orient(g, n, star.f);
+  ring(g.position, n, STAR_COL, 0.4, 4.5, 0.6); sparkles(T1.copy(g.position).addScaledVector(n, 1), n, STAR_COL, 20, 1.2);
+  toast('STAR SPRITE! Catch it before it escapes'); Audio.play('power', 0.6, 1.6);
+  return true;
+}
+function removeStar() { if (star) { world.remove(star.g); star = null; } }
+function catchStar() {
+  const s = star, p = surf(s.b, s.n, 1, V());
+  G.time += 5; const tp = $('timePlus'); tp.textContent = '+5s'; tp.classList.remove('go'); void tp.offsetWidth; tp.classList.add('go');
+  G.pw.magnet = Math.max(G.pw.magnet, 6); G.stars++; renderPowers();
+  addScore(500, p, '#fff0a0', 'STAR ');
+  burst(p, s.n, STAR_COL, 30, 7, 0.45, 0.6); sparkles(p, s.n, PAL.gold, 26, 1.4); ring(s.g.position, s.n, STAR_COL, 0.5, 6.5, 0.6);
+  flash(0.3, '#fff0a0'); addShake(0.3); hitStop = 0.06; Audio.play('power', 0.9, 1.5); Audio.play('combo', 0.6, 1.3);
+  removeStar();
+}
+function updateStar(dt, t) {
+  if (!star) return;
+  const s = star; s.t += dt;
+  if (state === 'play') {
+    // flee from the hero along the surface, with a playful zig-zag; slower near the end so it stays catchable
+    const d = s.g.position.distanceTo(H.pos);
+    if (H.body === s.b && d < 16) { T1.subVectors(s.g.position, H.pos); tangent(T1, s.n); if (T1.lengthSq() > 1e-4) s.f.lerp(T1.normalize(), 1 - Math.exp(-2.2 * dt)); }
+    T2.crossVectors(s.n, s.f); s.f.addScaledVector(T2, Math.sin(s.t * 3.1) * 1.1 * dt); tangent(s.f, s.n).normalize();
+    const spd = (d < 7 ? 7.6 : 4.4) * (s.t > s.life - 4 ? 0.8 : 1) * (G.pw.freeze > 0 ? 0.3 : 1) * (G.mode === 'hard' ? 1.08 : 1);
+    s.n.addScaledVector(s.f, spd * dt / s.b.r).normalize(); tangent(s.f, s.n).normalize();
+    if (d < 2) { catchStar(); return; }
+  }
+  surf(s.b, s.n, Math.abs(Math.sin(s.t * 6)) * 0.55, s.g.position); orient(s.g, s.n, s.f);
+  s.m.rotation.y += dt * 5; s.h.material.opacity = 0.6 + Math.sin(t * 8) * 0.2;
+  if (Math.random() < 0.8 * PFX_SCALE) { T1.copy(s.g.position).addScaledVector(s.n, 0.95); FX.sparkle.emit(T1.x, T1.y, T1.z, s.n.x * 0.6, s.n.y * 0.6, s.n.z * 0.6, Math.random() < 0.5 ? STAR_COL : PAL.gold, 0.32, 0.7, -0.2, 1); }
+  if (s.t > s.life) { burst(surf(s.b, s.n, 1, T1), s.n, STAR_COL, 16, 8, 0.35, 0.5, 0); if (state === 'play') toast('The star got away'); removeStar(); }
+  else s.g.visible = s.t < s.life - 3 || Math.floor(t * 10) % 2 === 0;
 }
 const capGeo = new THREE.IcosahedronGeometry(0.42, 0); capGeo.__shared = true;
 function addCap(b, n, type) {
@@ -1321,7 +1392,7 @@ function buildSector(k, seed) {
   const statics = bodies.filter((b) => !b.moon);
   for (let i = 0; i < capN; i++) { const b = statics[1 + Math.floor(R() * (statics.length - 1))] || statics[0]; addCap(b, randDir(R, V()), types[Math.floor(R() * types.length)]); }
   if (moon) addCap(moon, randDir(R, V()), types[Math.floor(R() * types.length)]);
-  G.boss = boss; G.bossDown = !boss; G.sectorT = 0; G.theme = th;
+  G.boss = boss; G.bossDown = !boss; G.sectorT = 0; G.theme = th; G.starDone = false; G.secHit = false;
   G.gravK = th.trait === 'lowgrav' ? 0.66 : 1;
   G.time = G.M.time + Math.min(12, (k - 1) * 2);
   G.spawnT = 2.5; G.meteorT = 7; G.enemyCap = Math.min(12, Math.round((3 + k * 1.5) * (G.mode === 'hard' ? 1.25 : 1)));
@@ -1340,8 +1411,11 @@ const spinRing = new THREE.Mesh(new THREE.RingGeometry(0.6, 2.1, 40), new THREE.
 spinRing.rotation.x = -Math.PI / 2; spinRing.position.y = 0.7; hero.add(spinRing);
 const crest = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color: new THREE.Color(PAL.gold).multiplyScalar(1.6), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
 crest.scale.set(0.5, 0.5, 1); crest.position.set(0, 1.85, 0); hero.add(crest);
+const landMark = new THREE.Mesh(new THREE.RingGeometry(0.42, 0.56, 28), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, side: THREE.DoubleSide }));
+landMark.renderOrder = 4; landMark.visible = false;
+let speedK = 0; const speedFx = { el: document.getElementById('speedFx'), o: -1 };
 const blob = new THREE.Mesh(new THREE.CircleGeometry(0.55, 20), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.35, depthWrite: false }));
-scene.add(blob);
+scene.add(blob, landMark);
 // recolor the hero's palette texture for the chosen suit: greens become the cloak hue, browns the trim hue
 const heroTexCache = {};
 function heroTexture(src, suit) {
@@ -1819,7 +1893,7 @@ function newGame(mode, seed) {
   const M = MODES[mode];
   G = {
     mode, M, seed, rnd: mulberry32(seed ^ 0x5bd1e995), score: 0, shown: 0, sector: 1, hearts: M.hearts, maxHearts: M.hearts, time: M.time,
-    combo: 0, comboT: 0, bestCombo: 1, kills: 0, shardsTotal: 0, bosses: 0, pw: { magnet: 0, jetpack: 0, freeze: 0 }, shield: false, revived: false, invuln: 0,
+    combo: 0, comboT: 0, bestCombo: 1, kills: 0, shardsTotal: 0, bosses: 0, stars: 0, starDone: false, secHit: false, pw: { magnet: 0, jetpack: 0, freeze: 0 }, shield: false, revived: false, invuln: 0,
     need: 0, got: 0, boss: false, bossDown: true, sectorT: 0, spawnT: 0, meteorT: 0, enemyCap: 3, final: false, lowT: 0, cause: '', banked: 0, gravK: 1, theme: THEMES[0]
   };
 }
@@ -1866,7 +1940,7 @@ function hurtHero(src, force) {
     burst(T1.copy(H.pos).addScaledVector(H.n, 0.8), H.n, PAL.cyan, 24, 6, 0.4, 0.5); ring(H.pos, H.n, PAL.cyan, 0.5, 4, 0.4);
     renderPowers(); return;
   }
-  G.hearts--; G.invuln = 1.6; H.hitT = 0.35; G.combo = 0;
+  G.hearts--; G.invuln = 1.6; H.hitT = 0.35; G.combo = 0; G.secHit = true;
   renderHearts(true); flashHurt(); addShake(0.55); hitStop = 0.09;
   Audio.play('hurt', 0.9);
   burst(T1.copy(H.pos).addScaledVector(H.n, 0.8), H.n, PAL.red, 18, 6, 0.4, 0.5);
@@ -2069,9 +2143,10 @@ function contacts() {
 }
 function enterGate() {
   state = 'warp'; G.warpT = 0;
-  const left = Math.max(0, G.time), bonus = 1000 * G.sector + Math.floor(left) * 25 * (G.mode === 'hard' ? 2 : 1);
+  removeStar();
+  const left = Math.max(0, G.time), flawless = !G.secHit, bonus = 1000 * G.sector + Math.floor(left) * 25 * (G.mode === 'hard' ? 2 : 1) + (flawless ? 500 * G.sector : 0);
   G.score += bonus; bumpScore();
-  banner('SECTOR ' + G.sector + ' CLEAR', '+' + fmt(bonus) + '  /  ' + Math.floor(left) + ' S LEFT', '#36d6ff');
+  banner('SECTOR ' + G.sector + ' CLEAR', '+' + fmt(bonus) + '  /  ' + Math.floor(left) + ' S LEFT' + (flawless ? '  /  FLAWLESS' : ''), '#36d6ff');
   Audio.play('warp', 0.9); heroAnim('Cheer', 0.15);
   flash(0.4, '#9be8ff');
   H.vel.set(0, 0, 0);
@@ -2155,6 +2230,7 @@ function updateRadar(dt) {
   c.beginPath(); c.moveTo(38, 7); c.lineTo(38, 69); c.moveTo(7, 38); c.lineTo(69, 38); c.stroke();
   for (const s of shards) if (s.alive) radarDot(s.g.position, '#ffc93c', 2.6, s.body && s.body !== H.body ? 0.45 : 1);
   for (const q of caps) if (q.alive) radarDot(q.g.position, '#ffffff', 2.2, 0.8);
+  if (star) radarDot(star.g.position, '#fff6c0', 3.4 + Math.sin(simT * 9) * 0.9, 1);
   if (gate) radarDot(gate.p, '#36d6ff', 4, 1);
   if (B) radarDot(B.pos, '#ff4d9d', 3.6, 0.9);
   // the hero: an arrow pointing where they run
@@ -2270,7 +2346,6 @@ function wipe() { const w = $('wipe'); w.classList.remove('go'); void w.offsetWi
 let menuSuit = 0;
 function renderMenu() {
   document.querySelectorAll('.mode').forEach((b) => b.classList.toggle('sel', b.dataset.m === selMode));
-  $('modeInfo').textContent = MODES[selMode].info;
   $('bestLine').textContent = 'BEST ' + MODES[selMode].label + '  ' + fmt(SV.best[selMode] || 0);
   renderSuit(); renderAccount();
   if (CHAL) { $('chal').textContent = 'CHALLENGE: beat ' + fmt(CHAL.beat) + ' pts in the same galaxy (' + MODES[CHAL.mode].label + ')'; show($('chal'), true); }
@@ -2506,6 +2581,7 @@ function updatePlay(dt) {
   for (const k in G.pw) if (G.pw[k] > 0) G.pw[k] = Math.max(0, G.pw[k] - dt);
   if (G.pw.freeze <= 0 && !H.flight) G.time -= dt;
   if (G.time <= 0) { G.time = 0; killHero('time'); return; }
+  if (!G.starDone && !star && G.sectorT > 9 && !B && !gate) G.starDone = spawnStar();
   // reinforcements away from the hero
   G.spawnT -= dt;
   if (G.spawnT <= 0) { G.spawnT = Math.max(3, 7 - G.sector * 0.4) / G.M.speed; if (enemies.filter((e) => e.alive).length < G.enemyCap) spawnEnemy(); }
@@ -2521,7 +2597,7 @@ function updateWorld(dt, t) {
     surf(o.b, o.n, 0.75, o.m.position);
     if (Math.random() < 0.5) FX.soft.emit(o.m.position.x, o.m.position.y, o.m.position.z, 0, 0, 0, PAL.orange, 0.5, 0.3, -1, 0);
   }
-  updateMeteors(dt);
+  updateMeteors(dt); updateStar(dt, t); beamMat.uniforms.uT.value = t;
   if (state === 'play' || state === 'warp' || state === 'dying') updateBoss(dt);
   // shards bob and spin, magnet pulls them in
   for (const s of shards) {
@@ -2529,6 +2605,7 @@ function updateWorld(dt, t) {
     s.t += dt; s.m.rotation.y += dt * 2.4;
     if (s.pull && state === 'play') { HC.copy(H.pos).addScaledVector(H.n, 0.8); s.g.position.lerp(HC, 1 - Math.exp(-6 * dt)); }
     else s.m.position.y = Math.sin(s.t * 2.5) * 0.12;
+    if (s.beam) { const k = clamp((s.g.position.distanceTo(H.pos) - 3) / 7, 0, 1); s.beam.visible = k > 0.03 && !s.pull; s.beam.scale.y = 6 * k; }
     if (Math.random() < 0.03 * PFX_SCALE) FX.sparkle.emit(s.g.position.x, s.g.position.y, s.g.position.z, 0, 0, 0, 0xfff0a0, 0.2, 0.6, 0, 0);
   }
   for (const c of caps) { if (!c.alive) continue; c.t += dt; c.m.rotation.y += dt * 2; c.m.rotation.x += dt; c.rg.rotation.x = t * 1.5; c.rg.rotation.y = t; c.m.position.y = Math.sin(c.t * 3) * 0.15; }
@@ -2574,6 +2651,20 @@ function updateHeroVisual(dt, t) {
   if ((H.dashT > 0 || (!H.grounded && T1.copy(H.vel).length() > 10)) && Math.random() < 0.9) { T1.copy(H.pos).addScaledVector(H.n, 0.8); FX.soft.emit(T1.x, T1.y, T1.z, 0, 0, 0, H.dashT > 0 ? PAL.cyan : (heroSuit ? heroSuit.trail : PAL.gold), 0.9, 0.35, -2, 0); }
   // blob shadow on the ground below
   const b = H.body || bodies[0]; if (b) { const nn = T2.subVectors(H.pos, b.c).normalize(); surf(b, nn, 0.06, blob.position); blob.quaternion.setFromUnitVectors(T3.set(0, 0, 1), nn); const hgt = Math.max(0, heightOver(H)); const bs = Math.max(0.2, 1 - hgt * 0.12); blob.scale.set(bs, bs, bs); blob.material.opacity = 0.35 * bs; }
+  // landing marker while airborne: turns rose and grows when the hero will land on a monster (stomp)
+  const air = !!(b && state === 'play' && !H.grounded && !H.flight);
+  let hot = false;
+  if (air) {
+    landMark.position.copy(blob.position).addScaledVector(T2, 0.02); landMark.quaternion.copy(blob.quaternion);
+    for (const e of enemies) if (e.alive && e.b === b && e.root.position.distanceTo(blob.position) < 1.7) { hot = true; break; }
+    landMark.material.color.set(hot ? PAL.rose : (heroSuit ? heroSuit.glow : PAL.gold)).multiplyScalar(hot ? 2.2 : 1.4);
+    const ls = hot ? 1.5 + Math.sin(t * 18) * 0.15 : 1; landMark.scale.set(ls, ls, ls);
+  }
+  landMark.material.opacity = lerp(landMark.material.opacity, air ? (hot ? 0.95 : 0.6) : 0, 1 - Math.exp(-14 * dt)); landMark.visible = landMark.material.opacity > 0.02;
+  // speed lines
+  const sp = state === 'play' ? (H.dashT > 0 ? 0.7 : H.flight ? 0.55 : (!H.grounded && T1.copy(H.vel).length() > 12) ? 0.4 : 0) * (RM ? 0.35 : 1) : 0;
+  speedK = lerp(speedK, sp, 1 - Math.exp(-10 * dt));
+  const so = speedK < 0.02 ? 0 : +speedK.toFixed(2); if (so !== speedFx.o) { speedFx.o = so; speedFx.el.style.opacity = so; speedFx.el.classList.toggle('on', so > 0); }
   heroLight.position.copy(H.pos).addScaledVector(H.n, 1.6);
   // light rig follows the hero so shadows stay crisp
   sun.target.position.copy(H.pos); sun.position.copy(H.pos).addScaledVector(SUN_DIR, 20);
@@ -2688,6 +2779,10 @@ if (TEST) {
     lite: (nor, det) => { for (const b of bodies) { b.mat.userData.U.uHasNor.value = nor; b.mat.userData.U.uHasDet.value = det; } },
     suit: (id) => { SV.suit = id; buildHero(id); },
     cam: (m) => setCamMode(m),
+    star: () => { G.starDone = spawnStar(); return !!star; },
+    starInfo: () => (star ? { t: +star.t.toFixed(2), d: +star.g.position.distanceTo(H.pos).toFixed(2) } : null),
+    catchStar: () => { if (star) { star.n.copy(H.n); star.g.position.copy(H.pos); } },
+    stars: () => G.stars,
     look: () => { PV.copy(H.pos).addScaledVector(H.n, 0.8).project(camera); return [+PV.x.toFixed(2), +PV.y.toFixed(2), +PV.z.toFixed(3)]; }
   };
 }
