@@ -40,3 +40,4 @@ Statuts : `proposé`, `lancé` (demandé par Laurent), `fait`, `refusé` (ne jam
 | A-032 | 2026-11-25 | Titres d'articles > 65 car. (20) et meta descriptions de fiches > 165 car. (16) | SEO | proposé | 2026-11-25 | |
 | A-033 | 2026-11-25 | Pied de page : lien vers X alors que le compte est abandonné | image | proposé | 2026-11-25 | Footer.jsx l.41 |
 | A-034 | 2026-11-25 | Option tendance : typographie d'affichage expressive pour les H1 | tendance | proposé | 2026-11-25 | option à décider |
+| A-035 | 2026-11-25 | Jeux : menu titre qui saute ou tremble sur desktop et barres de défilement visibles dans les menus (surtout les derniers jeux sortis) | jeux, desktop | lancé | 2026-11-25 | demandé par Laurent pour l'audit du 2026-11-26 : vérifier jeu par jeu en 1280x748 et 1000x562 (bouton qui grossit en boucle, panneaux overflow-y:auto). Corrigé sur quadshock (PR #111) ; Laurent donnera des précisions |

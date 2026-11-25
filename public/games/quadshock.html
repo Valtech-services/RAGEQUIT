@@ -17,6 +17,7 @@
   --gold: #ffc23a;
   --violet: #9b5cff;
   --ink: #f4efff;
+  --me: #b8ff2e;
   --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -47,10 +48,13 @@ button { font-family: var(--font); cursor: pointer; border: 0; color: inherit; }
 
 #rivalChip { position: absolute; top: calc(64px + var(--safe-top)); left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; padding: 6px 14px 6px 6px; border-radius: 999px; background: rgba(26,10,48,.78); box-shadow: inset 0 0 0 1px rgba(255,45,94,.45), 0 0 16px rgba(255,45,94,.18); white-space: nowrap; transition: box-shadow .25s ease; }
 #rivalChip.turnP { box-shadow: inset 0 0 0 1px rgba(184,255,46,.6), 0 0 18px rgba(184,255,46,.25); }
-#rivalAv { width: 30px; height: 30px; border-radius: 50%; }
-#rivalName { font-size: 13px; font-weight: 900; letter-spacing: 2px; color: var(--crimson); }
+#rivalChip { padding: 6px 14px 6px 8px; }
+.chipDot { width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff 0, var(--crimson) 35%, #7a0a26 100%); box-shadow: 0 0 10px var(--crimson); transition: background .25s ease, box-shadow .25s ease; }
+#rivalChip.turnP .chipDot { background: radial-gradient(circle at 35% 30%, #fff 0, var(--me) 35%, #1d2a00 100%); box-shadow: 0 0 10px var(--me); }
+#rivalName { font-size: 12px; font-weight: 900; letter-spacing: 2px; color: var(--crimson); font-variant-numeric: tabular-nums; }
+#rivalChip.trio { box-shadow: inset 0 0 0 1px rgba(255,194,58,.7), 0 0 18px rgba(255,194,58,.3); }
 #turnTxt { font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: rgba(244,239,255,.75); min-width: 96px; }
-#rivalChip.turnP #turnTxt { color: var(--lime); }
+#rivalChip.turnP #turnTxt { color: var(--me); }
 .dots span { animation: dot 1s infinite; opacity: .2; }
 .dots span:nth-child(2) { animation-delay: .2s; } .dots span:nth-child(3) { animation-delay: .4s; }
 @keyframes dot { 50% { opacity: 1; } }
@@ -95,8 +99,8 @@ button { font-family: var(--font); cursor: pointer; border: 0; color: inherit; }
 .ov { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; padding: calc(16px + var(--safe-top)) calc(16px + var(--safe-right)) calc(16px + var(--safe-bottom)) calc(16px + var(--safe-left)); opacity: 0; pointer-events: none; transition: opacity .3s ease; }
 .ov.on { opacity: 1; pointer-events: auto; }
 .ov.center { justify-content: center; background: rgba(8,3,18,.8); }
-.panel { width: min(100%, 380px); max-height: 100%; overflow-y: auto; text-align: center; padding: 22px 20px; border-radius: 22px; background: linear-gradient(180deg, rgba(40,16,70,.96), rgba(16,6,30,.96)); box-shadow: inset 0 0 0 1px rgba(155,92,255,.5), 0 0 40px rgba(155,92,255,.25); transform: translateY(16px) scale(.97); transition: transform .35s cubic-bezier(.2,.9,.3,1.2); }
-.ov.on .panel { transform: none; }
+.panel { width: min(100%, 380px); max-height: 100%; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; -ms-overflow-style: none; overscroll-behavior: contain; text-align: center; padding: 22px 20px; border-radius: 22px; background: linear-gradient(180deg, rgba(40,16,70,.96), rgba(16,6,30,.96)); box-shadow: inset 0 0 0 1px rgba(155,92,255,.5), 0 0 40px rgba(155,92,255,.25); }
+.panel::-webkit-scrollbar, .ov::-webkit-scrollbar { display: none; width: 0; height: 0; }
 .panel h2 { margin: 0 0 6px; font-size: 30px; font-weight: 900; font-style: italic; letter-spacing: 2px; }
 .panel p { margin: 6px 0; font-size: 14px; color: rgba(244,239,255,.8); line-height: 1.4; }
 .btn { display: block; width: 100%; margin-top: 10px; padding: 15px 18px; border-radius: 16px; font-size: 17px; font-weight: 900; letter-spacing: 2px; background: linear-gradient(180deg, #d2ff5c, var(--lime)); color: #142000; box-shadow: 0 0 22px rgba(184,255,46,.45), inset 0 -3px 0 rgba(0,0,0,.2); transition: transform .12s ease; }
@@ -114,25 +118,35 @@ button { font-family: var(--font); cursor: pointer; border: 0; color: inherit; }
 #logo .tag { display: block; margin-top: 10px; font-size: 13px; font-weight: 800; letter-spacing: 4px; color: var(--gold); text-shadow: 0 0 10px rgba(255,194,58,.6); }
 @keyframes flick { 0%, 40%, 44%, 100% { opacity: 1; } 42% { opacity: .45; } 43% { opacity: 1; } 45% { opacity: .7; } }
 #menu { width: min(100%, 400px); text-align: center; }
-#modes { display: flex; gap: 8px; margin-bottom: 10px; }
-.mode { flex: 1; padding: 11px 4px; border-radius: 14px; font-size: 13px; font-weight: 900; letter-spacing: 1.5px; background: rgba(26,10,48,.82); box-shadow: inset 0 0 0 1px rgba(244,239,255,.2); transition: transform .12s ease, box-shadow .2s ease; }
-.mode.sel { box-shadow: inset 0 0 0 2px var(--lime), 0 0 16px rgba(184,255,46,.35); color: var(--lime); }
-.mode[data-m="hard"].sel { box-shadow: inset 0 0 0 2px var(--crimson), 0 0 16px rgba(255,45,94,.35); color: var(--crimson); }
-.mode[data-m="daily"].sel { box-shadow: inset 0 0 0 2px var(--gold), 0 0 16px rgba(255,194,58,.35); color: var(--gold); }
-.mode:active { transform: scale(.94); }
-#playBtn { font-size: 22px; padding: 17px; animation: pulse 1.4s ease-in-out infinite; }
-@keyframes pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 22px rgba(184,255,46,.45), inset 0 -3px 0 rgba(0,0,0,.2); } 50% { transform: scale(1.035); box-shadow: 0 0 38px rgba(184,255,46,.75), inset 0 -3px 0 rgba(0,0,0,.2); } }
+/* PLAY pulses by glow only: no scale, so the menu never moves */
+#playRow { display: flex; gap: 10px; align-items: stretch; }
+#playBtn { flex: 1; margin-top: 0; font-size: 22px; padding: 17px; animation: pulse 1.4s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { box-shadow: 0 0 18px rgba(184,255,46,.4), inset 0 -3px 0 rgba(0,0,0,.2); filter: brightness(1); } 50% { box-shadow: 0 0 40px rgba(184,255,46,.8), inset 0 -3px 0 rgba(0,0,0,.2); filter: brightness(1.08); } }
+.shopBtn { flex: 0 0 auto; width: 84px; margin-top: 0; padding: 8px 6px; border-radius: 16px; background: linear-gradient(180deg, rgba(60,26,100,.95), rgba(22,8,44,.95)); box-shadow: inset 0 0 0 2px var(--gold), 0 0 16px rgba(255,194,58,.3); color: var(--gold); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 900; letter-spacing: 1.5px; transition: transform .12s ease; }
+.shopBtn:active { transform: scale(.94); }
+.shopBtn svg { width: 24px; height: 24px; }
+.coinIco { display: inline-block; width: 14px; height: 14px; border-radius: 50%; vertical-align: -2px; margin-right: 4px; background: radial-gradient(circle at 35% 30%, #fff6cf 0, #ffc23a 40%, #a96400 100%); box-shadow: 0 0 8px rgba(255,194,58,.7), inset 0 0 0 1.5px rgba(122,74,0,.6); }
+#coinTxt { color: var(--gold); }
 #help { margin-top: 9px; font-size: 12px; font-weight: 700; color: rgba(244,239,255,.6); letter-spacing: .5px; }
-#bestTxt { margin-bottom: 8px; font-size: 12px; font-weight: 800; letter-spacing: 2px; color: rgba(244,239,255,.7); font-variant-numeric: tabular-nums; }
+#bestTxt { margin-bottom: 9px; font-size: 12px; font-weight: 800; letter-spacing: 2px; color: rgba(244,239,255,.7); font-variant-numeric: tabular-nums; display: flex; justify-content: center; gap: 16px; }
 #chalTxt { margin-bottom: 8px; font-size: 13px; font-weight: 900; letter-spacing: 1px; color: var(--gold); }
 
-/* Intro */
-#introAv { width: 120px; height: 120px; margin: 4px auto 6px; display: block; }
-#introNo { font-size: 12px; font-weight: 900; letter-spacing: 3px; color: rgba(244,239,255,.6); }
-#introName { font-size: 40px; font-weight: 900; font-style: italic; letter-spacing: 3px; color: var(--crimson); text-shadow: 0 0 20px rgba(255,45,94,.6); margin: 2px 0; }
-#introTrait { font-size: 13px; font-weight: 800; letter-spacing: 1px; color: var(--gold); }
-#introMod { font-size: 12px; font-weight: 700; color: rgba(244,239,255,.7); margin-top: 6px; min-height: 16px; }
-#introStars { font-size: 16px; letter-spacing: 4px; color: var(--crimson); margin-top: 4px; }
+/* Shop */
+#shop .panel { width: min(100%, 420px); }
+#shopCoins { font-size: 20px; font-weight: 900; color: var(--gold); font-variant-numeric: tabular-nums; text-shadow: 0 0 12px rgba(255,194,58,.5); }
+#shopCoins .coinIco { width: 18px; height: 18px; vertical-align: -3px; }
+#skins { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 12px 0 4px; }
+.skin { position: relative; padding: 8px 2px 7px; border-radius: 14px; background: rgba(255,255,255,.05); box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); display: flex; flex-direction: column; align-items: center; gap: 4px; transition: transform .12s ease, box-shadow .2s ease; }
+.skin:active { transform: scale(.94); }
+.skin canvas { width: 48px; height: 48px; }
+.skin small { font-size: 9px; font-weight: 900; letter-spacing: 1px; color: rgba(244,239,255,.75); white-space: nowrap; }
+.skin b { font-size: 11px; font-weight: 900; letter-spacing: 1px; font-variant-numeric: tabular-nums; color: var(--gold); }
+.skin.owned b { color: rgba(244,239,255,.6); }
+.skin.eq { box-shadow: inset 0 0 0 2px var(--me), 0 0 16px rgba(184,255,46,.3); }
+.skin.eq b { color: var(--me); }
+.skin.locked canvas { filter: saturate(.35) brightness(.7); }
+.skin.poor b { color: rgba(255,45,94,.85); }
+#shopMsg { min-height: 16px; font-size: 12px; font-weight: 800; letter-spacing: 1px; color: var(--gold); margin-top: 6px; }
 
 #win { background: rgba(8,3,18,.45); justify-content: flex-start; padding-top: calc(110px + var(--safe-top)); }
 /* Stats */
@@ -145,6 +159,7 @@ button { font-family: var(--font); cursor: pointer; border: 0; color: inherit; }
 .rows div { display: flex; justify-content: space-between; padding: 5px 2px; border-bottom: 1px dashed rgba(255,255,255,.1); opacity: 0; transform: translateX(-10px); transition: opacity .25s ease, transform .25s ease; }
 .rows div.in { opacity: 1; transform: none; }
 .rows div b { color: var(--gold); font-variant-numeric: tabular-nums; }
+.coinGain { margin-top: 4px; font-size: 15px; font-weight: 900; color: var(--gold); font-variant-numeric: tabular-nums; text-shadow: 0 0 10px rgba(255,194,58,.5); }
 #newBest { display: none; font-size: 13px; font-weight: 900; letter-spacing: 3px; color: var(--gold); animation: flick 1.2s infinite; }
 #newBest.on { display: block; }
 #shareMsg, #chalRes { font-size: 12px; font-weight: 700; color: var(--gold); min-height: 14px; margin-top: 6px; word-break: break-all; }
@@ -164,6 +179,19 @@ button { font-family: var(--font); cursor: pointer; border: 0; color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   #playBtn, #logo .q, #logo .s, .cell.full i, .pw.armed { animation: none; }
 }
+/* Short screens (desktop site player, landscape phones): compact panels so nothing needs to scroll */
+@media (max-height: 620px) {
+  .panel { padding: 14px 16px; }
+  .panel h2 { font-size: 24px; margin-bottom: 2px; }
+  .big { font-size: 36px; }
+  .btn { padding: 11px 14px; margin-top: 7px; font-size: 15px; }
+  .stats { margin: 8px 0 2px; gap: 6px; }
+  .stat { padding: 6px 4px; }
+  .stat b { font-size: 16px; }
+  #playBtn { padding: 13px; font-size: 20px; }
+  #skins { gap: 6px; margin-top: 8px; }
+  .skin canvas { width: 38px; height: 38px; }
+}
 @media (min-aspect-ratio: 1/1) {
   #logo .w { font-size: clamp(44px, 9vh, 92px); }
 }
@@ -175,13 +203,13 @@ button { font-family: var(--font); cursor: pointer; border: 0; color: inherit; }
 <div id="hud">
   <div id="scoreBox">
     <div id="score">0</div>
-    <div id="subRow"><span id="matchTxt">MATCH 1</span><span id="streakTxt">STREAK x1</span></div>
+    <div id="subRow"><span id="matchTxt">ROUND 1</span><span id="streakTxt">STREAK x1</span></div>
   </div>
   <div id="topRight">
     <button class="iconBtn" id="sndBtn" aria-label="Sound"><svg viewBox="0 0 24 24" id="sndIco"></svg></button>
     <button class="iconBtn" id="pauseBtn" aria-label="Pause"><svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
   </div>
-  <div id="rivalChip"><canvas id="rivalAv" width="60" height="60"></canvas><span id="rivalName">SPARK</span><span id="turnTxt">YOUR TURN</span></div>
+  <div id="rivalChip"><span class="chipDot"></span><span id="rivalName">CPU LV 1</span><span id="turnTxt">YOUR TURN</span></div>
   <div id="bottomBar">
     <div id="timerWrap"><div id="timerBar"></div></div>
     <div id="pwRow">
@@ -198,22 +226,9 @@ button { font-family: var(--font); cursor: pointer; border: 0; color: inherit; }
   <div id="logo"><span class="w q">QUAD</span><span class="w s">SHOCK</span><span class="tag">CONNECT 4. FRY THE GRID.</span></div>
   <div id="menu">
     <div id="chalTxt"></div>
-    <div id="bestTxt">BEST 0</div>
-    <div id="modes"><button class="mode sel" data-m="classic">CLASSIC</button><button class="mode" data-m="hard">HARD</button><button class="mode" data-m="daily">DAILY</button></div>
-    <button class="btn" id="playBtn">PLAY</button>
-    <div id="help">Tap a column to drop. Line up 4 to shock your rival.</div>
-  </div>
-</div>
-
-<div class="ov center" id="intro">
-  <div class="panel">
-    <div id="introNo">RIVAL 1</div>
-    <canvas id="introAv" width="240" height="240"></canvas>
-    <div id="introName">SPARK</div>
-    <div id="introStars"></div>
-    <div id="introTrait"></div>
-    <div id="introMod"></div>
-    <button class="btn" id="fightBtn">FIGHT</button>
+    <div id="bestTxt"><span id="bestNum">BEST 0</span><span id="coinTxt"><i class="coinIco"></i><span id="coinNum">0</span></span></div>
+    <div id="playRow"><button class="btn" id="playBtn">PLAY</button><button class="shopBtn" id="shopBtn" aria-label="Shop"><svg viewBox="0 0 24 24"><path d="M5 9h14l-1.2 10.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z" fill="#ffc23a"/><path d="M8.5 9V7a3.5 3.5 0 0 1 7 0v2" stroke="#ffc23a" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="12" cy="14.5" r="2.4" fill="#2a1600"/></svg><span>SHOP</span></button></div>
+    <div id="help">Tap a column to drop. Line up 4, win rounds, stack points.</div>
   </div>
 </div>
 
@@ -222,7 +237,8 @@ button { font-family: var(--font); cursor: pointer; border: 0; color: inherit; }
     <h2 id="winTitle" style="color: var(--lime)">SHOCKED!</h2>
     <div class="rows" id="winRows"></div>
     <div class="big" id="winTotal">+0</div>
-    <button class="btn" id="nextBtn">NEXT RIVAL</button>
+    <div class="coinGain" id="winCoins"></div>
+    <button class="btn" id="nextBtn">NEXT ROUND</button>
   </div>
 </div>
 
@@ -238,8 +254,8 @@ button { font-family: var(--font); cursor: pointer; border: 0; color: inherit; }
 <div class="ov center" id="revive">
   <div class="panel">
     <h2 style="color: var(--crimson)">SHORT-CIRCUITED</h2>
-    <p>Watch an ad to rewind your last move and replay this match. Your streak survives.</p>
-    <button class="btn gold" id="reviveBtn">WATCH AD &middot; REWIND</button>
+    <p id="reviveTxt">Watch an ad to replay this round from the start. Your score and streak stay.</p>
+    <button class="btn gold" id="reviveBtn">WATCH AD &middot; REPLAY ROUND</button>
     <button class="btn alt" id="noReviveBtn">NO THANKS</button>
   </div>
 </div>
@@ -251,15 +267,25 @@ button { font-family: var(--font); cursor: pointer; border: 0; color: inherit; }
     <div class="big" id="overScore">0</div>
     <div class="stats">
       <div class="stat"><small>BEST</small><b id="stBest">0</b></div>
-      <div class="stat"><small>RIVALS BEATEN</small><b id="stWins">0</b></div>
+      <div class="stat"><small>ROUNDS WON</small><b id="stWins">0</b></div>
       <div class="stat"><small>BEST STREAK</small><b id="stStreak">x1</b></div>
-      <div class="stat"><small>BLOCKS</small><b id="stBlocks">0</b></div>
+      <div class="stat"><small>COINS</small><b id="stCoins" style="color: var(--gold)">+0</b></div>
     </div>
     <div id="chalRes"></div>
     <button class="btn" id="againBtn">PLAY AGAIN</button>
-    <div class="btnRow"><button class="btn gold" id="shareBtn">CHALLENGE A FRIEND</button></div>
-    <button class="btn alt" id="menuBtn">MENU</button>
+    <div class="btnRow"><button class="btn gold" id="dblBtn">AD &middot; x2 COINS</button><button class="btn gold" id="shareBtn">CHALLENGE</button></div>
+    <div class="btnRow"><button class="btn alt" id="overShopBtn">SHOP</button><button class="btn alt" id="menuBtn">MENU</button></div>
     <div id="shareMsg"></div>
+  </div>
+</div>
+
+<div class="ov center" id="shop">
+  <div class="panel">
+    <h2 style="color: var(--gold)">DISC SHOP</h2>
+    <div id="shopCoins"><i class="coinIco"></i><span id="shopNum">0</span></div>
+    <div id="skins"></div>
+    <div id="shopMsg">Win rounds to earn coins.</div>
+    <button class="btn" id="shopClose">DONE</button>
   </div>
 </div>
 
@@ -284,7 +310,6 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const easeOut = (t) => 1 - Math.pow(1 - t, 3);
 const EMPTY = 0, P1 = 1, P2 = 2, ROCK = 3;
-const TIMER = { classic: 12, hard: 6, daily: 10 };
 
 function store(k, v) { try { localStorage.setItem('qs_' + k, String(v)); } catch (e) {} }
 function load(k, d) { try { const v = localStorage.getItem('qs_' + k); return v === null ? d : v; } catch (e) { return d; } }
@@ -292,7 +317,6 @@ function post(msg) { try { window.parent && window.parent !== window && window.p
 function bestOf(mode) { return parseInt(load('best_' + mode, '0'), 10) || 0; }
 
 function mulberry(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
-function todaySeed() { const d = new Date(); return d.getUTCFullYear() * 10000 + (d.getUTCMonth() + 1) * 100 + d.getUTCDate(); }
 
 /* ================= CHALLENGE LINK ================= */
 let challenge = null;
@@ -301,7 +325,7 @@ let challenge = null;
   try { if (!/qs_beat/.test(qs) && window.parent !== window) qs = window.parent.location.search; } catch (e) {}
   const p = new URLSearchParams(qs);
   const beat = parseInt(p.get('qs_beat'), 10), seed = parseInt(p.get('qs_seed'), 10);
-  if (beat > 0 && seed > 0) challenge = { beat, seed, mode: p.get('qs_mode') === 'hard' ? 'hard' : 'classic' };
+  if (beat > 0 && seed > 0) challenge = { beat, seed, mode: 'classic' };
 })();
 
 /* ================= AUDIO (Web Audio) ================= */
@@ -350,39 +374,64 @@ const SND = {
       case 'charge': this.tone(500, 0.12, 'sine', 0.1, 1200); break;
       case 'warn': this.tone(1200, 0.06, 'square', 0.06); break;
       case 'ui': this.tone(660, 0.06, 'triangle', 0.08); break;
+      case 'coin': [1319, 1760].forEach((f, i) => this.tone(f, 0.12, 'square', 0.05, 0, i * 0.07)); break;
+      case 'buy': [784, 988, 1175, 1568].forEach((f, i) => this.tone(f, 0.16, 'triangle', 0.1, 0, i * 0.06)); this.noise(0.2, 0.05, 4000, 0.2); break;
     }
   }
 };
 
-/* ================= RIVALS ================= */
-const RIVALS = [
-  { name: 'SPARK', depth: 1, err: 0.38, trait: 'Twitchy rookie. Drops wherever it feels.', hue: 0, eyes: 2 },
-  { name: 'GLITCH', depth: 2, err: 0.22, trait: 'Sees one move ahead. Sometimes.', hue: 20, eyes: 3 },
-  { name: 'RAZOR', depth: 4, err: 0.1, trait: 'Cold, fast and hates open threes.', hue: 330, eyes: 1 },
-  { name: 'HEX', depth: 5, err: 0.05, trait: 'Packs a BOMB. Guard your stacks.', hue: 290, eyes: 2, bomb: 1 },
-  { name: 'OVERLORD', depth: 7, err: 0, trait: 'BOSS. Bigger grid. Flips gravity on you.', hue: 350, eyes: 3, flip: 2, boss: true }
-];
-function rivalFor(n, mode) {
-  const base = RIVALS[(n - 1) % 5];
-  const loop = Math.floor((n - 1) / 5);
-  const r = Object.assign({}, base);
-  r.depth = Math.min(9, base.depth + loop + (mode === 'hard' ? 2 : 0));
-  r.err = Math.max(0, base.err - loop * 0.08 - (mode === 'hard' ? 0.12 : 0));
-  if (loop > 0) r.name = base.name + ' ' + ['II', 'III', 'IV', 'V', 'X'][Math.min(4, loop - 1)];
-  if (loop > 0 && !r.bomb && !r.boss && n % 5 >= 3) r.bomb = 1;
-  r.stars = clamp(Math.round(r.depth / 2), 1, 5);
-  return r;
+/* ================= ROUNDS (one CPU that levels up) ================= */
+/* Round 1: you open, round 2: CPU opens, and so on. Every 4th round is a TRIO bonus round
+   (5 x 4 grid, line up 3, losing it costs nothing). Every 6th round is a MEGA 8 x 7 grid. */
+function roundCfg(n) {
+  const trio = n % 4 === 0, mega = !trio && n % 6 === 0;
+  return {
+    trio, mega, k: trio ? 3 : 4,
+    cols: trio ? 5 : mega ? 8 : 7, rows: trio ? 4 : mega ? 7 : 6,
+    depth: trio ? 2 : Math.min(8, 1 + Math.floor(n * 0.6)),
+    err: trio ? 0.3 : Math.max(0, 0.38 - n * 0.045),
+    budget: mega ? 420 : 300,
+    tmax: trio ? 8 : Math.max(8, 12 - Math.floor(n / 4)),
+    rocks: trio ? 0 : mega ? 2 : n >= 3 ? Math.min(3, 1 + Math.floor((n - 3) / 3)) : 0
+  };
 }
 
-/* ================= BOARD ENGINE ================= */
-function makeBoard(cols, rows) {
-  const b = { cols, rows, n: cols * rows, cell: new Int8Array(cols * rows), g: 1, wins: [], byCell: [] };
-  const dirs = [[1, 0], [0, 1], [1, 1], [1, -1]];
+/* ================= WALLET & DISC SKINS ================= */
+const SKINS = [
+  { id: 'lime', name: 'LIME', color: '#b8ff2e', glyph: 'bolt', price: 0 },
+  { id: 'ice', name: 'ICE', color: '#3ff3ff', glyph: 'star', price: 60 },
+  { id: 'solar', name: 'SOLAR', color: '#ffc23a', glyph: 'diamond', price: 120 },
+  { id: 'volt', name: 'VOLT', color: '#5b7bff', glyph: 'bolt', price: 200 },
+  { id: 'ultra', name: 'ULTRA', color: '#c06bff', glyph: 'ring', price: 300 },
+  { id: 'mint', name: 'MINT', color: '#3dffa8', glyph: 'plus', price: 400 },
+  { id: 'plasma', name: 'PLASMA', color: '#f4efff', glyph: 'star', price: 550 },
+  { id: 'prism', name: 'PRISM', color: 'prism', fx: '#7ff9ff', glyph: 'diamond', price: 800 }
+];
+const WALLET = {
+  coins: parseInt(load('coins', '0'), 10) || 0,
+  owned: new Set(String(load('skins', 'lime')).split(',').concat('lime')),
+  skin: load('skin', 'lime')
+};
+function saveWallet() { store('coins', WALLET.coins); store('skins', [...WALLET.owned].join(',')); store('skin', WALLET.skin); }
+function mySkin() { return SKINS.find((k) => k.id === WALLET.skin && WALLET.owned.has(k.id)) || SKINS[0]; }
+const ME = { color: PAL.lime, rgb: '184,255,46' };
+function applySkin() {
+  const k = mySkin(); ME.color = k.fx || k.color;
+  const n = parseInt(ME.color.slice(1), 16); ME.rgb = (n >> 16) + ',' + ((n >> 8) & 255) + ',' + (n & 255);
+  document.documentElement.style.setProperty('--me', ME.color);
+  if (L.cs) SPR.p1 = discSprite(k.color, k.glyph);
+}
+
+/* ================= BOARD ENGINE (connect K) ================= */
+const DIRS = [[1, 0], [0, 1], [1, 1], [1, -1]];
+function makeBoard(cols, rows, k) {
+  k = k || 4;
+  const b = { cols, rows, k, n: cols * rows, cell: new Int8Array(cols * rows), g: 1, wins: [], byCell: [] };
   for (let i = 0; i < b.n; i++) b.byCell.push([]);
-  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) for (const [dc, dr] of dirs) {
-    const ec = c + dc * 3, er = r + dr * 3;
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) for (const [dc, dr] of DIRS) {
+    const ec = c + dc * (k - 1), er = r + dr * (k - 1);
     if (ec < 0 || ec >= cols || er < 0 || er >= rows) continue;
-    const w = [0, 1, 2, 3].map((k) => (r + dr * k) * cols + (c + dc * k));
+    const w = []; for (let j = 0; j < k; j++) w.push((r + dr * j) * cols + (c + dc * j));
     const wi = b.wins.length; b.wins.push(w); for (const i of w) b.byCell[i].push(wi);
   }
   return b;
@@ -395,13 +444,21 @@ function landRow(b, c) {
   return r;
 }
 function legalCols(b) { const out = []; for (let c = 0; c < b.cols; c++) if (landRow(b, c) >= 0) out.push(c); return out; }
-function winAt(b, idx, p) {
-  for (const wi of b.byCell[idx]) { const w = b.wins[wi]; if (b.cell[w[0]] === p && b.cell[w[1]] === p && b.cell[w[2]] === p && b.cell[w[3]] === p) return w; }
-  return null;
-}
-function findLine(b, p) {
-  for (const w of b.wins) if (b.cell[w[0]] === p && b.cell[w[1]] === p && b.cell[w[2]] === p && b.cell[w[3]] === p) return w;
-  return null;
+function fullWin(b, w, p) { for (let j = 0; j < w.length; j++) if (b.cell[w[j]] !== p) return false; return true; }
+function winAt(b, idx, p) { for (const wi of b.byCell[idx]) if (fullWin(b, b.wins[wi], p)) return b.wins[wi]; return null; }
+function findLine(b, p) { for (const w of b.wins) if (fullWin(b, w, p)) return w; return null; }
+/* Every maximal straight run of K or more for player p (5 in a row = one long line, crosses = several lines). */
+function lineSegments(b, p) {
+  const out = [];
+  for (const [dc, dr] of DIRS) for (let r = 0; r < b.rows; r++) for (let c = 0; c < b.cols; c++) {
+    if (b.cell[r * b.cols + c] !== p) continue;
+    const pc = c - dc, pr = r - dr;
+    if (pc >= 0 && pc < b.cols && pr >= 0 && pr < b.rows && b.cell[pr * b.cols + pc] === p) continue;
+    const seg = []; let cc = c, rr = r;
+    while (cc >= 0 && cc < b.cols && rr >= 0 && rr < b.rows && b.cell[rr * b.cols + cc] === p) { seg.push(rr * b.cols + cc); cc += dc; rr += dr; }
+    if (seg.length >= b.k) out.push(seg);
+  }
+  return out;
 }
 /* Settle discs toward gravity; rocks stay put. Returns list of moves {from,to,p}. */
 function settle(b) {
@@ -429,13 +486,13 @@ function immediateWins(b, p) { const out = []; for (const c of legalCols(b)) { c
 const AI = {
   deadline: 0, nodes: 0, aborted: false,
   evalBoard(b, p) {
-    const o = 3 - p; let s = 0;
+    const o = 3 - p, K = b.k; let s = 0;
     for (const w of b.wins) {
       let mp = 0, op = 0, bad = false;
-      for (let k = 0; k < 4; k++) { const v = b.cell[w[k]]; if (v === p) mp++; else if (v === o) op++; else if (v === ROCK) { bad = true; break; } }
+      for (let k = 0; k < K; k++) { const v = b.cell[w[k]]; if (v === p) mp++; else if (v === o) op++; else if (v === ROCK) { bad = true; break; } }
       if (bad || (mp && op)) continue;
-      if (mp === 3) s += 50; else if (mp === 2) s += 8; else if (mp === 1) s += 1;
-      if (op === 3) s -= 60; else if (op === 2) s -= 8; else if (op === 1) s -= 1;
+      if (mp === K - 1) s += 50; else if (mp === K - 2 && mp > 0) s += 8; else if (mp > 0) s += 1;
+      if (op === K - 1) s -= 60; else if (op === K - 2 && op > 0) s -= 8; else if (op > 0) s -= 1;
     }
     const mid = (b.cols - 1) / 2;
     for (let i = 0; i < b.n; i++) { const v = b.cell[i]; if (v === p || v === o) { const c = i % b.cols; const w = 3 - Math.abs(c - mid) * 0.9; s += v === p ? w : -w; } }
@@ -475,11 +532,11 @@ const AI = {
     }
     return result || this.order(b).map((c) => ({ c, v: 0 }));
   },
-  choose(b, p, rival, rnd) {
-    const sc = this.scoreMoves(b, p, rival.depth, rival.boss ? 420 : 300);
+  choose(b, p, cfg, rnd) {
+    const sc = this.scoreMoves(b, p, cfg.depth, cfg.budget);
     sc.sort((x, y) => y.v - x.v);
     const best = sc[0];
-    if (rival.err > 0 && rnd() < rival.err && best.v < 90000) {
+    if (cfg.err > 0 && rnd() < cfg.err && best.v < 90000) {
       const safe = sc.filter((s) => s.v > -90000);
       if (safe.length > 1) return safe[Math.floor(rnd() * safe.length)].c;
     }
@@ -501,8 +558,9 @@ function resize() {
   SPR.bg = null;
   layout();
 }
+function curBoard() { return state === 'title' || !M ? demo.b : M.b; }
 function layout() {
-  const b = state === 'title' || !M ? demo.b : M.b;
+  const b = curBoard();
   if (!b) return;
   let top, bottom;
   if (state === 'title') {
@@ -523,20 +581,55 @@ function layout() {
 function discSprite(color, glyph) {
   const cs = L.cs, s = Math.ceil(cs * 1.7), c = document.createElement('canvas');
   c.width = c.height = Math.ceil(s * DPR); const g = c.getContext('2d'); g.scale(DPR, DPR);
-  const R = cs * 0.4, cx = s / 2, cy = s / 2;
-  g.shadowColor = color; g.shadowBlur = cs * 0.35;
-  const grd = g.createRadialGradient(cx - R * 0.3, cy - R * 0.4, R * 0.1, cx, cy, R);
-  grd.addColorStop(0, '#ffffff'); grd.addColorStop(0.25, color); grd.addColorStop(1, shade(color, -0.45));
-  g.fillStyle = grd; g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2); g.fill();
-  g.shadowBlur = 0;
-  g.strokeStyle = 'rgba(255,255,255,.55)'; g.lineWidth = Math.max(1.5, cs * 0.04); g.beginPath(); g.arc(cx, cy, R * 0.7, 0, Math.PI * 2); g.stroke();
-  g.strokeStyle = 'rgba(0,0,0,.35)'; g.lineWidth = Math.max(1.5, cs * 0.05);
-  g.beginPath();
-  if (glyph === 'bolt') { g.moveTo(cx + R * 0.12, cy - R * 0.45); g.lineTo(cx - R * 0.2, cy + R * 0.05); g.lineTo(cx + R * 0.08, cy + R * 0.05); g.lineTo(cx - R * 0.12, cy + R * 0.45); }
-  else if (glyph === 'x') { g.moveTo(cx - R * 0.3, cy - R * 0.3); g.lineTo(cx + R * 0.3, cy + R * 0.3); g.moveTo(cx + R * 0.3, cy - R * 0.3); g.lineTo(cx - R * 0.3, cy + R * 0.3); }
-  else if (glyph === 'bomb') { g.arc(cx, cy, R * 0.28, 0, Math.PI * 2); }
-  g.stroke();
+  drawDisc(g, s / 2, s / 2, cs * 0.4, color, glyph, cs);
   return { c, s };
+}
+/* Heavy glossy disc: deep body, bevel rim, specular highlight, embossed glyph. */
+function drawDisc(g, cx, cy, R, color, glyph, cs) {
+  const prism = color === 'prism', base = prism ? '#c06bff' : color;
+  g.save();
+  g.shadowColor = prism ? '#7ff9ff' : color; g.shadowBlur = cs * 0.35;
+  let body;
+  if (prism && g.createConicGradient) {
+    body = g.createConicGradient(0.6, cx, cy);
+    ['#ff4fd8', '#ffc23a', '#b8ff2e', '#3ff3ff', '#5b7bff', '#c06bff', '#ff4fd8'].forEach((col, i) => body.addColorStop(i / 6, col));
+  } else if (prism) {
+    body = g.createLinearGradient(cx - R, cy - R, cx + R, cy + R);
+    ['#ff4fd8', '#ffc23a', '#b8ff2e', '#3ff3ff', '#c06bff'].forEach((col, i) => body.addColorStop(i / 4, col));
+  } else {
+    body = g.createRadialGradient(cx - R * 0.3, cy - R * 0.4, R * 0.1, cx, cy, R);
+    body.addColorStop(0, shade(color, 0.55)); body.addColorStop(0.35, color); body.addColorStop(1, shade(color, -0.55));
+  }
+  g.fillStyle = body; g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2); g.fill();
+  g.shadowBlur = 0;
+  // inner shading for weight (dark lower half)
+  const sh = g.createLinearGradient(0, cy - R, 0, cy + R); sh.addColorStop(0.45, 'rgba(0,0,0,0)'); sh.addColorStop(1, 'rgba(0,0,0,.38)');
+  g.fillStyle = sh; g.beginPath(); g.arc(cx, cy, R, 0, Math.PI * 2); g.fill();
+  // bevel rim + inner groove
+  g.strokeStyle = 'rgba(255,255,255,.35)'; g.lineWidth = Math.max(1, cs * 0.03); g.beginPath(); g.arc(cx, cy, R - g.lineWidth / 2, Math.PI * 1.05, Math.PI * 1.95); g.stroke();
+  g.strokeStyle = 'rgba(255,255,255,.5)'; g.lineWidth = Math.max(1.5, cs * 0.035); g.beginPath(); g.arc(cx, cy, R * 0.7, 0, Math.PI * 2); g.stroke();
+  g.strokeStyle = 'rgba(0,0,0,.28)'; g.lineWidth = Math.max(1, cs * 0.025); g.beginPath(); g.arc(cx, cy + cs * 0.012, R * 0.7 + g.lineWidth, 0, Math.PI * 2); g.stroke();
+  // glyph (embossed)
+  g.lineCap = 'round'; g.lineJoin = 'round';
+  const path = () => {
+    g.beginPath();
+    if (glyph === 'bolt') { g.moveTo(cx + R * 0.12, cy - R * 0.45); g.lineTo(cx - R * 0.2, cy + R * 0.05); g.lineTo(cx + R * 0.08, cy + R * 0.05); g.lineTo(cx - R * 0.12, cy + R * 0.45); }
+    else if (glyph === 'x') { g.moveTo(cx - R * 0.3, cy - R * 0.3); g.lineTo(cx + R * 0.3, cy + R * 0.3); g.moveTo(cx + R * 0.3, cy - R * 0.3); g.lineTo(cx - R * 0.3, cy + R * 0.3); }
+    else if (glyph === 'bomb' || glyph === 'ring') { g.arc(cx, cy, R * 0.28, 0, Math.PI * 2); }
+    else if (glyph === 'plus') { g.moveTo(cx, cy - R * 0.36); g.lineTo(cx, cy + R * 0.36); g.moveTo(cx - R * 0.36, cy); g.lineTo(cx + R * 0.36, cy); }
+    else if (glyph === 'diamond') { g.moveTo(cx, cy - R * 0.42); g.lineTo(cx + R * 0.3, cy); g.lineTo(cx, cy + R * 0.42); g.lineTo(cx - R * 0.3, cy); g.closePath(); }
+    else if (glyph === 'star') { for (let k = 0; k < 10; k++) { const a = -Math.PI / 2 + k * Math.PI / 5, rr = k % 2 ? R * 0.17 : R * 0.42; g.lineTo(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr); } g.closePath(); }
+  };
+  g.lineWidth = Math.max(1.5, cs * 0.05);
+  g.translate(0, cs * 0.015); g.strokeStyle = 'rgba(255,255,255,.35)'; path(); g.stroke();
+  g.translate(0, -cs * 0.03); g.strokeStyle = 'rgba(0,0,0,.42)'; path(); g.stroke();
+  g.translate(0, cs * 0.015);
+  // specular highlight
+  const hl = g.createRadialGradient(cx - R * 0.38, cy - R * 0.45, 0, cx - R * 0.38, cy - R * 0.45, R * 0.55);
+  hl.addColorStop(0, 'rgba(255,255,255,.85)'); hl.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = hl; g.beginPath(); g.ellipse(cx - R * 0.33, cy - R * 0.42, R * 0.42, R * 0.24, -0.6, 0, Math.PI * 2); g.fill();
+  g.restore();
+  void base;
 }
 function rockSprite() {
   const cs = L.cs, s = Math.ceil(cs * 1.7), c = document.createElement('canvas');
@@ -556,7 +649,8 @@ function shade(hex, k) {
 }
 function buildSprites() {
   if (!SPR.haze) { const h = document.createElement('canvas'); h.width = h.height = 128; const hg = h.getContext('2d'); const rg = hg.createRadialGradient(64, 64, 0, 64, 64, 64); rg.addColorStop(0, 'rgba(155,92,255,.9)'); rg.addColorStop(1, 'rgba(155,92,255,0)'); hg.fillStyle = rg; hg.fillRect(0, 0, 128, 128); SPR.haze = h; }
-  SPR.p1 = discSprite(PAL.lime, 'bolt'); SPR.p2 = discSprite(PAL.crimson, 'x');
+  const sk = mySkin(); SPR.p1 = discSprite(sk.color, sk.glyph); SPR.p2 = discSprite(PAL.crimson, 'x');
+  const trio = curBoard() && curBoard().k === 3, edge = trio ? PAL.gold : PAL.violet, edgeHi = trio ? '#ffe08a' : '#c9a6ff';
   SPR.bomb1 = discSprite('#ff8a1a', 'bomb'); SPR.rock = rockSprite();
   // Panel overlay with holes
   const cs = L.cs, pw = cs * L.cols + cs * 0.4, ph = cs * L.rows + cs * 0.4;
@@ -569,9 +663,9 @@ function buildSprites() {
   g.globalCompositeOperation = 'destination-out';
   for (let r = 0; r < L.rows; r++) for (let k = 0; k < L.cols; k++) { g.beginPath(); g.arc(pad + (k + 0.5) * cs, pad + (r + 0.5) * cs, cs * 0.43, 0, Math.PI * 2); g.fill(); }
   g.globalCompositeOperation = 'source-over';
-  g.strokeStyle = 'rgba(155,92,255,.55)'; g.lineWidth = Math.max(1, cs * 0.035);
+  g.strokeStyle = trio ? 'rgba(255,194,58,.5)' : 'rgba(155,92,255,.55)'; g.lineWidth = Math.max(1, cs * 0.035);
   for (let r = 0; r < L.rows; r++) for (let k = 0; k < L.cols; k++) { g.beginPath(); g.arc(pad + (k + 0.5) * cs, pad + (r + 0.5) * cs, cs * 0.43, 0, Math.PI * 2); g.stroke(); }
-  g.shadowColor = PAL.violet; g.shadowBlur = cs * 0.4; g.strokeStyle = '#c9a6ff'; g.lineWidth = Math.max(2, cs * 0.06);
+  g.shadowColor = edge; g.shadowBlur = cs * 0.4; g.strokeStyle = edgeHi; g.lineWidth = Math.max(2, cs * 0.06);
   roundRect(g, g.lineWidth / 2, g.lineWidth / 2, pw - g.lineWidth, ph - g.lineWidth, cs * 0.3); g.stroke();
   g.shadowBlur = 0;
   const hl = g.createLinearGradient(0, 0, 0, ph * 0.4); hl.addColorStop(0, 'rgba(255,255,255,.12)'); hl.addColorStop(1, 'rgba(255,255,255,0)');
@@ -603,7 +697,9 @@ function burst(x, y, color, n, speed, life) {
 const FLOATS = []; for (let i = 0; i < 24; i++) FLOATS.push({ on: false });
 function floater(x, y, text, color, size) { const f = FLOATS.find((q) => !q.on); if (!f) return; Object.assign(f, { on: true, x, y, text, color, size: size || 18, t: 0 }); }
 const SPARKS = []; for (let i = 0; i < 50; i++) SPARKS.push({ x: Math.random(), y: Math.random(), s: 0.2 + Math.random() * 0.8, h: Math.random() < 0.5 ? 0 : 1 });
-let shakeT = 0, shakeA = 0, flashT = 0, flashC = '#fff', hitStop = 0, flipFx = 0;
+const RINGS = []; for (let i = 0; i < 16; i++) RINGS.push({ on: false });
+function ring(x, y, color, size, life) { const r = RINGS.find((q) => !q.on); if (!r) return; Object.assign(r, { on: true, x, y, color, size, life: life || 0.4, t: 0 }); }
+let shakeT = 0, shakeA = 0, flashT = 0, flashC = '#fff', hitStop = 0, flipFx = 0, kick = 0, kickV = 0;
 function shake(a, t) { if (REDUCED) a *= 0.25; shakeA = Math.max(shakeA, a); shakeT = Math.max(shakeT, t); }
 function flash(c, t) { flashC = c; flashT = REDUCED ? t * 0.3 : t; }
 function banner(big, small, color) {
@@ -642,76 +738,73 @@ function stepFall(dt) {
   }
 }
 function onLandFx(a) {
-  const x = cellX(a.to), y = a.ty;
-  burst(x, y + (M && M.b.g < 0 ? -1 : 1) * L.cs * 0.35, a.p === P1 ? PAL.lime : PAL.crimson, 6, L.cs * 2.2, 0.35);
+  const x = cellX(a.to), y = a.ty, dir = M && M.b.g < 0 ? -1 : 1, col = a.p === P1 ? ME.color : PAL.crimson;
+  const hard = clamp(Math.abs(a.vy) / (L.cs * 14), 0.3, 1);
+  burst(x, y + dir * L.cs * 0.35, col, 6, L.cs * 2.2, 0.35);
+  ring(x, y + dir * L.cs * 0.36, col, L.cs * (0.5 + 0.5 * hard), 0.38);
   if (a.sound !== false) SND.play(a.p === P1 ? 'land' : 'landAi', 1 - Math.floor(a.to / L.cols) / L.rows);
   shake(L.cs * 0.05, 0.08);
+  if (!REDUCED) kickV += dir * L.cs * 1.4 * hard; // the whole grid takes the hit
 }
 
 /* ================= GAME STATE ================= */
 let state = 'loading';
-let mode = 'classic';
 let R = null;   // run
-let M = null;   // match
+let M = null;   // round
 const demo = { b: null, t: 0, turn: P1, rnd: mulberry(7) };
 
-function newRun(m) {
-  mode = m;
+function newRun() {
   FALL.length = 0; hidden.clear(); animDone = null;
-  const seed = challenge && m === challenge.mode && challenge.used !== true ? challenge.seed : m === 'daily' ? todaySeed() : (Math.random() * 1e9) | 0;
-  R = { mode: m, seed, rnd: mulberry(seed), score: 0, shown: 0, match: 0, wins: 0, streak: 1, bestStreak: 1, blocks: 0, meter: 100, revived: false, chal: challenge && m === challenge.mode ? challenge.beat : 0 };
-  if (challenge && m === challenge.mode) challenge.used = true;
-  nextMatch();
+  const useChal = challenge && !challenge.used;
+  const seed = useChal ? challenge.seed : (Math.random() * 1e9) | 0;
+  R = { mode: 'classic', seed, rnd: mulberry(seed), score: 0, shown: 0, round: 0, wins: 0, streak: 1, bestStreak: 1, blocks: 0, meter: 100, revived: false, chal: useChal ? challenge.beat : 0, coins: 0, doubled: false };
+  if (challenge) challenge.used = true;
+  nextRound();
 }
-function nextMatch() {
-  R.match++;
-  const rival = rivalFor(R.match, R.mode);
-  const big = rival.boss;
-  const b = makeBoard(big ? 8 : 7, big ? 7 : 6);
-  // Rocks (crystal blocks) from match 3 (2 in hard/daily), symmetric
-  const nRocks = big ? 2 : (R.match >= (R.mode === 'classic' ? 3 : 2) ? Math.min(3, 1 + Math.floor((R.match - 2) / 3)) : 0);
-  let mod = '';
-  for (let k = 0; k < nRocks; k++) {
+function nextRound() {
+  R.round++;
+  const cfg = roundCfg(R.round);
+  const b = makeBoard(cfg.cols, cfg.rows, cfg.k);
+  for (let k = 0; k < cfg.rocks; k++) {
     for (let tries = 0; tries < 20; tries++) {
       const c = Math.floor(R.rnd() * b.cols), r = 1 + Math.floor(R.rnd() * (b.rows - 2));
       const i = r * b.cols + c;
       if (b.cell[i] === EMPTY && c !== Math.floor(b.cols / 2)) { b.cell[i] = ROCK; break; }
     }
   }
-  if (nRocks) mod = nRocks + ' crystal block' + (nRocks > 1 ? 's' : '') + ' on the grid';
-  if (big) mod = '8 x 7 grid · ' + mod;
-  const aiFirst = big || R.mode === 'hard';
-  M = { b, rival, turn: aiFirst ? P2 : P1, busy: false, timer: TIMER[R.mode], tmax: TIMER[R.mode], moves: 0, pMoves: 0, quick: 0, threats: 0, blocks: 0, kills: 0, bombArmed: false, aiBomb: rival.bomb || 0, aiFlip: rival.flip || 0, line: null, lineT: 0, over: false, hist: [], hover: Math.floor(b.cols / 2), turnStart: 0, lastWarn: 99, mod, start: null };
+  const first = R.round % 2 === 1 ? P1 : P2;
+  M = { b, cfg, first, turn: first, busy: true, timer: cfg.tmax, tmax: cfg.tmax, moves: 0, pMoves: 0, quick: 0, threats: 0, blocks: 0, kills: 0, bombArmed: false, lines: null, lineSet: null, lineP: 0, lineT: 0, over: false, hist: [], hover: Math.floor(b.cols / 2), turnStart: 0, lastWarn: 99, start: null };
   M.start = snapshot();
-  showIntro();
+  introRound(false);
 }
-function snapshot() { return { cell: new Int8Array(M.b.cell), g: M.b.g, meter: R.meter, aiBomb: M.aiBomb, aiFlip: M.aiFlip, pMoves: M.pMoves, moves: M.moves }; }
-function restore(s) { M.b.cell = new Int8Array(s.cell); M.b.g = s.g; R.meter = s.meter; M.aiBomb = s.aiBomb; M.aiFlip = s.aiFlip; M.pMoves = s.pMoves; M.moves = s.moves; }
+function snapshot() { return { cell: new Int8Array(M.b.cell), g: M.b.g, meter: R.meter, pMoves: M.pMoves, moves: M.moves }; }
+function restore(s) { M.b.cell = new Int8Array(s.cell); M.b.g = s.g; R.meter = s.meter; M.pMoves = s.pMoves; M.moves = s.moves; }
 
 function setState(s) {
   state = s;
-  for (const id of ['title', 'intro', 'win', 'pause', 'revive', 'over', 'ad']) $(id).classList.toggle('on', id === s);
-  $('hud').classList.toggle('on', s === 'play' || s === 'paused' || s === 'win' || s === 'revive' || s === 'intro');
+  for (const id of ['title', 'win', 'pause', 'revive', 'over', 'ad', 'shop']) $(id).classList.toggle('on', id === s);
+  $('hud').classList.toggle('on', s === 'play' || s === 'paused' || s === 'win' || s === 'revive');
   layout();
 }
-function showIntro() {
-  const r = M.rival;
-  $('introNo').textContent = r.boss ? 'BOSS · RIVAL ' + R.match : 'RIVAL ' + R.match;
-  $('introName').textContent = r.name;
-  $('introStars').textContent = '★'.repeat(r.stars) + '☆'.repeat(5 - r.stars);
-  $('introTrait').textContent = r.trait;
-  $('introMod').textContent = (M.turn === P2 ? 'Rival opens · ' : 'You open · ') + (M.mod || 'clean grid');
-  drawAvatar($('introAv'), r, 1);
-  drawAvatar($('rivalAv'), r, 0);
-  $('rivalName').textContent = r.name;
+/* Short round card on the board itself (no extra tap), then the round starts. */
+function introRound(replay) {
+  const cfg = M.cfg, mm = M;
+  M.busy = true; M.introPending = false;
   updateHud(false);
-  setState('intro');
-  SND.play(r.boss ? 'zap' : 'ui');
-}
-function beginMatch() {
   setState('play');
-  if (M.rival.boss) banner('BOSS FIGHT', M.rival.name, PAL.crimson); else banner('FIGHT!', 'vs ' + M.rival.name, PAL.lime);
-  startTurn();
+  updateTurnUi();
+  const who = M.first === P1 ? 'you open' : 'CPU opens';
+  const extra = cfg.rocks ? ' · ' + cfg.rocks + ' crystal' + (cfg.rocks > 1 ? 's' : '') : '';
+  if (replay) banner('REPLAY', 'round ' + R.round + ' · score kept', PAL.gold);
+  else if (cfg.trio) banner('BONUS ROUND', 'line up 3 · ' + who, PAL.gold);
+  else if (cfg.mega) banner('MEGA GRID', '8 x 7 · ' + who + extra, PAL.violet);
+  else banner('ROUND ' + R.round, who + extra, M.first === P1 ? ME.color : PAL.crimson);
+  SND.play(cfg.trio || cfg.mega ? 'zap' : 'ui');
+  setTimeout(() => {
+    if (M !== mm || M.over) return;
+    M.busy = false;
+    if (state === 'play') startTurn(); else M.introPending = true;
+  }, 1050);
 }
 function startTurn() {
   if (M.over) return;
@@ -723,9 +816,11 @@ function startTurn() {
   if (M.turn === P2) setTimeout(aiTurn, 520 + Math.random() * 380);
 }
 function updateTurnUi() {
-  const mine = M.turn === P1;
-  $('rivalChip').classList.toggle('turnP', mine);
-  $('turnTxt').innerHTML = mine ? (M.bombArmed ? 'BOMB ARMED' : 'YOUR TURN') : 'THINKING<span class="dots"><span>.</span><span>.</span><span>.</span></span>';
+  const mine = M.turn === P1 && !M.busy;
+  $('rivalChip').classList.toggle('turnP', M.turn === P1);
+  $('rivalChip').classList.toggle('trio', !!M.cfg.trio);
+  $('rivalName').textContent = M.cfg.trio ? 'BONUS · LINE 3' : 'CPU LV ' + R.round;
+  $('turnTxt').innerHTML = M.turn === P1 ? (M.bombArmed ? 'BOMB ARMED' : mine ? 'YOUR TURN' : 'YOU OPEN') : 'THINKING<span class="dots"><span>.</span><span>.</span><span>.</span></span>';
   $('timerWrap').classList.toggle('idle', !mine);
   updatePowers();
 }
@@ -746,7 +841,7 @@ function playerDrop(c) {
     if (threats.includes(c) && !M.over) { M.blocks++; R.blocks++; addMeter(60); addScore(150, cellX(i), cellY(i), 'BLOCK! +150', '#7ff9ff', 20); SND.play('block'); }
     if (!M.over) {
       const t = immediateWins(M.b, P1).length;
-      if (t > 0) { M.threats++; addMeter(50); addScore(60 * t, cellX(i), cellY(i) - L.cs * 0.5, (t > 1 ? 'DOUBLE THREAT +' : 'THREAT +') + 60 * t, PAL.lime, t > 1 ? 22 : 16); SND.play('threat'); }
+      if (t > 0) { M.threats++; addMeter(50); addScore(60 * t, cellX(i), cellY(i) - L.cs * 0.5, (t > 1 ? 'DOUBLE THREAT +' : 'THREAT +') + 60 * t, ME.color, t > 1 ? 22 : 16); SND.play('threat'); }
     }
   });
   M.bombArmed = false;
@@ -766,12 +861,11 @@ function explode(i, p, cb) {
   let killed = 0;
   for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
     const r = r0 + dr, c = c0 + dc; if (r < 0 || c < 0 || r >= b.rows || c >= b.cols || (!dr && !dc)) continue;
-    const j = r * b.cols + c; if (b.cell[j] === o) { b.cell[j] = EMPTY; killed++; burst(cellX(j), cellY(j), o === P1 ? PAL.lime : PAL.crimson, 14, L.cs * 4, 0.6); }
+    const j = r * b.cols + c; if (b.cell[j] === o) { b.cell[j] = EMPTY; killed++; burst(cellX(j), cellY(j), o === P1 ? ME.color : PAL.crimson, 14, L.cs * 4, 0.6); }
   }
   burst(cellX(i), cellY(i), '#ff8a1a', 26, L.cs * 6, 0.7);
   SND.play('boom'); shake(L.cs * 0.3, 0.35); flash('#ff8a1a', 0.18); hitStop = 0.09;
   if (p === P1 && killed) { M.kills += killed; addScore(50 * killed, cellX(i), cellY(i), 'BOOM +' + 50 * killed, '#ff8a1a', 22); }
-  if (p === P2) banner('BOMB!', M.rival.name + ' blew ' + killed + ' disc' + (killed === 1 ? '' : 's'), '#ff8a1a');
   setTimeout(() => {
     const mv = settle(b);
     animate(mv.map((m) => ({ p: m.p, x: cellX(m.to), y: cellY(m.from), ty: cellY(m.to), vy: 0, to: m.to, sound: false })), cb);
@@ -780,7 +874,7 @@ function explode(i, p, cb) {
 function flipGravity(by, cb) {
   const b = M.b; b.g = -b.g;
   flipFx = 1; SND.play('flip'); flash(PAL.violet, 0.2); shake(L.cs * 0.15, 0.3);
-  banner('GRAVITY FLIP', by === P1 ? 'everything falls ' + (b.g > 0 ? 'down' : 'up') : M.rival.name + ' flipped the grid!', PAL.violet);
+  banner('GRAVITY FLIP', 'everything falls ' + (b.g > 0 ? 'down' : 'up'), PAL.violet);
   const mv = settle(b);
   animate(mv.map((m) => ({ p: m.p, x: cellX(m.to), y: cellY(m.from), ty: cellY(m.to), vy: 0, to: m.to, sound: false })), () => {
     burst(W / 2, L.y0 + L.cs * L.rows / 2, PAL.violet, 20, L.cs * 5, 0.6);
@@ -794,7 +888,7 @@ function resolve(mover, after) {
   if (lm || lo) {
     after && after();
     const winner = lm ? mover : other;
-    M.line = lm || lo; M.lineT = 0;
+    setLines(winner);
     finishLine(winner, !lm && lo && mover === P1 ? 'BACKFIRE' : '');
     return;
   }
@@ -804,95 +898,100 @@ function resolve(mover, after) {
   if (!legalCols(M.b).length) { endMatch(0); return; }
   startTurn();
 }
+function setLines(winner) {
+  M.lines = lineSegments(M.b, winner); M.lineP = winner; M.lineT = 0;
+  M.lineSet = new Set(); for (const sg of M.lines) for (const i of sg) M.lineSet.add(i);
+}
 function finishLine(winner, note) {
   M.over = true; M.busy = true;
+  const segs = M.lines.length, longest = Math.max.apply(null, M.lines.map((sg) => sg.length)), K = M.b.k;
   $('turnTxt').textContent = winner === P1 ? 'SHOCKED!' : 'ZAPPED';
-  SND.play('zap'); hitStop = 0.12; shake(L.cs * 0.35, 0.45); flash(winner === P1 ? PAL.lime : PAL.crimson, 0.22);
-  for (const i of M.line) burst(cellX(i), cellY(i), winner === P1 ? PAL.lime : PAL.crimson, 16, L.cs * 5, 0.8);
-  if (winner === P1) banner('SHOCKED!', M.rival.name + ' is fried', PAL.lime);
-  else banner(note || 'ZAPPED', note ? 'your own flip turned on you' : M.rival.name + ' connected 4', PAL.crimson);
+  SND.play('zap'); if (segs > 1 || longest > K) setTimeout(() => SND.play('zap'), 180);
+  hitStop = 0.12; shake(L.cs * (0.35 + 0.1 * (segs - 1)), 0.45); flash(winner === P1 ? ME.color : PAL.crimson, 0.22);
+  for (const i of M.lineSet) burst(cellX(i), cellY(i), winner === P1 ? ME.color : PAL.crimson, 16, L.cs * 5, 0.8);
+  if (winner === P1) {
+    if (segs > 1) banner('CROSS SHOCK!', segs + ' lines fried at once', ME.color);
+    else if (longest > K) banner('MEGA SHOCK!', longest + ' in a row', ME.color);
+    else banner(M.cfg.trio ? 'BONUS!' : 'SHOCKED!', 'round ' + R.round + ' won', ME.color);
+  } else banner(note || 'ZAPPED', note ? 'your own flip turned on you' : 'CPU connected ' + K, PAL.crimson);
   const mm = M;
-  setTimeout(() => { if (M === mm) endMatch(winner); }, 1500);
+  setTimeout(() => { if (M === mm) endMatch(winner); }, segs > 1 || longest > K ? 1800 : 1500);
 }
+function addCoins(n) { if (!R || n <= 0) return; R.coins += n; WALLET.coins += n; saveWallet(); }
 function endMatch(winner) {
   if (!M || !R) return;
   M.over = true;
   if (winner === P1) { SND.play('win'); showWin(); }
-  else if (winner === P2) { SND.play('lose'); if (!R.revived) setState('revive'); else finish(); }
-  else { // draw
-    banner('DRAW', 'grid jammed · rematch', PAL.gold);
+  else if (winner === P2) {
+    SND.play('lose');
+    if (M.cfg.trio) { addCoins(2); showBonusMissed(); return; }
+    addCoins(2);
+    R.streak = 1;
+    if (!R.revived) { $('reviveTxt').textContent = 'Watch an ad to replay round ' + R.round + ' from the start. Your score stays.'; setState('revive'); }
+    else finish();
+  } else { // draw: small reward, next round
+    banner('DRAW', 'grid jammed · next round', PAL.gold);
     addScore(300, W / 2, L.y0, 'DRAW +300', PAL.gold, 20);
-    const run = R;
-    setTimeout(() => { if (R !== run || state !== 'play') return; R.match--; R.streak = 1; nextMatch(); }, 1400);
+    addCoins(5);
+    R.streak = 1;
+    const run = R, mm = M;
+    setTimeout(() => { if (R !== run || M !== mm || state !== 'play') return; nextRound(); }, 1500);
   }
 }
 function showWin() {
   R.wins++;
-  const rows = [];
-  const base = 1000 + 100 * R.match; rows.push(['Rival ' + M.rival.name, base]);
-  const speed = Math.max(0, 22 - M.pMoves) * 40; if (speed) rows.push(['Speed (' + M.pMoves + ' moves)', speed]);
-  if (M.rival.boss) rows.push(['Boss bonus', base]);
-  const sub = rows.reduce((s, r) => s + r[1], 0);
+  const cfg = M.cfg, K = M.b.k, rows = [];
+  const base = (cfg.trio ? 1500 : 1000) + 100 * R.round;
+  rows.push([cfg.trio ? 'Bonus round ' + R.round : 'Round ' + R.round, base]);
+  const speed = cfg.trio ? Math.max(0, 12 - M.pMoves) * 60 : Math.max(0, 22 - M.pMoves) * 40;
+  if (speed) rows.push(['Speed (' + M.pMoves + ' moves)', speed]);
+  if (cfg.mega) rows.push(['Mega grid', Math.round(base / 2)]);
+  const segs = M.lines ? M.lines.length : 1;
+  const extraDiscs = M.lines ? M.lines.reduce((s2, sg) => s2 + Math.max(0, sg.length - K), 0) : 0;
+  if (segs > 1) rows.push(['Cross shock (' + segs + ' lines)', 600 * (segs - 1)]);
+  if (extraDiscs) rows.push(['Long line (+' + extraDiscs + ')', 300 * extraDiscs]);
+  const sub = rows.reduce((s2, r) => s2 + r[1], 0);
   const mult = R.streak;
   if (mult > 1) rows.push(['Streak x' + mult, sub * (mult - 1)]);
   const total = sub * mult;
   R.streak = Math.min(5, R.streak + 1); R.bestStreak = Math.max(R.bestStreak, R.streak);
   R.meter = Math.min(300, R.meter + 50);
-  $('winTitle').textContent = M.rival.boss ? 'BOSS DOWN!' : 'SHOCKED!';
-  const box = $('winRows'); box.innerHTML = '';
-  rows.forEach((r, k) => { const d = document.createElement('div'); d.innerHTML = '<span>' + r[0] + '</span><b>+' + fmt(r[1]) + '</b>'; box.appendChild(d); setTimeout(() => { d.classList.add('in'); SND.play('tick'); }, 250 + k * 180); });
-  $('winTotal').textContent = '+0';
-  setState('win');
-  const t0 = performance.now() + 250 + rows.length * 180;
-  const roll = (now) => { const k = clamp((now - t0) / 700, 0, 1); $('winTotal').textContent = '+' + fmt(total * easeOut(k)); if (k < 1 && state === 'win') requestAnimationFrame(roll); };
-  requestAnimationFrame(roll);
+  const coins = (cfg.trio ? 15 : 10) + Math.min(20, R.round) + (cfg.mega ? 10 : 0) + 5 * (segs - 1);
+  addCoins(coins);
+  $('winTitle').textContent = cfg.trio ? 'BONUS!' : cfg.mega ? 'MEGA WIN!' : segs > 1 ? 'CROSS SHOCK!' : 'SHOCKED!';
+  $('winTitle').style.color = 'var(--me)';
+  showRoundCard(rows, total, coins);
   R.score += total;
   bumpStreak();
+}
+function showBonusMissed() {
+  $('winTitle').textContent = 'BONUS MISSED';
+  $('winTitle').style.color = 'var(--crimson)';
+  showRoundCard([['Bonus round ' + R.round, 0], ['No penalty', 0]], 0, 2);
+}
+function showRoundCard(rows, total, coins) {
+  const box = $('winRows'); box.innerHTML = '';
+  rows.forEach((r, k) => { const d = document.createElement('div'); d.innerHTML = '<span>' + r[0] + '</span><b>+' + fmt(r[1]) + '</b>'; box.appendChild(d); setTimeout(() => { d.classList.add('in'); SND.play('tick'); }, 250 + k * 160); });
+  $('winTotal').textContent = '+0';
+  $('winCoins').innerHTML = '';
+  $('nextBtn').textContent = 'NEXT ROUND';
+  setState('win');
+  const t0 = performance.now() + 250 + rows.length * 160;
+  const roll = (now) => { const k = clamp((now - t0) / 700, 0, 1); $('winTotal').textContent = '+' + fmt(total * easeOut(k)); if (k < 1 && state === 'win') requestAnimationFrame(roll); else if (k >= 1 && coins) { $('winCoins').innerHTML = '<i class="coinIco"></i>+' + coins + ' coins'; SND.play('coin'); } };
+  requestAnimationFrame(roll);
 }
 
 /* ---- AI turn ---- */
 function aiTurn() {
   if (state !== 'play' || !M || M.over || M.turn !== P2 || M.busy) { if (state === 'paused' && M && M.turn === P2) M.aiPending = true; return; }
-  const b = M.b, rv = M.rival, rnd = R.rnd;
-  // Powers at root
-  if (M.aiFlip > 0 && M.moves >= 6) {
-    const t = cloneBoard(b); t.g = -t.g; settle(t);
-    const aiLine = findLine(t, P2), pLine = findLine(t, P1);
-    const pThreatNow = immediateWins(b, P1).length;
-    const pThreatAfter = pLine ? 9 : immediateWins(t, P1).length;
-    if ((aiLine && !pLine) || (pThreatNow >= 1 && pThreatAfter === 0 && immediateWins(b, P2).length === 0) || (M.moves > 14 && rnd() < 0.12 && !pLine && pThreatAfter === 0)) {
-      M.aiFlip--; M.busy = true;
-      flipGravity(P2, () => resolveFlip(P2));
-      return;
-    }
-  }
-  if (M.aiBomb > 0 && !immediateWins(b, P2).length) {
-    const pt = immediateWins(b, P1);
-    let pick = -1;
-    for (const c of legalCols(b)) {
-      const t = cloneBoard(b); const r = landRow(t, c), i = r * t.cols + c; t.cell[i] = P2;
-      let killed = 0; const c0 = c;
-      for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) { const rr = r + dr, cc = c0 + dc; if (rr < 0 || cc < 0 || rr >= t.rows || cc >= t.cols) continue; const j = rr * t.cols + cc; if (t.cell[j] === P1) { t.cell[j] = EMPTY; killed++; } }
-      settle(t);
-      if (findLine(t, P1)) continue;
-      if (findLine(t, P2) || (pt.length && immediateWins(t, P1).length === 0) || (killed >= 3 && M.moves > 10)) { pick = c; break; }
-    }
-    if (pick >= 0) { M.aiBomb--; aiDrop(pick, true); return; }
-  }
-  const c = AI.choose(b, P2, rv, rnd);
-  aiDrop(c, false);
-}
-function aiDrop(c, bomb) {
-  dropDisc(c, P2, bomb, null);
+  dropDisc(AI.choose(M.b, P2, M.cfg, R.rnd), P2, false, null);
 }
 function resolveFlip(by) {
   if (!M) return;
   const lb = findLine(M.b, by), lo = findLine(M.b, 3 - by);
-  if (lb || lo) { M.line = lb || lo; M.lineT = 0; finishLine(lb ? by : 3 - by, !lb && by === P1 ? 'BACKFIRE' : ''); return; }
+  if (lb || lo) { const w = lb ? by : 3 - by; setLines(w); finishLine(w, !lb && by === P1 ? 'BACKFIRE' : ''); return; }
   M.busy = false;
-  if (by === P2) { // AI still plays its move after flipping
-    setTimeout(() => { if (state === 'play' && !M.over) aiDrop(AI.choose(M.b, P2, M.rival, R.rnd), false); }, 380);
-  } else { M.turnStart = performance.now(); M.timer = M.tmax; updateTurnUi(); }
+  M.turnStart = performance.now(); M.timer = M.tmax; updateTurnUi();
 }
 
 /* ---- Powers & meter ---- */
@@ -931,7 +1030,7 @@ function addScore(v, x, y, text, color, size) { R.score += v; if (text) floater(
 function bumpStreak() { const s = $('streakTxt'); s.classList.remove('bump'); void s.offsetWidth; s.classList.add('bump'); setTimeout(() => s.classList.remove('bump'), 160); }
 function updateHud(force) {
   if (!R) return;
-  $('matchTxt').textContent = 'MATCH ' + R.match;
+  $('matchTxt').textContent = 'ROUND ' + R.round;
   $('streakTxt').textContent = 'STREAK x' + R.streak;
   if (force) R.shown = R.score;
   updatePowers();
@@ -961,20 +1060,36 @@ function simulateAd(cb) {
 function grantRevive() {
   post({ type: 'RH_TRACK', event: 'ad_rewarded_complete', game_id: GAME_ID, props: { context: 'revive' } });
   R.revived = true;
-  const snap = M.hist.length ? M.hist[M.hist.length - 1] : M.start;
-  restore(snap);
-  M.over = false; M.busy = false; M.line = null; M.turn = P1; M.bombArmed = false;
-  setState('play');
-  banner('REWIND', 'replay your move', PAL.gold);
+  // Replay the current round from its very first move; score and coins are kept.
+  FALL.length = 0; hidden.clear(); animDone = null;
+  restore(M.start);
+  M.over = false; M.line = null; M.lines = null; M.lineSet = null; M.turn = M.first; M.bombArmed = false; M.hist = []; M.pMoves = 0; M.moves = 0;
   SND.play('charge');
-  startTurn();
+  introRound(true);
 }
 function doRevive() {
-  setState('ad'); $('adCount').textContent = '...';
+  setState('ad'); $('adCount').textContent = '...'; $('adSub').textContent = 'Replay incoming...';
   requestAd('revive', (status) => {
     if (status === 'simulate') simulateAd(grantRevive);
     else if (status === 'completed' || status === 'unavailable') grantRevive();
     else setState('revive');
+  });
+}
+function grantDouble() {
+  post({ type: 'RH_TRACK', event: 'ad_rewarded_complete', game_id: GAME_ID, props: { context: 'double_coins' } });
+  const gain = R.coins; R.doubled = true; addCoins(gain);
+  setState('over');
+  $('stCoins').textContent = '+' + R.coins; $('dblBtn').style.display = 'none';
+  $('shareMsg').textContent = '+' + gain + ' bonus coins!';
+  SND.play('buy');
+}
+function doDouble() {
+  if (!R || R.doubled || R.coins <= 0) return;
+  setState('ad'); $('adCount').textContent = '...'; $('adSub').textContent = 'Doubling your coins...';
+  requestAd('double_coins', (status) => {
+    if (status === 'simulate') simulateAd(grantDouble);
+    else if (status === 'completed' || status === 'unavailable') grantDouble();
+    else setState('over');
   });
 }
 
@@ -982,15 +1097,16 @@ function doRevive() {
 function finish() {
   if (!R || state === 'over') return;
   const score = Math.floor(R.score);
-  post({ type: SCORE_TYPE, game: GAME_ID, mode: R.mode, score, scoreLabel: score.toLocaleString('en-US') + ' pts · ' + R.wins + (R.wins === 1 ? ' win' : ' wins') });
-  const prev = bestOf(R.mode), isBest = score > prev;
-  if (isBest) store('best_' + R.mode, score);
-  $('overTitle').textContent = R.mode === 'hard' ? 'HARD RUN FRIED' : R.mode === 'daily' ? 'DAILY DONE' : 'GRID FRIED';
+  post({ type: SCORE_TYPE, game: GAME_ID, mode: 'classic', score, scoreLabel: score.toLocaleString('en-US') + ' pts · ' + R.wins + (R.wins === 1 ? ' win' : ' wins') });
+  const prev = bestOf('classic'), isBest = score > prev;
+  if (isBest) store('best_classic', score);
+  $('overTitle').textContent = 'GRID FRIED';
   $('newBest').classList.toggle('on', isBest && score > 0);
   $('stBest').textContent = fmt(Math.max(prev, score));
   $('stWins').textContent = R.wins;
   $('stStreak').textContent = 'x' + R.bestStreak;
-  $('stBlocks').textContent = R.blocks;
+  $('stCoins').textContent = '+' + R.coins;
+  $('dblBtn').style.display = R.coins > 0 && !R.doubled ? '' : 'none';
   $('shareMsg').textContent = '';
   $('chalRes').textContent = R.chal ? (score > R.chal ? 'Challenge beaten! You crushed ' + fmt(R.chal) + '.' : 'Friend\'s score: ' + fmt(R.chal) + '. ' + fmt(R.chal - score + 1) + ' to go.') : '';
   setState('over');
@@ -1002,9 +1118,8 @@ async function shareChallenge() {
   if (!R) return;
   let base = 'https://ragequit-arcade.com/game/' + GAME_ID;
   try { if (window.parent.location.pathname.indexOf('/game/') >= 0) base = window.parent.location.origin + window.parent.location.pathname; } catch (e) {}
-  const m = R.mode === 'hard' ? 'hard' : 'classic';
-  const url = base + '?qs_seed=' + R.seed + '&qs_beat=' + Math.floor(R.score) + '&qs_mode=' + m;
-  const text = 'I fried ' + R.wins + ' rivals for ' + fmt(R.score) + ' pts in QUADSHOCK. Same grids, beat me:';
+  const url = base + '?qs_seed=' + R.seed + '&qs_beat=' + Math.floor(R.score) + '&qs_mode=classic';
+  const text = 'I won ' + R.wins + ' rounds for ' + fmt(R.score) + ' pts in QUADSHOCK. Same grids, beat me:';
   try { if (navigator.share) { await navigator.share({ title: 'QUADSHOCK', text, url }); $('shareMsg').textContent = 'Challenge sent!'; return; } }
   catch (e) { if (e && e.name === 'AbortError') return; }
   try { await navigator.clipboard.writeText(text + ' ' + url); $('shareMsg').textContent = 'Link copied. Send it to a friend!'; }
@@ -1012,53 +1127,54 @@ async function shareChallenge() {
 }
 
 /* ---- Pause ---- */
-function pause() { if (state !== 'play') return; M.pausedAt = performance.now(); $('pauseInfo').textContent = 'Match ' + R.match + ' vs ' + M.rival.name + ' · ' + fmt(R.score) + ' pts'; setState('paused'); $('pause').classList.add('on'); }
+function pause() { if (state !== 'play') return; M.pausedAt = performance.now(); $('pauseInfo').textContent = 'Round ' + R.round + ' · ' + fmt(R.score) + ' pts'; setState('paused'); $('pause').classList.add('on'); }
 function resume() {
   if (state !== 'paused') return;
   M.turnStart += performance.now() - (M.pausedAt || performance.now());
   setState('play');
-  if (M.aiPending) { M.aiPending = false; setTimeout(aiTurn, 300); }
+  if (M.introPending) { M.introPending = false; startTurn(); }
+  else if (M.aiPending) { M.aiPending = false; setTimeout(aiTurn, 300); }
 }
 function toTitle() { R = null; M = null; FALL.length = 0; hidden.clear(); animDone = null; setState('title'); refreshTitle(); }
 document.addEventListener('visibilitychange', () => { if (document.hidden && state === 'play') pause(); });
 
-/* ================= AVATARS ================= */
-function drawAvatar(c, r, big) {
-  const g = c.getContext('2d'), s = c.width, cx = s / 2, cy = s / 2;
-  g.clearRect(0, 0, s, s);
-  const col = 'hsl(' + r.hue + ',100%,58%)';
-  g.save();
-  g.shadowColor = col; g.shadowBlur = s * 0.12;
-  // head: hex/skull-ish
-  g.beginPath(); const R0 = s * 0.38;
-  for (let k = 0; k < (r.boss ? 8 : 6); k++) { const n = r.boss ? 8 : 6, a = -Math.PI / 2 + k * Math.PI * 2 / n; g.lineTo(cx + Math.cos(a) * R0, cy + Math.sin(a) * R0 * 1.02); }
-  g.closePath();
-  const grd = g.createLinearGradient(0, cy - R0, 0, cy + R0); grd.addColorStop(0, '#2b0a3e'); grd.addColorStop(1, '#100318');
-  g.fillStyle = grd; g.fill(); g.lineWidth = s * 0.035; g.strokeStyle = col; g.stroke();
-  // eyes
-  g.fillStyle = col;
-  const ey = cy - s * 0.04;
-  for (let k = 0; k < r.eyes; k++) { const ex = cx + (k - (r.eyes - 1) / 2) * s * 0.17; g.beginPath(); g.moveTo(ex - s * 0.06, ey - s * 0.02); g.lineTo(ex + s * 0.06, ey - s * 0.05); g.lineTo(ex + s * 0.05, ey + s * 0.03); g.lineTo(ex - s * 0.05, ey + s * 0.03); g.closePath(); g.fill(); }
-  // mouth grid
-  g.lineWidth = s * 0.02; g.beginPath();
-  g.moveTo(cx - s * 0.14, cy + s * 0.15); g.lineTo(cx + s * 0.14, cy + s * 0.15);
-  for (let k = -2; k <= 2; k++) { g.moveTo(cx + k * s * 0.06, cy + s * 0.11); g.lineTo(cx + k * s * 0.06, cy + s * 0.19); }
-  g.stroke();
-  if (r.boss) { g.fillStyle = PAL.gold; g.shadowColor = PAL.gold; g.beginPath(); g.moveTo(cx - s * 0.2, cy - s * 0.32); g.lineTo(cx - s * 0.12, cy - s * 0.46); g.lineTo(cx, cy - s * 0.34); g.lineTo(cx + s * 0.12, cy - s * 0.46); g.lineTo(cx + s * 0.2, cy - s * 0.32); g.closePath(); g.fill(); }
-  if (r.bomb && big) { g.fillStyle = '#ff8a1a'; g.shadowColor = '#ff8a1a'; g.beginPath(); g.arc(cx + s * 0.3, cy + s * 0.28, s * 0.08, 0, Math.PI * 2); g.fill(); }
-  g.restore();
+/* ================= SHOP ================= */
+let shopFrom = 'title';
+function openShop() { shopFrom = state; setState('shop'); renderShop(''); }
+function closeShop() { setState(shopFrom === 'over' ? 'over' : 'title'); if (state === 'title') refreshTitle(); }
+function renderShop(msg) {
+  $('shopNum').textContent = fmt(WALLET.coins);
+  const box = $('skins'); box.innerHTML = '';
+  for (const k of SKINS) {
+    const owned = WALLET.owned.has(k.id), eq = mySkin().id === k.id;
+    const el = document.createElement('button');
+    el.className = 'skin' + (owned ? ' owned' : ' locked') + (eq ? ' eq' : '') + (!owned && WALLET.coins < k.price ? ' poor' : '');
+    const cvs = document.createElement('canvas'); cvs.width = cvs.height = 96;
+    const g = cvs.getContext('2d'); drawDisc(g, 48, 48, 36, k.color, k.glyph, 90);
+    el.appendChild(cvs);
+    el.insertAdjacentHTML('beforeend', '<small>' + k.name + '</small><b>' + (eq ? 'ON' : owned ? 'OWNED' : '<i class="coinIco"></i>' + k.price) + '</b>');
+    el.addEventListener('click', (e) => { e.stopPropagation(); SND.unlock(); pickSkin(k); });
+    box.appendChild(el);
+  }
+  $('shopMsg').textContent = msg || (WALLET.coins < 60 && WALLET.owned.size < 2 ? 'Win rounds to earn coins. Even a loss pays a little.' : 'Tap a disc to equip it.');
+}
+function pickSkin(k) {
+  if (WALLET.owned.has(k.id)) { WALLET.skin = k.id; saveWallet(); applySkin(); SND.play('ui'); renderShop(k.name + ' equipped'); return; }
+  if (WALLET.coins < k.price) { SND.play('warn'); renderShop('Need ' + (k.price - WALLET.coins) + ' more coins'); return; }
+  WALLET.coins -= k.price; WALLET.owned.add(k.id); WALLET.skin = k.id; saveWallet(); applySkin();
+  SND.play('buy'); renderShop(k.name + ' unlocked!');
 }
 
 /* ================= TITLE DEMO ================= */
 function resetDemo() {
-  demo.b = makeBoard(7, 6); demo.turn = P1; demo.t = 0.6; demo.line = null; demo.lineT = 0;
+  demo.b = makeBoard(7, 6); demo.turn = P1; demo.t = 0.6; demo.lines = null; demo.lineSet = null; demo.lineT = 0;
 }
 function stepDemo(dt) {
   if (!demo.b) resetDemo();
   if (FALL.length) return;
   demo.t -= dt;
   if (demo.t > 0) return;
-  if (demo.line) { resetDemo(); return; }
+  if (demo.lines) { resetDemo(); return; }
   const b = demo.b, legal = legalCols(b);
   if (!legal.length) { resetDemo(); return; }
   let c = immediateWins(b, demo.turn)[0];
@@ -1067,7 +1183,7 @@ function stepDemo(dt) {
   const r = landRow(b, c), i = r * b.cols + c, p = demo.turn; b.cell[i] = p;
   animate([{ p, x: cellX(i), y: L.y0 - L.cs * 0.6, ty: cellY(i), vy: 0, to: i, sound: false }], () => {
     const w = winAt(b, i, p);
-    if (w) { demo.line = w; demo.lineT = 0; demo.lineP = p; demo.t = 2.4; for (const j of w) burst(cellX(j), cellY(j), p === P1 ? PAL.lime : PAL.crimson, 10, L.cs * 4, 0.7); }
+    if (w) { demo.lines = lineSegments(b, p); demo.lineSet = new Set([].concat.apply([], demo.lines)); demo.lineT = 0; demo.lineP = p; demo.t = 2.4; for (const j of demo.lineSet) burst(cellX(j), cellY(j), p === P1 ? ME.color : PAL.crimson, 10, L.cs * 4, 0.7); }
     else demo.t = 0.55;
   });
   demo.turn = 3 - demo.turn;
@@ -1117,8 +1233,9 @@ function drawBg(dt) {
     ctx.restore();
   }
 }
-function drawBoard(b, now) {
+function drawBoard(b, now, lineSet) {
   const cs = L.cs, panel = SPR.panel;
+  ctx.save(); ctx.translate(0, kick);
   // column hover highlight (under panel)
   const playing = state === 'play' && M && M.turn === P1 && !M.busy && !M.over;
   ctx.drawImage(SPR.wells, L.x0 - panel.pad, L.y0 - panel.pad, panel.w, panel.h);
@@ -1129,7 +1246,7 @@ function drawBoard(b, now) {
     let sx = 1, sy = 1;
     if (squash[i] > 0) { const q = squash[i]; sx = 1 + 0.18 * q; sy = 1 - 0.18 * q; }
     let x = cellX(i), y = cellY(i);
-    if (M && M.line && M.line.includes(i)) { const pz = 1 + 0.08 * Math.sin(now * 0.02); sx *= pz; sy *= pz; }
+    if (lineSet && lineSet.has(i)) { const pz = 1 + 0.09 * Math.sin(now * 0.02 + i); sx *= pz; sy *= pz; }
     ctx.drawImage(spr.c, x - spr.s * sx / 2, y - spr.s * sy / 2, spr.s * sx, spr.s * sy);
   }
   for (const a of FALL) {
@@ -1144,7 +1261,7 @@ function drawBoard(b, now) {
     const gx = L.x0 + c * cs;
     const gg = ctx.createLinearGradient(0, L.y0, 0, L.y0 + cs * L.rows);
     const a0 = b.g > 0 ? 0.16 : 0.02, a1 = b.g > 0 ? 0.02 : 0.16;
-    gg.addColorStop(0, 'rgba(184,255,46,' + a0 + ')'); gg.addColorStop(1, 'rgba(184,255,46,' + a1 + ')');
+    gg.addColorStop(0, 'rgba(' + ME.rgb + ',' + a0 + ')'); gg.addColorStop(1, 'rgba(' + ME.rgb + ',' + a1 + ')');
     ctx.fillStyle = gg; ctx.fillRect(gx + 2, L.y0, cs - 4, cs * L.rows);
     ctx.restore();
     // ghost disc
@@ -1167,6 +1284,21 @@ function drawBoard(b, now) {
       const y = gyDir > 0 ? yy : L.y0 + cs * L.rows - (yy - L.y0);
       ctx.beginPath(); ctx.moveTo(x - 4, y - 4 * gyDir); ctx.lineTo(x, y); ctx.lineTo(x + 4, y - 4 * gyDir); ctx.stroke();
     }
+  }
+  ctx.restore();
+  // two neon sparks racing around the frame (yours and the CPU's)
+  if (!lowQ) {
+    const x0 = L.x0 - panel.pad, y0 = L.y0 - panel.pad, pw = panel.w, ph = panel.h, per = 2 * (pw + ph);
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    [[0, ME.color], [0.5, PAL.crimson]].forEach(([off, col]) => {
+      for (let tail = 0; tail < 6; tail++) {
+        let d = (((now * 0.00012 + off) % 1) * per - tail * cs * 0.12 + per) % per, x, y;
+        if (d < pw) { x = x0 + d; y = y0; } else if ((d -= pw) < ph) { x = x0 + pw; y = y0 + d; } else if ((d -= ph) < pw) { x = x0 + pw - d; y = y0 + ph; } else { d -= pw; x = x0; y = y0 + ph - d; }
+        ctx.globalAlpha = 0.7 * (1 - tail / 6); ctx.fillStyle = col;
+        ctx.beginPath(); ctx.arc(x, y, Math.max(1.5, cs * 0.07) * (1 - tail / 8), 0, Math.PI * 2); ctx.fill();
+      }
+    });
+    ctx.restore();
   }
   ctx.restore();
 }
@@ -1192,6 +1324,14 @@ function drawBolt(pts, color, now) {
 }
 function drawFx(dt) {
   ctx.save(); ctx.globalCompositeOperation = 'lighter';
+  for (const r of RINGS) {
+    if (!r.on) continue;
+    r.t += dt; if (r.t >= r.life) { r.on = false; continue; }
+    const k = r.t / r.life, e = easeOut(k);
+    ctx.globalAlpha = (1 - k) * 0.8; ctx.strokeStyle = r.color; ctx.lineWidth = Math.max(1, L.cs * 0.07 * (1 - k));
+    ctx.beginPath(); ctx.ellipse(r.x, r.y + kick, r.size * (0.4 + e), r.size * (0.12 + 0.18 * e), 0, 0, Math.PI * 2); ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
   for (const p of PARTS) {
     if (!p.on) continue;
     p.t += dt; if (p.t >= p.life) { p.on = false; continue; }
@@ -1238,9 +1378,8 @@ document.addEventListener('contextmenu', (e) => e.preventDefault());
 window.addEventListener('keydown', (e) => {
   SND.unlock();
   const k = e.key;
-  if (state === 'title' && (k === 'Enter' || k === ' ')) { e.preventDefault(); startGame(); return; }
-  if (state === 'intro' && (k === 'Enter' || k === ' ')) { e.preventDefault(); beginMatch(); return; }
-  if (state === 'win' && (k === 'Enter' || k === ' ')) { e.preventDefault(); nextMatch(); return; }
+  if (state === 'title' && (k === 'Enter' || k === ' ')) { e.preventDefault(); newRun(); return; }
+  if (state === 'win' && (k === 'Enter' || k === ' ')) { e.preventDefault(); nextRound(); return; }
   if ((k === 'p' || k === 'P' || k === 'Escape') && (state === 'play' || state === 'paused')) { state === 'play' ? pause() : resume(); return; }
   if (state !== 'play' || !M) return;
   if (k === 'ArrowLeft' || k === 'a' || k === 'q') { M.hover = (M.hover + L.cols - 1) % L.cols; SND.play('hover'); }
@@ -1251,17 +1390,18 @@ window.addEventListener('keydown', (e) => {
   else if (k === 'f' || k === 'F') useFlip();
 });
 function tapBtn(id, fn) { $(id).addEventListener('click', (e) => { e.stopPropagation(); SND.unlock(); SND.play('ui', 0.7); fn(); }); }
-document.querySelectorAll('.mode').forEach((el) => el.addEventListener('click', () => { SND.unlock(); SND.play('ui'); document.querySelectorAll('.mode').forEach((m) => m.classList.toggle('sel', m === el)); mode = el.dataset.m; refreshTitle(); }));
-function startGame() { newRun(mode); }
-tapBtn('playBtn', startGame);
-tapBtn('fightBtn', beginMatch);
-tapBtn('nextBtn', nextMatch);
+tapBtn('playBtn', newRun);
+tapBtn('nextBtn', nextRound);
+tapBtn('shopBtn', openShop);
+tapBtn('overShopBtn', openShop);
+tapBtn('shopClose', closeShop);
+tapBtn('dblBtn', doDouble);
 tapBtn('pauseBtn', () => (state === 'paused' ? resume() : pause()));
 tapBtn('resumeBtn', resume);
 tapBtn('quitBtn', toTitle);
 tapBtn('reviveBtn', doRevive);
 tapBtn('noReviveBtn', () => { R.revived = true; finish(); });
-tapBtn('againBtn', () => newRun(R ? R.mode : mode));
+tapBtn('againBtn', newRun);
 tapBtn('menuBtn', toTitle);
 tapBtn('shareBtn', shareChallenge);
 $('bombBtn').addEventListener('click', (e) => { e.stopPropagation(); SND.unlock(); useBomb(); });
@@ -1270,9 +1410,9 @@ function drawSndIcon() { $('sndIco').innerHTML = SND.on ? '<path d="M4 9h4l5-4v1
 tapBtn('sndBtn', () => { SND.on = !SND.on; store('snd', SND.on ? 1 : 0); drawSndIcon(); });
 drawSndIcon();
 function refreshTitle() {
-  if (challenge && !challenge.used) { $('chalTxt').textContent = 'A FRIEND SCORED ' + fmt(challenge.beat) + ' · BEAT IT'; mode = challenge.mode; document.querySelectorAll('.mode').forEach((m) => m.classList.toggle('sel', m.dataset.m === mode)); }
-  else $('chalTxt').textContent = '';
-  $('bestTxt').textContent = 'BEST ' + fmt(bestOf(mode)) + (mode === 'daily' ? ' · TODAY\'S GRIDS' : '');
+  $('chalTxt').textContent = challenge && !challenge.used ? 'A FRIEND SCORED ' + fmt(challenge.beat) + ' · BEAT IT' : '';
+  $('bestNum').textContent = 'BEST ' + fmt(bestOf('classic'));
+  $('coinNum').textContent = fmt(WALLET.coins);
 }
 
 /* ================= LOOP ================= */
@@ -1286,7 +1426,7 @@ function frame(now) {
   if (hitStop > 0) { hitStop -= dt; dt *= 0.08; }
   // logic
   if (state === 'title') stepDemo(dt);
-  if (state === 'play' || state === 'title' || state === 'revive' || state === 'win') stepFall(dt);
+  if (state === 'play' || state === 'title' || state === 'revive' || state === 'win' || state === 'shop') stepFall(dt);
   for (let i = 0; i < squash.length; i++) if (squash[i] > 0) squash[i] = Math.max(0, squash[i] - dt * 5);
   if (state === 'play' && M && !M.over && M.turn === P1 && !M.busy) {
     const left = M.tmax - (now - M.turnStart) / 1000;
@@ -1315,17 +1455,26 @@ function frame(now) {
   if (shakeT > 0) { shakeT -= vis; sx = (Math.random() - 0.5) * shakeA * 2; sy = (Math.random() - 0.5) * shakeA * 2; if (shakeT <= 0) shakeA = 0; }
   drawBg(vis);
   ctx.translate(sx, sy);
-  const b = state === 'title' || !M ? demo.b : M.b;
+  // grid recoil spring (heavy landings push the whole grid)
+  kickV += (-kick * 900 - kickV * 26) * vis; kick += kickV * vis; if (Math.abs(kick) < 0.05 && Math.abs(kickV) < 0.5) { kick = 0; kickV = 0; }
+  kick = clamp(kick, -L.cs * 0.12, L.cs * 0.12);
+  const b = curBoard();
   if (b && SPR.panel) {
-    drawBoard(b, now);
-    const line = state === 'title' ? demo.line : M && M.line;
-    if (line) {
-      const lp = state === 'title' ? demo.lineP : M.b.cell[line[0]];
-      const lt = state === 'title' ? (demo.lineT += vis) : (M.lineT += vis);
-      const k = clamp(lt / 0.35, 0, 1);
-      const pts = line.map((i) => [cellX(i), cellY(i)]);
-      const end = [lerp(pts[0][0], pts[3][0], k), lerp(pts[0][1], pts[3][1], k)];
-      drawBolt([pts[0], end], lp === P1 ? PAL.lime : PAL.crimson, now);
+    const src = state === 'title' || !M ? demo : M;
+    drawBoard(b, now, src.lineSet);
+    if (src.lines) {
+      const lt = (src.lineT += vis), col = src.lineP === P1 ? ME.color : PAL.crimson;
+      ctx.save(); ctx.translate(0, kick);
+      src.lines.forEach((sg, n) => {
+        // each line (horizontal, vertical or diagonal) gets its own bolt from its first to its last disc
+        const k = clamp((lt - n * 0.12) / 0.35, 0, 1); if (k <= 0) return;
+        const a = [cellX(sg[0]), cellY(sg[0])], z = [cellX(sg[sg.length - 1]), cellY(sg[sg.length - 1])];
+        const ext = L.cs * 0.3, len = Math.hypot(z[0] - a[0], z[1] - a[1]) || 1, ux = (z[0] - a[0]) / len, uy = (z[1] - a[1]) / len;
+        const p0 = [a[0] - ux * ext, a[1] - uy * ext], p1 = [z[0] + ux * ext, z[1] + uy * ext];
+        drawBolt([p0, [lerp(p0[0], p1[0], k), lerp(p0[1], p1[1], k)]], col, now);
+        if (k >= 1 && !lowQ && Math.random() < 0.25) { const j = sg[Math.floor(Math.random() * sg.length)]; burst(cellX(j), cellY(j), col, 2, L.cs * 2.5, 0.3); }
+      });
+      ctx.restore();
     }
   }
   drawFx(vis);
@@ -1337,9 +1486,25 @@ function frame(now) {
 /* ================= TEST HOOKS (#qstest) ================= */
 if (/qstest/.test(location.hash)) {
   window.QS_TEST = {
-    state: () => state, run: () => R, match: () => M,
-    winNow() { const b = M.b; b.cell.fill(EMPTY); for (let c = 0; c < 3; c++) b.cell[(b.rows - 1) * b.cols + c] = P1; M.turn = P1; M.busy = false; },
-    loseNow() { const b = M.b; b.cell.fill(EMPTY); for (let c = 0; c < 3; c++) b.cell[(b.rows - 1) * b.cols + c] = P2; b.cell[(b.rows - 1) * b.cols + 6] = P1; M.turn = P2; M.busy = false; setTimeout(() => aiDrop(3, false), 50); },
+    state: () => state, run: () => R, match: () => M, wallet: () => WALLET,
+    goRound(n) { R.round = n - 1; nextRound(); },
+    winNow() { const b = M.b, K = b.k; b.cell.fill(EMPTY); for (let c = 0; c < K - 1; c++) b.cell[(b.rows - 1) * b.cols + c] = P1; M.turn = P1; M.busy = false; },
+    loseNow() { const b = M.b, K = b.k; b.cell.fill(EMPTY); for (let c = 0; c < K - 1; c++) b.cell[(b.rows - 1) * b.cols + c] = P2; b.cell[(b.rows - 1) * b.cols + b.cols - 1] = P1; M.turn = P2; M.busy = false; setTimeout(() => dropDisc(K - 1, P2, false, null), 50); },
+    // bottom row: X X _ X X  -> dropping in column 2 makes 5 in a row
+    five() { const b = M.b; b.cell.fill(EMPTY); [0, 1, 3, 4].forEach((c) => { b.cell[(b.rows - 1) * b.cols + c] = P1; }); M.turn = P1; M.busy = false; },
+    // horizontal + vertical + diagonal all through the cell that column 3 fills
+    cross() {
+      const b = M.b, at = (r, c, v) => { b.cell[r * b.cols + c] = v; }; b.cell.fill(EMPTY); const B = b.rows - 1;
+      for (let c = 0; c < 7; c++) for (let r = B; r >= B - 2; r--) at(r, c, (r + c) % 2 ? P2 : P2);
+      // row B-3 left of column 3: horizontal line 0..2 + 3
+      at(B - 3, 0, P1); at(B - 3, 1, P1); at(B - 3, 2, P1);
+      // vertical in column 3 under the target
+      at(B, 3, P1); at(B - 1, 3, P1); at(B - 2, 3, P1);
+      // diagonal down-right from the target: (B-2,4) (B-1,5) (B,6)
+      at(B - 2, 4, P1); at(B - 1, 5, P1); at(B, 6, P1);
+      M.turn = P1; M.busy = false;
+    },
+    coins(n) { WALLET.coins = n; saveWallet(); refreshTitle(); },
     meter(v) { R.meter = v; updatePowers(); },
     fill() { const b = M.b; const pat = [P1, P2]; for (let r = b.rows - 1; r >= 2; r--) for (let c = 0; c < b.cols; c++) if (b.cell[r * b.cols + c] === EMPTY) b.cell[r * b.cols + c] = pat[(c + Math.floor(r / 2)) % 2]; }
   };
@@ -1350,6 +1515,7 @@ function boot() {
   $('loadBar').style.width = '60%';
   resetDemo();
   resize();
+  applySkin();
   refreshTitle();
   setTimeout(() => {
     $('loadBar').style.width = '100%';
