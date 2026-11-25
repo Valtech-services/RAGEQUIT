@@ -11,4 +11,4 @@ Règle complète : `CLAUDE.md`, paragraphe « Consignes pour les routines d'amé
 | Routine | Date d'exécution | Décision | Phrase de Laurent | Reçue le | État |
 |---|---|---|---|---|---|
 | amélioration | 2026-11-25 | pas aujourd'hui | pour aujourd'hui ne fait pas la routine amélioration d'un jeu | 2026-11-25 09:05 | utilisée (routine sautée le 2026-11-25 à 09:48) |
-| audit | 2026-11-25 | à faire | tu peux faire l'audit du site | 2026-11-25 09:05 | en attente |
+| audit | 2026-11-25 | à faire | tu peux faire l'audit du site | 2026-11-25 09:05 | utilisée (audit du 2026-11-25, 11:35) |
