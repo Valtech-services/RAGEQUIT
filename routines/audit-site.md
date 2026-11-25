@@ -2,6 +2,12 @@
 
 Ce fichier fait foi pour la routine, en plus de `CLAUDE.md` (à lire en premier). **Cette routine ne modifie jamais le site** : elle observe, compare avec la veille et propose. Laurent choisit ensuite, dans une conversation, les points à lancer (« lance les points 3 et 7 »).
 
+## 0. Consigne de Laurent (avant tout travail)
+
+Lire `routines/consignes-routines.md` et la mémoire Claude de Laurent (`/areas/ragequit-arcade.md`) : chercher une consigne pour la routine `audit` datée d'aujourd'hui (heure de Paris). Règle complète dans `CLAUDE.md`, paragraphe « Consignes pour les routines d'amélioration et d'audit ».
+- `pas aujourd'hui` : ne rien faire d'autre ; passer la ligne en `utilisée` (petite PR qui ne touche qu'à `routines/consignes-routines.md`, fusionnée) et envoyer une notification courte (routine sautée, phrase de Laurent, reprise normale à la prochaine exécution).
+- `à faire` ou aucune consigne : exécution normale. La notification indique toujours la consigne retenue et sa source.
+
 ## 1. Mémoire
 
 - Lire `routines/audit-site-suivi.md` : chaque point déjà proposé y figure avec son numéro stable (`A-001`, `A-002`...), sa date et son statut :
