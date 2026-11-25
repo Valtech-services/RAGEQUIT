@@ -8,7 +8,8 @@
 <style>
 :root {
   --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --dock: 0px; /* room left for the iPhone Safari toolbar when it floats over the game (set in JS) */
+  --safe-bottom: calc(env(safe-area-inset-bottom, 0px) + var(--dock));
   --safe-left: env(safe-area-inset-left, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
   --void: #0b0516;
@@ -531,7 +532,27 @@ const cv = $('cv'), ctx = cv.getContext('2d');
 let W = 0, H = 0, DPR = 1, lowQ = false;
 const L = { x0: 0, y0: 0, cs: 40, cols: 7, rows: 6 };
 const SPR = {};
+/* iPhone Safari (recent iOS): the bottom toolbar floats over the page, and the page, so this
+   iframe, runs underneath it. Viewport APIs do not report it, so when the frame reaches the
+   bottom of the screen we keep the menu, the timer and the panels above the toolbar. */
+function measureDock() {
+  let dock = 0;
+  try {
+    const ua = navigator.userAgent || '';
+    const iosSafari = /iP(hone|od)/.test(ua) && /Safari\//.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS|GSA\//.test(ua) && !navigator.standalone;
+    if (iosSafari && window.innerHeight >= window.innerWidth) {
+      let bottom = window.innerHeight;
+      try { if (window.frameElement) bottom = window.frameElement.getBoundingClientRect().bottom; } catch (e) {}
+      // The page (and the frame) reach the bottom of the screen: the toolbar, about 135 px with the
+      // home bar, sits on top of the last part of the frame. Older Safari stops the page above it.
+      if (bottom > Math.max(screen.height, screen.width) - 120) dock = 138;
+    }
+  } catch (e) { dock = 0; }
+  document.documentElement.style.setProperty('--dock', dock + 'px');
+  return dock;
+}
 function resize() {
+  measureDock();
   DPR = Math.min(2, window.devicePixelRatio || 1);
   W = window.innerWidth; H = window.innerHeight;
   cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
@@ -1382,6 +1403,7 @@ function frame(now) {
 if (/qstest/.test(location.hash)) {
   window.QS_TEST = {
     state: () => state, run: () => R, match: () => M, wallet: () => WALLET,
+    dock(px) { document.documentElement.style.setProperty('--dock', px + 'px'); resize(); document.documentElement.style.setProperty('--dock', px + 'px'); layout(); },
     goRound(n) { R.round = n - 1; nextRound(); },
     winNow() { const b = M.b, K = b.k; b.cell.fill(EMPTY); for (let c = 0; c < K - 1; c++) b.cell[(b.rows - 1) * b.cols + c] = P1; M.turn = P1; M.busy = false; },
     loseNow() { const b = M.b, K = b.k; b.cell.fill(EMPTY); for (let c = 0; c < K - 1; c++) b.cell[(b.rows - 1) * b.cols + c] = P2; b.cell[(b.rows - 1) * b.cols + b.cols - 1] = P1; M.turn = P2; M.busy = false; setTimeout(() => dropDisc(K - 1, P2, null), 50); },
