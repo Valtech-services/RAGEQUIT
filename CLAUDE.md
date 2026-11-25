@@ -256,6 +256,16 @@ En plus de la tâche « un jeu par jour », deux routines tournent chaque jour (
 - **Vers 10h, amélioration d'un jeu en test** : `routines/amelioration-jeu.md` (historique dans `routines/historique-ameliorations.md`). Un jeu de `testGames.js` tiré au hasard, un brief d'amélioration écrit puis appliqué dans une PR de test fusionnée.
 - **Vers midi, audit du site** : `routines/audit-site.md` (mémoire dans `routines/audit-site-suivi.md`). Balayage du site en ligne, captures sur plusieurs appareils et rapport des 10 points à améliorer. Cette routine ne modifie jamais le site : Laurent choisit ensuite les points à lancer.
 
+### Consignes pour les routines d'amélioration et d'audit (décision de Laurent du 2026-11-25)
+
+- **Par défaut, les deux routines tournent chaque jour.** Si Laurent ne dit rien, rien ne change.
+- Laurent peut dire, dans n'importe quelle conversation, de ne pas faire l'une ou l'autre (« ne fais pas l'amélioration demain », « pas d'audit aujourd'hui »...). Cette consigne vaut pour la **prochaine exécution** de la routine nommée : le jour même si le message arrive avant l'heure de la routine (amélioration 9h48, audit 11h35, heure de Paris), sinon le lendemain. Chaque nouvelle consigne fonctionne de la même façon. Pour plusieurs jours, Laurent le précise : une ligne par date.
+- **Enregistrement** : le Claude qui reçoit la consigne l'inscrit dans `routines/consignes-routines.md` (routine, date d'exécution, décision `pas aujourd'hui` ou `à faire`, phrase de Laurent) par une petite PR qui ne touche qu'à ce fichier, fusionnée aussitôt, et confirme à Laurent la date retenue. Sans accès au dépôt : ligne dans la mémoire Claude de Laurent (`/areas/ragequit-arcade.md`) commençant par « Pas d'amélioration » ou « Pas d'audit » (ou « Amélioration OK » / « Audit OK »), avec la date d'exécution AAAA-MM-JJ et la phrase de Laurent.
+- **Lecture par la routine** (tout au début, avant tout travail) : `routines/consignes-routines.md` **et** la mémoire Claude (`mcp__memory__memory_read` sur `/areas/ragequit-arcade.md`), lignes datées du jour (heure de Paris) pour cette routine. Si les deux se contredisent, la plus récente l'emporte ; si la mémoire est inaccessible, s'en tenir au fichier et le signaler.
+  - `pas aujourd'hui` : ne rien faire d'autre (aucun jeu modifié, aucun rapport), passer la ligne en `utilisée` (consigne lue dans la mémoire : recopiée avec la source « mémoire ») dans une petite PR qui ne touche qu'à `routines/consignes-routines.md`, fusionnée, puis notification courte à Laurent : routine sautée, sa phrase, et la reprise normale à la prochaine exécution.
+  - `à faire` ou aucune consigne : exécution normale ; une ligne `à faire` est passée en `utilisée` dans la PR de la routine (pour l'audit, la PR de `routines/audit-site-suivi.md` peut aussi toucher ce fichier).
+  - La notification dit toujours la consigne retenue et sa source (fichier, mémoire ou aucune).
+
 ## Choix des sources (backlog)
 
 - Licences acceptées pour les jeux de référence : MIT, BSD, ISC, Apache-2.0, Unlicense, CC0, GPL (le code étant réécrit, seule la mécanique est reprise).
