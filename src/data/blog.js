@@ -417,6 +417,20 @@ export const posts = [
       metaDescription: 'The best free browser games for a short break, sorted by session length: one-minute reflex tests, calm puzzles, daily score chases and two-player matches.',
     },
   },
+  {
+    slug: 'quadshock-tips',
+    game: 'quadshock',
+    category: 'guides',
+    title: "QUADSHOCK Tips: How to Win More Rounds at Neon Connect 4",
+    date: '2026-11-25',
+    author: 'Ragequit Arcade',
+    excerpt: "QUADSHOCK turns connect four into a run against a CPU that levels up every round. Learn how to play the center, build double threats, survive the rounds where the CPU opens, use crystal blocks and score CROSS SHOCK bonuses.",
+    image: '/blog/quadshock-tips.jpg',
+    seo: {
+      title: "QUADSHOCK Tips: Win More Rounds at Connect 4 | Ragequit Arcade",
+      metaDescription: "A tips guide for QUADSHOCK, the free neon connect four game: center control, double threats, defending when the CPU opens, TRIO rounds and CROSS SHOCK.",
+    },
+  },
 ]
 
 // Trouve un article par son slug.
