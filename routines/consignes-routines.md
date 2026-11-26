@@ -12,5 +12,5 @@ Règle complète : `CLAUDE.md`, paragraphe « Consignes pour les routines d'amé
 |---|---|---|---|---|---|
 | amélioration | 2026-11-25 | pas aujourd'hui | pour aujourd'hui ne fait pas la routine amélioration d'un jeu | 2026-11-25 09:05 | utilisée (routine sautée le 2026-11-25 à 09:48) |
 | audit | 2026-11-25 | à faire | tu peux faire l'audit du site | 2026-11-25 09:05 | utilisée (audit du 2026-11-25, 11:35) |
-| amélioration | 2026-11-26 | pas aujourd'hui | demain ne fait pas l'audit du site ni l'amélioration d'un jeu | 2026-11-26 01:13 | en attente |
+| amélioration | 2026-11-26 | pas aujourd'hui | demain ne fait pas l'audit du site ni l'amélioration d'un jeu | 2026-11-26 01:13 | utilisée (routine sautée le 2026-11-26 à 09:48) |
 | audit | 2026-11-26 | pas aujourd'hui | demain ne fait pas l'audit du site ni l'amélioration d'un jeu | 2026-11-26 01:13 | en attente |
