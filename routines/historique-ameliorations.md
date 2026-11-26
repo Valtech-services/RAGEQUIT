@@ -1,6 +1,6 @@
 # Historique des améliorations de jeux en test
 
-Une ligne par exécution de la routine `routines/amelioration-jeu.md` (la plus récente en bas). Sert à ne pas reprendre le même jeu pendant 5 jours.
+Une ligne par jeu réellement modifié par la routine `routines/propositions-ameliorations.md` (ancienne routine `amelioration-jeu.md` jusqu'au 2026-11-25), la plus récente en bas.
 
 | Date | Jeu (`id`) | PR | Résumé |
 |---|---|---|---|

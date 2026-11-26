@@ -50,7 +50,7 @@ Les règles de ce fichier sont des repères, pas des carcans. Pour chaque jeu, c
 
 ## Pipeline « un jeu par jour »
 
-1. Ouvrir `backlog.md`, prendre le premier jeu au statut `à faire`.
+1. Ouvrir `backlog.md` et reporter d'abord les « Idée de jeu » de Laurent trouvées dans sa mémoire et pas encore dans la réserve (voir « Idées de jeux de Laurent »), puis prendre le premier jeu au statut `à faire`.
 2. Cloner la source dans un dossier temporaire hors du repo. Ne jamais exécuter son code (pas de `npm install` ni de script) : on la lit uniquement.
 3. Audit sécurité de la source : appels réseau, scripts externes, code obfusqué, `eval`, trackers, iframes. Le noter dans la PR.
 4. Concevoir la transformation (voir « Transformation obligatoire ») et l'écrire dans la PR avant le code.
@@ -253,7 +253,7 @@ Le site fournit un pont générique (`src/lib/gameBridge.js`, branché sur la pa
 ## Routines quotidiennes
 
 En plus de la tâche « un jeu par jour », deux routines tournent chaque jour (heure de Paris). Chacune lit ce fichier puis son propre fichier d'instructions, qui fait foi pour elle :
-- **Vers 10h, amélioration d'un jeu en test** : `routines/amelioration-jeu.md` (historique dans `routines/historique-ameliorations.md`). Un jeu de `testGames.js` tiré au hasard, un brief d'amélioration écrit puis appliqué dans une PR de test fusionnée.
+- **Vers 10h, propositions d'amélioration de jeux** : `routines/propositions-ameliorations.md` (registre dans `routines/propositions-ameliorations-suivi.md`, historique dans `routines/historique-ameliorations.md`). Décision de Laurent du 2026-11-26 : la routine ne modifie plus un jeu d'elle-même. Chaque jour, elle applique d'abord les propositions que Laurent a validées (un jeu par exécution), puis étudie 2 jeux (un en test, un en ligne, de préférence ancien) et envoie à Laurent une série de propositions numérotées (design d'abord : rendu en code à la place des images, assets CC0, Poly Haven, Hugging Face, Three.js ; puis gameplay). Laurent répond « Améliorations OK : DZ-1, QS-2 », « Améliorations non : DZ-2 » ou « Ne touche pas à <jeu> », dans n'importe quelle conversation.
 - **Vers midi, audit du site** : `routines/audit-site.md` (mémoire dans `routines/audit-site-suivi.md`). Balayage du site en ligne, captures sur plusieurs appareils et rapport des 10 points à améliorer. Cette routine ne modifie jamais le site : Laurent choisit ensuite les points à lancer.
 
 ### Consignes pour les routines d'amélioration et d'audit (décision de Laurent du 2026-11-25)
@@ -265,6 +265,16 @@ En plus de la tâche « un jeu par jour », deux routines tournent chaque jour (
   - `pas aujourd'hui` : ne rien faire d'autre (aucun jeu modifié, aucun rapport), passer la ligne en `utilisée` (consigne lue dans la mémoire : recopiée avec la source « mémoire ») dans une petite PR qui ne touche qu'à `routines/consignes-routines.md`, fusionnée, puis notification courte à Laurent : routine sautée, sa phrase, et la reprise normale à la prochaine exécution.
   - `à faire` ou aucune consigne : exécution normale ; une ligne `à faire` est passée en `utilisée` dans la PR de la routine (pour l'audit, la PR de `routines/audit-site-suivi.md` peut aussi toucher ce fichier).
   - La notification dit toujours la consigne retenue et sa source (fichier, mémoire ou aucune).
+
+## Idées de jeux de Laurent (décision du 2026-11-26)
+
+À tout moment (journée, nuit, entre deux routines), Laurent peut proposer un jeu que lui ou ses amis aiment, avec la phrase **« Idée de jeu : <nom du jeu> »** (une précision facultative après : plateforme, ce qui lui plaît, un lien).
+- Le Claude qui reçoit la phrase cherche le jeu (GitHub et Gitee avec `gh api search/repositories`, web français, américain ou autre) : ce qu'est le jeu, ses mécaniques, et une base de code dont la licence est acceptée (voir « Choix des sources » ci-dessous).
+  - Base de code trouvée : ligne normale dans la réserve (source, licence vérifiée, catégorie, jeu d'origine en bref, piste de transformation).
+  - Aucun code libre (jeu commercial, mobile, sans licence) : on ne reprend que l'idée de gameplay, jamais le nom, les images, les sons, les personnages ni le code ; ligne « Idée de Laurent (inspiré de <jeu>), aucune source », licence « Création RageQuit », comme RAGE TAP. Écarter un jeu dont la mécanique même est protégée ou une marque défendue (cas Tetris), et le dire à Laurent.
+- La ligne va **à la fin de la réserve**, à la suite des jeux `à faire` (statut `à faire`), avec la mention « idée de Laurent » dans la piste de transformation. Petite PR qui ne touche qu'à `backlog.md`, fusionnée aussitôt. Claude répond à Laurent en 3 lignes : ce qu'il a trouvé (source, licence), la piste RageQuit proposée, la position dans la file (« n-ième jeu à faire »).
+- Sans accès au dépôt : ligne dans la mémoire Claude de Laurent (`/areas/ragequit-arcade.md`) commençant par « Idée de jeu », datée, avec ce qui a été trouvé ; la tâche « un jeu par jour » la reporte dans la réserve à sa prochaine exécution (étape 1 du pipeline).
+- La tâche « un jeu par jour » ne change pas : elle prend toujours le premier jeu `à faire`, et les idées de Laurent arrivent dans l'ordre de la file.
 
 ## Choix des sources (backlog)
 
