@@ -14,7 +14,7 @@ Règle complète : `CLAUDE.md`, paragraphe « Consignes pour les routines d'amé
 | audit | 2026-11-25 | à faire | tu peux faire l'audit du site | 2026-11-25 09:05 | utilisée (audit du 2026-11-25, 11:35) |
 | amélioration | 2026-11-26 | pas aujourd'hui | demain ne fait pas l'audit du site ni l'amélioration d'un jeu | 2026-11-26 01:13 | utilisée (routine sautée le 2026-11-26 à 09:48) |
 | audit | 2026-11-26 | pas aujourd'hui | demain ne fait pas l'audit du site ni l'amélioration d'un jeu | 2026-11-26 01:13 | utilisée (audit sauté le 2026-11-26 à 11:35) |
-| amélioration | 2026-11-27 | pas aujourd'hui | L'audit du site et l'amélioration d'un jeu par jour [sont] repoussés au lundi 30 novembre 2026 | 2026-11-26 | en attente |
+| amélioration | 2026-11-27 | pas aujourd'hui | L'audit du site et l'amélioration d'un jeu par jour [sont] repoussés au lundi 30 novembre 2026 | 2026-11-26 | utilisée (routine sautée le 2026-11-27 à 09:48) |
 | audit | 2026-11-27 | pas aujourd'hui | L'audit du site et l'amélioration d'un jeu par jour [sont] repoussés au lundi 30 novembre 2026 | 2026-11-26 | en attente |
 | amélioration | 2026-11-28 | pas aujourd'hui | L'audit du site et l'amélioration d'un jeu par jour [sont] repoussés au lundi 30 novembre 2026 | 2026-11-26 | en attente |
 | audit | 2026-11-28 | pas aujourd'hui | L'audit du site et l'amélioration d'un jeu par jour [sont] repoussés au lundi 30 novembre 2026 | 2026-11-26 | en attente |
