@@ -17,6 +17,6 @@ Règle complète : `CLAUDE.md`, paragraphe « Consignes pour les routines d'amé
 | amélioration | 2026-11-27 | pas aujourd'hui | L'audit du site et l'amélioration d'un jeu par jour [sont] repoussés au lundi 30 novembre 2026 | 2026-11-26 | utilisée (routine sautée le 2026-11-27 à 09:48) |
 | audit | 2026-11-27 | pas aujourd'hui | L'audit du site et l'amélioration d'un jeu par jour [sont] repoussés au lundi 30 novembre 2026 | 2026-11-26 | utilisée (audit sauté le 2026-11-27 à 11:35) |
 | amélioration | 2026-11-28 | pas aujourd'hui | L'audit du site et l'amélioration d'un jeu par jour [sont] repoussés au lundi 30 novembre 2026 | 2026-11-26 | utilisée (routine sautée le 2026-11-28 à 09:48) |
-| audit | 2026-11-28 | pas aujourd'hui | L'audit du site et l'amélioration d'un jeu par jour [sont] repoussés au lundi 30 novembre 2026 | 2026-11-26 | en attente |
+| audit | 2026-11-28 | pas aujourd'hui | L'audit du site et l'amélioration d'un jeu par jour [sont] repoussés au lundi 30 novembre 2026 | 2026-11-26 | utilisée (audit sauté le 2026-11-28 à 11:35) |
 | amélioration | 2026-11-29 | pas aujourd'hui | L'audit du site et l'amélioration d'un jeu par jour [sont] repoussés au lundi 30 novembre 2026 | 2026-11-26 | en attente |
 | audit | 2026-11-29 | pas aujourd'hui | L'audit du site et l'amélioration d'un jeu par jour [sont] repoussés au lundi 30 novembre 2026 | 2026-11-26 | en attente |
